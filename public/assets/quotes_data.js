@@ -1,0 +1,67 @@
+/* INSTRUCTIONS:
+   1. Add your new quotes at the BOTTOM of this list.
+   2. The website will automatically show the last added quote at the TOP.
+   3. Use \n for line breaks inside the text.
+*/
+
+const quotesData = [
+    
+    {
+        id: 1,
+        text: "நான் ஒன்றுமறியே,\nமனிதர் முற்றுமறியே.\nஎவரும் பிழையற்றோர் அன்று,\nதவரே நிழலாய் நின்றது.",
+        translation: "I know not a single knowing,\nnor mankind ever all-knowing.\nWe are none ever free of flaw —\nit stands beside us evermore,\nlike our reflection on the floor.",
+        author: "எல்வன் பார்த்தசாரதி",
+        tag: "Philosophy",
+        lang: "ta"
+    },
+    {
+        id: 2,
+        text: "முன்னே முடிவின் முடிவு மாறின்,\nமுன்னே முடிவிலா முடிவு நன்னின்",
+        translation: "A chosen course may twist and bend,\nYet untold paths bring joys unpenned.",
+        author: "எல்வன் பார்த்தசாரதி",
+        tag: "Journey",
+        lang: "ta"
+    },
+    {
+        id: 3,
+        text: "நிழல் தேடி நீ செல்கையில்\nஎவரும் வாரா நீயே எல் ஞாயிறாக",
+        translation: "As you walk seeking shade, none will come —\nYou must become your own blazing sun",
+        author: "எல்வன் பார்த்தசாரதி",
+        tag: "Strength",
+        lang: "ta"
+    },
+    {
+        id: 4,
+        text: "No two shadows dance the same,\nTry to enjoy the rhythm.",
+        translation: null,
+        author: "Elvan Parthasarathy",
+        tag: "Perspective",
+        lang: "en"
+    },
+    {
+        id: 5,
+        text: "Every locked door opens only\nto reveal another passage.",
+        translation: null,
+        author: "Elvan Parthasarathy",
+        tag: "Hope",
+        lang: "en"
+    },
+    {
+        id: 6,
+        text: "நன்னதில் வாழ்த்துவும் பிறரை,\nஇதற்கென்னோர் காரணமில்லை.\nஅந்நதில் கிளைக்கும் உணர்வை,\nதருவதற்கோர் வழியுமில்லை.",
+        transliteration: "നന്നതിൽ വാഴ്ത്തുവും പിറരൈ\nഇതർകെനോർ കാരണമില്ലൈ\nഅന്നതിൽ കിളൈക്കും ഉണർവൈ\nതരുവതർകോർ വഴിയുമില്ലൈ",
+        translation: "Wishing someone always feels good,\ndoesn’t matter what it’s for.\nJust enjoy spreading a little happiness!",
+        author: "எல்வன் பார்த்தசாரதி",
+        tag: "Happiness",
+        lang: "ta"
+    },
+    {
+        id: 7,
+        text: "The thing is nowhere — that’s how it goes,\nIt’s the plan you make, that no one knows.\nIt may change from what it’s meant to be,\nThe decision, in the end, it’s all with me.",
+        translation: null, // English original needs no translation
+        author: "Elvan Parthasarathy",
+        tag: "Life",
+        lang: "en"
+    }
+
+];

@@ -1,0 +1,337 @@
+/* =========================================
+   1. GLOBAL RESET & VARIABLES
+========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+:root {
+    --bg-app: #FFFFFF;
+    --bg-panel: #F7F7F7;
+    --text-main: #111;
+    --text-muted: #666;
+    --sidebar-width: 280px;
+}
+
+body {
+    font-family: "Mukta Malar", "Inter", sans-serif;
+    background: var(--bg-app);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+.app-shell {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* =========================================
+   2. DESKTOP LAYOUT (Default > 768px)
+========================================= */
+
+/* Hide Mobile Header on Desktop */
+.mobile-header {
+    display: none;
+}
+
+/* Sidebar – left vertical panel */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--bg-panel);
+    border-right: 1px solid rgba(0,0,0,0.04);
+    border-radius: 0 24px 24px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px 24px;
+    z-index: 20;
+}
+
+/* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */
+.sidebar::before,
+.sidebar::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Sidebar Internals */
+.sidebar-top {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Reduced gap slightly */
+}
+
+.brand {
+    font-size: 1.5rem; /* Reduced from 1.6rem */
+    font-weight: 800;
+    padding-left: 12px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Reduced gap slightly */
+    width: 100%;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px; /* Reduced padding */
+    border-radius: 99px;
+    gap: 10px; /* Reduced gap slightly */
+    text-decoration: none;
+    cursor: pointer;
+    
+    /* PERFORMANCE FIX: Specific transitions only */
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                background 0.2s ease, 
+                box-shadow 0.2s ease;
+    transform-origin: center;
+    will-change: transform; /* Hint to browser */
+}
+
+/* Hover: Scale UP slightly + light background */
+.nav-item:hover {
+    background: rgba(0,0,0,0.04);
+    transform: scale(1.02); 
+}
+
+/* Active Click: Slight shrink */
+.nav-item:active {
+    transform: scale(0.96); 
+}
+
+.nav-icon {
+    width: 18px; /* Reduced icon size slightly */
+    height: 18px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.label {
+    font-size: 0.95rem; /* Reduced from 1rem */
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.2s ease, font-weight 0.2s ease; 
+}
+
+/* Desktop Active States */
+.nav-item.active {
+    background: #000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    transform: scale(1);
+}
+
+.nav-item.active .nav-icon {
+    opacity: 1;
+    filter: invert(100%) brightness(200%);
+    transform: scale(1.1); 
+}
+
+.nav-item.active .label {
+    color: #fff;
+    font-weight: 800; 
+}
+
+/* Sidebar Bottom */
+.sidebar-bottom {
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Profile Card */
+.profile-card {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 50px;
+    /* PERFORMANCE FIX: Specific transitions */
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.profile-card:hover {
+    background: rgba(0,0,0,0.05);
+    transform: scale(1.02); 
+}
+
+.profile-card:active {
+    transform: scale(0.98);
+}
+
+.avatar {
+    width: 32px; /* Reduced size */
+    height: 32px;
+    border-radius: 50%;
+    background: #ccc;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.name { font-size: 0.9rem; /* Reduced from 0.95rem */ font-weight: 600; color: #111; }
+
+.settings-btn {
+    width: 32px; /* Reduced size */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.6;
+    /* PERFORMANCE FIX: Specific transitions */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease, background 0.2s ease;
+}
+
+.settings-btn:hover {
+    opacity: 1;
+    background: rgba(0,0,0,0.05);
+    transform: rotate(45deg) scale(1.1);
+}
+
+.settings-btn:active {
+    transform: rotate(45deg) scale(0.9);
+}
+
+/* --- BOTTOM BUTTON ACTIVE STATES (Dull Grey) --- */
+.profile-card.active {
+    background: #e0e0e0;
+    color: #000;
+    transform: scale(1);
+}
+.profile-card.active .name { color: #000; }
+
+.settings-btn.active {
+    background: #e0e0e0;
+    transform: rotate(180deg);
+    opacity: 1;
+}
+.settings-btn.active img { filter: none; }
+
+/* Main Content (Desktop) */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 40px 30px; /* Reduced padding */
+}
+
+/* --- UTILITIES --- */
+.desktop-only { display: flex !important; }
+
+/* --- PAGE TRANSITIONS (Global) --- */
+/* Optimized: Container ONLY handles Opacity. No Movement. */
+.page-view {
+    opacity: 1;
+    transition: opacity 0.3s ease; 
+}
+
+/* Hidden State */
+.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Visible State */
+.fade-in {
+    opacity: 1;
+}
+
+/* --- STAGGERED CONTENT ANIMATION --- */
+/* Children handle the Movement (Slide Up) independently */
+.animate-entry > * { /* Changed from .fade-in > * to .animate-entry > * to match app.js */
+    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0; /* Start hidden for animation */
+}
+
+/* Animation Delays for sequential flow */
+.animate-entry > *:nth-child(1) { animation-delay: 0.05s; }
+.animate-entry > *:nth-child(2) { animation-delay: 0.1s; }
+.animate-entry > *:nth-child(3) { animation-delay: 0.15s; }
+.animate-entry > *:nth-child(4) { animation-delay: 0.2s; }
+.animate-entry > *:nth-child(5) { animation-delay: 0.25s; }
+.animate-entry > *:nth-child(n+6) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0); /* Start slightly lower */
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* --- GLOBAL CONTENT STYLES (REDUCED SIZING) --- */
+.title { font-size: 2.4rem; /* Reduced from 3rem */ font-weight: 800; margin-bottom: 8px; }
+.subtitle { font-size: 1rem; /* Reduced from 1.1rem */ color: var(--text-muted); margin-bottom: 20px; }
+.category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Reduced min column width */ gap: 20px; }
+
+/* --- CARD HOVER ANIMATIONS (Performance Optimized) --- */
+.category-card { 
+    background: #fff; 
+    border: 1px solid #eee; 
+    padding: 20px; /* Reduced padding */
+    border-radius: 16px; /* Reduced radius */
+    text-decoration: none; 
+    color: #111; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+    
+    /* PERFORMANCE FIX: Only animate transform/shadow/border */
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s ease, 
+                border-color 0.3s ease;
+    will-change: transform; /* Hint for browser */
+    position: relative;
+    top: 0;
+}
+
+/* Hover State */
+.category-card:hover {
+    transform: translateY(-4px); /* Reduced lift */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* Reduced shadow spread */
+    border-color: rgba(0,0,0,0.1);
+}
+
+.category-card:active {
+    transform: translateY(-1px); 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition-duration: 0.1s;
+}
+
+.cat-title { font-weight: 700; font-size: 1rem; /* Reduced from 1.1rem */ }
+.cat-desc { font-size: 0.8rem; /* Reduced from 0.85rem */ color: #666; }
+
+/* Quote Styles (Global styles that will be overridden by quotes.html) */
+.quote-sub-label {
+    font-size: 0.7rem; /* Reduced from 0.75rem */
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-family: "Inter", sans-serif;
+    margin-top: 2px;
+}
+.quote-text { margin-top: 0; }

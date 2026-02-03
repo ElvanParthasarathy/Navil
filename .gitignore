@@ -1,0 +1,33 @@
+# Common
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Specific (Large Media & Backups)
+jaiprakashelvan instagram/
+elvan.jp Insta HTML/
+temp_story_videos/
+pages_backup/
+temp_msg.txt
+
+# Offline Instagram Media (User specifically requested not to upload)
+public/assets/instagram/
