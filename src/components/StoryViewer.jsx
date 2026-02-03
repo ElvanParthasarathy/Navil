@@ -291,13 +291,6 @@ const StoryViewer = ({
                             onContextMenu={(e) => e.preventDefault()}
                         />
                     </div>
-
-                    {/* Footer / Caption if any */}
-                    {currentStory?.caption && (
-                        <div className="sv-footer">
-                            <p className="sv-caption">{currentStory.caption}</p>
-                        </div>
-                    )}
                 </div>
 
                 {/* Next Card Preview (3D-ish) */}
@@ -613,7 +606,7 @@ const StoryViewer = ({
                     }
                 }
             `}</style>
-        </div>
+        </div >
     );
 };
 
