@@ -8,11 +8,12 @@ import ReelsViewer from '../components/ReelsViewer';
 
 const Library = () => {
     // Destructure Data
-    const { posts: rawPosts, reels: rawReels, archivedPosts: rawArchived } = instagramData || {};
+    const { posts: rawPosts, reels: rawReels, arts: rawArts, archivedPosts: rawArchived } = instagramData || {};
 
     // Memoized Lists to prevent re-calculations and reference changes on every render
     const posts = React.useMemo(() => [...(rawPosts || [])].sort((a, b) => b.timestamp - a.timestamp), [rawPosts]);
     const reels = React.useMemo(() => [...(rawReels || [])].sort((a, b) => b.timestamp - a.timestamp), [rawReels]);
+    const arts = React.useMemo(() => [...(rawArts || [])].sort((a, b) => b.timestamp - a.timestamp), [rawArts]);
     const archivedPosts = React.useMemo(() => [...(rawArchived || [])].sort((a, b) => b.timestamp - a.timestamp), [rawArchived]);
 
     // Highlights Data (Sort: Newest Group First, Oldest Story inside Group First)
@@ -25,7 +26,7 @@ const Library = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     // --- STATES ---
-    const [activeTab, setActiveTab] = useState('posts'); // 'posts', 'reels', 'archive'
+    const [activeTab, setActiveTab] = useState('posts'); // 'posts', 'arts', 'reels', 'archive'
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedReel, setSelectedReel] = useState(null);
     const [postImageIndex, setPostImageIndex] = useState(0);
@@ -48,7 +49,7 @@ const Library = () => {
 
         // Handle Post
         if (postId) {
-            const allContent = [...posts, ...reels, ...archivedPosts];
+            const allContent = [...posts, ...reels, ...arts, ...archivedPosts];
             const foundPost = allContent.find(p => p.id === postId);
             if (foundPost) {
                 if (isMobile) {
@@ -69,7 +70,7 @@ const Library = () => {
 
         // Handle Reel
         if (reelId) {
-            const allContent = [...reels, ...posts, ...archivedPosts]; // Reels first for priority
+            const allContent = [...reels, ...arts, ...posts, ...archivedPosts]; // Reels first for priority
             const foundReel = allContent.find(r => r.id === reelId);
             if (foundReel) {
                 setSelectedReel(foundReel);
@@ -1337,6 +1338,12 @@ const Library = () => {
                     <FiGrid size={12} style={{ marginRight: 6 }} /> POSTS
                 </div>
                 <div
+                    className={`tab-item ${activeTab === 'arts' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('arts')}
+                >
+                    <FiLayers size={12} style={{ marginRight: 6 }} /> ARTS
+                </div>
+                <div
                     className={`tab-item ${activeTab === 'reels' ? 'active' : ''}`}
                     onClick={() => setActiveTab('reels')}
                 >
@@ -1353,7 +1360,7 @@ const Library = () => {
             {/* --- MAIN GRID --- */}
             <div className="library-container">
                 <div className="library-grid animate-entry">
-                    {(activeTab === 'posts' ? posts : activeTab === 'reels' ? reels : archivedPosts).map(post => {
+                    {(activeTab === 'posts' ? posts : activeTab === 'arts' ? arts : activeTab === 'reels' ? reels : archivedPosts).map(post => {
                         const isVideo = post.type === 'video' || (post.image && post.image.endsWith('.mp4'));
                         const hasMultiple = post.images && post.images.length > 1;
 

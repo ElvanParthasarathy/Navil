@@ -9,8 +9,13 @@ const __dirname = path.dirname(__filename);
 const CLOUDINARY_BASE = 'https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram';
 const CLOUDINARY_VIDEO_BASE = 'https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram';
 
+// elvan.jp Cloudinary Configuration
+const ARTS_CLOUDINARY_BASE = 'https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/elvan.jp';
+const ARTS_CLOUDINARY_VIDEO_BASE = 'https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/elvan.jp';
+
 // Adjusted path to match user's structure
-const inputPath = path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/posts_1.html');
+const mainInputPath = path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/posts_1.html');
+const artsInputPath = path.join(__dirname, '../elvan.jp Insta HTML/your_instagram_activity/media/posts_1.html');
 const outputPath = path.join(__dirname, '../src/data/instagramData.js');
 
 try {
@@ -18,6 +23,8 @@ try {
     const posts = [];
     const archivedPosts = [];
     const reels = [];
+    const arts = [];
+    const stories = [];
 
     // List of posts to specifically exclude (Requested by User)
     // List of posts to specifically exclude (Requested by User)
@@ -38,7 +45,7 @@ try {
     ];
 
     // Helper to parse generic post HTML (images/mixed)
-    const parsePostFile = (filePath, sourceType, targetArray) => {
+    const parsePostFile = (filePath, sourceType, targetArray, customBase = null, customVideoBase = null) => {
         if (!fs.existsSync(filePath)) return;
         const content = fs.readFileSync(filePath, 'utf8');
         const blocks = content.split('class="pam');
@@ -60,7 +67,7 @@ try {
             const allImages = imgMatches.map(match => {
                 const relativePath = match[1].replace('media/', '');
                 const isVideo = relativePath.endsWith('.mp4');
-                const base = isVideo ? CLOUDINARY_VIDEO_BASE : CLOUDINARY_BASE;
+                const base = isVideo ? (customVideoBase || CLOUDINARY_VIDEO_BASE) : (customBase || CLOUDINARY_BASE);
                 // Force .jpg extension for HEIC/HEIF in the URL so Cloudinary transforms it reliably
                 let cloudPath = relativePath;
                 if (relativePath.toLowerCase().endsWith('.heic') || relativePath.toLowerCase().endsWith('.heif')) {
@@ -97,7 +104,10 @@ try {
     };
 
     // Parse Main Posts
-    parsePostFile(inputPath, 'post', posts);
+    parsePostFile(mainInputPath, 'post', posts);
+
+    // Parse Arts (elvan.jp)
+    parsePostFile(artsInputPath, 'art', arts, ARTS_CLOUDINARY_BASE, ARTS_CLOUDINARY_VIDEO_BASE);
 
     // Parse Archived Posts
     const archivedPath = path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/archived_posts.html');
@@ -106,48 +116,55 @@ try {
     console.log(`Parsed ${posts.length} main posts and ${archivedPosts.length} archived posts.`);
 
     // --- REELS PARSING ---
-    const reelsPath = path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/reels.html');
-    if (fs.existsSync(reelsPath)) {
-        const reelsContent = fs.readFileSync(reelsPath, 'utf8');
-        const reelBlocks = reelsContent.split('class="pam');
+    const parseReels = (reelsPath, targetArray, customVideoBase = null) => {
+        if (fs.existsSync(reelsPath)) {
+            const reelsContent = fs.readFileSync(reelsPath, 'utf8');
+            const reelBlocks = reelsContent.split('class="pam');
 
-        reelBlocks.forEach((block, index) => {
-            if (index === 0) return;
+            reelBlocks.forEach((block, index) => {
+                if (index === 0) return;
 
-            // Extract Video Source
-            const videoMatch = block.match(/src="(media\/reels\/[^"]+)"/);
-            if (!videoMatch) return;
+                // Extract Video Source
+                const videoMatch = block.match(/src="(media\/reels\/[^"]+)"/);
+                if (!videoMatch) return;
 
-            const localPath = videoMatch[1];
-            const relativePath = localPath.replace('media/', '');
-            const webPath = `${CLOUDINARY_VIDEO_BASE}/${relativePath}`;
+                const localPath = videoMatch[1];
+                const relativePath = localPath.replace('media/', '');
+                const base = customVideoBase || CLOUDINARY_VIDEO_BASE;
+                const webPath = `${base}/${relativePath}`;
 
-            const dateMatch = block.match(/class="_3-94 _a6-o">([^<]+)</);
-            const date = dateMatch ? dateMatch[1] : '';
+                const dateMatch = block.match(/class="_3-94 _a6-o">([^<]+)</);
+                const date = dateMatch ? dateMatch[1] : '';
 
-            const captionMatch = block.match(/class="_3-95 _2pim _a6-h _a6-i">([\s\S]*?)<\/div>/);
-            let caption = captionMatch ? captionMatch[1] : '';
-            caption = caption.replace(/<[^>]+>/g, '').trim();
+                const captionMatch = block.match(/class="_3-95 _2pim _a6-h _a6-i">([\s\S]*?)<\/div>/);
+                let caption = captionMatch ? captionMatch[1] : '';
+                caption = caption.replace(/<[^>]+>/g, '').trim();
 
-            // Push to REELS array
-            reels.push({
-                id: `reel_${index}_${Date.now()}`,
-                image: webPath,
-                images: [webPath],
-                caption: caption,
-                date: date,
-                timestamp: new Date(date).getTime(),
-                type: 'video'
+                // Push to target array
+                targetArray.push({
+                    id: `reel_${index}_${Date.now()}`,
+                    image: webPath,
+                    images: [webPath],
+                    caption: caption,
+                    date: date,
+                    timestamp: new Date(date).getTime(),
+                    type: 'video'
+                });
             });
-        });
-        console.log(`Parsed ${reels.length} reels.`);
-    }
+            console.log(`Parsed reels from ${reelsPath}. Total now: ${targetArray.length}`);
+        }
+    };
+
+    parseReels(path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/reels.html'), reels);
+    // Note: If elvan.jp has reels.html, parse it too into arts or reels? 
+    // The user said "arts in that add these post from this account", so art reels go to arts.
+    parseReels(path.join(__dirname, '../elvan.jp Insta HTML/your_instagram_activity/media/reels.html'), arts, ARTS_CLOUDINARY_VIDEO_BASE);
+
+    console.log(`Final Counts - Posts: ${posts.length}, Arts: ${arts.length}, Reels: ${reels.length}`);
 
     // --- STORIES PARSING (New) ---
-    const storiesInputPath = path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/stories.html');
-    const stories = [];
-
-    if (fs.existsSync(storiesInputPath)) {
+    const parseStories = (storiesInputPath, customBase = null, customVideoBase = null) => {
+        if (!fs.existsSync(storiesInputPath)) return;
         const storiesHtml = fs.readFileSync(storiesInputPath, 'utf8');
         const storyBlocks = storiesHtml.split('class="pam');
 
@@ -161,7 +178,7 @@ try {
             const localPath = mediaMatch[1];
             const relativePath = localPath.replace('media/', '');
             const isVideo = localPath.endsWith('.mp4');
-            const base = isVideo ? CLOUDINARY_VIDEO_BASE : CLOUDINARY_BASE;
+            const base = isVideo ? (customVideoBase || CLOUDINARY_VIDEO_BASE) : (customBase || CLOUDINARY_BASE);
             let cloudPath = relativePath;
             if (cloudPath.toLowerCase().endsWith('.heic') || cloudPath.toLowerCase().endsWith('.heif')) {
                 cloudPath = cloudPath.replace(/\.(heic|heif)$/i, '.jpg');
@@ -193,10 +210,12 @@ try {
                 index: index // Adding index to use as tie-breaker for sorting
             });
         });
-        console.log(`Found ${stories.length} stories.`);
-    } else {
-        console.log('Stories file not found, skipping.');
-    }
+    };
+
+    parseStories(path.join(__dirname, '../jaiprakashelvan instagram/your_instagram_activity/media/stories.html'));
+    parseStories(path.join(__dirname, '../elvan.jp Insta HTML/your_instagram_activity/media/stories.html'), ARTS_CLOUDINARY_BASE, ARTS_CLOUDINARY_VIDEO_BASE);
+
+    console.log(`Found ${stories.length} total stories.`);
 
     // Group Stories by Month-Year
     const highlights = {};
@@ -351,6 +370,7 @@ try {
     const fileContent = `const instagramData = {
     posts: ${JSON.stringify(posts, null, 2)},
     reels: ${JSON.stringify(reels, null, 2)},
+    arts: ${JSON.stringify(arts, null, 2)},
     archivedPosts: ${JSON.stringify(archivedPosts, null, 2)},
     dmChats: []
 };
