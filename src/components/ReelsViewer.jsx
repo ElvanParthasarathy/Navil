@@ -1,87 +1,228 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FiX, FiHeart, FiMessageCircle, FiSend, FiMoreHorizontal, FiMusic, FiVolume2, FiVolumeX, FiPlay, FiPause } from 'react-icons/fi';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { FiX, FiHeart, FiMessageCircle, FiSend, FiMoreHorizontal, FiMusic, FiVolume2, FiVolumeX, FiPlay, FiPause, FiChevronUp, FiChevronDown } from 'react-icons/fi';
 
 const ReelsViewer = ({ reel, reels, onClose, onSwitchReel, profileData }) => {
     const [isMuted, setIsMuted] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
-    const videoRef = useRef(null);
-    const touchStartY = useRef(null);
-    const lastScrollTime = useRef(0);
+    const containerRef = useRef(null);
+    const observerRef = useRef(null);
+    const [activeReelId, setActiveReelId] = useState(reel.id);
+    const reelRefs = useRef({});
 
-    const currentIndex = reels.findIndex(r => r.id === reel.id);
+    // Create a stable map of refs for each reel
+    const setReelRef = useCallback((id, el) => {
+        if (el) reelRefs.current[id] = el;
+    }, []);
 
-    const nextReel = () => {
-        if (currentIndex < reels.length - 1) {
-            onSwitchReel(reels[currentIndex + 1]);
-        }
-    };
-
-    const prevReel = () => {
-        if (currentIndex > 0) {
-            onSwitchReel(reels[currentIndex - 1]);
-        }
-    };
-
+    // Initial Scroll to specific reel
     useEffect(() => {
-        // Auto-play when reel changes
-        if (videoRef.current) {
-            videoRef.current.play().catch(() => {
-                // Autoplay might be blocked, start muted
-                setIsMuted(true);
+        const target = reelRefs.current[reel.id];
+        if (target && containerRef.current) {
+            target.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+    }, []);
+
+    // Intersection Observer to detect active reel
+    useEffect(() => {
+        observerRef.current = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.dataset.id;
+                    // Only switch if it's actually different to avoid cycles
+                    setActiveReelId(prev => {
+                        if (prev !== id) {
+                            onSwitchReel(reels.find(r => r.id === id));
+                            return id;
+                        }
+                        return prev;
+                    });
+                }
             });
-        }
-    }, [reel]);
+        }, {
+            threshold: 0.7 // Must be 70% visible
+        });
 
-    // Keyboard & Scroll Support
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'ArrowDown') nextReel();
-            if (e.key === 'ArrowUp') prevReel();
-            if (e.key === 'Escape') onClose();
-            if (e.key === ' ') {
-                e.preventDefault();
-                togglePlay();
-            }
-        };
-
-        const handleWheel = (e) => {
-            const now = Date.now();
-            if (now - lastScrollTime.current < 1000) return; // Debounce 1s
-
-            if (e.deltaY > 50) {
-                nextReel();
-                lastScrollTime.current = now;
-            } else if (e.deltaY < -50) {
-                prevReel();
-                lastScrollTime.current = now;
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('wheel', handleWheel, { passive: false });
+        reels.forEach(r => {
+            const el = reelRefs.current[r.id];
+            if (el) observerRef.current.observe(el);
+        });
 
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('wheel', handleWheel);
+            if (observerRef.current) observerRef.current.disconnect();
         };
-    }, [currentIndex]);
+    }, [reels, onSwitchReel]);
 
-    // Touch Support
-    const handleTouchStart = (e) => {
-        touchStartY.current = e.touches[0].clientY;
+    const scrollToPrev = () => {
+        const idx = reels.findIndex(r => r.id === activeReelId);
+        if (idx > 0) {
+            reelRefs.current[reels[idx - 1].id].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
-    const handleTouchEnd = (e) => {
-        if (touchStartY.current === null) return;
-        const touchEndY = e.changedTouches[0].clientY;
-        const deltaY = touchStartY.current - touchEndY;
-
-        if (deltaY > 50) nextReel();
-        else if (deltaY < -50) prevReel();
-
-        touchStartY.current = null;
+    const scrollToNext = () => {
+        const idx = reels.findIndex(r => r.id === activeReelId);
+        if (idx < reels.length - 1) {
+            reelRefs.current[reels[idx + 1].id].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
+
+    // Keyboard support
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'ArrowUp') { e.preventDefault(); scrollToPrev(); }
+            if (e.key === 'ArrowDown') { e.preventDefault(); scrollToNext(); }
+            if (e.key === 'Escape') onClose();
+            if (e.key === 'm' || e.key === 'M') setIsMuted(prev => !prev);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [activeReelId, reels]);
+
+    return (
+        <div className="reels-mega-overlay">
+            {/* Top Controls */}
+            <div className="reels-top-bar">
+                <button className="reels-close-btn" onClick={onClose} title="Close (Esc)">
+                    <FiX size={28} />
+                </button>
+            </div>
+
+            {/* Desktop Navigation Arrows */}
+            <div className="desktop-nav-arrows desktop-only-flex">
+                <button
+                    className={`reels-nav-arrow up ${activeReelId === reels[0]?.id ? 'hidden' : ''}`}
+                    onClick={scrollToPrev}
+                >
+                    <FiChevronUp size={32} />
+                </button>
+                <button
+                    className={`reels-nav-arrow down ${activeReelId === reels[reels.length - 1]?.id ? 'hidden' : ''}`}
+                    onClick={scrollToNext}
+                >
+                    <FiChevronDown size={32} />
+                </button>
+            </div>
+
+            <div className="reels-feed-container" ref={containerRef}>
+                {reels.map((r) => (
+                    <ReelItem
+                        key={r.id}
+                        reel={r}
+                        isActive={activeReelId === r.id}
+                        isMuted={isMuted}
+                        onToggleMute={() => setIsMuted(!isMuted)}
+                        profileData={profileData}
+                        setRef={(el) => setReelRef(r.id, el)}
+                    />
+                ))}
+            </div>
+
+            <style jsx>{`
+                .reels-mega-overlay {
+                    position: fixed;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: #000;
+                    z-index: 6000;
+                    overflow: hidden;
+                }
+
+                .reels-top-bar {
+                    position: absolute;
+                    top: 0; left: 0; right: 0;
+                    height: 60px;
+                    z-index: 6200;
+                    pointer-events: none;
+                }
+
+                .reels-close-btn {
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    z-index: 6100;
+                    pointer-events: auto;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+                    transition: transform 0.2s;
+                }
+                .reels-close-btn:hover { transform: scale(1.1); }
+
+                .reels-feed-container {
+                    height: 100vh;
+                    height: 100dvh;
+                    overflow-y: scroll;
+                    scroll-snap-type: y mandatory;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
+                .reels-feed-container::-webkit-scrollbar { display: none; }
+
+                /* Desktop Navigation Arrows */
+                .desktop-nav-arrows {
+                    position: absolute;
+                    left: calc(50% + 30vh);
+                    top: 50%;
+                    transform: translateY(-50%);
+                    flex-direction: column;
+                    gap: 16px;
+                    z-index: 6150;
+                    display: flex;
+                }
+                
+                .reels-nav-arrow {
+                    width: 50px; height: 50px;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.15);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    backdrop-filter: blur(10px);
+                }
+                .reels-nav-arrow:hover { 
+                    background: rgba(255,255,255,0.25); 
+                    transform: scale(1.1);
+                    border-color: rgba(255,255,255,0.4);
+                }
+                .reels-nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+                @media (max-width: 1000px) {
+                    .desktop-nav-arrows { 
+                        left: auto;
+                        right: 20px; 
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .desktop-nav-arrows { display: none; }
+                    .reels-close-btn { 
+                        top: max(20px, env(safe-area-inset-top)); 
+                    }
+                }
+            `}</style>
+        </div>
+    );
+};
+
+// Individual Reel Component
+const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }) => {
+    const videoRef = useRef(null);
+    const [isPaused, setIsPaused] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+
+    useEffect(() => {
+        if (isActive && videoRef.current) {
+            videoRef.current.currentTime = 0;
+            videoRef.current.play().catch(() => { });
+            setIsPaused(false);
+        } else if (videoRef.current) {
+            videoRef.current.pause();
+        }
+    }, [isActive]);
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -95,77 +236,87 @@ const ReelsViewer = ({ reel, reels, onClose, onSwitchReel, profileData }) => {
         }
     };
 
-    if (!reel) return null;
-
     return (
         <div
-            className="reels-overlay"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+            className="reels-snap-item"
+            ref={setRef}
+            data-id={reel.id}
         >
-            <button className="reels-close-btn" onClick={onClose}>
-                <FiX size={28} />
-            </button>
-
-            <div className="reels-content-wrapper">
-                <div className="reels-video-container" onClick={togglePlay}>
+            <div className="reels-main-content">
+                <div className="reels-video-box" onClick={togglePlay}>
                     <video
                         ref={videoRef}
                         src={reel.image || (reel.images && reel.images[0])}
                         loop
                         playsInline
                         muted={isMuted}
-                        className="reel-video"
+                        className="v-media"
+                        controlsList="nodownload"
+                        onContextMenu={(e) => e.preventDefault()}
+                    />
+
+                    {/* Protection Overlay (blocks right-click and save) */}
+                    <div
+                        className="reels-protection-layer"
+                        style={{
+                            position: 'absolute',
+                            top: 0, left: 0, width: '100%', height: '100%',
+                            zIndex: 10,
+                            backgroundColor: 'transparent'
+                        }}
+                        onContextMenu={(e) => e.preventDefault()}
                     />
 
                     {isPaused && (
-                        <div className="reels-pause-indicator">
+                        <div className="v-pause-ui">
                             <FiPlay size={60} fill="white" />
                         </div>
                     )}
 
-                    {/* Overlaid Info (Bottom Left) */}
-                    <div className="reels-info-overlay">
-                        <div className="reels-user-row">
-                            <img src={profileData?.profilePic} alt="" className="reels-p-pic" />
-                            <span className="reels-username">{profileData?.username}</span>
-                            <button className="reels-follow-btn">Follow</button>
+                    {/* Bottom Info Overlay */}
+                    <div className="v-info-card">
+                        <div className="v-user-row">
+                            <img src={profileData?.profilePic} alt="" className="v-avatar" />
+                            <span className="v-username">{profileData?.username}</span>
+                            <button className="v-follow">Follow</button>
                         </div>
-                        <div className="reels-caption">
-                            {reel.caption || "No caption"}
+                        <div className="v-caption">
+                            {reel.caption || "Instagram Reel"}
                         </div>
-                        <div className="reels-audio-info">
+                        <div className="v-audio">
                             <FiMusic size={12} />
-                            <marquee scrollamount="3">Original audio • {profileData?.username}</marquee>
+                            <div className="audio-marquee">
+                                <span>Original audio • {profileData?.username}</span>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Action Buttons (Floating Right) */}
-                    <div className="reels-actions">
-                        <div className="action-item" onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); }}>
-                            <div className={`action-icon ${isLiked ? 'liked' : ''}`}>
+                    {/* Side Action Buttons */}
+                    <div className="v-actions-list">
+                        <div className="v-action-btn" onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); }}>
+                            <div className={`v-icon-circle ${isLiked ? 'liked' : ''}`}>
                                 <FiHeart size={24} fill={isLiked ? "#ed4956" : "none"} color={isLiked ? "#ed4956" : "white"} />
                             </div>
-                            <span>1.2K</span>
+                            <span className="v-label">1.2K</span>
                         </div>
-                        <div className="action-item" onClick={(e) => e.stopPropagation()}>
-                            <div className="action-icon">
+                        <div className="v-action-btn" onClick={(e) => e.stopPropagation()}>
+                            <div className="v-icon-circle">
                                 <FiMessageCircle size={24} color="white" />
                             </div>
-                            <span>42</span>
+                            <span className="v-label">42</span>
                         </div>
-                        <div className="action-item" onClick={(e) => e.stopPropagation()}>
-                            <div className="action-icon">
+                        <div className="v-action-btn" onClick={(e) => e.stopPropagation()}>
+                            <div className="v-icon-circle">
                                 <FiSend size={24} color="white" />
                             </div>
                         </div>
-                        <div className="action-item" onClick={(e) => e.stopPropagation()}>
-                            <div className="action-icon">
+                        <div className="v-action-btn" onClick={(e) => e.stopPropagation()}>
+                            <div className="v-icon-circle">
                                 <FiMoreHorizontal size={24} color="white" />
                             </div>
                         </div>
-                        <div className="action-item" onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }}>
-                            <div className="action-icon">
+                        <div className="v-action-btn" onClick={(e) => { e.stopPropagation(); onToggleMute(); }}>
+                            <div className="v-icon-circle">
                                 {isMuted ? <FiVolumeX size={20} color="white" /> : <FiVolume2 size={20} color="white" />}
                             </div>
                         </div>
@@ -174,173 +325,143 @@ const ReelsViewer = ({ reel, reels, onClose, onSwitchReel, profileData }) => {
             </div>
 
             <style jsx>{`
-                .reels-overlay {
-                    position: fixed;
-                    top: 0; left: 0; right: 0; bottom: 0;
-                    background: #000;
-                    z-index: 6000;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .reels-close-btn {
-                    position: absolute;
-                    top: 20px;
-                    left: 20px;
-                    background: none;
-                    border: none;
-                    color: white;
-                    cursor: pointer;
-                    z-index: 6100;
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-                }
-
-                .reels-content-wrapper {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                .reels-snap-item {
+                    height: 100vh;
+                    height: 100dvh;
                     width: 100%;
+                    scroll-snap-align: start;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #000;
                 }
 
-                .reels-video-container {
+                .reels-main-content {
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .reels-video-box {
                     position: relative;
-                    height: 90vh;
+                    height: 94%;
                     aspect-ratio: 9/16;
                     background: #111;
                     border-radius: 8px;
                     overflow: hidden;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
                 }
 
-                .reel-video {
+                .v-media {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                 }
 
-                .reels-pause-indicator {
+                .v-pause-ui {
                     position: absolute;
                     top: 50%; left: 50%;
                     transform: translate(-50%, -50%);
-                    opacity: 0.8;
+                    opacity: 0.7;
                     pointer-events: none;
                 }
 
-                /* Info Overlay */
-                .reels-info-overlay {
+                /* Info Card */
+                .v-info-card {
                     position: absolute;
                     bottom: 0; left: 0; right: 60px;
-                    padding: 20px 16px;
-                    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+                    padding: 24px 16px;
+                    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+                    color: white;
                     display: flex;
                     flex-direction: column;
                     gap: 12px;
-                    color: white;
                 }
 
-                .reels-user-row {
+                .v-user-row {
                     display: flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 10px;
                 }
 
-                .reels-p-pic {
+                .v-avatar {
                     width: 32px; height: 32px;
                     border-radius: 50%;
-                    border: 1.5px solid white;
+                    border: 2px solid white;
                 }
 
-                .reels-username {
-                    font-weight: 600;
-                    font-size: 14px;
+                .v-username {
+                    font-weight: 600; font-size: 14px;
                 }
 
-                .reels-follow-btn {
-                    background: none;
-                    border: 1px solid white;
-                    color: white;
-                    padding: 2px 10px;
-                    border-radius: 6px;
-                    font-size: 12px;
-                    font-weight: 600;
+                .v-follow {
+                    background: none; border: 1px solid white;
+                    color: white; padding: 3px 12px;
+                    border-radius: 6px; font-size: 12px;
+                    font-weight: 600; cursor: pointer;
                 }
 
-                .reels-caption {
-                    font-size: 14px;
-                    line-height: 1.4;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
+                .v-caption {
+                    font-size: 14px; line-height: 1.4;
+                    display: -webkit-box; -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical; overflow: hidden;
                 }
 
-                .reels-audio-info {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    font-size: 12px;
-                    width: 150px;
-                    overflow: hidden;
+                .v-audio {
+                    display: flex; align-items: center; gap: 8px; font-size: 12px;
+                }
+                
+                .audio-marquee {
+                    width: 150px; overflow: hidden; white-space: nowrap;
+                }
+                .audio-marquee span {
+                    display: inline-block;
+                    animation: m-scroll 10s linear infinite;
+                }
+                @keyframes m-scroll {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-100%); }
                 }
 
-                /* Actions */
-                .reels-actions {
+                /* Side Actions */
+                .v-actions-list {
                     position: absolute;
                     right: 0; bottom: 0;
-                    width: 60px;
+                    width: 65px;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     gap: 20px;
-                    padding-bottom: 20px;
-                    z-index: 10;
+                    padding-bottom: 24px;
+                    z-index: 20;
                 }
 
-                .action-item {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 4px;
-                    cursor: pointer;
+                .v-action-btn {
+                    display: flex; flex-direction: column;
+                    align-items: center; gap: 6px; cursor: pointer;
                 }
 
-                .action-icon {
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+                .v-icon-circle {
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
                     transition: transform 0.1s;
                 }
-
-                .action-item:active .action-icon {
-                    transform: scale(0.9);
-                }
-
-                .action-item span {
-                    color: white;
-                    font-size: 12px;
-                    font-weight: 500;
-                }
+                .v-action-btn:active .v-icon-circle { transform: scale(0.9); }
+                .v-label { font-size: 12px; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
                 @media (max-width: 768px) {
-                    .reels-video-container {
-                        height: 100vh;
-                        height: 100dvh;
-                        width: 100vw;
+                    .reels-video-box {
+                        height: 100%;
+                        width: 100%;
                         border-radius: 0;
                         aspect-ratio: auto;
                     }
-                    
-                    .reels-close-btn {
-                        top: max(20px, env(safe-area-inset-top));
-                        left: 15px;
+                    .v-info-card {
+                        padding-bottom: max(30px, env(safe-area-inset-bottom) + 10px);
                     }
-
-                    .reels-info-overlay {
-                        padding-bottom: max(20px, env(safe-area-inset-bottom));
-                    }
-
-                    .reels-actions {
-                        padding-bottom: max(20px, env(safe-area-inset-bottom) + 20px);
+                    .v-actions-list {
+                        padding-bottom: max(30px, env(safe-area-inset-bottom) + 10px);
                     }
                 }
             `}</style>

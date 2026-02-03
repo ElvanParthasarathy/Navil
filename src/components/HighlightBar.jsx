@@ -145,7 +145,10 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                     .h-ring { width: 62px; height: 62px; }
                     .h-item { width: 78px; }
                     .highlight-bar-container { padding: 4px 0 12px; }
-                    .highlights-scroll { gap: 12px; }
+                    .highlights-scroll { 
+                        gap: 12px; 
+                        padding: 0 8px; /* Minimal padding for mobile scroll */
+                    }
                 }
             `}</style>
         </div>

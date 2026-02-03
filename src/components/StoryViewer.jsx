@@ -266,14 +266,30 @@ const StoryViewer = ({
                                 playsInline
                                 onLoadedData={handleVideoLoaded}
                                 onEnded={nextStory}
+                                controlsList="nodownload"
+                                onContextMenu={(e) => e.preventDefault()}
                             />
                         ) : (
                             <img
                                 src={currentStory?.url}
                                 alt=""
                                 onLoad={handleImageLoaded}
+                                onContextMenu={(e) => e.preventDefault()}
+                                style={{ userSelect: 'none', WebkitUserDrag: 'none' }}
                             />
                         )}
+
+                        {/* Protection Overlay (blocks right-click and save) */}
+                        <div
+                            className="story-protection-layer"
+                            style={{
+                                position: 'absolute',
+                                top: 0, left: 0, width: '100%', height: '100%',
+                                zIndex: 10,
+                                backgroundColor: 'transparent'
+                            }}
+                            onContextMenu={(e) => e.preventDefault()}
+                        />
                     </div>
 
                     {/* Footer / Caption if any */}

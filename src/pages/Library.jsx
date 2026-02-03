@@ -126,10 +126,19 @@ const Library = () => {
     };
 
     const closePost = () => {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('post');
-        newParams.delete('reel');
-        setSearchParams(newParams);
+        setSearchParams(prev => {
+            const next = new URLSearchParams(prev);
+            next.delete('post');
+            next.delete('reel');
+            return next;
+        }, { replace: true });
+
+        // Ensure fullscreen is exited if it was active (for Reels too)
+        try {
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        } catch (e) { }
     };
 
     const nextImage = (e) => {
@@ -151,7 +160,7 @@ const Library = () => {
         const currentData = activeTab === 'posts' ? posts : activeTab === 'reels' ? reels : archivedPosts;
         const currentIndex = currentData.findIndex(p => p.id === selectedPost.id);
         if (currentIndex < currentData.length - 1) {
-            setSearchParams({ post: currentData[currentIndex + 1].id });
+            setSearchParams({ post: currentData[currentIndex + 1].id }, { replace: true });
             setPostImageIndex(0);
         }
     };
@@ -161,7 +170,7 @@ const Library = () => {
         const currentData = activeTab === 'posts' ? posts : activeTab === 'reels' ? reels : archivedPosts;
         const currentIndex = currentData.findIndex(p => p.id === selectedPost.id);
         if (currentIndex > 0) {
-            setSearchParams({ post: currentData[currentIndex - 1].id });
+            setSearchParams({ post: currentData[currentIndex - 1].id }, { replace: true });
             setPostImageIndex(0);
         }
     };
@@ -197,11 +206,11 @@ const Library = () => {
     };
 
     const switchHighlight = (highlight) => {
-        setSearchParams({ story: highlight.id });
+        setSearchParams({ story: highlight.id }, { replace: true });
     };
 
     const switchReel = (reel) => {
-        setSearchParams({ reel: reel.id });
+        setSearchParams({ reel: reel.id }, { replace: true });
     };
 
 
@@ -221,10 +230,24 @@ const Library = () => {
         // Reset loading state when src changes
         useEffect(() => {
             mountedRef.current = true;
-            setLoading(true);
             setError(false);
-            setReady(false);
             loadStartTime.current = Date.now();
+
+            // Instant check for cached images
+            if (src && !isVideo) {
+                const img = new Image();
+                img.src = src;
+                if (img.complete) {
+                    setLoading(false);
+                    setReady(true);
+                } else {
+                    setLoading(true);
+                    setReady(false);
+                }
+            } else {
+                setLoading(true);
+                setReady(false);
+            }
 
             // Pause and reset video immediately when source changes
             if (ref.current && isVideo) {
@@ -251,18 +274,9 @@ const Library = () => {
 
         const handleLoad = () => {
             if (!mountedRef.current) return;
-
-            // Ensure loader shows for at least 200ms to prevent flash
-            const elapsed = Date.now() - loadStartTime.current;
-            const minLoaderTime = 200;
-            const delay = Math.max(0, minLoaderTime - elapsed);
-
-            setTimeout(() => {
-                if (!mountedRef.current) return;
-                setLoading(false);
-                setReady(true);
-                if (onLoaded) onLoaded();
-            }, delay);
+            setLoading(false);
+            setReady(true);
+            if (onLoaded) onLoaded();
         };
 
         const handleError = () => {
@@ -300,6 +314,8 @@ const Library = () => {
                         muted={muted}
                         playsInline={playsInline}
                         controls={controls}
+                        controlsList="nodownload"
+                        onContextMenu={(e) => e.preventDefault()}
                         onLoadedData={handleLoad}
                         onError={handleError}
                         onEnded={() => {
@@ -315,11 +331,28 @@ const Library = () => {
                         style={{
                             ...style,
                             display: ready ? 'block' : 'none',
+                            userSelect: 'none',
+                            WebkitUserDrag: 'none'
                         }}
                         onLoad={handleLoad}
                         onError={handleError}
+                        onContextMenu={(e) => e.preventDefault()}
                     />
                 )}
+
+                {/* Protection Layer (blocks right-click and save as) */}
+                <div
+                    className="media-protection-layer"
+                    style={{
+                        position: 'absolute',
+                        top: 0, left: 0, width: '100%', height: '100%',
+                        zIndex: 10,
+                        backgroundColor: 'transparent',
+                        userSelect: 'none',
+                        WebkitTouchCallout: 'none'
+                    }}
+                    onContextMenu={(e) => e.preventDefault()}
+                />
             </div>
         );
     };
@@ -561,6 +594,12 @@ const Library = () => {
                         font-weight: 300;
                         margin-bottom: 12px;
                         display: block;
+                    }
+
+                    /* Remove side padding for full-width highlights/grid */
+                    .library-container {
+                        padding-left: 0;
+                        padding-right: 0;
                     }
                 }
                 @media (min-width: 736px) {
@@ -1319,7 +1358,19 @@ const Library = () => {
                         const hasMultiple = post.images && post.images.length > 1;
 
                         return (
-                            <div key={post.id} className="post-thumbnail" onClick={() => openPost(post)}>
+                            <div
+                                key={post.id}
+                                className="post-thumbnail"
+                                onClick={() => openPost(post)}
+                                onMouseEnter={() => {
+                                    // Proactive Preloading: Load full-res image on hover
+                                    const media = post.images ? post.images[0] : (post.image || post.url);
+                                    if (media && !media.endsWith('.mp4')) {
+                                        const img = new Image();
+                                        img.src = media;
+                                    }
+                                }}
+                            >
                                 {isVideo ? (
                                     <video
                                         src={post.image}
@@ -1331,7 +1382,7 @@ const Library = () => {
                                         onMouseOut={e => { e.target.pause(); e.target.currentTime = 0; }}
                                     />
                                 ) : (
-                                    <img src={post.image} alt="Post" className="post-image" loading="lazy" />
+                                    <img src={post.image} alt="Post" className="post-image" loading="eager" />
                                 )}
 
                                 {isVideo && (
@@ -1442,9 +1493,14 @@ const Library = () => {
                                     const currentMediaCallback = selectedPost.images ? selectedPost.images[postImageIndex] : selectedPost.image;
                                     const isVideoCallback = selectedPost.type === 'video' || (currentMediaCallback && currentMediaCallback.endsWith('.mp4'));
 
+                                    // Preload next image if in a carousel
+                                    if (selectedPost.images && postImageIndex < selectedPost.images.length - 1) {
+                                        const nextImg = new Image();
+                                        nextImg.src = selectedPost.images[postImageIndex + 1];
+                                    }
+
                                     return (
                                         <MediaLoader
-                                            key={`post-${selectedPost.id}-${postImageIndex}`} // Absolute unique key to force remount
                                             src={currentMediaCallback}
                                             type={isVideoCallback ? 'video' : 'image'}
                                             className="modal-image"
