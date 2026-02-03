@@ -4,6 +4,7 @@ import instagramData, { storyHighlights as initialHighlights, profileData } from
 import { FiHeart, FiMessageCircle, FiX, FiChevronLeft, FiChevronRight, FiPlay, FiLayers, FiGrid, FiFilm, FiArchive, FiVolume2, FiVolumeX, FiPause } from 'react-icons/fi';
 import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
+import ReelsViewer from '../components/ReelsViewer';
 
 const Library = () => {
     // Destructure Data
@@ -26,6 +27,7 @@ const Library = () => {
     // --- STATES ---
     const [activeTab, setActiveTab] = useState('posts'); // 'posts', 'reels', 'archive'
     const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedReel, setSelectedReel] = useState(null);
     const [postImageIndex, setPostImageIndex] = useState(0);
 
     const [viewingHighlight, setViewingHighlight] = useState(null); // The highlight group being viewed
@@ -39,14 +41,16 @@ const Library = () => {
     useEffect(() => {
         const postId = searchParams.get('post');
         const storyId = searchParams.get('story');
+        const reelId = searchParams.get('reel');
         const listType = searchParams.get('list');
+
+        const isMobile = window.innerWidth <= 768;
 
         // Handle Post
         if (postId) {
             const allContent = [...posts, ...reels, ...archivedPosts];
             const foundPost = allContent.find(p => p.id === postId);
             if (foundPost) {
-                const isMobile = window.innerWidth <= 768;
                 if (isMobile) {
                     setIsMobileFeed(true);
                     setSelectedPost(foundPost);
@@ -59,7 +63,22 @@ const Library = () => {
         } else {
             setSelectedPost(null);
             setIsMobileFeed(false);
-            if (!storyId && !listType) document.body.style.overflow = 'auto';
+            // Only reset overflow if no other modals are open
+            if (!storyId && !reelId && !listType) document.body.style.overflow = 'auto';
+        }
+
+        // Handle Reel
+        if (reelId) {
+            const allContent = [...reels, ...posts, ...archivedPosts]; // Reels first for priority
+            const foundReel = allContent.find(r => r.id === reelId);
+            if (foundReel) {
+                setSelectedReel(foundReel);
+                document.body.style.overflow = 'hidden';
+            }
+        } else {
+            setSelectedReel(null);
+            // Only reset overflow if no other modals are open
+            if (!postId && !storyId && !listType) document.body.style.overflow = 'auto';
         }
 
         // Handle Story
@@ -71,7 +90,8 @@ const Library = () => {
             }
         } else {
             setViewingHighlight(null);
-            if (!postId && !listType) document.body.style.overflow = 'auto';
+            // Only reset overflow if no other modals are open
+            if (!postId && !reelId && !listType) document.body.style.overflow = 'auto';
         }
 
         // Handle List
@@ -85,7 +105,8 @@ const Library = () => {
             }
         } else {
             setUserListModal(prev => ({ ...prev, open: false }));
-            if (!postId && !storyId) document.body.style.overflow = 'auto';
+            // Only reset overflow if no other modals are open
+            if (!postId && !storyId && !reelId) document.body.style.overflow = 'auto';
         }
     }, [searchParams, posts, reels, archivedPosts, highlights]);
 
@@ -96,12 +117,18 @@ const Library = () => {
 
     // --- POST MODAL LOGIC ---
     const openPost = (post) => {
-        setSearchParams({ post: post.id }, { replace: false });
+        // Switch logic for Reels vs Standard Posts
+        if (post.type === 'video' || (post.image && post.image.endsWith('.mp4')) || activeTab === 'reels') {
+            setSearchParams({ reel: post.id }, { replace: false });
+        } else {
+            setSearchParams({ post: post.id }, { replace: false });
+        }
     };
 
     const closePost = () => {
         const newParams = new URLSearchParams(searchParams);
         newParams.delete('post');
+        newParams.delete('reel');
         setSearchParams(newParams);
     };
 
@@ -142,16 +169,39 @@ const Library = () => {
     // --- STORY VIEWER LOGIC ---
     const openHighlight = (highlight) => {
         setSearchParams({ story: highlight.id }, { replace: false });
+        // Enable fullscreen on mobile for immersive experience
+        if (window.innerWidth <= 768) {
+            try {
+                const docElm = document.documentElement;
+                if (docElm.requestFullscreen) docElm.requestFullscreen();
+                else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
+                else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
+                else if (docElm.msRequestFullscreen) docElm.msRequestFullscreen();
+            } catch (e) { console.warn("Fullscreen request failed", e); }
+        }
     };
 
     const closeStory = () => {
         const newParams = new URLSearchParams(searchParams);
         newParams.delete('story');
         setSearchParams(newParams);
+        // Exit fullscreen if active
+        try {
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        } catch (e) { console.warn("Exit fullscreen failed", e); }
     };
 
     const switchHighlight = (highlight) => {
         setSearchParams({ story: highlight.id });
+    };
+
+    const switchReel = (reel) => {
+        setSearchParams({ reel: reel.id });
     };
 
 
@@ -1311,8 +1361,18 @@ const Library = () => {
                 />
             )}
 
+            {/* --- REELS VIEWER MODAL --- */}
+            {selectedReel && (
+                <ReelsViewer
+                    reel={selectedReel}
+                    reels={reels}
+                    onClose={closePost}
+                    onSwitchReel={switchReel}
+                    profileData={profileData}
+                />
+            )}
 
-            {/* --- POST MODAL --- */}
+            {/* --- POST VIEWER MODAL --- */}
             {
                 selectedPost && !isMobileFeed && (
                     <div className="post-modal-overlay" onClick={closePost}>

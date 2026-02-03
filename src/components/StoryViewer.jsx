@@ -355,6 +355,7 @@ const StoryViewer = ({
                     position: relative;
                     width: 100%;
                     height: 100vh;
+                    height: 100dvh;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -421,6 +422,7 @@ const StoryViewer = ({
                     position: absolute;
                     top: 0; left: 0; right: 0;
                     padding: 12px 12px 30px;
+                    padding-top: max(12px, env(safe-area-inset-top));
                     background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
                     z-index: 150;
                 }
@@ -530,6 +532,7 @@ const StoryViewer = ({
                     position: absolute;
                     bottom: 0; left: 0; right: 0;
                     padding: 20px 20px 30px;
+                    padding-bottom: max(30px, env(safe-area-inset-bottom));
                     background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
                     z-index: 150;
                 }
@@ -580,6 +583,7 @@ const StoryViewer = ({
                     .sv-card.active {
                         width: 100vw;
                         height: 100vh;
+                        height: 100dvh;
                         border-radius: 0;
                         transform: none;
                     }
@@ -588,7 +592,9 @@ const StoryViewer = ({
                         gap: 4px;
                     }
                     .sv-btn { padding: 4px; }
-                    .sv-header { padding-top: 16px; }
+                    .sv-header { 
+                        padding-top: max(16px, env(safe-area-inset-top)); 
+                    }
                 }
             `}</style>
         </div>

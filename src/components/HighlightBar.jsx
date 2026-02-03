@@ -49,13 +49,15 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                     position: relative;
                     padding: 10px 0 20px;
                     width: 100%;
+                    max-width: 935px;
+                    margin: 0 auto;
                 }
 
                 .highlights-scroll {
                     display: flex;
                     gap: 18px;
                     overflow-x: auto;
-                    padding: 0 10px;
+                    padding: 0 40px;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
                 }
@@ -135,8 +137,8 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                 }
 
-                .h-nav-btn.left { left: -12px; }
-                .h-nav-btn.right { right: -12px; }
+                .h-nav-btn.left { left: 8px; }
+                .h-nav-btn.right { right: 8px; }
 
                 @media (max-width: 768px) {
                     .h-nav-btn { display: none; }
