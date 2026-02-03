@@ -17,10 +17,7 @@ const Library = () => {
     const archivedPosts = React.useMemo(() => [...(rawArchived || [])].sort((a, b) => b.timestamp - a.timestamp), [rawArchived]);
 
     // Highlights Data (Sort: Newest Group First, Oldest Story inside Group First)
-    const highlights = React.useMemo(() => [...(initialHighlights || [])].reverse().map(group => ({
-        ...group,
-        stories: [...group.stories].reverse()
-    })), [initialHighlights]);
+    const highlights = React.useMemo(() => (initialHighlights || []), [initialHighlights]);
 
     // --- SEARCH PARAMS (HISTORY SYNC) ---
     const [searchParams, setSearchParams] = useSearchParams();
