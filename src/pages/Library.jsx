@@ -158,7 +158,9 @@ const Library = () => {
 
     const nextPost = (e) => {
         e.stopPropagation();
-        const currentData = activeTab === 'posts' ? posts : activeTab === 'reels' ? reels : archivedPosts;
+        const currentData = activeTab === 'posts' ? posts :
+            activeTab === 'arts' ? arts :
+                activeTab === 'reels' ? reels : archivedPosts;
         const currentIndex = currentData.findIndex(p => p.id === selectedPost.id);
         if (currentIndex < currentData.length - 1) {
             setSearchParams({ post: currentData[currentIndex + 1].id }, { replace: true });
@@ -168,7 +170,9 @@ const Library = () => {
 
     const prevPost = (e) => {
         e.stopPropagation();
-        const currentData = activeTab === 'posts' ? posts : activeTab === 'reels' ? reels : archivedPosts;
+        const currentData = activeTab === 'posts' ? posts :
+            activeTab === 'arts' ? arts :
+                activeTab === 'reels' ? reels : archivedPosts;
         const currentIndex = currentData.findIndex(p => p.id === selectedPost.id);
         if (currentIndex > 0) {
             setSearchParams({ post: currentData[currentIndex - 1].id }, { replace: true });
@@ -1580,7 +1584,7 @@ const Library = () => {
                             <div style={{ width: 28 }}></div> {/* Spacer */}
                         </div>
                         <div className="mobile-feed-content">
-                            {(activeTab === 'posts' ? posts : activeTab === 'reels' ? reels : archivedPosts).map((post) => (
+                            {(activeTab === 'posts' ? posts : activeTab === 'arts' ? arts : activeTab === 'reels' ? reels : archivedPosts).map((post) => (
                                 <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
                                     <div className="modal-header">
                                         <div className="modal-avatar">
