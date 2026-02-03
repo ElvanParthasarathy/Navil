@@ -414,11 +414,14 @@ const Library = () => {
                 >
                     {mediaList.map((m, idx) => (
                         <div key={idx} className="feed-media-slide">
-                            {post.type === 'video' || (typeof m === 'string' && m.endsWith('.mp4')) ? (
-                                <video src={m} className="feed-media" controls playsInline />
-                            ) : (
-                                <img src={m} alt="" className="feed-media" loading="eager" />
-                            )}
+                            <MediaLoader
+                                src={m}
+                                type={(post.type === 'video' || (typeof m === 'string' && m.endsWith('.mp4'))) ? 'video' : 'image'}
+                                className="feed-media"
+                                controls={true}
+                                playsInline={true}
+                                autoPlay={false} // Don't autoplay in feed to avoid noise
+                            />
                         </div>
                     ))}
                 </div>
@@ -1046,7 +1049,7 @@ const Library = () => {
                     cursor: pointer;
                     margin: 0 10px; /* Space from container/peers */
                     flex-shrink: 0;
-                    z-index: 25;
+                    z-index: 30;
                     transition: transform 0.2s;
                 }
                 .story-arrow-btn:hover {
@@ -1086,7 +1089,7 @@ const Library = () => {
                 .post-nav-btn {
                     position: absolute; top: 50%; transform: translateY(-50%);
                     background: none; border: none; color: #fff;
-                    cursor: pointer; padding: 0; z-index: 2100;
+                    cursor: pointer; padding: 0; z-index: 2200;
                     display: flex; align-items: center; justify-content: center;
                     width: 60px; height: 60px;
                     transition: all 0.2s ease;
@@ -1109,7 +1112,7 @@ const Library = () => {
                     background: rgba(255, 255, 255, 0.8); border: none;
                     border-radius: 50%; width: 30px; height: 30px;
                     display: flex; align-items: center; justify-content: center;
-                    cursor: pointer; z-index: 10; color: #000;
+                    cursor: pointer; z-index: 25; color: #000;
                 }
                 .carousel-btn.left { left: 10px; }
                 .carousel-btn.right { right: 10px; }
@@ -1232,11 +1235,18 @@ const Library = () => {
                         background: rgba(255, 255, 255, 0.7); border: none;
                         border-radius: 50%; width: 26px; height: 26px;
                         display: flex; align-items: center; justify-content: center;
-                        cursor: pointer; z-index: 10; color: #000;
+                        cursor: pointer; z-index: 25; color: #000;
                         box-shadow: 0 0 10px rgba(0,0,0,0.1);
                     }
                     .feed-nav-btn.left { left: 10px; }
                     .feed-nav-btn.right { right: 10px; }
+
+                    /* Allow swipe on mobile by letting touch events pass through shield if needed */
+                    @media (max-width: 768px) {
+                        .media-protection-layer {
+                            pointer-events: none;
+                        }
+                    }
                 }
             `}</style>
 
@@ -1442,24 +1452,33 @@ const Library = () => {
                         <div className="desktop-only-block" style={{ position: 'absolute', top: 20, right: 20, color: 'white', cursor: 'pointer', zIndex: 2100 }} onClick={closePost}><FiX size={30} /></div>
 
                         {/* Prev Post Btn (Desktop) */}
-                        {posts.findIndex(p => p.id === selectedPost.id) > 0 && (
-                            <button
-                                className="post-nav-btn prev-post desktop-only-block"
-                                onClick={prevPost}
-                            >
-                                <FiChevronLeft size={44} className="post-nav-icon" />
-                            </button>
-                        )}
+                        {(() => {
+                            const currentList = activeTab === 'posts' ? posts :
+                                activeTab === 'arts' ? arts :
+                                    activeTab === 'reels' ? reels : archivedPosts;
+                            const idx = currentList.findIndex(p => p.id === selectedPost.id);
 
-                        {/* Next Post Btn (Desktop) */}
-                        {posts.findIndex(p => p.id === selectedPost.id) < posts.length - 1 && (
-                            <button
-                                className="post-nav-btn next-post desktop-only-block"
-                                onClick={nextPost}
-                            >
-                                <FiChevronRight size={44} className="post-nav-icon" />
-                            </button>
-                        )}
+                            return (
+                                <>
+                                    {idx > 0 && (
+                                        <button
+                                            className="post-nav-btn prev-post desktop-only-block"
+                                            onClick={prevPost}
+                                        >
+                                            <FiChevronLeft size={44} className="post-nav-icon" />
+                                        </button>
+                                    )}
+                                    {idx < currentList.length - 1 && (
+                                        <button
+                                            className="post-nav-btn next-post desktop-only-block"
+                                            onClick={nextPost}
+                                        >
+                                            <FiChevronRight size={44} className="post-nav-icon" />
+                                        </button>
+                                    )}
+                                </>
+                            );
+                        })()}
 
                         <div className="post-modal-content" onClick={e => e.stopPropagation()}>
                             {/* Mobile Header (Top) */}
