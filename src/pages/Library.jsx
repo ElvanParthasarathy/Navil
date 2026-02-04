@@ -180,31 +180,12 @@ const Library = () => {
     // --- STORY VIEWER LOGIC ---
     const openHighlight = (highlight) => {
         setSearchParams({ story: highlight.id }, { replace: false });
-        // Enable fullscreen on mobile for immersive experience
-        if (window.innerWidth <= 768) {
-            try {
-                const docElm = document.documentElement;
-                if (docElm.requestFullscreen) docElm.requestFullscreen();
-                else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
-                else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
-                else if (docElm.msRequestFullscreen) docElm.msRequestFullscreen();
-            } catch (e) { console.warn("Fullscreen request failed", e); }
-        }
     };
 
     const closeStory = () => {
         const newParams = new URLSearchParams(searchParams);
         newParams.delete('story');
         setSearchParams(newParams);
-        // Exit fullscreen if active
-        try {
-            if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                if (document.exitFullscreen) document.exitFullscreen();
-                else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                else if (document.msExitFullscreen) document.msExitFullscreen();
-            }
-        } catch (e) { console.warn("Exit fullscreen failed", e); }
     };
 
     const switchHighlight = (highlight) => {

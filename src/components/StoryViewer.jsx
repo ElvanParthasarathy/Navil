@@ -335,6 +335,9 @@ const StoryViewer = ({
                     justify-content: center;
                     overflow: hidden;
                     font-family: 'Inter', sans-serif;
+                    /* Prevent scrolling */
+                    touch-action: none;
+                    overscroll-behavior: none;
                 }
 
                 .sv-blur-bg {
@@ -383,6 +386,7 @@ const StoryViewer = ({
                     justify-content: center;
                     z-index: 5100;
                     perspective: 1500px;
+                    touch-action: none; /* Critical for swipe */
                 }
 
                 /* 3D Cards */
@@ -510,8 +514,6 @@ const StoryViewer = ({
                     gap: 12px;
                 }
 
-
-
                 /* Navigation Taps */
                 .sv-nav-tap {
                     position: absolute;
@@ -519,6 +521,7 @@ const StoryViewer = ({
                     width: 25%;
                     z-index: 151;
                     cursor: pointer;
+                    -webkit-tap-highlight-color: transparent;
                 }
                 .sv-nav-tap.left { left: 0; }
                 .sv-nav-tap.right { right: 0; width: 75%; }
@@ -600,27 +603,40 @@ const StoryViewer = ({
 
                 /* Mobile Optimization */
                 @media (max-width: 768px) {
-                    .sv-overlay { background: #000; }
+                    .sv-overlay { 
+                        background: #000;
+                        /* Ensure it sits on top of browser UI */
+                        height: 100dvh; 
+                    }
                     .sv-blur-bg { display: none; }
+                    
                     .sv-card.active {
-                        width: 100vw;
-                        height: 100vh;
+                        width: 100%;
                         height: 100dvh;
                         border-radius: 0;
                         transform: none;
                         background: #000;
+                        /* Prevent resizing glitches */
+                        max-width: 100vw;
                     }
-                    .sv-media-wrapper video,
-                    .sv-media-wrapper img {
-                        object-fit: cover; /* Fill screen on mobile */
+                    
+                    .sv-media-wrapper img,
+                    .sv-media-wrapper video {
+                        /* Force fit within the viewport */
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
                     }
+
                     .sv-card.peer { display: none; }
                     .sv-controls-group { 
-                        gap: 4px;
+                        gap: 10px;
                     }
-                    .sv-btn { padding: 4px; }
+                    .sv-btn { padding: 8px; }
                     .sv-header { 
                         padding-top: max(16px, env(safe-area-inset-top)); 
+                        /* Ensure header stays reachable */
+                        top: 0;
                     }
                 }
             `}</style>
