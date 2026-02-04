@@ -183,19 +183,17 @@ const Home = () => {
                     .hero-content { width: 100%; display: flex; flex-direction: column; align-items: center; }
                     .hero-avatar-wrapper { width: 120px; height: 120px; }
                     .hero-avatar { border-radius: 50%; border-width: 3px; }
-                    .hero-title { font-size: 1.6rem; margin-bottom: 4px; letter-spacing: -0.5px; }
-                    .hero-subtitle { font-size: 1rem; margin-bottom: 12px; opacity: 0.9; }
-                    .hero-bio { font-size: 0.9rem; margin-bottom: 24px; line-height: 1.4; max-width: 300px; margin-left: auto; margin-right: auto; white-space: pre-line; }
+                    .hero-title { font-size: 1.8rem; margin-bottom: 6px; letter-spacing: -0.5px; }
+                    .hero-subtitle { font-size: 1.1rem; margin-bottom: 14px; opacity: 0.9; }
+                    .hero-bio { font-size: 1rem; margin-bottom: 28px; line-height: 1.6; max-width: 90%; margin-left: auto; margin-right: auto; white-space: pre-line; }
                     .hero-actions { width: 100%; flex-direction: column; gap: 10px; }
-                    .hero-btn { width: 100%; justify-content: center; margin: 0; padding: 12px 20px; font-size: 0.95rem; }
+                    .hero-btn { width: 100%; justify-content: center; margin: 0; padding: 14px 20px; font-size: 1rem; font-weight: 600; }
                     
-
-                    
-                    .contact-footer { padding: 32px 24px; border-radius: 24px; flex-direction: column; gap: 24px; text-align: center; }
-                    .contact-info-block h3 { font-size: 1.2rem; margin-bottom: 6px; }
-                    .contact-info-block p { font-size: 0.95rem; line-height: 1.5; }
-                    .contact-socials { justify-content: center; gap: 16px; }
-                    .social-icon-link { width: 44px; height: 44px; }
+                    .contact-footer { padding: 36px 24px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; }
+                    .contact-info-block h3 { font-size: 1.25rem; margin-bottom: 8px; font-weight: 800; }
+                    .contact-info-block p { font-size: 1rem; line-height: 1.6; max-width: 260px; margin: 0 auto; }
+                    .contact-socials { justify-content: center; gap: 20px; }
+                    .social-icon-link { width: 48px; height: 48px; }
                 }
             `}</style>
 

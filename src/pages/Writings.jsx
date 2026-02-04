@@ -136,9 +136,14 @@ const Writings = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .writings-title { font-size: 3rem; }
-                    .category-grid { grid-template-columns: 1fr; }
-                    .category-card { min-height: auto; padding: 24px; }
+                    .writings-header { padding: 40px 20px 20px; text-align: center; }
+                    .writings-title { font-size: 2.2rem; margin-bottom: 12px; }
+                    .writings-subtitle { font-size: 1rem; line-height: 1.5; }
+                    .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; }
+                    .category-card { min-height: auto; padding: 20px; gap: 16px; border-radius: 20px; }
+                    .cat-icon-box { width: 48px; height: 48px; font-size: 1.25rem; border-radius: 12px; }
+                    .cat-title { font-size: 1.2rem; margin-bottom: 4px; }
+                    .cat-desc { font-size: 0.95rem; line-height: 1.4; }
                 }
             `}</style>
 
