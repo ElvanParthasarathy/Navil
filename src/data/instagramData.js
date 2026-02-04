@@ -587,7 +587,7 @@ const instagramData = {
 export const profileData = {
   "username": "elvanparthasarathy",
   "name": "Elvan",
-  "bio": "RMDEC '27\nNo two shadows dance the same. 🌗✨\nLearn to enjoy the rhythm. 🎶🕺",
+  "bio": "Every idea begins with a simple question — why not?",
   "profilePic": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/other/475941983_913470554201391_4166396232242741929_n_18340039015155402.jpg",
   "followers": 210,
   "following": 206,
