@@ -272,13 +272,25 @@ const Home = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .home-hero { flex-direction: column-reverse; gap: 40px; padding: 20px 0; align-items: flex-start; text-align: left; }
-                    .hero-avatar-wrapper { width: 200px; height: 200px; }
-                    .hero-title { font-size: 2.5rem; }
-                    .hero-subtitle { font-size: 1.5rem; }
-                    .explorer-grid { grid-template-columns: 1fr; gap: 16px; }
-                    .explorer-grid > *:last-child { grid-column: span 1; }
-                    .contact-footer { flex-direction: column; gap: 30px; text-align: center; }
+                    .home-page { padding: 20px 16px; }
+                    .home-hero { flex-direction: column-reverse; gap: 32px; padding: 10px 0 40px; align-items: flex-start; text-align: left; }
+                    .hero-content { width: 100%; }
+                    .hero-avatar-wrapper { width: 140px; height: 140px; }
+                    .hero-avatar { border-width: 4px; }
+                    .hero-title { font-size: 2rem; letter-spacing: -1px; margin-bottom: 12px; }
+                    .hero-subtitle { font-size: 1.25rem; margin-bottom: 16px; }
+                    .hero-bio { font-size: 1.05rem; margin-bottom: 32px; }
+                    .hero-btn { width: 100%; justify-content: center; padding: 14px 28px; }
+                    
+                    .section-label { margin-bottom: 20px; }
+                    .explorer-grid { gap: 12px; margin-bottom: 60px; }
+                    .explorer-card { padding: 24px; min-height: 200px; border-radius: 24px; }
+                    .card-icon { width: 48px; height: 48px; }
+                    .card-info { margin-top: 24px; }
+                    .card-title { font-size: 1.25rem; }
+                    
+                    .contact-footer { padding: 32px 24px; border-radius: 24px; flex-direction: column; gap: 24px; text-align: center; }
+                    .contact-info-block h3 { font-size: 1.25rem; }
                 }
             `}</style>
 
