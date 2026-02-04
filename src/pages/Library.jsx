@@ -1658,10 +1658,14 @@ const Library = () => {
                         <div className="user-list-header">
                             <h2>{userListModal.title}</h2>
                             <FiX size={22} style={{ cursor: 'pointer' }} onClick={() => {
-                                const newParams = new URLSearchParams(searchParams);
-                                newParams.delete('list');
-                                setSearchParams(newParams, { replace: false });
+                                setSearchParams(prev => {
+                                    const next = new URLSearchParams(prev);
+                                    next.delete('list');
+                                    return next;
+                                }, { replace: true });
+                                setUserListModal(prev => ({ ...prev, open: false }));
                                 setUserSearchQuery('');
+                                document.body.style.overflow = 'auto';
                             }} />
                         </div>
                         <div className="user-list-search">
