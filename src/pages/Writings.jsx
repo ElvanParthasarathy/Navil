@@ -1,152 +1,229 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
+import { FiArrowRight } from 'react-icons/fi';
 
 const Writings = () => {
     return (
-        <div className="page-view page-fade">
-            <style>{`
-        .writings-header {
-           /* Inherits hero-section styles */
-        }
-        
-        .category-grid {
-           display: grid;
-           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-           gap: 15px;
-           margin-top: 20px;
-           padding: 0 10px;
-           max-width: 800px; /* Constrain width */
-           width: 100%;
-        }
+        <div className="writings-page page-view fadeIn">
+            <style jsx>{`
+                .writings-page {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 40px 24px;
+                }
 
-        .category-card {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 20px 15px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 160px;
-        }
+                .writings-header {
+                    margin-bottom: 60px;
+                    text-align: left;
+                }
 
-        .category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            background-color: var(--bg-card);
-            border-color: var(--border-color);
-        }
+                .writings-title {
+                    font-size: 4rem;
+                    font-weight: 800;
+                    letter-spacing: -2px;
+                    margin-bottom: 16px;
+                    color: var(--text-main);
+                }
 
-        .cat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+                .writings-subtitle {
+                    font-size: 1.25rem;
+                    color: var(--text-muted);
+                    max-width: 600px;
+                    line-height: 1.6;
+                }
 
-        .cat-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            color: var(--text-main);
-        }
+                .category-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                    gap: 24px;
+                    margin-top: 40px;
+                }
 
-        .cat-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
+                .category-card {
+                    background: var(--bg-card);
+                    border: 1px solid var(--border-light);
+                    border-radius: 24px;
+                    padding: 32px;
+                    text-decoration: none;
+                    color: inherit;
+                    transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+                    position: relative;
+                    overflow: hidden;
+                    min-height: 240px;
+                }
 
-        .cat-arrow {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.2rem;
-            color: var(--border-light);
-            opacity: 0;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
+                .cat-icon-box {
+                    width: 56px;
+                    height: 56px;
+                    background: var(--bg-panel);
+                    border-radius: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.5rem;
+                    color: var(--text-main);
+                    transition: all 0.3s ease;
+                }
 
-        .category-card:hover .cat-arrow {
-            opacity: 1;
-            transform: translateX(3px);
-            color: var(--text-main);
-        }
-      `}</style>
+                .cat-content {
+                    flex: 1;
+                }
 
-            <div className="hero-section writings-header">
-                <h1 className="title">Writings</h1>
-                <p className="subtitle">Select a category to explore.</p>
-            </div>
+                .cat-title {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                    color: var(--text-main);
+                }
 
-            <div className="category-grid">
+                .cat-desc {
+                    font-size: 1rem;
+                    color: var(--text-muted);
+                    line-height: 1.5;
+                }
+
+                /* HOVER EFFECTS */
+                .category-card:hover {
+                    transform: translateY(-8px);
+                    border-color: var(--text-main);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                }
+
+                .category-card:hover .cat-icon-box {
+                    background: var(--text-main);
+                    color: var(--bg-app);
+                    transform: rotate(-5deg) scale(1.1);
+                }
+
+                .cat-footer {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    color: var(--text-main);
+                    opacity: 0;
+                    transform: translateX(-10px);
+                    transition: all 0.3s ease;
+                }
+
+                .category-card:hover .cat-footer {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+
+                /* GLASS DECORATION */
+                .category-card::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -20px;
+                    right: -20px;
+                    width: 100px;
+                    height: 100px;
+                    background: var(--text-main);
+                    opacity: 0.03;
+                    border-radius: 50%;
+                    transition: all 0.5s ease;
+                }
+
+                .category-card:hover::after {
+                    transform: scale(2);
+                    opacity: 0.05;
+                }
+
+                @media (max-width: 768px) {
+                    .writings-title { font-size: 3rem; }
+                    .category-grid { grid-template-columns: 1fr; }
+                    .category-card { min-height: auto; padding: 24px; }
+                }
+            `}</style>
+
+            <header className="writings-header animate-entry">
+                <h1 className="writings-title">Writings</h1>
+                <p className="writings-subtitle">
+                    A collection of thoughts, stories, and observations captured throughout my journey. Select a category to explore my archive.
+                </p>
+            </header>
+
+            <div className="category-grid animate-entry">
                 <Link to="/writings/quotes" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsChatQuote /></div>
-                    <div className="cat-title">Quotes</div>
-                    <div className="cat-desc">Collected wisdom from others.</div>
+                    <div className="cat-icon-box"><BsChatQuote /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Quotes</div>
+                        <p className="cat-desc">Collected wisdom and inspiring words from thinkers across generations.</p>
+                    </div>
+                    <div className="cat-footer">Browse archive <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/blog" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsPencilSquare /></div>
-                    <div className="cat-title">Blog Posts</div>
-                    <div className="cat-desc">Daily updates and casual writing.</div>
+                    <div className="cat-icon-box"><BsPencilSquare /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Blog Posts</div>
+                        <p className="cat-desc">Daily reflections, updates, and casual shares from my personal life.</p>
+                    </div>
+                    <div className="cat-footer">Read posts <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/articles" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsNewspaper /></div>
-                    <div className="cat-title">Articles</div>
-                    <div className="cat-desc">Long-form technical and philosophical pieces.</div>
+                    <div className="cat-icon-box"><BsNewspaper /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Articles</div>
+                        <p className="cat-desc">In-depth technical analysis and structured philosophical long-forms.</p>
+                    </div>
+                    <div className="cat-footer">Explore articles <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/essays" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsFileText /></div>
-                    <div className="cat-title">Essays</div>
-                    <div className="cat-desc">Formal arguments and observations.</div>
+                    <div className="cat-icon-box"><BsFileText /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Essays</div>
+                        <p className="cat-desc">Formal arguments, critical reviews, and academic observations.</p>
+                    </div>
+                    <div className="cat-footer">View essays <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/stories" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsBook /></div>
-                    <div className="cat-title">Short Stories</div>
-                    <div className="cat-desc">Fiction, narrative experiments, and tales.</div>
+                    <div className="cat-icon-box"><BsBook /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Short Stories</div>
+                        <p className="cat-desc">Narrative experiments, fiction, and immersive storytelling pieces.</p>
+                    </div>
+                    <div className="cat-footer">Read stories <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/poems" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsPen /></div>
-                    <div className="cat-title">Poems</div>
-                    <div className="cat-desc">Verses and rhythmic thoughts.</div>
+                    <div className="cat-icon-box"><BsPen /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Poems</div>
+                        <p className="cat-desc">Rhythmic verses, abstract poetry, and lyrical expressions of emotion.</p>
+                    </div>
+                    <div className="cat-footer">Read poems <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/thoughts" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsCloud /></div>
-                    <div className="cat-title">Thoughts</div>
-                    <div className="cat-desc">Random streams of consciousness.</div>
+                    <div className="cat-icon-box"><BsCloud /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Thoughts</div>
+                        <p className="cat-desc">Unfiltered streams of consciousness and quick ideological captures.</p>
+                    </div>
+                    <div className="cat-footer">Explore thoughts <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/diary" className="category-card">
-                    <span className="cat-arrow">→</span>
-                    <div className="cat-icon"><BsMoonStars /></div>
-                    <div className="cat-title">Diary</div>
-                    <div className="cat-desc">Personal notes and logs.</div>
+                    <div className="cat-icon-box"><BsMoonStars /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Diary</div>
+                        <p className="cat-desc">Private logs, milestones, and personal journey documentations.</p>
+                    </div>
+                    <div className="cat-footer">Open logbook <FiArrowRight /></div>
                 </Link>
             </div>
 
-            <div style={{ height: '40px' }}></div>
+            <div style={{ height: '80px' }}></div>
         </div>
     );
 };

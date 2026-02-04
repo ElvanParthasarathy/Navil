@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useOutletContext } from 'react-router-dom';
-import { FiHome, FiUser, FiEdit3, FiLayers, FiSettings, FiGrid } from 'react-icons/fi';
+import { FiHome, FiUser, FiEdit3, FiLayers, FiSettings, FiGrid, FiArrowRight } from 'react-icons/fi';
 import { profileData } from './data/instagramData';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -52,9 +52,9 @@ const Layout = () => {
             <header className="mobile-header">
                 <div className="brand">Elvan</div>
                 <div className="mobile-actions">
-                    <Link to="/settings" className="settings-btn-small">
-                        <FiSettings size={22} />
-                    </Link>
+                    <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn primary">
+                        View Portfolio <FiArrowRight />
+                    </a>
                 </div>
             </header>
 
@@ -64,7 +64,10 @@ const Layout = () => {
                     <div className="sidebar-nav">
                         <NavLink to="/" icon={<FiHome size={22} />} label="Home" active={location.pathname === '/'} />
                         <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="Writings" active={location.pathname.startsWith('/writings')} />
-                        <NavLink to="/portfolio" icon={<FiLayers size={22} />} label="Portfolio" active={location.pathname === '/portfolio'} />
+                        <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className={`nav-item ${location.pathname === '/portfolio' ? 'active' : ''}`}>
+                            <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiLayers size={22} /></span>
+                            <span className="label">Portfolio</span>
+                        </a>
                         <NavLink to="/library" icon={<FiGrid size={22} />} label="Library" active={location.pathname === '/library'} />
                         <NavLink to="/about" icon={<FiUser size={22} />} label="About" active={location.pathname === '/about'} />
                     </div>
