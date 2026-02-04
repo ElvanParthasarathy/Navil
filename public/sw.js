@@ -2,9 +2,10 @@ const CACHE_NAME = 'elvan-cache-v1';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
+    '/manifest.webmanifest',
+    '/assets/instagram/profile.jpg',
     '/assets/style.css',
-    '/assets/mobile.css',
-    '/manifest.webmanifest'
+    '/assets/mobile.css'
 ];
 
 self.addEventListener('install', (event) => {

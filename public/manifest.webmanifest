@@ -10,17 +10,20 @@
         {
             "src": "/assets/instagram/profile.jpg",
             "sizes": "150x150",
-            "type": "image/jpeg"
+            "type": "image/jpeg",
+            "purpose": "any maskable"
         },
         {
             "src": "/assets/instagram/profile.jpg",
             "sizes": "192x192",
-            "type": "image/jpeg"
+            "type": "image/jpeg",
+            "purpose": "any maskable"
         },
         {
             "src": "/assets/instagram/profile.jpg",
             "sizes": "512x512",
-            "type": "image/jpeg"
+            "type": "image/jpeg",
+            "purpose": "any maskable"
         }
     ]
 }
