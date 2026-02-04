@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiPhone, FiMail, FiLinkedin } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiPhone, FiMail, FiLinkedin, FiInstagram } from 'react-icons/fi';
 
 const Home = () => {
     return (
@@ -121,6 +122,11 @@ const Home = () => {
                         <span className="contact-icon-circle"><FiLinkedin size={16} /></span>
                         LinkedIn
                     </a>
+
+                    <Link to="/library" className="contact-link-item">
+                        <span className="contact-icon-circle"><FiInstagram size={16} /></span>
+                        Instagram
+                    </Link>
                 </div>
 
                 <div style={{ height: '20px' }}></div>
