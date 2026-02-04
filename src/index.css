@@ -247,11 +247,7 @@ body {
   background: var(--nav-hover);
 }
 
-.profile-pill.active,
-.settings-circle.active {
-  background: var(--nav-hover);
-  opacity: 1;
-}
+
 
 
 

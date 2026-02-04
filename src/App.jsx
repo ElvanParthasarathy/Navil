@@ -70,7 +70,7 @@ const Layout = () => {
                 </div>
 
                 <div className="sidebar-bottom">
-                    <Link to="/about" className={`profile-pill ${location.pathname === '/about' ? 'active' : ''}`}>
+                    <Link to="/about" className="profile-pill">
                         <ProfileImage
                             src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"}
                             alt="Profile"
@@ -78,7 +78,7 @@ const Layout = () => {
                         />
                         <div className="pill-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</div>
                     </Link>
-                    <Link to="/settings" className={`settings-circle ${location.pathname === '/settings' ? 'active' : ''}`}>
+                    <Link to="/settings" className="settings-circle">
                         <FiSettings size={20} />
                     </Link>
                 </div>
