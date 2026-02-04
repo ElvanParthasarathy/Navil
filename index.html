@@ -11,17 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/instagram/profile.jpg" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(reg => {
-          console.log('SW registered!', reg);
-        }).catch(err => {
-          console.log('SW registration failed!', err);
-        });
-      });
-    }
-  </script>
+
 </head>
 
 <body>
