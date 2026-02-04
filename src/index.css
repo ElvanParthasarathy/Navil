@@ -181,53 +181,96 @@ body {
   font-weight: 800;
 }
 
-/* Sidebar Bottom */
+/* Sidebar Bottom Pill Design */
 .sidebar-bottom {
   padding-top: 15px;
   border-top: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
-/* Profile Card */
-.profile-card {
-  flex-grow: 1;
+.bottom-nav-pill {
+  display: flex;
+  align-items: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-light);
+  border-radius: 99px;
+  padding: 6px;
+  gap: 4px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.bottom-nav-pill:hover {
+  background: var(--nav-hover);
+  border-color: var(--border-color);
+}
+
+.pill-profile {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 2px 10px 2px 4px;
   text-decoration: none;
-  padding: 8px;
-  border-radius: 50px;
-  /* PERFORMANCE FIX: Specific transitions */
-  transition: transform 0.2s ease, background 0.2s ease;
+  border-radius: 99px;
+  transition: background 0.2s ease;
 }
 
-.profile-card:hover {
-  background: var(--nav-hover);
-  transform: scale(1.02);
+.pill-profile:hover {
+  background: rgba(0, 0, 0, 0.03);
 }
 
-.profile-card:active {
-  transform: scale(0.98);
+[data-theme='dark'] .pill-profile:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.avatar {
-  width: 40px;
-  height: 40px;
+.pill-avatar {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #eee;
   overflow: hidden;
-  position: relative;
   flex-shrink: 0;
 }
 
-.avatar img {
+.pill-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
+
+.pill-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.pill-settings {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text-main);
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.pill-settings:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .pill-settings:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pill-profile.active,
+.pill-settings.active {
+  background: var(--bg-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
 
 .shimmer-loader {
   position: absolute;
@@ -271,53 +314,11 @@ body {
   }
 }
 
-.name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-main);
-}
 
-.settings-btn {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  color: var(--text-main);
-  opacity: 0.6;
-  /* PERFORMANCE FIX: Specific transitions */
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
 
-.settings-btn:hover {
-  opacity: 1;
-  background: var(--nav-hover);
-  transform: rotate(45deg) scale(1.1);
-}
 
-.settings-btn:active {
-  transform: rotate(45deg) scale(0.9);
-}
 
-/* --- BOTTOM BUTTON ACTIVE STATES --- */
-.profile-card.active {
-  background: var(--nav-hover);
-  color: var(--text-main);
-  transform: scale(1);
-}
 
-.profile-card.active .name {
-  color: var(--text-main);
-}
-
-.settings-btn.active {
-  background: var(--nav-hover);
-  transform: rotate(180deg);
-  opacity: 1;
-  color: var(--text-main);
-}
 
 /* Main Content (Desktop) */
 .main-content {
