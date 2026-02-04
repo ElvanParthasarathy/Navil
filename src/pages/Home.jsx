@@ -191,10 +191,11 @@ const Home = () => {
                     
 
                     
-                    .contact-footer { padding: 20px; border-radius: 20px; gap: 20px; }
-                    .contact-info-block h3 { font-size: 1rem; }
-                    .contact-socials { gap: 12px; }
-                    .social-icon-link { width: 40px; height: 40px; }
+                    .contact-footer { padding: 32px 24px; border-radius: 24px; flex-direction: column; gap: 24px; text-align: center; }
+                    .contact-info-block h3 { font-size: 1.2rem; margin-bottom: 6px; }
+                    .contact-info-block p { font-size: 0.95rem; line-height: 1.5; }
+                    .contact-socials { justify-content: center; gap: 16px; }
+                    .social-icon-link { width: 44px; height: 44px; }
                 }
             `}</style>
 
