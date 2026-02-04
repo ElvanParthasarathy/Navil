@@ -272,42 +272,43 @@ const Home = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .home-page { padding: 40px 16px; }
-                    .home-hero { flex-direction: column; gap: 24px; padding: 0; align-items: center; text-align: center; margin-bottom: 48px; }
+                    .home-page { padding: 40px 20px; }
+                    .home-hero { flex-direction: column; gap: 0; padding: 0; align-items: center; text-align: center; margin-bottom: 40px; }
+                    .hero-visual { order: -1; margin-bottom: 24px; }
                     .hero-content { width: 100%; display: flex; flex-direction: column; align-items: center; }
-                    .hero-avatar-wrapper { width: 120px; height: 120px; order: -1; margin-bottom: 20px; }
-                    .hero-avatar { border-radius: 50%; border-width: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-                    .hero-title { font-size: 1.75rem; margin-bottom: 8px; }
-                    .hero-subtitle { font-size: 1.1rem; margin-bottom: 16px; }
-                    .hero-bio { font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; opacity: 0.8; }
-                    .hero-actions { width: 100%; flex-direction: column; gap: 12px; }
-                    .hero-btn { width: 100%; margin: 0; }
+                    .hero-avatar-wrapper { width: 120px; height: 120px; }
+                    .hero-avatar { border-radius: 50%; border-width: 3px; }
+                    .hero-title { font-size: 1.6rem; margin-bottom: 4px; letter-spacing: -0.5px; }
+                    .hero-subtitle { font-size: 1rem; margin-bottom: 12px; opacity: 0.9; }
+                    .hero-bio { font-size: 0.9rem; margin-bottom: 24px; line-height: 1.4; max-width: 300px; margin-left: auto; margin-right: auto; white-space: pre-line; }
+                    .hero-actions { width: 100%; flex-direction: column; gap: 10px; }
+                    .hero-btn { width: 100%; justify-content: center; margin: 0; padding: 12px 20px; font-size: 0.95rem; }
                     
-                    .section-label { justify-content: center; font-size: 0.75rem; margin-bottom: 16px; opacity: 0.6; }
+                    .section-label { justify-content: center; font-size: 0.7rem; margin-bottom: 12px; opacity: 0.5; }
                     .section-label::after { display: none; }
                     
-                    .explorer-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
+                    .explorer-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 40px; width: 100%; }
                     .explorer-card { 
                         min-height: auto; 
-                        padding: 20px; 
-                        flex-direction: row; 
-                        align-items: center; 
-                        gap: 16px; 
-                        border-radius: 20px; 
+                        padding: 16px; 
+                        flex-direction: row !important; 
+                        align-items: center !important; 
+                        gap: 12px; 
+                        border-radius: 16px; 
                         background: var(--bg-panel);
                         border: 1px solid var(--border-light);
                     }
-                    .card-icon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; }
-                    .card-icon svg { width: 20px; height: 20px; }
-                    .card-info { margin-top: 0; flex: 1; text-align: left; }
-                    .card-title { font-size: 1.1rem; margin-bottom: 2px; }
-                    .card-desc { font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-                    .card-arrow { opacity: 0.4; transform: none; display: block; }
+                    .card-icon { width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; }
+                    .card-icon svg { width: 18px; height: 18px; }
+                    .card-info { margin-top: 0 !important; flex: 1; text-align: left; }
+                    .card-title { font-size: 1rem; margin-bottom: 0; }
+                    .card-desc { display: none; }
+                    .card-arrow { opacity: 0.3; transform: none; display: block; font-size: 14px; }
                     
-                    .contact-footer { padding: 24px; border-radius: 24px; gap: 20px; }
-                    .contact-info-block h3 { font-size: 1.1rem; }
-                    .contact-socials { gap: 16px; }
-                    .social-icon-link { width: 44px; height: 44px; }
+                    .contact-footer { padding: 20px; border-radius: 20px; gap: 20px; }
+                    .contact-info-block h3 { font-size: 1rem; }
+                    .contact-socials { gap: 12px; }
+                    .social-icon-link { width: 40px; height: 40px; }
                 }
             `}</style>
 
