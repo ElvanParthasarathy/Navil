@@ -605,37 +605,57 @@ const StoryViewer = ({
                 @media (max-width: 768px) {
                     .sv-overlay { 
                         background: #000;
-                        /* Ensure it sits on top of browser UI */
                         height: 100dvh; 
                     }
                     .sv-blur-bg { display: none; }
                     
-                    .sv-card.active {
-                        width: 100%;
-                        height: 100dvh;
+                    /* Base styles for ALL cards on mobile (active + peers) */
+                    .sv-card {
+                        width: 100% !important; /* Force full width */
+                        height: 100dvh !important; /* Force full height */
                         border-radius: 0;
-                        transform: none;
                         background: #000;
-                        /* Prevent resizing glitches */
                         max-width: 100vw;
+                        /* Ensure transition is active */
+                        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+                        box-shadow: none;
+                    }
+
+                    /* State specific transforms */
+                    .sv-card.active {
+                        transform: translate3d(0, 0, 0);
+                        z-index: 100;
+                        opacity: 1;
+                    }
+
+                    .sv-card.peer {
+                        display: block !important; /* Enable rendering for animation */
+                        z-index: 90;
+                        filter: brightness(0.5); /* Slight dim for peers */
+                    }
+
+                    .sv-card.peer.prev {
+                        transform: translate3d(-100%, 0, 0); /* Slide to left */
+                    }
+
+                    .sv-card.peer.next {
+                        transform: translate3d(100%, 0, 0); /* Slide to right */
                     }
                     
                     .sv-media-wrapper img,
                     .sv-media-wrapper video {
-                        /* Force fit within the viewport */
                         width: 100%;
                         height: 100%;
                         object-fit: contain;
+                        background: #000;
                     }
 
-                    .sv-card.peer { display: none; }
                     .sv-controls-group { 
                         gap: 10px;
                     }
                     .sv-btn { padding: 8px; }
                     .sv-header { 
                         padding-top: max(16px, env(safe-area-inset-top)); 
-                        /* Ensure header stays reachable */
                         top: 0;
                     }
                 }
