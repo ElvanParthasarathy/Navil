@@ -116,7 +116,7 @@ const ReelsViewer = ({ reel, reels, onClose, onSwitchReel, profileData }) => {
                 ))}
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .reels-mega-overlay {
                     position: fixed;
                     top: 0; left: 0; right: 0; bottom: 0;
@@ -367,7 +367,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .reels-snap-item {
                     height: 100vh;
                     height: 100dvh;

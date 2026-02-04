@@ -6,7 +6,7 @@ import { FiArrowRight } from 'react-icons/fi';
 const Writings = () => {
     return (
         <div className="writings-page page-view fadeIn">
-            <style jsx>{`
+            <style>{`
                 .writings-page {
                     max-width: 1200px;
                     margin: 0 auto;

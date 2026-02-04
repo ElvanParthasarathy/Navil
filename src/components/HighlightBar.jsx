@@ -44,7 +44,7 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                 <FiChevronRight size={20} />
             </button>
 
-            <style jsx>{`
+            <style>{`
                 .highlight-bar-container {
                     position: relative;
                     padding: 10px 0 20px;

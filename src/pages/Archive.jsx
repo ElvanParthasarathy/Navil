@@ -601,46 +601,38 @@ const Archive = () => {
                     backdrop-filter: blur(5px);
                 }
                 .user-list-modal {
-                    background: #262626;
-                    border-radius: 16px;
+                    background: var(--bg-card);
+                    border-radius: 12px;
                     width: 400px;
                     max-width: 90vw;
-                    height: 400px;
-                    max-height: 80vh;
+                    height: 600px;
+                    max-height: 85vh;
                     display: flex;
                     flex-direction: column;
                     overflow: hidden;
                     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-                    border: 1px solid #363636;
+                    border: 1px solid var(--border-color);
                 }
                 .user-list-header {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    padding: 12px 16px;
-                    border-bottom: 1px solid #363636;
-                    position: relative;
-                }
-                .user-list-header {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 16px;
-                    border-bottom: 1px solid #363636;
+                    padding: 14px 16px;
+                    border-bottom: 1px solid var(--border-color);
                     position: relative;
                 }
                 .user-list-header h2 {
                     margin: 0;
                     font-size: 16px;
                     font-weight: 700;
-                    color: #fff;
+                    color: var(--text-main);
                 }
                 .user-list-header svg {
                     position: absolute;
                     right: 16px;
                     top: 50%;
                     transform: translateY(-50%);
-                    color: #fff;
+                    color: var(--text-main);
                     cursor: pointer;
                     transition: opacity 0.2s;
                 }
@@ -657,10 +649,10 @@ const Archive = () => {
                     gap: 14px;
                 }
                 .user-list-item:hover {
-                    background: rgba(255,255,255,0.05);
+                    background: var(--nav-hover);
                 }
                 .user-avatar-placeholder {
-                    width: 50px; height: 50px;
+                    width: 44px; height: 44px;
                     border-radius: 50%;
                     background: linear-gradient(135deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
                     flex-shrink: 0;
@@ -671,7 +663,7 @@ const Archive = () => {
                 }
                 .user-name {
                     font-weight: 600;
-                    color: #fff;
+                    color: var(--text-main);
                     text-decoration: none;
                     font-size: 14px;
                     display: block;
@@ -680,47 +672,46 @@ const Archive = () => {
                     white-space: nowrap;
                     line-height: 1.4;
                 }
-                .user-name:hover { opacity: 0.8; }
+                .user-name:hover { text-decoration: underline; }
                 
                 .user-date {
                     font-size: 13px;
-                    color: #a8a8a8;
+                    color: var(--text-muted);
                 }
                 
                 .user-action-btn {
-                    background: #363636;
-                    border: none;
+                    background: var(--bg-panel);
+                    border: 1px solid var(--border-color);
                     border-radius: 8px;
                     padding: 7px 16px;
                     font-weight: 600;
                     font-size: 14px;
                     cursor: pointer;
-                    color: #fff;
+                    color: var(--text-main);
                     transition: all 0.2s;
                     min-width: 80px;
                 }
                 .user-action-btn:hover {
-                    background: #505050;
+                    background: var(--nav-hover);
                 }
                 
                 .user-list-search {
                     padding: 12px 16px;
-                    /* border-bottom: 1px solid #363636; Removed border for cleaner look */
                 }
                 .user-search-input {
                     width: 100%;
                     padding: 10px 16px;
                     border: none;
                     border-radius: 12px;
-                    background: #363636;
+                    background: var(--bg-panel);
                     font-size: 14px;
                     outline: none;
-                    color: #fff;
+                    color: var(--text-main);
                 }
                 .user-search-input:focus {
-                    background: #404040;
+                    background: var(--nav-hover);
                 }
-                .user-search-input::placeholder { color: #a8a8a8; }
+                .user-search-input::placeholder { color: var(--text-muted); }
 
                 /* --- TABS --- */
                 .profile-tabs {

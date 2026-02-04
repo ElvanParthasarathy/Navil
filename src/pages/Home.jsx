@@ -6,7 +6,7 @@ import { profileData } from '../data/instagramData';
 const Home = () => {
     return (
         <div className="home-page page-view fadeIn">
-            <style jsx>{`
+            <style>{`
                 .home-page {
                     max-width: 1200px;
                     margin: 0 auto;
