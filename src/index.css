@@ -200,11 +200,15 @@ body {
   border: none;
   border-radius: 99px;
   text-decoration: none;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.1s ease;
 }
 
 .profile-pill:hover {
   background: var(--nav-hover);
+}
+
+.profile-pill:active {
+  transform: scale(0.96);
 }
 
 .pill-avatar {
@@ -239,12 +243,24 @@ body {
   color: var(--text-main);
   text-decoration: none;
   opacity: 0.7;
-  transition: background 0.3s ease, opacity 0.3s ease;
+  transition: background 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+}
+
+.settings-circle svg {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .settings-circle:hover {
   opacity: 1;
   background: var(--nav-hover);
+}
+
+.settings-circle:active {
+  transform: scale(0.92);
+}
+
+.settings-circle:active svg {
+  transform: rotate(90deg);
 }
 
 
