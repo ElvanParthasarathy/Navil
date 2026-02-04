@@ -18,6 +18,7 @@ body {
 
 :root {
   --bg-app: #FFFFFF;
+  --bg-app-rgb: 255, 255, 255;
   --bg-panel: #F7F7F7;
   --bg-card: #FFFFFF;
   --text-main: #111;
@@ -27,21 +28,20 @@ body {
   --sidebar-width: 280px;
   --nav-hover: rgba(0, 0, 0, 0.04);
   --accent-color: #000;
-  --accent-color: #000;
   --accent-text: #fff;
   --link-color: #0095f6;
 }
 
 [data-theme='dark'] {
   --bg-app: #000000;
+  --bg-app-rgb: 0, 0, 0;
   --bg-panel: #121212;
   --bg-card: #121212;
   --text-main: #FFFFFF;
   --text-muted: #A0A0A0;
   --border-color: #262626;
-  --border-light: #262626;
+  --border-light: rgba(255, 255, 255, 0.08);
   --nav-hover: rgba(255, 255, 255, 0.1);
-  --accent-color: #fff;
   --accent-color: #fff;
   --accent-text: #000;
   --link-color: #4cb5f9;
@@ -508,7 +508,7 @@ body {
     background: var(--bg-app);
   }
 
-  /* --- B. HEADER (Floating on Top) --- */
+  /* --- B. HEADER (Floating on Top with Glassmorphism) --- */
   .mobile-header {
     display: flex !important;
     align-items: center;
@@ -518,13 +518,14 @@ body {
     left: 0;
     right: 0;
     height: 60px;
-    padding: 0 16px;
-    background: var(--bg-app);
+    padding: 0 20px;
+    background: rgba(var(--bg-app-rgb, 255, 255, 255), 0.8) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     z-index: 1000;
-    border-bottom: 1px solid var(--border-color) !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    transition: background 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid var(--border-light) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
   }
 
   /* No Scoops in IG Style */
@@ -588,24 +589,26 @@ body {
     box-shadow: none;
   }
 
-  /* --- E. BOTTOM BAR (Instagram Style) --- */
+  /* --- E. BOTTOM BAR (Modern Nav Bar) --- */
   .sidebar {
     position: fixed !important;
     bottom: 0;
     left: 0;
     right: 0;
     top: auto;
-    height: 60px;
+    height: 64px;
     width: 100% !important;
     display: flex !important;
     flex-direction: row;
-    background: var(--bg-app);
-    padding: 0;
+    background: rgba(var(--bg-app-rgb, 255, 255, 255), 0.8) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding: 0 10px;
     z-index: 1000;
-    border-top: 1px solid var(--border-color) !important;
+    border-top: 1px solid var(--border-light) !important;
     border-radius: 0 !important;
-    box-shadow: none !important;
-    transition: background 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
   }
 
   /* No Scoops in IG Style */
@@ -649,21 +652,22 @@ body {
 
   /* ICON CONTAINER */
   .nav-icon {
-    width: 24px !important;
-    height: 24px !important;
+    width: 26px !important;
+    height: 26px !important;
     padding: 0 !important;
-    opacity: 1;
+    opacity: 0.6;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-main);
-    transition: transform 0.1s ease !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     background: transparent !important;
     box-shadow: none !important;
   }
 
   .nav-item:active .nav-icon {
-    transform: scale(0.9);
+    transform: scale(0.85);
+    opacity: 1;
   }
 
   /* Hide labels on mobile to match pure IG icon bar */
