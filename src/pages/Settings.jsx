@@ -1,104 +1,134 @@
 import React from 'react';
-import { FiSettings, FiMoon, FiSun, FiLayers } from 'react-icons/fi';
+import { FiSettings, FiMoon, FiSun, FiMonitor } from 'react-icons/fi';
 import { useOutletContext } from 'react-router-dom';
 
 const Settings = () => {
-    const { theme, toggleTheme } = useOutletContext();
+    const { theme, setTheme } = useOutletContext();
 
     return (
-        <div className="page-view page-fade">
-            <style jsx>{`
-                .settings-section {
-                    margin-top: 30px;
-                    animation: fadeInUp 0.6s ease-out forwards;
+        <div className="settings-page page-view animate-entry">
+            <style>{`
+                .settings-page {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 32px 20px 80px;
                 }
 
-                .section-title {
-                    font-size: 1.1rem;
-                    font-weight: 700;
-                    margin-bottom: 15px;
+                .settings-hero {
+                    text-align: center;
+                    margin-bottom: 48px;
+                    padding-top: 24px;
+                }
+
+                .settings-title {
+                    font-size: 2.5rem;
+                    font-weight: 800;
+                    margin-bottom: 8px;
+                    letter-spacing: -1px;
                     color: var(--text-main);
-                    opacity: 0.8;
+                }
+
+                .settings-subtitle {
+                    font-family: 'Mukta Malar', sans-serif;
+                    font-size: 1.1rem;
+                    color: var(--text-muted);
+                    font-weight: 500;
+                }
+
+                /* THEME SECTION */
+                .section-label {
+                    font-size: 0.9rem;
                     text-transform: uppercase;
-                    letter-spacing: 1px;
+                    letter-spacing: 1.5px;
+                    font-weight: 700;
+                    color: var(--text-muted);
+                    margin-bottom: 16px;
+                    padding-left: 12px;
                 }
 
                 .settings-card {
                     background: var(--bg-card);
                     border: 1px solid var(--border-light);
-                    border-radius: 20px;
-                    padding: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    transition: all 0.3s ease;
+                    border-radius: 24px;
+                    padding: 24px;
+                    margin-bottom: 40px;
                 }
 
-                .clickable-card:hover {
-                    border-color: var(--text-main);
-                    transform: translateY(-2px);
-                    background: var(--nav-hover);
-                }
-
-                .settings-info {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                }
-
-                .settings-icon {
-                    width: 40px;
-                    height: 40px;
+                /* THEME SLIDER */
+                .theme-slider-container {
                     background: var(--bg-panel);
-                    border-radius: 12px;
+                    border-radius: 18px;
+                    padding: 6px;
+                    display: flex;
+                    position: relative;
+                }
+
+                .theme-option {
+                    flex: 1;
+                    padding: 12px;
+                    border-radius: 14px;
+                    border: none;
+                    background: transparent;
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    font-size: 0.95rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: var(--text-main);
-                }
-
-                .settings-label {
-                    font-weight: 600;
-                    color: var(--text-main);
-                }
-
-                .theme-toggle-btn {
-                    background: var(--bg-panel);
-                    border: 1px solid var(--border-light);
-                    padding: 8px 16px;
-                    border-radius: 10px;
-                    color: var(--text-main);
-                    font-weight: 600;
-                    display: flex;
-                    align-items: center;
                     gap: 8px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
+                    position: relative;
+                    z-index: 2;
                 }
 
-                .theme-toggle-btn:hover {
-                    background: var(--nav-hover);
-                    transform: translateY(-2px);
+                .theme-option:hover {
+                    color: var(--text-main);
                 }
 
+                .theme-option.active {
+                    color: var(--bg-app);
+                }
+
+                /* Active Indicator pill */
+                .slider-indicator {
+                    position: absolute;
+                    top: 6px;
+                    bottom: 6px;
+                    background: var(--text-main);
+                    border-radius: 14px;
+                    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+                    z-index: 1;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                }
+                
+                /* Calculate positions based on 3 items */
+                /* 
+                   0% for first item
+                   33.33% width
+                   left: 0, 33.33%, 66.66%
+                */
+                .slider-indicator { width: calc(33.33% - 4px); }
+                
+                [data-active-theme="light"] .slider-indicator { left: 6px; }
+                [data-active-theme="auto"] .slider-indicator { left: calc(50% - (33.33% / 2) + 2px); } /* Centered? No wait. 3 items. Left is 33.33% + spacer? */
+                
+                /* Let's use simple flex logic or inline styles for the indicator translate */
+                
+                /* Coming Soon */
                 .coming-soon-container { 
                     display: flex; 
                     flex-direction: column; 
                     align-items: center; 
-                    justify-content: center; 
                     text-align: center; 
-                    padding: 40px 20px; 
-                    background: var(--bg-card); 
-                    border: 1px solid var(--border-light); 
-                    border-radius: 16px; 
-                    margin-top: 25px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    padding: 48px 20px; 
+                    opacity: 0.6;
                 }
                 
                 .cs-icon { 
-                    font-size: 3.5rem;
+                    font-size: 2.5rem;
                     margin-bottom: 20px; 
-                    animation: gearSpin 4s linear infinite; 
+                    animation: gearSpin 8s linear infinite; 
                     color: var(--text-main);
                 }
                 
@@ -106,86 +136,68 @@ const Settings = () => {
                     from { transform: rotate(0deg); }
                     to { transform: rotate(360deg); }
                 }
-                
-                .cs-title { 
-                    font-size: 1.4rem; 
-                    font-weight: 800; 
-                    color: var(--text-main); 
-                    margin-bottom: 8px; 
-                }
-                .cs-text { 
-                    font-size: 0.95rem; 
-                    color: var(--text-muted); 
-                    max-width: 400px; 
-                    line-height: 1.6; 
-                }
 
-                @media (max-width: 768px) {
-                    .settings-section { margin-top: 24px; }
-                    .section-title { font-size: 0.9rem; margin-bottom: 12px; }
-                    .settings-card { padding: 16px; border-radius: 16px; }
-                    .settings-icon { width: 36px; height: 36px; border-radius: 10px; }
-                    .settings-label { font-size: 0.95rem; }
-                    .theme-toggle-btn { padding: 6px 12px; font-size: 0.9rem; }
-                    
-                    .hero-section { text-align: center; }
-                    .hero-section .title { font-size: 1.8rem; }
-                    .hero-section .subtitle { font-size: 1rem; }
-                    
-                    .coming-soon-container { padding: 32px 16px; margin-top: 20px; }
-                    .cs-icon { font-size: 2.5rem; margin-bottom: 16px; }
-                    .cs-title { font-size: 1.2rem; }
-                    .cs-text { font-size: 0.85rem; line-height: 1.5; }
-                }
             `}</style>
 
-            <div className="hero-section">
-                <h1 className="title">Settings</h1>
-                <h2 className="subtitle">Manage preferences and view info.</h2>
+            <div className="settings-hero animate-entry">
+                <h1 className="settings-title">Settings</h1>
+                <h2 className="settings-subtitle">Personalize your experience.</h2>
             </div>
 
-            <div className="settings-section">
-                <h3 className="section-title">Appearance</h3>
+            <div className="settings-section animate-entry" style={{ animationDelay: '0.1s' }}>
+                <h3 className="section-label">Appearance</h3>
+
                 <div className="settings-card">
-                    <div className="settings-info">
-                        <div className="settings-icon">
-                            {theme === 'dark' ? <FiMoon size={20} /> : <FiSun size={20} />}
-                        </div>
-                        <div className="settings-label">Dark Mode</div>
+                    <div className="theme-slider-container" data-active-theme={theme || 'auto'}>
+                        {/* Indicator */}
+                        <div className="slider-indicator" style={{
+                            transform: `translateX(${theme === 'light' ? '0%' :
+                                    theme === 'auto' ? '100%' : '200%'
+                                })`,
+                            left: '6px',
+                            /* Adjust widths precisely or use flex logic */
+                            /* Simpler logic: */
+                            /* With 3 flex:1 items, each is 33.3% wide. */
+                            /* Transform X: 0%, 100%, 200% of its OWN width */
+                            /* But we have padding 6px on container. */
+                        }}></div>
+
+                        <button
+                            className={`theme-option ${theme === 'light' ? 'active' : ''}`}
+                            onClick={() => setTheme('light')}
+                        >
+                            <FiSun size={18} /> Light
+                        </button>
+
+                        <button
+                            className={`theme-option ${theme === 'auto' ? 'active' : ''}`}
+                            onClick={() => setTheme('auto')}
+                        >
+                            <FiMonitor size={18} /> Auto
+                        </button>
+
+                        <button
+                            className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
+                            onClick={() => setTheme('dark')}
+                        >
+                            <FiMoon size={18} /> Dark
+                        </button>
                     </div>
-                    <button className="theme-toggle-btn" onClick={toggleTheme}>
-                        {theme === 'dark' ? 'Enabled' : 'Disabled'}
-                    </button>
+                    <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                        {theme === 'auto' ? 'Syncs with your system preferences.' :
+                            theme === 'dark' ? 'Dark mode is active.' : 'Light mode is active.'}
+                    </p>
                 </div>
             </div>
 
-            <div className="settings-section">
-                <h3 className="section-title">External</h3>
-                <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                    <div className="settings-card clickable-card">
-                        <div className="settings-info">
-                            <div className="settings-icon">
-                                <FiLayers size={20} />
-                            </div>
-                            <div className="settings-label">View Portfolio</div>
-                        </div>
-                        <div className="theme-toggle-btn">
-                            Visit
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div className="coming-soon-container">
+            <div className="coming-soon-container animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="cs-icon"><FiSettings /></div>
-                <div className="cs-title">More Settings Coming Soon</div>
-                <p className="cs-text">
-                    Profile customization and extra configuration options are being built.<br />
-                    Check back soon for updates!
+                <h3 style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '8px' }}>More Coming Soon</h3>
+                <p style={{ fontSize: '0.95rem' }}>
+                    Profile customization and extra configuration options are being built.
                 </p>
             </div>
 
-            <div style={{ height: '40px' }}></div>
         </div>
     );
 };

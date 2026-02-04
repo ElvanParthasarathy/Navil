@@ -10,16 +10,16 @@ const Home = () => {
                 .home-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 40px 24px;
+                    padding: 32px 20px;
                 }
 
                 /* HERO SECTION */
                 .home-hero {
                     display: flex;
                     align-items: center;
-                    gap: 60px;
-                    margin-bottom: 80px;
-                    padding: 40px 0;
+                    gap: 40px;
+                    margin-bottom: 56px;
+                    padding: 24px 0;
                     position: relative;
                 }
 
@@ -35,8 +35,8 @@ const Home = () => {
 
                 .hero-avatar-wrapper {
                     position: relative;
-                    width: 320px;
-                    height: 320px;
+                    width: 260px;
+                    height: 260px;
                 }
 
                 .hero-avatar-bg {
@@ -66,27 +66,27 @@ const Home = () => {
                 }
 
                 .hero-title {
-                    font-size: 4rem;
+                    font-size: clamp(2.6rem, 3.2vw, 3.25rem);
                     font-weight: 800;
                     line-height: 1.1;
-                    margin-bottom: 16px;
+                    margin-bottom: 12px;
                     letter-spacing: -2px;
                     color: var(--text-main);
                 }
 
                 .hero-subtitle {
                     font-family: 'Mukta Malar', sans-serif;
-                    font-size: 2rem;
+                    font-size: clamp(1.4rem, 2vw, 1.75rem);
                     color: var(--text-muted);
-                    margin-bottom: 24px;
+                    margin-bottom: 16px;
                 }
 
                 .hero-bio {
-                    font-size: 1.25rem;
+                    font-size: 1.1rem;
                     line-height: 1.6;
                     color: var(--text-muted);
                     max-width: 600px;
-                    margin-bottom: 40px;
+                    margin-bottom: 28px;
                     white-space: pre-line;
                 }
 
@@ -101,7 +101,7 @@ const Home = () => {
                     display: flex;
                     align-items: center;
                     gap: 10px;
-                    padding: 12px 28px;
+                    padding: 10px 22px;
                     border-radius: 99px;
                     font-weight: 600;
                     text-decoration: none;
@@ -132,13 +132,13 @@ const Home = () => {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 40px;
+                    padding: 32px;
                     background: var(--bg-panel);
                     border-radius: 32px;
                 }
 
                 .contact-info-block h3 {
-                    font-size: 1.5rem;
+                    font-size: 1.35rem;
                     font-weight: 800;
                     margin-bottom: 4px;
                 }
@@ -153,8 +153,8 @@ const Home = () => {
                 }
 
                 .social-icon-link {
-                    width: 48px;
-                    height: 48px;
+                    width: 44px;
+                    height: 44px;
                     background: var(--bg-card);
                     border: 1px solid var(--border-color);
                     border-radius: 50%;
@@ -173,7 +173,9 @@ const Home = () => {
 
                 /* RESPONSIVE */
                 @media (max-width: 1024px) {
-                    .hero-title { font-size: 3rem; }
+                    .hero-avatar-wrapper { width: 220px; height: 220px; }
+                    .hero-title { font-size: 2.6rem; }
+                    .hero-subtitle { font-size: 1.5rem; }
                 }
 
                 @media (max-width: 768px) {
@@ -212,8 +214,8 @@ const Home = () => {
                         <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn primary">
                             View Portfolio <FiArrowRight />
                         </a>
-                        <Link to="/library" className="hero-btn secondary">
-                            <FiInstagram /> Explore Instagram
+                        <Link to="/archive" className="hero-btn secondary">
+                            <FiInstagram /> Explore Insta Archive
                         </Link>
                     </div>
                 </div>
@@ -234,10 +236,11 @@ const Home = () => {
                 <div className="contact-info-block">
                     <h3>Let's Connect</h3>
                     <p>Open for collaborations and creative conversations.</p>
+                    <p style={{ marginTop: '8px', fontWeight: 'bold' }}>+91 93451 28797</p>
                 </div>
                 <div className="contact-socials">
-                    <a href="https://instagram.com/jaiprakash_parthasarathy" target="_blank" rel="noopener noreferrer" className="social-icon-link">
-                        <FiInstagram size={20} />
+                    <a href="tel:+919345128797" className="social-icon-link">
+                        <FiPhone size={20} />
                     </a>
                     <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
                         <FiMail size={20} />

@@ -20,6 +20,7 @@ const StoryViewer = ({
     const DEFAULT_DURATION = 5000;
     const touchStartX = useRef(null);
     const touchStartY = useRef(null);
+    const pendingStartIndex = useRef(null); // Track intended start index when switching highlights
 
     const currentStories = activeHighlight?.stories || [];
     const currentIndexSafe = Math.min(currentIndex, currentStories.length > 0 ? currentStories.length - 1 : 0);
@@ -57,7 +58,9 @@ const StoryViewer = ({
             const prevGroupIdx = highlights.findIndex(h => h.id === activeHighlight.id) - 1;
             if (prevGroupIdx >= 0) {
                 const prevGroup = highlights[prevGroupIdx];
-                onSwitchHighlight(prevGroup, prevGroup.stories.length - 1);
+                // Store the intended start index (last story of prev group) before switching
+                pendingStartIndex.current = prevGroup.stories.length - 1;
+                onSwitchHighlight(prevGroup);
             } else {
                 onClose();
             }
@@ -152,7 +155,10 @@ const StoryViewer = ({
 
     // Reset when highlight changes
     useEffect(() => {
-        setCurrentIndex(0);
+        // Use pending start index if set (for backward navigation), otherwise start from 0
+        const startIdx = pendingStartIndex.current ?? 0;
+        pendingStartIndex.current = null; // Clear after use
+        setCurrentIndex(startIdx);
         setProgress(0);
         setIsLoaded(false);
         setStoryDuration(DEFAULT_DURATION);
@@ -257,7 +263,7 @@ const StoryViewer = ({
                                 </div>
                             </div>
 
-                            <div className="sv-controls-group">
+                            <div className="sv-controls-group" onMouseDown={e => e.stopPropagation()} onMouseUp={e => e.stopPropagation()} onTouchStart={e => e.stopPropagation()} onTouchEnd={e => e.stopPropagation()}>
                                 <button className="sv-btn" onClick={() => setIsPaused(!isPaused)} aria-label={isPaused ? "Play" : "Pause"}>
                                     {isPaused ? <FiPlay size={18} /> : <FiPause size={18} />}
                                 </button>
@@ -532,13 +538,13 @@ const StoryViewer = ({
                 .sv-nav-tap {
                     position: absolute;
                     top: 100px; bottom: 100px;
-                    width: 25%;
+                    width: 30%;
                     z-index: 151;
                     cursor: pointer;
                     -webkit-tap-highlight-color: transparent;
                 }
                 .sv-nav-tap.left { left: 0; }
-                .sv-nav-tap.right { right: 0; width: 75%; }
+                .sv-nav-tap.right { right: 0; width: 30%; }
 
                 /* Shimmer Loader */
                 .sv-shimmer {

@@ -15,6 +15,17 @@
 </head>
 
 <body>
+  <!-- Blocking script to prevent theme flicker -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme') || 'auto';
+      let effectiveTheme = theme;
+      if (theme === 'auto') {
+        effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', effectiveTheme);
+    })();
+  </script>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

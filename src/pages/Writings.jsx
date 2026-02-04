@@ -10,50 +10,50 @@ const Writings = () => {
                 .writings-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 40px 24px;
+                    padding: 32px 20px;
                 }
 
                 .writings-header {
-                    margin-bottom: 60px;
+                    margin-bottom: 48px;
                     text-align: left;
                 }
 
                 .writings-title {
-                    font-size: 4rem;
+                    font-size: clamp(2.4rem, 3vw, 3rem);
                     font-weight: 800;
-                    letter-spacing: -2px;
-                    margin-bottom: 16px;
+                    letter-spacing: -1.5px;
+                    margin-bottom: 12px;
                     color: var(--text-main);
                 }
 
                 .writings-subtitle {
-                    font-size: 1.25rem;
+                    font-size: 1.1rem;
                     color: var(--text-muted);
-                    max-width: 600px;
+                    max-width: 640px;
                     line-height: 1.6;
                 }
 
                 .category-grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
                     gap: 24px;
-                    margin-top: 40px;
+                    margin-top: 32px;
                 }
 
                 .category-card {
                     background: var(--bg-card);
                     border: 1px solid var(--border-light);
-                    border-radius: 24px;
-                    padding: 32px;
+                    border-radius: 20px;
+                    padding: 24px;
                     text-decoration: none;
                     color: inherit;
                     transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
                     display: flex;
                     flex-direction: column;
-                    gap: 24px;
+                    gap: 20px;
                     position: relative;
                     overflow: hidden;
-                    min-height: 240px;
+                    min-height: 220px;
                 }
 
                 .cat-icon-box {
@@ -74,14 +74,14 @@ const Writings = () => {
                 }
 
                 .cat-title {
-                    font-size: 1.5rem;
+                    font-size: 1.35rem;
                     font-weight: 700;
-                    margin-bottom: 8px;
+                    margin-bottom: 6px;
                     color: var(--text-main);
                 }
 
                 .cat-desc {
-                    font-size: 1rem;
+                    font-size: 0.95rem;
                     color: var(--text-muted);
                     line-height: 1.5;
                 }
@@ -104,7 +104,7 @@ const Writings = () => {
                     align-items: center;
                     gap: 8px;
                     font-weight: 600;
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
                     color: var(--text-main);
                     opacity: 0;
                     transform: translateX(-10px);
@@ -136,11 +136,13 @@ const Writings = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .writings-header { padding: 40px 20px 20px; text-align: center; }
-                    .writings-title { font-size: 2.2rem; margin-bottom: 12px; }
+                    .writings-page { padding: 24px 0; }
+                    .writings-header { padding: 40px 20px 20px; text-align: center; margin-bottom: 32px; }
+                    .writings-title { font-size: 2.1rem; margin-bottom: 10px; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; }
-                    .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; }
-                    .category-card { min-height: auto; padding: 20px; gap: 16px; border-radius: 20px; }
+                    .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
+                    .category-card { min-height: auto; padding: 20px; gap: 16px; border-radius: 18px; }
+                    .category-card:active { transform: scale(0.97) translateY(1px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
                     .cat-icon-box { width: 48px; height: 48px; font-size: 1.25rem; border-radius: 12px; }
                     .cat-title { font-size: 1.2rem; margin-bottom: 4px; }
                     .cat-desc { font-size: 0.95rem; line-height: 1.4; }
@@ -228,7 +230,7 @@ const Writings = () => {
                 </Link>
             </div>
 
-            <div style={{ height: '80px' }}></div>
+            <div style={{ height: '56px' }}></div>
         </div>
     );
 };

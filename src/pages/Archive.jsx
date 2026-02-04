@@ -6,7 +6,7 @@ import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
 import ReelsViewer from '../components/ReelsViewer';
 
-const Library = () => {
+const Archive = () => {
     // Destructure Data
     const { posts: rawPosts, reels: rawReels, arts: rawArts, archivedPosts: rawArchived } = instagramData || {};
 
@@ -463,8 +463,8 @@ const Library = () => {
                 .profile-header {
                     display: flex;
                     max-width: 935px;
-                    margin: 0 auto 44px;
-                    padding: 30px 20px 0;
+                    margin: 0 auto 36px;
+                    padding: 24px 20px 0;
                     align-items: flex-start;
                     color: var(--text-main);
                 }
@@ -503,8 +503,14 @@ const Library = () => {
                     margin-bottom: 20px;
                     font-size: 16px;
                 }
-                .stat-item { margin-right: 40px; }
-                .stat-value { font-weight: 600; color: var(--text-main); }
+                .stat-item { 
+                    margin-right: 40px; 
+                    white-space: nowrap;
+                    display: inline-flex; 
+                    align-items: center;
+                    gap: 6px;
+                }
+                .stat-value { font-weight: 600; color: var(--text-main); display: inline; }
                 
                 .profile-bio-row {
                     font-size: 16px;
@@ -567,7 +573,7 @@ const Library = () => {
                     }
 
                     /* Remove side padding for full-width highlights/grid */
-                    .library-container {
+                    .archive-container {
                         padding-left: 0;
                         padding-right: 0;
                     }
@@ -592,30 +598,53 @@ const Library = () => {
                     background: rgba(0,0,0,0.65);
                     z-index: 3000;
                     display: flex; align-items: center; justify-content: center;
+                    backdrop-filter: blur(5px);
                 }
                 .user-list-modal {
-                    background: var(--bg-card);
-                    border-radius: 12px;
+                    background: #262626;
+                    border-radius: 16px;
                     width: 400px;
                     max-width: 90vw;
-                    max-height: 70vh;
+                    height: 400px;
+                    max-height: 80vh;
                     display: flex;
                     flex-direction: column;
                     overflow: hidden;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                    border: 1px solid #363636;
                 }
                 .user-list-header {
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
                     padding: 12px 16px;
-                    border-bottom: 1px solid var(--border-color);
-                    font-weight: 600;
+                    border-bottom: 1px solid #363636;
+                    position: relative;
+                }
+                .user-list-header {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 16px;
+                    border-bottom: 1px solid #363636;
+                    position: relative;
                 }
                 .user-list-header h2 {
                     margin: 0;
                     font-size: 16px;
-                    font-weight: 600;
+                    font-weight: 700;
+                    color: #fff;
                 }
+                .user-list-header svg {
+                    position: absolute;
+                    right: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #fff;
+                    cursor: pointer;
+                    transition: opacity 0.2s;
+                }
+                .user-list-header svg:hover { opacity: 0.7; }
                 .user-list-body {
                     flex: 1;
                     overflow-y: auto;
@@ -624,14 +653,14 @@ const Library = () => {
                 .user-list-item {
                     display: flex;
                     align-items: center;
-                    padding: 8px 16px;
-                    gap: 12px;
+                    padding: 10px 16px;
+                    gap: 14px;
                 }
                 .user-list-item:hover {
-                    background: var(--nav-hover);
+                    background: rgba(255,255,255,0.05);
                 }
                 .user-avatar-placeholder {
-                    width: 44px; height: 44px;
+                    width: 50px; height: 50px;
                     border-radius: 50%;
                     background: linear-gradient(135deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
                     flex-shrink: 0;
@@ -642,52 +671,56 @@ const Library = () => {
                 }
                 .user-name {
                     font-weight: 600;
-                    color: var(--text-main);
+                    color: #fff;
                     text-decoration: none;
                     font-size: 14px;
                     display: block;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
+                    line-height: 1.4;
                 }
-                .user-name:hover {
-                    text-decoration: underline;
-                }
+                .user-name:hover { opacity: 0.8; }
+                
                 .user-date {
-                    font-size: 12px;
-                    color: var(--text-muted);
+                    font-size: 13px;
+                    color: #a8a8a8;
                 }
+                
                 .user-action-btn {
-                    background: transparent;
-                    border: 1px solid var(--border-color);
+                    background: #363636;
+                    border: none;
                     border-radius: 8px;
                     padding: 7px 16px;
                     font-weight: 600;
                     font-size: 14px;
                     cursor: pointer;
-                    color: var(--text-main);
-                    transition: background 0.2s;
+                    color: #fff;
+                    transition: all 0.2s;
+                    min-width: 80px;
                 }
                 .user-action-btn:hover {
-                    background: var(--nav-hover);
+                    background: #505050;
                 }
+                
                 .user-list-search {
-                    padding: 8px 16px;
-                    border-bottom: 1px solid var(--border-color);
+                    padding: 12px 16px;
+                    /* border-bottom: 1px solid #363636; Removed border for cleaner look */
                 }
                 .user-search-input {
                     width: 100%;
-                    padding: 8px 12px;
+                    padding: 10px 16px;
                     border: none;
-                    border-radius: 8px;
-                    background: var(--bg-panel);
+                    border-radius: 12px;
+                    background: #363636;
                     font-size: 14px;
                     outline: none;
-                    color: var(--text-main);
+                    color: #fff;
                 }
                 .user-search-input:focus {
-                    background: var(--nav-hover);
+                    background: #404040;
                 }
+                .user-search-input::placeholder { color: #a8a8a8; }
 
                 /* --- TABS --- */
                 .profile-tabs {
@@ -717,12 +750,12 @@ const Library = () => {
                 .tab-item:hover { color: var(--text-main); }
 
                 /* --- GRID STYLES --- */
-                .library-container {
+                .archive-container {
                     max-width: 935px;
                     margin: 0 auto;
-                    padding: 20px 20px 0;
+                    padding: 16px 20px 0;
                 }
-                .library-grid {
+                .archive-grid {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
                     gap: 4px; /* Instagram style tight gap */
@@ -1117,18 +1150,18 @@ const Library = () => {
                    .mobile-stat-item .stat-number { font-weight: 700; font-size: 15px; display: block; color: var(--text-main); line-height: 1.2; }
                    .mobile-stat-item .stat-label { font-size: 12px; color: var(--text-muted); display: block; font-weight: 400; opacity: 0.8; }
                   
-                  .mobile-bio-section { padding: 0; margin-bottom: 20px; }
-                   .mobile-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: var(--text-main); }
-                   .mobile-bio { font-size: 0.9rem; white-space: pre-wrap; line-height: 1.5; color: var(--text-main); opacity: 0.95; }
-                   .mobile-tagline { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.4; }
+                  .mobile-bio-section { padding: 0; margin-bottom: 20px; text-align: left; }
+                   .mobile-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: var(--text-main); text-align: left; }
+                   .mobile-bio { font-size: 0.9rem; white-space: pre-wrap; line-height: 1.5; color: var(--text-main); opacity: 0.95; text-align: left; }
+                   .mobile-tagline { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.4; text-align: left; }
                   
 
                 }
 
                 /* Responsive */
                 @media (max-width: 768px) {
-                    .library-container { padding: 10px 0 0; } 
-                    .library-grid { gap: 2px; }
+                    .archive-container { padding: 10px 0 0; } 
+                    .archive-grid { gap: 2px; }
                     .post-modal-overlay { padding: 0; background: var(--bg-app); }
                     .post-modal-content { flex-direction: column; max-height: 100vh; height: 100vh; width: 100vw; max-width: none; border-radius: 0; border: none; }
                     .modal-image-container { width: 100%; background: #000; border-radius: 0; display: block; }
@@ -1356,8 +1389,8 @@ const Library = () => {
             </div>
 
             {/* --- MAIN GRID --- */}
-            <div className="library-container">
-                <div className="library-grid animate-entry">
+            <div className="archive-container">
+                <div className="archive-grid animate-entry">
                     {(activeTab === 'posts' ? posts : activeTab === 'arts' ? arts : activeTab === 'reels' ? reels : archivedPosts).map(post => {
                         const isVideo = post.type === 'video' || (post.image && post.image.endsWith('.mp4'));
                         const hasMultiple = post.images && post.images.length > 1;
@@ -1671,4 +1704,4 @@ const Library = () => {
     );
 };
 
-export default Library;
+export default Archive;
