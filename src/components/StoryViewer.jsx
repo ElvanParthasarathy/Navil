@@ -16,7 +16,8 @@ const StoryViewer = ({
 
     const videoRef = useRef(null);
     const progressTimer = useRef(null);
-    const STORY_DURATION = 5000; // 5 seconds
+    const [storyDuration, setStoryDuration] = useState(5000); // Default 5 seconds
+    const DEFAULT_DURATION = 5000;
     const touchStartX = useRef(null);
     const touchStartY = useRef(null);
 
@@ -131,7 +132,7 @@ const StoryViewer = ({
         }
 
         const interval = 50; // ms
-        const increment = (interval / STORY_DURATION) * 100;
+        const increment = (interval / storyDuration) * 100;
 
         progressTimer.current = setInterval(() => {
             setProgress(prev => {
@@ -147,20 +148,32 @@ const StoryViewer = ({
         return () => {
             if (progressTimer.current) clearInterval(progressTimer.current);
         };
-    }, [isLoaded, isPaused, nextStory, STORY_DURATION]);
+    }, [isLoaded, isPaused, nextStory, storyDuration]);
 
     // Reset when highlight changes
     useEffect(() => {
         setCurrentIndex(0);
         setProgress(0);
         setIsLoaded(false);
+        setStoryDuration(DEFAULT_DURATION);
     }, [activeHighlight?.id]);
 
+    // Also reset when story index changes within the same highlight
+    useEffect(() => {
+        setProgress(0);
+        setIsLoaded(false);
+        setStoryDuration(DEFAULT_DURATION);
+    }, [currentIndex]);
+
     const handleVideoLoaded = () => {
+        if (videoRef.current && videoRef.current.duration) {
+            setStoryDuration(videoRef.current.duration * 1000);
+        }
         setIsLoaded(true);
     };
 
     const handleImageLoaded = () => {
+        setStoryDuration(DEFAULT_DURATION);
         setIsLoaded(true);
     };
 
@@ -595,6 +608,11 @@ const StoryViewer = ({
                         height: 100dvh;
                         border-radius: 0;
                         transform: none;
+                        background: #000;
+                    }
+                    .sv-media-wrapper video,
+                    .sv-media-wrapper img {
+                        object-fit: cover; /* Fill screen on mobile */
                     }
                     .sv-card.peer { display: none; }
                     .sv-controls-group { 

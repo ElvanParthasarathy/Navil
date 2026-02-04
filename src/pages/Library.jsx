@@ -461,10 +461,15 @@ const Library = () => {
     const mobileFeedRef = useRef(null);
     useEffect(() => {
         if (isMobileFeed && selectedPost && mobileFeedRef.current) {
-            const element = document.getElementById(`feed-post-${selectedPost.id}`);
-            if (element) {
-                element.scrollIntoView({ behavior: 'auto', block: 'start' });
-            }
+            // Use a small delay to ensure the modal/overlay is fully rendered
+            // and the list is populated before scrolling
+            const timer = setTimeout(() => {
+                const element = document.getElementById(`feed-post-${selectedPost.id}`);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'auto', block: 'start' });
+                }
+            }, 100);
+            return () => clearTimeout(timer);
         }
     }, [isMobileFeed, selectedPost]);
 
@@ -1208,9 +1213,18 @@ const Library = () => {
                     }
                     .mobile-feed-title { font-weight: 600; font-size: 16px; }
                     .mobile-feed-content { flex: 1; overflow-y: auto; background: #fff; }
-                    .mobile-feed-item { border-bottom: 1px solid #efefef; padding-bottom: 10px; }
-                    .feed-media-container { width: 100vw; background: #000; line-height: 0; position: relative; }
-                    .feed-media { width: 100%; max-height: 80vh; object-fit: contain; }
+                    .mobile-feed-item { border-bottom: 1px solid #efefef; padding-bottom: 10px; scroll-margin-top: 10px; }
+                    .feed-media-container { 
+                        width: 100vw; 
+                        background: #000; 
+                        line-height: 0; 
+                        position: relative; 
+                        aspect-ratio: 1/1; /* Default aspect ratio to prevent jumpy scroll */
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .feed-media { width: 100%; height: 100%; max-height: 80vh; object-fit: contain; }
                     .feed-media-scroll {
                         display: flex; 
                         overflow-x: auto; 
@@ -1239,10 +1253,22 @@ const Library = () => {
                     .feed-nav-btn.right { right: 10px; }
 
                     /* Allow swipe on mobile by letting touch events pass through shield if needed */
-                    @media (max-width: 768px) {
-                        .media-protection-layer {
-                            pointer-events: none;
-                        }
+                    /* Mobile Tab Switcher Alignment Fix */
+                    .profile-tabs {
+                        justify-content: space-around;
+                        border-top: 1px solid #dbdbdb;
+                        margin-bottom: 0;
+                    }
+                    .tab-item {
+                        margin-right: 0;
+                        flex: 1;
+                        justify-content: center;
+                        height: 48px;
+                        font-size: 11px;
+                        letter-spacing: 0.5px;
+                    }
+                    .tab-item.active {
+                        border-top: 1.5px solid #262626;
                     }
                 }
             `}</style>
