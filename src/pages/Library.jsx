@@ -497,16 +497,7 @@ const Library = () => {
                     margin-right: 20px;
                     line-height: 32px;
                 }
-                .edit-profile-btn {
-                    background-color: transparent;
-                    border: 1px solid var(--border-color);
-                    color: var(--text-main);
-                    border-radius: 4px;
-                    padding: 5px 9px;
-                    font-weight: 600;
-                    font-size: 14px;
-                    cursor: pointer;
-                }
+
                 .profile-stats-row {
                     display: flex;
                     margin-bottom: 20px;
@@ -1113,25 +1104,25 @@ const Library = () => {
                   .mobile-only-flex { display: flex !important; }
                   
                   /* Mobile Profile Layout */
-                  .profile-header { flex-direction: column; padding: 16px; margin-bottom: 0; }
-                  .profile-mobile-top { display: flex; align-items: center; width: 100%; gap: 28px; }
+                  .profile-header { flex-direction: column; padding: 16px 16px 0; margin-bottom: 0; display: block; }
+                  .profile-mobile-top { display: flex; align-items: center; width: 100%; gap: 20px; margin-bottom: 16px; }
                   .profile-mobile-top .profile-avatar-container { margin-right: 0; flex-shrink: 0; }
-                  .profile-mobile-top .profile-avatar { width: 77px; height: 77px; }
+                  .profile-mobile-top .profile-avatar { width: 77px; height: 77px; padding: 4px; border: 1px solid #dbdbdb; }
                   
-                  .mobile-stats-inline { display: flex; flex: 1; justify-content: space-around; }
+                  .mobile-username-header { padding-bottom: 20px; display: flex; align-items: center; }
+                  .mobile-username { font-size: 20px; font-weight: 600; margin: 0; color: var(--text-main); }
+
+                  .mobile-stats-inline { display: flex; flex: 1; justify-content: space-around; padding-left: 10px; }
                   .mobile-stat-item { text-align: center; }
-                  .mobile-stat-item .stat-number { font-weight: 600; font-size: 16px; }
-                  .mobile-stat-item .stat-label { font-size: 13px; color: var(--text-muted); }
+                  .mobile-stat-item .stat-number { font-weight: 600; font-size: 16px; display: block; color: var(--text-main); }
+                  .mobile-stat-item .stat-label { font-size: 13px; color: var(--text-muted); display: block; font-weight: 400; }
                   
-                  .mobile-bio-section { padding: 12px 16px 0; }
-                  .mobile-name { font-weight: 600; font-size: 14px; }
-                  .mobile-bio { font-size: 14px; white-space: pre-wrap; line-height: 1.4; }
+                  .mobile-bio-section { padding: 0; margin-bottom: 20px; }
+                  .mobile-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; color: var(--text-main); }
+                  .mobile-bio { font-size: 14px; white-space: pre-wrap; line-height: 1.4; color: var(--text-main); }
+                  .mobile-tagline { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
                   
-                  .mobile-edit-btn-container { padding: 12px 16px; }
-                  .mobile-edit-btn-container .edit-profile-btn { width: 100%; }
-                  
-                  .mobile-username-header { padding: 0 0 12px; }
-                  .mobile-username { font-size: 20px; font-weight: 400; margin: 0; }
+
                 }
 
                 /* Responsive */
@@ -1140,8 +1131,8 @@ const Library = () => {
                     .library-grid { gap: 2px; }
                     .post-modal-overlay { padding: 0; background: var(--bg-app); }
                     .post-modal-content { flex-direction: column; max-height: 100vh; height: 100vh; width: 100vw; max-width: none; border-radius: 0; border: none; }
-                    .modal-image-container { height: 50vh; flex: none; background: #000; border-radius: 0; }
-                    .modal-image { max-height: 50vh; }
+                    .modal-image-container { width: 100%; background: #000; border-radius: 0; display: block; }
+                    .modal-image { width: 100%; height: auto; display: block; }
                     .post-nav-btn { display: none; }
                     .modal-info { border-left: none; padding: 12px 16px; flex: 1; overflow-y: auto; background: var(--bg-card); }
                     
@@ -1190,12 +1181,9 @@ const Library = () => {
                         background: #000; 
                         line-height: 0; 
                         position: relative; 
-                        aspect-ratio: 1/1; /* Default aspect ratio to prevent jumpy scroll */
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
+                        display: block;
                     }
-                    .feed-media { width: 100%; height: 100%; max-height: 80vh; object-fit: contain; }
+                    .feed-media { width: 100%; height: auto; display: block; }
                     .feed-media-scroll {
                         display: flex; 
                         overflow-x: auto; 
@@ -1204,7 +1192,12 @@ const Library = () => {
                         scrollbar-width: none;
                     }
                     .feed-media-scroll::-webkit-scrollbar { display: none; }
-                    .feed-media-slide { flex-shrink: 0; width: 100vw; scroll-snap-align: start; }
+                    .feed-media-slide { 
+                        flex-shrink: 0; 
+                        width: 100vw; 
+                        scroll-snap-align: start; 
+                        scroll-snap-stop: always; /* Lock to each photo, prevent skipping */
+                    }
                     .feed-dots { 
                         position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
                         display: flex; gap: 4px; pointer-events: none; z-index: 5;
@@ -1299,16 +1292,12 @@ const Library = () => {
                     </div>
                 </div>
 
-                {/* Mobile Edit Profile Button */}
-                <div className="mobile-edit-btn-container mobile-only">
-                    <button className="edit-profile-btn">Edit Profile</button>
-                </div>
+
 
                 {/* Desktop Profile Info */}
                 <div className="profile-info desktop-only-flex">
                     <div className="profile-username-row">
                         <h2 className="username-text">{profileData?.username}</h2>
-                        <button className="edit-profile-btn">Edit Profile</button>
                         <FiHeart size={24} style={{ marginLeft: 10, cursor: 'pointer' }} />
                     </div>
                     <div className="profile-stats-row">

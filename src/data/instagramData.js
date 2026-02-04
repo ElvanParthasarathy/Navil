@@ -587,12 +587,27 @@ const instagramData = {
 export const profileData = {
   "username": "elvanparthasarathy",
   "name": "Elvan",
-  "bio": "Elvan | RMDEC '27\nNo two shadows dance the same. 🌗✨\nLearn to enjoy the rhythm. 🎶🕺",
+  "bio": "RMDEC '27\nNo two shadows dance the same. 🌗✨\nLearn to enjoy the rhythm. 🎶🕺",
   "profilePic": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/other/475941983_913470554201391_4166396232242741929_n_18340039015155402.jpg",
   "followers": 210,
   "following": 206,
   "postsCount": 16,
   "followersList": [
+    {
+      "username": "notjaibalaji",
+      "url": "https://www.instagram.com/notjaibalaji",
+      "date": "Sep 16, 2023 2:34 am"
+    },
+    {
+      "username": "krishna_vishwa_cb",
+      "url": "https://www.instagram.com/krishna_vishwa_cb",
+      "date": "Apr 20, 2024 7:45 am"
+    },
+    {
+      "username": "navami_.krishna",
+      "url": "https://www.instagram.com/navami_.krishna",
+      "date": "Dec 21, 2024 9:21 am"
+    },
     {
       "username": "yogi_yokesh4",
       "url": "https://www.instagram.com/yogi_yokesh4",
@@ -677,11 +692,6 @@ export const profileData = {
       "username": "_tamil_kp_",
       "url": "https://www.instagram.com/_tamil_kp_",
       "date": "Dec 24, 2024 2:11 am"
-    },
-    {
-      "username": "navami_.krishna",
-      "url": "https://www.instagram.com/navami_.krishna",
-      "date": "Dec 21, 2024 9:21 am"
     },
     {
       "username": "naan_dhaan_da.leo",
@@ -907,11 +917,6 @@ export const profileData = {
       "username": "its_me_ajayak",
       "url": "https://www.instagram.com/its_me_ajayak",
       "date": "Apr 21, 2024 8:45 am"
-    },
-    {
-      "username": "krishna_vishwa_cb",
-      "url": "https://www.instagram.com/krishna_vishwa_cb",
-      "date": "Apr 20, 2024 7:45 am"
     },
     {
       "username": "__dr__005",
@@ -1267,11 +1272,6 @@ export const profileData = {
       "username": "im_pixaga",
       "url": "https://www.instagram.com/im_pixaga",
       "date": "Sep 16, 2023 4:04 am"
-    },
-    {
-      "username": "notjaibalaji",
-      "url": "https://www.instagram.com/notjaibalaji",
-      "date": "Sep 16, 2023 2:34 am"
     },
     {
       "username": "raj_ravi_4125",
@@ -3212,7 +3212,7 @@ export const storyHighlights = [
   {
     "id": "அக்._2024",
     "title": "அக். 2024",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202410/462216389_2972290356270465_6773475641993791201_n_17943468407859441.webp",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202410/AQPZyrpCNvk1YyuRHz5PomDRazEZ_VhGk6zYpcZcsgvBBQRgL8HPcTrPlwaiLxaCQvKb5LUUeeuVKMxReRJtl5GrWMpkAOfcnUOM_17987767349726267.mp4",
     "stories": [
       {
         "id": "story_70",
@@ -3496,7 +3496,7 @@ export const storyHighlights = [
   {
     "id": "ஆக._2024",
     "title": "ஆக. 2024",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202408/453334835_521448476978883_3015564490432210388_n_18016467632215251.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202408/AQNeU1LxwWNu_6qbrBPA0u2wzsJlL8572xo6rWDgXaH0AYOK_sEhAL5iPDBD3FUCtpoFysVcPlFwgRFAOQ6i1WZU8KFfTjccYYnIg_18006897431399223.mp4",
     "stories": [
       {
         "id": "story_105",
@@ -4017,7 +4017,7 @@ export const storyHighlights = [
   {
     "id": "ஏப்._2024",
     "title": "ஏப். 2024",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/elvan.jp/stories/202404/435694358_1612516362828933_5652511305007108309_n_18110215117386778.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202404/AQNpglnOPuR29n4gJMihDQS5cfSu0dVpWCgI81mZ8CawlM6bl1UHe5mCvr385D711OPcuZ9iGXgxZLYITBoizn0cnCqLDE0m13pYjM_18347487637111913.mp4",
     "stories": [
       {
         "id": "story_5",
@@ -4328,7 +4328,7 @@ export const storyHighlights = [
   {
     "id": "ஜன._2024",
     "title": "ஜன. 2024",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202401/470201373_18014247662659667_7928533396878174755_n_17858287635052256.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202401/AQNTs9uLShrB7cVewk8UGSa3jcY1cVMSuRAi8rnYpjJX3yDzXEy3o5dU8tYhgnOpMybgy8qb06zDelL7FwNqBUQSPFh4lgqVfsjrMxg_18045879184592619.mp4",
     "stories": [
       {
         "id": "story_172",
@@ -4465,7 +4465,7 @@ export const storyHighlights = [
   {
     "id": "டிச._2023",
     "title": "டிச. 2023",
-    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202312/AQNUoj3kq5z1FxH8jTgY6azCWsbLj4ak_PL2ZLx3U6KyGldc4E_jIA2iOOK8NZMQNbitn7ZwVpg1r1inguig9q7_CxjQea3OLlMDwQ_18023801017766801.mp4",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/elvan.jp/stories/202312/AQPSZ5FVrKQjVZOxeveA6rmC0ApfNzYGrvOT52qw_dmG64S0M3jQSTdgeTqKaZStn19IIZB4f7MtFCbZzP42dxHq2Ah9eRsFMVpk_18051666214534878.mp4",
     "stories": [
       {
         "id": "story_181",
@@ -4572,7 +4572,7 @@ export const storyHighlights = [
   {
     "id": "நவ._2023",
     "title": "நவ. 2023",
-    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202311/AQOQTmn8mC2WAfDjV2TOFT8SYWLrpWv5fiPpF3HsNrbjVSRFqlphaw8kw66eXyJAtt4N4IEcq3thpFRsBdNJgUIu4IyBIKBKkGKneM_17988528254390326.mp4",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202311/AQMg0bBh4FeLUzO5cWyRR8FzyrDyMTLOTvZ1ypGxnLkuR8FNE4jYTWIgiudcd65Tr_3S5GuC3BgtUSZUIUyhwlUCkmQV5hN920_18060378970475581.mp4",
     "stories": [
       {
         "id": "story_7",
@@ -4593,16 +4593,6 @@ export const storyHighlights = [
         "group": "நவ. 2023",
         "caption": "",
         "index": 183
-      },
-      {
-        "id": "story_182",
-        "url": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202311/AQOQTmn8mC2WAfDjV2TOFT8SYWLrpWv5fiPpF3HsNrbjVSRFqlphaw8kw66eXyJAtt4N4IEcq3thpFRsBdNJgUIu4IyBIKBKkGKneM_17988528254390326.mp4",
-        "type": "video",
-        "date": "Nov 14, 2023 8:32 am",
-        "timestamp": 1699930920000,
-        "group": "நவ. 2023",
-        "caption": "Jaiprakash\nParthasarathy JaiSudar \nParthasarathy",
-        "index": 182
       }
     ]
   },
@@ -4656,7 +4646,7 @@ export const storyHighlights = [
   {
     "id": "செப்._2023",
     "title": "செப். 2023",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202309/377446615_647408917372188_8283124859446787656_n_18389199463025015.webp",
+    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202309/383346033_848461620021390_4946035236011645143_n_18390772456036883.webp",
     "stories": [
       {
         "id": "story_191",
@@ -4703,7 +4693,7 @@ export const storyHighlights = [
   {
     "id": "ஆக._2023",
     "title": "ஆக. 2023",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202308/364952336_615606257083937_8491492499284572388_n_18000186091978691.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202308/AQO7JPy_mVwxziKxCZJGFdn4L1W7t6c4swD9kJzQAPYFWFO7GRogN_LASnrSb9P_x57KhfRsFQagQ8lwTGWNV2borh2UutjVtCV7RY_17992465187484348.mp4",
     "stories": [
       {
         "id": "story_199",
@@ -4817,7 +4807,7 @@ export const storyHighlights = [
   {
     "id": "ஜூன்_2023",
     "title": "ஜூன் 2023",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202306/350635041_198074569390814_4624830439412512261_n_18018851800598739.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202306/AQOon2FyMi5WtmLJp2GGIzvVAkDZdMyYqkKsd8I2iIw4aJH7pNHmoPXNOCnYgDAvb5e_67eRuolGQbCfprabK9XtZG9CZ7d2qjswE_17975815550514551.mp4",
     "stories": [
       {
         "id": "story_203",
@@ -4844,7 +4834,7 @@ export const storyHighlights = [
   {
     "id": "மே_2023",
     "title": "மே 2023",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202305/347584427_597477052482947_3605358324674160856_n_17881098818808177.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202305/347455989_791604792567040_3746575617447505350_n_17897313209796521.jpg",
     "stories": [
       {
         "id": "story_205",
@@ -4905,7 +4895,7 @@ export const storyHighlights = [
   {
     "id": "டிச._2022",
     "title": "டிச. 2022",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202212/322445481_213669881076840_3426789636096729936_n_18167559379258515.jpg",
+    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202212/322935631_1688348228250017_5647256880427909424_n_17910007373679823.jpg",
     "stories": [
       {
         "id": "story_209",
@@ -5021,36 +5011,7 @@ export const storyHighlights = [
         "caption": "",
         "index": 219
       },
-      {
-        "id": "story_218",
-        "url": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202210/312457609_5888551164511499_2942011645600221211_n_18002416810506143.jpg",
-        "type": "image",
-        "date": "Oct 24, 2022 7:55 am",
-        "timestamp": 1666578300000,
-        "group": "அக். 2022",
-        "caption": "",
-        "index": 218
-      },
-      {
-        "id": "story_217",
-        "url": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202210/312581916_1235078923735722_8700945453313317867_n_17850239351853221.jpg",
-        "type": "image",
-        "date": "Oct 24, 2022 7:56 am",
-        "timestamp": 1666578360000,
-        "group": "அக். 2022",
-        "caption": "",
-        "index": 217
-      },
-      {
-        "id": "story_216",
-        "url": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202210/312435873_589782652836108_4468151683656809034_n_17979505303683659.jpg",
-        "type": "image",
-        "date": "Oct 24, 2022 7:56 am",
-        "timestamp": 1666578360000,
-        "group": "அக். 2022",
-        "caption": "",
-        "index": 216
-      },
+
       {
         "id": "story_215",
         "url": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202210/313038397_2997114257258476_8529705829448960784_n_17945923412357775.jpg",
@@ -5143,7 +5104,7 @@ export const storyHighlights = [
   {
     "id": "ஆக._2022",
     "title": "ஆக. 2022",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202208/299300573_2442399285899869_3984198958872888751_n_17981541853527570.webp",
+    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202208/302170487_599305744981538_6975680991574799831_n_18071368957314903.webp",
     "stories": [
       {
         "id": "story_244",
@@ -5374,7 +5335,7 @@ export const storyHighlights = [
   {
     "id": "மே_2022",
     "title": "மே 2022",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202205/279579001_159428163213691_1646789104799335022_n_17894955395528054.webp",
+    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202205/282020558_159361146582205_6868539520521077334_n_17860941992737019.webp",
     "stories": [
       {
         "id": "story_251",
@@ -5401,7 +5362,7 @@ export const storyHighlights = [
   {
     "id": "ஏப்._2022",
     "title": "ஏப். 2022",
-    "cover": "https://res.cloudinary.com/doxhuprh4/image/upload/f_auto,q_auto/assets/instagram/stories/202204/278362376_957748781575247_7387029305651783158_n_18231497986129984.webp",
+    "cover": "https://res.cloudinary.com/doxhuprh4/video/upload/f_auto,q_auto/assets/instagram/stories/202204/AQO_FRK3H8e4lWfAM3zY8XZiWa708RQy82F9nFCM2P6Q9Ve4_3HKxKBPXH4Wa0wOSU0h3SFuNxGzLoTD8H2Z64VUrZrkmrd6O4bpE_18160691104228944.mp4",
     "stories": [
       {
         "id": "story_263",

@@ -165,6 +165,20 @@ const StoryViewer = ({
         setStoryDuration(DEFAULT_DURATION);
     }, [currentIndex]);
 
+    // Imperative Video Pause/Play Control
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isPaused) {
+                videoRef.current.pause();
+            } else {
+                // Only play if it's already loaded/ready to avoid race conditions
+                if (isLoaded) {
+                    videoRef.current.play().catch(e => console.log("Play failed:", e));
+                }
+            }
+        }
+    }, [isPaused, isLoaded]);
+
     const handleVideoLoaded = () => {
         if (videoRef.current && videoRef.current.duration) {
             setStoryDuration(videoRef.current.duration * 1000);

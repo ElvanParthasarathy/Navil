@@ -213,6 +213,8 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
     const videoRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [duration, setDuration] = useState(0);
 
     useEffect(() => {
         if (isActive && videoRef.current) {
@@ -223,6 +225,30 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
             videoRef.current.pause();
         }
     }, [isActive]);
+
+    const handleTimeUpdate = () => {
+        if (videoRef.current) {
+            const current = videoRef.current.currentTime;
+            const dur = videoRef.current.duration;
+            if (dur > 0) {
+                setProgress((current / dur) * 100);
+            }
+        }
+    };
+
+    const handleLoadedMetadata = () => {
+        if (videoRef.current) {
+            setDuration(videoRef.current.duration);
+        }
+    };
+
+    const handleSeek = (e) => {
+        const seekTime = (parseFloat(e.target.value) / 100) * duration;
+        if (videoRef.current) {
+            videoRef.current.currentTime = seekTime;
+            setProgress(e.target.value);
+        }
+    };
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -253,6 +279,8 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                         className="v-media"
                         controlsList="nodownload"
                         onContextMenu={(e) => e.preventDefault()}
+                        onTimeUpdate={handleTimeUpdate}
+                        onLoadedMetadata={handleLoadedMetadata}
                     />
 
                     {/* Protection Overlay (blocks right-click and save) */}
@@ -289,6 +317,21 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                                 <span>Original audio • {profileData?.username}</span>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Video Scrubber / Slider */}
+                    <div className="v-progress-container" onClick={(e) => e.stopPropagation()}>
+                        <div className="v-progress-bar" style={{ width: `${progress}%` }}></div>
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            step="0.1"
+                            value={progress}
+                            onChange={handleSeek}
+                            className="v-scrubber"
+                            aria-label="Seek Video"
+                        />
                     </div>
 
                     {/* Side Action Buttons */}
@@ -330,6 +373,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                     height: 100dvh;
                     width: 100%;
                     scroll-snap-align: start;
+                    scroll-snap-stop: always; /* Prevent scrolling past multiple reels on one flick */
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -357,7 +401,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                 .v-media {
                     width: 100%;
                     height: 100%;
-                    object-fit: cover;
+                    object-fit: contain;
                 }
 
                 .v-pause-ui {
@@ -372,13 +416,74 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                 .v-info-card {
                     position: absolute;
                     bottom: 0; left: 0; right: 60px;
-                    padding: 24px 16px;
-                    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+                    padding: 24px 16px 32px; /* Extra bottom padding for slider room */
+                    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
                     color: white;
                     display: flex;
                     flex-direction: column;
                     gap: 12px;
+                    z-index: 15;
+                    pointer-events: none;
                 }
+                .v-info-card > * { pointer-events: auto; }
+
+                /* Progress / Scrubber Styles */
+                .v-progress-container {
+                    position: absolute;
+                    bottom: 0; left: 0; right: 0;
+                    height: 12px;
+                    z-index: 30;
+                    display: flex;
+                    align-items: flex-end;
+                    padding-bottom: 2px;
+                    cursor: pointer;
+                }
+
+                .v-progress-bar {
+                    position: absolute;
+                    bottom: 0; left: 0;
+                    height: 2px;
+                    background: rgba(255,255,255,0.8);
+                    z-index: 31;
+                    pointer-events: none;
+                    transition: height 0.1s;
+                }
+
+                .v-scrubber {
+                    width: 100%;
+                    margin: 0;
+                    -webkit-appearance: none;
+                    background: transparent;
+                    height: 10px;
+                    z-index: 32;
+                    cursor: pointer;
+                }
+
+                .v-progress-container:hover .v-progress-bar { height: 4px; }
+                .v-progress-container:hover .v-scrubber::-webkit-slider-thumb { opacity: 1; transform: scale(1.2); }
+
+                .v-scrubber::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background: white;
+                    cursor: pointer;
+                    opacity: 0;
+                    transition: opacity 0.2s, transform 0.2s;
+                }
+
+                .v-scrubber::-moz-range-thumb {
+                    width: 12px; height: 12px;
+                    border-radius: 50%;
+                    background: white;
+                    cursor: pointer;
+                    border: none;
+                    opacity: 0;
+                }
+
+                .v-scrubber:focus { outline: none; }
 
                 .v-user-row {
                     display: flex;
@@ -434,7 +539,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                     flex-direction: column;
                     align-items: center;
                     gap: 20px;
-                    padding-bottom: 24px;
+                    padding-bottom: 32px;
                     z-index: 20;
                 }
 
@@ -458,11 +563,18 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                         aspect-ratio: auto;
                     }
                     .v-info-card {
-                        padding-bottom: max(30px, env(safe-area-inset-bottom) + 10px);
+                        padding-bottom: max(40px, env(safe-area-inset-bottom) + 20px);
                     }
                     .v-actions-list {
-                        padding-bottom: max(30px, env(safe-area-inset-bottom) + 10px);
+                        padding-bottom: max(40px, env(safe-area-inset-bottom) + 20px);
                     }
+                    .v-progress-container {
+                        bottom: env(safe-area-inset-bottom);
+                        padding-bottom: 4px;
+                        height: 20px;
+                    }
+                    /* On mobile, make scrubber thumb always visible for easier seeking */
+                    .v-scrubber::-webkit-slider-thumb { opacity: 1; width: 8px; height: 8px; }
                 }
             `}</style>
         </div>
