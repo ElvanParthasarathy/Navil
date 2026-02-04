@@ -70,19 +70,17 @@ const Layout = () => {
                 </div>
 
                 <div className="sidebar-bottom">
-                    <div className="bottom-nav-pill">
-                        <Link to="/about" className={`pill-profile ${location.pathname === '/about' ? 'active' : ''}`}>
-                            <ProfileImage
-                                src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"}
-                                alt="Profile"
-                                className="pill-avatar"
-                            />
-                            <div className="pill-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</div>
-                        </Link>
-                        <Link to="/settings" className={`pill-settings ${location.pathname === '/settings' ? 'active' : ''}`}>
-                            <FiSettings size={20} />
-                        </Link>
-                    </div>
+                    <Link to="/about" className={`profile-pill ${location.pathname === '/about' ? 'active' : ''}`}>
+                        <ProfileImage
+                            src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"}
+                            alt="Profile"
+                            className="pill-avatar"
+                        />
+                        <div className="pill-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</div>
+                    </Link>
+                    <Link to="/settings" className={`settings-circle ${location.pathname === '/settings' ? 'active' : ''}`}>
+                        <FiSettings size={20} />
+                    </Link>
                 </div>
             </nav>
 
