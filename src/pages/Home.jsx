@@ -125,100 +125,7 @@ const Home = () => {
                 }
 
                 /* GRID SECTIONS */
-                .section-label {
-                    font-size: 0.8rem;
-                    font-weight: 800;
-                    letter-spacing: 2px;
-                    text-transform: uppercase;
-                    color: var(--text-muted);
-                    margin-bottom: 30px;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                }
 
-                .section-label::after {
-                    content: '';
-                    flex: 1;
-                    height: 1px;
-                    background: var(--border-color);
-                }
-
-                .explorer-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 24px;
-                    margin-bottom: 80px;
-                }
-
-                .explorer-card {
-                    background: var(--bg-card);
-                    border: 1px solid var(--border-light);
-                    padding: 40px;
-                    border-radius: 32px;
-                    text-decoration: none;
-                    color: var(--text-main);
-                    transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    min-height: 280px;
-                    position: relative;
-                    overflow: hidden;
-                }
-
-                .card-icon {
-                    width: 60px;
-                    height: 60px;
-                    background: var(--bg-panel);
-                    border-radius: 18px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: var(--text-main);
-                    transition: all 0.3s ease;
-                }
-
-                .card-info {
-                    margin-top: 40px;
-                }
-
-                .card-title {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    margin-bottom: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                }
-
-                .card-desc {
-                    font-size: 1rem;
-                    color: var(--text-muted);
-                    line-height: 1.5;
-                }
-
-                .card-arrow {
-                    opacity: 0;
-                    transform: translateX(-10px);
-                    transition: all 0.3s ease;
-                }
-
-                .explorer-card:hover {
-                    transform: translateY(-8px);
-                    border-color: var(--text-main);
-                    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-                }
-
-                .explorer-card:hover .card-icon {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                }
-
-                .explorer-card:hover .card-arrow {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
 
                 /* CONTACT FOOTER */
                 .contact-footer {
@@ -267,8 +174,6 @@ const Home = () => {
                 /* RESPONSIVE */
                 @media (max-width: 1024px) {
                     .hero-title { font-size: 3rem; }
-                    .explorer-grid { grid-template-columns: 1fr 1fr; }
-                    .explorer-grid > *:last-child { grid-column: span 2; min-height: 200px; }
                 }
 
                 @media (max-width: 768px) {
@@ -284,26 +189,7 @@ const Home = () => {
                     .hero-actions { width: 100%; flex-direction: column; gap: 10px; }
                     .hero-btn { width: 100%; justify-content: center; margin: 0; padding: 12px 20px; font-size: 0.95rem; }
                     
-                    .section-label { justify-content: center; font-size: 0.7rem; margin-bottom: 12px; opacity: 0.5; }
-                    .section-label::after { display: none; }
-                    
-                    .explorer-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 40px; width: 100%; }
-                    .explorer-card { 
-                        min-height: auto; 
-                        padding: 16px; 
-                        flex-direction: row !important; 
-                        align-items: center !important; 
-                        gap: 12px; 
-                        border-radius: 16px; 
-                        background: var(--bg-panel);
-                        border: 1px solid var(--border-light);
-                    }
-                    .card-icon { width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; }
-                    .card-icon svg { width: 18px; height: 18px; }
-                    .card-info { margin-top: 0 !important; flex: 1; text-align: left; }
-                    .card-title { font-size: 1rem; margin-bottom: 0; }
-                    .card-desc { display: none; }
-                    .card-arrow { opacity: 0.3; transform: none; display: block; font-size: 14px; }
+
                     
                     .contact-footer { padding: 20px; border-radius: 20px; gap: 20px; }
                     .contact-info-block h3 { font-size: 1rem; }
@@ -345,67 +231,25 @@ const Home = () => {
                 </div>
             </section>
 
-            <div className="section-label animate-entry">Explorer</div>
-
-            <div className="explorer-grid animate-entry">
-                <Link to="/library" className="explorer-card">
-                    <div className="card-icon">
-                        <FiGrid size={28} />
-                    </div>
-                    <div className="card-info">
-                        <div className="card-title">
-                            Library <FiChevronRight className="card-arrow" />
-                        </div>
-                        <p className="card-desc">A curated collection of {profileData.postsCount} Instagram posts, reels, and highlights.</p>
-                    </div>
-                </Link>
-
-                <Link to="/writings" className="explorer-card">
-                    <div className="card-icon">
-                        <FiEdit3 size={28} />
-                    </div>
-                    <div className="card-info">
-                        <div className="card-title">
-                            Writings <FiChevronRight className="card-arrow" />
-                        </div>
-                        <p className="card-desc">Thoughts, quotes, and long-form writings captured over the years.</p>
-                    </div>
-                </Link>
-
-                <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="explorer-card">
-                    <div className="card-icon">
-                        <FiLayers size={28} />
-                    </div>
-                    <div className="card-info">
-                        <div className="card-title">
-                            Portfolio <FiChevronRight className="card-arrow" />
-                        </div>
-                        <p className="card-desc">Professional work, projects, and creative endeavors.</p>
-                    </div>
-                </a>
-            </div>
-
-            <section className="contact-footer animate-entry">
+            <div className="contact-footer animate-entry">
                 <div className="contact-info-block">
-                    <h3>Get in touch</h3>
-                    <p>Open for collaborations and creative projects.</p>
+                    <h3>Let's Connect</h3>
+                    <p>Open for collaborations and creative conversations.</p>
                 </div>
-
                 <div className="contact-socials">
-                    <a href="tel:+919345128797" className="social-icon-link" title="Call">
-                        <FiPhone size={20} />
-                    </a>
-                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link" title="Email">
-                        <FiMail size={20} />
-                    </a>
-                    <a href="https://www.linkedin.com/in/jaiprakashpartha" target="_blank" rel="noopener noreferrer" className="social-icon-link" title="LinkedIn">
-                        <FiLinkedin size={20} />
-                    </a>
-                    <a href="https://www.instagram.com/elvanparthasarathy" target="_blank" rel="noopener noreferrer" className="social-icon-link" title="Instagram">
+                    <a href="https://instagram.com/jaiprakash_parthasarathy" target="_blank" rel="noopener noreferrer" className="social-icon-link">
                         <FiInstagram size={20} />
                     </a>
+                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
+                        <FiMail size={20} />
+                    </a>
+                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noopener noreferrer" className="social-icon-link">
+                        <FiLinkedin size={20} />
+                    </a>
                 </div>
-            </section>
+            </div>
+
+            <div style={{ height: '40px' }}></div>
         </div>
     );
 };
