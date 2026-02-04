@@ -119,6 +119,24 @@ const Settings = () => {
                     max-width: 400px; 
                     line-height: 1.6; 
                 }
+
+                @media (max-width: 768px) {
+                    .settings-section { margin-top: 24px; }
+                    .section-title { font-size: 0.9rem; margin-bottom: 12px; }
+                    .settings-card { padding: 16px; border-radius: 16px; }
+                    .settings-icon { width: 36px; height: 36px; border-radius: 10px; }
+                    .settings-label { font-size: 0.95rem; }
+                    .theme-toggle-btn { padding: 6px 12px; font-size: 0.9rem; }
+                    
+                    .hero-section { text-align: center; }
+                    .hero-section .title { font-size: 1.8rem; }
+                    .hero-section .subtitle { font-size: 1rem; }
+                    
+                    .coming-soon-container { padding: 32px 16px; margin-top: 20px; }
+                    .cs-icon { font-size: 2.5rem; margin-bottom: 16px; }
+                    .cs-title { font-size: 1.2rem; }
+                    .cs-text { font-size: 0.85rem; line-height: 1.5; }
+                }
             `}</style>
 
             <div className="hero-section">

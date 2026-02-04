@@ -1110,17 +1110,17 @@ const Library = () => {
                   .profile-mobile-top .profile-avatar { width: 77px; height: 77px; padding: 4px; border: 1px solid #dbdbdb; }
                   
                   .mobile-username-header { padding-bottom: 20px; display: flex; align-items: center; }
-                  .mobile-username { font-size: 20px; font-weight: 600; margin: 0; color: var(--text-main); }
+                   .mobile-username { font-size: 22px; font-weight: 700; margin: 0; color: var(--text-main); letter-spacing: -0.5px; }
 
                   .mobile-stats-inline { display: flex; flex: 1; justify-content: space-around; padding-left: 10px; }
                   .mobile-stat-item { text-align: center; }
-                  .mobile-stat-item .stat-number { font-weight: 600; font-size: 16px; display: block; color: var(--text-main); }
-                  .mobile-stat-item .stat-label { font-size: 13px; color: var(--text-muted); display: block; font-weight: 400; }
+                   .mobile-stat-item .stat-number { font-weight: 700; font-size: 15px; display: block; color: var(--text-main); line-height: 1.2; }
+                   .mobile-stat-item .stat-label { font-size: 12px; color: var(--text-muted); display: block; font-weight: 400; opacity: 0.8; }
                   
                   .mobile-bio-section { padding: 0; margin-bottom: 20px; }
-                  .mobile-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; color: var(--text-main); }
-                  .mobile-bio { font-size: 14px; white-space: pre-wrap; line-height: 1.4; color: var(--text-main); }
-                  .mobile-tagline { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+                   .mobile-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: var(--text-main); }
+                   .mobile-bio { font-size: 0.9rem; white-space: pre-wrap; line-height: 1.5; color: var(--text-main); opacity: 0.95; }
+                   .mobile-tagline { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.4; }
                   
 
                 }

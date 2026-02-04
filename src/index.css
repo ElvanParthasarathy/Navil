@@ -506,6 +506,8 @@ body {
     overflow: visible !important;
     position: relative;
     background: var(--bg-app);
+    font-size: 16px;
+    /* Prevent iPhone zoom on inputs */
   }
 
   /* --- B. HEADER (Floating on Top with Glassmorphism) --- */
@@ -537,10 +539,10 @@ body {
 
   .mobile-header .brand {
     display: block !important;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     padding: 0;
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
     line-height: 1;
     color: var(--text-main);
   }
