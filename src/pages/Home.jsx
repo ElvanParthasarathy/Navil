@@ -23,14 +23,14 @@ const Home = () => {
             font-family: 'Mukta Malar', sans-serif; 
             font-size: 1.6rem; 
             margin-top: 4px; 
-            color: #333;
+            color: var(--text-main);
         }
 
         /* Real Name Details */
         .real-name-details {
             margin-bottom: 25px; 
             font-size: 0.95rem; 
-            color: #666; 
+            color: var(--text-muted); 
             line-height: 1.5;
         }
 
@@ -50,7 +50,7 @@ const Home = () => {
             display: flex; 
             align-items: center; 
             gap: 8px; 
-            color: #333; 
+            color: var(--text-main); 
             font-weight: 600; 
             text-decoration: none;
             padding: 8px 15px; 
@@ -59,15 +59,15 @@ const Home = () => {
         }
 
         .contact-link-item:hover {
-            color: #000;
-            background-color: #e0e0e0; /* Hover effect retained */
+            color: var(--accent-text);
+            background-color: var(--accent-color); /* Hover effect retained */
             transform: scale(1.05); /* Hover effect retained */
         }
 
         /* Contact Icon Circle */
         .contact-icon-circle {
-            background: #fff; 
-            border: 1px solid #ccc;
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color);
             padding: 6px; 
             border-radius: 50%; 
             width: 32px; 
@@ -77,6 +77,7 @@ const Home = () => {
             align-items: center; 
             font-size: 1rem; 
             flex-shrink: 0;
+            color: var(--text-main);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
         }
 

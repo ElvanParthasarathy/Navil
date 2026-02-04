@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useOutletContext } from 'react-router-dom';
 import { FiHome, FiUser, FiEdit3, FiLayers, FiSettings, FiGrid } from 'react-icons/fi';
 import { profileData } from './data/instagramData';
 import Home from './pages/Home';
@@ -11,6 +11,12 @@ import Library from './pages/Library';
 import Quotes from './pages/writings/Quotes';
 import WritingsPlaceholder from './pages/writings/WritingsPlaceholder';
 
+// Create a Context for Theme
+const ThemeContext = React.createContext({ theme: 'light', toggleTheme: () => { } });
+
+// Export a hook for easy access
+export const useTheme = () => React.useContext(ThemeContext);
+
 const ProfileImage = ({ src, alt, className }) => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
@@ -20,7 +26,7 @@ const ProfileImage = ({ src, alt, className }) => {
             {loading && !error && (
                 <div className="shimmer-loader" style={{
                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                    background: '#eee'
+                    background: 'var(--border-light)'
                 }} />
             )}
             <img
@@ -37,8 +43,9 @@ const ProfileImage = ({ src, alt, className }) => {
     );
 };
 
-const Layout = ({ children }) => {
+const Layout = () => {
     const location = useLocation();
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
@@ -79,7 +86,7 @@ const Layout = ({ children }) => {
             </nav>
 
             <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%' }}>
-                <Outlet />
+                <Outlet context={{ theme, toggleTheme }} />
             </main>
         </div>
     );
@@ -115,7 +122,24 @@ const router = createBrowserRouter([
 });
 
 function App() {
-    return <RouterProvider router={router} />;
+    const [theme, setTheme] = React.useState(() => {
+        return localStorage.getItem('theme') || 'light';
+    });
+
+    React.useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    };
+
+    return (
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+            <RouterProvider router={router} />
+        </ThemeContext.Provider>
+    );
 }
 
 export default App;

@@ -19,9 +19,32 @@ body {
 :root {
   --bg-app: #FFFFFF;
   --bg-panel: #F7F7F7;
+  --bg-card: #FFFFFF;
   --text-main: #111;
   --text-muted: #666;
+  --border-color: #dbdbdb;
+  --border-light: rgba(0, 0, 0, 0.04);
   --sidebar-width: 280px;
+  --nav-hover: rgba(0, 0, 0, 0.04);
+  --accent-color: #000;
+  --accent-color: #000;
+  --accent-text: #fff;
+  --link-color: #0095f6;
+}
+
+[data-theme='dark'] {
+  --bg-app: #000000;
+  --bg-panel: #121212;
+  --bg-card: #121212;
+  --text-main: #FFFFFF;
+  --text-muted: #A0A0A0;
+  --border-color: #262626;
+  --border-light: #262626;
+  --nav-hover: rgba(255, 255, 255, 0.1);
+  --accent-color: #fff;
+  --accent-color: #fff;
+  --accent-text: #000;
+  --link-color: #4cb5f9;
 }
 
 body {
@@ -29,6 +52,7 @@ body {
   background: var(--bg-app);
   color: var(--text-main);
   overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .app-shell {
@@ -53,7 +77,7 @@ body {
   top: 0;
   left: 0;
   background: var(--bg-panel);
-  border-right: 1px solid rgba(0, 0, 0, 0.04);
+  border-right: 1px solid var(--border-light);
   border-radius: 0 24px 24px 0;
   display: flex;
   flex-direction: column;
@@ -110,7 +134,7 @@ body {
 
 /* Hover: Scale UP slightly + light background */
 .nav-item:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--nav-hover);
   transform: scale(1.02);
 }
 
@@ -139,27 +163,27 @@ body {
 
 /* Desktop Active States */
 .nav-item.active {
-  background: #000;
+  background: var(--accent-color);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   transform: scale(1);
 }
 
 .nav-item.active .nav-icon {
   opacity: 1;
-  color: #fff;
+  color: var(--accent-text);
   /* Ensure icon color change */
   transform: scale(1.1);
 }
 
 .nav-item.active .label {
-  color: #fff;
+  color: var(--accent-text);
   font-weight: 800;
 }
 
 /* Sidebar Bottom */
 .sidebar-bottom {
   padding-top: 15px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -179,7 +203,7 @@ body {
 }
 
 .profile-card:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--nav-hover);
   transform: scale(1.02);
 }
 
@@ -249,7 +273,7 @@ body {
 .name {
   font-size: 1rem;
   font-weight: 600;
-  color: #111;
+  color: var(--text-main);
 }
 
 .settings-btn {
@@ -267,7 +291,7 @@ body {
 
 .settings-btn:hover {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--nav-hover);
   transform: rotate(45deg) scale(1.1);
 }
 
@@ -394,12 +418,12 @@ body {
 
 /* --- CARD HOVER ANIMATIONS (Performance Optimized) --- */
 .category-card {
-  background: #fff;
-  border: 1px solid #eee;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
   padding: 24px;
   border-radius: 20px;
   text-decoration: none;
-  color: #111;
+  color: var(--text-main);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -407,7 +431,9 @@ body {
   /* PERFORMANCE FIX: Only animate transform/shadow/border */
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
     box-shadow 0.3s ease,
-    border-color 0.3s ease;
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
   will-change: transform;
   /* Hint for browser */
   position: relative;
@@ -436,7 +462,7 @@ body {
 
 .cat-desc {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 /* Quote Styles (Global styles that will be overridden by quotes.html) */
@@ -474,7 +500,7 @@ body {
     overflow-x: hidden;
     position: static !important;
     height: auto !important;
-    background: #ffffff;
+    background: var(--bg-app);
     overscroll-behavior-y: auto;
   }
 
@@ -484,7 +510,7 @@ body {
     min-height: 100vh;
     overflow: visible !important;
     position: relative;
-    background: #ffffff;
+    background: var(--bg-app);
   }
 
   /* --- B. HEADER (Floating on Top) --- */
@@ -498,11 +524,12 @@ body {
     right: 0;
     height: 60px;
     padding: 0 16px;
-    background: #ffffff;
+    background: var(--bg-app);
     z-index: 1000;
-    border-bottom: 1px solid #dbdbdb !important;
+    border-bottom: 1px solid var(--border-color) !important;
     box-shadow: none !important;
     border-radius: 0 !important;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
 
   /* No Scoops in IG Style */
@@ -519,7 +546,7 @@ body {
     padding: 0;
     letter-spacing: -0.5px;
     line-height: 1;
-    color: #000;
+    color: var(--text-main);
   }
 
   .mobile-actions {
@@ -534,7 +561,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #262626;
+    color: var(--text-main);
   }
 
   /* --- C. MAIN AREA --- */
@@ -547,13 +574,13 @@ body {
     padding-bottom: 60px !important;
     min-height: 100vh;
     overflow: visible !important;
-    background: #ffffff;
+    background: var(--bg-app);
   }
 
   /* --- D. CONTENT CARD --- */
   #content-area {
     display: block;
-    background: #ffffff;
+    background: var(--bg-app);
     width: 100%;
     height: auto !important;
     min-height: calc(100vh - 120px);
@@ -577,12 +604,13 @@ body {
     width: 100% !important;
     display: flex !important;
     flex-direction: row;
-    background: #ffffff;
+    background: var(--bg-app);
     padding: 0;
     z-index: 1000;
-    border-top: 1px solid #dbdbdb !important;
+    border-top: 1px solid var(--border-color) !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
 
   /* No Scoops in IG Style */
@@ -633,7 +661,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #262626;
+    color: var(--text-main);
     transition: transform 0.1s ease !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -649,7 +677,7 @@ body {
   }
 
   .nav-item.active .nav-icon {
-    color: #000;
+    color: var(--text-main);
     font-weight: bold;
     /* In actual IG, active icons are often 'filled' versions. 
        Since we use Fi icons, we can't easily switch to 'filled' variants 

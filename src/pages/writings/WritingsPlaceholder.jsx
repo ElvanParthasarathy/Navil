@@ -7,7 +7,7 @@ const WritingsPlaceholder = () => {
 
     return (
         <div className="page-view page-fade">
-            <Link to="/writings" className="spa-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#666', textDecoration: 'none', fontWeight: 600, marginBottom: '24px' }}>
+            <Link to="/writings" className="spa-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, marginBottom: '24px' }}>
                 <span>←</span> Back to Writings
             </Link>
 
@@ -21,8 +21,8 @@ const WritingsPlaceholder = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 padding: '40px',
-                background: '#fff',
-                border: '1px solid #eee',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-light)',
                 borderRadius: '16px',
                 textAlign: 'center'
             }}>

@@ -14,8 +14,8 @@ const Portfolio = () => {
             justify-content: center; 
             text-align: center; 
             padding: 40px 20px; /* Reduced padding for compact look */
-            background: #fff; 
-            border: 1px solid #eee; 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-light); 
             border-radius: 16px; 
             margin-top: 25px; /* Added spacing */
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -53,12 +53,12 @@ const Portfolio = () => {
         .cs-title { 
             font-size: 1.4rem; 
             font-weight: 800; 
-            color: #111; 
+            color: var(--text-main); 
             margin-bottom: 8px; 
         }
         .cs-text { 
             font-size: 0.95rem; 
-            color: #666; 
+            color: var(--text-muted); 
             max-width: 400px; 
             line-height: 1.6; 
         }

@@ -91,9 +91,9 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                     width: 100%;
                     height: 100%;
                     border-radius: 50%;
-                    border: 2px solid #fff;
+                    border: 2px solid var(--bg-app);
                     overflow: hidden;
-                    background: #fafafa;
+                    background: var(--bg-panel);
                 }
 
                 .h-inner img, 
@@ -106,7 +106,7 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                 .h-label {
                     font-size: 12px;
                     text-align: center;
-                    color: #262626;
+                    color: var(--text-main);
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
@@ -120,15 +120,15 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
                     width: 24px;
                     height: 24px;
                     border-radius: 50%;
-                    background: #fff;
-                    border: none;
+                    background: var(--bg-card);
+                    border: 1px solid var(--border-color);
                     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
                     z-index: 10;
-                    color: #8e8e8e;
+                    color: var(--text-muted);
                     opacity: 0.8;
                 }
 

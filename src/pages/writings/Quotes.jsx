@@ -23,8 +23,8 @@ const Quotes = () => {
 
                 .quote-card {
                     break-inside: avoid; 
-                    background: #fff; 
-                    border: 1px solid #eee; 
+                    background: var(--bg-card); 
+                    border: 1px solid var(--border-light); 
                     padding: 24px; 
                     border-radius: 16px; 
                     margin-bottom: 20px;
@@ -33,26 +33,26 @@ const Quotes = () => {
                     display: inline-block; 
                     width: 100%;
                 }
-                .quote-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-color: #111; }
+                .quote-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-color: var(--text-main); }
                 
                 /* 2. Quote Text */
                 .quote-text { 
                     font-family: "Mukta Malar", sans-serif; 
                     font-size: 1rem; 
                     line-height: 1.5; 
-                    color: #222; 
+                    color: var(--text-main); 
                     margin-bottom: 8px; 
                 }
 
                 /* 3. Quote Mark */
                 .quote-mark {
                     position: absolute; top: 15px; left: 20px; font-size: 3rem;
-                    line-height: 1; font-family: serif; color: #f0f0f0; z-index: 0; pointer-events: none;
+                    line-height: 1; font-family: serif; color: var(--border-light); z-index: 0; pointer-events: none;
                 }
 
                 .quote-sub-label {
                     font-size: 0.7rem; 
-                    color: #999; 
+                    color: var(--text-muted); 
                     text-transform: uppercase; 
                     letter-spacing: 0.5px;
                     margin-bottom: 4px;
@@ -63,14 +63,14 @@ const Quotes = () => {
                 .quote-author { 
                     font-size: 0.85rem; 
                     font-weight: 700; 
-                    color: #111; 
+                    color: var(--text-main); 
                     margin-top: 10px; 
                     display: block; 
                     text-align: right; 
                 }
             `}</style>
 
-            <Link to="/writings" className="spa-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#666', textDecoration: 'none', fontWeight: 600, marginBottom: '24px' }}>
+            <Link to="/writings" className="spa-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600, marginBottom: '24px' }}>
                 <span>←</span> Back to Writings
             </Link>
 
@@ -94,9 +94,9 @@ const Quotes = () => {
 
                         {/* Translation if available */}
                         {quote.translation && (
-                            <div style={{ marginTop: '12px', borderTop: '1px solid #eee', paddingTop: '8px' }}>
+                            <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
                                 <div className="quote-sub-label">Translation</div>
-                                <div style={{ fontSize: '0.9rem', color: '#555', fontStyle: 'italic', whiteSpace: 'pre-line' }}>
+                                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', whiteSpace: 'pre-line' }}>
                                     {quote.translation}
                                 </div>
                             </div>
@@ -104,9 +104,9 @@ const Quotes = () => {
 
                         {/* Transliteration if available */}
                         {quote.transliteration && (
-                            <div style={{ marginTop: '12px', borderTop: '1px solid #eee', paddingTop: '8px' }}>
+                            <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
                                 <div className="quote-sub-label">Malayalam</div>
-                                <div style={{ fontSize: '0.9rem', color: '#555', fontFamily: 'sans-serif', whiteSpace: 'pre-line' }}>
+                                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontFamily: 'sans-serif', whiteSpace: 'pre-line' }}>
                                     {quote.transliteration}
                                 </div>
                             </div>

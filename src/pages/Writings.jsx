@@ -21,8 +21,8 @@ const Writings = () => {
         }
 
         .category-card {
-            background-color: #fafafa;
-            border: 1px solid #eee;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-light);
             border-radius: 12px;
             padding: 20px 15px;
             text-align: center;
@@ -41,8 +41,8 @@ const Writings = () => {
         .category-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            background-color: #fff;
-            border-color: #ddd;
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
         }
 
         .cat-icon {
@@ -57,12 +57,12 @@ const Writings = () => {
             font-weight: 700;
             font-size: 1.1rem;
             margin-bottom: 5px;
-            color: #333;
+            color: var(--text-main);
         }
 
         .cat-desc {
             font-size: 0.85rem;
-            color: #777;
+            color: var(--text-muted);
             line-height: 1.4;
         }
 
@@ -71,7 +71,7 @@ const Writings = () => {
             top: 10px;
             right: 15px;
             font-size: 1.2rem;
-            color: #ccc;
+            color: var(--border-light);
             opacity: 0;
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
@@ -79,7 +79,7 @@ const Writings = () => {
         .category-card:hover .cat-arrow {
             opacity: 1;
             transform: translateX(3px);
-            color: #555;
+            color: var(--text-main);
         }
       `}</style>
 

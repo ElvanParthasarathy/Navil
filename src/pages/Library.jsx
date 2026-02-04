@@ -459,19 +459,7 @@ const Library = () => {
     };
 
     const mobileFeedRef = useRef(null);
-    useEffect(() => {
-        if (isMobileFeed && selectedPost && mobileFeedRef.current) {
-            // Use a small delay to ensure the modal/overlay is fully rendered
-            // and the list is populated before scrolling
-            const timer = setTimeout(() => {
-                const element = document.getElementById(`feed-post-${selectedPost.id}`);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'auto', block: 'start' });
-                }
-            }, 100);
-            return () => clearTimeout(timer);
-        }
-    }, [isMobileFeed, selectedPost]);
+    // Scroll logic removed: selected post is now rendered first in the reordered list.
 
     // Keyboard Support
     useEffect(() => {
@@ -497,7 +485,7 @@ const Library = () => {
                     margin: 0 auto 44px;
                     padding: 30px 20px 0;
                     align-items: flex-start;
-                    color: #262626;
+                    color: var(--text-main);
                 }
                 .profile-avatar-container {
                     flex-grow: 1;
@@ -510,7 +498,7 @@ const Library = () => {
                     width: 150px; height: 150px;
                     border-radius: 50%;
                     object-fit: cover;
-                    border: 1px solid #dbdbdb;
+                    border: 1px solid var(--border-color);
                     padding: 2px; /* Ring gap */
                 }
                 .profile-info {
@@ -530,8 +518,8 @@ const Library = () => {
                 }
                 .edit-profile-btn {
                     background-color: transparent;
-                    border: 1px solid #dbdbdb;
-                    color: #262626;
+                    border: 1px solid var(--border-color);
+                    color: var(--text-main);
                     border-radius: 4px;
                     padding: 5px 9px;
                     font-weight: 600;
@@ -544,13 +532,13 @@ const Library = () => {
                     font-size: 16px;
                 }
                 .stat-item { margin-right: 40px; }
-                .stat-value { font-weight: 600; color: #262626; }
+                .stat-value { font-weight: 600; color: var(--text-main); }
                 
                 .profile-bio-row {
                     font-size: 16px;
                     line-height: 24px;
                 }
-                .full-name { font-weight: 600; color: #262626; }
+                .full-name { font-weight: 600; color: var(--text-main); }
                 
                 /* Mobile Layout */
                 @media (max-width: 735px) {
@@ -558,7 +546,7 @@ const Library = () => {
                         flex-direction: column;
                         margin-bottom: 24px;
                         padding: 16px 16px 24px;
-                        border-bottom: 1px solid #dbdbdb;
+                        border-bottom: 1px solid var(--border-color);
                     }
                     .profile-mobile-top {
                         display: flex;
@@ -585,17 +573,17 @@ const Library = () => {
                     .mobile-stats-row {
                         display: flex;
                         justify-content: space-around;
-                        border-top: 1px solid #dbdbdb;
+                        border-top: 1px solid var(--border-color);
                         padding: 12px 0;
                         font-size: 14px;
-                        color: #8e8e8e;
+                        color: var(--text-muted);
                     }
                     .mobile-stat-col {
                         display: flex; flex-direction: column; align-items: center;
                     }
                     .mobile-stat-value {
                         font-weight: 600;
-                        color: #262626;
+                        color: var(--text-main);
                     }
                     
                     /* Mobile Username Header */
@@ -623,7 +611,7 @@ const Library = () => {
                     transition: color 0.2s;
                 }
                 .stat-clickable:hover {
-                    color: #0095f6;
+                    color: var(--link-color);
                 }
 
                 /* --- USER LIST MODAL --- */
@@ -634,7 +622,7 @@ const Library = () => {
                     display: flex; align-items: center; justify-content: center;
                 }
                 .user-list-modal {
-                    background: #fff;
+                    background: var(--bg-card);
                     border-radius: 12px;
                     width: 400px;
                     max-width: 90vw;
@@ -648,7 +636,7 @@ const Library = () => {
                     justify-content: space-between;
                     align-items: center;
                     padding: 12px 16px;
-                    border-bottom: 1px solid #dbdbdb;
+                    border-bottom: 1px solid var(--border-color);
                     font-weight: 600;
                 }
                 .user-list-header h2 {
@@ -668,7 +656,7 @@ const Library = () => {
                     gap: 12px;
                 }
                 .user-list-item:hover {
-                    background: #fafafa;
+                    background: var(--nav-hover);
                 }
                 .user-avatar-placeholder {
                     width: 44px; height: 44px;
@@ -682,7 +670,7 @@ const Library = () => {
                 }
                 .user-name {
                     font-weight: 600;
-                    color: #262626;
+                    color: var(--text-main);
                     text-decoration: none;
                     font-size: 14px;
                     display: block;
@@ -695,44 +683,45 @@ const Library = () => {
                 }
                 .user-date {
                     font-size: 12px;
-                    color: #8e8e8e;
+                    color: var(--text-muted);
                 }
                 .user-action-btn {
                     background: transparent;
-                    border: 1px solid #dbdbdb;
+                    border: 1px solid var(--border-color);
                     border-radius: 8px;
                     padding: 7px 16px;
                     font-weight: 600;
                     font-size: 14px;
                     cursor: pointer;
-                    color: #262626;
+                    color: var(--text-main);
                     transition: background 0.2s;
                 }
                 .user-action-btn:hover {
-                    background: #fafafa;
+                    background: var(--nav-hover);
                 }
                 .user-list-search {
                     padding: 8px 16px;
-                    border-bottom: 1px solid #dbdbdb;
+                    border-bottom: 1px solid var(--border-color);
                 }
                 .user-search-input {
                     width: 100%;
                     padding: 8px 12px;
                     border: none;
                     border-radius: 8px;
-                    background: #efefef;
+                    background: var(--bg-panel);
                     font-size: 14px;
                     outline: none;
+                    color: var(--text-main);
                 }
                 .user-search-input:focus {
-                    background: #e0e0e0;
+                    background: var(--nav-hover);
                 }
 
                 /* --- TABS --- */
                 .profile-tabs {
                     display: flex;
                     justify-content: center;
-                    border-top: 1px solid #dbdbdb;
+                    border-top: 1px solid var(--border-color);
                     margin-bottom: 5px;
                 }
                 .tab-item {
@@ -744,16 +733,16 @@ const Library = () => {
                     font-size: 12px;
                     font-weight: 600;
                     letter-spacing: 1px;
-                    color: #8e8e8e;
+                    color: var(--text-muted);
                     transition: color 0.1s;
                 }
                 .tab-item:last-child { margin-right: 0; }
                 .tab-item.active {
-                    color: #262626;
-                    border-top: 1px solid #262626;
+                    color: var(--text-main);
+                    border-top: 1px solid var(--text-main);
                     margin-top: -1px;
                 }
-                .tab-item:hover { color: #262626; }
+                .tab-item:hover { color: var(--text-main); }
 
                 /* --- GRID STYLES --- */
                 .library-container {
@@ -771,7 +760,7 @@ const Library = () => {
                     position: relative;
                     width: 100%;
                     padding-top: 100%; /* 1:1 Aspect Ratio */
-                    background: #f0f0f0;
+                    background: var(--bg-panel);
                     cursor: pointer;
                     overflow: hidden;
                 }
@@ -812,7 +801,7 @@ const Library = () => {
                     height: 70px;
                     border-radius: 50%;
                     padding: 3px;
-                    background: #dbdbdb; /* Default grey border */
+                    background: var(--border-color); /* Default grey border */
                     /* border: 2px solid #fff; */
                     position: relative;
                 }
@@ -822,7 +811,7 @@ const Library = () => {
                 .highlight-img-container {
                     width: 100%; height: 100%;
                     border-radius: 50%;
-                    border: 2px solid #fff; /* Inner white border */
+                    border: 2px solid var(--bg-app); /* Inner white border */
                     overflow: hidden;
                     background: #000;
                 }
@@ -834,7 +823,7 @@ const Library = () => {
                     margin-top: 8px;
                     font-size: 12px;
                     font-weight: 600;
-                    color: #262626;
+                    color: var(--text-main);
                     text-align: center;
                     white-space: nowrap;
                     overflow: hidden;
@@ -847,8 +836,8 @@ const Library = () => {
                     position: absolute;
                     top: 50%;
                     transform: translateY(-70%);
-                    background: rgba(255, 255, 255, 0.9);
-                    border: 1px solid #dbdbdb;
+                    background: var(--bg-card);
+                    border: 1px solid var(--border-color);
                     border-radius: 50%;
                     width: 26px;
                     height: 26px;
@@ -857,12 +846,12 @@ const Library = () => {
                     justify-content: center;
                     cursor: pointer;
                     z-index: 10;
-                    color: #262626;
+                    color: var(--text-main);
                     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                     transition: all 0.2s;
                 }
                 .highlights-nav-btn:hover {
-                    background: #fff;
+                    background: var(--bg-app);
                     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
                 }
                 .highlights-nav-left { left: 0; }
@@ -1078,14 +1067,14 @@ const Library = () => {
                     padding: 20px;
                 }
                 .post-modal-content {
-                    background: #fff; max-width: 935px; width: 100%; max-height: 90vh;
+                    background: var(--bg-card); max-width: 935px; width: 100%; max-height: 90vh;
                     display: flex; flex-direction: row; position: relative;
                     border-radius: 4px; overflow: hidden;
                     box-shadow: 0 0 20px rgba(0,0,0,0.2);
                 }
                 .modal-image-container { flex: 1.2; background: #000; position: relative; display: flex; align-items: center; justify-content: center; min-height: 450px; }
                 .modal-image { max-width: 100%; max-height: 90vh; object-fit: contain; }
-                .modal-info { flex: 1; padding: 20px; display: flex; flex-direction: column; border-left: 1px solid #efefef; overflow-y: auto; background: white; }
+                .modal-info { flex: 1; padding: 20px; display: flex; flex-direction: column; border-left: 1px solid var(--border-color); overflow-y: auto; background: var(--bg-card); border-right: none; }
                 
                 /* Modal Navigation Buttons (Desktop) */
                 .post-nav-btn {
@@ -1111,10 +1100,11 @@ const Library = () => {
                 /* Carousel Buttons */
                 .carousel-btn {
                     position: absolute; top: 50%; transform: translateY(-50%);
-                    background: rgba(255, 255, 255, 0.8); border: none;
+                    background: var(--bg-card); border: none;
+                    opacity: 0.8;
                     border-radius: 50%; width: 30px; height: 30px;
                     display: flex; align-items: center; justify-content: center;
-                    cursor: pointer; z-index: 25; color: #000;
+                    cursor: pointer; z-index: 25; color: var(--text-main);
                 }
                 .carousel-btn.left { left: 10px; }
                 .carousel-btn.right { right: 10px; }
@@ -1150,7 +1140,7 @@ const Library = () => {
                   .mobile-stats-inline { display: flex; flex: 1; justify-content: space-around; }
                   .mobile-stat-item { text-align: center; }
                   .mobile-stat-item .stat-number { font-weight: 600; font-size: 16px; }
-                  .mobile-stat-item .stat-label { font-size: 13px; color: #262626; }
+                  .mobile-stat-item .stat-label { font-size: 13px; color: var(--text-muted); }
                   
                   .mobile-bio-section { padding: 12px 16px 0; }
                   .mobile-name { font-weight: 600; font-size: 14px; }
@@ -1167,12 +1157,12 @@ const Library = () => {
                 @media (max-width: 768px) {
                     .library-container { padding: 10px 0 0; } 
                     .library-grid { gap: 2px; }
-                    .post-modal-overlay { padding: 0; background: #fff; }
+                    .post-modal-overlay { padding: 0; background: var(--bg-app); }
                     .post-modal-content { flex-direction: column; max-height: 100vh; height: 100vh; width: 100vw; max-width: none; border-radius: 0; border: none; }
                     .modal-image-container { height: 50vh; flex: none; background: #000; border-radius: 0; }
                     .modal-image { max-height: 50vh; }
                     .post-nav-btn { display: none; }
-                    .modal-info { border-left: none; padding: 12px 16px; flex: 1; overflow-y: auto; }
+                    .modal-info { border-left: none; padding: 12px 16px; flex: 1; overflow-y: auto; background: var(--bg-card); }
                     
                     .mobile-only { display: block !important; }
                     .mobile-only-flex { display: flex !important; }
@@ -1180,8 +1170,8 @@ const Library = () => {
 
                     .modal-header.mobile-only {
                         padding: 12px 16px;
-                        border-bottom: 1px solid #efefef;
-                        background: #fff;
+                        border-bottom: 1px solid var(--border-color);
+                        background: var(--bg-card);
                     }
                     .modal-actions.mobile-only {
                         padding: 12px 16px 8px;
@@ -1196,24 +1186,24 @@ const Library = () => {
                     .modal-date.mobile-only {
                         padding: 0 16px 20px;
                         font-size: 10px;
-                        color: #8e8e8e;
+                        color: var(--text-muted);
                         text-transform: uppercase;
                     }
 
                     /* Mobile Feed Viewer */
                     .mobile-feed-overlay {
                         position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-                        background: #fff; z-index: 4000;
+                        background: var(--bg-app); z-index: 4000;
                         display: flex; flex-direction: column;
                     }
                     .mobile-feed-header {
                         height: 44px; display: flex; align-items: center; justify-content: space-between;
-                        padding: 0 16px; border-bottom: 1px solid #efefef;
-                        position: sticky; top: 0; background: #fff; z-index: 10;
+                        padding: 0 16px; border-bottom: 1px solid var(--border-color);
+                        position: sticky; top: 0; background: var(--bg-card); z-index: 10;
                     }
-                    .mobile-feed-title { font-weight: 600; font-size: 16px; }
-                    .mobile-feed-content { flex: 1; overflow-y: auto; background: #fff; }
-                    .mobile-feed-item { border-bottom: 1px solid #efefef; padding-bottom: 10px; scroll-margin-top: 10px; }
+                    .mobile-feed-title { font-weight: 600; font-size: 16px; color: var(--text-main); }
+                    .mobile-feed-content { flex: 1; overflow-y: auto; background: var(--bg-app); }
+                    .mobile-feed-item { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; scroll-margin-top: 10px; }
                     .feed-media-container { 
                         width: 100vw; 
                         background: #000; 
@@ -1243,10 +1233,11 @@ const Library = () => {
                     
                     .feed-nav-btn {
                         position: absolute; top: 50%; transform: translateY(-50%);
-                        background: rgba(255, 255, 255, 0.7); border: none;
+                        background: var(--bg-card); border: none;
+                        opacity: 0.8;
                         border-radius: 50%; width: 26px; height: 26px;
                         display: flex; align-items: center; justify-content: center;
-                        cursor: pointer; z-index: 25; color: #000;
+                        cursor: pointer; z-index: 25; color: var(--text-main);
                         box-shadow: 0 0 10px rgba(0,0,0,0.1);
                     }
                     .feed-nav-btn.left { left: 10px; }
@@ -1256,7 +1247,7 @@ const Library = () => {
                     /* Mobile Tab Switcher Alignment Fix */
                     .profile-tabs {
                         justify-content: space-around;
-                        border-top: 1px solid #dbdbdb;
+                        border-top: 1px solid var(--border-color);
                         margin-bottom: 0;
                     }
                     .tab-item {
@@ -1268,7 +1259,7 @@ const Library = () => {
                         letter-spacing: 0.5px;
                     }
                     .tab-item.active {
-                        border-top: 1.5px solid #262626;
+                        border-top: 1.5px solid var(--text-main);
                     }
                 }
             `}</style>
@@ -1626,22 +1617,31 @@ const Library = () => {
                             <div style={{ width: 28 }}></div> {/* Spacer */}
                         </div>
                         <div className="mobile-feed-content">
-                            {(activeTab === 'posts' ? posts : activeTab === 'arts' ? arts : activeTab === 'reels' ? reels : archivedPosts).map((post) => (
-                                <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
-                                    <div className="modal-header">
-                                        <div className="modal-avatar">
-                                            <img src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                            {(() => {
+                                const currentList = activeTab === 'posts' ? posts : activeTab === 'arts' ? arts : activeTab === 'reels' ? reels : archivedPosts;
+                                const selectedIndex = selectedPost ? currentList.findIndex(p => p.id === selectedPost.id) : 0;
+                                // Reorder: Start from selected post, then wrap around to show posts before it
+                                const reorderedList = selectedIndex > 0
+                                    ? [...currentList.slice(selectedIndex), ...currentList.slice(0, selectedIndex)]
+                                    : currentList;
+
+                                return reorderedList.map((post) => (
+                                    <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
+                                        <div className="modal-header">
+                                            <div className="modal-avatar">
+                                                <img src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                            </div>
+                                            <div className="modal-username">elvanparthasarathy</div>
                                         </div>
-                                        <div className="modal-username">elvanparthasarathy</div>
+                                        <FeedItemMedia post={post} />
+                                        <div className="modal-actions" style={{ padding: '8px 16px 4px', display: 'flex', gap: 16 }}>
+                                            <FiHeart size={26} />
+                                            <FiMessageCircle size={26} />
+                                        </div>
+                                        <TruncatedCaption username="elvanparthasarathy" caption={post.caption} date={post.date} />
                                     </div>
-                                    <FeedItemMedia post={post} />
-                                    <div className="modal-actions" style={{ padding: '8px 16px 4px', display: 'flex', gap: 16 }}>
-                                        <FiHeart size={26} />
-                                        <FiMessageCircle size={26} />
-                                    </div>
-                                    <TruncatedCaption username="elvanparthasarathy" caption={post.caption} date={post.date} />
-                                </div>
-                            ))}
+                                ));
+                            })()}
                         </div>
                     </div>
                 )

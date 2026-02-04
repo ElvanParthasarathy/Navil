@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elvan-cache-v1';
+const CACHE_NAME = 'elvan-cache-v2';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -17,9 +17,18 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Skip service worker caching for local development (e.g., Vite dev server)
+    if (event.request.url.includes('localhost') || event.request.url.includes('127.0.0.1')) {
+        return; // Let the browser handle it directly
+    }
+
     event.respondWith(
         caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
+            return response || fetch(event.request).catch(() => {
+                // Return a fallback response or just ignore network failures
+                console.warn('SW: Fetch failed for:', event.request.url);
+                return new Response('Network error', { status: 503, statusText: 'Service Unavailable' });
+            });
         })
     );
 });
