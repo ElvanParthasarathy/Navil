@@ -10,6 +10,7 @@ import Writings from './pages/Writings';
 import Archive from './pages/Archive';
 import Quotes from './pages/writings/Quotes';
 import WritingsPlaceholder from './pages/writings/WritingsPlaceholder';
+import Admin from './pages/Admin';
 
 // Create a Context for Theme
 const ThemeContext = React.createContext({ theme: 'auto', setTheme: () => { }, toggleTheme: () => { } });
@@ -124,6 +125,7 @@ const router = createBrowserRouter([
             { path: "archive", element: <Archive /> },
             { path: "writings/quotes", element: <Quotes /> },
             { path: "writings/:category", element: <WritingsPlaceholder /> },
+            { path: "admin", element: <Admin /> },
         ]
     }
 ], {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import quotesData from '../../data/quotesData';
+import quotesData from '../../data/quotes.json';
 
 const Quotes = () => {
     // Reverse data to show newest first, as per instructions in original file
@@ -149,52 +149,52 @@ const Quotes = () => {
             `}</style>
 
             <div className="quotes-page">
-            <Link to="/writings" className="quotes-back-pill">
-                <span>←</span> Back to Writings
-            </Link>
+                <Link to="/writings" className="quotes-back-pill">
+                    <span>←</span> Back to Writings
+                </Link>
 
-            <div className="hero-section quotes-header">
-                <h1 className="title">Quotes</h1>
-                <h2 className="subtitle">Fragments of wisdom I've collected over time.</h2>
-            </div>
+                <div className="hero-section quotes-header">
+                    <h1 className="title">Quotes</h1>
+                    <h2 className="subtitle">Fragments of wisdom I've collected over time.</h2>
+                </div>
 
-            <div className="quotes-masonry">
-                {sortedQuotes.map(quote => (
-                    <div key={quote.id} className="quote-card">
-                        <div className="quote-mark">“</div>
+                <div className="quotes-masonry">
+                    {sortedQuotes.map(quote => (
+                        <div key={quote.id} className="quote-card">
+                            <div className="quote-mark">“</div>
 
-                        {/* Tag */}
-                        <div className="quote-sub-label">{quote.tag}</div>
+                            {/* Tag */}
+                            <div className="quote-sub-label">{quote.tag}</div>
 
-                        {/* Text */}
-                        <div className="quote-text" style={{ position: 'relative', zIndex: 1, whiteSpace: 'pre-line' }}>
-                            {quote.text}
+                            {/* Text */}
+                            <div className="quote-text" style={{ position: 'relative', zIndex: 1, whiteSpace: 'pre-line' }}>
+                                {quote.text}
+                            </div>
+
+                            {/* Translation if available */}
+                            {quote.translation && (
+                                <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
+                                    <div className="quote-sub-label">Translation</div>
+                                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', whiteSpace: 'pre-line' }}>
+                                        {quote.translation}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Transliteration if available */}
+                            {quote.transliteration && (
+                                <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
+                                    <div className="quote-sub-label">Malayalam</div>
+                                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontFamily: 'sans-serif', whiteSpace: 'pre-line' }}>
+                                        {quote.transliteration}
+                                    </div>
+                                </div>
+                            )}
+
+                            <span className="quote-author">- {quote.author}</span>
                         </div>
-
-                        {/* Translation if available */}
-                        {quote.translation && (
-                            <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
-                                <div className="quote-sub-label">Translation</div>
-                                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', whiteSpace: 'pre-line' }}>
-                                    {quote.translation}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Transliteration if available */}
-                        {quote.transliteration && (
-                            <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
-                                <div className="quote-sub-label">Malayalam</div>
-                                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontFamily: 'sans-serif', whiteSpace: 'pre-line' }}>
-                                    {quote.transliteration}
-                                </div>
-                            </div>
-                        )}
-
-                        <span className="quote-author">- {quote.author}</span>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
             </div>
         </div>
