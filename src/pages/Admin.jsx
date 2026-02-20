@@ -80,6 +80,7 @@ const SCHEMAS = {
         type: 'standard_post',
         fields: [
             { key: 'title', label: 'Poem Title', type: 'text', required: true },
+            { key: 'author', label: 'Author Name', type: 'text', required: true },
             { key: 'date', label: 'Date', type: 'datetime-local' },
             { key: 'style', label: 'Style/Form', type: 'text' },
             { key: 'content', label: 'Poem (Whitespace Preserved)', type: 'textarea', rows: 15, fullWidth: true, style: { whiteSpace: 'pre', fontFamily: 'monospace' } }
