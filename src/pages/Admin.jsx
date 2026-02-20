@@ -1,10 +1,112 @@
 
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiPlus, FiTrash2, FiEdit3, FiUser, FiMessageCircle, FiCheck, FiX, FiList, FiGlobe } from 'react-icons/fi';
+import { FiSave, FiPlus, FiTrash2, FiEdit3, FiUser, FiMessageCircle, FiCheck, FiX, FiList, FiGlobe, FiFileText, FiBookOpen, FiPenTool, FiSun, FiBook } from 'react-icons/fi';
 
 // Import Data (Initial State)
 import initialQuotes from '../data/quotes.json';
 import initialProfile from '../data/profile.json';
+import initialBlog from '../data/blog.json';
+import initialArticles from '../data/articles.json';
+import initialEssays from '../data/essays.json';
+import initialStories from '../data/short_stories.json';
+import initialPoems from '../data/poems.json';
+import initialThoughts from '../data/thoughts.json';
+import initialDiary from '../data/diary.json';
+
+// --- DATA SCHEMAS ---
+const SCHEMAS = {
+    quotes: {
+        label: 'Quotes',
+        icon: <FiMessageCircle />,
+        type: 'custom_quotes' // Handled by specific renderer
+    },
+    blog: {
+        label: 'Blog',
+        icon: <FiEdit3 />,
+        type: 'standard_post',
+        fields: [
+            { key: 'title', label: 'Title', type: 'text', required: true },
+            { key: 'slug', label: 'Slug (URL)', type: 'text', placeholder: 'my-blog-post' },
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'tags', label: 'Tags (comma separated)', type: 'text' },
+            { key: 'cover', label: 'Cover Image URL', type: 'text' },
+            { key: 'excerpt', label: 'Short Excerpt', type: 'textarea', rows: 2 },
+            { key: 'content', label: 'Content (Markdown/HTML)', type: 'textarea', rows: 15, fullWidth: true }
+        ]
+    },
+    articles: {
+        label: 'Articles',
+        icon: <FiFileText />,
+        type: 'standard_post',
+        fields: [
+            { key: 'title', label: 'Article Title', type: 'text', required: true },
+            { key: 'slug', label: 'Slug', type: 'text' },
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'tags', label: 'Tags', type: 'text' },
+            { key: 'cover', label: 'Cover Image URL', type: 'text' },
+            { key: 'summary', label: 'Summary/Abstract', type: 'textarea', rows: 3, fullWidth: true },
+            { key: 'content', label: 'Article Body', type: 'textarea', rows: 20, fullWidth: true }
+        ]
+    },
+    essays: {
+        label: 'Essays',
+        icon: <FiBookOpen />,
+        type: 'standard_post',
+        fields: [
+            { key: 'title', label: 'Essay Title', type: 'text', required: true },
+            { key: 'slug', label: 'Slug', type: 'text' },
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'subject', label: 'Subject/Topic', type: 'text' },
+            { key: 'content', label: 'Essay Content', type: 'textarea', rows: 25, fullWidth: true }
+        ]
+    },
+    stories: {
+        label: 'Short Stories',
+        icon: <FiBook />,
+        type: 'standard_post',
+        fields: [
+            { key: 'title', label: 'Story Title', type: 'text', required: true },
+            { key: 'slug', label: 'Slug', type: 'text' },
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'genre', label: 'Genre', type: 'text' },
+            { key: 'cover', label: 'Cover Art URL', type: 'text' },
+            { key: 'synopsis', label: 'Synopsis', type: 'textarea', rows: 3 },
+            { key: 'content', label: 'Story Content', type: 'textarea', rows: 25, fullWidth: true }
+        ]
+    },
+    poems: {
+        label: 'Poems',
+        icon: <FiPenTool />,
+        type: 'standard_post',
+        fields: [
+            { key: 'title', label: 'Poem Title', type: 'text', required: true },
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'style', label: 'Style/Form', type: 'text' },
+            { key: 'content', label: 'Poem (Whitespace Preserved)', type: 'textarea', rows: 15, fullWidth: true, style: { whiteSpace: 'pre', fontFamily: 'monospace' } }
+        ]
+    },
+    thoughts: {
+        label: 'Thoughts',
+        icon: <FiSun />,
+        type: 'standard_post',
+        fields: [
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'mood', label: 'Current Mood', type: 'text' },
+            { key: 'content', label: 'Though Stream', type: 'textarea', rows: 6, fullWidth: true }
+        ]
+    },
+    diary: {
+        label: 'Diary',
+        icon: <FiBook />,
+        type: 'standard_post',
+        fields: [
+            { key: 'date', label: 'Date', type: 'datetime-local' },
+            { key: 'title', label: 'Entry Title (Optional)', type: 'text' },
+            { key: 'location', label: 'Location', type: 'text' },
+            { key: 'content', label: 'Dear Diary...', type: 'textarea', rows: 15, fullWidth: true }
+        ]
+    }
+};
 
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('quotes');
@@ -15,7 +117,14 @@ const Admin = () => {
     // Manage Data States
     const [dataStore, setDataStore] = useState({
         quotes: initialQuotes,
-        profile: initialProfile
+        profile: initialProfile,
+        blog: initialBlog,
+        articles: initialArticles,
+        essays: initialEssays,
+        stories: initialStories,
+        poems: initialPoems,
+        thoughts: initialThoughts,
+        diary: initialDiary
     });
 
     // Toggle States
@@ -34,7 +143,7 @@ const Admin = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    collection,
+                    collection: collection === 'stories' ? 'short_stories' : collection, // Map stories to short_stories.json
                     data: dataStore[collection],
                     password
                 })
@@ -70,7 +179,7 @@ const Admin = () => {
     // Generic Add Item
     const addItem = (collection) => {
         const newId = Date.now().toString();
-        let newItem = { id: newId };
+        let newItem = { id: newId, date: new Date().toISOString().slice(0, 16) }; // Default current date
 
         if (collection === 'quotes') {
             newItem = {
@@ -135,6 +244,13 @@ const Admin = () => {
         setDataStore(prev => ({ ...prev, quotes: newQuotes }));
     };
 
+    // --- GENERIC FIELD UPDATE ---
+    const updateGenericItem = (collection, index, field, value) => {
+        const newData = [...dataStore[collection]];
+        newData[index] = { ...newData[index], [field]: value };
+        setDataStore(prev => ({ ...prev, [collection]: newData }));
+    };
+
     return (
         <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px', minHeight: '100vh', color: 'var(--text-main)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
@@ -149,24 +265,20 @@ const Admin = () => {
             </div>
 
             {/* TAB NAVIGATION */}
-            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', marginBottom: '20px' }}>
-                {Object.keys(dataStore).map(key => (
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', marginBottom: '20px', scrollbarWidth: 'none' }}>
+                <button
+                    onClick={() => setActiveTab('profile')}
+                    style={getTabStyle(activeTab === 'profile')}
+                >
+                    <FiUser /> Profile
+                </button>
+                {Object.keys(SCHEMAS).map(key => (
                     <button
                         key={key}
                         onClick={() => setActiveTab(key)}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: '8px',
-                            padding: '10px 20px',
-                            borderRadius: '99px',
-                            border: 'none',
-                            background: activeTab === key ? 'var(--text-main)' : 'var(--bg-panel)',
-                            color: activeTab === key ? 'var(--bg-app)' : 'var(--text-muted)',
-                            cursor: 'pointer',
-                            fontWeight: '600',
-                            whiteSpace: 'nowrap'
-                        }}
+                        style={getTabStyle(activeTab === key)}
                     >
-                        {key === 'profile' ? <FiUser /> : <FiMessageCircle />} {key.charAt(0).toUpperCase() + key.slice(1)}
+                        {SCHEMAS[key].icon} {SCHEMAS[key].label}
                     </button>
                 ))}
             </div>
@@ -187,7 +299,7 @@ const Admin = () => {
             {/* HEADER ACTIONS */}
             <div style={{ background: 'var(--bg-panel)', borderRadius: '20px', padding: '24px', border: '1px solid var(--border-light)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', alignItems: 'center' }}>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: '700' }}>Manage {activeTab}</h2>
+                    <h2 style={{ fontSize: '1.2rem', fontWeight: '700' }}>Manage {activeTab === 'profile' ? 'Profile' : SCHEMAS[activeTab]?.label}</h2>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         {activeTab !== 'profile' && (
                             <button onClick={() => addItem(activeTab)} style={btnStyle}>
@@ -242,7 +354,7 @@ const Admin = () => {
                     </div>
                 )}
 
-                {/* QUOTES EDITOR (MULTI-VARIANT) */}
+                {/* CUSTOM QUOTES EDITOR */}
                 {activeTab === 'quotes' && (
                     <div style={{ display: 'grid', gap: '20px' }}>
                         {dataStore.quotes.map((item, index) => (
@@ -256,7 +368,6 @@ const Admin = () => {
                                 {editingId !== item.id ? (
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <div style={{ flex: 1 }}>
-                                            {/* Preview First Variant */}
                                             <p style={{ fontStyle: 'italic', fontSize: '1rem', fontWeight: '500' }}>"{item.variants?.[0]?.text || 'Empty Quote'}"</p>
                                             <div style={{ display: 'flex', gap: '15px', marginTop: '10px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                                                 <span><FiUser size={12} /> {item.variants?.[0]?.author || 'Unknown'}</span>
@@ -368,11 +479,94 @@ const Admin = () => {
                         ))}
                     </div>
                 )}
+
+                {/* GENERIC STANDARD POST EDITOR (Blog, Articles, Essays, etc.) */}
+                {SCHEMAS[activeTab]?.type === 'standard_post' && (
+                    <div style={{ display: 'grid', gap: '20px' }}>
+                        {dataStore[activeTab].map((item, index) => (
+                            <div key={item.id || index} style={{
+                                padding: '20px',
+                                background: 'var(--bg-card)',
+                                borderRadius: '15px',
+                                border: editingId === item.id ? '2px solid var(--text-main)' : '1px solid var(--border-color)',
+                                transition: 'all 0.2s'
+                            }}>
+                                {editingId !== item.id ? (
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '4px' }}>{item.title || item.date || 'Untitled'}</h3>
+                                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                                {new Date(item.date).toLocaleDateString()}
+                                                {item.tags && ` • ${item.tags}`}
+                                            </p>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <button onClick={() => setEditingId(item.id)} style={{ ...btnStyle, padding: '6px 12px' }}><FiEdit3 /> Edit</button>
+                                            <button onClick={() => deleteItem(activeTab, index)} style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}><FiTrash2 size={18} /></button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div style={{ display: 'grid', gap: '15px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+                                            {SCHEMAS[activeTab].fields.map(field => (
+                                                <div
+                                                    key={field.key}
+                                                    style={{
+                                                        display: 'flex', flexDirection: 'column', gap: '6px',
+                                                        gridColumn: field.fullWidth ? '1 / -1' : 'auto'
+                                                    }}
+                                                >
+                                                    <label style={labelStyle}>{field.label}</label>
+                                                    {field.type === 'textarea' ? (
+                                                        <textarea
+                                                            style={{
+                                                                ...inputStyle,
+                                                                minHeight: field.rows ? `${field.rows * 24}px` : 'auto',
+                                                                ...(field.style || {})
+                                                            }}
+                                                            value={item[field.key] || ''}
+                                                            onChange={(e) => updateGenericItem(activeTab, index, field.key, e.target.value)}
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type={field.type}
+                                                            style={inputStyle}
+                                                            value={item[field.key] || ''}
+                                                            onChange={(e) => updateGenericItem(activeTab, index, field.key, e.target.value)}
+                                                            placeholder={field.placeholder || ''}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid var(--border-light)', paddingTop: '15px' }}>
+                                            <button onClick={() => setEditingId(null)} style={{ ...btnStyle, background: 'transparent' }}><FiX /> Cancel</button>
+                                            <button
+                                                onClick={() => handleSaveCollection(activeTab, index)}
+                                                disabled={savingIndex === index}
+                                                style={{ ...btnStyle, background: 'var(--text-main)', color: 'var(--bg-app)' }}
+                                            >
+                                                {savingIndex === index ? 'Saving...' : <><FiCheck /> Save Item</>}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        {dataStore[activeTab].length === 0 && (
+                            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)', border: '2px dashed var(--border-color)', borderRadius: '15px' }}>
+                                No items yet. Click "Add New" to start writing.
+                            </div>
+                        )}
+                    </div>
+                )}
+
             </div>
         </div>
     );
 };
 
+// -- STYLES --
 const btnStyle = {
     display: 'flex', alignItems: 'center', gap: '8px',
     padding: '8px 16px', borderRadius: '8px',
@@ -385,7 +579,8 @@ const inputStyle = {
     padding: '10px', borderRadius: '8px',
     border: '1px solid var(--border-color)',
     background: 'var(--bg-app)', color: 'var(--text-main)',
-    width: '100%', fontSize: '0.95rem'
+    width: '100%', fontSize: '0.95rem',
+    fontFamily: 'inherit'
 };
 
 const labelStyle = {
@@ -397,5 +592,18 @@ const labelStyle = {
     marginBottom: '4px',
     display: 'block'
 };
+
+const getTabStyle = (isActive) => ({
+    display: 'flex', alignItems: 'center', gap: '8px',
+    padding: '10px 20px',
+    borderRadius: '99px',
+    border: 'none',
+    background: isActive ? 'var(--text-main)' : 'var(--bg-panel)',
+    color: isActive ? 'var(--bg-app)' : 'var(--text-muted)',
+    cursor: 'pointer',
+    fontWeight: '600',
+    whiteSpace: 'nowrap',
+    transition: 'all 0.2s ease'
+});
 
 export default Admin;
