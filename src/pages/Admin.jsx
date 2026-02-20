@@ -1,26 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiPlus, FiTrash2, FiEdit3, FiUser, FiMessageCircle, FiCheck, FiX, FiEye } from 'react-icons/fi';
+import { FiSave, FiPlus, FiTrash2, FiEdit3, FiUser, FiMessageCircle, FiCheck, FiX, FiList, FiGlobe } from 'react-icons/fi';
 
 // Import Data (Initial State)
 import initialQuotes from '../data/quotes.json';
 import initialProfile from '../data/profile.json';
-
-// --- DATA SCHEMAS ---
-const SCHEMAS = {
-    quotes: {
-        fields: [
-            { key: 'text', label: 'Quote Text', type: 'textarea', rows: 3, fullWidth: true },
-            { key: 'translation', label: 'Translation', type: 'textarea', rows: 2, fullWidth: true },
-            { key: 'transliteration', label: 'Transliteration / Original Script', type: 'textarea', rows: 2, fullWidth: true },
-            { key: 'transliterationLabel', label: 'Label for Transliteration (e.g. Malayalam)', type: 'text', default: 'Transliteration' },
-            { key: 'author', label: 'Author', type: 'text', default: 'Elvan Parthasarathy' },
-            { key: 'tag', label: 'Tag', type: 'text', default: 'Philosophy' },
-            { key: 'lang', label: 'Language', type: 'select', options: ['ta', 'en'] }
-        ],
-        icon: <FiMessageCircle />
-    }
-};
 
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('quotes');
@@ -86,11 +70,16 @@ const Admin = () => {
     // Generic Add Item
     const addItem = (collection) => {
         const newId = Date.now().toString();
-        const newItem = { id: newId };
-        if (SCHEMAS[collection]) {
-            SCHEMAS[collection].fields.forEach(f => {
-                newItem[f.key] = f.default || '';
-            });
+        let newItem = { id: newId };
+
+        if (collection === 'quotes') {
+            newItem = {
+                id: newId,
+                tag: 'Philosophy',
+                variants: [
+                    { label: 'Original', text: '', author: 'Elvan Parthasarathy', lang: 'en' }
+                ]
+            };
         }
 
         setDataStore(prev => ({
@@ -109,17 +98,41 @@ const Admin = () => {
         setMessage('Removed from draft. Click "Save All" to commit deletions.');
     };
 
-    const updateItem = (collection, index, field, value) => {
-        const newData = [...dataStore[collection]];
-        newData[index] = { ...newData[index], [field]: value };
-        setDataStore(prev => ({ ...prev, [collection]: newData }));
-    };
-
     const updateProfile = (field, value) => {
         setDataStore(prev => ({
             ...prev,
             profile: { ...prev.profile, [field]: value }
         }));
+    };
+
+    // --- QUOTE SPECIFIC UPDATES ---
+    const updateQuoteField = (index, field, value) => {
+        const newQuotes = [...dataStore.quotes];
+        newQuotes[index] = { ...newQuotes[index], [field]: value };
+        setDataStore(prev => ({ ...prev, quotes: newQuotes }));
+    };
+
+    const updateVariant = (quoteIndex, variantIndex, field, value) => {
+        const newQuotes = [...dataStore.quotes];
+        const newVariants = [...newQuotes[quoteIndex].variants];
+        newVariants[variantIndex] = { ...newVariants[variantIndex], [field]: value };
+        newQuotes[quoteIndex].variants = newVariants;
+        setDataStore(prev => ({ ...prev, quotes: newQuotes }));
+    };
+
+    const addVariant = (quoteIndex) => {
+        const newQuotes = [...dataStore.quotes];
+        newQuotes[quoteIndex].variants.push({
+            label: 'Translation', text: '', author: 'Elvan Parthasarathy', lang: 'en'
+        });
+        setDataStore(prev => ({ ...prev, quotes: newQuotes }));
+    };
+
+    const removeVariant = (quoteIndex, variantIndex) => {
+        if (!window.confirm("Remove this variant?")) return;
+        const newQuotes = [...dataStore.quotes];
+        newQuotes[quoteIndex].variants.splice(variantIndex, 1);
+        setDataStore(prev => ({ ...prev, quotes: newQuotes }));
     };
 
     return (
@@ -230,7 +243,7 @@ const Admin = () => {
                     </div>
                 )}
 
-                {/* LIST EDITOR (QUOTES) */}
+                {/* QUOTES EDITOR (MULTI-VARIANT) */}
                 {activeTab === 'quotes' && (
                     <div style={{ display: 'grid', gap: '20px' }}>
                         {dataStore.quotes.map((item, index) => (
@@ -244,10 +257,12 @@ const Admin = () => {
                                 {editingId !== item.id ? (
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <div style={{ flex: 1 }}>
-                                            <p style={{ fontStyle: 'italic', fontSize: '1rem', fontWeight: '500' }}>"{item.text || 'Empty Quote'}"</p>
+                                            {/* Preview First Variant */}
+                                            <p style={{ fontStyle: 'italic', fontSize: '1rem', fontWeight: '500' }}>"{item.variants?.[0]?.text || 'Empty Quote'}"</p>
                                             <div style={{ display: 'flex', gap: '15px', marginTop: '10px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                                                <span><FiUser size={12} /> {item.author}</span>
+                                                <span><FiUser size={12} /> {item.variants?.[0]?.author || 'Unknown'}</span>
                                                 <span style={{ background: 'var(--bg-panel)', padding: '2px 8px', borderRadius: '4px' }}>{item.tag}</span>
+                                                {item.variants?.length > 1 && <span style={{ background: 'var(--nav-hover)', padding: '2px 8px', borderRadius: '4px' }}>+{item.variants.length - 1} more</span>}
                                             </div>
                                         </div>
                                         <div style={{ display: 'flex', gap: '8px' }}>
@@ -256,42 +271,88 @@ const Admin = () => {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div style={{ display: 'grid', gap: '15px' }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                                            {SCHEMAS.quotes.fields.map(field => (
-                                                <div
-                                                    key={field.key}
-                                                    style={{
-                                                        display: 'flex', flexDirection: 'column', gap: '6px',
-                                                        gridColumn: field.fullWidth ? '1 / -1' : 'auto'
-                                                    }}
-                                                >
-                                                    <label style={labelStyle}>{field.label}</label>
-                                                    {field.type === 'textarea' ? (
-                                                        <textarea
-                                                            style={{ ...inputStyle, minHeight: field.rows ? `${field.rows * 24}px` : 'auto' }}
-                                                            value={item[field.key] || ''}
-                                                            onChange={(e) => updateItem('quotes', index, field.key, e.target.value)}
-                                                        />
-                                                    ) : field.type === 'select' ? (
-                                                        <select
-                                                            style={inputStyle}
-                                                            value={item[field.key] || ''}
-                                                            onChange={(e) => updateItem('quotes', index, field.key, e.target.value)}
-                                                        >
-                                                            {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                                                        </select>
-                                                    ) : (
-                                                        <input
-                                                            type="text"
-                                                            style={inputStyle}
-                                                            value={item[field.key] || ''}
-                                                            onChange={(e) => updateItem('quotes', index, field.key, e.target.value)}
-                                                        />
-                                                    )}
+                                    <div style={{ display: 'grid', gap: '20px' }}>
+                                        {/* Global Fields */}
+                                        <div style={{ display: 'flex', gap: '20px' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <label style={labelStyle}>Tag / Category</label>
+                                                <input
+                                                    style={inputStyle}
+                                                    value={item.tag || ''}
+                                                    onChange={(e) => updateQuoteField(index, 'tag', e.target.value)}
+                                                />
+                                            </div>
+                                            <div style={{ flex: 1 }}>
+                                                <label style={labelStyle}>ID</label>
+                                                <input style={{ ...inputStyle, background: 'var(--bg-panel)', color: 'var(--text-muted)' }} value={item.id} disabled />
+                                            </div>
+                                        </div>
+
+                                        {/* Variants List */}
+                                        <div style={{ display: 'grid', gap: '15px' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <label style={labelStyle}>Quote Variants (Languages)</label>
+                                                <button onClick={() => addVariant(index)} style={{ fontSize: '0.8rem', color: 'var(--text-main)', background: 'none', border: '1px dashed var(--border-color)', padding: '4px 10px', borderRadius: '6px', cursor: 'pointer' }}>+ Add Variant</button>
+                                            </div>
+
+                                            {item.variants?.map((variant, vIndex) => (
+                                                <div key={vIndex} style={{ padding: '15px', background: 'var(--bg-panel)', borderRadius: '12px', border: '1px solid var(--border-light)', position: 'relative' }}>
+                                                    <button
+                                                        onClick={() => removeVariant(index, vIndex)}
+                                                        style={{ position: 'absolute', top: '10px', right: '10px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}
+                                                        title="Remove Variant"
+                                                    >
+                                                        <FiX />
+                                                    </button>
+
+                                                    <div style={{ display: 'grid', gap: '12px' }}>
+                                                        <div style={{ display: 'flex', gap: '12px' }}>
+                                                            <div style={{ flex: 1 }}>
+                                                                <label style={labelStyle}>Header Label (e.g. Original, Translation)</label>
+                                                                <input
+                                                                    style={inputStyle}
+                                                                    value={variant.label || ''}
+                                                                    onChange={(e) => updateVariant(index, vIndex, 'label', e.target.value)}
+                                                                    placeholder="e.g. Original Tamil"
+                                                                />
+                                                            </div>
+                                                            <div style={{ width: '120px' }}>
+                                                                <label style={labelStyle}>Language</label>
+                                                                <select
+                                                                    style={inputStyle}
+                                                                    value={variant.lang || 'en'}
+                                                                    onChange={(e) => updateVariant(index, vIndex, 'lang', e.target.value)}
+                                                                >
+                                                                    <option value="en">English (en)</option>
+                                                                    <option value="ta">Tamil (ta)</option>
+                                                                    <option value="ml">Malayalam (ml)</option>
+                                                                    <option value="hi">Hindi (hi)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            <label style={labelStyle}>Quote Text</label>
+                                                            <textarea
+                                                                style={{ ...inputStyle, minHeight: '80px' }}
+                                                                value={variant.text || ''}
+                                                                onChange={(e) => updateVariant(index, vIndex, 'text', e.target.value)}
+                                                            />
+                                                        </div>
+
+                                                        <div>
+                                                            <label style={labelStyle}>Author Name (in this language)</label>
+                                                            <input
+                                                                style={inputStyle}
+                                                                value={variant.author || ''}
+                                                                onChange={(e) => updateVariant(index, vIndex, 'author', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
+
                                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid var(--border-light)', paddingTop: '15px' }}>
                                             <button onClick={() => setEditingId(null)} style={{ ...btnStyle, background: 'transparent' }}><FiX /> Cancel</button>
                                             <button
@@ -329,11 +390,13 @@ const inputStyle = {
 };
 
 const labelStyle = {
-    fontSize: '0.8rem',
+    fontSize: '0.75rem',
     fontWeight: '700',
     color: 'var(--text-muted)',
     textTransform: 'uppercase',
-    letterSpacing: '0.5px'
+    letterSpacing: '0.5px',
+    marginBottom: '4px',
+    display: 'block'
 };
 
 export default Admin;

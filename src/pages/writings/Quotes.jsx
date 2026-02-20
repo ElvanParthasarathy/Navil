@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import quotesData from '../../data/quotes.json';
@@ -5,11 +6,6 @@ import quotesData from '../../data/quotes.json';
 const Quotes = () => {
     // Reverse data to show newest first, as per instructions in original file
     const sortedQuotes = [...quotesData].reverse();
-    const [currentPage, setCurrentPage] = useState(1);
-    const quotesPerPage = 10; // Adjust as needed
-
-    // Logic for displaying quotes could include pagination if list grows
-    // For now simple masonry or list
 
     return (
         <div className="page-view page-fade">
@@ -111,37 +107,35 @@ const Quotes = () => {
                     font-size: 0.85rem;
                     font-weight: 700;
                     color: var(--text-main);
-                    margin-top: 10px;
+                    margin-top: 4px;
                     display: block;
                     text-align: right;
+                    opacity: 0.8;
+                }
+                
+                .quote-variant {
+                    padding-bottom: 12px;
+                    margin-bottom: 12px;
+                    border-bottom: 1px dashed var(--border-light);
+                }
+                
+                .quote-variant:last-child {
+                    border-bottom: none;
+                    margin-bottom: 0;
+                    padding-bottom: 0;
                 }
 
                 @media (max-width: 768px) {
                     .quotes-page {
                         padding: 24px 16px 48px;
                     }
-
-                    .quotes-header {
-                        margin-bottom: 24px;
-                    }
-
                     .quotes-back-pill {
                         padding: 8px 16px;
                         margin-bottom: 16px;
-                        font-size: 0.95rem;
-                        border-radius: 999px;
                     }
-
                     .quote-card {
                         padding: 18px;
-                        border-radius: 16px;
                     }
-
-                    .quote-card:active {
-                        transform: scale(0.97) translateY(1px);
-                        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-                    }
-
                     .quote-text {
                         font-size: 0.96rem;
                     }
@@ -164,34 +158,23 @@ const Quotes = () => {
                             <div className="quote-mark">“</div>
 
                             {/* Tag */}
-                            <div className="quote-sub-label">{quote.tag}</div>
+                            <div className="quote-sub-label" style={{ marginBottom: '16px' }}>{quote.tag}</div>
 
-                            {/* Text */}
-                            <div className="quote-text" style={{ position: 'relative', zIndex: 1, whiteSpace: 'pre-line' }}>
-                                {quote.text}
-                            </div>
+                            {/* Render Variants */}
+                            {quote.variants?.map((variant, index) => (
+                                <div key={index} className="quote-variant">
+                                    {/* Optional Header Label */}
+                                    {variant.label && <div className="quote-sub-label">{variant.label}</div>}
 
-                            {/* Translation if available */}
-                            {quote.translation && (
-                                <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
-                                    <div className="quote-sub-label">Translation</div>
-                                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', whiteSpace: 'pre-line' }}>
-                                        {quote.translation}
+                                    {/* Text */}
+                                    <div className="quote-text" style={{ position: 'relative', zIndex: 1, whiteSpace: 'pre-line' }}>
+                                        {variant.text}
                                     </div>
-                                </div>
-                            )}
 
-                            {/* Transliteration if available */}
-                            {quote.transliteration && (
-                                <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
-                                    <div className="quote-sub-label">{quote.transliterationLabel || 'Malayalam'}</div>
-                                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontFamily: 'sans-serif', whiteSpace: 'pre-line' }}>
-                                        {quote.transliteration}
-                                    </div>
+                                    {/* Author for this specific variant */}
+                                    {variant.author && <span className="quote-author">- {variant.author}</span>}
                                 </div>
-                            )}
-
-                            <span className="quote-author">- {quote.author}</span>
+                            ))}
                         </div>
                     ))}
                 </div>
