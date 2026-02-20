@@ -78,7 +78,7 @@ const Layout = () => {
                             to="/about"
                             icon={
                                 <ProfileImage
-                                    src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"}
+                                    src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
                                     alt="Profile"
                                     className="nav-profile-avatar"
                                 />
@@ -93,7 +93,7 @@ const Layout = () => {
                 <div className="sidebar-bottom">
                     <Link to="/about" className="profile-pill">
                         <ProfileImage
-                            src={profileData?.profilePic || "https://res.cloudinary.com/doxhuprh4/image/upload/assets/instagram/profile.jpg"}
+                            src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
                             alt="Profile"
                             className="pill-avatar"
                         />
