@@ -1,5 +1,5 @@
 import React from 'react';
-import { profileData } from '../data/instagramData';
+import profileData from '../data/profile.json';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
 
 const About = () => {

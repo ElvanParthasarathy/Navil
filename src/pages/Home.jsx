@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight } from 'react-icons/fi';
-import { profileData } from '../data/instagramData';
+import profileData from '../data/profile.json';
 
 const Home = () => {
     return (

@@ -1,146 +1,304 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { FiSave, FiPlus, FiTrash2, FiEdit3, FiGrid, FiUser, FiImage, FiFilm, FiMessageCircle, FiArchive } from 'react-icons/fi';
+
+// Import Data (Initial State)
+import initialQuotes from '../data/quotes.json';
+import initialPosts from '../data/posts.json';
+import initialArts from '../data/arts.json';
+import initialReels from '../data/reels.json';
+import initialProfile from '../data/profile.json';
+import initialStories from '../data/stories.json';
+import initialArchived from '../data/archived.json';
+
+// --- DATA SCHEMAS ---
+const SCHEMAS = {
+    quotes: {
+        fields: [
+            { key: 'text', label: 'Quote Text', type: 'textarea', rows: 3 },
+            { key: 'translation', label: 'Translation', type: 'textarea', rows: 2 },
+            { key: 'author', label: 'Author', type: 'text', default: 'Elvan Parthasarathy' },
+            { key: 'tag', label: 'Tag', type: 'text', default: 'Philosophy' },
+            { key: 'lang', label: 'Language', type: 'select', options: ['ta', 'en'] }
+        ],
+        icon: <FiMessageCircle />
+    },
+    posts: {
+        fields: [
+            { key: 'url', label: 'Image/Video URL', type: 'text' },
+            { key: 'username', label: 'Username', type: 'text', default: 'elvan.jp' },
+            { key: 'date', label: 'Date', type: 'text' },
+            { key: 'caption', label: 'Caption', type: 'textarea' },
+            { key: 'type', label: 'Type', type: 'select', options: ['image', 'video'] }
+        ],
+        icon: <FiGrid />
+    },
+    arts: {
+        fields: [
+            { key: 'url', label: 'Art URL', type: 'text' },
+            { key: 'date', label: 'Date', type: 'text' },
+            { key: 'caption', label: 'Description', type: 'textarea' }
+        ],
+        icon: <FiImage />
+    },
+    reels: {
+        fields: [
+            { key: 'url', label: 'Video URL', type: 'text' },
+            { key: 'thumbnail', label: 'Thumbnail URL', type: 'text' },
+            { key: 'caption', label: 'Caption', type: 'textarea' },
+            { key: 'date', label: 'Date', type: 'text' }
+        ],
+        icon: <FiFilm />
+    },
+    archived: {
+        fields: [
+            { key: 'url', label: 'Image URL', type: 'text' },
+            { key: 'date', label: 'Date', type: 'text' },
+            { key: 'username', label: 'Username', type: 'text' }
+        ],
+        icon: <FiArchive />
+    }
+};
 
 const Admin = () => {
-    const [formData, setFormData] = useState({
-        text: '',
-        translation: '',
-        author: 'Elvan Parthasarathy',
-        tag: 'Philosophy',
-        lang: 'ta'
-    });
-    const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [activeTab, setActiveTab] = useState('quotes');
+    const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    // Manage Data States
+    const [dataStore, setDataStore] = useState({
+        quotes: initialQuotes,
+        posts: initialPosts,
+        arts: initialArts,
+        reels: initialReels,
+        archived: initialArchived,
+        profile: initialProfile,
+        stories: initialStories
+    });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const currentSchema = SCHEMAS[activeTab];
+
+    const handleSave = async (collection) => {
         setStatus('loading');
         setMessage('');
 
         try {
-            const response = await fetch('/api/addQuote', {
+            const response = await fetch('/api/saveData', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    collection,
+                    data: dataStore[collection],
+                    password
+                })
             });
 
-            const data = await response.json();
+            const resData = await response.json();
 
             if (response.ok) {
                 setStatus('success');
-                setMessage('Quote added successfully! It will appear after the next deployment (approx 1 min).');
-                setFormData({ ...formData, text: '', translation: '' }); // Clear text fields
+                setMessage('Saved successfully! Changes will appear in ~1-2 mins.');
             } else {
                 setStatus('error');
-                setMessage(data.error || 'Failed to add quote.');
+                setMessage(resData.error || 'Failed to save.');
             }
         } catch (error) {
             setStatus('error');
-            setMessage('Network error. Please try again.');
+            setMessage('Network error.');
         }
     };
 
+    // Generic Add Item
+    const addItem = (collection) => {
+        const newItem = { id: Date.now().toString() };
+        // Pre-fill defaults
+        if (SCHEMAS[collection]) {
+            SCHEMAS[collection].fields.forEach(f => {
+                newItem[f.key] = f.default || '';
+            });
+            // Add date if needed
+            if (SCHEMAS[collection].fields.some(f => f.key === 'date')) {
+                newItem.date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+        }
+
+        setDataStore(prev => ({
+            ...prev,
+            [collection]: [newItem, ...prev[collection]]
+        }));
+    };
+
+    // Generic Delete
+    const deleteItem = (collection, index) => {
+        if (!window.confirm("Are you sure?")) return;
+        const newData = [...dataStore[collection]];
+        newData.splice(index, 1);
+        setDataStore(prev => ({ ...prev, [collection]: newData }));
+    };
+
+    // Generic Update
+    const updateItem = (collection, index, field, value) => {
+        const newData = [...dataStore[collection]];
+        newData[index] = { ...newData[index], [field]: value };
+        setDataStore(prev => ({ ...prev, [collection]: newData }));
+    };
+
+    const updateProfile = (field, value) => {
+        setDataStore(prev => ({
+            ...prev,
+            profile: { ...prev.profile, [field]: value }
+        }));
+    };
+
     return (
-        <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto', color: 'var(--text-primary)' }}>
-            <h1 style={{ marginBottom: '2rem' }}>Add New Quote</h1>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px', minHeight: '100vh', color: 'var(--text-main)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                <h1 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Admin Dashboard</h1>
+                <input
+                    type="password"
+                    placeholder="Admin Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-panel)', color: 'var(--text-main)' }}
+                />
+            </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Text (Quote)</label>
-                    <textarea
-                        name="text"
-                        value={formData.text}
-                        onChange={handleChange}
-                        required
-                        rows="4"
-                        style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-                    />
+            {/* TAB NAVIGATION */}
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', marginBottom: '20px' }}>
+                {Object.keys(dataStore).map(key => (
+                    <button
+                        key={key}
+                        onClick={() => setActiveTab(key)}
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            padding: '10px 20px',
+                            borderRadius: '99px',
+                            border: 'none',
+                            background: activeTab === key ? 'var(--text-main)' : 'var(--bg-panel)',
+                            color: activeTab === key ? 'var(--bg-app)' : 'var(--text-muted)',
+                            cursor: 'pointer',
+                            fontWeight: '600',
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+                        {SCHEMAS[key]?.icon || <FiEdit3 />} {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </button>
+                ))}
+            </div>
+
+            {/* MESSAGE ALERT */}
+            {message && (
+                <div style={{
+                    padding: '12px', borderRadius: '8px', marginBottom: '20px',
+                    background: status === 'success' ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 0, 0, 0.1)',
+                    color: status === 'success' ? '#10B981' : '#EF4444'
+                }}>
+                    {message}
                 </div>
+            )}
 
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Translation (Optional)</label>
-                    <textarea
-                        name="translation"
-                        value={formData.translation}
-                        onChange={handleChange}
-                        rows="2"
-                        style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-                    />
-                </div>
-
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ flex: 1 }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Language</label>
-                        <select
-                            name="lang"
-                            value={formData.lang}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-                        >
-                            <option value="ta">Tamil</option>
-                            <option value="en">English</option>
-                        </select>
+            {/* CONTENT EDITOR */}
+            <div style={{ background: 'var(--bg-panel)', borderRadius: '20px', padding: '24px', border: '1px solid var(--border-light)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                    <h2 style={{ fontSize: '1.2rem', fontWeight: '700' }}>Manage {activeTab}</h2>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        {activeTab !== 'profile' && (
+                            <button onClick={() => addItem(activeTab)} style={btnStyle}>
+                                <FiPlus /> Add New
+                            </button>
+                        )}
+                        <button onClick={() => handleSave(activeTab)} style={{ ...btnStyle, background: 'var(--text-main)', color: 'var(--bg-app)' }}>
+                            {status === 'loading' ? 'Saving...' : <><FiSave /> Save Changes</>}
+                        </button>
                     </div>
-
-                    <div style={{ flex: 1 }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Tag</label>
-                        <input
-                            type="text"
-                            name="tag"
-                            value={formData.tag}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-                        />
-                    </div>
                 </div>
 
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Author</label>
-                    <input
-                        type="text"
-                        name="author"
-                        value={formData.author}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-                    />
-                </div>
+                {/* PROFILE EDITOR */}
+                {activeTab === 'profile' && (
+                    <div style={{ display: 'grid', gap: '15px' }}>
+                        <label>Name</label>
+                        <input style={inputStyle} value={dataStore.profile.name || ''} onChange={(e) => updateProfile('name', e.target.value)} />
 
-                <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    style={{
-                        padding: '1rem',
-                        background: status === 'loading' ? 'var(--text-secondary)' : 'var(--accent-color, #0070f3)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-                        fontWeight: 'bold',
-                        marginTop: '1rem'
-                    }}
-                >
-                    {status === 'loading' ? 'Posting...' : 'Add Quote'}
-                </button>
+                        <label>Bio</label>
+                        <textarea style={inputStyle} rows={4} value={dataStore.profile.bio || ''} onChange={(e) => updateProfile('bio', e.target.value)} />
 
-                {status === 'success' && (
-                    <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(0, 255, 0, 0.1)', color: 'green', borderRadius: '8px' }}>
-                        {message}
+                        <label>Profile Pic URL</label>
+                        <input style={inputStyle} value={dataStore.profile.profilePic || ''} onChange={(e) => updateProfile('profilePic', e.target.value)} />
                     </div>
                 )}
 
-                {status === 'error' && (
-                    <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(255, 0, 0, 0.1)', color: 'red', borderRadius: '8px' }}>
-                        {message}
+                {/* LIST EDITOR */}
+                {currentSchema && (
+                    <div style={{ display: 'grid', gap: '20px' }}>
+                        {dataStore[activeTab].map((item, index) => (
+                            <div key={index} style={{ padding: '20px', background: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', position: 'relative' }}>
+                                <button
+                                    onClick={() => deleteItem(activeTab, index)}
+                                    style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer' }}
+                                >
+                                    <FiTrash2 size={18} />
+                                </button>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', paddingRight: '40px' }}>
+                                    {currentSchema.fields.map(field => (
+                                        <div key={field.key} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{field.label}</label>
+
+                                            {field.type === 'textarea' ? (
+                                                <textarea
+                                                    style={{ ...inputStyle, minHeight: field.rows ? `${field.rows * 24}px` : 'auto' }}
+                                                    value={item[field.key] || ''}
+                                                    onChange={(e) => updateItem(activeTab, index, field.key, e.target.value)}
+                                                />
+                                            ) : field.type === 'select' ? (
+                                                <select
+                                                    style={inputStyle}
+                                                    value={item[field.key] || ''}
+                                                    onChange={(e) => updateItem(activeTab, index, field.key, e.target.value)}
+                                                >
+                                                    {field.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    style={inputStyle}
+                                                    value={item[field.key] || ''}
+                                                    onChange={(e) => updateItem(activeTab, index, field.key, e.target.value)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
-            </form>
+
+                {!currentSchema && activeTab !== 'profile' && (
+                    <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                        JSON Editor for {activeTab} is not yet implemented in UI.
+                        Data is loaded but generic editor not configured.
+                    </div>
+                )}
+            </div>
         </div>
     );
+};
+
+const btnStyle = {
+    display: 'flex', alignItems: 'center', gap: '8px',
+    padding: '8px 16px', borderRadius: '8px',
+    border: '1px solid var(--border-color)',
+    background: 'var(--bg-card)', color: 'var(--text-main)',
+    cursor: 'pointer', fontWeight: '600'
+};
+
+const inputStyle = {
+    padding: '10px', borderRadius: '8px',
+    border: '1px solid var(--border-color)',
+    background: 'var(--bg-app)', color: 'var(--text-main)',
+    width: '100%', fontSize: '0.95rem'
 };
 
 export default Admin;

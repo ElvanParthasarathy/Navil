@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import instagramData, { storyHighlights as initialHighlights, profileData } from '../data/instagramData';
+import profileData from '../data/profile.json';
+import initialHighlights from '../data/stories.json';
+import postsData from '../data/posts.json';
+import reelsData from '../data/reels.json';
+import artsData from '../data/arts.json';
+import archivedData from '../data/archived.json';
 import { FiHeart, FiMessageCircle, FiX, FiChevronLeft, FiChevronRight, FiPlay, FiLayers, FiGrid, FiFilm, FiArchive, FiVolume2, FiVolumeX, FiPause } from 'react-icons/fi';
 import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
@@ -8,7 +13,11 @@ import ReelsViewer from '../components/ReelsViewer';
 
 const Archive = () => {
     // Destructure Data
-    const { posts: rawPosts, reels: rawReels, arts: rawArts, archivedPosts: rawArchived } = instagramData || {};
+    // Data from JSON files
+    const rawPosts = postsData;
+    const rawReels = reelsData;
+    const rawArts = artsData;
+    const rawArchived = archivedData;
 
     // Memoized Lists to prevent re-calculations and reference changes on every render
     const posts = React.useMemo(() => [...(rawPosts || [])].sort((a, b) => b.timestamp - a.timestamp), [rawPosts]);
