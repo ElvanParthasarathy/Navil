@@ -1,15 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiPlus, FiTrash2, FiEdit3, FiGrid, FiUser, FiImage, FiFilm, FiMessageCircle, FiArchive } from 'react-icons/fi';
+import { FiSave, FiPlus, FiTrash2, FiEdit3, FiUser, FiMessageCircle } from 'react-icons/fi';
 
 // Import Data (Initial State)
 import initialQuotes from '../data/quotes.json';
-import initialPosts from '../data/posts.json';
-import initialArts from '../data/arts.json';
-import initialReels from '../data/reels.json';
 import initialProfile from '../data/profile.json';
-import initialStories from '../data/stories.json';
-import initialArchived from '../data/archived.json';
 
 // --- DATA SCHEMAS ---
 const SCHEMAS = {
@@ -22,41 +17,6 @@ const SCHEMAS = {
             { key: 'lang', label: 'Language', type: 'select', options: ['ta', 'en'] }
         ],
         icon: <FiMessageCircle />
-    },
-    posts: {
-        fields: [
-            { key: 'url', label: 'Image/Video URL', type: 'text' },
-            { key: 'username', label: 'Username', type: 'text', default: 'elvan.jp' },
-            { key: 'date', label: 'Date', type: 'text' },
-            { key: 'caption', label: 'Caption', type: 'textarea' },
-            { key: 'type', label: 'Type', type: 'select', options: ['image', 'video'] }
-        ],
-        icon: <FiGrid />
-    },
-    arts: {
-        fields: [
-            { key: 'url', label: 'Art URL', type: 'text' },
-            { key: 'date', label: 'Date', type: 'text' },
-            { key: 'caption', label: 'Description', type: 'textarea' }
-        ],
-        icon: <FiImage />
-    },
-    reels: {
-        fields: [
-            { key: 'url', label: 'Video URL', type: 'text' },
-            { key: 'thumbnail', label: 'Thumbnail URL', type: 'text' },
-            { key: 'caption', label: 'Caption', type: 'textarea' },
-            { key: 'date', label: 'Date', type: 'text' }
-        ],
-        icon: <FiFilm />
-    },
-    archived: {
-        fields: [
-            { key: 'url', label: 'Image URL', type: 'text' },
-            { key: 'date', label: 'Date', type: 'text' },
-            { key: 'username', label: 'Username', type: 'text' }
-        ],
-        icon: <FiArchive />
     }
 };
 
@@ -69,12 +29,7 @@ const Admin = () => {
     // Manage Data States
     const [dataStore, setDataStore] = useState({
         quotes: initialQuotes,
-        posts: initialPosts,
-        arts: initialArts,
-        reels: initialReels,
-        archived: initialArchived,
-        profile: initialProfile,
-        stories: initialStories
+        profile: initialProfile
     });
 
     const currentSchema = SCHEMAS[activeTab];
@@ -182,7 +137,7 @@ const Admin = () => {
                             whiteSpace: 'nowrap'
                         }}
                     >
-                        {SCHEMAS[key]?.icon || <FiEdit3 />} {key.charAt(0).toUpperCase() + key.slice(1)}
+                        {key === 'profile' ? <FiUser /> : <FiMessageCircle />} {key.charAt(0).toUpperCase() + key.slice(1)}
                     </button>
                 ))}
             </div>
@@ -216,15 +171,37 @@ const Admin = () => {
 
                 {/* PROFILE EDITOR */}
                 {activeTab === 'profile' && (
-                    <div style={{ display: 'grid', gap: '15px' }}>
-                        <label>Name</label>
-                        <input style={inputStyle} value={dataStore.profile.name || ''} onChange={(e) => updateProfile('name', e.target.value)} />
+                    <div style={{ display: 'grid', gap: '20px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <label style={labelStyle}>Full Name</label>
+                                <input style={inputStyle} value={dataStore.profile.name || ''} onChange={(e) => updateProfile('name', e.target.value)} />
 
-                        <label>Bio</label>
-                        <textarea style={inputStyle} rows={4} value={dataStore.profile.bio || ''} onChange={(e) => updateProfile('bio', e.target.value)} />
+                                <label style={labelStyle}>Bio</label>
+                                <textarea style={inputStyle} rows={4} value={dataStore.profile.bio || ''} onChange={(e) => updateProfile('bio', e.target.value)} />
 
-                        <label>Profile Pic URL</label>
-                        <input style={inputStyle} value={dataStore.profile.profilePic || ''} onChange={(e) => updateProfile('profilePic', e.target.value)} />
+                                <label style={labelStyle}>Profile Pic URL</label>
+                                <input style={inputStyle} value={dataStore.profile.profilePic || ''} onChange={(e) => updateProfile('profilePic', e.target.value)} />
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '10px' }}>Instagram Stats</h3>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <label style={labelStyle}>Followers</label>
+                                        <input type="number" style={inputStyle} value={dataStore.profile.followers || 0} onChange={(e) => updateProfile('followers', parseInt(e.target.value))} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <label style={labelStyle}>Following</label>
+                                        <input type="number" style={inputStyle} value={dataStore.profile.following || 0} onChange={(e) => updateProfile('following', parseInt(e.target.value))} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <label style={labelStyle}>Posts Count</label>
+                                        <input type="number" style={inputStyle} value={dataStore.profile.postsCount || 0} onChange={(e) => updateProfile('postsCount', parseInt(e.target.value))} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
 
@@ -274,13 +251,6 @@ const Admin = () => {
                         ))}
                     </div>
                 )}
-
-                {!currentSchema && activeTab !== 'profile' && (
-                    <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
-                        JSON Editor for {activeTab} is not yet implemented in UI.
-                        Data is loaded but generic editor not configured.
-                    </div>
-                )}
             </div>
         </div>
     );
@@ -299,6 +269,12 @@ const inputStyle = {
     border: '1px solid var(--border-color)',
     background: 'var(--bg-app)', color: 'var(--text-main)',
     width: '100%', fontSize: '0.95rem'
+};
+
+const labelStyle = {
+    fontSize: '0.85rem',
+    fontWeight: '600',
+    color: 'var(--text-muted)'
 };
 
 export default Admin;
