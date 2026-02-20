@@ -29,7 +29,14 @@ export default async function handler(request, response) {
         'profile': 'src/data/profile.json',
         'stories': 'src/data/stories.json',
         'archived': 'src/data/archived.json',
-        'dm_chats': 'src/data/dm_chats.json'
+        'dm_chats': 'src/data/dm_chats.json',
+        'blog': 'src/data/blog.json',
+        'articles': 'src/data/articles.json',
+        'essays': 'src/data/essays.json',
+        'short_stories': 'src/data/short_stories.json',
+        'poems': 'src/data/poems.json',
+        'thoughts': 'src/data/thoughts.json',
+        'diary': 'src/data/diary.json'
     };
 
     const filePath = fileMap[collection];
