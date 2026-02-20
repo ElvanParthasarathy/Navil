@@ -222,8 +222,7 @@ const Admin = () => {
                                         <input style={inputStyle} value={dataStore.profile.name || ''} onChange={(e) => updateProfile('name', e.target.value)} />
                                         <label style={labelStyle}>Bio</label>
                                         <textarea style={inputStyle} rows={4} value={dataStore.profile.bio || ''} onChange={(e) => updateProfile('bio', e.target.value)} />
-                                        <label style={labelStyle}>Profile Pic URL</label>
-                                        <input style={inputStyle} value={dataStore.profile.profilePic || ''} onChange={(e) => updateProfile('profilePic', e.target.value)} />
+
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                         <h3 style={{ fontSize: '1rem', fontWeight: '600' }}>Instagram Stats</h3>
