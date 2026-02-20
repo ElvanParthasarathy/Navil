@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
 import { FiHome, FiEdit3, FiSettings, FiInstagram } from 'react-icons/fi';
-import { profileData } from './data/instagramData';
+import profileData from './data/profile.json';
 import Home from './pages/Home';
 import About from './pages/About';
 import Portfolio from './pages/Portfolio';
