@@ -10,8 +10,8 @@ import initialProfile from '../data/profile.json';
 const SCHEMAS = {
     quotes: {
         fields: [
-            { key: 'text', label: 'Quote Text', type: 'textarea', rows: 3 },
-            { key: 'translation', label: 'Translation', type: 'textarea', rows: 2 },
+            { key: 'text', label: 'Quote Text', type: 'textarea', rows: 3, fullWidth: true },
+            { key: 'translation', label: 'Translation', type: 'textarea', rows: 2, fullWidth: true },
             { key: 'author', label: 'Author', type: 'text', default: 'Elvan Parthasarathy' },
             { key: 'tag', label: 'Tag', type: 'text', default: 'Philosophy' },
             { key: 'lang', label: 'Language', type: 'select', options: ['ta', 'en'] }
@@ -257,7 +257,13 @@ const Admin = () => {
                                     <div style={{ display: 'grid', gap: '15px' }}>
                                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
                                             {SCHEMAS.quotes.fields.map(field => (
-                                                <div key={field.key} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                <div
+                                                    key={field.key}
+                                                    style={{
+                                                        display: 'flex', flexDirection: 'column', gap: '6px',
+                                                        gridColumn: field.fullWidth ? '1 / -1' : 'auto'
+                                                    }}
+                                                >
                                                     <label style={labelStyle}>{field.label}</label>
                                                     {field.type === 'textarea' ? (
                                                         <textarea
