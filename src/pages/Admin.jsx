@@ -12,6 +12,8 @@ const SCHEMAS = {
         fields: [
             { key: 'text', label: 'Quote Text', type: 'textarea', rows: 3, fullWidth: true },
             { key: 'translation', label: 'Translation', type: 'textarea', rows: 2, fullWidth: true },
+            { key: 'transliteration', label: 'Transliteration / Original Script', type: 'textarea', rows: 2, fullWidth: true },
+            { key: 'transliterationLabel', label: 'Label for Transliteration (e.g. Malayalam)', type: 'text', default: 'Transliteration' },
             { key: 'author', label: 'Author', type: 'text', default: 'Elvan Parthasarathy' },
             { key: 'tag', label: 'Tag', type: 'text', default: 'Philosophy' },
             { key: 'lang', label: 'Language', type: 'select', options: ['ta', 'en'] }

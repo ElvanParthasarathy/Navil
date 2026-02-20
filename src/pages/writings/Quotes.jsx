@@ -184,7 +184,7 @@ const Quotes = () => {
                             {/* Transliteration if available */}
                             {quote.transliteration && (
                                 <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '8px' }}>
-                                    <div className="quote-sub-label">Malayalam</div>
+                                    <div className="quote-sub-label">{quote.transliterationLabel || 'Malayalam'}</div>
                                     <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontFamily: 'sans-serif', whiteSpace: 'pre-line' }}>
                                         {quote.transliteration}
                                     </div>
