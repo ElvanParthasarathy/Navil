@@ -16,8 +16,15 @@ const runCmd = (cmd) => {
 const pushInBatches = async () => {
     console.log('--- Starting Safe Single-File Media Upload ---');
 
-    // We only need to push reels and stories
-    const folders = ['assets/instagram/reels', 'assets/instagram/stories'];
+    // Include ALL folders to ensure full migration
+    const folders = [
+        'assets/instagram/reels',
+        'assets/instagram/stories',
+        'assets/instagram/posts',
+        'assets/instagram/archived_posts',
+        'assets/instagram/other',
+        'assets/instagram/recently_deleted'
+    ];
 
     for (const folder of folders) {
         console.log(`\nProcessing folder: ${folder}`);
