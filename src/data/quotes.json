@@ -1,5 +1,41 @@
 [
   {
+    "id": "1772479061127",
+    "tag": "Philosophy ",
+    "variants": [
+      {
+        "label": "Original",
+        "text": "நெய்யாப் பட்டுநூல்,\nமெழுகைப் போல்.",
+        "author": "எல்வன் பார்த்தசாரதி",
+        "lang": "ta"
+      },
+      {
+        "label": "Original",
+        "text": "Unwoven silk thread,\nA candle’s light.",
+        "author": "Elvan Parthasarathy",
+        "lang": "en"
+      },
+      {
+        "label": "Tamil Transliteration",
+        "text": "Neiyaap Pattunool,\nMezhugaip Poal.",
+        "author": "Elvan Parthasarathy",
+        "lang": "ta"
+      },
+      {
+        "label": "Original",
+        "text": "നെയ്യാത്ത പട്ടുനൂൽ\nമെഴുകു പോലെ",
+        "author": "എൽവൻ പാർത്തചാരതി",
+        "lang": "ml"
+      },
+      {
+        "label": "Malayalam Transliteration",
+        "text": "Neyyaaththa pattunool\nMezhuku poale",
+        "author": "Elvan Parthasarathy",
+        "lang": "ml"
+      }
+    ]
+  },
+  {
     "id": 1,
     "tag": "Philosophy",
     "variants": [
