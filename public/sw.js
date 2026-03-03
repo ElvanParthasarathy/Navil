@@ -17,6 +17,12 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Only intercept same-origin requests (for static assets).
+    // Let cross-origin requests (like Supabase API) pass through directly.
+    if (!event.request.url.startsWith(self.location.origin)) {
+        return;
+    }
+
     // Skip service worker caching for local development (e.g., Vite dev server)
     if (event.request.url.includes('localhost') || event.request.url.includes('127.0.0.1')) {
         return; // Let the browser handle it directly
@@ -24,10 +30,10 @@ self.addEventListener('fetch', (event) => {
 
     event.respondWith(
         caches.match(event.request).then((response) => {
-            return response || fetch(event.request).catch(() => {
-                // Return a fallback response or just ignore network failures
-                console.warn('SW: Fetch failed for:', event.request.url);
-                return new Response('Network error', { status: 503, statusText: 'Service Unavailable' });
+            return response || fetch(event.request).catch((err) => {
+                console.warn('SW: Fetch failed for:', event.request.url, err);
+                // Only return fake 503 for our own assets if offline
+                return new Response('Network error: Offline', { status: 503, statusText: 'Service Unavailable' });
             });
         })
     );
