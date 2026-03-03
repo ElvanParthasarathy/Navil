@@ -250,7 +250,7 @@ const Poems = () => {
                     position: absolute;
                     cursor: pointer;
                     top: 0; left: 0; right: 0; bottom: 0;
-                    background: rgba(255,255,255,0.15);
+                    background: color-mix(in srgb, var(--text-main) 15%, transparent);
                     border-radius: 20px;
                     transition: background 0.25s ease;
                 }
@@ -261,7 +261,8 @@ const Poems = () => {
                     width: 14px;
                     left: 3px;
                     bottom: 3px;
-                    background: rgba(255,255,255,0.6);
+                    background: var(--bg-app);
+                    box-shadow: 0 1px 3px color-mix(in srgb, var(--text-main) 30%, transparent);
                     border-radius: 50%;
                     transition: transform 0.25s ease, background 0.25s ease;
                 }
@@ -271,6 +272,7 @@ const Poems = () => {
                 .transl-switch input:checked + .transl-slider::before {
                     transform: translateX(16px);
                     background: var(--bg-app);
+                    box-shadow: none;
                 }
                 .transl-switch-label {
                     font-size: 0.7rem;
