@@ -212,7 +212,7 @@ const About = () => {
                     />
                 </div>
                 <h1 className="hero-title">Elvan Parthasarathy</h1>
-                <h2 className="hero-subtitle">(also known as Jaiprakash P)</h2>
+                <h2 className="hero-subtitle">(Known as Jaiprakash P)</h2>
 
                 <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn">
                     View Portfolio <FiArrowRight />

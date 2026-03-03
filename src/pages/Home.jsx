@@ -245,8 +245,8 @@ const Home = () => {
                     <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
                         <FiMail size={20} />
                     </a>
-                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noopener noreferrer" className="social-icon-link">
-                        <FiLinkedin size={20} />
+                    <a href="https://www.instagram.com/elvanparthasarathy" target="_blank" rel="noopener noreferrer" className="social-icon-link">
+                        <FiInstagram size={20} />
                     </a>
                 </div>
             </div>

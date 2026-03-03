@@ -157,6 +157,15 @@ const Writings = () => {
             </header>
 
             <div className="category-grid animate-entry">
+                <Link to="/writings/poems" className="category-card">
+                    <div className="cat-icon-box"><BsPen /></div>
+                    <div className="cat-content">
+                        <div className="cat-title">Poems</div>
+                        <p className="cat-desc">Rhythmic verses, abstract poetry, and lyrical expressions of emotion.</p>
+                    </div>
+                    <div className="cat-footer">Read poems <FiArrowRight /></div>
+                </Link>
+
                 <Link to="/writings/quotes" className="category-card">
                     <div className="cat-icon-box"><BsChatQuote /></div>
                     <div className="cat-content">
@@ -202,14 +211,6 @@ const Writings = () => {
                     <div className="cat-footer">Read stories <FiArrowRight /></div>
                 </Link>
 
-                <Link to="/writings/poems" className="category-card">
-                    <div className="cat-icon-box"><BsPen /></div>
-                    <div className="cat-content">
-                        <div className="cat-title">Poems</div>
-                        <p className="cat-desc">Rhythmic verses, abstract poetry, and lyrical expressions of emotion.</p>
-                    </div>
-                    <div className="cat-footer">Read poems <FiArrowRight /></div>
-                </Link>
 
                 <Link to="/writings/thoughts" className="category-card">
                     <div className="cat-icon-box"><BsCloud /></div>

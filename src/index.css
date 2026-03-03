@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Mukta+Malar:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Mukta+Malar:wght@200;300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@300;400;500;600;700;800&display=swap');
 
 /* =========================================
    1. GLOBAL RESET & VARIABLES
@@ -48,7 +48,7 @@ body {
 }
 
 body {
-  font-family: "Inter", "Mukta Malar", sans-serif;
+  font-family: "Inter", "Mukta Malar", "Noto Sans Malayalam", sans-serif;
   background: var(--bg-app);
   color: var(--text-main);
   overflow-x: hidden;
