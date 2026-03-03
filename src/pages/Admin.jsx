@@ -336,7 +336,27 @@ const Admin = () => {
     const removeVariant = (collection, itemIndex, variantIndex) => {
         if (!window.confirm("Remove this variant?")) return;
         const newData = [...dataStore[collection]];
-        newData[itemIndex].variants.splice(variantIndex, 1);
+        const newVariants = [...newData[itemIndex].variants];
+        newVariants.splice(variantIndex, 1);
+        newData[itemIndex].variants = newVariants;
+        setDataStore(prev => ({ ...prev, [collection]: newData }));
+    };
+
+    const moveVariant = (collection, itemIndex, variantIndex, direction) => {
+        const newData = [...dataStore[collection]];
+        const newVariants = [...newData[itemIndex].variants];
+
+        if (direction === 'up' && variantIndex > 0) {
+            const temp = newVariants[variantIndex - 1];
+            newVariants[variantIndex - 1] = newVariants[variantIndex];
+            newVariants[variantIndex] = temp;
+        } else if (direction === 'down' && variantIndex < newVariants.length - 1) {
+            const temp = newVariants[variantIndex + 1];
+            newVariants[variantIndex + 1] = newVariants[variantIndex];
+            newVariants[variantIndex] = temp;
+        }
+
+        newData[itemIndex].variants = newVariants;
         setDataStore(prev => ({ ...prev, [collection]: newData }));
     };
 
@@ -578,13 +598,31 @@ const Admin = () => {
 
                                             {item.variants?.map((variant, vIndex) => (
                                                 <div key={vIndex} style={{ padding: '15px', background: 'var(--bg-panel)', borderRadius: '12px', border: '1px solid var(--border-light)', position: 'relative' }}>
-                                                    <button
-                                                        onClick={() => removeVariant('quotes', index, vIndex)}
-                                                        style={{ position: 'absolute', top: '10px', right: '10px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}
-                                                        title="Remove Variant"
-                                                    >
-                                                        <FiX />
-                                                    </button>
+                                                    <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '4px' }}>
+                                                        <button
+                                                            onClick={() => moveVariant('quotes', index, vIndex, 'up')}
+                                                            disabled={vIndex === 0}
+                                                            style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: vIndex === 0 ? 'not-allowed' : 'pointer', opacity: vIndex === 0 ? 0.3 : 1 }}
+                                                            title="Move Up"
+                                                        >
+                                                            ↑
+                                                        </button>
+                                                        <button
+                                                            onClick={() => moveVariant('quotes', index, vIndex, 'down')}
+                                                            disabled={vIndex === item.variants.length - 1}
+                                                            style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: vIndex === item.variants.length - 1 ? 'not-allowed' : 'pointer', opacity: vIndex === item.variants.length - 1 ? 0.3 : 1 }}
+                                                            title="Move Down"
+                                                        >
+                                                            ↓
+                                                        </button>
+                                                        <button
+                                                            onClick={() => removeVariant('quotes', index, vIndex)}
+                                                            style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', marginLeft: '4px' }}
+                                                            title="Remove Variant"
+                                                        >
+                                                            <FiX />
+                                                        </button>
+                                                    </div>
 
                                                     <div style={{ display: 'grid', gap: '12px' }}>
                                                         <div style={{ display: 'flex', gap: '12px' }}>
@@ -894,13 +932,31 @@ const Admin = () => {
 
                                             {item.variants?.map((variant, vIndex) => (
                                                 <div key={vIndex} style={{ padding: '15px', background: 'var(--bg-panel)', borderRadius: '12px', border: '1px solid var(--border-light)', position: 'relative' }}>
-                                                    <button
-                                                        onClick={() => removeVariant('poems', index, vIndex)}
-                                                        style={{ position: 'absolute', top: '10px', right: '10px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}
-                                                        title="Remove Variant"
-                                                    >
-                                                        <FiX />
-                                                    </button>
+                                                    <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '4px' }}>
+                                                        <button
+                                                            onClick={() => moveVariant('poems', index, vIndex, 'up')}
+                                                            disabled={vIndex === 0}
+                                                            style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: vIndex === 0 ? 'not-allowed' : 'pointer', opacity: vIndex === 0 ? 0.3 : 1 }}
+                                                            title="Move Up"
+                                                        >
+                                                            ↑
+                                                        </button>
+                                                        <button
+                                                            onClick={() => moveVariant('poems', index, vIndex, 'down')}
+                                                            disabled={vIndex === item.variants.length - 1}
+                                                            style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: vIndex === item.variants.length - 1 ? 'not-allowed' : 'pointer', opacity: vIndex === item.variants.length - 1 ? 0.3 : 1 }}
+                                                            title="Move Down"
+                                                        >
+                                                            ↓
+                                                        </button>
+                                                        <button
+                                                            onClick={() => removeVariant('poems', index, vIndex)}
+                                                            style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', marginLeft: '4px' }}
+                                                            title="Remove Variant"
+                                                        >
+                                                            <FiX />
+                                                        </button>
+                                                    </div>
 
                                                     <div style={{ display: 'grid', gap: '12px' }}>
                                                         <div style={{ display: 'flex', gap: '12px' }}>
