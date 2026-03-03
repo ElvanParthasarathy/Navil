@@ -72,24 +72,6 @@
     ]
   },
   {
-    "id": 3,
-    "tag": "Strength",
-    "variants": [
-      {
-        "label": "Original",
-        "text": "நிழல் தேடி நீ செல்கையில்\nஎவரும் வாரா நீயே எல் ஞாயிறாக",
-        "author": "எல்வன் பார்த்தசாரதி",
-        "lang": "ta"
-      },
-      {
-        "label": "Translation",
-        "text": "As you walk seeking shade, none will come —\nYou must become your own blazing sun",
-        "author": "Elvan Parthasarathy",
-        "lang": "en"
-      }
-    ]
-  },
-  {
     "id": 4,
     "tag": "Perspective",
     "variants": [
@@ -112,54 +94,5 @@
         "lang": "en"
       }
     ]
-  },
-  {
-    "id": 6,
-    "tag": "Happiness",
-    "variants": [
-      {
-        "label": "Original",
-        "text": "நன்னதில் வாழ்த்துவும் பிறரை,\nஇதற்கென்னோர் காரணமில்லை.\nஅந்நதில் கிளைக்கும் உணர்வை,\nதருவதற்கோர் வழியுமில்லை.",
-        "author": "எல்வன் பார்த்தசாரதி",
-        "lang": "ta"
-      },
-      {
-        "label": "Malayalam Transliteration",
-        "text": "നന്നതിൽ വാഴ്ത്തുവും പിറരൈ\nഇതർകെനോർ കാരണമില്ലൈ\nഅന്നതിൽ കിളൈക്കും ഉണർവൈ\nതരുവതർകോർ വഴിയുമില്ലൈ",
-        "author": "എൽവൻ പാർത്തചാരതി",
-        "lang": "ml"
-      },
-      {
-        "label": "Translation",
-        "text": "Wishing someone always feels good,\ndoesn’t matter what it’s for.\nJust enjoy spreading a little happiness!",
-        "author": "Elvan Parthasarathy",
-        "lang": "en"
-      }
-    ]
-  },
-  {
-    "id": 7,
-    "tag": "Life",
-    "variants": [
-      {
-        "label": "Original",
-        "text": "The thing is nowhere — that’s how it goes,\nIt’s the plan you make, that no one knows.\nIt may change from what it’s meant to be,\nThe decision, in the end, it’s all with me.",
-        "author": "Elvan Parthasarathy",
-        "lang": "en"
-      }
-    ]
-  },
-  {
-    "id": 8,
-    "tag": "Philosophy",
-    "variants": [
-      {
-        "label": "Original",
-        "text": "hi",
-        "author": "Elvan Parthasarathy",
-        "lang": "ta"
-      }
-    ],
-    "date": "2026-02-19T19:47:04.746Z"
   }
 ]
