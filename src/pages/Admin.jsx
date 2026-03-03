@@ -325,6 +325,34 @@ const Admin = () => {
         setDataStore(prev => ({ ...prev, [collection]: newData }));
     };
 
+    const toggleTransliterationLang = (collection, itemIndex, variantIndex, tLang) => {
+        const newData = [...dataStore[collection]];
+        const newVariants = [...newData[itemIndex].variants];
+        const v = newVariants[variantIndex];
+
+        const hasLang = v.transliterations && v.transliterations[tLang] !== undefined;
+
+        if (hasLang) {
+            // Remove it
+            const newTransl = { ...v.transliterations };
+            delete newTransl[tLang];
+            v.transliterations = newTransl;
+
+            if (v.titleTransliterations) {
+                const newTitleTransl = { ...v.titleTransliterations };
+                delete newTitleTransl[tLang];
+                v.titleTransliterations = newTitleTransl;
+            }
+        } else {
+            // Add it
+            v.transliterations = { ...(v.transliterations || {}), [tLang]: '' };
+            v.titleTransliterations = { ...(v.titleTransliterations || {}), [tLang]: '' };
+        }
+
+        newData[itemIndex].variants = newVariants;
+        setDataStore(prev => ({ ...prev, [collection]: newData }));
+    };
+
     const addVariant = (collection, itemIndex) => {
         const newData = [...dataStore[collection]];
         newData[itemIndex].variants.push({
@@ -662,17 +690,21 @@ const Admin = () => {
                                                             const isIndic = indicLangs.includes(variant.lang);
                                                             if (!isIndic) return null;
 
-                                                            const requiredKeys = variant.lang === 'ml' ? ['en', 'ta'] : ['en'];
                                                             const existingKeys = variant.transliterations ? Object.keys(variant.transliterations) : [];
-                                                            const allTranslKeys = [...new Set([...requiredKeys, ...existingKeys])];
 
                                                             return (
                                                                 <div style={{ padding: '10px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-light)', marginTop: '10px' }}>
                                                                     <div style={{ marginBottom: '10px', fontWeight: 'bold', color: 'var(--text-muted)', fontSize: '0.85rem', textTransform: 'uppercase' }}>Transliteration Targets</div>
-                                                                    {allTranslKeys.map(tLang => (
+                                                                    {existingKeys.map(tLang => (
                                                                         <div key={tLang} style={{ marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                                                                 <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>Language: <code>{tLang}</code></span>
+                                                                                <button
+                                                                                    onClick={(e) => { e.preventDefault(); toggleTransliterationLang('quotes', index, vIndex, tLang); }}
+                                                                                    style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
+                                                                                    title="Remove this transliteration target">
+                                                                                    ✕ Remove
+                                                                                </button>
                                                                             </div>
                                                                             <div style={{ marginBottom: '8px' }}>
                                                                                 <label style={{ ...labelStyle, fontSize: '0.75rem' }}>Text Transliteration</label>
@@ -996,17 +1028,21 @@ const Admin = () => {
                                                             const isIndic = indicLangs.includes(variant.lang);
                                                             if (!isIndic) return null;
 
-                                                            const requiredKeys = variant.lang === 'ml' ? ['en', 'ta'] : ['en'];
                                                             const existingKeys = variant.transliterations ? Object.keys(variant.transliterations) : [];
-                                                            const allTranslKeys = [...new Set([...requiredKeys, ...existingKeys])];
 
                                                             return (
                                                                 <div style={{ padding: '10px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid var(--border-light)', marginTop: '10px' }}>
                                                                     <div style={{ marginBottom: '10px', fontWeight: 'bold', color: 'var(--text-muted)', fontSize: '0.85rem', textTransform: 'uppercase' }}>Transliteration Targets</div>
-                                                                    {allTranslKeys.map(tLang => (
+                                                                    {existingKeys.map(tLang => (
                                                                         <div key={tLang} style={{ marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                                                                 <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>Language: <code>{tLang}</code></span>
+                                                                                <button
+                                                                                    onClick={(e) => { e.preventDefault(); toggleTransliterationLang('poems', index, vIndex, tLang); }}
+                                                                                    style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '4px 8px', borderRadius: '4px' }}
+                                                                                    title="Remove this transliteration target">
+                                                                                    ✕ Remove
+                                                                                </button>
                                                                             </div>
                                                                             <div style={{ marginBottom: '8px' }}>
                                                                                 <label style={{ ...labelStyle, fontSize: '0.75rem' }}>Text Transliteration</label>
