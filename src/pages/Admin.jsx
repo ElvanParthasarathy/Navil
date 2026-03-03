@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FiSave, FiPlus, FiTrash2, FiEdit3, FiUser, FiMessageCircle, FiCheck, FiX, FiList, FiGlobe, FiFileText, FiBookOpen, FiPenTool, FiSun, FiBook } from 'react-icons/fi';
+import { supabase } from '../lib/supabaseClient';
 
 // Import Data (Initial State)
 import initialQuotes from '../data/quotes.json';
@@ -121,6 +122,27 @@ const Admin = () => {
         diary: initialDiary
     });
 
+    // Load poems & quotes from Supabase on mount
+    useEffect(() => {
+        const loadFromSupabase = async () => {
+            try {
+                const { data: poems } = await supabase.from('poems').select('*').order('date', { ascending: false });
+                if (poems) {
+                    const mapped = poems.map(p => ({ ...p, isPinned: p.is_pinned, pinExpiresAt: p.pin_expires_at }));
+                    setDataStore(prev => ({ ...prev, poems: mapped }));
+                }
+                const { data: quotes } = await supabase.from('quotes').select('*').order('date', { ascending: false });
+                if (quotes) {
+                    const mapped = quotes.map(q => ({ ...q, isPinned: q.is_pinned, pinExpiresAt: q.pin_expires_at }));
+                    setDataStore(prev => ({ ...prev, quotes: mapped }));
+                }
+            } catch (err) {
+                console.warn('Supabase load failed, using legacy JSON:', err.message);
+            }
+        };
+        loadFromSupabase();
+    }, []);
+
     // Toggle States
     const [editingId, setEditingId] = useState(null); // Quotes: item.id
     const [isProfileEditing, setIsProfileEditing] = useState(false);
@@ -133,37 +155,90 @@ const Admin = () => {
         setMessage('');
 
         try {
-            const response = await fetch('/api/saveData', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    collection: collection === 'stories' ? 'short_stories' : collection, // Map stories to short_stories.json
-                    data: dataStore[collection],
-                    password
-                })
-            });
+            // Poems & Quotes → Supabase
+            if (collection === 'poems' || collection === 'quotes') {
+                const items = dataStore[collection];
+                const tableName = collection;
 
-            const resData = await response.json();
+                // Upsert all items
+                const rows = items.map(item => {
+                    const row = {
+                        id: String(item.id),
+                        variants: item.variants || [],
+                        is_pinned: item.isPinned || false,
+                        pin_expires_at: item.pinExpiresAt || null,
+                        urai: item.urai || '',
+                        notes: item.notes || '',
+                    };
+                    if (collection === 'poems') {
+                        row.title = item.title || '';
+                        row.date = item.date || null;
+                        row.style = item.style || '';
+                        row.theme = item.theme || '';
+                        row.meter = item.meter || '';
+                        row.dedication = item.dedication || '';
+                        row.classification = item.classification || null;
+                    } else {
+                        row.tag = item.tag || '';
+                        row.date = item.date || null;
+                    }
+                    return row;
+                });
 
-            if (response.ok) {
+                const { error } = await supabase.from(tableName).upsert(rows, { onConflict: 'id' });
+                if (error) throw new Error(error.message);
+
+                // Delete rows that no longer exist locally
+                const localIds = rows.map(r => r.id);
+                const { data: dbRows } = await supabase.from(tableName).select('id');
+                const toDelete = (dbRows || []).filter(r => !localIds.includes(r.id)).map(r => r.id);
+                if (toDelete.length > 0) {
+                    await supabase.from(tableName).delete().in('id', toDelete);
+                }
+
                 if (specificIndex !== null) {
-                    setMessage(`Saved!`);
+                    setMessage('Saved to Supabase!');
                     setEditingId(null);
-                    if (collection === 'profile') setIsProfileEditing(false);
                     setTimeout(() => setMessage(''), 3000);
                 } else {
                     setStatus('success');
-                    setMessage('Collection saved successfully!');
+                    setMessage('Saved to Supabase!');
                     setEditingId(null);
-                    setIsProfileEditing(false);
                 }
             } else {
-                setStatus('error');
-                setMessage(resData.error || 'Failed to save.');
+                // Everything else → GitHub API (legacy path)
+                const response = await fetch('/api/saveData', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        collection: collection === 'stories' ? 'short_stories' : collection,
+                        data: dataStore[collection],
+                        password
+                    })
+                });
+
+                const resData = await response.json();
+
+                if (response.ok) {
+                    if (specificIndex !== null) {
+                        setMessage(`Saved!`);
+                        setEditingId(null);
+                        if (collection === 'profile') setIsProfileEditing(false);
+                        setTimeout(() => setMessage(''), 3000);
+                    } else {
+                        setStatus('success');
+                        setMessage('Collection saved successfully!');
+                        setEditingId(null);
+                        setIsProfileEditing(false);
+                    }
+                } else {
+                    setStatus('error');
+                    setMessage(resData.error || 'Failed to save.');
+                }
             }
         } catch (error) {
             setStatus('error');
-            setMessage('Network error.');
+            setMessage(error.message || 'Network error.');
         } finally {
             setSavingIndex(null);
             if (specificIndex === null) setStatus('idle');

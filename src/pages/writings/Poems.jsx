@@ -1,9 +1,41 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import poemsData from '../../data/poems.json';
+import { supabase } from '../../lib/supabaseClient';
+// Legacy fallback — kept as static backup
+import legacyPoemsData from '../../data/poems.json';
 
 const Poems = () => {
-    const rawPosts = [...(poemsData || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const [poemsData, setPoemsData] = useState(legacyPoemsData || []);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPoems = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('poems')
+                    .select('*')
+                    .order('date', { ascending: false });
+
+                if (error) throw error;
+
+                // Map snake_case DB fields → camelCase JS fields
+                const mapped = (data || []).map(p => ({
+                    ...p,
+                    isPinned: p.is_pinned,
+                    pinExpiresAt: p.pin_expires_at,
+                }));
+                setPoemsData(mapped);
+            } catch (err) {
+                console.warn('Supabase fetch failed, using legacy JSON:', err.message);
+                // Falls back to legacyPoemsData already set in useState
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPoems();
+    }, []);
+
+    const rawPosts = [...poemsData].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     // Friendly bilingual genre/theme labels
     const THEME_LABELS = {

@@ -1,9 +1,39 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import quotesData from '../../data/quotes.json';
+import { supabase } from '../../lib/supabaseClient';
+// Legacy fallback — kept as static backup
+import legacyQuotesData from '../../data/quotes.json';
 
 const Quotes = () => {
-    const rawPosts = [...(quotesData || [])].reverse();
+    const [quotesData, setQuotesData] = useState(legacyQuotesData || []);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchQuotes = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('quotes')
+                    .select('*')
+                    .order('date', { ascending: false });
+
+                if (error) throw error;
+
+                const mapped = (data || []).map(q => ({
+                    ...q,
+                    isPinned: q.is_pinned,
+                    pinExpiresAt: q.pin_expires_at,
+                }));
+                setQuotesData(mapped);
+            } catch (err) {
+                console.warn('Supabase fetch failed, using legacy JSON:', err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchQuotes();
+    }, []);
+
+    const rawPosts = [...quotesData].reverse();
 
     // Friendly bilingual genre/theme labels
     const THEME_LABELS = {
