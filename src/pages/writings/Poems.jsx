@@ -338,10 +338,11 @@ const Poems = () => {
                     font-weight: 700;
                     text-transform: uppercase;
                     letter-spacing: 1.5px;
-                    padding: 4px 12px;
-                    border: 1px solid;
-                    border-radius: 4px;
+                    padding: 5px 14px;
+                    border: none;
+                    border-radius: 99px;
                     margin-bottom: 12px;
+                    background: color-mix(in srgb, currentColor 15%, transparent);
                 }
                 .poem-header {
                     display: flex;
@@ -638,7 +639,7 @@ const Poems = () => {
                                         </div>
                                     )}
                                     {post.classification && CLASSIFICATION_LABELS[post.classification] && (
-                                        <span className="classification-badge" style={{ color: CLASSIFICATION_LABELS[post.classification].color, borderColor: CLASSIFICATION_LABELS[post.classification].color }}>
+                                        <span className="classification-badge" style={{ color: CLASSIFICATION_LABELS[post.classification].color }}>
                                             {CLASSIFICATION_LABELS[post.classification].label}
                                         </span>
                                     )}
