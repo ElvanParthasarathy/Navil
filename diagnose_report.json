@@ -1,0 +1,196 @@
+{
+  "summary": {
+    "uniqueMediaStems": 437,
+    "extensionMismatches": 0,
+    "trulyMissing": 23,
+    "heicFiles": 0
+  },
+  "issues": [],
+  "missing": [
+    {
+      "file": "arts.json",
+      "id": "art_1_1770151909546",
+      "key": "image",
+      "current": "486661112_17917995261074513_4323922563204709560_n_17946532850955870.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_1_1770151909546",
+      "key": "images[0]",
+      "current": "486661112_17917995261074513_4323922563204709560_n_17946532850955870.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_2_1770151909546",
+      "key": "image",
+      "current": "485438887_17917462032074513_5799053440177304876_n_18087063886594016.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_2_1770151909546",
+      "key": "images[0]",
+      "current": "485438887_17917462032074513_5799053440177304876_n_18087063886594016.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_3_1770151909546",
+      "key": "image",
+      "current": "483184804_17916108282074513_6209887549286429367_n_18001376771740308.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_3_1770151909546",
+      "key": "images[0]",
+      "current": "483184804_17916108282074513_6209887549286429367_n_18001376771740308.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_4_1770151909546",
+      "key": "image",
+      "current": "480460403_17913812217074513_6006378603240905747_n_18139415770380502.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_4_1770151909546",
+      "key": "images[0]",
+      "current": "480460403_17913812217074513_6006378603240905747_n_18139415770380502.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_5_1770151909546",
+      "key": "image",
+      "current": "469595376_1322730955752115_3441789547039822625_n_18099699523466190.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_5_1770151909546",
+      "key": "images[0]",
+      "current": "469595376_1322730955752115_3441789547039822625_n_18099699523466190.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_5_1770151909546",
+      "key": "images[1]",
+      "current": "469602463_827563316088991_9216102116479056746_n_18060884737879014.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_5_1770151909546",
+      "key": "images[2]",
+      "current": "469732800_1116869396685353_4904963150484290831_n_18016931441384995.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_5_1770151909546",
+      "key": "images[3]",
+      "current": "469736760_472674692089301_6171240758579266400_n_18056120530754241.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_6_1770151909546",
+      "key": "image",
+      "current": "469327926_1325149855515315_6485462274325460593_n_18296448721239813.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_6_1770151909546",
+      "key": "images[0]",
+      "current": "469327926_1325149855515315_6485462274325460593_n_18296448721239813.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_6_1770151909546",
+      "key": "images[1]",
+      "current": "469242850_1274127280405055_1513317488677782165_n_18054184663781302.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_6_1770151909546",
+      "key": "images[2]",
+      "current": "469284910_1289607359057551_1150388194666897260_n_18044743976138332.webp",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_7_1770151909547",
+      "key": "image",
+      "current": "452644225_463802139793776_2337705804392259157_n_18013559198246769.jpg",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_7_1770151909547",
+      "key": "images[0]",
+      "current": "452644225_463802139793776_2337705804392259157_n_18013559198246769.jpg",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_8_1770151909547",
+      "key": "image",
+      "current": "451735421_840713784245428_3830761426190214260_n_18031998871935782.jpg",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_8_1770151909547",
+      "key": "images[0]",
+      "current": "451735421_840713784245428_3830761426190214260_n_18031998871935782.jpg",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_9_1770151909547",
+      "key": "image",
+      "current": "450944751_1210358590095812_3951910950438702909_n_18027275027272368.jpg",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    },
+    {
+      "file": "arts.json",
+      "id": "art_9_1770151909547",
+      "key": "images[0]",
+      "current": "450944751_1210358590095812_3951910950438702909_n_18027275027272368.jpg",
+      "actual": "NOT FOUND",
+      "reason": "File Missing"
+    }
+  ],
+  "heic": []
+}

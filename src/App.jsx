@@ -139,8 +139,11 @@ const router = createBrowserRouter([
             { path: "writings/thoughts", element: <Thoughts /> },
             { path: "writings/diary", element: <Diary /> },
             { path: "writings/:category", element: <WritingsPlaceholder /> },
-            { path: "admin", element: <Admin /> },
         ]
+    },
+    {
+        path: "/admin",
+        element: <Admin />
     }
 ], {
     future: {
