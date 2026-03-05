@@ -485,10 +485,6 @@ body {
 /* --- UTILITIES --- */
 /* --- UTILITIES --- */
 /* By default, desktop only elements rely on their native display type, but we ensure they remain visible here */
-.nav-item.desktop-only {
-  display: flex !important;
-}
-
 span.desktop-only {
   display: inline-block;
 }
