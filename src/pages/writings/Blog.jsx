@@ -14,7 +14,8 @@ const Blog = () => {
             </Link>
 
             <header style={{ marginBottom: '48px', textAlign: 'center' }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '12px' }}>Blog</h1>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '10px', lineHeight: '1.1' }}>வலைப்பதிவுகள்</h1>
+                <div style={{ fontSize: '1rem', fontWeight: '500', color: '#888888', marginBottom: '16px', letterSpacing: '0.5px' }}>Blog</div>
                 <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Personal reflections and updates.</p>
             </header>
 

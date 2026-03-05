@@ -90,7 +90,6 @@ body {
   display: none;
 }
 
-/* Sidebar – left vertical panel */
 .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
@@ -98,8 +97,9 @@ body {
   top: 0;
   left: 0;
   background: var(--bg-panel);
-  border-right: 1px solid var(--border-light);
-  border-radius: 0 24px 24px 0;
+  border-right: none;
+  box-shadow: 1px 0 0 var(--border-light), 10px 0 30px rgba(0, 0, 0, 0.02);
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -152,11 +152,12 @@ body {
 .nav-item {
   display: flex;
   align-items: center;
-  padding: 14px 24px;
+  padding: 10px 18px;
   border-radius: 99px;
   gap: 12px;
   text-decoration: none;
   cursor: pointer;
+  user-select: none;
 
   /* PERFORMANCE FIX: Specific transitions only */
   transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -179,22 +180,54 @@ body {
 }
 
 .nav-icon {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  /* Reduced from 24px */
+  height: 22px;
+  /* Reduced from 24px */
   color: var(--text-main);
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
   display: flex;
-  /* Ensure centering */
   align-items: center;
   justify-content: center;
 }
 
+/* If you are using inline SVGs, ensure they fill the container */
+.nav-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2px;
+  /* Adjust this if the icon looks too thick/thin after scaling */
+}
+
+.nav-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  /* INCREASED: Adds breathing room between Tamil and English */
+}
+
 .label {
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-main);
   transition: color 0.2s ease, font-weight 0.2s ease;
+  line-height: 1;
+  /* Keep this tight so the gap does the work */
+  margin-bottom: 0px;
+  /* Remove margin if you had it, let gap handle it */
+}
+
+.sub-label {
+  font-size: 11px;
+  /* REDUCED: Makes it clearly a secondary subtitle */
+  font-weight: 500;
+  /* Keeps it readable at a smaller size */
+  text-transform: capitalize;
+  color: #888888;
+  line-height: 1;
+  transition: color 0.2s ease;
 }
 
 /* Desktop Active States */
@@ -211,42 +244,57 @@ body {
   transform: scale(1.1);
 }
 
+/* Primary Tamil Text: Solid and Bold when active */
 .nav-item.active .label {
   color: var(--accent-text);
   font-weight: 800;
 }
 
-/* Sidebar Bottom - Separate Pill & Circle */
+/* Secondary English Text: Takes the active color, but muted via opacity */
+.nav-item.active .sub-label {
+  color: var(--accent-text);
+  opacity: 0.55;
+  /* Makes "Home" look like a sleek grey subtitle inside the white pill */
+}
+
+/* Sidebar Bottom - Settings Popup Trigger */
 .sidebar-bottom {
   padding-top: 15px;
   border-top: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  position: relative;
 }
 
-.profile-pill {
-  flex-grow: 1;
+.settings-profile-container {
+  position: relative;
+}
+
+.settings-trigger {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 16px 6px 6px;
+  padding: 8px 12px;
   background: var(--bg-panel);
   border: none;
   border-radius: 99px;
-  text-decoration: none;
+  cursor: pointer;
   transition: background 0.3s ease, transform 0.1s ease;
+  width: 100%;
+  user-select: none;
 }
 
-.profile-pill:hover {
+.settings-trigger:hover {
   background: var(--nav-hover);
 }
 
-.profile-pill:active {
+.settings-trigger:active {
   transform: scale(0.96);
 }
 
-.pill-avatar {
+.settings-trigger.active-trigger {
+  background: var(--nav-hover);
+}
+
+.trigger-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -254,48 +302,125 @@ body {
   flex-shrink: 0;
 }
 
-.pill-avatar img {
+.trigger-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.pill-name {
+.trigger-text {
+  flex-grow: 1;
+}
+
+.trigger-name {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-main);
 }
 
-.settings-circle {
-  width: 42px;
-  height: 42px;
+.trigger-gear {
+  color: var(--text-muted);
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.settings-trigger:hover .trigger-gear {
+  opacity: 1;
+}
+
+.settings-trigger.active-trigger .trigger-gear {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+/* Settings Popup */
+.settings-popup {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: var(--bg-panel);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.24), 0 0 0 1px var(--border-light);
+  z-index: 2000;
+  border: 1px solid var(--border-light);
+  animation: popupSlideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes popupSlideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.popup-theme-section {
+  cursor: default;
+}
+
+.popup-theme-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+}
+
+/* 3-way theme slider */
+.theme-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--nav-hover);
+  border-radius: 99px;
+  padding: 2px;
+  height: 36px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  border: 1px solid var(--border-light);
+}
+
+.slider-thumb {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  width: calc((100% - 4px) / 3);
+  background: var(--accent-color);
+  border-radius: 99px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 1;
+}
+
+.slider-option {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-panel);
-  border: none;
-  border-radius: 50%;
-  color: var(--text-main);
-  text-decoration: none;
-  opacity: 0.7;
-  transition: background 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+  z-index: 2;
+  cursor: pointer;
+  height: 100%;
+  transition: all 0.2s;
 }
 
-.settings-circle svg {
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.slider-option svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.settings-circle:hover {
-  opacity: 1;
-  background: var(--nav-hover);
-}
-
-.settings-circle:active {
-  transform: scale(0.92);
-}
-
-.settings-circle:active svg {
-  transform: rotate(90deg);
+.slider-option.active svg {
+  color: var(--accent-text);
 }
 
 
@@ -358,8 +483,14 @@ body {
 }
 
 /* --- UTILITIES --- */
-.desktop-only {
+/* --- UTILITIES --- */
+/* By default, desktop only elements rely on their native display type, but we ensure they remain visible here */
+.nav-item.desktop-only {
   display: flex !important;
+}
+
+span.desktop-only {
+  display: inline-block;
 }
 
 /* --- PAGE TRANSITIONS (Global) --- */
@@ -675,6 +806,10 @@ body {
 
   .mobile-only-nav-item {
     display: flex !important;
+  }
+
+  .desktop-only {
+    display: none !important;
   }
 
   .nav-item {

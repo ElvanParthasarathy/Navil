@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser } from 'react-icons/fi';
 import profileData from './data/profile.json';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -54,6 +54,21 @@ const ProfileImage = ({ src, alt, className }) => {
 const Layout = () => {
     const location = useLocation();
     const { theme, setTheme, toggleTheme } = useTheme();
+    const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+    const settingsZoneRef = React.useRef(null);
+
+    // Close popup on click outside
+    React.useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (settingsZoneRef.current && !settingsZoneRef.current.contains(e.target)) {
+                setIsSettingsOpen(false);
+            }
+        };
+        if (isSettingsOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isSettingsOpen]);
 
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
@@ -70,10 +85,11 @@ const Layout = () => {
                 <div className="sidebar-top">
                     <div className="brand">Elvan</div>
                     <div className="sidebar-nav">
-                        <NavLink to="/" icon={<FiHome size={22} />} label="Home" active={location.pathname === '/'} />
-                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="Writings" active={location.pathname.startsWith('/writings')} />
+                        <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} />
+                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} />
 
-                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="Archive" active={location.pathname === '/archive'} />
+                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} />
+                        <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="About" active={location.pathname === '/about'} className="desktop-only" />
                         <NavLink
                             to="/about"
                             icon={
@@ -90,18 +106,46 @@ const Layout = () => {
                     </div>
                 </div>
 
-                <div className="sidebar-bottom">
-                    <Link to="/about" className="profile-pill">
-                        <ProfileImage
-                            src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
-                            alt="Profile"
-                            className="pill-avatar"
-                        />
-                        <div className="pill-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</div>
-                    </Link>
-                    <Link to="/settings" className="settings-circle">
-                        <FiSettings size={20} />
-                    </Link>
+                <div className="sidebar-bottom" ref={settingsZoneRef}>
+                    <div className="settings-profile-container">
+                        <div
+                            className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''}`}
+                            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                        >
+                            <ProfileImage
+                                src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                                alt="Profile"
+                                className="trigger-avatar"
+                            />
+                            <div className="trigger-text">
+                                <span className="trigger-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</span>
+                            </div>
+                            <FiSettings size={16} className="trigger-gear" />
+                        </div>
+
+                        {isSettingsOpen && (
+                            <div className="settings-popup">
+                                <div className="popup-theme-section" onClick={(e) => e.stopPropagation()}>
+                                    <span className="popup-theme-label">Appearance</span>
+                                    <div className="theme-slider-container">
+                                        <div
+                                            className="slider-thumb"
+                                            style={{ transform: `translateX(${theme === 'light' ? '0%' : theme === 'auto' ? '100%' : '200%'})` }}
+                                        />
+                                        <div className={`slider-option ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')} title="Light">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+                                        </div>
+                                        <div className={`slider-option ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
+                                        </div>
+                                        <div className={`slider-option ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </nav>
 
@@ -112,10 +156,13 @@ const Layout = () => {
     );
 };
 
-const NavLink = ({ to, icon, label, active, className = '' }) => (
+const NavLink = ({ to, icon, label, subLabel, active, className = '' }) => (
     <Link to={to} className={`nav-item ${active ? 'active' : ''} ${className}`.trim()}>
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
-        <span className="label">{label}</span>
+        <div className="nav-text-container">
+            <span className="label">{label}</span>
+            {subLabel && <span className="sub-label desktop-only">{subLabel}</span>}
+        </div>
     </Link>
 );
 

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome } from 'react-icons/fi';
+import React, { useState, useEffect, useRef } from 'react';
+import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut } from 'react-icons/fi';
+import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
@@ -13,6 +14,8 @@ import { EssayEditor } from '../components/admin/EssayEditor';
 import { StoryEditor } from '../components/admin/StoryEditor';
 import { ThoughtEditor } from '../components/admin/ThoughtEditor';
 import { DiaryEditor } from '../components/admin/DiaryEditor';
+import AdminLogin from '../components/admin/AdminLogin';
+import AdminDashboard from '../components/admin/AdminDashboard';
 
 import '../styles/admin.css';
 
@@ -30,15 +33,24 @@ import initialDiary from '../data/diary.json';
 
 // ─── MAIN ADMIN COMPONENT ───
 const Admin = () => {
-    const [activeTab, setActiveTab] = useState('quotes');
+    const [activeTab, setActiveTab] = useState('dashboard');
     const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
-    const [password, setPassword] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [isProfileEditing, setIsProfileEditing] = useState(false);
 
-    // For mobile sidebar toggle if needed (currently using top tabs instead on mobile)
+    // Login gate
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+
+    // Theme state (light / dark / auto)
+    const [adminTheme, setAdminTheme] = useState(() => localStorage.getItem('theme') || 'auto');
+
+    // Sidebar state
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('admin_sidebar_collapsed') === 'true');
+    const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
+    const profileZoneRef = useRef(null);
 
     const [dataStore, setDataStore] = useState({
         quotes: initialQuotes,
@@ -51,6 +63,58 @@ const Admin = () => {
         thoughts: initialThoughts,
         diary: initialDiary
     });
+
+    // Apply admin theme
+    useEffect(() => {
+        const root = document.documentElement;
+        localStorage.setItem('theme', adminTheme);
+        const apply = () => {
+            if (adminTheme === 'auto') {
+                const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                root.setAttribute('data-theme', sys);
+            } else {
+                root.setAttribute('data-theme', adminTheme);
+            }
+        };
+        apply();
+        if (adminTheme === 'auto') {
+            const mq = window.matchMedia('(prefers-color-scheme: dark)');
+            const handler = () => apply();
+            mq.addEventListener('change', handler);
+            return () => mq.removeEventListener('change', handler);
+        }
+    }, [adminTheme]);
+
+    const toggleCollapse = () => {
+        setIsCollapsed(prev => {
+            const next = !prev;
+            localStorage.setItem('admin_sidebar_collapsed', String(next));
+            return next;
+        });
+    };
+
+    const handleSignOut = () => {
+        setIsLoggedIn(false);
+        setUsername('');
+        setIsProfilePopupOpen(false);
+    };
+
+    // Close popup on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (profileZoneRef.current && !profileZoneRef.current.contains(e.target)) {
+                setIsProfilePopupOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Login handler
+    const handleLogin = (user, pass) => {
+        setUsername(user);
+        setIsLoggedIn(true);
+    };
 
     // Load poems & quotes from Supabase on mount
     useEffect(() => {
@@ -357,20 +421,30 @@ const Admin = () => {
     };
 
     // ── RENDER ──
+    if (!isLoggedIn) {
+        return <AdminLogin onLogin={handleLogin} />;
+    }
+
     return (
         <div className="admin-shell">
             <SharedDatalists />
             {/* Desktop & Mobile Sidebar */}
-            <aside className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+            <aside className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
                 <div className="admin-sidebar-header">
                     <h1>Admin</h1>
-                    <Link to="/" className="adm-btn icon-only" title="Return Home" style={{ padding: '6px' }}><FiHome size={18} /></Link>
+                    <button className="sidebar-collapse-btn" onClick={toggleCollapse} title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+                        {isCollapsed ? <RiMenuUnfoldLine size={16} /> : <RiMenuFoldLine size={16} />}
+                    </button>
                     {/* Close button only visible on mobile */}
                     <button className="adm-btn icon-only admin-mobile-close" onClick={() => setMobileMenuOpen(false)}>
                         <FiX size={18} />
                     </button>
                 </div>
                 <nav className="admin-sidebar-nav">
+                    <button className={`admin-nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => { setActiveTab('dashboard'); setEditingId(null); setMobileMenuOpen(false); }}>
+                        <div className="nav-icon"><FiGrid size={16} /></div> <span>Dashboard</span>
+                    </button>
+                    <div className="nav-group-label">Content</div>
                     <button className={`admin-nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { setActiveTab('profile'); setEditingId(null); setMobileMenuOpen(false); }}>
                         <div className="nav-icon"><FiUser size={16} /></div> <span>Profile</span>
                     </button>
@@ -380,8 +454,64 @@ const Admin = () => {
                         </button>
                     ))}
                 </nav>
-                <div className="admin-sidebar-footer">
-                    <input type="password" placeholder="Admin Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+                {/* Profile Trigger & Popup */}
+                <div className="user-auth-zone" ref={profileZoneRef}>
+                    <div className="profile-container">
+                        <div
+                            className={`profile-trigger ${isProfilePopupOpen ? 'active-trigger' : ''}`}
+                            onClick={() => setIsProfilePopupOpen(!isProfilePopupOpen)}
+                        >
+                            <div className="user-avatar-circle">
+                                {username ? username.charAt(0).toUpperCase() : 'A'}
+                            </div>
+                            <div className="trigger-text">
+                                <span className="first-name">{username || 'Admin'}</span>
+                                <p className="role-subtext">Administrator</p>
+                            </div>
+                        </div>
+
+                        {isProfilePopupOpen && (
+                            <div className="logout-popup-solid">
+                                <div className="dropdown-info">
+                                    <h3>Hi, {username || 'Admin'}</h3>
+                                </div>
+
+                                <div className="dropdown-divider"></div>
+
+                                <div className="popup-actions">
+                                    <div className="popup-theme-section" onClick={(e) => e.stopPropagation()}>
+                                        <span className="popup-theme-label">Appearance</span>
+                                        <div className="theme-slider-container">
+                                            <div
+                                                className="slider-thumb"
+                                                style={{ transform: `translateX(${adminTheme === 'light' ? '0%' : adminTheme === 'auto' ? '100%' : '200%'})` }}
+                                            />
+                                            <div className={`slider-option ${adminTheme === 'light' ? 'active' : ''}`} onClick={() => setAdminTheme('light')} title="Light">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+                                            </div>
+                                            <div className={`slider-option ${adminTheme === 'auto' ? 'active' : ''}`} onClick={() => setAdminTheme('auto')} title="Auto">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
+                                            </div>
+                                            <div className={`slider-option ${adminTheme === 'dark' ? 'active' : ''}`} onClick={() => setAdminTheme('dark')} title="Dark">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="dropdown-divider"></div>
+
+                                <Link to="/" className="popup-item" onClick={() => setIsProfilePopupOpen(false)}>
+                                    <FiHome size={15} /> <span>Go Home</span>
+                                </Link>
+
+                                <button onClick={handleSignOut} className="popup-logout-btn">
+                                    <FiLogOut size={14} /> Sign Out
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </aside>
 
@@ -395,13 +525,27 @@ const Admin = () => {
 
                 {/* Mobile Header (Hamburger) */}
                 <div className="admin-mobile-header">
-                    <button className="adm-btn icon-only" onClick={() => setMobileMenuOpen(true)}>
-                        <FiMenu size={20} />
-                    </button>
-                    <h2 className="mobile-header-title">
-                        {activeTab === 'profile' ? 'Profile' : SCHEMAS[activeTab]?.label}
-                    </h2>
-                    <div style={{ width: 34 }}></div> {/* Spacer for centering */}
+                    <div className="mobile-header-left">
+                        <button className="mobile-circle-btn" onClick={() => setMobileMenuOpen(true)}>
+                            <FiMenu size={18} />
+                        </button>
+                        <h2 className="mobile-header-title">
+                            {activeTab === 'dashboard' ? 'Dashboard'
+                                : activeTab === 'profile' ? (isProfileEditing ? 'Edit Profile' : 'Profile')
+                                    : editingId ? `Edit ${SCHEMAS[activeTab]?.label.slice(0, -1) || 'Item'}`
+                                        : (SCHEMAS[activeTab]?.label || '')}
+                        </h2>
+                    </div>
+                    {/* Back Chevron handles backing out of editors before leaving the tab */}
+                    {activeTab !== 'dashboard' && (
+                        <button className="mobile-circle-btn" onClick={() => {
+                            if (isProfileEditing) { setIsProfileEditing(false); }
+                            else if (editingId) { setEditingId(null); }
+                            else { setActiveTab('dashboard'); }
+                        }}>
+                            <FiChevronLeft size={20} />
+                        </button>
+                    )}
                 </div>
 
                 {/* Status Toast */}
@@ -412,7 +556,13 @@ const Admin = () => {
                     </div>
                 )}
 
-                {activeTab === 'profile' ? (
+                {activeTab === 'dashboard' ? (
+                    <AdminDashboard
+                        dataStore={dataStore}
+                        username={username}
+                        onNavigate={(tab) => { setActiveTab(tab); setEditingId(null); }}
+                    />
+                ) : activeTab === 'profile' ? (
                     <ProfileEditor
                         profileData={dataStore.profile}
                         isProfileEditing={isProfileEditing}

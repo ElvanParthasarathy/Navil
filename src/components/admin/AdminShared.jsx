@@ -146,34 +146,38 @@ export const renderFieldRow = (fields, item, collection, index, updateItemField)
 
 // ─── PIN EDITOR ───
 export const PinEditor = ({ item, onUpdate, idPrefix }) => (
-    <>
-        <div className="adm-field">
-            <label className="adm-label">Pin</label>
-            <div className="adm-pin-toggle">
-                <label className="adm-toggle">
-                    <input
-                        type="checkbox" id={`pin-${idPrefix}`}
-                        checked={!!item.isPinned}
-                        onChange={(e) => {
-                            const c = e.target.checked;
-                            onUpdate('isPinned', c);
-                            if (c) {
-                                if (!item.pinType) onUpdate('pinType', 'auto');
-                                if (!item.pinExpiresAt && (!item.pinType || item.pinType === 'auto')) {
-                                    const d = new Date(); d.setDate(d.getDate() + 7);
-                                    onUpdate('pinExpiresAt', d.toISOString());
-                                }
-                            }
-                        }}
-                    />
-                    <span className="adm-toggle-slider"></span>
-                </label>
-                <span className="adm-pin-status">{item.isPinned ? '✨ Pinned' : 'Off'}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: item.isPinned ? '24px' : '0' }}>
+        <div className="adm-field" style={{ margin: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label className="adm-label" style={{ margin: 0 }}>Pin</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {!!item.isPinned && <span className="adm-pin-status" style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: 'var(--text-main)' }}>✨ Pinned</span>}
+                    <div className="adm-pin-toggle" style={{ margin: 0 }}>
+                        <label className="adm-toggle" style={{ margin: 0 }}>
+                            <input
+                                type="checkbox" id={`pin-${idPrefix}`}
+                                checked={!!item.isPinned}
+                                onChange={(e) => {
+                                    const c = e.target.checked;
+                                    onUpdate('isPinned', c);
+                                    if (c) {
+                                        if (!item.pinType) onUpdate('pinType', 'auto');
+                                        if (!item.pinExpiresAt && (!item.pinType || item.pinType === 'auto')) {
+                                            const d = new Date(); d.setDate(d.getDate() + 7);
+                                            onUpdate('pinExpiresAt', d.toISOString());
+                                        }
+                                    }
+                                }}
+                            />
+                            <span className="adm-toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         {!!item.isPinned && (
-            <>
-                <div className="adm-field">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="adm-field" style={{ margin: 0 }}>
                     <label className="adm-label">Pin Mode</label>
                     <div className="adm-pill-group" data-active={(item.pinType || 'auto') === 'auto' ? '0' : '1'}>
                         <button className={`adm-pill-btn ${(item.pinType || 'auto') === 'auto' ? 'active' : ''}`}
@@ -185,7 +189,7 @@ export const PinEditor = ({ item, onUpdate, idPrefix }) => (
                     </div>
                 </div>
                 {(item.pinType || 'auto') === 'auto' && (
-                    <div className="adm-field">
+                    <div className="adm-field" style={{ margin: 0 }}>
                         <label className="adm-label">Expires At</label>
                         <input className="adm-input" type="datetime-local"
                             value={item.pinExpiresAt ? new Date(new Date(item.pinExpiresAt).getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 16) : ''}
@@ -193,9 +197,9 @@ export const PinEditor = ({ item, onUpdate, idPrefix }) => (
                         />
                     </div>
                 )}
-            </>
+            </div>
         )}
-    </>
+    </div>
 );
 
 // ─── TRANSLITERATION EDITOR ───

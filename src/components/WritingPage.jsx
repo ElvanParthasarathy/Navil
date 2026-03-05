@@ -42,6 +42,7 @@ const LANG_LABELS = { en: 'Aa', ta: 'த', ml: 'മ', hi: 'हि', te: 'తె'
  */
 const WritingPage = ({
     pageTitle,
+    pageTitleTamil,
     pageSubtitle,
     tableName,
     legacyData,
@@ -172,13 +173,19 @@ const WritingPage = ({
                    ========================================= */
                 .poems-container {
                     width: 100%;
-                    max-width: 900px;
                     margin: 0;
-                    padding: 30px 24px 100px;
+                    padding: 10px 0 100px 24px;
                 }
 
                 .poems-nav {
                     margin-bottom: 24px;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 16px;
+                }
+                .poems-header-area {
+                    flex: 1;
                 }
                 .back-link {
                     display: inline-flex;
@@ -192,6 +199,10 @@ const WritingPage = ({
                     border-radius: 100px;
                     padding: 10px 20px;
                     transition: background 0.3s ease, color 0.3s ease;
+                    flex-shrink: 0;
+                    white-space: nowrap;
+                    align-self: flex-start;
+                    margin-top: 8px;
                 }
                 .back-link:hover {
                     background: color-mix(in srgb, var(--text-main) 12%, transparent);
@@ -207,8 +218,15 @@ const WritingPage = ({
                     font-weight: 800;
                     letter-spacing: -1.5px;
                     line-height: 1.1;
-                    margin-bottom: 16px;
+                    margin-bottom: 10px;
                     color: var(--text-main);
+                }
+                .poems-title-sub {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: #888888;
+                    margin-bottom: 16px;
+                    letter-spacing: 0.5px;
                 }
                 .poems-subtitle {
                     font-size: 1rem;
@@ -720,15 +738,15 @@ const WritingPage = ({
             `}</style>
 
             <div className="poems-container">
-                <nav className="poems-nav">
+                <div className="poems-nav">
+                    <div className="poems-header-area">
+                        <h1 className="poems-main-title">{pageTitleTamil || pageTitle}</h1>
+                        {pageTitleTamil && <div className="poems-title-sub">{pageTitle}</div>}
+                        <p className="poems-subtitle">{pageSubtitle}</p>
+                    </div>
                     <Link to="/writings" className="back-link">
-                        <span>&larr;</span> Back to Writings
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                     </Link>
-                </nav>
-
-                <div className="poems-header-area">
-                    <h1 className="poems-main-title">{pageTitle}</h1>
-                    <p className="poems-subtitle">{pageSubtitle}</p>
                 </div>
 
                 <div className="controls-area">

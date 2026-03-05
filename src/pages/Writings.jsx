@@ -22,8 +22,17 @@ const Writings = () => {
                     font-size: clamp(2.4rem, 3vw, 3rem);
                     font-weight: 800;
                     letter-spacing: -1.5px;
-                    margin-bottom: 12px;
+                    margin-bottom: 10px;
                     color: var(--text-main);
+                    line-height: 1.1;
+                }
+
+                .writings-title-sub {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: #888888;
+                    margin-bottom: 16px;
+                    letter-spacing: 0.5px;
                 }
 
                 .writings-subtitle {
@@ -76,8 +85,16 @@ const Writings = () => {
                 .cat-title {
                     font-size: 1.35rem;
                     font-weight: 700;
-                    margin-bottom: 6px;
+                    margin-bottom: 2px;
                     color: var(--text-main);
+                    line-height: 1.1;
+                }
+
+                .cat-title-sub {
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    color: #888888;
+                    margin-bottom: 8px;
                 }
 
                 .cat-desc {
@@ -180,7 +197,8 @@ const Writings = () => {
             `}</style>
 
             <header className="writings-header animate-entry">
-                <h1 className="writings-title">Writings</h1>
+                <h1 className="writings-title">எழுத்துகள்</h1>
+                <div className="writings-title-sub">Writings</div>
                 <p className="writings-subtitle">
                     A collection of thoughts, stories, and observations captured throughout my journey. Select a category to explore my archive.
                 </p>
@@ -190,7 +208,8 @@ const Writings = () => {
                 <Link to="/writings/poems" className="category-card">
                     <div className="cat-icon-box"><BsPen /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Poems</div>
+                        <div className="cat-title">செய்யுள்கள்</div>
+                        <div className="cat-title-sub">Poems</div>
                         <p className="cat-desc">Rhythmic verses, abstract poetry, and lyrical expressions of emotion.</p>
                     </div>
                     <div className="cat-footer">Read poems <FiArrowRight /></div>
@@ -199,7 +218,8 @@ const Writings = () => {
                 <Link to="/writings/quotes" className="category-card">
                     <div className="cat-icon-box"><BsChatQuote /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Quotes</div>
+                        <div className="cat-title">பொன்மொழிகள்</div>
+                        <div className="cat-title-sub">Quotes</div>
                         <p className="cat-desc">Collected wisdom and inspiring words from thinkers across generations.</p>
                     </div>
                     <div className="cat-footer">Browse archive <FiArrowRight /></div>
@@ -208,7 +228,8 @@ const Writings = () => {
                 <Link to="/writings/blog" className="category-card">
                     <div className="cat-icon-box"><BsPencilSquare /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Blog Posts</div>
+                        <div className="cat-title">வலைப்பதிவுகள்</div>
+                        <div className="cat-title-sub">Blog Posts</div>
                         <p className="cat-desc">Daily reflections, updates, and casual shares from my personal life.</p>
                     </div>
                     <div className="cat-footer">Read posts <FiArrowRight /></div>
@@ -217,7 +238,8 @@ const Writings = () => {
                 <Link to="/writings/articles" className="category-card">
                     <div className="cat-icon-box"><BsNewspaper /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Articles</div>
+                        <div className="cat-title">கட்டுரைகள்</div>
+                        <div className="cat-title-sub">Articles</div>
                         <p className="cat-desc">In-depth technical analysis and structured philosophical long-forms.</p>
                     </div>
                     <div className="cat-footer">Explore articles <FiArrowRight /></div>
@@ -226,7 +248,8 @@ const Writings = () => {
                 <Link to="/writings/essays" className="category-card">
                     <div className="cat-icon-box"><BsFileText /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Essays</div>
+                        <div className="cat-title">கருத்துரைகள்</div>
+                        <div className="cat-title-sub">Essays</div>
                         <p className="cat-desc">Formal arguments, critical reviews, and academic observations.</p>
                     </div>
                     <div className="cat-footer">View essays <FiArrowRight /></div>
@@ -235,7 +258,8 @@ const Writings = () => {
                 <Link to="/writings/stories" className="category-card">
                     <div className="cat-icon-box"><BsBook /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Short Stories</div>
+                        <div className="cat-title">சிறுகதைகள்</div>
+                        <div className="cat-title-sub">Short Stories</div>
                         <p className="cat-desc">Narrative experiments, fiction, and immersive storytelling pieces.</p>
                     </div>
                     <div className="cat-footer">Read stories <FiArrowRight /></div>
@@ -245,7 +269,8 @@ const Writings = () => {
                 <Link to="/writings/thoughts" className="category-card">
                     <div className="cat-icon-box"><BsCloud /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Thoughts</div>
+                        <div className="cat-title">எண்ணங்கள்</div>
+                        <div className="cat-title-sub">Thoughts</div>
                         <p className="cat-desc">Unfiltered streams of consciousness and quick ideological captures.</p>
                     </div>
                     <div className="cat-footer">Explore thoughts <FiArrowRight /></div>
@@ -254,7 +279,8 @@ const Writings = () => {
                 <Link to="/writings/diary" className="category-card">
                     <div className="cat-icon-box"><BsMoonStars /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Diary</div>
+                        <div className="cat-title">நாளேடு</div>
+                        <div className="cat-title-sub">Diary</div>
                         <p className="cat-desc">Private logs, milestones, and personal journey documentations.</p>
                     </div>
                     <div className="cat-footer">Open logbook <FiArrowRight /></div>

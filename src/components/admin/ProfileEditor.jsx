@@ -34,13 +34,33 @@ export const ProfileEditor = ({
                 <div className="admin-editor-body">
                     {!isProfileEditing ? (
                         <div className="adm-profile-view">
-                            <div>
-                                <h3>{profileData.name}</h3>
-                                <p>{profileData.bio}</p>
+                            <div className="adm-profile-card">
+                                <div className="adm-profile-avatar">
+                                    {profileData.name ? profileData.name.charAt(0).toUpperCase() : 'A'}
+                                </div>
+                                <div className="adm-profile-info">
+                                    <h3>{profileData.name}</h3>
+                                    <p className="adm-profile-bio">{profileData.bio}</p>
+
+                                    <div className="adm-profile-stats-row">
+                                        <div className="adm-profile-stat">
+                                            <span className="adm-stat-value">{profileData.followers || 0}</span>
+                                            <span className="adm-stat-label">Followers</span>
+                                        </div>
+                                        <div className="adm-profile-stat">
+                                            <span className="adm-stat-value">{profileData.following || 0}</span>
+                                            <span className="adm-stat-label">Following</span>
+                                        </div>
+                                        <div className="adm-profile-stat">
+                                            <span className="adm-stat-value">{profileData.postsCount || 0}</span>
+                                            <span className="adm-stat-label">Posts</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="adm-form">
+                        <div className="adm-form adm-profile-edit-form">
                             <div className="adm-grid">
                                 <div className="adm-field">
                                     <label className="adm-label">Full Name</label>
