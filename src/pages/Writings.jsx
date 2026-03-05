@@ -86,19 +86,7 @@ const Writings = () => {
                     line-height: 1.5;
                 }
 
-                /* HOVER EFFECTS */
-                .category-card:hover {
-                    transform: translateY(-8px);
-                    border-color: var(--text-main);
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-                }
-
-                .category-card:hover .cat-icon-box {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    transform: rotate(-5deg) scale(1.1);
-                }
-
+                /* BASE FOOTER & DECORATION */
                 .cat-footer {
                     display: flex;
                     align-items: center;
@@ -111,12 +99,6 @@ const Writings = () => {
                     transition: all 0.3s ease;
                 }
 
-                .category-card:hover .cat-footer {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-
-                /* GLASS DECORATION */
                 .category-card::after {
                     content: '';
                     position: absolute;
@@ -130,19 +112,67 @@ const Writings = () => {
                     transition: all 0.5s ease;
                 }
 
-                .category-card:hover::after {
-                    transform: scale(2);
-                    opacity: 0.05;
+                /* HOVER EFFECTS - DESKTOP ONLY */
+                @media (hover: hover) {
+                    .category-card:hover {
+                        transform: translateY(-6px);
+                        border-color: color-mix(in srgb, var(--text-main) 15%, var(--border-light));
+                        background: color-mix(in srgb, var(--text-main) 3%, var(--bg-card));
+                        box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+                    }
+
+                    .category-card:hover .cat-icon-box {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        transform: scale(1.08) rotate(-4deg);
+                        box-shadow: 0 8px 16px color-mix(in srgb, var(--text-main) 20%, transparent);
+                    }
+
+                    .category-card:hover .cat-footer {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+
+                    .category-card:hover::after {
+                        transform: scale(2.2);
+                        opacity: 0.06;
+                    }
                 }
 
+                /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
                     .writings-page { padding: 24px 0; }
                     .writings-header { padding: 40px 20px 20px; text-align: center; margin-bottom: 32px; }
                     .writings-title { font-size: 2.1rem; margin-bottom: 10px; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; }
                     .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
-                    .category-card { min-height: auto; padding: 20px; gap: 16px; border-radius: 18px; }
-                    .category-card:active { transform: scale(0.97) translateY(1px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+                    
+                    .category-card { 
+                        min-height: auto; 
+                        padding: 20px; 
+                        gap: 16px; 
+                        border-radius: 18px; 
+                    }
+                    
+                    .cat-footer {
+                        opacity: 1;
+                        transform: translateX(0);
+                        font-size: 0.8rem;
+                        color: var(--text-muted);
+                    }
+
+                    /* Active state for tap feedback */
+                    .category-card:active { 
+                        transform: scale(0.97); 
+                        background: color-mix(in srgb, var(--text-main) 4%, var(--bg-card));
+                        border-color: color-mix(in srgb, var(--text-main) 20%, var(--border-light));
+                    }
+                    
+                    .category-card:active .cat-icon-box {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                    }
+
                     .cat-icon-box { width: 48px; height: 48px; font-size: 1.25rem; border-radius: 12px; }
                     .cat-title { font-size: 1.2rem; margin-bottom: 4px; }
                     .cat-desc { font-size: 0.95rem; line-height: 1.4; }
