@@ -1061,11 +1061,18 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
 }
 
 /* ══════════════════════════════════════════
-   MOBILE TABS (shown < 768px)
+   MOBILE UI COMPONENTS (shown < 768px)
    ══════════════════════════════════════════ */
-.admin-mobile-tabs {
+.admin-mobile-header {
     display: none;
-    /* Hidden on desktop */
+}
+
+.admin-mobile-overlay {
+    display: none;
+}
+
+.admin-mobile-close {
+    display: none;
 }
 
 /* ══════════════════════════════════════════
@@ -1113,47 +1120,76 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
         height: 100vh;
     }
 
-    /* Hide desktop sidebar */
+    /* Hamburger Sidebar Logic */
     .admin-sidebar {
-        display: none;
+        position: fixed;
+        left: -100%;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        min-width: 260px;
+        height: 100vh;
+        z-index: 2000;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        border-right: 1px solid var(--border-light);
     }
 
-    /* Show mobile tabs */
-    .admin-mobile-tabs {
+    .admin-sidebar.mobile-open {
+        left: 0;
+    }
+
+    .admin-sidebar-header {
+        justify-content: space-between;
+        padding: 24px 20px 16px;
+    }
+
+    .admin-sidebar-header h1,
+    .admin-nav-item span,
+    .admin-sidebar-footer {
+        display: block;
+    }
+
+    .admin-mobile-close {
         display: flex;
-        overflow-x: auto;
-        gap: 4px;
-        padding: 10px 12px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .admin-nav-item {
+        justify-content: flex-start;
+        padding: 10px 18px;
+        border-radius: 100px;
+        width: 100%;
+        height: auto;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .admin-mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
         background: var(--bg-panel);
         border-bottom: 1px solid var(--border-light);
-        scrollbar-width: none;
         flex-shrink: 0;
     }
 
-    .admin-mobile-tabs::-webkit-scrollbar {
-        display: none;
+    .mobile-header-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-main);
     }
 
-    .admin-mobile-tab {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 8px 16px;
-        border-radius: 100px;
-        border: none;
-        background: transparent;
-        color: var(--text-muted);
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 13px;
-        white-space: nowrap;
-        font-family: inherit;
-        transition: all 0.15s;
-    }
-
-    .admin-mobile-tab.active {
-        background: var(--text-main);
-        color: var(--bg-app);
+    .admin-mobile-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1500;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
     }
 
     /* Smaller padding on mobile */
@@ -1167,6 +1203,14 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
 
     .admin-editor-body {
         padding: 16px;
+        overflow-y: auto;
+        /* Fix: allow vertical scrolling on mobile */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .admin-editor-body::-webkit-scrollbar {
+        display: none;
     }
 
     .adm-row {

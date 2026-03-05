@@ -360,18 +360,22 @@ const Admin = () => {
     return (
         <div className="admin-shell">
             <SharedDatalists />
-            {/* Desktop Sidebar */}
-            <aside className="admin-sidebar">
+            {/* Desktop & Mobile Sidebar */}
+            <aside className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
                 <div className="admin-sidebar-header">
                     <h1>Admin</h1>
                     <Link to="/" className="adm-btn icon-only" title="Return Home" style={{ padding: '6px' }}><FiHome size={18} /></Link>
+                    {/* Close button only visible on mobile */}
+                    <button className="adm-btn icon-only admin-mobile-close" onClick={() => setMobileMenuOpen(false)}>
+                        <FiX size={18} />
+                    </button>
                 </div>
                 <nav className="admin-sidebar-nav">
-                    <button className={`admin-nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { setActiveTab('profile'); setEditingId(null); }}>
+                    <button className={`admin-nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { setActiveTab('profile'); setEditingId(null); setMobileMenuOpen(false); }}>
                         <div className="nav-icon"><FiUser size={16} /></div> <span>Profile</span>
                     </button>
                     {Object.keys(SCHEMAS).map(key => (
-                        <button key={key} className={`admin-nav-item ${activeTab === key ? 'active' : ''}`} onClick={() => { setActiveTab(key); setEditingId(null); }}>
+                        <button key={key} className={`admin-nav-item ${activeTab === key ? 'active' : ''}`} onClick={() => { setActiveTab(key); setEditingId(null); setMobileMenuOpen(false); }}>
                             <div className="nav-icon">{SCHEMAS[key].icon}</div> <span>{SCHEMAS[key].label}</span>
                         </button>
                     ))}
@@ -381,20 +385,24 @@ const Admin = () => {
                 </div>
             </aside>
 
-            {/* Mobile Tabs (visible only on mobile) */}
-            <div className="admin-mobile-tabs">
-                <button className={`admin-mobile-tab ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { setActiveTab('profile'); setEditingId(null); }}>
-                    <FiUser size={14} /> Profile
-                </button>
-                {Object.keys(SCHEMAS).map(key => (
-                    <button key={key} className={`admin-mobile-tab ${activeTab === key ? 'active' : ''}`} onClick={() => { setActiveTab(key); setEditingId(null); }}>
-                        {SCHEMAS[key].icon} {SCHEMAS[key].label}
-                    </button>
-                ))}
-            </div>
+            {/* Mobile Overlay */}
+            {mobileMenuOpen && (
+                <div className="admin-mobile-overlay" onClick={() => setMobileMenuOpen(false)}></div>
+            )}
 
             {/* Content Area — fills remaining space */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden', position: 'relative' }}>
+
+                {/* Mobile Header (Hamburger) */}
+                <div className="admin-mobile-header">
+                    <button className="adm-btn icon-only" onClick={() => setMobileMenuOpen(true)}>
+                        <FiMenu size={20} />
+                    </button>
+                    <h2 className="mobile-header-title">
+                        {activeTab === 'profile' ? 'Profile' : SCHEMAS[activeTab]?.label}
+                    </h2>
+                    <div style={{ width: 34 }}></div> {/* Spacer for centering */}
+                </div>
 
                 {/* Status Toast */}
                 {message && (
