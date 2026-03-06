@@ -166,6 +166,58 @@ const NavLink = ({ to, icon, label, subLabel, active, className = '' }) => (
     </Link>
 );
 
+const ArchiveSkeleton = () => (
+    <div className="page-view" style={{ maxWidth: 935, margin: '0 auto', padding: '24px 20px' }}>
+        <style>{`
+            @keyframes skeletonShimmer {
+                0% { background-position: -400px 0; }
+                100% { background-position: 400px 0; }
+            }
+            .skel {
+                background: linear-gradient(90deg, var(--bg-panel) 25%, color-mix(in srgb, var(--text-main) 6%, var(--bg-panel)) 50%, var(--bg-panel) 75%);
+                background-size: 800px 100%;
+                animation: skeletonShimmer 1.5s ease-in-out infinite;
+                border-radius: 8px;
+            }
+        `}</style>
+        {/* Profile header */}
+        <div style={{ display: 'flex', gap: 30, alignItems: 'center', marginBottom: 36 }}>
+            <div className="skel" style={{ width: 150, height: 150, borderRadius: '50%', flexShrink: 0 }} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div className="skel" style={{ width: '45%', height: 28 }} />
+                <div style={{ display: 'flex', gap: 30 }}>
+                    <div className="skel" style={{ width: 70, height: 18 }} />
+                    <div className="skel" style={{ width: 70, height: 18 }} />
+                    <div className="skel" style={{ width: 70, height: 18 }} />
+                </div>
+                <div className="skel" style={{ width: '60%', height: 16 }} />
+                <div className="skel" style={{ width: '40%', height: 16 }} />
+            </div>
+        </div>
+        {/* Highlights */}
+        <div style={{ display: 'flex', gap: 15, marginBottom: 30, overflowX: 'hidden' }}>
+            {[...Array(7)].map((_, i) => (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                    <div className="skel" style={{ width: 66, height: 66, borderRadius: '50%' }} />
+                    <div className="skel" style={{ width: 48, height: 10 }} />
+                </div>
+            ))}
+        </div>
+        {/* Tabs */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 50, borderTop: '1px solid var(--border-color)', padding: '16px 0', marginBottom: 10 }}>
+            {[60, 50, 55, 65].map((w, i) => (
+                <div key={i} className="skel" style={{ width: w, height: 14 }} />
+            ))}
+        </div>
+        {/* Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
+            {[...Array(9)].map((_, i) => (
+                <div key={i} className="skel" style={{ width: '100%', paddingTop: '100%', borderRadius: 2 }} />
+            ))}
+        </div>
+    </div>
+);
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -176,7 +228,7 @@ const router = createBrowserRouter([
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },
             { path: "writings", element: <Writings /> },
-            { path: "archive", element: <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', color: 'var(--text-muted)' }}><div className="loader-spinner" /></div>}><Archive /></Suspense> },
+            { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
             { path: "writings/quotes", element: <Quotes /> },
             { path: "writings/blog", element: <Blog /> },
             { path: "writings/articles", element: <Articles /> },
