@@ -76,7 +76,7 @@ const ReadingView = () => {
 
     if (loading) {
         return (
-            <div className="page-view fadeIn" style={{ width: '100%', margin: 0, padding: '10px 0 100px 24px' }}>
+            <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
                 <style>{`
                     .reader-skeleton-wrapper {
                         max-width: 800px;
@@ -202,7 +202,7 @@ const ReadingView = () => {
     }
 
     return (
-        <div className="page-view fadeIn" style={{ width: '100%', margin: 0, padding: '10px 0 100px 24px' }}>
+        <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             {/* Transliteration toggle styles (same as WritingPage) */}
             <style>{`
                 .transl-switch {

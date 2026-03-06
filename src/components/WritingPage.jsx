@@ -176,9 +176,9 @@ const WritingPage = ({
                    MINIMAL, KINETIC, TOUCH-OPTIMIZED UI
                    ========================================= */
                 .poems-container {
-                    width: 100%;
-                    margin: 0;
-                    padding: 10px 0 100px 24px;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 10px 20px 100px;
                 }
 
                 .poems-nav {

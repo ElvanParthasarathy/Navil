@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
 import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser } from 'react-icons/fi';
+import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import profileData from './data/profile.json';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -52,6 +53,14 @@ const Layout = () => {
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef(null);
 
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(() => {
+        return localStorage.getItem('sidebarCollapsed') === 'true';
+    });
+
+    React.useEffect(() => {
+        localStorage.setItem('sidebarCollapsed', isSidebarCollapsed);
+    }, [isSidebarCollapsed]);
+
     // Close popup on click outside
     React.useEffect(() => {
         const handleClickOutside = (e) => {
@@ -76,15 +85,24 @@ const Layout = () => {
                 </div>
             </header>
 
-            <nav className="sidebar">
+            <nav className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-top">
-                    <div className="brand">Elvan</div>
+                    <div className="sidebar-header">
+                        {!isSidebarCollapsed && <div className="brand">Elvan</div>}
+                        <button
+                            className="sidebar-toggle-btn"
+                            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                            title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                        >
+                            {isSidebarCollapsed ? <RiMenuUnfoldLine size={20} /> : <RiMenuFoldLine size={20} />}
+                        </button>
+                    </div>
                     <div className="sidebar-nav">
-                        <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} />
-                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} />
+                        <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
 
-                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} />
-                        <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="About" active={location.pathname === '/about'} className="desktop-only" />
+                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="About" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
                             icon={
@@ -97,6 +115,7 @@ const Layout = () => {
                             label="Profile"
                             active={location.pathname === '/about'}
                             className="mobile-only-nav-item"
+                            collapsed={isSidebarCollapsed}
                         />
                     </div>
                 </div>
@@ -104,18 +123,30 @@ const Layout = () => {
                 <div className="sidebar-bottom" ref={settingsZoneRef}>
                     <div className="settings-profile-container">
                         <div
-                            className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''}`}
-                            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                            className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''} ${isSidebarCollapsed ? 'collapsed-trigger' : ''}`}
+                            onClick={() => setIsSidebarCollapsed(false)} // Expand on profile click if collapsed
+                            onMouseEnter={() => { }} // Optional: peek expand? Nah, let's stick to click
                         >
-                            <ProfileImage
-                                src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
-                                alt="Profile"
-                                className="trigger-avatar"
-                            />
-                            <div className="trigger-text">
-                                <span className="trigger-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</span>
-                            </div>
-                            <FiSettings size={16} className="trigger-gear" />
+                            {!isSidebarCollapsed && (
+                                <div onClick={(e) => { e.stopPropagation(); setIsSettingsOpen(!isSettingsOpen); }} style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
+                                    <ProfileImage
+                                        src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                                        alt="Profile"
+                                        className="trigger-avatar"
+                                    />
+                                    <div className="trigger-text">
+                                        <span className="trigger-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</span>
+                                    </div>
+                                    <FiSettings size={16} className="trigger-gear" />
+                                </div>
+                            )}
+                            {isSidebarCollapsed && (
+                                <ProfileImage
+                                    src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                                    alt="Profile"
+                                    className="trigger-avatar"
+                                />
+                            )}
                         </div>
 
                         {isSettingsOpen && (
@@ -144,20 +175,22 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%', contain: 'layout style paint', transform: 'translateZ(0)' }}>
-                <Outlet context={{ theme, setTheme, toggleTheme }} />
+            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%', contain: 'layout style', transform: 'translateZ(0)', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
+                <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed }} />
             </main>
         </div>
     );
 };
 
-const NavLink = ({ to, icon, label, subLabel, active, className = '' }) => (
-    <Link to={to} className={`nav-item ${active ? 'active' : ''} ${className}`.trim()}>
+const NavLink = ({ to, icon, label, subLabel, active, className = '', collapsed }) => (
+    <Link to={to} className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} title={collapsed ? label : ''}>
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
-        <div className="nav-text-container">
-            <span className="label">{label}</span>
-            {subLabel && <span className="sub-label desktop-only">{subLabel}</span>}
-        </div>
+        {!collapsed && (
+            <div className="nav-text-container">
+                <span className="label">{label}</span>
+                {subLabel && <span className="sub-label desktop-only">{subLabel}</span>}
+            </div>
+        )}
     </Link>
 );
 

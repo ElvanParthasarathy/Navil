@@ -112,12 +112,23 @@ body {
   flex-direction: column;
   justify-content: space-between;
   padding: 30px 24px;
-  z-index: 20;
+  z-index: 100;
 
-  /* GPU layer isolation — keeps sidebar responsive during heavy content renders */
-  contain: layout style paint;
-  will-change: transform;
+  transition: width 0.4s cubic-bezier(0.2, 0, 0, 1),
+    padding 0.4s cubic-bezier(0.2, 0, 0, 1),
+    background 0.3s ease,
+    color 0.3s ease;
+  contain: layout style;
+  /* REMOVED 'paint' TO ALLOW OVERFLOW VISIBILITY */
+  overflow: visible;
+  /* EXPLICITLY ALLOW OVERFLOW FOR THE TOGGLE */
+  will-change: width, transform;
   transform: translateZ(0);
+}
+
+.sidebar.collapsed {
+  width: 72px;
+  padding: 30px 12px;
 }
 
 /* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */
@@ -138,7 +149,58 @@ body {
 .brand {
   font-size: 1.8rem;
   font-weight: 800;
-  padding-left: 12px;
+  padding-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.sidebar-toggle-btn {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-radius: 99px;
+  /* CHANGED FROM 8px TO 99px FOR PILL LOOK */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: background 0.2s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: var(--nav-hover);
+  transform: none;
+  box-shadow: none;
+}
+
+.sidebar-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+  width: 100%;
+}
+
+.sidebar-toggle-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5px;
+  opacity: 0.6;
 }
 
 .sidebar-nav {
@@ -177,8 +239,13 @@ body {
     background 0.2s ease,
     box-shadow 0.2s ease;
   transform-origin: center;
-  will-change: transform;
+  will-change: transform, background;
   /* Hint to browser */
+}
+
+.nav-item.collapsed {
+  padding: 12px;
+  justify-content: center;
 }
 
 /* Hover: Scale UP slightly + light background */
@@ -293,6 +360,11 @@ body {
   transition: background 0.3s ease, transform 0.1s ease;
   width: 100%;
   user-select: none;
+}
+
+.settings-trigger.collapsed-trigger {
+  padding: 8px;
+  justify-content: center;
 }
 
 .settings-trigger:hover {
@@ -914,7 +986,8 @@ span.desktop-only {
   /* Hide Desktop Elements */
   .desktop-only,
   .sidebar-bottom,
-  .sidebar-top .brand {
+  .sidebar-top .brand,
+  .sidebar-toggle-btn {
     display: none !important;
   }
 
