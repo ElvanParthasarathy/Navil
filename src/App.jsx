@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
 import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser } from 'react-icons/fi';
 import profileData from './data/profile.json';
@@ -7,7 +7,7 @@ import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Settings from './pages/Settings';
 import Writings from './pages/Writings';
-import Archive from './pages/Archive';
+const Archive = React.lazy(() => import('./pages/Archive'));
 import Quotes from './pages/writings/Quotes';
 import WritingsPlaceholder from './pages/writings/WritingsPlaceholder';
 import Admin from './pages/Admin';
@@ -176,7 +176,7 @@ const router = createBrowserRouter([
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },
             { path: "writings", element: <Writings /> },
-            { path: "archive", element: <Archive /> },
+            { path: "archive", element: <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', color: 'var(--text-muted)' }}><div className="loader-spinner" /></div>}><Archive /></Suspense> },
             { path: "writings/quotes", element: <Quotes /> },
             { path: "writings/blog", element: <Blog /> },
             { path: "writings/articles", element: <Articles /> },
