@@ -248,7 +248,7 @@ const Writings = () => {
                 <Link to="/writings/essays" className="category-card">
                     <div className="cat-icon-box"><BsFileText /></div>
                     <div className="cat-content">
-                        <div className="cat-title">கருத்துரைகள்</div>
+                        <div className="cat-title">ஆய்வுரைகள்</div>
                         <div className="cat-title-sub">Essays</div>
                         <p className="cat-desc">Formal arguments, critical reviews, and academic observations.</p>
                     </div>
