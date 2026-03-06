@@ -44,6 +44,14 @@ const Archive = () => {
     const [userListModal, setUserListModal] = useState({ open: false, title: '', users: [] });
     const [userSearchQuery, setUserSearchQuery] = useState('');
 
+
+    // --- CLEANUP: Reset body scroll when navigating away ---
+    useEffect(() => {
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+
     // --- EFFECT: SYNC MODALS WITH URL ---
     useEffect(() => {
         const postId = searchParams.get('post');

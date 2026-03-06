@@ -485,6 +485,12 @@ body {
 /* --- UTILITIES --- */
 /* --- UTILITIES --- */
 /* By default, desktop only elements rely on their native display type, but we ensure they remain visible here */
+@media screen and (min-width: 769px) {
+  .nav-item.desktop-only {
+    display: flex !important;
+  }
+}
+
 span.desktop-only {
   display: inline-block;
 }
