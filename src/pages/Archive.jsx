@@ -776,6 +776,8 @@ const Archive = () => {
                     background: var(--bg-panel);
                     cursor: pointer;
                     overflow: hidden;
+                    content-visibility: auto;
+                    contain-intrinsic-size: 300px 300px;
                 }
                 .post-image {
                     position: absolute;

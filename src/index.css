@@ -105,6 +105,11 @@ body {
   justify-content: space-between;
   padding: 30px 24px;
   z-index: 20;
+
+  /* GPU layer isolation — keeps sidebar responsive during heavy content renders */
+  contain: layout style paint;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */

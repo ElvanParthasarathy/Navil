@@ -149,7 +149,7 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%' }}>
+            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%', contain: 'layout style paint', transform: 'translateZ(0)' }}>
                 <Outlet context={{ theme, setTheme, toggleTheme }} />
             </main>
         </div>
