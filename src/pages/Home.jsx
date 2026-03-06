@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight } from 'react-icons/fi';
+import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight, FiGithub } from 'react-icons/fi';
 import profileData from '../data/profile.json';
 
 const Home = () => {
@@ -105,7 +105,7 @@ const Home = () => {
                     border-radius: 99px;
                     font-weight: 600;
                     text-decoration: none;
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    transition: all 0.2s ease;
                 }
 
                 .hero-btn.primary {
@@ -119,9 +119,20 @@ const Home = () => {
                     border: 1px solid var(--border-color);
                 }
 
-                .hero-btn:hover {
-                    transform: translateY(-3px) scale(1.02);
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                @media (hover: hover) and (pointer: fine) {
+                    .hero-btn:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                    }
+                    .hero-btn.secondary:hover {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        border-color: var(--text-main);
+                    }
+                }
+
+                .hero-btn:active {
+                    transform: scale(0.98);
                 }
 
                 /* GRID SECTIONS */
@@ -165,10 +176,18 @@ const Home = () => {
                     transition: all 0.3s ease;
                 }
 
-                .social-icon-link:hover {
+                @media (hover: hover) and (pointer: fine) {
+                    .social-icon-link:hover {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        transform: translateY(-3px);
+                    }
+                }
+
+                .social-icon-link:active {
                     background: var(--text-main);
                     color: var(--bg-app);
-                    transform: translateY(-3px);
+                    transform: scale(0.95);
                 }
 
                 /* RESPONSIVE */
@@ -188,8 +207,8 @@ const Home = () => {
                     .hero-title { font-size: 1.8rem; margin-bottom: 6px; letter-spacing: -0.5px; }
                     .hero-subtitle { font-size: 1.1rem; margin-bottom: 14px; opacity: 0.9; }
                     .hero-bio { font-size: 1rem; margin-bottom: 28px; line-height: 1.6; max-width: 90%; margin-left: auto; margin-right: auto; white-space: pre-line; }
-                    .hero-actions { width: 100%; flex-direction: column; gap: 10px; }
-                    .hero-btn { width: 100%; justify-content: center; margin: 0; padding: 14px 20px; font-size: 1rem; font-weight: 600; }
+                    .hero-actions { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px; }
+                    .hero-btn { width: auto; flex: 1; min-width: 140px; justify-content: center; margin: 0; padding: 12px 16px; font-size: 0.95rem; font-weight: 600; }
                     
                     .contact-footer { padding: 36px 24px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; }
                     .contact-info-block h3 { font-size: 1.25rem; margin-bottom: 8px; font-weight: 800; }
@@ -201,14 +220,18 @@ const Home = () => {
 
             <section className="home-hero animate-entry">
                 <div className="hero-content">
-                    <h1 className="hero-title">எல்வன் பார்த்தசாரதி</h1>
+                    <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
                     <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
 
-                    <p className="hero-bio">
-                        {profileData.bio}
-                        {"\n\n"}
-                        (Real Name: <strong>Jaiprakash P</strong>)
-                    </p>
+                    <div className="hero-bio">
+                        <span lang="ta" style={{ display: 'block', marginBottom: '4px' }}>
+                            "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+                        </span>
+                        <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block', marginBottom: '16px' }}>{profileData.bio}</span>
+
+                        <span lang="ta" style={{ display: 'block', fontWeight: 600 }}>இயற்பெயர்: பா. ஜெய்பிரகாஷ்</span>
+                        <span style={{ fontSize: '0.85rem', opacity: 0.6 }}>(Real Name: Jaiprakash P)</span>
+                    </div>
 
                     <div className="hero-actions">
                         <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn primary">
@@ -234,9 +257,14 @@ const Home = () => {
 
             <div className="contact-footer animate-entry">
                 <div className="contact-info-block">
-                    <h3>Let's Connect</h3>
-                    <p>Open for collaborations and creative conversations.</p>
-                    <p style={{ marginTop: '8px', fontWeight: 'bold' }}>+91 93451 28797</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        <h3 lang="ta" style={{ fontSize: '1.5rem', margin: 0 }}>இணைவோம்</h3>
+                        <div style={{ width: '2px', height: '24px', background: 'var(--border-color)', opacity: 0.6 }}></div>
+                        <h3 style={{ fontSize: '1.4rem', margin: 0 }}>Let's Connect</h3>
+                    </div>
+
+                    <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px' }}>Open for collaborations and creative conversations.</p>
                 </div>
                 <div className="contact-socials">
                     <a href="tel:+919345128797" className="social-icon-link">
@@ -245,8 +273,11 @@ const Home = () => {
                     <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
                         <FiMail size={20} />
                     </a>
-                    <a href="https://www.instagram.com/elvanparthasarathy" target="_blank" rel="noopener noreferrer" className="social-icon-link">
-                        <FiInstagram size={20} />
+                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
+                        <FiLinkedin size={20} />
+                    </a>
+                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
+                        <FiGithub size={20} />
                     </a>
                 </div>
             </div>

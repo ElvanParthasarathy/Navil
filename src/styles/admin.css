@@ -560,6 +560,14 @@
     opacity: 1;
 }
 
+.admin-move-controls {
+    display: flex;
+    gap: 2px;
+    margin-right: 8px;
+    padding-right: 8px;
+    border-right: 1px solid var(--border-light);
+}
+
 /* ── Editor Full (replaces list) ── */
 .admin-editor-full {
     flex: 1;
@@ -2381,4 +2389,53 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
         justify-content: center;
         gap: 20px;
     }
+}
+
+/* ── Variant List Editor Style ── */
+.adm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 32px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.adm-form.side-by-side {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0;
+    padding: 32px 40px;
+    height: 100%;
+}
+
+.adm-form-sidebar {
+    flex: 0 0 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 32px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding-right: 12px;
+}
+
+.adm-form-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.adm-form-sidebar::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.adm-form-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }

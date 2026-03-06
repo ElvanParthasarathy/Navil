@@ -9,15 +9,10 @@ import Settings from './pages/Settings';
 import Writings from './pages/Writings';
 const Archive = React.lazy(() => import('./pages/Archive'));
 import Quotes from './pages/writings/Quotes';
-import WritingsPlaceholder from './pages/writings/WritingsPlaceholder';
-import Admin from './pages/Admin';
-import Blog from './pages/writings/Blog';
-import Articles from './pages/writings/Articles';
-import Essays from './pages/writings/Essays';
-import Stories from './pages/writings/Stories';
 import Poems from './pages/writings/Poems';
-import Thoughts from './pages/writings/Thoughts';
-import Diary from './pages/writings/Diary';
+import Admin from './pages/Admin';
+import CategoryListView from './components/CategoryListView';
+import ReadingView from './components/ReadingView';
 
 // Create a Context for Theme
 const ThemeContext = React.createContext({ theme: 'auto', setTheme: () => { }, toggleTheme: () => { } });
@@ -230,14 +225,11 @@ const router = createBrowserRouter([
             { path: "writings", element: <Writings /> },
             { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
             { path: "writings/quotes", element: <Quotes /> },
-            { path: "writings/blog", element: <Blog /> },
-            { path: "writings/articles", element: <Articles /> },
-            { path: "writings/essays", element: <Essays /> },
-            { path: "writings/stories", element: <Stories /> },
             { path: "writings/poems", element: <Poems /> },
-            { path: "writings/thoughts", element: <Thoughts /> },
-            { path: "writings/diary", element: <Diary /> },
-            { path: "writings/:category", element: <WritingsPlaceholder /> },
+
+            // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary)
+            { path: "writings/:category", element: <CategoryListView /> },
+            { path: "writings/:category/:slug", element: <ReadingView /> },
         ]
     },
     {

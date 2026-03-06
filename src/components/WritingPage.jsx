@@ -52,6 +52,16 @@ const WritingPage = ({
 }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [activeGenre, setActiveGenre] = useState('All');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [variantTranslStates, setVariantTranslStates] = useState({});
+
+    const ITEMS_PER_PAGE = 10;
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -99,13 +109,6 @@ const WritingPage = ({
     // Only show themes that actually exist in the data
     const existingThemes = [...new Set(rawPosts.map(p => p.theme).filter(Boolean))];
 
-    const [activeGenre, setActiveGenre] = useState('All');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [variantTranslStates, setVariantTranslStates] = useState({});
-
-    // Pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 10;
 
     const toggleVariantTransl = (variantKey, lang) => {
         setVariantTranslStates(prev => ({
@@ -208,6 +211,10 @@ const WritingPage = ({
                 .back-link:hover {
                     background: color-mix(in srgb, var(--text-main) 12%, transparent);
                     color: var(--text-main);
+                }
+                .back-link:active {
+                    transform: scale(0.95);
+                    background: color-mix(in srgb, var(--text-main) 18%, transparent);
                 }
 
                 /* Header Area */
@@ -643,33 +650,70 @@ const WritingPage = ({
 
                 .pagination-wrapper {
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
+                    gap: 24px;
                     padding: 40px 0;
                     margin-top: 40px;
                     border-top: 1px solid var(--border-light);
                 }
-                .page-btn {
-                    padding: 10px 24px;
-                    border: 1px solid var(--border-light);
+                .page-numbers {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .page-number-btn {
                     background: transparent;
-                    color: var(--text-main);
-                    font-size: 0.95rem;
-                    font-weight: 500;
+                    color: var(--text-muted);
+                    border: 1px solid var(--border-light);
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    font-size: 0.9rem;
+                    font-weight: 600;
                     cursor: pointer;
-                    border-radius: 4px;
-                    transition: all 0.3s ease;
+                    transition: all 0.2s ease;
+                }
+                .page-number-btn:hover {
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    color: var(--text-main);
+                    border-color: var(--text-main);
+                }
+                .page-number-btn.active {
+                    background: var(--text-main);
+                    color: var(--bg-app);
+                    border-color: var(--text-main);
+                    box-shadow: 0 4px 15px color-mix(in srgb, var(--text-main) 30%, transparent);
+                }
+                .page-btn {
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    color: var(--text-main);
+                    border: none;
+                    padding: 10px 24px;
+                    border-radius: 100px;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
                 }
                 .page-btn:hover:not(:disabled) {
                     background: var(--text-main);
                     color: var(--bg-app);
+                    transform: translateY(-2px);
                 }
                 .page-btn:disabled {
                     opacity: 0.3;
                     cursor: not-allowed;
                 }
+                .page-btn:active:not(:disabled) {
+                    transform: scale(0.95);
+                }
                 .page-info {
-                    font-size: 0.95rem;
+                    font-size: 0.9rem;
+                    font-weight: 600;
                     color: var(--text-muted);
                 }
 
@@ -760,7 +804,7 @@ const WritingPage = ({
                         <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                         <input
                             type="text"
-                            placeholder="Search..."
+                            placeholder="தேடுக..."
                             value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
@@ -839,7 +883,7 @@ const WritingPage = ({
                                                 displayTitle = primaryVariant.titleTransliterations[activeLang];
                                             }
 
-                                            return <h2 className="poem-title">{displayTitle}</h2>;
+                                            return <h2 className="poem-title" lang={activeLang || primaryVariant?.lang || 'en'}>{displayTitle}</h2>;
                                         })()}
                                     </div>
 
@@ -892,19 +936,21 @@ const WritingPage = ({
                                                         ))}
                                                     </div>
                                                     {variant.title && variant.title !== post.title && (
-                                                        <div className="variant-title">
+                                                        <div className="variant-title" lang={activeLang || variant.lang}>
                                                             {activeLang && variant.titleTransliterations?.[activeLang]
                                                                 ? variant.titleTransliterations[activeLang]
                                                                 : variant.title}
                                                         </div>
                                                     )}
-                                                    <div className="poem-text-content">
-                                                        {activeLang && translObj[activeLang]
-                                                            ? translObj[activeLang]
-                                                            : variant.text}
-                                                    </div>
+                                                    <div
+                                                        className="poem-text-content"
+                                                        lang={activeLang || variant.lang}
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: activeLang && translObj[activeLang] ? translObj[activeLang] : (variant.text || '')
+                                                        }}
+                                                    />
                                                     {variant.author && (
-                                                        <div className="poem-attribution">{variant.author}</div>
+                                                        <div className="poem-attribution" lang={variant.lang}>{variant.author}</div>
                                                     )}
                                                 </div>
                                             );
@@ -936,24 +982,38 @@ const WritingPage = ({
                     <div className="pagination-wrapper">
                         <button
                             className="page-btn"
+                            lang="ta"
                             disabled={currentPage === 1}
                             onClick={() => {
                                 setCurrentPage(prev => Math.max(prev - 1, 1));
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         >
-                            &larr; Previous
+                            &larr; முன்பு
                         </button>
-                        <span className="page-info">Page {currentPage} of {totalPages}</span>
+
+                        <div className="page-numbers">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                                <button
+                                    key={num}
+                                    className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setCurrentPage(num);
+                                    }}
+                                >
+                                    {num}
+                                </button>
+                            ))}
+                        </div>
+
                         <button
                             className="page-btn"
+                            lang="ta"
                             disabled={currentPage === totalPages}
                             onClick={() => {
                                 setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         >
-                            Next &rarr;
+                            அடுத்து &rarr;
                         </button>
                     </div>
                 )}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiX, FiClock, FiAnchor } from 'react-icons/fi';
+import RichTextEditor from './RichTextEditor';
 
 // ─── SCHEMAS ───
 export const SCHEMAS = {
@@ -48,67 +49,142 @@ export const SCHEMAS = {
         getItemSubtitle: (item) => [item.style, item.theme].filter(Boolean).join(' • '),
     },
     blog: {
-        label: 'Blog', icon: <FiEdit3 size={16} />, type: 'standard_post',
-        fields: [
-            { key: 'title', label: 'Title', type: 'text', required: true },
+        label: 'Blog', icon: <FiEdit3 size={16} />, type: 'variant_based',
+        tableName: 'blog_posts',
+        itemFields: [
+            { key: 'title', label: 'Post Title', type: 'text', placeholder: 'Enter post title', flex: 2 },
+            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
+        ],
+        row2Fields: [
             { key: 'slug', label: 'Slug (URL)', type: 'text', placeholder: 'my-blog-post' },
-            { key: 'date', label: 'Date', type: 'datetime-local' },
-            { key: 'tags', label: 'Tags (comma separated)', type: 'text' },
-            { key: 'cover', label: 'Cover Image URL', type: 'text' },
-            { key: 'excerpt', label: 'Short Excerpt', type: 'textarea', rows: 2 },
-            { key: 'content', label: 'Content (Markdown/HTML)', type: 'textarea', rows: 15, fullWidth: true }
-        ]
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Life, Tech, Tamil' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+        ],
+        row3Fields: [
+            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
+            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
+            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+        ],
+        extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+        ],
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Blog',
+        getItemSubtitle: (item) => [item.tags, item.slug].filter(Boolean).join(' • '),
     },
     articles: {
-        label: 'Articles', icon: <FiFileText size={16} />, type: 'standard_post',
-        fields: [
-            { key: 'title', label: 'Article Title', type: 'text', required: true },
-            { key: 'slug', label: 'Slug', type: 'text' },
-            { key: 'date', label: 'Date', type: 'datetime-local' },
-            { key: 'tags', label: 'Tags', type: 'text' },
-            { key: 'cover', label: 'Cover Image URL', type: 'text' },
-            { key: 'summary', label: 'Summary', type: 'textarea', rows: 3, fullWidth: true },
-            { key: 'content', label: 'Article Body', type: 'textarea', rows: 20, fullWidth: true }
-        ]
+        label: 'Articles', icon: <FiFileText size={16} />, type: 'variant_based',
+        tableName: 'articles_v2',
+        itemFields: [
+            { key: 'title', label: 'Article Title', type: 'text', placeholder: 'Enter article title', flex: 2 },
+            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
+        ],
+        row2Fields: [
+            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'my-article' },
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Politics, Review' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+        ],
+        row3Fields: [
+            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
+            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
+            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+        ],
+        extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+        ],
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Article',
+        getItemSubtitle: (item) => [item.tags, item.slug].filter(Boolean).join(' • '),
     },
     essays: {
-        label: 'Essays', icon: <FiBookOpen size={16} />, type: 'standard_post',
-        fields: [
-            { key: 'title', label: 'Essay Title', type: 'text', required: true },
-            { key: 'slug', label: 'Slug', type: 'text' },
-            { key: 'date', label: 'Date', type: 'datetime-local' },
-            { key: 'subject', label: 'Subject/Topic', type: 'text' },
-            { key: 'content', label: 'Essay Content', type: 'textarea', rows: 25, fullWidth: true }
-        ]
+        label: 'Essays', icon: <FiBookOpen size={16} />, type: 'variant_based',
+        tableName: 'essays_v2',
+        itemFields: [
+            { key: 'title', label: 'Essay Title', type: 'text', placeholder: 'Enter essay title', flex: 2 },
+            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
+        ],
+        row2Fields: [
+            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'my-essay' },
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Philosophy, Science' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+        ],
+        row3Fields: [
+            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
+            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
+            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+        ],
+        extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+        ],
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Essay',
+        getItemSubtitle: (item) => [item.tags, item.slug].filter(Boolean).join(' • '),
     },
     stories: {
-        label: 'Stories', icon: <FiBook size={16} />, type: 'standard_post',
-        fields: [
-            { key: 'title', label: 'Story Title', type: 'text', required: true },
-            { key: 'slug', label: 'Slug', type: 'text' },
-            { key: 'date', label: 'Date', type: 'datetime-local' },
-            { key: 'genre', label: 'Genre', type: 'text' },
-            { key: 'cover', label: 'Cover Art URL', type: 'text' },
-            { key: 'synopsis', label: 'Synopsis', type: 'textarea', rows: 3 },
-            { key: 'content', label: 'Story Content', type: 'textarea', rows: 25, fullWidth: true }
-        ]
+        label: 'Stories', icon: <FiBook size={16} />, type: 'variant_based',
+        tableName: 'short_stories_v2',
+        itemFields: [
+            { key: 'title', label: 'Story Title', type: 'text', placeholder: 'Enter story title', flex: 2 },
+            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
+        ],
+        row2Fields: [
+            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'my-story' },
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Fantasy, Slice of Life' },
+            { key: 'series_name', label: 'Series', type: 'text', placeholder: 'My College Days' },
+        ],
+        row3Fields: [
+            { key: 'series_part', label: 'Part / Chapter', type: 'number', placeholder: '1' },
+            { key: 'cover_image', label: 'Cover Art URL', type: 'text', placeholder: 'https://...' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+        ],
+        extraFields: [
+            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
+            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
+            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+        ],
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Story',
+        getItemSubtitle: (item) => {
+            const parts = [item.tags];
+            if (item.series_name) parts.push(`${item.series_name} #${item.series_part || '?'}`);
+            return parts.filter(Boolean).join(' • ');
+        },
     },
     thoughts: {
-        label: 'Thoughts', icon: <FiSun size={16} />, type: 'standard_post',
-        fields: [
-            { key: 'date', label: 'Date', type: 'datetime-local' },
-            { key: 'mood', label: 'Mood', type: 'text' },
-            { key: 'content', label: 'Thought Stream', type: 'textarea', rows: 6, fullWidth: true }
-        ]
+        label: 'Thoughts', icon: <FiSun size={16} />, type: 'variant_based',
+        tableName: 'thoughts_v2',
+        itemFields: [
+            { key: 'title', label: 'Title', type: 'text', placeholder: 'A quick thought...', flex: 2 },
+            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
+        ],
+        row2Fields: [
+            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'a-quick-thought' },
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Reflection, Daily' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+        ],
+        row3Fields: [
+            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
+            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
+            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+        ],
+        getItemTitle: (item) => item.title || item.variants?.[0]?.text?.replace(/<[^>]+>/g, '').slice(0, 50) || 'Untitled Thought',
+        getItemSubtitle: (item) => item.tags || '',
     },
     diary: {
-        label: 'Diary', icon: <FiBook size={16} />, type: 'standard_post',
-        fields: [
-            { key: 'date', label: 'Date', type: 'datetime-local' },
-            { key: 'title', label: 'Entry Title', type: 'text' },
-            { key: 'location', label: 'Location', type: 'text' },
-            { key: 'content', label: 'Dear Diary...', type: 'textarea', rows: 15, fullWidth: true }
-        ]
+        label: 'Diary', icon: <FiBook size={16} />, type: 'variant_based',
+        tableName: 'diary_v2',
+        itemFields: [
+            { key: 'title', label: 'Entry Title', type: 'text', placeholder: 'Today...', flex: 2 },
+            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
+        ],
+        row2Fields: [
+            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'diary-entry' },
+            { key: 'is_private', label: 'Private Entry', type: 'toggle' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+        ],
+        row3Fields: [
+            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
+            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
+            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+        ],
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Entry',
+        getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
     }
 };
 
@@ -118,7 +194,7 @@ export const FieldInput = ({ field, value, onChange }) => {
         return (
             <textarea
                 className="adm-input"
-                style={{ minHeight: field.rows ? `${field.rows * 22}px` : '60px' }}
+                style={{ minHeight: field.rows ? `${field.rows * 22} px` : '60px' }}
                 value={value || ''}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={field.placeholder || ''}
@@ -155,7 +231,7 @@ export const PinEditor = ({ item, onUpdate, idPrefix }) => (
                     <div className="adm-pin-toggle" style={{ margin: 0 }}>
                         <label className="adm-toggle" style={{ margin: 0 }}>
                             <input
-                                type="checkbox" id={`pin-${idPrefix}`}
+                                type="checkbox" id={`pin - ${idPrefix} `}
                                 checked={!!item.isPinned}
                                 onChange={(e) => {
                                     const c = e.target.checked;
@@ -224,21 +300,20 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
                         </div>
                         <div className="adm-field">
                             <label className="adm-label" style={{ paddingLeft: '14px' }}>Text</label>
-                            <textarea
-                                className="adm-input"
-                                style={{ minHeight: '180px', fontFamily: 'monospace', fontSize: '1.05rem', lineHeight: '1.6' }}
-                                value={variant.transliterations?.[tLang] || ''}
-                                onChange={(e) => onUpdateTransl('transliterations', tLang, e.target.value)}
+                            <RichTextEditor
+                                content={variant.transliterations?.[tLang] || ''}
+                                onChange={(html) => onUpdateTransl('transliterations', tLang, html)}
+                                placeholder="Write transliteration here..."
                             />
                         </div>
                     </div>
                 </div>
             ))}
             <div className="adm-translit-add">
-                <input id={`add-transl-${idPrefix}`} className="adm-input" list="lang-options" placeholder="e.g. ml" style={{ width: '80px', padding: '5px 8px' }} maxLength="3" />
+                <input id={`add - transl - ${idPrefix} `} className="adm-input" list="lang-options" placeholder="e.g. ml" style={{ width: '80px', padding: '5px 8px' }} maxLength="3" />
                 <button className="adm-btn" onClick={(e) => {
                     e.preventDefault();
-                    const input = document.getElementById(`add-transl-${idPrefix}`);
+                    const input = document.getElementById(`add - transl - ${idPrefix} `);
                     if (input?.value.trim()) {
                         onUpdateTransl('transliterations', input.value.trim().toLowerCase(), '');
                         onUpdateTransl('titleTransliterations', input.value.trim().toLowerCase(), '');
@@ -284,7 +359,11 @@ export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdate
             </div>
             <div className="adm-field">
                 <label className="adm-label" style={{ paddingLeft: '14px' }}>Text</label>
-                <textarea className="adm-input adm-typer" style={{ minHeight: '360px', fontSize: '1.2rem', lineHeight: '1.8' }} value={variant.text || ''} onChange={(e) => onUpdate('text', e.target.value)} placeholder="Write your content here..." />
+                <RichTextEditor
+                    content={variant.text || ''}
+                    onChange={(html) => onUpdate('text', html)}
+                    placeholder="Write your content here..."
+                />
             </div>
             <TransliterationEditor variant={variant} onUpdateTransl={onUpdateTransl} onToggleLang={onToggleLang} idPrefix={idPrefix} />
         </div>

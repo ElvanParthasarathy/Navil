@@ -3,6 +3,7 @@ import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiL
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { v4 as uuidv4 } from 'uuid';
 
 import { SCHEMAS, SharedDatalists } from '../components/admin/AdminShared';
 import { ProfileEditor } from '../components/admin/ProfileEditor';
@@ -19,16 +20,12 @@ import AdminDashboard from '../components/admin/AdminDashboard';
 
 import '../styles/admin.css';
 
-// Import Data (Initial State)
+// Import Data (Initial State for non-Supabase data)
 import initialQuotes from '../data/quotes.json';
 import initialProfile from '../data/profile.json';
-import initialBlog from '../data/blog.json';
-import initialArticles from '../data/articles.json';
-import initialEssays from '../data/essays.json';
-import initialStories from '../data/short_stories.json';
 import initialPoems from '../data/poems.json';
-import initialThoughts from '../data/thoughts.json';
-import initialDiary from '../data/diary.json';
+
+// We now load all 6 writing categories from Supabase!
 
 
 // ─── MAIN ADMIN COMPONENT ───
@@ -55,13 +52,13 @@ const Admin = () => {
     const [dataStore, setDataStore] = useState({
         quotes: initialQuotes,
         profile: initialProfile,
-        blog: initialBlog,
-        articles: initialArticles,
-        essays: initialEssays,
-        stories: initialStories,
         poems: initialPoems,
-        thoughts: initialThoughts,
-        diary: initialDiary
+        blog: [],
+        articles: [],
+        essays: [],
+        stories: [],
+        thoughts: [],
+        diary: []
     });
 
     // Apply admin theme
@@ -116,40 +113,81 @@ const Admin = () => {
         setIsLoggedIn(true);
     };
 
-    // Load poems & quotes from Supabase on mount
+    // Load data from Supabase on mount
     useEffect(() => {
         const loadFromSupabase = async () => {
             try {
-                const { data: poems } = await supabase.from('poems')
-                    .select('*')
-                    .order('display_order', { ascending: true })
-                    .order('date', { ascending: false });
+                // Legacy custom ones (poems/quotes)
+                const { data: poems } = await supabase.from('poems').select('*').order('display_order', { ascending: true }).order('date', { ascending: false });
                 if (poems) {
                     const mapped = poems.map(p => ({
-                        ...p,
-                        isPinned: p.is_pinned,
-                        pinExpiresAt: p.pin_expires_at,
-                        pinType: p.pin_type || 'auto',
-                        displayOrder: p.display_order || 0
+                        ...p, isPinned: p.is_pinned, pinExpiresAt: p.pin_expires_at, pinType: p.pin_type || 'auto', displayOrder: p.display_order || 0
                     }));
                     setDataStore(prev => ({ ...prev, poems: mapped }));
                 }
-                const { data: quotes } = await supabase.from('quotes')
-                    .select('*')
-                    .order('display_order', { ascending: true })
-                    .order('date', { ascending: false });
+
+                const { data: quotes } = await supabase.from('quotes').select('*').order('display_order', { ascending: true }).order('date', { ascending: false });
                 if (quotes) {
                     const mapped = quotes.map(q => ({
-                        ...q,
-                        isPinned: q.is_pinned,
-                        pinExpiresAt: q.pin_expires_at,
-                        pinType: q.pin_type || 'auto',
-                        displayOrder: q.display_order || 0
+                        ...q, isPinned: q.is_pinned, pinExpiresAt: q.pin_expires_at, pinType: q.pin_type || 'auto', displayOrder: q.display_order || 0
                     }));
                     setDataStore(prev => ({ ...prev, quotes: mapped }));
                 }
+
+                // New bilingual categories
+                const categories = [
+                    { key: 'blog', table: 'blog_posts' },
+                    { key: 'articles', table: 'articles_v2' },
+                    { key: 'essays', table: 'essays_v2' },
+                    { key: 'stories', table: 'short_stories_v2' },
+                    { key: 'thoughts', table: 'thoughts_v2' },
+                    { key: 'diary', table: 'diary_v2' }
+                ];
+
+                const promises = categories.map(async ({ key, table }) => {
+                    const { data } = await supabase.from(table).select('*')
+                        .order('display_order', { ascending: true })
+                        .order('publish_date', { ascending: false });
+                    if (data) {
+                        // Ensure variants is an array, auto-migrate old content{} if needed
+                        const processedData = data.map(item => {
+                            let variants = item.variants || [];
+
+                            // Auto-migrate legacy content to variants if empty
+                            if (variants.length === 0 && item.content) {
+                                Object.keys(item.content).forEach(lang => {
+                                    const lData = item.content[lang];
+                                    if (lData && (lData.title || lData.body)) {
+                                        variants.push({
+                                            lang: lang,
+                                            label: lang === 'ta' ? 'Original' : 'Translation',
+                                            title: lData.title || '',
+                                            text: (lData.body || '') + (lData.excerpt ? `\n\n<i>Excerpt: ${lData.excerpt}</i>` : ''),
+                                            author: '',
+                                            transliterations: {},
+                                            titleTransliterations: {}
+                                        });
+                                    }
+                                });
+                            }
+
+                            return {
+                                ...item,
+                                variants,
+                                isPinned: item.is_pinned,
+                                pinExpiresAt: item.pin_expires_at,
+                                pinType: item.pin_type || 'auto'
+                            };
+                        });
+
+                        setDataStore(prev => ({ ...prev, [key]: processedData }));
+                    }
+                });
+
+                await Promise.all(promises);
+
             } catch (err) {
-                console.warn('Supabase load failed, using legacy JSON:', err.message);
+                console.warn('Supabase load failed:', err.message);
             }
         };
         loadFromSupabase();
@@ -161,9 +199,30 @@ const Admin = () => {
         setMessage('');
 
         try {
+            if (collection === 'profile') {
+                const response = await fetch('/api/saveData', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ collection: 'profile', data: dataStore.profile })
+                });
+                const resData = await response.json();
+                if (response.ok) {
+                    setStatus('success');
+                    setMessage('Profile saved successfully!');
+                    setIsProfileEditing(false);
+                } else {
+                    setStatus('error');
+                    setMessage(resData.error || 'Failed to save profile.');
+                }
+                return;
+            }
+
+            const items = dataStore[collection];
+            let tableName = SCHEMAS[collection]?.tableName || collection; // Uses tableName for new schema
+            let rows;
+
             if (collection === 'poems' || collection === 'quotes') {
-                const items = dataStore[collection];
-                const rows = items.map((item, index) => ({
+                rows = items.map((item, index) => ({
                     id: String(item.id),
                     variants: item.variants || [],
                     is_pinned: item.isPinned || false,
@@ -180,47 +239,66 @@ const Admin = () => {
                     classification: item.classification || null,
                     display_order: index,
                 }));
-
-                let { error } = await supabase.from(collection).upsert(rows, { onConflict: 'id' });
-
-                if (error && error.message.includes('column')) {
-                    console.warn('Retrying save without new columns:', error.message);
-                    const fallbackRows = rows.map(({ pin_type, classification, style, meter, dedication, display_order, ...rest }) => rest);
-                    const retry = await supabase.from(collection).upsert(fallbackRows, { onConflict: 'id' });
-                    if (retry.error) throw new Error(retry.error.message);
-                } else if (error) {
-                    throw new Error(error.message);
-                }
-
-                const localIds = rows.map(r => r.id);
-                const { data: dbRows } = await supabase.from(collection).select('id');
-                const toDelete = (dbRows || []).filter(r => !localIds.includes(r.id)).map(r => r.id);
-                if (toDelete.length > 0) {
-                    await supabase.from(collection).delete().in('id', toDelete);
-                }
-
-                setStatus('success');
-                setMessage('Saved to Supabase!');
             } else {
-                const response = await fetch('/api/saveData', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        collection: collection === 'stories' ? 'short_stories' : collection,
-                        data: dataStore[collection],
-                        password
-                    })
+                // New unified schema — uses variants model like poems
+                const schema = SCHEMAS[collection];
+                rows = items.map((item, index) => {
+                    const row = {
+                        id: String(item.id),
+                        slug: item.slug || null,
+                        publish_date: item.publish_date || item.date || new Date().toISOString(),
+                        is_private: !!item.is_private,
+                        tags: item.tags ? (typeof item.tags === 'string' ? item.tags.split(',').map(t => t.trim()) : item.tags) : [],
+                        variants: item.variants || [],
+                        content: item.content || {},
+                        display_order: index
+                    };
+
+                    // Collect all possible extra fields from schema definitions
+                    const schemaKeys = [
+                        ...(schema.itemFields || []),
+                        ...(schema.row2Fields || []),
+                        ...(schema.row3Fields || []),
+                        ...(schema.extraFields || [])
+                    ].map(f => f.key);
+
+                    if (schemaKeys.includes('cover_image')) row.cover_image = item.cover_image || null;
+                    if (schemaKeys.includes('series_name')) row.series_name = item.series_name || null;
+                    if (schemaKeys.includes('series_part')) row.series_part = item.series_part ? parseInt(item.series_part) : null;
+
+                    if (schemaKeys.includes('classification')) row.classification = item.classification || null;
+                    if (schemaKeys.includes('style')) row.style = item.style || null;
+                    if (schemaKeys.includes('theme')) row.theme = item.theme || null;
+                    if (schemaKeys.includes('meter')) row.meter = item.meter || null;
+
+                    row.is_pinned = item.isPinned || false;
+                    row.pin_expires_at = item.pinExpiresAt || null;
+                    row.pin_type = item.pinType || 'auto';
+
+                    return row;
                 });
-                const resData = await response.json();
-                if (response.ok) {
-                    setStatus('success');
-                    setMessage('Saved successfully!');
-                    if (collection === 'profile') setIsProfileEditing(false);
-                } else {
-                    setStatus('error');
-                    setMessage(resData.error || 'Failed to save.');
-                }
             }
+
+            let { error } = await supabase.from(tableName).upsert(rows, { onConflict: 'id' });
+
+            if (error && error.message.includes('column') && (collection === 'poems' || collection === 'quotes')) {
+                console.warn('Retrying save without new columns:', error.message);
+                const fallbackRows = rows.map(({ pin_type, classification, style, meter, dedication, display_order, ...rest }) => rest);
+                const retry = await supabase.from(tableName).upsert(fallbackRows, { onConflict: 'id' });
+                if (retry.error) throw new Error(retry.error.message);
+            } else if (error) {
+                throw new Error(error.message);
+            }
+
+            const localIds = rows.map(r => r.id);
+            const { data: dbRows } = await supabase.from(tableName).select('id');
+            const toDelete = (dbRows || []).filter(r => !localIds.includes(r.id)).map(r => r.id);
+            if (toDelete.length > 0) {
+                await supabase.from(tableName).delete().in('id', toDelete);
+            }
+
+            setStatus('success');
+            setMessage('Saved to Supabase!');
         } catch (error) {
             setStatus('error');
             setMessage(error.message || 'Network error.');
@@ -231,25 +309,22 @@ const Admin = () => {
 
     // ── CRUD helpers (local state only — never saves automatically) ──
     const addItem = (collection) => {
-        const newId = Date.now().toString();
+        const newId = uuidv4();
         let newItem;
 
         if (collection === 'quotes' || collection === 'poems') {
             newItem = {
-                id: newId,
-                title: '',
-                date: new Date().toISOString().slice(0, 16),
-                style: '',
-                theme: '',
-                meter: '',
-                dedication: '',
-                classification: '',
-                urai: '',
-                notes: '',
+                id: newId, title: '', date: new Date().toISOString().slice(0, 16),
+                style: '', theme: '', meter: '', dedication: '', classification: '', urai: '', notes: '',
                 variants: [{ label: '', title: '', text: '', author: '', lang: '', transliterations: {}, titleTransliterations: {} }]
             };
         } else {
-            newItem = { id: newId, date: new Date().toISOString().slice(0, 16) };
+            // New unified bilingual schema — uses same variants model as poems
+            newItem = {
+                id: newId,
+                publish_date: new Date().toISOString().slice(0, 16),
+                variants: [{ label: '', title: '', text: '', author: '', lang: 'ta', transliterations: {}, titleTransliterations: {} }]
+            };
         }
 
         setDataStore(prev => ({ ...prev, [collection]: [newItem, ...prev[collection]] }));
@@ -262,10 +337,13 @@ const Admin = () => {
             const items = dataStore[activeTab];
             const item = items?.find(i => i.id === id);
             if (item) {
-                const hasTitle = item.title && item.title.trim();
-                const hasVariantText = item.variants?.some(v => v.text && v.text.trim());
-                const hasAnyContent = hasTitle || hasVariantText || item.body?.trim() || item.content?.trim();
-                if (!hasAnyContent) {
+                const schema = SCHEMAS[activeTab];
+                const isBiling = schema?.type === 'bilingual_post';
+
+                const hasLegacyTitle = item.title && item.title.trim();
+                const hasVariantText = item.variants?.some(v => (v.text && v.text.trim()) || (v.title && v.title.trim()));
+
+                if (!hasLegacyTitle && !hasVariantText) {
                     // Item is blank — remove it
                     setDataStore(prev => ({
                         ...prev,

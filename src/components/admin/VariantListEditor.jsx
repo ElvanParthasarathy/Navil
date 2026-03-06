@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave } from 'react-icons/fi';
+import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import { SCHEMAS, renderFieldRow, PinEditor, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
 
@@ -98,6 +98,24 @@ export const VariantListEditor = ({
                                         </span>
                                     </div>
                                     <div className="admin-file-row-actions">
+                                        <div className="admin-move-controls">
+                                            <button
+                                                className="adm-btn icon-only"
+                                                onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }}
+                                                disabled={index === 0}
+                                                title="Move Up"
+                                            >
+                                                <FiChevronUp size={16} />
+                                            </button>
+                                            <button
+                                                className="adm-btn icon-only"
+                                                onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }}
+                                                disabled={index === items.length - 1}
+                                                title="Move Down"
+                                            >
+                                                <FiChevronDown size={16} />
+                                            </button>
+                                        </div>
                                         <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); setEditingId(listItem.id); }} title="Edit">
                                             <FiEdit3 size={14} />
                                         </button>

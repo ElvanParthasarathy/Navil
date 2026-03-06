@@ -1,6 +1,6 @@
 import React from 'react';
-import { StandardListEditor } from './StandardListEditor';
+import { VariantListEditor } from './VariantListEditor';
 
 export const DiaryEditor = (props) => {
-    return <StandardListEditor {...props} collection="diary" />;
+    return <VariantListEditor {...props} collection="diary" />;
 };
