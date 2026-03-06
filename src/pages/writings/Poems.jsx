@@ -6,7 +6,8 @@ const Poems = () => (
     <WritingPage
         pageTitle="Poems"
         pageTitleTamil="செய்யுள்கள்"
-        pageSubtitle="Verses, rhythms, and lyrical expressions."
+        pageSubtitle="என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்."
+        pageSubtitleEnglish="My lyrical verses and emotional expressions."
         tableName="poems"
         legacyData={legacyPoemsData}
     />

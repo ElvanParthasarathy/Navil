@@ -6,7 +6,8 @@ const Quotes = () => (
     <WritingPage
         pageTitle="Quotes"
         pageTitleTamil="பொன்மொழிகள்"
-        pageSubtitle="Short reflections and distilled thoughts."
+        pageSubtitle="என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்."
+        pageSubtitleEnglish="My short quotes and personal insights."
         tableName="quotes"
         legacyData={legacyQuotesData}
     />

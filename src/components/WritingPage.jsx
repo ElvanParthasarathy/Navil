@@ -44,6 +44,7 @@ const WritingPage = ({
     pageTitle,
     pageTitleTamil,
     pageSubtitle,
+    pageSubtitleEnglish,
     tableName,
     legacyData,
     themeLabels = DEFAULT_THEME_LABELS,
@@ -742,7 +743,12 @@ const WritingPage = ({
                     <div className="poems-header-area">
                         <h1 className="poems-main-title">{pageTitleTamil || pageTitle}</h1>
                         {pageTitleTamil && <div className="poems-title-sub">{pageTitle}</div>}
-                        <p className="poems-subtitle">{pageSubtitle}</p>
+                        <p className="poems-subtitle" style={{ margin: 0 }}>{pageSubtitle}</p>
+                        {pageSubtitleEnglish && (
+                            <p className="poems-subtitle" style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', maxWidth: '100%' }}>
+                                {pageSubtitleEnglish}
+                            </p>
+                        )}
                     </div>
                     <Link to="/writings" className="back-link">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்

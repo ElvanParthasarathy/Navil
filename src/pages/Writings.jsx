@@ -10,7 +10,7 @@ const Writings = () => {
                 .writings-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 32px 20px;
+                    padding: 10px 20px;
                 }
 
                 .writings-header {
@@ -38,8 +38,8 @@ const Writings = () => {
                 .writings-subtitle {
                     font-size: 1.1rem;
                     color: var(--text-muted);
-                    max-width: 640px;
                     line-height: 1.6;
+                    margin: 0;
                 }
 
                 .category-grid {
@@ -101,6 +101,13 @@ const Writings = () => {
                     font-size: 0.95rem;
                     color: var(--text-muted);
                     line-height: 1.5;
+                }
+
+                .cat-desc-sub {
+                    font-size: 0.82rem;
+                    color: #888888;
+                    line-height: 1.4;
+                    margin-top: 2px;
                 }
 
                 /* BASE FOOTER & DECORATION */
@@ -200,7 +207,10 @@ const Writings = () => {
                 <h1 className="writings-title">எழுத்துகள்</h1>
                 <div className="writings-title-sub">Writings</div>
                 <p className="writings-subtitle">
-                    A collection of thoughts, stories, and observations captured throughout my journey. Select a category to explore my archive.
+                    என் வாழ்வியற் சிந்தனைகள், கதைகள், பட்டறிவுகளின் தொகுப்பு. வாசிக்கப் பகுதிகளைத் தேர்வுசெய்க.
+                </p>
+                <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                    A collection of thoughts, stories, and observations from my journey. Select a category to explore.
                 </p>
             </header>
 
@@ -210,9 +220,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">செய்யுள்கள்</div>
                         <div className="cat-title-sub">Poems</div>
-                        <p className="cat-desc">Rhythmic verses, abstract poetry, and lyrical expressions of emotion.</p>
+                        <p className="cat-desc">என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்.</p>
+                        <p className="cat-desc-sub">My lyrical verses and emotional expressions.</p>
                     </div>
-                    <div className="cat-footer">Read poems <FiArrowRight /></div>
+                    <div className="cat-footer">செய்யுள்களை வாசிக்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/quotes" className="category-card">
@@ -220,9 +231,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">பொன்மொழிகள்</div>
                         <div className="cat-title-sub">Quotes</div>
-                        <p className="cat-desc">Collected wisdom and inspiring words from thinkers across generations.</p>
+                        <p className="cat-desc">என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்.</p>
+                        <p className="cat-desc-sub">My short quotes and personal insights.</p>
                     </div>
-                    <div className="cat-footer">Browse archive <FiArrowRight /></div>
+                    <div className="cat-footer">பொன்மொழிகளைப் பார்க்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/blog" className="category-card">
@@ -230,9 +242,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">வலைப்பதிவுகள்</div>
                         <div className="cat-title-sub">Blog Posts</div>
-                        <p className="cat-desc">Daily reflections, updates, and casual shares from my personal life.</p>
+                        <p className="cat-desc">என் அன்றாடத் தேடல்களும் வாழ்வியல் பகிர்வுகளும்.</p>
+                        <p className="cat-desc-sub">My daily reflections and personal updates.</p>
                     </div>
-                    <div className="cat-footer">Read posts <FiArrowRight /></div>
+                    <div className="cat-footer">பகிர்வுகளை வாசிக்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/articles" className="category-card">
@@ -240,9 +253,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">கட்டுரைகள்</div>
                         <div className="cat-title-sub">Articles</div>
-                        <p className="cat-desc">In-depth technical analysis and structured philosophical long-forms.</p>
+                        <p className="cat-desc">என் ஆழமான பகுப்பாய்வுப் பதிவுகள்.</p>
+                        <p className="cat-desc-sub">My in-depth technical and structured writings.</p>
                     </div>
-                    <div className="cat-footer">Explore articles <FiArrowRight /></div>
+                    <div className="cat-footer">கட்டுரைகளைப் படிக்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/essays" className="category-card">
@@ -250,9 +264,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">ஆய்வுரைகள்</div>
                         <div className="cat-title-sub">Essays</div>
-                        <p className="cat-desc">Formal arguments, critical reviews, and academic observations.</p>
+                        <p className="cat-desc">என் கருத்துரைகளும் திறனாய்வுகளும்.</p>
+                        <p className="cat-desc-sub">My formal reviews and critical observations.</p>
                     </div>
-                    <div className="cat-footer">View essays <FiArrowRight /></div>
+                    <div className="cat-footer">ஆய்வுரைகளைப் பார்க்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/stories" className="category-card">
@@ -260,9 +275,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">சிறுகதைகள்</div>
                         <div className="cat-title-sub">Short Stories</div>
-                        <p className="cat-desc">Narrative experiments, fiction, and immersive storytelling pieces.</p>
+                        <p className="cat-desc">என் கற்பனையில் உருவான சிறு புனைவுகள்.</p>
+                        <p className="cat-desc-sub">My original fiction and short narratives.</p>
                     </div>
-                    <div className="cat-footer">Read stories <FiArrowRight /></div>
+                    <div className="cat-footer">சிறுகதைகளை வாசிக்க <FiArrowRight /></div>
                 </Link>
 
 
@@ -271,9 +287,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">எண்ணங்கள்</div>
                         <div className="cat-title-sub">Thoughts</div>
-                        <p className="cat-desc">Unfiltered streams of consciousness and quick ideological captures.</p>
+                        <p className="cat-desc">என் உள்ளத்தின் தடையற்ற எண்ண ஓட்டங்கள்.</p>
+                        <p className="cat-desc-sub">My unfiltered thoughts and quick ideas.</p>
                     </div>
-                    <div className="cat-footer">Explore thoughts <FiArrowRight /></div>
+                    <div className="cat-footer">எண்ணங்களை அறிய <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/diary" className="category-card">
@@ -281,9 +298,10 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">நாளேடு</div>
                         <div className="cat-title-sub">Diary</div>
-                        <p className="cat-desc">Private logs, milestones, and personal journey documentations.</p>
+                        <p className="cat-desc">என் தனிப்பட்ட குறிப்புகளும் காலச்சுவடுகளும்.</p>
+                        <p className="cat-desc-sub">My private logs and personal milestones.</p>
                     </div>
-                    <div className="cat-footer">Open logbook <FiArrowRight /></div>
+                    <div className="cat-footer">நாளேட்டைத் திறக்க <FiArrowRight /></div>
                 </Link>
             </div>
 

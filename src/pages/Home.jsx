@@ -70,7 +70,7 @@ const Home = () => {
                     font-weight: 800;
                     line-height: 1.1;
                     margin-bottom: 12px;
-                    letter-spacing: -2px;
+                    letter-spacing: 0;
                     color: var(--text-main);
                 }
 
@@ -201,8 +201,8 @@ const Home = () => {
 
             <section className="home-hero animate-entry">
                 <div className="hero-content">
-                    <h1 className="hero-title">{profileData.name} Parthasarathy</h1>
-                    <h2 className="hero-subtitle">எல்வன் பார்த்தசாரதி</h2>
+                    <h1 className="hero-title">எல்வன் பார்த்தசாரதி</h1>
+                    <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
 
                     <p className="hero-bio">
                         {profileData.bio}
