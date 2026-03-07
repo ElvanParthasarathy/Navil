@@ -299,8 +299,26 @@ const Archive = () => {
                     </div>
                 )}
 
+                {/* Error State - clean fallback */}
+                {error && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                        zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        backgroundColor: '#1a1a1a', color: '#666', gap: '8px',
+                    }}>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                            Media Unavailable
+                        </span>
+                    </div>
+                )}
+
                 {/* Media - hidden until ready */}
-                {isVideo ? (
+                {!error && isVideo ? (
                     <video
                         ref={ref}
                         src={src}
@@ -322,9 +340,9 @@ const Archive = () => {
                             // nextStory removed - stories handled by StoryViewer component
                         }}
                     />
-                ) : (
+                ) : !error ? (
                     <img
-                        src={error ? "https://via.placeholder.com/600x800?text=Error+Loading+Media" : src}
+                        src={src}
                         alt=""
                         className={className}
                         loading="eager"
@@ -338,7 +356,7 @@ const Archive = () => {
                         onError={handleError}
                         onContextMenu={(e) => e.preventDefault()}
                     />
-                )}
+                ) : null}
 
                 {/* Protection Layer (blocks right-click and save as) */}
                 <div
