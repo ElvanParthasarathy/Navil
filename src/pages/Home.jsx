@@ -257,14 +257,14 @@ const Home = () => {
 
             <div className="contact-footer animate-entry">
                 <div className="contact-info-block">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                         <h3 lang="ta" style={{ fontSize: '1.5rem', margin: 0 }}>இணைவோம்</h3>
                         <div style={{ width: '2px', height: '24px', background: 'var(--border-color)', opacity: 0.6 }}></div>
                         <h3 style={{ fontSize: '1.4rem', margin: 0 }}>Let's Connect</h3>
                     </div>
 
-                    <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px' }}>Open for collaborations and creative conversations.</p>
+                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
                 </div>
                 <div className="contact-socials">
                     <a href="tel:+919345128797" className="social-icon-link">

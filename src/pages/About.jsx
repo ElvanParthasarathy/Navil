@@ -7,9 +7,9 @@ const About = () => {
         <div className="about-page page-view animate-entry">
             <style>{`
                 .about-page {
-                    max-width: 900px;
+                    max-width: 1200px;
                     margin: 0 auto;
-                    padding: 32px 20px 80px;
+                    padding: 10px 20px 80px;
                 }
 
                 .about-hero {
@@ -69,25 +69,35 @@ const About = () => {
                     font-weight: 500;
                 }
 
-                .hero-btn {
+                .about-portfolio-btn {
                     display: inline-flex;
                     align-items: center;
-                    gap: 8px;
+                    justify-content: center;
+                    gap: 10px;
                     margin-top: 24px;
-                    padding: 12px 28px;
-                    background: var(--text-main);
+                    padding: 14px 32px;
+                    background-color: var(--text-main);
                     color: var(--bg-app);
                     border-radius: 99px;
                     font-weight: 700;
                     text-decoration: none;
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    font-size: 1rem;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+                    font-size: 1.05rem;
+                    border: none;
+                    cursor: pointer;
                 }
 
-                .hero-btn:hover {
-                    transform: translateY(-3px) scale(1.05);
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                @media (hover: hover) and (pointer: fine) {
+                    .about-portfolio-btn:hover {
+                        transform: translateY(-4px) scale(1.02);
+                        background-color: color-mix(in srgb, var(--text-main) 85%, transparent);
+                        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1); /* Subtle glow for dark mode */
+                    }
+                }
+
+                .about-portfolio-btn:active {
+                    transform: scale(0.96) translateY(0) !important;
+                    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
                 }
 
                 /* BENTO GRID LAYOUT */
@@ -100,7 +110,7 @@ const About = () => {
 
                 .about-card {
                     background: var(--bg-panel);
-                    border: none;
+                    border: 1px solid transparent;
                     padding: 32px;
                     border-radius: 28px;
                     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -112,11 +122,14 @@ const About = () => {
                     height: 100%;
                 }
 
-                .about-card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-                    background: var(--bg-card);
-                    z-index: 2;
+                @media (hover: hover) and (pointer: fine) {
+                    .about-card:hover {
+                        transform: translateY(-4px);
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+                        background: var(--bg-card);
+                        border-color: var(--border-light);
+                        z-index: 2;
+                    }
                 }
 
                 .card-title {
@@ -168,8 +181,9 @@ const About = () => {
                 .contact-info h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
                 .contact-location { display: flex; align-items: center; gap: 8px; color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
                 .contact-socials { display: flex; gap: 12px; }
-                .social-pill { display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 99px; color: var(--text-main); text-decoration: none; font-weight: 600; transition: all 0.2s ease; }
-                .social-pill:hover { background: var(--text-main); color: var(--bg-app); transform: translateY(-2px); border-color: var(--text-main); }
+                .social-icon-link { width: 44px; height: 44px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: all 0.3s ease; }
+                @media (hover: hover) and (pointer: fine) { .social-icon-link:hover { background: var(--text-main); color: var(--bg-app); transform: translateY(-3px); } }
+                .social-icon-link:active { background: var(--text-main); color: var(--bg-app); transform: scale(0.95); }
                 .about-footer-text { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.7; }
 
                 /* RESPONSIVE & DESKTOP GRID */
@@ -198,7 +212,7 @@ const About = () => {
                    .contact-info { width: 100%; }
                    .contact-location { justify-content: center; }
                    .contact-socials { justify-content: center; flex-wrap: wrap; }
-                   .social-pill { padding: 10px 16px; font-size: 0.9rem; }
+                   .social-icon-link { width: 48px; height: 48px; }
                 }
             `}</style>
 
@@ -214,7 +228,7 @@ const About = () => {
                 <h1 className="hero-title">Elvan Parthasarathy</h1>
                 <h2 className="hero-subtitle">(Known as Jaiprakash P)</h2>
 
-                <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn">
+                <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
                     View Portfolio <FiArrowRight />
                 </a>
             </section>
@@ -255,30 +269,30 @@ const About = () => {
 
             <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="contact-info">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                         <h3 lang="ta" style={{ fontSize: '1.5rem', margin: 0 }}>இணைவோம்</h3>
                         <div style={{ width: '2px', height: '24px', background: 'var(--border-color)', opacity: 0.6 }}></div>
                         <h3 style={{ fontSize: '1.4rem', margin: 0 }}>Let's Connect</h3>
                     </div>
-                    <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px' }}>Open for collaborations and creative conversations.</p>
+                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
                     <div className="contact-location">
                         <FiMapPin /> Arani, Tamil Nadu - 632317 (Currently in Chennai)
                     </div>
                 </div>
 
                 <div className="contact-socials">
-                    <a href="tel:+919345128797" className="social-pill">
-                        <FiPhone size={18} /> Call
+                    <a href="tel:+919345128797" className="social-icon-link">
+                        <FiPhone size={20} />
                     </a>
-                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-pill">
-                        <FiMail size={18} /> Email
+                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
+                        <FiMail size={20} />
                     </a>
-                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-pill">
-                        <FiLinkedin size={18} /> LinkedIn
+                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
+                        <FiLinkedin size={20} />
                     </a>
-                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-pill">
-                        <FiGithub size={18} /> GitHub
+                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
+                        <FiGithub size={20} />
                     </a>
                 </div>
             </div>
