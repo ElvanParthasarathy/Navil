@@ -255,8 +255,13 @@ const About = () => {
 
             <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="contact-info">
-                    <h3>Let's Connect</h3>
-                    <p>Open for collaborations, opportunities, or just a chat.</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        <h3 lang="ta" style={{ fontSize: '1.5rem', margin: 0 }}>இணைவோம்</h3>
+                        <div style={{ width: '2px', height: '24px', background: 'var(--border-color)', opacity: 0.6 }}></div>
+                        <h3 style={{ fontSize: '1.4rem', margin: 0 }}>Let's Connect</h3>
+                    </div>
+                    <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px' }}>Open for collaborations and creative conversations.</p>
                     <div className="contact-location">
                         <FiMapPin /> Arani, Tamil Nadu - 632317 (Currently in Chennai)
                     </div>
