@@ -10,6 +10,37 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* --- CONTENT PROTECTION --- */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Allow selection in form fields only */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+img,
+video {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for interactive media (controls, clickable) */
+video[controls] {
+  pointer-events: auto;
+}
+
 html,
 body {
   width: 100%;

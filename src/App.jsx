@@ -74,6 +74,55 @@ const Layout = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isSettingsOpen]);
 
+    // --- CONTENT PROTECTION ---
+    React.useEffect(() => {
+        const isAdmin = location.pathname.startsWith('/admin');
+        if (isAdmin) return; // Skip protection on admin pages
+
+        // Block right-click context menu
+        const blockContext = (e) => e.preventDefault();
+        document.addEventListener('contextmenu', blockContext);
+
+        // Block copy, cut, and print keyboard shortcuts
+        const blockKeys = (e) => {
+            // Block Ctrl+C, Ctrl+U (view source), Ctrl+S (save), Ctrl+P (print), Ctrl+A (select all)
+            if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'p', 'a'].includes(e.key.toLowerCase())) {
+                // Allow in form inputs
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+                e.preventDefault();
+            }
+            // Block PrintScreen
+            if (e.key === 'PrintScreen') {
+                e.preventDefault();
+            }
+            // Block F12 (DevTools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+        };
+        document.addEventListener('keydown', blockKeys);
+
+        // Block copy/cut events
+        const blockCopy = (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            e.preventDefault();
+        };
+        document.addEventListener('copy', blockCopy);
+        document.addEventListener('cut', blockCopy);
+
+        // Block drag
+        const blockDrag = (e) => e.preventDefault();
+        document.addEventListener('dragstart', blockDrag);
+
+        return () => {
+            document.removeEventListener('contextmenu', blockContext);
+            document.removeEventListener('keydown', blockKeys);
+            document.removeEventListener('copy', blockCopy);
+            document.removeEventListener('cut', blockCopy);
+            document.removeEventListener('dragstart', blockDrag);
+        };
+    }, [location.pathname]);
+
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
             <header className="mobile-header">
@@ -175,7 +224,7 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%', contain: 'layout style', transform: 'translateZ(0)', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
+            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed }} />
             </main>
         </div>
