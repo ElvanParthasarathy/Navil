@@ -82,6 +82,13 @@ const Layout = () => {
             <header className="mobile-header">
                 <div className="brand">Elvan</div>
                 <div className="mobile-actions">
+                    <Link 
+                        to="/teaching" 
+                        className="settings-btn-small" 
+                        style={{ color: location.pathname.startsWith('/teaching') ? 'var(--accent-color)' : 'var(--text-main)', opacity: location.pathname.startsWith('/teaching') ? 1 : 0.6 }}
+                    >
+                        <FiMonitor size={22} />
+                    </Link>
                     <Link to="/settings" className="settings-btn-small">
                         <FiSettings size={22} />
                     </Link>
@@ -103,7 +110,7 @@ const Layout = () => {
                     <div className="sidebar-nav">
                         <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="Teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="Teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
                         <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="About" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />

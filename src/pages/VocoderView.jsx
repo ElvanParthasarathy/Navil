@@ -12,7 +12,7 @@ const VocoderView = () => {
     }, []);
 
     return (
-        <div className="page-view fadeIn" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
+        <div className="page-view fadeIn vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
             <style>{`
                 /* Lock absolute scrolling for the entire document while this component is active */
                 html, body, #root, .app-shell, .main-content {
@@ -21,7 +21,13 @@ const VocoderView = () => {
                 .main-content {
                     padding: 0 !important;
                 }
-                
+                @media (max-width: 768px) {
+                    .vocoder-page-container {
+                        padding-top: 60px !important;
+                        padding-bottom: 64px !important;
+                    }
+                }
+
                 .vocoder-workspace-theme {
                     --topbar-bg: #18191B;
                     --workspace-bg: #0F0F11;
@@ -299,7 +305,16 @@ const VocoderView = () => {
                     .slide-frame { border-radius: 4px; }
                     .slide-thumbs-bar { padding: 0 12px 16px 12px; gap: 10px; }
                     .slide-thumb { width: 80px; }
-                    .vocoder-topbar { padding: 12px; }
+                    .vocoder-topbar { 
+                        display: flex; 
+                        flex-wrap: wrap; 
+                        justify-content: space-between;
+                        gap: 12px;
+                        padding: 16px 16px 12px 16px; 
+                    }
+                    .vocoder-topbar-title { display: none !important; }
+                    .vocoder-tab-btn { padding: 6px 12px; font-size: 0.75rem; }
+                    .vocoder-topbar .back-pill { padding: 6px 14px; font-size: 0.8rem; }
                 }
             `}</style>
 
@@ -311,7 +326,7 @@ const VocoderView = () => {
                     <button className={`vocoder-tab-btn ${activeTab === 'interactive' ? 'active' : ''}`} onClick={() => setActiveTab('interactive')}>Interactive Story</button>
                 </div>
 
-                <span style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-main)', letterSpacing: '-0.3px', justifySelf: 'center' }}>
+                <span className="vocoder-topbar-title" style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-main)', letterSpacing: '-0.3px', justifySelf: 'center' }}>
                     🎤 Vocoder
                 </span>
 
