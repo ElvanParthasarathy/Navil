@@ -109,8 +109,12 @@ const Admin = () => {
 
     // Login handler
     const handleLogin = (user, pass) => {
-        setUsername(user);
-        setIsLoggedIn(true);
+        if (user === 'jaiprakashvp2006@gmail.com' && pass === 'jaione2006@elvan') {
+            setUsername('Jaiprakash');
+            setIsLoggedIn(true);
+            return true;
+        }
+        return false;
     };
 
     // Load data from Supabase on mount

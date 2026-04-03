@@ -8,12 +8,16 @@ const AdminLogin = ({ onLogin }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!username.trim()) {
+        if (!username.trim() || !password) {
             setShaking(true);
             setTimeout(() => setShaking(false), 500);
             return;
         }
-        onLogin(username.trim(), password);
+        const success = onLogin(username.trim(), password);
+        if (!success) {
+            setShaking(true);
+            setTimeout(() => setShaking(false), 500);
+        }
     };
 
     return (
@@ -29,7 +33,7 @@ const AdminLogin = ({ onLogin }) => {
                         <input
                             id="admin-username"
                             type="text"
-                            placeholder="Username"
+                            placeholder="Email address"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             autoFocus
@@ -52,8 +56,6 @@ const AdminLogin = ({ onLogin }) => {
                         <FiArrowRight size={16} />
                     </button>
                 </form>
-
-                <p className="admin-login-hint">Dummy auth — enter any credentials</p>
             </div>
         </div>
     );
