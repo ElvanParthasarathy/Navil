@@ -157,6 +157,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  flex: 1;
+  min-height: 0;
 }
 
 .brand {
@@ -220,7 +222,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 100%;
+  width: auto;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 10px 15px 20px 15px; /* horizontal bleed zone for shadows/scaling */
+  margin: -10px -15px 0 -15px; /* offset bleed zone */
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .mobile-only-nav-item {
@@ -898,10 +910,13 @@ span.desktop-only {
     display: flex;
     flex-direction: row;
     height: 100%;
-    width: 100%;
+    width: 100% !important;
     gap: 0;
     justify-content: space-around;
     align-items: center;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   .mobile-only-nav-item {
