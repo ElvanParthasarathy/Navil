@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import profileData from './data/profile.json';
@@ -329,6 +330,7 @@ function App() {
     return (
         <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
             <RouterProvider router={router} />
+            <Analytics />
         </ThemeContext.Provider>
     );
 }
