@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import profileData from './data/profile.json';
 import Home from './pages/Home';
@@ -8,6 +8,8 @@ import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Settings from './pages/Settings';
 import Writings from './pages/Writings';
+import Teaching from './pages/Teaching';
+import VocoderView from './pages/VocoderView';
 const Archive = React.lazy(() => import('./pages/Archive'));
 import Quotes from './pages/writings/Quotes';
 import Poems from './pages/writings/Poems';
@@ -74,54 +76,6 @@ const Layout = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isSettingsOpen]);
 
-    // --- CONTENT PROTECTION ---
-    React.useEffect(() => {
-        const isAdmin = location.pathname.startsWith('/admin');
-        if (isAdmin) return; // Skip protection on admin pages
-
-        // Block right-click context menu
-        const blockContext = (e) => e.preventDefault();
-        document.addEventListener('contextmenu', blockContext);
-
-        // Block copy, cut, and print keyboard shortcuts
-        const blockKeys = (e) => {
-            // Block Ctrl+C, Ctrl+U (view source), Ctrl+S (save), Ctrl+P (print), Ctrl+A (select all)
-            if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'p', 'a'].includes(e.key.toLowerCase())) {
-                // Allow in form inputs
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
-                e.preventDefault();
-            }
-            // Block PrintScreen
-            if (e.key === 'PrintScreen') {
-                e.preventDefault();
-            }
-            // Block F12 (DevTools)
-            if (e.key === 'F12') {
-                e.preventDefault();
-            }
-        };
-        document.addEventListener('keydown', blockKeys);
-
-        // Block copy/cut events
-        const blockCopy = (e) => {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-            e.preventDefault();
-        };
-        document.addEventListener('copy', blockCopy);
-        document.addEventListener('cut', blockCopy);
-
-        // Block drag
-        const blockDrag = (e) => e.preventDefault();
-        document.addEventListener('dragstart', blockDrag);
-
-        return () => {
-            document.removeEventListener('contextmenu', blockContext);
-            document.removeEventListener('keydown', blockKeys);
-            document.removeEventListener('copy', blockCopy);
-            document.removeEventListener('cut', blockCopy);
-            document.removeEventListener('dragstart', blockDrag);
-        };
-    }, [location.pathname]);
 
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
@@ -149,6 +103,7 @@ const Layout = () => {
                     <div className="sidebar-nav">
                         <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="Teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} />
 
                         <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="About" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
@@ -224,7 +179,7 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: '100%', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
+            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1), width 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed }} />
             </main>
         </div>
@@ -305,6 +260,8 @@ const router = createBrowserRouter([
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },
             { path: "writings", element: <Writings /> },
+            { path: "teaching", element: <Teaching /> },
+            { path: "teaching/vocoder", element: <VocoderView /> },
             { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
             { path: "writings/quotes", element: <Quotes /> },
             { path: "writings/poems", element: <Poems /> },
