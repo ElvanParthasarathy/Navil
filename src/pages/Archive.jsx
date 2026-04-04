@@ -1627,11 +1627,16 @@ const Archive = () => {
                                         onClick={closePost}
                                     />
                                 </div>
-                                <div style={{ flex: 1, overflowY: 'auto' }}>
+                                <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
                                     <div className="modal-caption">
                                         {selectedPost.caption}
                                     </div>
                                     <div className="modal-date">{selectedPost.date}</div>
+                                    
+                                    {/* Ad filling the blank space below caption */}
+                                    <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
+                                        <AdBanner variant="inline" />
+                                    </div>
                                 </div>
                                 <div style={{ marginTop: 15, borderTop: '1px solid #efefef', paddingTop: 10, display: 'flex', gap: 15 }}>
                                     <FiHeart size={24} />
@@ -1661,22 +1666,35 @@ const Archive = () => {
                                     ? [...currentList.slice(selectedIndex), ...currentList.slice(0, selectedIndex)]
                                     : currentList;
 
-                                return reorderedList.map((post) => (
-                                    <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
-                                        <div className="modal-header">
-                                            <div className="modal-avatar">
-                                                <img src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                return reorderedList.reduce((acc, post, idx, arr) => {
+                                    acc.push(
+                                        <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
+                                            <div className="modal-header">
+                                                <div className="modal-avatar">
+                                                    <img src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                                </div>
+                                                <div className="modal-username">elvanparthasarathy</div>
                                             </div>
-                                            <div className="modal-username">elvanparthasarathy</div>
+                                            <FeedItemMedia post={post} />
+                                            <div className="modal-actions" style={{ padding: '8px 16px 4px', display: 'flex', gap: 16 }}>
+                                                <FiHeart size={26} />
+                                                <FiMessageCircle size={26} />
+                                            </div>
+                                            <TruncatedCaption username="elvanparthasarathy" caption={post.caption} date={post.date} />
                                         </div>
-                                        <FeedItemMedia post={post} />
-                                        <div className="modal-actions" style={{ padding: '8px 16px 4px', display: 'flex', gap: 16 }}>
-                                            <FiHeart size={26} />
-                                            <FiMessageCircle size={26} />
-                                        </div>
-                                        <TruncatedCaption username="elvanparthasarathy" caption={post.caption} date={post.date} />
-                                    </div>
-                                ));
+                                    );
+                                    
+                                    // Inject ad after every post in the mobile feed
+                                    if (idx < arr.length - 1) {
+                                        acc.push(
+                                            <div key={`ad-${post.id}`} style={{ padding: '24px 0', borderBottom: '1px solid var(--border-color)' }}>
+                                                <AdBanner variant="inline" />
+                                            </div>
+                                        );
+                                    }
+                                    
+                                    return acc;
+                                }, []);
                             })()}
                         </div>
                     </div>

@@ -974,11 +974,11 @@ const WritingPage = ({
                                 </article>
                             );
                         })
-                        .reduce((acc, item, idx) => {
+                        .reduce((acc, item, idx, arr) => {
                             acc.push(item);
-                            if (idx === 2) {
+                            if (idx < arr.length - 1) {
                                 acc.push(
-                                    <div key="ad-inline" style={{ padding: '40px 0' }}>
+                                    <div key={`ad-inline-${idx}`} style={{ padding: '40px 0', borderBottom: '1px solid var(--border-light)' }}>
                                         <AdBanner variant="inline" />
                                     </div>
                                 );
