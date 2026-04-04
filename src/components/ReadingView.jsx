@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
 import { supabase } from '../lib/supabaseClient';
+import AdBanner from './AdBanner';
 
 const CATEGORY_META = {
     'blog': { title: 'வலைப்பதிவுகள்', table: 'blog_posts' },
@@ -452,6 +453,8 @@ const ReadingView = () => {
                     </div>
                 )}
             </article>
+
+            <AdBanner format="horizontal" />
 
             {/* Rich content body styles */}
             <style>{`

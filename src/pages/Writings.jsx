@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
+import AdBanner from '../components/AdBanner';
 
 const Writings = () => {
     return (
@@ -304,6 +305,8 @@ const Writings = () => {
                     <div className="cat-footer">நாளேட்டைத் திறக்க <FiArrowRight /></div>
                 </Link>
             </div>
+
+            <AdBanner format="horizontal" />
 
             <div style={{ height: '56px' }}></div>
         </div>

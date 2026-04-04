@@ -1,6 +1,7 @@
 import React from 'react';
 import profileData from '../data/profile.json';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
+import AdBanner from '../components/AdBanner';
 
 const About = () => {
     return (
@@ -266,6 +267,8 @@ const About = () => {
                     </div>
                 </div>
             </div>
+
+            <AdBanner format="horizontal" />
 
             <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="contact-info">

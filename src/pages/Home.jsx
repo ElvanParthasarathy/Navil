@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight, FiGithub } from 'react-icons/fi';
 import profileData from '../data/profile.json';
+import AdBanner from '../components/AdBanner';
 
 const Home = () => {
     return (
@@ -254,6 +255,8 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            <AdBanner format="horizontal" />
 
             <div className="contact-footer animate-entry">
                 <div className="contact-info-block">
