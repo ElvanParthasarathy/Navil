@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import AdBanner from './AdBanner';
 
 // Friendly bilingual genre/theme labels (shared default)
 const DEFAULT_THEME_LABELS = {
@@ -973,10 +974,23 @@ const WritingPage = ({
                                 </article>
                             );
                         })
+                        .reduce((acc, item, idx) => {
+                            acc.push(item);
+                            if (idx === 2) {
+                                acc.push(
+                                    <div key="ad-inline" style={{ padding: '40px 0' }}>
+                                        <AdBanner variant="inline" />
+                                    </div>
+                                );
+                            }
+                            return acc;
+                        }, [])
                     ) : (
                         <div className="poems-empty">I couldn't find any piece of work that matches.</div>
                     )}
                 </div>
+
+                <AdBanner variant="inline" />
 
                 {totalPages > 1 && (
                     <div className="pagination-wrapper">

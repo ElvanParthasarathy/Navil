@@ -2,34 +2,56 @@ import React, { useEffect, useRef } from 'react';
 
 /**
  * AdBanner — Fully integrated Google AdSense component.
- * Designed to feel like native site content, not a foreign element.
  * 
- * Variants:
- *   'inline'   — Flows between content sections (default)
- *   'card'     — Matches category-card grid items on Writings page
- *   'feed'     — Instagram-feed style between items
+ * Set PREVIEW_MODE = true to show sample placeholder ads for visual testing.
+ * Set PREVIEW_MODE = false for real AdSense ads in production.
  */
+const PREVIEW_MODE = true; // ← Toggle this to switch between sample and real ads
+
 const AdBanner = ({ variant = 'inline', slot = '', className = '' }) => {
     const adRef = useRef(null);
     const pushed = useRef(false);
 
     useEffect(() => {
-        if (pushed.current) return;
-        // Small delay to let the DOM settle before pushing ad
+        if (PREVIEW_MODE || pushed.current) return;
         const timer = setTimeout(() => {
             try {
                 if (adRef.current && window.adsbygoogle) {
                     (window.adsbygoogle = window.adsbygoogle || []).push({});
                     pushed.current = true;
                 }
-            } catch (e) {
-                // AdSense not loaded or blocked — fail silently
-            }
+            } catch (e) {}
         }, 300);
         return () => clearTimeout(timer);
     }, []);
 
-    // Common ad insert element
+    // ── SAMPLE PLACEHOLDER (for visual testing) ──
+    const sampleAd = (
+        <div style={{
+            width: '100%',
+            minHeight: variant === 'card' ? '120px' : '90px',
+            background: 'linear-gradient(135deg, color-mix(in srgb, var(--text-main) 3%, transparent), color-mix(in srgb, var(--text-main) 6%, transparent))',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            padding: '20px',
+            border: '1px dashed color-mix(in srgb, var(--text-main) 10%, transparent)',
+            boxSizing: 'border-box',
+        }}>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--text-muted)', opacity: 0.4, marginBottom: '6px' }}>
+                    Ad · Sponsored
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', opacity: 0.5 }}>
+                    Google AdSense will appear here
+                </div>
+            </div>
+        </div>
+    );
+
+    // Real AdSense element
     const adInsert = (
         <ins
             ref={adRef}
@@ -42,136 +64,17 @@ const AdBanner = ({ variant = 'inline', slot = '', className = '' }) => {
         />
     );
 
-    // ── CARD VARIANT ──
-    // Looks exactly like a category-card in the Writings grid
-    if (variant === 'card') {
-        return (
-            <div className={`elvan-ad elvan-ad--card ${className}`}>
-                <style>{`
-                    .elvan-ad--card {
-                        background: var(--bg-card);
-                        border: 1px solid var(--border-light);
-                        border-radius: 20px;
-                        padding: 24px;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 16px;
-                        position: relative;
-                        overflow: hidden;
-                        min-height: 220px;
-                        transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
-                    }
-                    .elvan-ad--card::after {
-                        content: '';
-                        position: absolute;
-                        bottom: -20px;
-                        right: -20px;
-                        width: 100px;
-                        height: 100px;
-                        background: var(--text-main);
-                        opacity: 0.03;
-                        border-radius: 50%;
-                    }
-                    .elvan-ad__card-header {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                    }
-                    .elvan-ad__card-icon {
-                        width: 56px;
-                        height: 56px;
-                        background: var(--bg-panel);
-                        border-radius: 16px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 1.4rem;
-                        color: var(--text-muted);
-                        opacity: 0.5;
-                        flex-shrink: 0;
-                    }
-                    .elvan-ad__card-label {
-                        font-size: 0.7rem;
-                        font-weight: 600;
-                        text-transform: uppercase;
-                        letter-spacing: 1px;
-                        color: var(--text-muted);
-                        opacity: 0.4;
-                    }
-                    .elvan-ad__card-body {
-                        flex: 1;
-                        border-radius: 12px;
-                        overflow: hidden;
-                        min-height: 90px;
-                    }
-                `}</style>
-                <div className="elvan-ad__card-header">
-                    <div className="elvan-ad__card-icon">📌</div>
-                    <span className="elvan-ad__card-label">Promoted</span>
-                </div>
-                <div className="elvan-ad__card-body">
-                    {adInsert}
-                </div>
-            </div>
-        );
-    }
+    const content = PREVIEW_MODE ? sampleAd : adInsert;
 
-    // ── FEED VARIANT ──
-    // Looks like a natural content block in a feed/list (like IG sponsored)
-    if (variant === 'feed') {
-        return (
-            <div className={`elvan-ad elvan-ad--feed ${className}`}>
-                <style>{`
-                    .elvan-ad--feed {
-                        width: 100%;
-                        padding: 0;
-                        margin: 0;
-                        border-top: 1px solid var(--border-light);
-                        border-bottom: 1px solid var(--border-light);
-                        background: var(--bg-card);
-                        overflow: hidden;
-                    }
-                    .elvan-ad__feed-label {
-                        padding: 10px 20px 6px;
-                        font-size: 0.7rem;
-                        font-weight: 600;
-                        text-transform: uppercase;
-                        letter-spacing: 1px;
-                        color: var(--text-muted);
-                        opacity: 0.4;
-                    }
-                    .elvan-ad__feed-body {
-                        padding: 0 20px 14px;
-                        min-height: 60px;
-                    }
-                `}</style>
-                <div className="elvan-ad__feed-label">Sponsored</div>
-                <div className="elvan-ad__feed-body">
-                    {adInsert}
-                </div>
-            </div>
-        );
-    }
-
-    // ── INLINE VARIANT (default) ──
-    // Zero-chrome: no border, no background — just flows with content
+    // ── INLINE VARIANT (default) — zero chrome ──
     return (
-        <div className={`elvan-ad elvan-ad--inline ${className}`}>
-            <style>{`
-                .elvan-ad--inline {
-                    width: 100%;
-                    margin: 0;
-                    padding: 0;
-                    overflow: hidden;
-                    border-radius: 0;
-                    background: transparent;
-                    min-height: 50px;
-                }
-                .elvan-ad--inline ins {
-                    background: transparent !important;
-                }
-            `}</style>
-            {adInsert}
+        <div className={`elvan-ad elvan-ad--inline ${className}`} style={{
+            width: '100%',
+            margin: '40px 0',
+            padding: 0,
+            overflow: 'hidden',
+        }}>
+            {content}
         </div>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { BsDisplay } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import AdBanner from '../components/AdBanner';
 
 const Teaching = () => {
     return (
@@ -71,6 +72,8 @@ const Teaching = () => {
                     <div className="cat-footer">விளக்கக்காட்சியைக் காண <FiArrowRight /></div>
                 </Link>
             </div>
+
+            <AdBanner variant="inline" />
 
             <div style={{ height: '56px' }}></div>
         </div>

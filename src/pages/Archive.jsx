@@ -10,6 +10,7 @@ import { FiHeart, FiMessageCircle, FiX, FiChevronLeft, FiChevronRight, FiPlay, F
 import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
 import ReelsViewer from '../components/ReelsViewer';
+import AdBanner from '../components/AdBanner';
 
 const Archive = () => {
     // Destructure Data
@@ -1465,6 +1466,10 @@ const Archive = () => {
                         );
                     })}
                 </div>
+            </div>
+
+            <div style={{ maxWidth: '935px', margin: '0 auto', padding: '0 20px' }}>
+                <AdBanner variant="inline" />
             </div>
 
             {/* --- NEW STORY VIEWER --- */}
