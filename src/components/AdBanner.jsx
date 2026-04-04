@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from 'react';
  */
 const PREVIEW_MODE = false; // ← Toggle this to switch between sample and real ads
 
-const AdBanner = ({ variant = 'inline', slot = '', className = '', wrapperStyle = {}, wrapperClass = '' }) => {
+const AdBanner = ({ variant = 'inline', slot = '1749945992', className = '', wrapperStyle = {}, wrapperClass = '' }) => {
     const adRef = useRef(null);
     const pushed = useRef(false);
     // Start as false — container is hidden until a real ad fills
