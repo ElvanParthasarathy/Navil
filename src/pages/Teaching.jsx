@@ -73,9 +73,7 @@ const Teaching = () => {
                 </Link>
             </div>
 
-            <AdBanner variant="inline" />
-
-            <div style={{ height: '56px' }}></div>
+            <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
         </div>
     );
 };

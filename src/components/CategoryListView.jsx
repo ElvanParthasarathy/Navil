@@ -306,9 +306,7 @@ const CategoryListView = () => {
                         // Insert a native-looking ad after the 3rd item
                         if (idx === 2) {
                             acc.push(
-                                <div key="ad-feed" style={{ padding: '48px 0' }}>
-                                    <AdBanner variant="inline" />
-                                </div>
+                                <AdBanner key="ad-feed" variant="inline" wrapperStyle={{ padding: '48px 0' }} />
                             );
                         }
                         return acc;
@@ -316,6 +314,7 @@ const CategoryListView = () => {
                 ) : (
                     <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
                         <p>No content available yet. Check back soon!</p>
+                        <AdBanner variant="inline" wrapperStyle={{ padding: '40px 0', marginTop: '20px' }} />
                     </div>
                 )}
             </div>

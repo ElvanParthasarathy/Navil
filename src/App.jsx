@@ -17,6 +17,7 @@ import Poems from './pages/writings/Poems';
 import Admin from './pages/Admin';
 import CategoryListView from './components/CategoryListView';
 import ReadingView from './components/ReadingView';
+import AdBanner from './components/AdBanner';
 
 // Create a Context for Theme
 const ThemeContext = React.createContext({ theme: 'auto', setTheme: () => { }, toggleTheme: () => { } });
@@ -129,6 +130,14 @@ const Layout = () => {
                             className="mobile-only-nav-item"
                             collapsed={isSidebarCollapsed}
                         />
+                        
+                    </div>
+                    
+                    {/* Always rendered to avoid mount/unmount layout shifts — hidden via display:none */}
+                    <div style={{
+                        display: (location.pathname.startsWith('/teaching') && !isSidebarCollapsed) ? 'block' : 'none',
+                    }}>
+                        <AdBanner variant="inline" wrapperClass="sidebar-ad" wrapperStyle={{ width: '100%', padding: '10px 15px 0', flexShrink: 0 }} />
                     </div>
                 </div>
 

@@ -978,19 +978,24 @@ const WritingPage = ({
                             acc.push(item);
                             if (idx < arr.length - 1) {
                                 acc.push(
-                                    <div key={`ad-inline-${idx}`} style={{ padding: '40px 0', borderBottom: '1px solid var(--border-light)' }}>
-                                        <AdBanner variant="inline" />
-                                    </div>
+                                    <AdBanner 
+                                        key={`ad-inline-${idx}`} 
+                                        variant="inline" 
+                                        wrapperStyle={{ marginTop: '-40px', marginBottom: '80px', paddingBottom: '40px', borderBottom: '1px solid var(--border-light)' }} 
+                                    />
                                 );
                             }
                             return acc;
                         }, [])
                     ) : (
-                        <div className="poems-empty">I couldn't find any piece of work that matches.</div>
+                        <div className="poems-empty">
+                            <p>I couldn't find any piece of work that matches.</p>
+                            <AdBanner variant="inline" wrapperStyle={{ padding: '40px 0', marginTop: '20px' }} />
+                        </div>
                     )}
                 </div>
 
-                <AdBanner variant="inline" />
+                <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
                 {totalPages > 1 && (
                     <div className="pagination-wrapper">

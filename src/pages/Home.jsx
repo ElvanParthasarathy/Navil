@@ -256,7 +256,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <AdBanner variant="inline" />
+            <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
             <div className="contact-footer animate-entry">
                 <div className="contact-info-block">

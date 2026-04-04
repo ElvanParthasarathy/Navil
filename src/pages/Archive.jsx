@@ -1468,9 +1468,7 @@ const Archive = () => {
                 </div>
             </div>
 
-            <div style={{ maxWidth: '935px', margin: '0 auto', padding: '0 20px' }}>
-                <AdBanner variant="inline" />
-            </div>
+            <AdBanner variant="inline" wrapperStyle={{ maxWidth: '935px', margin: '40px auto' }} />
 
             {/* --- NEW STORY VIEWER --- */}
             {viewingHighlight && (
@@ -1634,9 +1632,7 @@ const Archive = () => {
                                     <div className="modal-date">{selectedPost.date}</div>
                                     
                                     {/* Ad filling the blank space below caption */}
-                                    <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
-                                        <AdBanner variant="inline" />
-                                    </div>
+                                    <AdBanner variant="inline" wrapperStyle={{ marginTop: 'auto', paddingTop: '20px' }} />
                                 </div>
                                 <div style={{ marginTop: 15, borderTop: '1px solid #efefef', paddingTop: 10, display: 'flex', gap: 15 }}>
                                     <FiHeart size={24} />
@@ -1687,9 +1683,11 @@ const Archive = () => {
                                     // Inject ad after every post in the mobile feed
                                     if (idx < arr.length - 1) {
                                         acc.push(
-                                            <div key={`ad-${post.id}`} style={{ padding: '24px 0', borderBottom: '1px solid var(--border-color)' }}>
-                                                <AdBanner variant="inline" />
-                                            </div>
+                                            <AdBanner 
+                                                key={`ad-${post.id}`} 
+                                                variant="inline" 
+                                                wrapperStyle={{ padding: '24px 0', borderBottom: '1px solid var(--border-color)' }} 
+                                            />
                                         );
                                     }
                                     

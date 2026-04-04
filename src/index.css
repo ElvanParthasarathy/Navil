@@ -223,7 +223,7 @@ body {
   flex-direction: column;
   gap: 15px;
   width: auto;
-  flex: 1;
+  flex: 0 1 auto;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;

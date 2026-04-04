@@ -454,7 +454,7 @@ const ReadingView = () => {
                 )}
             </article>
 
-            <AdBanner variant="inline" />
+            <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
             {/* Rich content body styles */}
             <style>{`
