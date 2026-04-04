@@ -454,7 +454,7 @@ const ReadingView = () => {
                 )}
             </article>
 
-            <AdBanner format="horizontal" />
+            <AdBanner variant="inline" />
 
             {/* Rich content body styles */}
             <style>{`

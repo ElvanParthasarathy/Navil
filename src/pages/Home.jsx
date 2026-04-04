@@ -256,7 +256,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <AdBanner format="horizontal" />
+            <AdBanner variant="inline" />
 
             <div className="contact-footer animate-entry">
                 <div className="contact-info-block">

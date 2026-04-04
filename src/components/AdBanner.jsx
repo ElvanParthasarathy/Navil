@@ -1,112 +1,177 @@
 import React, { useEffect, useRef } from 'react';
 
 /**
- * AdBanner — A subtle, non-intrusive Google AdSense banner.
- * Designed to blend with content like Android TV banner ads.
+ * AdBanner — Fully integrated Google AdSense component.
+ * Designed to feel like native site content, not a foreign element.
  * 
- * Props:
- *   format  — 'auto' (default), 'horizontal', 'rectangle'
- *   slot    — AdSense ad slot ID (optional, uses default)
- *   style   — additional CSS overrides
+ * Variants:
+ *   'inline'   — Flows between content sections (default)
+ *   'card'     — Matches category-card grid items on Writings page
+ *   'feed'     — Instagram-feed style between items
  */
-const AdBanner = ({ format = 'auto', slot = '', style = {} }) => {
+const AdBanner = ({ variant = 'inline', slot = '', className = '' }) => {
     const adRef = useRef(null);
     const pushed = useRef(false);
 
     useEffect(() => {
-        // Only push once per component mount
         if (pushed.current) return;
-        try {
-            if (window.adsbygoogle && adRef.current) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                pushed.current = true;
+        // Small delay to let the DOM settle before pushing ad
+        const timer = setTimeout(() => {
+            try {
+                if (adRef.current && window.adsbygoogle) {
+                    (window.adsbygoogle = window.adsbygoogle || []).push({});
+                    pushed.current = true;
+                }
+            } catch (e) {
+                // AdSense not loaded or blocked — fail silently
             }
-        } catch (e) {
-            // AdSense not loaded or ad blocked — fail silently
-        }
+        }, 300);
+        return () => clearTimeout(timer);
     }, []);
 
-    return (
-        <div className="ad-banner-wrapper" style={style}>
-            <style>{`
-                .ad-banner-wrapper {
-                    width: 100%;
-                    max-width: 100%;
-                    display: flex;
-                    justify-content: center;
-                    margin: 32px auto;
-                    padding: 0 20px;
-                    box-sizing: border-box;
-                    opacity: 0;
-                    animation: adFadeIn 0.8s ease 0.5s forwards;
-                }
+    // Common ad insert element
+    const adInsert = (
+        <ins
+            ref={adRef}
+            className="adsbygoogle"
+            style={{ display: 'block', width: '100%' }}
+            data-ad-client="ca-pub-5392072917035799"
+            data-ad-slot={slot}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+        />
+    );
 
-                @keyframes adFadeIn {
-                    from { opacity: 0; transform: translateY(8px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-
-                .ad-banner-inner {
-                    width: 100%;
-                    max-width: 728px;
-                    min-height: 50px;
-                    background: color-mix(in srgb, var(--bg-panel) 60%, transparent);
-                    border: 1px solid var(--border-light);
-                    border-radius: 16px;
-                    overflow: hidden;
-                    position: relative;
-                    padding: 4px;
-                }
-
-                /* Subtle "Sponsored" label */
-                .ad-banner-label {
-                    position: absolute;
-                    top: 6px;
-                    right: 10px;
-                    font-size: 0.6rem;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    letter-spacing: 0.8px;
-                    color: var(--text-muted);
-                    opacity: 0.35;
-                    z-index: 2;
-                    pointer-events: none;
-                }
-
-                .ad-banner-inner ins {
-                    border-radius: 12px;
-                    overflow: hidden;
-                }
-
-                /* On mobile, make it edge-to-edge but still rounded */
-                @media (max-width: 768px) {
-                    .ad-banner-wrapper {
-                        margin: 24px auto;
-                        padding: 0 16px;
+    // ── CARD VARIANT ──
+    // Looks exactly like a category-card in the Writings grid
+    if (variant === 'card') {
+        return (
+            <div className={`elvan-ad elvan-ad--card ${className}`}>
+                <style>{`
+                    .elvan-ad--card {
+                        background: var(--bg-card);
+                        border: 1px solid var(--border-light);
+                        border-radius: 20px;
+                        padding: 24px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        position: relative;
+                        overflow: hidden;
+                        min-height: 220px;
+                        transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
                     }
-                    .ad-banner-inner {
+                    .elvan-ad--card::after {
+                        content: '';
+                        position: absolute;
+                        bottom: -20px;
+                        right: -20px;
+                        width: 100px;
+                        height: 100px;
+                        background: var(--text-main);
+                        opacity: 0.03;
+                        border-radius: 50%;
+                    }
+                    .elvan-ad__card-header {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                    }
+                    .elvan-ad__card-icon {
+                        width: 56px;
+                        height: 56px;
+                        background: var(--bg-panel);
+                        border-radius: 16px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.4rem;
+                        color: var(--text-muted);
+                        opacity: 0.5;
+                        flex-shrink: 0;
+                    }
+                    .elvan-ad__card-label {
+                        font-size: 0.7rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        color: var(--text-muted);
+                        opacity: 0.4;
+                    }
+                    .elvan-ad__card-body {
+                        flex: 1;
                         border-radius: 12px;
-                        min-height: 50px;
+                        overflow: hidden;
+                        min-height: 90px;
                     }
+                `}</style>
+                <div className="elvan-ad__card-header">
+                    <div className="elvan-ad__card-icon">📌</div>
+                    <span className="elvan-ad__card-label">Promoted</span>
+                </div>
+                <div className="elvan-ad__card-body">
+                    {adInsert}
+                </div>
+            </div>
+        );
+    }
+
+    // ── FEED VARIANT ──
+    // Looks like a natural content block in a feed/list (like IG sponsored)
+    if (variant === 'feed') {
+        return (
+            <div className={`elvan-ad elvan-ad--feed ${className}`}>
+                <style>{`
+                    .elvan-ad--feed {
+                        width: 100%;
+                        padding: 0;
+                        margin: 0;
+                        border-top: 1px solid var(--border-light);
+                        border-bottom: 1px solid var(--border-light);
+                        background: var(--bg-card);
+                        overflow: hidden;
+                    }
+                    .elvan-ad__feed-label {
+                        padding: 10px 20px 6px;
+                        font-size: 0.7rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        color: var(--text-muted);
+                        opacity: 0.4;
+                    }
+                    .elvan-ad__feed-body {
+                        padding: 0 20px 14px;
+                        min-height: 60px;
+                    }
+                `}</style>
+                <div className="elvan-ad__feed-label">Sponsored</div>
+                <div className="elvan-ad__feed-body">
+                    {adInsert}
+                </div>
+            </div>
+        );
+    }
+
+    // ── INLINE VARIANT (default) ──
+    // Zero-chrome: no border, no background — just flows with content
+    return (
+        <div className={`elvan-ad elvan-ad--inline ${className}`}>
+            <style>{`
+                .elvan-ad--inline {
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                    border-radius: 0;
+                    background: transparent;
+                    min-height: 50px;
+                }
+                .elvan-ad--inline ins {
+                    background: transparent !important;
                 }
             `}</style>
-
-            <div className="ad-banner-inner">
-                <span className="ad-banner-label">Sponsored</span>
-                <ins
-                    ref={adRef}
-                    className="adsbygoogle"
-                    style={{
-                        display: 'block',
-                        width: '100%',
-                        minHeight: '50px',
-                    }}
-                    data-ad-client="ca-pub-5392072917035799"
-                    data-ad-slot={slot}
-                    data-ad-format={format}
-                    data-full-width-responsive="true"
-                />
-            </div>
+            {adInsert}
         </div>
     );
 };

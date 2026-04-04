@@ -306,7 +306,7 @@ const Writings = () => {
                 </Link>
             </div>
 
-            <AdBanner format="horizontal" />
+            <AdBanner variant="inline" />
 
             <div style={{ height: '56px' }}></div>
         </div>

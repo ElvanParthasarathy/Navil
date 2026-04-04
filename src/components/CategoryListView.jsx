@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiCalendar } from 'react-icons/fi';
 import { supabase } from '../lib/supabaseClient';
+import AdBanner from './AdBanner';
 
 const CATEGORY_META = {
     'blog': {
@@ -300,6 +301,18 @@ const CategoryListView = () => {
                             </Link>
                         );
                     })
+                    .reduce((acc, item, idx) => {
+                        acc.push(item);
+                        // Insert a native-looking ad after the 3rd item
+                        if (idx === 2) {
+                            acc.push(
+                                <div key="ad-feed" style={{ padding: '48px 0' }}>
+                                    <AdBanner variant="inline" />
+                                </div>
+                            );
+                        }
+                        return acc;
+                    }, [])
                 ) : (
                     <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
                         <p>No content available yet. Check back soon!</p>

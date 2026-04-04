@@ -268,7 +268,7 @@ const About = () => {
                 </div>
             </div>
 
-            <AdBanner format="horizontal" />
+            <AdBanner variant="inline" />
 
             <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="contact-info">
