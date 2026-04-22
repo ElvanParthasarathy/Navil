@@ -90,11 +90,7 @@ const Admin = () => {
         });
     };
 
-    const handleSignOut = () => {
-        setIsLoggedIn(false);
-        setUsername('');
-        setIsProfilePopupOpen(false);
-    };
+
 
     // Close popup on outside click
     useEffect(() => {
@@ -107,14 +103,51 @@ const Admin = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // ── Auth Handling ──
+    useEffect(() => {
+        // Initial session check
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setIsLoggedIn(true);
+                setUsername(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Admin');
+            }
+        });
+
+        // Listen for changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                setIsLoggedIn(true);
+                setUsername(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Admin');
+            } else if (event === 'SIGNED_OUT') {
+                setIsLoggedIn(false);
+                setUsername('');
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+        setIsLoggedIn(false);
+        setUsername('');
+        setIsProfilePopupOpen(false);
+    };
+
     // Login handler
-    const handleLogin = (user, pass) => {
-        if (user === 'jaiprakashvp2006@gmail.com' && pass === 'jaione2006@elvan') {
-            setUsername('Jaiprakash');
-            setIsLoggedIn(true);
-            return true;
+    const handleLogin = async (email, password) => {
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) return { success: false, error: error.message };
+            return { success: true };
+        } catch (err) {
+            console.error('Login error:', err.message);
+            return { success: false, error: 'An unexpected error occurred.' };
         }
-        return false;
     };
 
     // Load data from Supabase on mount
