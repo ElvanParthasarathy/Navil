@@ -598,7 +598,7 @@ const WritingPage = ({
                 }
 
                 .poem-title {
-                    font-family: "Mukta Malar", "Noto Sans Malayalam", sans-serif;
+                    font-family: inherit;
                     font-size: 1.8rem;
                     font-weight: 700;
                     letter-spacing: -1px;
@@ -651,7 +651,7 @@ const WritingPage = ({
                 }
                 
                 .variant-title {
-                    font-family: "Mukta Malar", "Noto Sans Malayalam", sans-serif;
+                    font-family: inherit;
                     font-size: 1.5rem;
                     font-weight: 700;
                     margin-bottom: 14px;
@@ -673,7 +673,7 @@ const WritingPage = ({
                 }
 
                 .poem-attribution {
-                    font-family: "Mukta Malar", "Noto Sans Malayalam", sans-serif;
+                    font-family: inherit;
                     margin-top: 24px;
                     font-size: 1.15rem;
                     color: var(--text-muted);

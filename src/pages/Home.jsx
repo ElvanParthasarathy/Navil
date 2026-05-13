@@ -76,7 +76,6 @@ const Home = () => {
                 }
 
                 .hero-subtitle {
-                    font-family: 'Mukta Malar', sans-serif;
                     font-size: clamp(1.4rem, 2vw, 1.75rem);
                     color: var(--text-muted);
                     margin-bottom: 16px;

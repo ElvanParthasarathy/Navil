@@ -64,7 +64,6 @@ const About = () => {
                 }
 
                 .hero-subtitle {
-                    font-family: 'Mukta Malar', sans-serif;
                     font-size: clamp(1.1rem, 2vw, 1.3rem);
                     color: var(--text-muted);
                     font-weight: 500;
@@ -157,7 +156,6 @@ const About = () => {
 
                 /* PHILOSOPHY TEXT */
                 .philosophy-text {
-                    font-family: 'Mukta Malar', serif;
                     font-size: 1.35rem;
                     line-height: 1.5;
                     color: var(--text-main);

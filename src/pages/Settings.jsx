@@ -29,7 +29,6 @@ const Settings = () => {
                 }
 
                 .settings-subtitle {
-                    font-family: 'Mukta Malar', sans-serif;
                     font-size: 1.1rem;
                     color: var(--text-muted);
                     font-weight: 500;
