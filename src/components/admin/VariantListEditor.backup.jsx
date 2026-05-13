@@ -3,16 +3,6 @@ import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronD
 import { SCHEMAS, renderFieldRow, PinEditor, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
 
-// Classification colors — preset for known types, auto-generated for custom
-const CLASSIFICATION_COLORS = { 'அகம்': '#e8a0bf', 'புறம்': '#d4af37' };
-const getClassColor = (name) => {
-    if (!name) return '#888';
-    if (CLASSIFICATION_COLORS[name]) return CLASSIFICATION_COLORS[name];
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    return `hsl(${((hash % 360) + 360) % 360}, 55%, 60%)`;
-};
-
 export const VariantListEditor = ({
     items,
     collection,
@@ -165,45 +155,10 @@ export const VariantListEditor = ({
                 .select-all-hint input[type="checkbox"] {
                     width: 14px; height: 14px; accent-color: var(--accent, #088370); cursor: pointer;
                 }
-                .admin-file-row-meta {
-                    display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px;
-                }
-                .row-pin-badge {
-                    font-size: 0.75rem;
-                }
-                .row-class-badge {
-                    display: inline-flex; align-items: center;
-                    font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-                    padding: 2px 8px; border-radius: 99px;
-                    background: color-mix(in srgb, currentColor 15%, transparent);
-                }
-                .row-lang-dots {
-                    display: inline-flex; align-items: center; gap: 3px;
-                }
-                .row-lang-dot {
-                    display: inline-flex; align-items: center; justify-content: center;
-                    width: 20px; height: 20px; border-radius: 50%;
-                    font-size: 0.55rem; font-weight: 700;
-                    background: color-mix(in srgb, var(--text-main, #eee) 8%, transparent);
-                    color: var(--text-muted, #888);
-                }
-                .row-tag-pill {
-                    display: inline-flex; align-items: center;
-                    font-size: 0.65rem; font-weight: 600;
-                    padding: 1px 7px; border-radius: 99px;
-                    background: color-mix(in srgb, var(--accent, #088370) 12%, transparent);
-                    color: var(--text-muted, #aaa);
-                }
-                .row-date {
-                    font-size: 0.7rem; color: var(--text-muted, #666); font-weight: 500;
-                    margin-left: 2px;
-                }
                 @media (max-width: 600px) {
                     .bulk-toolbar { flex-direction: column; align-items: flex-start; }
                     .bulk-toolbar-right { width: 100%; }
                     .bulk-select { max-width: 100%; flex: 1; }
-                    .admin-file-row-meta { gap: 4px; }
-                    .row-class-badge, .row-tag-pill { font-size: 0.6rem; }
                 }
             `}</style>
 
@@ -285,30 +240,10 @@ export const VariantListEditor = ({
                                             </div>
                                             <div className="admin-file-row-info">
                                                 <h3>{SCHEMAS[collection].getItemTitle(listItem)}</h3>
-                                                <div className="admin-file-row-meta">
-                                                    {listItem.isPinned && <span className="row-pin-badge">✨</span>}
-                                                    {listItem.classification && (
-                                                        <span className="row-class-badge" style={{ color: getClassColor(listItem.classification) }}>{listItem.classification}</span>
-                                                    )}
-                                                    {listItem.variants?.length > 0 && (
-                                                        <span className="row-lang-dots">
-                                                            {listItem.variants.map((v, vi) => (
-                                                                <span key={vi} className="row-lang-dot" title={v.lang}>
-                                                                    {{ ta: 'த', ml: 'മ', en: 'Aa', hi: 'हि' }[v.lang] || v.lang}
-                                                                </span>
-                                                            ))}
-                                                        </span>
-                                                    )}
-                                                    {(listItem.tags || []).slice(0, 2).map((tag, ti) => (
-                                                        <span key={ti} className="row-tag-pill">{tag}</span>
-                                                    ))}
-                                                    {(listItem.tags || []).length > 2 && (
-                                                        <span className="row-tag-pill" style={{ opacity: 0.5 }}>+{listItem.tags.length - 2}</span>
-                                                    )}
-                                                    {listItem.date && (
-                                                        <span className="row-date">{new Date(listItem.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
-                                                    )}
-                                                </div>
+                                                <span className="admin-file-row-sub">
+                                                    {SCHEMAS[collection].getItemSubtitle(listItem)}
+                                                    {listItem.variants?.length > 0 && ` • ${listItem.variants.length} lang${listItem.variants.length > 1 ? 's' : ''}`}
+                                                </span>
                                             </div>
                                             <div className="admin-file-row-actions">
                                                 <div className="admin-move-controls">

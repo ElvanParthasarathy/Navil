@@ -3,6 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
+import HardBreak from '@tiptap/extension-hard-break';
 
 const MenuBar = ({ editor }) => {
     if (!editor) return null;
@@ -90,6 +91,19 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
         extensions: [
             StarterKit.configure({
                 heading: { levels: [2, 3] },
+                hardBreak: false, // We add our own below
+            }),
+            // Enter = line break (<br>), Shift+Enter = new paragraph
+            HardBreak.extend({
+                addKeyboardShortcuts() {
+                    return {
+                        'Enter': () => this.editor.commands.setHardBreak(),
+                        'Shift-Enter': () => {
+                            this.editor.commands.splitBlock();
+                            return true;
+                        },
+                    };
+                },
             }),
             Image.configure({ inline: false }),
             Placeholder.configure({ placeholder }),
@@ -139,9 +153,12 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
                     max-height: 600px;
                     overflow-y: auto;
                     font-size: 1.05rem;
-                    line-height: 1.8;
+                    line-height: 1.7;
                     color: var(--text-main);
                     outline: none;
+                }
+                .rte-wrapper .tiptap p {
+                    margin: 0;
                 }
                 .rte-wrapper .tiptap p.is-editor-empty:first-child::before {
                     content: attr(data-placeholder);

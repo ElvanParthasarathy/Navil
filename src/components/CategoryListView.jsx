@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiCalendar } from 'react-icons/fi';
-import { supabase } from '../lib/supabaseClient';
+import { db } from '../lib/firebaseClient';
+import { ref, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
 
 const CATEGORY_META = {
@@ -52,21 +53,43 @@ const CategoryListView = () => {
 
     useEffect(() => {
         if (!meta) return;
-        const fetchPosts = async () => {
-            setLoading(true);
-            const { data, error } = await supabase
-                .from(meta.table)
-                .select('*')
-                .order('display_order', { ascending: true })
-                .order('publish_date', { ascending: false });
-
-            if (!error && data) {
-                setPosts(data);
+        setLoading(true);
+        const catRef = ref(db, category);
+        const unsubscribe = onValue(catRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const dataObj = snapshot.val();
+                const dataArray = Object.entries(dataObj).map(([slug, val]) => {
+                    const item = { ...val, id: slug };
+                    if (item.variants) {
+                        if (!Array.isArray(item.variants)) item.variants = Object.values(item.variants);
+                        item.variants.forEach(v => {
+                            if (v.transliterations?._empty) delete v.transliterations._empty;
+                            if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                            if (!v.transliterations) v.transliterations = {};
+                            if (!v.titleTransliterations) v.titleTransliterations = {};
+                        });
+                    }
+                    return item;
+                });
+                
+                dataArray.sort((a, b) => {
+                    if (a.display_order !== b.display_order) return (a.display_order || 0) - (b.display_order || 0);
+                    const da = new Date(a.publish_date || a.date || 0);
+                    const dbDate = new Date(b.publish_date || b.date || 0);
+                    return dbDate - da;
+                });
+                setPosts(dataArray);
+            } else {
+                setPosts([]);
             }
             setLoading(false);
-        };
-        fetchPosts();
+        }, (error) => {
+            console.error("Firebase fetch error:", error);
+            setLoading(false);
+        });
+
         setCurrentPage(1);
+        return () => unsubscribe();
     }, [category, meta]);
 
     useEffect(() => {

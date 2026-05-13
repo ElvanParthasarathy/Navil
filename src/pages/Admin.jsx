@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut } from 'react-icons/fi';
+import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { db, auth } from '../lib/firebaseClient';
+import { ref, get, set } from 'firebase/database';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SCHEMAS, SharedDatalists } from '../components/admin/AdminShared';
+import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS } from '../components/admin/AdminShared';
 import { ProfileEditor } from '../components/admin/ProfileEditor';
 import { PoemEditor } from '../components/admin/PoemEditor';
 import { QuoteEditor } from '../components/admin/QuoteEditor';
@@ -58,7 +60,8 @@ const Admin = () => {
         essays: [],
         stories: [],
         thoughts: [],
-        diary: []
+        diary: [],
+        defaultAuthors: { ...DEFAULT_AUTHORS },
     });
 
     // Apply admin theme
@@ -105,30 +108,20 @@ const Admin = () => {
 
     // ── Auth Handling ──
     useEffect(() => {
-        // Initial session check
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
                 setIsLoggedIn(true);
-                setUsername(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Admin');
-            }
-        });
-
-        // Listen for changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN' && session) {
-                setIsLoggedIn(true);
-                setUsername(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Admin');
-            } else if (event === 'SIGNED_OUT') {
+                setUsername(user.displayName || user.email?.split('@')[0] || 'Admin');
+            } else {
                 setIsLoggedIn(false);
                 setUsername('');
             }
         });
-
-        return () => subscription.unsubscribe();
+        return () => unsubscribe();
     }, []);
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut();
+        await signOut(auth);
         setIsLoggedIn(false);
         setUsername('');
         setIsProfilePopupOpen(false);
@@ -137,205 +130,193 @@ const Admin = () => {
     // Login handler
     const handleLogin = async (email, password) => {
         try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-
-            if (error) return { success: false, error: error.message };
+            await signInWithEmailAndPassword(auth, email, password);
             return { success: true };
         } catch (err) {
             console.error('Login error:', err.message);
-            return { success: false, error: 'An unexpected error occurred.' };
+            return { success: false, error: err.message || 'An unexpected error occurred.' };
         }
     };
 
-    // Load data from Supabase on mount
+    // Google Login handler
+    const handleGoogleLogin = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            return { success: true };
+        } catch (err) {
+            console.error('Google login error:', err.message);
+            return { success: false, error: err.message || 'An unexpected error occurred.' };
+        }
+    };
+
+    // Load data from Firebase on mount
     useEffect(() => {
-        const loadFromSupabase = async () => {
+        const loadFromFirebase = async () => {
             try {
-                // Legacy custom ones (poems/quotes)
-                const { data: poems } = await supabase.from('poems').select('*').order('display_order', { ascending: true }).order('date', { ascending: false });
-                if (poems) {
-                    const mapped = poems.map(p => ({
-                        ...p, isPinned: p.is_pinned, pinExpiresAt: p.pin_expires_at, pinType: p.pin_type || 'auto', displayOrder: p.display_order || 0
-                    }));
-                    setDataStore(prev => ({ ...prev, poems: mapped }));
-                }
-
-                const { data: quotes } = await supabase.from('quotes').select('*').order('display_order', { ascending: true }).order('date', { ascending: false });
-                if (quotes) {
-                    const mapped = quotes.map(q => ({
-                        ...q, isPinned: q.is_pinned, pinExpiresAt: q.pin_expires_at, pinType: q.pin_type || 'auto', displayOrder: q.display_order || 0
-                    }));
-                    setDataStore(prev => ({ ...prev, quotes: mapped }));
-                }
-
-                // New bilingual categories
-                const categories = [
-                    { key: 'blog', table: 'blog_posts' },
-                    { key: 'articles', table: 'articles_v2' },
-                    { key: 'essays', table: 'essays_v2' },
-                    { key: 'stories', table: 'short_stories_v2' },
-                    { key: 'thoughts', table: 'thoughts_v2' },
-                    { key: 'diary', table: 'diary_v2' }
-                ];
-
-                const promises = categories.map(async ({ key, table }) => {
-                    const { data } = await supabase.from(table).select('*')
-                        .order('display_order', { ascending: true })
-                        .order('publish_date', { ascending: false });
-                    if (data) {
-                        // Ensure variants is an array, auto-migrate old content{} if needed
-                        const processedData = data.map(item => {
-                            let variants = item.variants || [];
-
-                            // Auto-migrate legacy content to variants if empty
-                            if (variants.length === 0 && item.content) {
-                                Object.keys(item.content).forEach(lang => {
-                                    const lData = item.content[lang];
-                                    if (lData && (lData.title || lData.body)) {
-                                        variants.push({
-                                            lang: lang,
-                                            label: lang === 'ta' ? 'Original' : 'Translation',
-                                            title: lData.title || '',
-                                            text: (lData.body || '') + (lData.excerpt ? `\n\n<i>Excerpt: ${lData.excerpt}</i>` : ''),
-                                            author: '',
-                                            transliterations: {},
-                                            titleTransliterations: {}
-                                        });
+                const snapshot = await get(ref(db));
+                if (snapshot.exists()) {
+                    const allData = snapshot.val();
+                    const newDataStore = { ...dataStore };
+                    
+                    const categories = ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary'];
+                    
+                    categories.forEach(key => {
+                        if (allData[key]) {
+                            const itemsArray = Object.entries(allData[key]).map(([slug, val]) => {
+                                const item = { ...val, id: slug };
+                                
+                                // Clean up _empty placeholders from old migrations
+                                if (item.variants) {
+                                    (Array.isArray(item.variants) ? item.variants : Object.values(item.variants)).forEach(v => {
+                                        if (v.transliterations?._empty) delete v.transliterations._empty;
+                                        if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                                        // Default missing transliterations to empty objects
+                                        if (!v.transliterations) v.transliterations = {};
+                                        if (!v.titleTransliterations) v.titleTransliterations = {};
+                                    });
+                                    // Firebase stores arrays as objects with numeric keys — normalize back
+                                    if (!Array.isArray(item.variants)) {
+                                        item.variants = Object.values(item.variants);
                                     }
-                                });
-                            }
-
-                            return {
-                                ...item,
-                                variants,
-                                isPinned: item.is_pinned,
-                                pinExpiresAt: item.pin_expires_at,
-                                pinType: item.pin_type || 'auto'
-                            };
-                        });
-
-                        setDataStore(prev => ({ ...prev, [key]: processedData }));
+                                }
+                                
+                                // Normalize tags: string → array
+                                if (item.tags && typeof item.tags === 'string') {
+                                    item.tags = item.tags.split(',').map(t => t.trim()).filter(Boolean);
+                                }
+                                if (item.tags && !Array.isArray(item.tags)) {
+                                    item.tags = Object.values(item.tags); // Firebase may store arrays as objects
+                                }
+                                
+                                return item;
+                            });
+                            
+                            // Sort
+                            itemsArray.sort((a, b) => {
+                                if (a.display_order !== b.display_order) return (a.display_order || 0) - (b.display_order || 0);
+                                const dateA = new Date(a.publish_date || a.date || 0);
+                                const dateB = new Date(b.publish_date || b.date || 0);
+                                return dateB - dateA;
+                            });
+                            
+                            newDataStore[key] = itemsArray;
+                        }
+                    });
+                    
+                    if (allData.config && allData.config.profile) {
+                        newDataStore.profile = allData.config.profile;
                     }
-                });
-
-                await Promise.all(promises);
-
+                    if (allData.config && allData.config.defaultAuthors) {
+                        newDataStore.defaultAuthors = { ...DEFAULT_AUTHORS, ...allData.config.defaultAuthors };
+                    }
+                    
+                    setDataStore(newDataStore);
+                }
             } catch (err) {
-                console.warn('Supabase load failed:', err.message);
+                console.warn('Firebase load failed:', err.message);
             }
         };
-        loadFromSupabase();
-    }, []);
+        if (isLoggedIn) {
+            loadFromFirebase();
+        }
+    }, [isLoggedIn]);
 
     // ── Save (explicit only — never auto-saves) ──
     const handleSaveCollection = async (collection) => {
         setStatus('loading');
         setMessage('');
 
+        // Slug generator
+        const generateSlug = (text) => {
+            let slug = String(text)
+                .replace(/<[^>]+>/g, '').trim().toLowerCase()
+                .replace(/[.#$\[\]\/]/g, '')
+                .replace(/[\s\n\r]+/g, '-')
+                .substring(0, 50)
+                .replace(/^-+|-+$/g, '');
+            return slug || 'untitled';
+        };
+
         try {
             if (collection === 'profile') {
-                const response = await fetch('/api/saveData', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ collection: 'profile', data: dataStore.profile })
-                });
-                const resData = await response.json();
-                if (response.ok) {
-                    setStatus('success');
-                    setMessage('Profile saved successfully!');
-                    setIsProfileEditing(false);
-                } else {
-                    setStatus('error');
-                    setMessage(resData.error || 'Failed to save profile.');
-                }
+                await set(ref(db, 'config/profile'), dataStore.profile);
+                setStatus('success');
+                setMessage('Profile saved successfully!');
+                setIsProfileEditing(false);
                 return;
             }
 
             const items = dataStore[collection];
-            let tableName = SCHEMAS[collection]?.tableName || collection; // Uses tableName for new schema
-            let rows;
+            const usedKeys = new Set();
+            const updateObj = {};
+            const updatedItems = [...items]; // Track id changes for local state
 
-            if (collection === 'poems' || collection === 'quotes') {
-                rows = items.map((item, index) => ({
-                    id: String(item.id),
-                    variants: item.variants || [],
-                    is_pinned: item.isPinned || false,
-                    pin_expires_at: item.pinExpiresAt || null,
-                    pin_type: item.pinType || 'auto',
-                    urai: item.urai || '',
-                    notes: item.notes || '',
-                    title: item.title || '',
-                    date: item.date || null,
-                    style: item.style || '',
-                    theme: item.theme || '',
-                    meter: item.meter || '',
-                    dedication: item.dedication || '',
-                    classification: item.classification || null,
-                    display_order: index,
-                }));
-            } else {
-                // New unified schema — uses variants model like poems
-                const schema = SCHEMAS[collection];
-                rows = items.map((item, index) => {
-                    const row = {
-                        id: String(item.id),
-                        slug: item.slug || null,
-                        publish_date: item.publish_date || item.date || new Date().toISOString(),
-                        is_private: !!item.is_private,
-                        tags: item.tags ? (typeof item.tags === 'string' ? item.tags.split(',').map(t => t.trim()) : item.tags) : [],
-                        variants: item.variants || [],
-                        content: item.content || {},
-                        display_order: index
-                    };
+            items.forEach((item, index) => {
+                // Determine the key
+                let key = String(item.id);
+                const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(key);
 
-                    // Collect all possible extra fields from schema definitions
-                    const schemaKeys = [
-                        ...(schema.itemFields || []),
-                        ...(schema.row2Fields || []),
-                        ...(schema.row3Fields || []),
-                        ...(schema.extraFields || [])
-                    ].map(f => f.key);
+                if (isUUID) {
+                    // New item with temp UUID — generate a proper slug
+                    const firstVariant = item.variants?.[0];
+                    const titleTransl = firstVariant?.titleTransliterations || {};
+                    const bestTitle = item.title
+                        || titleTransl.en
+                        || item.variants?.find(v => v.lang === 'en')?.title
+                        || firstVariant?.title
+                        || 'untitled';
+                    key = generateSlug(bestTitle);
+                }
 
-                    if (schemaKeys.includes('cover_image')) row.cover_image = item.cover_image || null;
-                    if (schemaKeys.includes('series_name')) row.series_name = item.series_name || null;
-                    if (schemaKeys.includes('series_part')) row.series_part = item.series_part ? parseInt(item.series_part) : null;
+                // Handle duplicate keys
+                let finalKey = key;
+                let suffix = 1;
+                while (usedKeys.has(finalKey)) {
+                    finalKey = `${key}-${suffix}`;
+                    suffix++;
+                }
+                usedKeys.add(finalKey);
 
-                    if (schemaKeys.includes('classification')) row.classification = item.classification || null;
-                    if (schemaKeys.includes('style')) row.style = item.style || null;
-                    if (schemaKeys.includes('theme')) row.theme = item.theme || null;
-                    if (schemaKeys.includes('meter')) row.meter = item.meter || null;
+                // Build clean record (no id inside, no _empty, no legacy fields)
+                const row = { ...item, display_order: index };
+                delete row.id; // Firebase key IS the id
+                delete row.style;
+                delete row.theme;
+                delete row.meter;
+                delete row.slug;
 
-                    row.is_pinned = item.isPinned || false;
-                    row.pin_expires_at = item.pinExpiresAt || null;
-                    row.pin_type = item.pinType || 'auto';
+                if (!row.publish_date && !row.date) row.publish_date = new Date().toISOString();
 
-                    return row;
-                });
-            }
+                // Normalize tags to array
+                if (row.tags && typeof row.tags === 'string') {
+                    row.tags = row.tags.split(',').map(t => t.trim()).filter(Boolean);
+                }
 
-            let { error } = await supabase.from(tableName).upsert(rows, { onConflict: 'id' });
+                // Clean up variants
+                if (row.variants) {
+                    row.variants.forEach(v => {
+                        if (v.transliterations?._empty) delete v.transliterations._empty;
+                        if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                        if (v.transliterations && Object.keys(v.transliterations).length === 0) delete v.transliterations;
+                        if (v.titleTransliterations && Object.keys(v.titleTransliterations).length === 0) delete v.titleTransliterations;
+                    });
+                }
 
-            if (error && error.message.includes('column') && (collection === 'poems' || collection === 'quotes')) {
-                console.warn('Retrying save without new columns:', error.message);
-                const fallbackRows = rows.map(({ pin_type, classification, style, meter, dedication, display_order, ...rest }) => rest);
-                const retry = await supabase.from(tableName).upsert(fallbackRows, { onConflict: 'id' });
-                if (retry.error) throw new Error(retry.error.message);
-            } else if (error) {
-                throw new Error(error.message);
-            }
+                updateObj[finalKey] = row;
 
-            const localIds = rows.map(r => r.id);
-            const { data: dbRows } = await supabase.from(tableName).select('id');
-            const toDelete = (dbRows || []).filter(r => !localIds.includes(r.id)).map(r => r.id);
-            if (toDelete.length > 0) {
-                await supabase.from(tableName).delete().in('id', toDelete);
-            }
+                // Update local state id to match the new key
+                updatedItems[index] = { ...item, id: finalKey };
+            });
+
+            // Atomic write of entire collection
+            await set(ref(db, collection), updateObj);
+
+            // Update local state with the new clean IDs
+            setDataStore(prev => ({ ...prev, [collection]: updatedItems }));
 
             setStatus('success');
-            setMessage('Saved to Supabase!');
+            setMessage('Saved to Firebase!');
         } catch (error) {
             setStatus('error');
             setMessage(error.message || 'Network error.');
@@ -500,6 +481,38 @@ const Admin = () => {
         setDataStore(prev => ({ ...prev, [collection]: newData }));
     };
 
+    // ── Bulk move/copy between collections ──
+    const handleMoveItems = (ids, fromCollection, toCollection) => {
+        const sourceItems = dataStore[fromCollection] || [];
+        const moving = sourceItems.filter(i => ids.includes(i.id));
+        const remaining = sourceItems.filter(i => !ids.includes(i.id));
+
+        setDataStore(prev => ({
+            ...prev,
+            [fromCollection]: remaining,
+            [toCollection]: [...(prev[toCollection] || []), ...moving]
+        }));
+        setMessage(`Moved ${moving.length} item${moving.length > 1 ? 's' : ''} to ${SCHEMAS[toCollection]?.label || toCollection}. Save both to commit.`);
+        setStatus('success');
+        setTimeout(() => setMessage(''), 4000);
+    };
+
+    const handleCopyItems = (ids, fromCollection, toCollection) => {
+        const sourceItems = dataStore[fromCollection] || [];
+        const copying = sourceItems.filter(i => ids.includes(i.id)).map(item => ({
+            ...JSON.parse(JSON.stringify(item)),
+            id: uuidv4() // New ID for the copy
+        }));
+
+        setDataStore(prev => ({
+            ...prev,
+            [toCollection]: [...(prev[toCollection] || []), ...copying]
+        }));
+        setMessage(`Copied ${copying.length} item${copying.length > 1 ? 's' : ''} to ${SCHEMAS[toCollection]?.label || toCollection}. Save to commit.`);
+        setStatus('success');
+        setTimeout(() => setMessage(''), 4000);
+    };
+
     const renderEditor = () => {
         const commonProps = {
             items: dataStore[activeTab],
@@ -519,7 +532,10 @@ const Admin = () => {
             removeVariant,
             moveVariant,
             updateTransliteration,
-            toggleTransliterationLang
+            toggleTransliterationLang,
+            defaultAuthors: dataStore.defaultAuthors || DEFAULT_AUTHORS,
+            onMoveItems: handleMoveItems,
+            onCopyItems: handleCopyItems
         };
 
         switch (activeTab) {
@@ -537,7 +553,7 @@ const Admin = () => {
 
     // ── RENDER ──
     if (!isLoggedIn) {
-        return <AdminLogin onLogin={handleLogin} />;
+        return <AdminLogin onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />;
     }
 
     return (
@@ -568,6 +584,10 @@ const Admin = () => {
                             <div className="nav-icon">{SCHEMAS[key].icon}</div> <span>{SCHEMAS[key].label}</span>
                         </button>
                     ))}
+                    <div className="nav-group-label">System</div>
+                    <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => { setActiveTab('settings'); setEditingId(null); setMobileMenuOpen(false); }}>
+                        <div className="nav-icon"><FiSettings size={16} /></div> <span>Settings</span>
+                    </button>
                 </nav>
 
                 {/* Profile Trigger & Popup */}
@@ -647,8 +667,9 @@ const Admin = () => {
                         <h2 className="mobile-header-title">
                             {activeTab === 'dashboard' ? 'Dashboard'
                                 : activeTab === 'profile' ? (isProfileEditing ? 'Edit Profile' : 'Profile')
-                                    : editingId ? `Edit ${SCHEMAS[activeTab]?.label.slice(0, -1) || 'Item'}`
-                                        : (SCHEMAS[activeTab]?.label || '')}
+                                    : activeTab === 'settings' ? 'Settings'
+                                        : editingId ? `Edit ${SCHEMAS[activeTab]?.label.slice(0, -1) || 'Item'}`
+                                            : (SCHEMAS[activeTab]?.label || '')}
                         </h2>
                     </div>
                     {/* Back Chevron handles backing out of editors before leaving the tab */}
@@ -685,6 +706,48 @@ const Admin = () => {
                         onUpdateProfile={updateProfile}
                         onSave={() => handleSaveCollection('profile')}
                     />
+                ) : activeTab === 'settings' ? (
+                    <div className="admin-content-area" style={{ padding: '32px', maxWidth: '600px' }}>
+                        <h2 style={{ marginBottom: '24px', color: 'var(--text-main)' }}>Default Author Names</h2>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '24px' }}>
+                            These names auto-fill when you set a language on a variant. Edit them here to change the defaults.
+                        </p>
+                        {[
+                            { code: 'ta', name: 'தமிழ் (Tamil)' },
+                            { code: 'ml', name: 'മലയാളം (Malayalam)' },
+                            { code: 'en', name: 'English' },
+                        ].map(({ code, name }) => (
+                            <div key={code} className="adm-field" style={{ marginBottom: '16px' }}>
+                                <label className="adm-label">{name}</label>
+                                <input
+                                    className="adm-input"
+                                    value={dataStore.defaultAuthors?.[code] || ''}
+                                    onChange={(e) => setDataStore(prev => ({
+                                        ...prev,
+                                        defaultAuthors: { ...prev.defaultAuthors, [code]: e.target.value }
+                                    }))}
+                                    placeholder={`Author name in ${name}`}
+                                />
+                            </div>
+                        ))}
+                        <button
+                            className="adm-btn primary"
+                            style={{ marginTop: '16px' }}
+                            onClick={async () => {
+                                try {
+                                    await set(ref(db, 'config/defaultAuthors'), dataStore.defaultAuthors);
+                                    setMessage('Default authors saved!');
+                                    setStatus('success');
+                                    setTimeout(() => setMessage(''), 3000);
+                                } catch (err) {
+                                    setMessage('Error saving: ' + err.message);
+                                    setStatus('error');
+                                }
+                            }}
+                        >
+                            <FiSave size={16} /> Save Author Defaults
+                        </button>
+                    </div>
                 ) : renderEditor()}
             </div>
         </div>

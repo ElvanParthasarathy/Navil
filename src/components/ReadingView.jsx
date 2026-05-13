@@ -1,21 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
-import { supabase } from '../lib/supabaseClient';
+import { db } from '../lib/firebaseClient';
+import { ref, get, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
 
 const CATEGORY_META = {
-    'blog': { title: 'வலைப்பதிவுகள்', table: 'blog_posts' },
-    'articles': { title: 'கட்டுரைகள்', table: 'articles_v2' },
-    'essays': { title: 'ஆய்வுரைகள்', table: 'essays_v2' },
-    'stories': { title: 'சிறுகதைகள்', table: 'short_stories_v2' },
-    'thoughts': { title: 'எண்ணங்கள்', table: 'thoughts_v2' },
-    'diary': { title: 'நாளேடு', table: 'diary_v2' }
+    'blog': { title: 'வலைப்பதிவுகள்' },
+    'articles': { title: 'கட்டுரைகள்' },
+    'essays': { title: 'ஆய்வுரைகள்' },
+    'stories': { title: 'சிறுகதைகள்' },
+    'thoughts': { title: 'எண்ணங்கள்' },
+    'diary': { title: 'நாளேடு' }
 };
 
-const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മலയாளம்', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
+const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
 const TRANSL_LABELS = { en: 'Aa', ta: 'த', ml: 'മ', hi: 'हि', te: 'తె', sa: 'सं' };
 const INDIC_LANGS = ['ta', 'ml', 'hi', 'sa', 'te'];
+
+// Convert text to renderable HTML — handles both plain text and TipTap's br-based HTML
+const textToHtml = (raw) => {
+    if (!raw) return '';
+    if (!/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) {
+        return raw.split('\n').map(line => 
+            line.trim() ? `<p>${line}</p>` : '<p style="height:1.2em"></p>'
+        ).join('');
+    }
+    let html = raw.replace(/<p>([\s\S]*?)<\/p>/gi, (match, content) => {
+        const lines = content.split(/<br\s*\/?>/gi);
+        return lines.map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '<p style="height:1.2em"></p>';
+            return `<p>${trimmed}</p>`;
+        }).join('');
+    });
+    return html;
+};
 
 const ReadingView = () => {
     const { category, slug } = useParams();
@@ -40,37 +60,66 @@ const ReadingView = () => {
 
     useEffect(() => {
         if (!meta) return;
-        const fetchPost = async () => {
+        const fetchPost = () => {
             setLoading(true);
-
-            let query = supabase.from(meta.table).select('*').limit(1).single();
-            const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
-            if (isUUID) {
-                query = query.eq('id', slug);
-            } else {
-                query = query.eq('slug', slug);
-            }
-
-            const { data, error } = await query;
-
-            if (!error && data) {
-                setPost(data);
-
-                if (category === 'stories' && data.series_name) {
-                    const { data: siblingData } = await supabase
-                        .from(meta.table)
-                        .select('id, slug, title, series_name, series_part')
-                        .eq('series_name', data.series_name)
-                        .order('series_part', { ascending: true });
-
-                    if (siblingData) {
-                        setSeriesParts(siblingData);
-                    }
+            const cleanItem = (data) => {
+                if (data.variants) {
+                    if (!Array.isArray(data.variants)) data.variants = Object.values(data.variants);
+                    data.variants.forEach(v => {
+                        if (v.transliterations?._empty) delete v.transliterations._empty;
+                        if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                        if (!v.transliterations) v.transliterations = {};
+                        if (!v.titleTransliterations) v.titleTransliterations = {};
+                    });
                 }
-            }
-            setLoading(false);
+                return data;
+            };
+
+            const catRef = ref(db, category);
+            const unsubscribe = onValue(catRef, (snapshot) => {
+                try {
+                    if (snapshot.exists()) {
+                        const allPosts = snapshot.val();
+                        let foundPost = null;
+                        
+                        if (allPosts[slug]) {
+                            foundPost = { ...cleanItem(allPosts[slug]), id: slug };
+                        } else {
+                            const found = Object.entries(allPosts).find(([key, val]) => val.id === slug || key === slug);
+                            if (found) {
+                                foundPost = { ...cleanItem(found[1]), id: found[0] };
+                            }
+                        }
+
+                        if (foundPost) {
+                            setPost(foundPost);
+
+                            if (category === 'stories' && foundPost.series_name) {
+                                const siblings = Object.entries(allPosts)
+                                    .map(([sKey, sVal]) => ({ ...cleanItem(sVal), id: sKey, slug: sKey }))
+                                    .filter(p => p.series_name === foundPost.series_name)
+                                    .sort((a, b) => (a.series_part || 0) - (b.series_part || 0));
+                                setSeriesParts(siblings);
+                            }
+                        } else {
+                            setPost(null);
+                        }
+                    } else {
+                        setPost(null);
+                    }
+                } catch (error) {
+                    console.error("Firebase fetch error:", error);
+                }
+                setLoading(false);
+            }, (error) => {
+                console.error("Firebase listen error:", error);
+                setLoading(false);
+            });
+
+            return unsubscribe;
         };
-        fetchPost();
+        const unsubscribe = fetchPost();
+        return () => unsubscribe();
     }, [category, slug, meta]);
 
     if (!meta) return <div className="page-view" style={{ padding: '60px' }}>Content not found</div>;
@@ -252,25 +301,22 @@ const ReadingView = () => {
                     user-select: none;
                 }
                 .variant-header-row {
-                    display: flex;
+                    display: inline-flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 12px;
                     margin-bottom: 12px;
                 }
                 .variant-badge {
                     display: inline-block;
                     font-size: 0.7rem;
-                    font-weight: 700;
+                    font-weight: 600;
                     text-transform: uppercase;
                     letter-spacing: 2px;
                     color: var(--text-muted);
-                    padding-bottom: 6px;
-                    border-bottom: 1px solid var(--border-light);
+                    opacity: 0.7;
                 }
                 .variant-header-row .variant-badge {
                     margin-bottom: 0;
-                    padding-bottom: 0;
-                    border-bottom: none;
                 }
                 .back-pill {
                     display: inline-flex;
@@ -358,11 +404,10 @@ const ReadingView = () => {
                                 <div key={vIndex} style={{ paddingBottom: isMulti ? '48px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
                                     {/* Header row with badge + transliteration toggles */}
                                     <div className="variant-header-row">
-                                        {isMulti && (
-                                            <div className="variant-badge">
-                                                {variant.label || LANG_LABELS[variant.lang] || variant.lang?.toUpperCase() || `#${vIndex + 1}`}
-                                            </div>
-                                        )}
+                                        <div className="variant-badge">
+                                            {LANG_LABELS[variant.lang] || variant.lang?.toUpperCase() || `#${vIndex + 1}`}
+                                            {variant.label && <span style={{ marginLeft: '4px' }}>({variant.label})</span>}
+                                        </div>
 
                                         {/* Transliteration toggles (only for Indic languages) */}
                                         {isIndic && hasAnyTransl && sortedKeys.map(tLang => (
@@ -406,7 +451,7 @@ const ReadingView = () => {
                                         lang={activeLang || variant.lang}
                                         className={`rich-content-body ${isStory ? 'story-format' : ''}`}
                                         style={{ fontSize: '1.15rem', lineHeight: '1.9', color: 'var(--text-main)', whiteSpace: 'pre-wrap' }}
-                                        dangerouslySetInnerHTML={{ __html: displayText || '<p>No content available.</p>' }}
+                                        dangerouslySetInnerHTML={{ __html: textToHtml(displayText) || '<p>No content available.</p>' }}
                                     />
                                 </div>
                             );
@@ -424,7 +469,7 @@ const ReadingView = () => {
                                     {lContent.title && lContent.title !== displayPrimaryTitle && <h1 lang={langCode} style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.2', color: 'var(--text-main)', marginBottom: '16px' }}>{lContent.title}</h1>}
                                     {lContent.excerpt && <p lang={langCode} style={{ fontSize: '1.25rem', lineHeight: '1.6', color: 'var(--text-muted)', fontWeight: 500, marginBottom: '24px' }}>{lContent.excerpt}</p>}
                                     <div lang={langCode} className="rich-content-body" style={{ fontSize: '1.15rem', lineHeight: '1.9', color: 'var(--text-main)', whiteSpace: 'pre-wrap' }}
-                                        dangerouslySetInnerHTML={{ __html: lContent.body || '<p>No content available.</p>' }} />
+                                        dangerouslySetInnerHTML={{ __html: textToHtml(lContent.body) || '<p>No content available.</p>' }} />
                                 </div>
                             );
                         })}
@@ -460,7 +505,7 @@ const ReadingView = () => {
             <style>{`
                 .rich-content-body h2 { font-size: 1.8rem; margin: 40px 0 16px; font-weight: 700; color: var(--text-main); }
                 .rich-content-body h3 { font-size: 1.4rem; margin: 32px 0 12px; font-weight: 600; color: var(--text-main); }
-                .rich-content-body p { margin-bottom: 24px; color: var(--text-main); }
+                .rich-content-body p { margin: 0; color: var(--text-main); }
                 .rich-content-body blockquote { border-left: 4px solid var(--text-main); padding-left: 24px; margin: 32px 0; font-style: italic; color: var(--text-muted); font-size: 1.25rem; }
                 .rich-content-body img { max-width: 100%; border-radius: 16px; margin: 32px 0; }
                 .rich-content-body ul, .rich-content-body ol { padding-left: 24px; margin-bottom: 24px; }

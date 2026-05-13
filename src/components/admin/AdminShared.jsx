@@ -3,6 +3,14 @@ import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, Fi
 import RichTextEditor from './RichTextEditor';
 
 // ─── SCHEMAS ───
+
+// Default author names per language — auto-filled when language is set
+export const DEFAULT_AUTHORS = {
+    ta: 'எலவன் பார்த்தசாரதி',
+    ml: 'എൽവൻ പാർത്തചാരതി',
+    en: 'Elvan Parthasarathy',
+};
+
 export const SCHEMAS = {
     quotes: {
         label: 'Quotes', icon: <FiMessageCircle size={16} />, type: 'variant_based',
@@ -11,20 +19,18 @@ export const SCHEMAS = {
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', placeholder: 'e.g. Couplet, Proverb', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', placeholder: 'e.g. Philosophy, Love', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', placeholder: 'e.g. Akaval, Venba', datalist: 'poem-meters' },
+            { key: 'classification', label: 'Classification', type: 'text', placeholder: 'அகம், புறம், etc.', datalist: 'poem-class' },
+            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
         ],
         row3Fields: [
-            { key: 'classification', label: 'Classification', type: 'text', placeholder: 'e.g. அகம், புறம்', datalist: 'poem-class' },
-            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
+            { key: 'tags', label: 'Tags / Style', type: 'tags', placeholder: 'e.g. சங்கம், தமிழாளம், Free Verse', suggestions: ['சங்கம்', 'தமிழாளம்', 'Modern', 'Free Verse', 'Haiku', 'Sonnet', 'Couplet'] },
         ],
         extraFields: [
             { key: 'urai', label: 'Urai / Meaning', type: 'textarea', rows: 2, placeholder: 'Prose meaning or commentary...' },
             { key: 'notes', label: 'Notes / Context', type: 'textarea', rows: 2, placeholder: 'Background, inspiration...' },
         ],
         getItemTitle: (item) => item.title || 'Untitled Quote',
-        getItemSubtitle: (item) => [item.style, item.theme].filter(Boolean).join(' • '),
+        getItemSubtitle: (item) => [item.classification, ...(item.tags || [])].filter(Boolean).join(' • '),
     },
     poems: {
         label: 'Poems', icon: <FiPenTool size={16} />, type: 'variant_based',
@@ -33,111 +39,81 @@ export const SCHEMAS = {
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', placeholder: 'e.g. Sonnet, Haiku', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', placeholder: 'e.g. Love, Nature', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', placeholder: 'e.g. Akaval, Venba', datalist: 'poem-meters' },
+            { key: 'classification', label: 'Classification', type: 'text', placeholder: 'அகம், புறம், etc.', datalist: 'poem-class' },
+            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
         ],
         row3Fields: [
-            { key: 'classification', label: 'Classification', type: 'text', placeholder: 'e.g. அகம், புறம்', datalist: 'poem-class' },
-            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
+            { key: 'tags', label: 'Tags / Style', type: 'tags', placeholder: 'e.g. சங்கம், தமிழாளம், Free Verse', suggestions: ['சங்கம்', 'தமிழாளம்', 'Modern', 'Free Verse', 'Haiku', 'Sonnet', 'Venba', 'Akaval'] },
         ],
         extraFields: [
             { key: 'urai', label: 'Urai / Commentary', type: 'textarea', rows: 3, placeholder: 'Prose explanation or meaning...' },
             { key: 'notes', label: 'Notes / Context', type: 'textarea', rows: 2, placeholder: 'Background, inspiration...' },
         ],
         getItemTitle: (item) => item.title || 'Untitled Poem',
-        getItemSubtitle: (item) => [item.style, item.theme].filter(Boolean).join(' • '),
+        getItemSubtitle: (item) => [item.classification, ...(item.tags || [])].filter(Boolean).join(' • '),
     },
     blog: {
         label: 'Blog', icon: <FiEdit3 size={16} />, type: 'variant_based',
-        tableName: 'blog_posts',
         itemFields: [
             { key: 'title', label: 'Post Title', type: 'text', placeholder: 'Enter post title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'slug', label: 'Slug (URL)', type: 'text', placeholder: 'my-blog-post' },
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Life, Tech, Tamil' },
             { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        row3Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Blog',
-        getItemSubtitle: (item) => [item.tags, item.slug].filter(Boolean).join(' • '),
+        getItemSubtitle: (item) => item.tags || '',
     },
     articles: {
         label: 'Articles', icon: <FiFileText size={16} />, type: 'variant_based',
-        tableName: 'articles_v2',
         itemFields: [
             { key: 'title', label: 'Article Title', type: 'text', placeholder: 'Enter article title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'my-article' },
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Politics, Review' },
             { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        row3Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Article',
-        getItemSubtitle: (item) => [item.tags, item.slug].filter(Boolean).join(' • '),
+        getItemSubtitle: (item) => item.tags || '',
     },
     essays: {
         label: 'Essays', icon: <FiBookOpen size={16} />, type: 'variant_based',
-        tableName: 'essays_v2',
         itemFields: [
             { key: 'title', label: 'Essay Title', type: 'text', placeholder: 'Enter essay title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'my-essay' },
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Philosophy, Science' },
             { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        row3Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Essay',
-        getItemSubtitle: (item) => [item.tags, item.slug].filter(Boolean).join(' • '),
+        getItemSubtitle: (item) => item.tags || '',
     },
     stories: {
         label: 'Stories', icon: <FiBook size={16} />, type: 'variant_based',
-        tableName: 'short_stories_v2',
         itemFields: [
             { key: 'title', label: 'Story Title', type: 'text', placeholder: 'Enter story title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'my-story' },
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Fantasy, Slice of Life' },
             { key: 'series_name', label: 'Series', type: 'text', placeholder: 'My College Days' },
-        ],
-        row3Fields: [
             { key: 'series_part', label: 'Part / Chapter', type: 'number', placeholder: '1' },
-            { key: 'cover_image', label: 'Cover Art URL', type: 'text', placeholder: 'https://...' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
         ],
         extraFields: [
-            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
+            { key: 'cover_image', label: 'Cover Art URL', type: 'text', placeholder: 'https://...' },
+            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Story',
         getItemSubtitle: (item) => {
@@ -148,44 +124,152 @@ export const SCHEMAS = {
     },
     thoughts: {
         label: 'Thoughts', icon: <FiSun size={16} />, type: 'variant_based',
-        tableName: 'thoughts_v2',
         itemFields: [
             { key: 'title', label: 'Title', type: 'text', placeholder: 'A quick thought...', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'a-quick-thought' },
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Reflection, Daily' },
             { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        row3Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.text?.replace(/<[^>]+>/g, '').slice(0, 50) || 'Untitled Thought',
         getItemSubtitle: (item) => item.tags || '',
     },
     diary: {
         label: 'Diary', icon: <FiBook size={16} />, type: 'variant_based',
-        tableName: 'diary_v2',
         itemFields: [
             { key: 'title', label: 'Entry Title', type: 'text', placeholder: 'Today...', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'slug', label: 'Slug', type: 'text', placeholder: 'diary-entry' },
             { key: 'is_private', label: 'Private Entry', type: 'toggle' },
             { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        row3Fields: [
-            { key: 'style', label: 'Style / Form', type: 'text', datalist: 'poem-styles' },
-            { key: 'theme', label: 'Theme', type: 'text', datalist: 'poem-themes' },
-            { key: 'meter', label: 'Meter / Rhythm', type: 'text', datalist: 'poem-meters' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Entry',
         getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
     }
+};
+
+// ─── TAG INPUT COMPONENT ───
+const TagInput = ({ value, onChange, placeholder, suggestions = [] }) => {
+    const tags = Array.isArray(value) ? value : (value ? String(value).split(',').map(t => t.trim()).filter(Boolean) : []);
+    const [input, setInput] = React.useState('');
+    const [showSuggestions, setShowSuggestions] = React.useState(false);
+
+    const addTag = (tag) => {
+        const trimmed = (tag || input).trim();
+        if (trimmed && !tags.includes(trimmed)) {
+            onChange([...tags, trimmed]);
+        }
+        setInput('');
+        setShowSuggestions(false);
+    };
+
+    const removeTag = (idx) => {
+        onChange(tags.filter((_, i) => i !== idx));
+    };
+
+    const updateTag = (idx, newValue) => {
+        const newTags = [...tags];
+        newTags[idx] = newValue;
+        onChange(newTags);
+    };
+
+    const filteredSuggestions = suggestions.filter(s => 
+        !tags.includes(s) && s.toLowerCase().includes(input.toLowerCase())
+    );
+
+    return (
+        <div style={{ position: 'relative' }}>
+            {/* Existing tags as a list */}
+            {tags.length > 0 && (
+                <div className="adm-tag-list">
+                    {tags.map((tag, i) => (
+                        <div key={i} className="adm-tag-row">
+                            <input
+                                className="adm-tag-row-input"
+                                value={tag}
+                                onChange={(e) => updateTag(i, e.target.value)}
+                            />
+                            <button type="button" onClick={() => removeTag(i)} className="adm-tag-row-remove" title="Remove">×</button>
+                        </div>
+                    ))}
+                </div>
+            )}
+            {/* Add new tag */}
+            <div className="adm-tag-add-row">
+                <input
+                    className="adm-input"
+                    value={input}
+                    onChange={(e) => { setInput(e.target.value); setShowSuggestions(true); }}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && input.trim()) {
+                            e.preventDefault();
+                            addTag();
+                        }
+                    }}
+                    placeholder={placeholder || 'Type to add...'}
+                    style={{ flex: 1 }}
+                />
+                <button
+                    type="button"
+                    className="adm-btn"
+                    onClick={() => addTag()}
+                    disabled={!input.trim()}
+                    style={{ flexShrink: 0 }}
+                >+ Add</button>
+            </div>
+            {showSuggestions && input && filteredSuggestions.length > 0 && (
+                <div className="adm-tag-suggestions">
+                    {filteredSuggestions.map(s => (
+                        <button key={s} type="button" className="adm-tag-suggestion-item" onMouseDown={() => addTag(s)}>{s}</button>
+                    ))}
+                </div>
+            )}
+            <style>{`
+                .adm-tag-list {
+                    display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;
+                }
+                .adm-tag-row {
+                    display: flex; align-items: center; gap: 8px;
+                    padding: 5px 12px; border-radius: 8px;
+                    background: color-mix(in srgb, var(--accent, #088370) 12%, transparent);
+                    border: 1px solid transparent;
+                    transition: border-color 0.2s;
+                }
+                .adm-tag-row:focus-within {
+                    border-color: color-mix(in srgb, var(--accent, #088370) 40%, transparent);
+                }
+                .adm-tag-row-input {
+                    flex: 1; font-size: 0.85rem; font-weight: 600; color: var(--text-main, #eee);
+                    background: transparent; border: none; outline: none; padding: 2px 0;
+                }
+                .adm-tag-row-remove {
+                    background: none; border: none; color: var(--text-muted, #888); cursor: pointer;
+                    font-size: 1.1rem; line-height: 1; padding: 2px 4px; opacity: 0.5; transition: all 0.2s;
+                    border-radius: 4px;
+                }
+                .adm-tag-row-remove:hover { opacity: 1; color: #ff6b6b; background: rgba(255,107,107,0.1); }
+                .adm-tag-add-row {
+                    display: flex; gap: 6px; align-items: center;
+                }
+                .adm-tag-suggestions {
+                    position: absolute; bottom: 0; transform: translateY(100%); left: 0; right: 0; z-index: 10;
+                    background: var(--bg-card, #1a1a2e); border: 1px solid var(--border-light, #333);
+                    border-radius: 10px; margin-top: 4px; padding: 4px; max-height: 150px; overflow-y: auto;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+                }
+                .adm-tag-suggestion-item {
+                    display: block; width: 100%; text-align: left; padding: 6px 12px;
+                    background: none; border: none; color: var(--text-main, #eee); cursor: pointer;
+                    font-size: 0.85rem; border-radius: 6px; transition: background 0.15s;
+                }
+                .adm-tag-suggestion-item:hover { background: color-mix(in srgb, var(--accent, #088370) 15%, transparent); }
+            `}</style>
+        </div>
+    );
 };
 
 // ─── FIELD INPUT ───
@@ -194,12 +278,24 @@ export const FieldInput = ({ field, value, onChange }) => {
         return (
             <textarea
                 className="adm-input"
-                style={{ minHeight: field.rows ? `${field.rows * 22} px` : '60px' }}
+                style={{ minHeight: field.rows ? `${field.rows * 22}px` : '60px' }}
                 value={value || ''}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={field.placeholder || ''}
             />
         );
+    }
+    if (field.type === 'select') {
+        return (
+            <select className="adm-input" value={value || ''} onChange={(e) => onChange(e.target.value)}>
+                {(field.options || []).map(opt => (
+                    <option key={opt} value={opt}>{opt || '— Select —'}</option>
+                ))}
+            </select>
+        );
+    }
+    if (field.type === 'tags') {
+        return <TagInput value={value} onChange={onChange} placeholder={field.placeholder} suggestions={field.suggestions} />;
     }
     if (field.datalist) {
         return <input className="adm-input" type="text" list={field.datalist} value={value || ''} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder || ''} />;
@@ -326,7 +422,9 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
 };
 
 // ─── VARIANT CARD ───
-export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdateTransl, onToggleLang, onRemove, onMove, idPrefix }) => (
+export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdateTransl, onToggleLang, onRemove, onMove, idPrefix, defaultAuthors }) => {
+    const authors = defaultAuthors || DEFAULT_AUTHORS;
+    return (
     <div className="adm-variant">
         <div className="adm-variant-number">
             #{vIndex + 1}
@@ -350,12 +448,21 @@ export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdate
                 )}
                 <div style={{ maxWidth: '80px' }}>
                     <label className="adm-label" style={{ paddingLeft: '14px' }}>Lang</label>
-                    <input className="adm-input" list="lang-options" value={variant.lang || ''} onChange={(e) => onUpdate('lang', e.target.value)} placeholder="ta" />
+                    <input className="adm-input" list="lang-options" value={variant.lang || ''} onChange={(e) => {
+                        const lang = e.target.value;
+                        onUpdate('lang', lang);
+                        // Auto-fill author if empty or if it was a default name
+                        const allDefaults = Object.values(authors);
+                        const isDefault = !variant.author || allDefaults.includes(variant.author);
+                        if (isDefault && authors[lang]) {
+                            onUpdate('author', authors[lang]);
+                        }
+                    }} placeholder="ta" />
                 </div>
             </div>
             <div className="adm-field">
                 <label className="adm-label" style={{ paddingLeft: '14px' }}>Author</label>
-                <input className="adm-input" value={variant.author || ''} onChange={(e) => onUpdate('author', e.target.value)} placeholder="Author" />
+                <input className="adm-input" list="author-names" value={variant.author || ''} onChange={(e) => onUpdate('author', e.target.value)} placeholder="Author" />
             </div>
             <div className="adm-field">
                 <label className="adm-label" style={{ paddingLeft: '14px' }}>Text</label>
@@ -368,40 +475,20 @@ export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdate
             <TransliterationEditor variant={variant} onUpdateTransl={onUpdateTransl} onToggleLang={onToggleLang} idPrefix={idPrefix} />
         </div>
     </div>
-);
+    );
+};
 
 // ─── SHARED DATALISTS (For Combobox autofill) ───
 export const SharedDatalists = () => (
     <>
-        <datalist id="poem-styles">
-            <option value="Free Verse" />
-            <option value="Sonnet" />
-            <option value="Haiku" />
-            <option value="Couplet" />
-            <option value="Proverb" />
-            <option value="Limerick" />
-        </datalist>
-        <datalist id="poem-themes">
-            <option value="Love" />
-            <option value="Nature" />
-            <option value="Philosophy" />
-            <option value="Life" />
-            <option value="Death" />
-            <option value="Admiration" />
-            <option value="Satire" />
-        </datalist>
-        <datalist id="poem-meters">
-            <option value="Venba" />
-            <option value="Akaval" />
-            <option value="Kalippa" />
-            <option value="Vanchi" />
-            <option value="Santham" />
+        <datalist id="author-names">
+            {Object.values(DEFAULT_AUTHORS).map(name => (
+                <option key={name} value={name} />
+            ))}
         </datalist>
         <datalist id="poem-class">
-            <option value="அகம் (Agam) - Inner/Love" />
-            <option value="புறம் (Puram) - Outer/War/Public" />
-            <option value="Modern" />
-            <option value="Devotional" />
+            <option value="அகம்" />
+            <option value="புறம்" />
         </datalist>
         <datalist id="variant-labels">
             <option value="Original" />

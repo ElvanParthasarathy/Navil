@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { db } from '../lib/firebaseClient';
+import { ref, get, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
 
 // Friendly bilingual genre/theme labels (shared default)
@@ -23,13 +24,46 @@ const DEFAULT_THEME_LABELS = {
     'Perspective': 'Perspective — பார்வை',
 };
 
-// Classification badge labels
-const DEFAULT_CLASSIFICATION_LABELS = {
-    'அகம்': { label: 'அகம்', color: '#e8a0bf' },
-    'புறம்': { label: 'புறம்', color: '#d4af37' },
+// Classification colors — preset for known types, auto-generated for custom
+const CLASSIFICATION_COLORS = {
+    'அகம்': '#e8a0bf',   // pink
+    'புறம்': '#d4af37',   // gold
+};
+
+// Generate a consistent HSL color from any string
+const getClassColor = (name) => {
+    if (!name) return '#888';
+    if (CLASSIFICATION_COLORS[name]) return CLASSIFICATION_COLORS[name];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    const hue = ((hash % 360) + 360) % 360;
+    return `hsl(${hue}, 55%, 60%)`;
 };
 
 const LANG_LABELS = { en: 'Aa', ta: 'த', ml: 'മ', hi: 'हि', te: 'తె', sa: 'सं' };
+const LANG_NAMES = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
+
+// Convert text to renderable HTML — handles both plain text and TipTap's br-based HTML
+const textToHtml = (raw) => {
+    if (!raw) return '';
+    // If it's plain text (no HTML tags), convert newlines
+    if (!/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) {
+        return raw.split('\n').map(line => 
+            line.trim() ? `<p>${line}</p>` : '<p style="height:1.2em"></p>'
+        ).join('');
+    }
+    // For TipTap HTML: split <br> inside <p> tags into separate <p> elements
+    // so each line break creates a proper block and blank lines are visible
+    let html = raw.replace(/<p>([\s\S]*?)<\/p>/gi, (match, content) => {
+        const lines = content.split(/<br\s*\/?>/gi);
+        return lines.map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '<p style="height:1.2em"></p>';
+            return `<p>${trimmed}</p>`;
+        }).join('');
+    });
+    return html;
+};
 
 /**
  * Shared display component for Poems and Quotes pages.
@@ -49,7 +83,7 @@ const WritingPage = ({
     tableName,
     legacyData,
     themeLabels = DEFAULT_THEME_LABELS,
-    classificationLabels = DEFAULT_CLASSIFICATION_LABELS,
+    classificationLabels,
 }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -58,39 +92,52 @@ const WritingPage = ({
     const [searchTerm, setSearchTerm] = useState('');
     const [variantTranslStates, setVariantTranslStates] = useState({});
 
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 5;
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const dataRef = ref(db, tableName);
+        const unsubscribe = onValue(dataRef, (snapshot) => {
             try {
-                const { data: rows, error } = await supabase
-                    .from(tableName)
-                    .select('*')
-                    .order('display_order', { ascending: true })
-                    .order('date', { ascending: false });
+                if (!snapshot.exists()) {
+                    setData([]);
+                    setIsLoading(false);
+                    return;
+                }
+                const dataObj = snapshot.val();
+                const rows = Object.entries(dataObj).map(([key, val]) => {
+                    const item = { ...val, id: key };
+                    // Clean up _empty placeholders and normalize variants
+                    if (item.variants) {
+                        if (!Array.isArray(item.variants)) item.variants = Object.values(item.variants);
+                        item.variants.forEach(v => {
+                            if (v.transliterations?._empty) delete v.transliterations._empty;
+                            if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                            if (!v.transliterations) v.transliterations = {};
+                            if (!v.titleTransliterations) v.titleTransliterations = {};
+                        });
+                    }
+                    return item;
+                });
 
-                if (error) throw error;
-
-                const mapped = (rows || []).map(p => ({
+                const mapped = rows.map(p => ({
                     ...p,
                     isPinned: p.is_pinned,
                     pinExpiresAt: p.pin_expires_at,
                     pinType: p.pin_type || 'auto',
+                    variants: p.variants || [],
                 }));
                 setData(mapped);
             } catch (err) {
-                console.warn(`Supabase fetch for ${tableName} failed, using legacy JSON:`, err.message);
-                // Only use legacy data as fallback when Supabase fails
-                setData(legacyData || []);
+                console.error("Error processing data:", err);
             } finally {
                 setIsLoading(false);
             }
-        };
-        fetchData();
+        });
+        return () => unsubscribe();
     }, [tableName]);
 
     // Normalize data: backward compat for legacy quotes that use `tag` instead of `theme`/`title`
@@ -107,8 +154,21 @@ const WritingPage = ({
         return new Date(b.date || 0) - new Date(a.date || 0);
     });
 
-    // Only show themes that actually exist in the data
-    const existingThemes = [...new Set(rawPosts.map(p => p.theme).filter(Boolean))];
+    // Collect all unique classifications and tags
+    const existingClassifications = new Set();
+    rawPosts.forEach(p => {
+        if (p.classification && typeof p.classification === 'string') {
+            existingClassifications.add(p.classification.trim());
+        }
+        if (p.tags && Array.isArray(p.tags)) {
+            p.tags.forEach(tag => {
+                if (tag && typeof tag === 'string') {
+                    existingClassifications.add(tag.trim());
+                }
+            });
+        }
+    });
+    const filterOptions = [...existingClassifications].sort();
 
 
     const toggleVariantTransl = (variantKey, lang) => {
@@ -125,13 +185,16 @@ const WritingPage = ({
                 (post.title || '').toLowerCase().includes(s) ||
                 (post.author || '').toLowerCase().includes(s) ||
                 (post.classification || '').toLowerCase().includes(s) ||
+                (post.tags?.some(tag => (tag || '').toLowerCase().includes(s))) ||
                 (post.variants?.some(v =>
                     (v.text || '').toLowerCase().includes(s) ||
                     (v.title || '').toLowerCase().includes(s) ||
                     Object.values(v.transliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
                     Object.values(v.titleTransliterations || {}).some(t => (t || '').toLowerCase().includes(s))
                 ));
-            const matchesGenre = activeGenre === 'All' || post.theme === activeGenre;
+            const matchesGenre = activeGenre === 'All' || 
+                post.classification === activeGenre || 
+                (post.tags && post.tags.includes(activeGenre));
             return matchesSearch && matchesGenre;
         });
         return filtered.sort((a, b) => {
@@ -369,9 +432,9 @@ const WritingPage = ({
                     user-select: none;
                 }
                 .variant-header-row {
-                    display: flex;
+                    display: inline-flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 12px;
                     margin-bottom: 12px;
                 }
                 .variant-header-row .variant-badge {
@@ -462,7 +525,7 @@ const WritingPage = ({
                     display: flex;
                     flex-wrap: wrap;
                     align-items: center;
-                    gap: 16px;
+                    gap: 8px;
                     margin-bottom: 16px;
                 }
                 .pinned-badge {
@@ -481,7 +544,7 @@ const WritingPage = ({
                 .classification-badge {
                     display: inline-flex;
                     align-items: center;
-                    font-size: 0.8rem;
+                    font-size: 0.7rem;
                     font-weight: 700;
                     text-transform: uppercase;
                     letter-spacing: 1.5px;
@@ -490,6 +553,26 @@ const WritingPage = ({
                     border-radius: 99px;
                     background: color-mix(in srgb, currentColor 15%, transparent);
                     white-space: nowrap;
+                }
+
+                .lang-dots {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-left: 4px;
+                }
+                .lang-dot {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    font-size: 0.6rem;
+                    font-weight: 700;
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    color: var(--text-muted);
+                    letter-spacing: 0;
                 }
                 .poem-header {
                     display: flex;
@@ -559,22 +642,21 @@ const WritingPage = ({
                 .variant-badge {
                     display: inline-block;
                     font-size: 0.7rem;
-                    font-weight: 700;
+                    font-weight: 600;
                     text-transform: uppercase;
                     letter-spacing: 2px;
                     color: var(--text-muted);
+                    opacity: 0.7;
                     margin-bottom: 12px;
-                    padding-bottom: 6px;
-                    border-bottom: 1px solid var(--border-light);
                 }
                 
                 .variant-title {
                     font-family: "Mukta Malar", "Noto Sans Malayalam", sans-serif;
-                    font-size: 1.25rem;
-                    font-weight: 600;
-                    margin-bottom: 12px;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    margin-bottom: 14px;
                     color: var(--text-main);
-                    font-style: auto;
+                    line-height: 1.25;
                     letter-spacing: -0.5px;
                 }
 
@@ -584,8 +666,10 @@ const WritingPage = ({
                     font-size: 1.05rem;
                     line-height: 1.7;
                     color: var(--text-main);
-                    white-space: pre-wrap;
                     word-break: break-word;
+                }
+                .poem-text-content p {
+                    margin: 0;
                 }
 
                 .poem-attribution {
@@ -822,9 +906,9 @@ const WritingPage = ({
                             setCurrentPage(1);
                         }}
                     >
-                        <option value="All">All Genres</option>
-                        {existingThemes.map(theme => (
-                            <option key={theme} value={theme}>{themeLabels[theme] || theme}</option>
+                        <option value="All">All Categories</option>
+                        {filterOptions.map(option => (
+                            <option key={option} value={option}>{option}</option>
                         ))}
                     </select>
                 </div>
@@ -866,8 +950,8 @@ const WritingPage = ({
                                                 </div>
                                             )}
                                             {post.classification && (
-                                                <span className="classification-badge" style={{ color: (classificationLabels[post.classification]?.color || 'var(--text-muted)') }}>
-                                                    {classificationLabels[post.classification]?.label || post.classification}
+                                                <span className="classification-badge" style={{ color: getClassColor(post.classification) }}>
+                                                    {post.classification}
                                                 </span>
                                             )}
                                         </div>
@@ -890,15 +974,12 @@ const WritingPage = ({
 
                                     <div className="poem-meta-minimal">
                                         {post.date && <span className="meta-date">{new Date(post.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
-                                        {post.date && (post.style || post.theme || post.meter) && <div className="meta-separator" />}
-
-                                        {post.style && <span>{post.style}</span>}
-                                        {post.style && (post.theme || post.meter) && <div className="meta-separator" />}
-
-                                        {post.theme && <span>{post.theme}</span>}
-                                        {post.theme && (post.meter) && <div className="meta-separator" />}
-
-                                        {post.meter && <span>{post.meter}</span>}
+                                        {(post.tags?.length > 0) && post.tags.map((tag, ti) => (
+                                            <React.Fragment key={ti}>
+                                                {(ti > 0 || post.date) && <div className="meta-separator" />}
+                                                <span>{tag}</span>
+                                            </React.Fragment>
+                                        ))}
                                     </div>
 
                                     {post.dedication && (
@@ -921,7 +1002,10 @@ const WritingPage = ({
                                             return (
                                                 <div key={vIndex} className="variant-wrapper">
                                                     <div className="variant-header-row">
-                                                        {variant.label && <div className="variant-badge">{variant.label}</div>}
+                                                        <div className="variant-badge">
+                                                            {LANG_NAMES[variant.lang] || variant.lang}
+                                                            {variant.label && <span style={{ marginLeft: '4px' }}>({variant.label})</span>}
+                                                        </div>
                                                         {hasAnyTransl && sortedKeys.map(lang => (
                                                             <React.Fragment key={lang}>
                                                                 <label className="transl-switch">
@@ -947,7 +1031,7 @@ const WritingPage = ({
                                                         className="poem-text-content"
                                                         lang={activeLang || variant.lang}
                                                         dangerouslySetInnerHTML={{
-                                                            __html: activeLang && translObj[activeLang] ? translObj[activeLang] : (variant.text || '')
+                                                            __html: textToHtml(activeLang && translObj[activeLang] ? translObj[activeLang] : (variant.text || ''))
                                                         }}
                                                     />
                                                     {variant.author && (

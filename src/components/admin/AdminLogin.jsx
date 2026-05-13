@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { AuthLayout, AuthHeader, AuthInput, AuthButton } from './AdminAuthComponents';
-import { supabase } from '../../lib/supabaseClient';
 
-const AdminLogin = ({ onLogin }) => {
+const AdminLogin = ({ onLogin, onGoogleLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -78,7 +77,33 @@ const AdminLogin = ({ onLogin }) => {
                     loading={loading}
                     icon={<FiArrowRight size={18} />}
                 >
-                    Sign In
+                    Sign In with Email
+                </AuthButton>
+
+                <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0', opacity: 0.6 }}>
+                    <div style={{ flex: 1, height: '1px', background: 'currentColor' }} />
+                    <span style={{ padding: '0 10px', fontSize: '12px' }}>OR</span>
+                    <div style={{ flex: 1, height: '1px', background: 'currentColor' }} />
+                </div>
+
+                <AuthButton
+                    type="button"
+                    onClick={async () => {
+                        setErrorMsg('');
+                        if (loading) return;
+                        setLoading(true);
+                        const result = await onGoogleLogin();
+                        setLoading(false);
+                        if (!result.success) {
+                            setErrorMsg(result.error || 'Google login failed');
+                            setShaking(true);
+                            setTimeout(() => setShaking(false), 500);
+                        }
+                    }}
+                    loading={loading}
+                    style={{ background: '#4285F4', color: 'white' }}
+                >
+                    Sign In with Google
                 </AuthButton>
             </form>
         </AuthLayout>
