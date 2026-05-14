@@ -99,7 +99,6 @@ const Layout = () => {
         <div className="app-shell" style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
             <header className="mobile-topbar">
-                <div className="brand">Elvan</div>
                 <button 
                     className="mobile-hamburger"
                     onClick={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
@@ -107,6 +106,8 @@ const Layout = () => {
                 >
                     {isMobileDrawerOpen ? <FiX size={22} /> : <FiMenu size={22} />}
                 </button>
+                <div className="brand">Elvan</div>
+                <div style={{ width: 38 }}></div>
             </header>
 
             {/* Mobile Drawer Overlay */}
