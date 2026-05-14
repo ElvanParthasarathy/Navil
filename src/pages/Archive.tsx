@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useOutletContext } from 'react-router-dom';
 import profileData from '../data/profile.json';
 import initialHighlights from '../data/stories.json';
 import postsData from '../data/posts.json';
@@ -14,6 +14,12 @@ import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
 
 const Archive = () => {
+    const { setPageTitle } = useOutletContext();
+
+    useEffect(() => {
+        setPageTitle('காப்புகள்');
+    }, [setPageTitle]);
+
     // Destructure Data
     // Data from JSON files
     const rawPosts = postsData;

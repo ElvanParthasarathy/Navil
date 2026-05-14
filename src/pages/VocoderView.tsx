@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import Presentation from '../components/vocoder/Presentation';
 import Interactive from '../components/vocoder/Interactive';
 import '../components/vocoder/vocoder-global.css';
 
 const VocoderView = () => {
     const [activeTab, setActiveTab] = useState('presentation');
+    const { setPageTitle } = useOutletContext();
+
+    useEffect(() => {
+        setPageTitle(activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story');
+    }, [activeTab, setPageTitle]);
 
     useEffect(() => {
         window.scrollTo(0, 0);

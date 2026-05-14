@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
 import { db } from '../lib/firebaseClient';
 import { ref, get, onValue } from 'firebase/database';
@@ -251,6 +251,11 @@ const ReadingView = () => {
         if (currIndex < seriesParts.length - 1) nextPart = seriesParts[currIndex + 1];
         if (currIndex > 0) prevPart = seriesParts[currIndex - 1];
     }
+
+    const { setPageTitle } = useOutletContext();
+    useEffect(() => {
+        if (displayPrimaryTitle) setPageTitle(displayPrimaryTitle);
+    }, [setPageTitle, displayPrimaryTitle]);
 
     return (
         <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>

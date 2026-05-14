@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useOutletContext } from 'react-router-dom';
 import { FiCalendar } from 'react-icons/fi';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
@@ -93,6 +93,12 @@ const CategoryListView = () => {
         setCurrentPage(1);
         return () => unsubscribe();
     }, [category, meta]);
+
+    const { setPageTitle } = useOutletContext();
+
+    useEffect(() => {
+        if (meta?.title) setPageTitle(meta.title);
+    }, [setPageTitle, meta?.title]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

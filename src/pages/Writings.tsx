@@ -1,10 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 
 const Writings = () => {
+    const { setPageTitle } = useOutletContext();
+
+    useEffect(() => {
+        setPageTitle('எழுத்துகள்');
+    }, [setPageTitle]);
+
     return (
         <div className="writings-page page-view fadeIn">
             <style>{`

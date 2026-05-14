@@ -4,7 +4,15 @@ import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'r
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
 
+import { useOutletContext } from 'react-router-dom';
+
 const About = () => {
+    const { setPageTitle } = useOutletContext();
+
+    React.useEffect(() => {
+        setPageTitle('பற்றி');
+    }, [setPageTitle]);
+
     return (
         <>
             <Helmet>

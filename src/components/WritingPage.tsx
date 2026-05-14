@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { db } from '../lib/firebaseClient';
 import { ref, get, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
@@ -95,6 +95,12 @@ const WritingPage = ({
     const [variantTranslStates, setVariantTranslStates] = useState({});
 
     const ITEMS_PER_PAGE = 5;
+
+    const { setPageTitle } = useOutletContext();
+
+    useEffect(() => {
+        setPageTitle(pageTitleTamil || pageTitle);
+    }, [setPageTitle, pageTitle, pageTitleTamil]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

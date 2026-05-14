@@ -101,6 +101,13 @@ const Layout = () => {
     }, [isSettingsOpen]);
 
 
+    const [pageTitle, setPageTitle] = React.useState('Elvan');
+
+    // Reset title on navigation to home
+    React.useEffect(() => {
+        if (location.pathname === '/') setPageTitle('Elvan');
+    }, [location.pathname]);
+
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
@@ -115,7 +122,7 @@ const Layout = () => {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
                         </button>
                     )}
-                    <div className="brand">Elvan</div>
+                    <div className="brand">{pageTitle}</div>
                 </div>
                 <div className="top-bar-actions">
                     <div className="mobile-menu-zone" ref={mobileMenuRef}>
@@ -293,7 +300,7 @@ const Layout = () => {
             </nav>
 
             <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1), width 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
-                <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed }} />
+                <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle }} />
             </main>
         </div>
     );

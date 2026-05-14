@@ -1,10 +1,16 @@
 import React from 'react';
 import { BsDisplay } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import AdBanner from '../components/AdBanner';
 
 const Teaching = () => {
+    const { setPageTitle } = useOutletContext();
+
+    React.useEffect(() => {
+        setPageTitle('பயிற்றுவிப்பு');
+    }, [setPageTitle]);
+
     return (
         <div className="writings-page page-view fadeIn">
             <style>{`
