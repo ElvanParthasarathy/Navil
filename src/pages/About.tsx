@@ -172,91 +172,147 @@ const About = () => {
                     gap: 6px;
                 }
 
-                /* CONTACT FOOTER */
-                .contact-footer {
+                /* CONTACT CARD — UNIQUE ABOUT PAGE DESIGN */
+                .about-contact-card {
+                    position: relative;
+                    background: var(--bg-panel);
+                    border-radius: 28px;
+                    overflow: hidden;
+                    border: 1px solid var(--border-color);
+                }
+
+                .about-contact-accent {
+                    height: 4px;
+                    background: linear-gradient(90deg, var(--text-main) 0%, var(--text-muted) 50%, transparent 100%);
+                    opacity: 0.35;
+                }
+
+                .about-contact-body {
+                    padding: 40px 36px;
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    padding: 40px 32px;
-                    background: var(--bg-panel);
-                    border-radius: 32px;
                     gap: 28px;
                 }
 
-                .contact-header {
+                .about-contact-titles {
                     display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    margin-bottom: 4px;
+                    flex-direction: column;
+                    gap: 2px;
                 }
 
-                .contact-divider {
-                    width: 2px;
-                    height: 24px;
-                    background: var(--border-color);
-                    opacity: 0.6;
-                }
-
-                .contact-info-block h3 {
+                .about-contact-titles h3 {
+                    margin: 0;
                     font-weight: 800;
-                    margin: 0;
-                }
-                .contact-info-block h3:first-child {
-                    font-size: 1.5rem;
-                }
-                .contact-info-block h3:last-child {
-                    font-size: 1.4rem;
+                    letter-spacing: -0.3px;
                 }
 
-                .contact-info-block p {
+                .about-contact-titles h3:first-child {
+                    font-size: 1.6rem;
+                }
+
+                .about-contact-titles h3:last-child {
+                    font-size: 1.2rem;
                     color: var(--text-muted);
-                    margin: 0;
-                    line-height: 1.6;
+                    font-weight: 600;
                 }
 
-                .contact-info-block .contact-sub {
-                    font-size: 0.9rem;
-                    margin-top: 4px;
-                }
-
-                .contact-location {
+                .about-contact-desc {
                     display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+
+                .about-contact-desc p {
+                    margin: 0;
+                    color: var(--text-muted);
+                    line-height: 1.6;
+                    font-size: 1rem;
+                }
+
+                .about-contact-desc .contact-sub-text {
+                    font-size: 0.88rem;
+                    opacity: 0.8;
+                }
+
+                .about-contact-location {
+                    display: inline-flex;
                     align-items: center;
                     gap: 8px;
+                    padding: 8px 16px;
+                    background: var(--bg-app);
+                    border-radius: 99px;
+                    font-size: 0.88rem;
                     color: var(--text-muted);
-                    font-size: 0.95rem;
-                    margin-top: 16px;
-                    justify-content: center;
+                    width: fit-content;
+                    border: 1px solid var(--border-light);
                 }
 
-                .contact-socials { display: flex; gap: 16px; }
+                .about-contact-location svg {
+                    flex-shrink: 0;
+                    opacity: 0.7;
+                }
 
-                .social-icon-link {
-                    width: 48px;
-                    height: 48px;
-                    background: var(--bg-card);
-                    border: 1px solid var(--border-color);
-                    border-radius: 50%;
+                /* SOCIAL LINKS — LABELED PILLS */
+                .about-contact-links {
                     display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                }
+
+                .about-contact-pill {
+                    display: inline-flex;
                     align-items: center;
-                    justify-content: center;
+                    gap: 8px;
+                    padding: 10px 18px;
+                    background: var(--bg-app);
+                    border: 1px solid var(--border-color);
+                    border-radius: 99px;
                     color: var(--text-main);
-                    transition: all 0.3s ease;
+                    text-decoration: none;
+                    font-size: 0.88rem;
+                    font-weight: 500;
+                    transition: all 0.25s ease;
                 }
 
                 @media (hover: hover) and (pointer: fine) {
-                    .social-icon-link:hover {
+                    .about-contact-pill:hover {
                         background: var(--text-main);
                         color: var(--bg-app);
-                        transform: translateY(-3px);
+                        border-color: var(--text-main);
+                        transform: translateY(-2px);
+                        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
                     }
                 }
 
-                .social-icon-link:active {
+                .about-contact-pill:active {
+                    transform: scale(0.97);
+                }
+
+                /* CTA BUTTON */
+                .about-contact-cta {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 12px 28px;
                     background: var(--text-main);
                     color: var(--bg-app);
-                    transform: scale(0.95);
+                    border-radius: 99px;
+                    font-weight: 600;
+                    font-size: 0.95rem;
+                    text-decoration: none;
+                    transition: all 0.25s ease;
+                    width: fit-content;
+                }
+
+                @media (hover: hover) and (pointer: fine) {
+                    .about-contact-cta:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+                    }
+                }
+
+                .about-contact-cta:active {
+                    transform: scale(0.97);
                 }
 
                 .about-footer-text { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.7; }
@@ -283,14 +339,13 @@ const About = () => {
                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
                    .about-card { padding: 28px; border-radius: 24px; }
                    
-                   .contact-footer { padding: 32px 20px; border-radius: 24px; gap: 20px; }
-                   .contact-header { flex-direction: column; gap: 2px; }
-                   .contact-divider { display: none; }
-                   .contact-info-block h3:first-child { font-size: 1.4rem; }
-                   .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; }
-                   .contact-info-block p { font-size: 0.95rem; padding: 0 16px; }
-                   .contact-location { font-size: 0.9rem; }
-                   .social-icon-link { width: 48px; height: 48px; }
+                   .about-contact-body { padding: 28px 20px; gap: 20px; }
+                   .about-contact-titles h3:first-child { font-size: 1.4rem; }
+                   .about-contact-titles h3:last-child { font-size: 1.05rem; }
+                   .about-contact-desc p { font-size: 0.95rem; }
+                   .about-contact-location { font-size: 0.85rem; }
+                   .about-contact-links { gap: 8px; }
+                   .about-contact-pill { padding: 9px 14px; font-size: 0.82rem; }
                 }
             `}</style>
 
@@ -347,35 +402,38 @@ const About = () => {
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
-            <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
-                <div className="contact-info-block">
-                    <div className="contact-header">
+            <div className="about-contact-card animate-entry" style={{ animationDelay: '0.2s' }}>
+                <div className="about-contact-accent"></div>
+                <div className="about-contact-body">
+                    <div className="about-contact-titles">
                         <h3 lang="ta">இணைவோம்</h3>
-                        <div className="contact-divider"></div>
                         <h3>Let's Connect</h3>
                     </div>
 
-                    <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p className="contact-sub">Open for collaborations and creative conversations.</p>
-
-                    <div className="contact-location">
-                        <FiMapPin size={16} />
-                        <span>Arani, Tamil Nadu - 632317 (Currently in Chennai)</span>
+                    <div className="about-contact-desc">
+                        <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                        <p className="contact-sub-text">Open for collaborations and creative conversations.</p>
                     </div>
-                </div>
 
-                <div className="contact-socials">
-                    <a href="tel:+919345128797" className="social-icon-link">
-                        <FiPhone size={20} />
-                    </a>
-                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                        <FiMail size={20} />
-                    </a>
-                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiLinkedin size={20} />
-                    </a>
-                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiGithub size={20} />
+                    <div className="about-contact-location">
+                        <FiMapPin size={14} />
+                        <span>Arani, Tamil Nadu · Currently in Chennai</span>
+                    </div>
+
+                    <div className="about-contact-links">
+                        <a href="tel:+919345128797" className="about-contact-pill">
+                            <FiPhone size={16} /> Call
+                        </a>
+                        <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="about-contact-pill">
+                            <FiLinkedin size={16} /> LinkedIn
+                        </a>
+                        <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="about-contact-pill">
+                            <FiGithub size={16} /> GitHub
+                        </a>
+                    </div>
+
+                    <a href="mailto:jaiprakashpartha@gmail.com" className="about-contact-cta">
+                        <FiMail size={18} /> Say Hello
                     </a>
                 </div>
             </div>
