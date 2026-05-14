@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiMenu, FiX } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
@@ -56,6 +56,7 @@ const Layout = () => {
     const { theme, setTheme, toggleTheme } = useTheme();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef(null);
+    const [isMobileDrawerOpen, setIsMobileDrawerOpen] = React.useState(false);
 
     const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(() => {
         return localStorage.getItem('sidebarCollapsed') === 'true';
@@ -64,6 +65,21 @@ const Layout = () => {
     React.useEffect(() => {
         localStorage.setItem('sidebarCollapsed', isSidebarCollapsed);
     }, [isSidebarCollapsed]);
+
+    // Close mobile drawer on route change
+    React.useEffect(() => {
+        setIsMobileDrawerOpen(false);
+    }, [location.pathname]);
+
+    // Prevent body scroll when drawer is open
+    React.useEffect(() => {
+        if (isMobileDrawerOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [isMobileDrawerOpen]);
 
     // Close popup on click outside
     React.useEffect(() => {
@@ -81,21 +97,56 @@ const Layout = () => {
 
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
-            <header className="mobile-header">
-                <div className="brand">Elvan</div>
-                <div className="mobile-actions">
-                    <Link 
-                        to="/teaching" 
-                        className="settings-btn-small" 
-                        style={{ color: location.pathname.startsWith('/teaching') ? 'var(--accent-color)' : 'var(--text-main)', opacity: location.pathname.startsWith('/teaching') ? 1 : 0.6 }}
-                    >
-                        <FiMonitor size={22} />
+            {/* Mobile Hamburger Button */}
+            <button 
+                className="mobile-hamburger"
+                onClick={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
+                aria-label="Toggle sidebar menu"
+            >
+                {isMobileDrawerOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
+
+            {/* Mobile Drawer Overlay */}
+            <div 
+                className={`mobile-drawer-overlay ${isMobileDrawerOpen ? 'open' : ''}`}
+                onClick={() => setIsMobileDrawerOpen(false)}
+            />
+
+            {/* Mobile Drawer Sidebar */}
+            <aside className={`mobile-drawer ${isMobileDrawerOpen ? 'open' : ''}`}>
+                <div className="mobile-drawer-header">
+                    <div className="brand">Elvan</div>
+                    <button className="mobile-drawer-close" onClick={() => setIsMobileDrawerOpen(false)}>
+                        <FiX size={22} />
+                    </button>
+                </div>
+                <div className="mobile-drawer-nav">
+                    <Link to="/" className={`drawer-nav-item ${location.pathname === '/' ? 'active' : ''}`}>
+                        <FiHome size={20} />
+                        <div className="drawer-nav-text"><span lang="ta">முகப்பு</span><span className="drawer-sub">Home</span></div>
                     </Link>
-                    <Link to="/settings" className="settings-btn-small">
-                        <FiSettings size={22} />
+                    <Link to="/writings" className={`drawer-nav-item ${location.pathname.startsWith('/writings') ? 'active' : ''}`}>
+                        <FiEdit3 size={20} />
+                        <div className="drawer-nav-text"><span lang="ta">எழுத்துகள்</span><span className="drawer-sub">Writings</span></div>
+                    </Link>
+                    <Link to="/teaching" className={`drawer-nav-item ${location.pathname.startsWith('/teaching') ? 'active' : ''}`}>
+                        <FiMonitor size={20} />
+                        <div className="drawer-nav-text"><span lang="ta">பயிற்றுவிப்பு</span><span className="drawer-sub">Teaching</span></div>
+                    </Link>
+                    <Link to="/archive" className={`drawer-nav-item ${location.pathname === '/archive' ? 'active' : ''}`}>
+                        <FiInstagram size={20} />
+                        <div className="drawer-nav-text"><span lang="ta">காப்புகள்</span><span className="drawer-sub">Archive</span></div>
+                    </Link>
+                    <Link to="/about" className={`drawer-nav-item ${location.pathname === '/about' ? 'active' : ''}`}>
+                        <FiUser size={20} />
+                        <div className="drawer-nav-text"><span lang="ta">பற்றி</span><span className="drawer-sub">About</span></div>
+                    </Link>
+                    <Link to="/settings" className={`drawer-nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
+                        <FiSettings size={20} />
+                        <div className="drawer-nav-text"><span>Settings</span><span className="drawer-sub">அமைப்புகள்</span></div>
                     </Link>
                 </div>
-            </header>
+            </aside>
 
             <nav className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-top">
