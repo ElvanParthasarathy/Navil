@@ -1,0 +1,158 @@
+[
+  {
+    "id": "1772479061127",
+    "tag": "Philosophy",
+    "date": "2026-03-01T10:00",
+    "variants": [
+      {
+        "label": "Original",
+        "title": "தத்துவம்",
+        "titleTransliterations": {
+          "en": "Thaththuvam",
+          "ml": "തത്തുവമ്"
+        },
+        "text": "நெய்யாப் பட்டுநூல்,\nமெழுகைப் போல்.",
+        "transliterations": {
+          "en": "Neiyaap Pattunool,\nMezhugaip Poal.",
+          "ml": "നെയ്യാപ് പട്ടുനൂല്,\nമെഴുകൈപ് പോല്."
+        },
+        "author": "எல்வன் பார்த்தசாரதி",
+        "lang": "ta"
+      },
+      {
+        "label": "Original",
+        "title": "Philosophy",
+        "text": "Unwoven silk thread,\nA candle’s light.",
+        "author": "Elvan Parthasarathy",
+        "lang": "en"
+      },
+      {
+        "label": "Original",
+        "title": "തത്ത്വം",
+        "titleTransliterations": {
+          "en": "Thaththvam",
+          "ta": "தத்த்வஂ"
+        },
+        "text": "നെയ്യാത്ത പട്ടുനൂൽ\nമെഴുകു പോലെ",
+        "transliterations": {
+          "en": "Neyyaaththa pattunool\nMezhuku poale",
+          "ta": "நெய்யாத்த பட்டுநூ௽\nமெழுகு போலெ"
+        },
+        "author": "എൽവൻ പാർത്തചാരതി",
+        "lang": "ml"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "tag": "Philosophy",
+    "date": "2026-03-01T14:00",
+    "variants": [
+      {
+        "label": "Original",
+        "title": "தத்துவம்",
+        "titleTransliterations": {
+          "en": "Thaththuvam",
+          "ml": "തത്തുവമ്"
+        },
+        "text": "நான் ஒன்றுமறியே,\nமனிதர் முற்றுமறியே.\nஎவரும் பிழையற்றோர் அன்று,\nதவரே நிழலாய் நின்றது.",
+        "transliterations": {
+          "en": "Naan onrumariye,\nManithar mutrumariye.\nEvarum pzhaiyatroor anru,\nThavare nizhalaai ninrathu.",
+          "ml": "നാഩ് ഒഩ്റുമറിയേ,\nമഩിതര് മുറ്റുമറിയേ.\nഎവരുമ് പിഴൈയറ്റോര് അഩ്റു,\nതവരേ നിഴലായ് നിഩ്റതു."
+        },
+        "author": "எல்வன் பார்த்தசாரதி",
+        "lang": "ta"
+      },
+      {
+        "label": "Translation",
+        "title": "Philosophy",
+        "text": "I know not a single knowing,\nnor mankind ever all-knowing.\nWe are none ever free of flaw —\nit stands beside us evermore,\nlike our reflection on the floor.",
+        "author": "Elvan Parthasarathy",
+        "lang": "en"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "tag": "Journey",
+    "date": "2026-03-01T18:00",
+    "variants": [
+      {
+        "label": "Original",
+        "title": "பயணம்",
+        "titleTransliterations": {
+          "en": "Payanam",
+          "ml": "പയണമ്"
+        },
+        "text": "முன்னே முடிவின் முடிவு மாறின்,\nமுன்னே முடிவிலா முடிவு நன்னின்",
+        "transliterations": {
+          "en": "Munne mudivin mudivu maarin,\nMunne mudivilaa mudivu nannin",
+          "ml": "മുഩ്ഩേ മുടിവിഩ് മുടിവു മാറിഩ്,\nമുഩ്ഩേ മുടിവിലാ മുടിവു നഩ്ഩിഩ്"
+        },
+        "author": "எல்வன் பார்த்தசாரதி",
+        "lang": "ta"
+      },
+      {
+        "label": "Translation",
+        "title": "Journey",
+        "text": "A chosen course may twist and bend,\nYet untold paths bring joys unpenned.",
+        "author": "Elvan Parthasarathy",
+        "lang": "en"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "tag": "Perspective",
+    "date": "2026-03-02T10:00",
+    "variants": [
+      {
+        "label": "Original",
+        "title": "Perspective",
+        "text": "No two shadows dance the same,\nTry to enjoy the rhythm.",
+        "author": "Elvan Parthasarathy",
+        "lang": "en"
+      },
+      {
+        "label": "Translation",
+        "title": "பார்வை",
+        "titleTransliterations": {
+          "en": "Paarvai"
+        },
+        "text": "எந்த இரு நிழல்களும் ஒரே மாதிரி நடனமாடுவதில்லை,\nஅதன் தாளத்தை ரசிக்க பழகு.",
+        "transliterations": {
+          "en": "Endha iru nizhalgalum ore maathiri nadanamaaduvathillai,\nAthan thaalaththai rasikka pazhagu."
+        },
+        "author": "எல்வன் பார்த்தசாரதி",
+        "lang": "ta"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "tag": "Hope",
+    "date": "2026-03-02T14:00",
+    "variants": [
+      {
+        "label": "Original",
+        "title": "Hope",
+        "text": "Every locked door opens only\nto reveal another passage.",
+        "author": "Elvan Parthasarathy",
+        "lang": "en"
+      },
+      {
+        "label": "Translation",
+        "title": "நம்பிக்கை",
+        "titleTransliterations": {
+          "en": "Nambikkai"
+        },
+        "text": "ஒவ்வொரு பூட்டிய கதவும் திறப்பது,\nமற்றொரு பாதையை காட்டவே.",
+        "transliterations": {
+          "en": "Ovvoru poottiya kathavum thirappathu,\nMatroru paathaiyai kaattave."
+        },
+        "author": "எல்வன் பார்த்தசாரதி",
+        "lang": "ta"
+      }
+    ]
+  }
+]

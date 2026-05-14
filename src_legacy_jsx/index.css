@@ -1,0 +1,1506 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@200;300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@300;400;500;600;700;800&display=swap');
+
+/* Google Sans — loaded manually with unicode-range excluding Tamil (U+0B80-0BFF) */
+@font-face {
+  font-family: "Google Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrwEIKli.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrw2IKli.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzaJ6li.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzjJ6li.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY0Ehpyw.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY3Mhpyw.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY58mpyw.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+@font-face {
+  font-family: "Google Sans";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY6Ympyw.ttf) format('truetype');
+  unicode-range: U+0000-0B7F, U+0C00-10FFFF;
+}
+
+/* =========================================
+   1. GLOBAL RESET & VARIABLES
+========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+img,
+video {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for interactive media (controls, clickable) */
+video[controls] {
+  pointer-events: auto;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+:root {
+  --bg-app: #F5F5F7;
+  --bg-app-rgb: 245, 245, 247;
+  --bg-panel: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --text-main: #1D1D1F;
+  --text-muted: #3C3C43;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-light: rgba(0, 0, 0, 0.05);
+  --sidebar-width: 280px;
+  --nav-hover: rgba(0, 0, 0, 0.08);
+  --accent-color: #000;
+  --accent-text: #fff;
+  --link-color: #0066cc;
+}
+
+[data-theme='dark'] {
+  --bg-app: #000000;
+  --bg-app-rgb: 0, 0, 0;
+  --bg-panel: #121212;
+  --bg-card: #121212;
+  --text-main: #FFFFFF;
+  --text-muted: #8E8E93;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
+  --nav-hover: rgba(255, 255, 255, 0.1);
+  --accent-color: #fff;
+  --accent-text: #000;
+  --link-color: #4cb5f9;
+}
+
+body {
+  font-family: "Google Sans", "Mukta Malar", "Noto Sans Malayalam", sans-serif;
+  font-optical-sizing: auto;
+  background: var(--bg-app);
+  color: var(--text-main);
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Tamil content uses Mukta Malar */
+[lang="ta"], :lang(ta) {
+  font-family: "Mukta Malar", "Google Sans", sans-serif;
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* =========================================
+   TAMIL FONT STRICTNESS
+========================================= */
+[lang="ta"],
+[lang="ta"] * {
+  font-family: "Mukta Malar", "Google Sans", sans-serif !important;
+}
+
+/* =========================================
+   2. DESKTOP LAYOUT (Default > 768px)
+========================================= */
+
+/* FORCE ARCHIVE STATS SINGLE LINE (HORIZONTAL) */
+.profile-stats-row {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+}
+
+.profile-stats-row .stat-item {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+  margin-right: 40px !important;
+}
+
+.profile-stats-row .stat-value {
+  display: inline !important;
+}
+
+/* Hide Mobile Elements on Desktop */
+.mobile-header,
+.mobile-topbar,
+.top-bar-actions,
+.top-menu-dropdown,
+.menu-backdrop {
+  display: none;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-light);
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 24px;
+  z-index: 100;
+
+  transition: width 0.4s cubic-bezier(0.2, 0, 0, 1),
+    padding 0.4s cubic-bezier(0.2, 0, 0, 1),
+    background 0.3s ease,
+    color 0.3s ease;
+  contain: layout style;
+  /* REMOVED 'paint' TO ALLOW OVERFLOW VISIBILITY */
+  overflow: visible;
+  /* EXPLICITLY ALLOW OVERFLOW FOR THE TOGGLE */
+  will-change: width, transform;
+  transform: translateZ(0);
+}
+
+.sidebar.collapsed {
+  width: 72px;
+  padding: 30px 12px;
+}
+
+/* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */
+.sidebar::before,
+.sidebar::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Sidebar Internals */
+.sidebar-top {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1;
+  min-height: 0;
+}
+
+.brand {
+  font-size: 1.8rem;
+  font-weight: 800;
+  padding-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.sidebar-toggle-btn {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-radius: 99px;
+  /* CHANGED FROM 8px TO 99px FOR PILL LOOK */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: background 0.2s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: var(--nav-hover);
+  transform: none;
+  box-shadow: none;
+}
+
+.sidebar-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+  width: 100%;
+}
+
+.sidebar-toggle-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5px;
+  opacity: 0.6;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: auto;
+  flex: 0 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 10px 15px 20px 15px; /* horizontal bleed zone for shadows/scaling */
+  margin: -10px -15px 0 -15px; /* offset bleed zone */
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-only-nav-item {
+  display: none !important;
+}
+
+.nav-profile-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.nav-profile-avatar img {
+  border-radius: 50%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  border-radius: 99px;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  /* PERFORMANCE FIX: Specific transitions only */
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  transform-origin: center;
+  will-change: transform, background;
+  /* Hint to browser */
+}
+
+.nav-item.collapsed {
+  padding: 12px;
+  justify-content: center;
+}
+
+/* Hover: Scale UP slightly + light background */
+.nav-item:hover {
+  background: var(--nav-hover);
+  transform: scale(1.02);
+}
+
+/* Active Click: Slight shrink */
+.nav-item:active {
+  transform: scale(0.96);
+}
+
+.nav-icon {
+  width: 22px;
+  /* Reduced from 24px */
+  height: 22px;
+  /* Reduced from 24px */
+  color: var(--text-main);
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* If you are using inline SVGs, ensure they fill the container */
+.nav-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2px;
+  /* Adjust this if the icon looks too thick/thin after scaling */
+}
+
+.nav-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  /* INCREASED: Adds breathing room between Tamil and English */
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  transition: color 0.2s ease, font-weight 0.2s ease;
+  line-height: 1;
+  /* Keep this tight so the gap does the work */
+  margin-bottom: 0px;
+  /* Remove margin if you had it, let gap handle it */
+}
+
+.sub-label {
+  font-size: 11px;
+  /* REDUCED: Makes it clearly a secondary subtitle */
+  font-weight: 500;
+  /* Keeps it readable at a smaller size */
+  text-transform: capitalize;
+  color: #888888;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+/* Desktop Active States */
+.nav-item.active {
+  background: var(--accent-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transform: scale(1);
+}
+
+.nav-item.active .nav-icon {
+  opacity: 1;
+  color: var(--accent-text);
+  /* Ensure icon color change */
+  transform: scale(1.1);
+}
+
+/* Primary Tamil Text: Solid and Bold when active */
+.nav-item.active .label {
+  color: var(--accent-text);
+  font-weight: 800;
+}
+
+/* Secondary English Text: Takes the active color, but muted via opacity */
+.nav-item.active .sub-label {
+  color: var(--accent-text);
+  opacity: 0.55;
+  /* Makes "Home" look like a sleek grey subtitle inside the white pill */
+}
+
+/* Sidebar Bottom - Settings Popup Trigger */
+.sidebar-bottom {
+  padding-top: 15px;
+  border-top: 1px solid var(--border-light);
+  position: relative;
+}
+
+.settings-profile-container {
+  position: relative;
+}
+
+.settings-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg-panel);
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+  width: 100%;
+  user-select: none;
+}
+
+.settings-trigger.collapsed-trigger {
+  padding: 8px;
+  justify-content: center;
+}
+
+.settings-trigger:hover {
+  background: var(--nav-hover);
+}
+
+.settings-trigger:active {
+  transform: scale(0.96);
+}
+
+.settings-trigger.active-trigger {
+  background: var(--nav-hover);
+}
+
+.trigger-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.trigger-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trigger-text {
+  flex-grow: 1;
+}
+
+.trigger-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.trigger-gear {
+  color: var(--text-muted);
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.settings-trigger:hover .trigger-gear {
+  opacity: 1;
+}
+
+.settings-trigger.active-trigger .trigger-gear {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+/* Settings Popup */
+.settings-popup {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: var(--bg-panel);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.24), 0 0 0 1px var(--border-light);
+  z-index: 2000;
+  border: 1px solid var(--border-light);
+  animation: popupSlideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes popupSlideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.popup-theme-section {
+  cursor: default;
+}
+
+.popup-theme-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+}
+
+/* 3-way theme slider */
+.theme-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--nav-hover);
+  border-radius: 99px;
+  padding: 2px;
+  height: 36px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  border: 1px solid var(--border-light);
+}
+
+.slider-thumb {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  width: calc((100% - 4px) / 3);
+  background: var(--accent-color);
+  border-radius: 99px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 1;
+}
+
+.slider-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: pointer;
+  height: 100%;
+  transition: all 0.2s;
+}
+
+.slider-option svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider-option.active svg {
+  color: var(--accent-text);
+}
+
+
+
+
+
+.shimmer-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #121212;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
+
+
+
+
+
+/* Main Content (Desktop) */
+.main-content {
+  margin-left: var(--sidebar-width);
+  padding: 50px 40px;
+  /* Increased padding */
+}
+
+/* --- UTILITIES --- */
+/* --- UTILITIES --- */
+/* By default, desktop only elements rely on their native display type, but we ensure they remain visible here */
+@media screen and (min-width: 769px) {
+  .nav-item.desktop-only {
+    display: flex !important;
+  }
+}
+
+span.desktop-only {
+  display: inline-block;
+}
+
+/* --- PAGE TRANSITIONS (Global) --- */
+/* Optimized: Container ONLY handles Opacity. No Movement. */
+.page-view {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Hidden State */
+.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visible State */
+.fade-in {
+  opacity: 1;
+}
+
+/* --- STAGGERED CONTENT ANIMATION --- */
+/* Children handle the Movement (Slide Up) independently */
+.animate-entry>* {
+  /* Changed from .fade-in > * to .animate-entry > * to match app.js */
+  animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+  /* Start hidden for animation */
+}
+
+/* Animation Delays for sequential flow */
+.animate-entry>*:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.animate-entry>*:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.animate-entry>*:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.animate-entry>*:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.animate-entry>*:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.animate-entry>*:nth-child(n+6) {
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    /* Start slightly lower */
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* --- GLOBAL CONTENT STYLES (REDUCED SIZING) --- */
+.title {
+  font-size: clamp(2.2rem, 2.6vw, 2.6rem);
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* --- CARD HOVER ANIMATIONS (Performance Optimized) --- */
+.category-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  padding: 24px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  /* PERFORMANCE FIX: Only animate transform/shadow/border */
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+  will-change: transform;
+  /* Hint for browser */
+  position: relative;
+  top: 0;
+}
+
+/* Hover State */
+.category-card:hover {
+  transform: translateY(-4px);
+  /* Reduced lift */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  /* Reduced shadow spread */
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.category-card:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition-duration: 0.1s;
+}
+
+.cat-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.cat-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Quote Styles (Global styles that will be overridden by quotes.html) */
+.quote-sub-label {
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  font-family: "Inter", sans-serif;
+  margin-top: 2px;
+}
+
+.quote-text {
+  margin-top: 0;
+}
+
+/* SPA Link Utility */
+.spa-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* =========================================
+   MOBILE LAYOUT (Native Body Scroll)
+   Applies only to screens smaller than 768px
+========================================= */
+@media screen and (max-width: 768px) {
+
+  /* --- A. UNLOCK THE SHELL (Let the Window Scroll) --- */
+  html,
+  body {
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    position: static !important;
+    height: auto !important;
+    background: var(--bg-app);
+    overscroll-behavior-y: auto;
+  }
+
+  .app-shell {
+    display: block !important;
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+    position: relative;
+    background: var(--bg-app);
+    font-size: 16px;
+    /* Prevent iPhone zoom on inputs */
+  }
+
+  /* --- B. MOBILE TOP BAR --- */
+  .mobile-topbar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    padding: 0 16px;
+    background: rgba(var(--bg-app-rgb, 255, 255, 255), 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    z-index: 1100;
+    border-bottom: 1px solid var(--border-light);
+    transition: all 0.3s ease;
+  }
+
+  .mobile-topbar .brand {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    color: var(--text-main);
+    line-height: 1.1;
+  }
+
+  /* --- 3-DOT MENU BUTTON (Neram Match) --- */
+  .top-bar-actions {
+    display: flex !important;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .mobile-menu-zone {
+    position: relative;
+  }
+
+  .top-dot-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    background: var(--bg-card);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.1s ease, background-color 0.2s;
+  }
+
+  .top-dot-btn:active {
+    transform: scale(0.92);
+    background: var(--nav-hover);
+  }
+
+  /* --- MENU BACKDROP --- */
+  .menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1199;
+  }
+
+  /* --- NERAM DROPDOWN CARD --- */
+  .top-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 1200;
+    width: 240px;
+    box-sizing: border-box;
+    border-radius: 28px;
+    background: var(--bg-panel);
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transform-origin: top right;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+      height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: menuScaleSmooth 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow: hidden;
+  }
+
+  [data-theme='dark'] .top-menu-dropdown {
+    background: #1C1C1E !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Sliding Container */
+  .menu-slider-track {
+    display: flex;
+    width: 200%;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    align-items: flex-start;
+  }
+
+  .menu-view {
+    width: 50%;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+
+  /* Menu Item Buttons */
+  .menu-item {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    background: transparent;
+    border-radius: 100px;
+    border: none !important;
+    outline: none;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.2s ease;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .menu-item:hover,
+  .menu-item:active,
+  .menu-item:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.06) !important;
+    color: var(--text-main) !important;
+  }
+
+  [data-theme='dark'] .menu-item:hover,
+  [data-theme='dark'] .menu-item:active,
+  [data-theme='dark'] .menu-item:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: var(--text-main) !important;
+  }
+
+  .menu-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.85;
+    color: currentColor;
+    flex-shrink: 0;
+  }
+
+  .menu-item.space-between {
+    justify-content: space-between;
+  }
+
+  .menu-item.back-btn {
+    color: var(--link-color) !important;
+    font-size: 16px;
+  }
+
+  .menu-item.back-btn:hover,
+  .menu-item.back-btn:active,
+  .menu-item.back-btn:focus {
+    color: var(--link-color) !important;
+  }
+
+  /* Selected State (Grey Pill + Checkmark) */
+  .menu-item.selected {
+    background: rgba(0, 0, 0, 0.06) !important;
+    color: var(--text-main) !important;
+    border: none;
+  }
+
+  [data-theme='dark'] .menu-item.selected {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: var(--text-main) !important;
+  }
+
+  .menu-item.selected::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    background-color: var(--link-color);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  /* Smooth Scale Animation */
+  @keyframes menuScaleSmooth {
+    0% {
+      opacity: 0;
+      transform: scale(0.9) translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+
+
+  .mobile-header {
+    display: none !important;
+  }
+
+  /* No Scoops in IG Style */
+  .mobile-header::before,
+  .mobile-header::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .mobile-header .brand {
+    display: block !important;
+    font-size: 22px;
+    font-weight: 800;
+    padding: 0;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--text-main);
+  }
+
+  .mobile-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .settings-btn-small {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+  }
+
+  /* --- C. MAIN AREA --- */
+  .main-content {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 56px !important;
+    padding-bottom: 60px !important;
+    min-height: 100vh;
+    overflow: visible !important;
+    background: var(--bg-app);
+  }
+
+  /* --- D. CONTENT CARD --- */
+  #content-area {
+    display: block;
+    background: var(--bg-app);
+    width: 100%;
+    height: auto !important;
+    min-height: calc(100vh - 120px);
+    margin: 0 !important;
+    border-radius: 0 !important;
+    position: relative;
+    z-index: 1;
+    padding: 20px 0 !important;
+    overflow: visible !important;
+    box-shadow: none;
+  }
+
+  /* --- E. BOTTOM BAR (Modern Nav Bar) --- */
+  .sidebar {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    height: 64px;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row;
+    background: rgba(var(--bg-app-rgb, 255, 255, 255), 0.8) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding: 0 10px !important;
+    z-index: 1000;
+    border-top: 1px solid var(--border-light) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+  }
+
+  /* No Scoops in IG Style */
+  .sidebar::before,
+  .sidebar::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* --- NAVIGATION ITEMS --- */
+  .sidebar-top {
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    gap: 0;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100% !important;
+    gap: 0;
+    justify-content: space-around;
+    align-items: center;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .mobile-only-nav-item {
+    display: flex !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent !important;
+    height: 100%;
+    transform: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* ICON CONTAINER */
+  .nav-icon {
+    width: 26px !important;
+    height: 26px !important;
+    padding: 0 !important;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .nav-item:active .nav-icon {
+    transform: scale(0.85);
+    opacity: 1;
+  }
+
+  /* Hide labels on mobile to match pure IG icon bar */
+  .nav-item .label {
+    display: none !important;
+  }
+
+  .nav-item.active .nav-icon {
+    color: var(--text-main);
+    font-weight: bold;
+    /* In actual IG, active icons are often 'filled' versions. 
+       Since we use Fi icons, we can't easily switch to 'filled' variants 
+       without changing the import, but we can make them bolder or larger. */
+    transform: scale(1.1);
+  }
+
+  /* --- SPECIAL PROFILE BUTTON STYLING --- */
+  .mobile-only-nav-item .nav-icon {
+    opacity: 1 !important;
+    width: 32px !important;
+    height: 32px !important;
+    transform: none !important;
+    transition: none !important;
+    /* No in-out fade animation */
+  }
+
+  .mobile-only-nav-item .nav-profile-avatar {
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    /* Prepare for outline */
+    box-sizing: border-box;
+    padding: 1px;
+    /* Gap between image and potential border */
+  }
+
+  .mobile-only-nav-item.active .nav-profile-avatar {
+    border-color: var(--text-main);
+    /* Subtle outline when selected */
+  }
+
+  /* Disable shrink animation on click for profile */
+  .mobile-only-nav-item:active .nav-icon {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Profile card on mobile (if shown in footer) */
+  .profile-card {
+    display: none !important;
+  }
+
+  /* Hide Desktop Elements */
+  .desktop-only,
+  .sidebar-bottom,
+  .sidebar-header,
+  .sidebar-top .brand,
+  .sidebar-toggle-btn {
+    display: none !important;
+  }
+
+  /* =========================================
+       PAGE ENTRY ANIMATION (Universal Match)
+    ========================================= */
+  .animate-entry>* {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Touch-friendly: remove default blue focus outlines on tappable elements */
+  a:focus,
+  a:focus-visible,
+  button:focus,
+  button:focus-visible,
+  .category-card:focus,
+  .category-card:focus-visible,
+  .quote-card:focus,
+  .quote-card:focus-visible {
+    outline: none;
+  }
+}
+
+/* =========================================
+   6. ABOUT PAGE REDESIGN
+========================================= */
+.about-container {
+  padding-top: 20px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.profile-image-container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  margin-bottom: 12px;
+}
+
+.about-profile-pic {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid var(--bg-app);
+  object-fit: cover;
+}
+
+.profile-fullname {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.profile-handle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.profile-bio {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  max-width: 90%;
+}
+
+.profile-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  justify-content: center;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Stats Row */
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 30px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Content Stack */
+.about-content-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 10px;
+}
+
+.info-card {
+  background: var(--bg-panel);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+}
+
+.card-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.highlight-card {
+  background: linear-gradient(135deg, rgba(var(--bg-app-rgb), 0.1), rgba(var(--bg-app-rgb), 0.05));
+  border: 1px dashed var(--border-color);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Close/Back Button for Mobile if needed (Optional) */
+@media screen and (min-width: 768px) {
+  .profile-header {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    gap: 30px;
+    padding-left: 20px;
+  }
+
+  .profile-image-container {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 0;
+  }
+
+  .profile-info-primary {
+    flex: 1;
+    padding-top: 10px;
+  }
+
+  .profile-fullname {
+    justify-content: flex-start;
+  }
+
+  .profile-meta {
+    justify-content: flex-start;
+  }
+
+  .profile-bio {
+    max-width: 100%;
+  }
+
+  .stats-row {
+    justify-content: flex-start;
+    gap: 50px;
+    padding-left: 20px;
+    border: none;
+    margin-top: -10px;
+    margin-bottom: 40px;
+  }
+}

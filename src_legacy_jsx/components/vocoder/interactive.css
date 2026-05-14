@@ -1,0 +1,327 @@
+:root {
+  --bg: #080b14;
+  --panel: var(--glass-bg);
+  --card: #131826;
+  --border: var(--glass-border);
+  --accent: var(--accent-blue);
+  --gold: #ffd54f;
+  --green: #69f0ae;
+  --red: #ff6b6b;
+  --purple: var(--accent-purple);
+  --orange: #ffb74d;
+  --text: #e8eaf6;
+  --muted: #607d8b;
+}
+
+.interactive-container {margin:0;padding:0;box-sizing:border-box;}
+.interactive-container {
+  width:100%;height:100%;
+  background:#080b14;
+  color:#e8eaf6;
+  font-family:'Poppins',sans-serif;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  /* Force dark theme */
+  --text-main: #e8eaf6;
+  --text-muted: #607d8b;
+  --bg-app: #080b14;
+  --bg-panel: #131826;
+  --glass-bg: rgba(19, 24, 38, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --shadow-premium: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ── STAGE: Canvas fills the center like PPT ── */
+.interactive-container #interactiveStage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 0;
+  position: relative;
+  background: #080b14;
+}
+
+.interactive-container #scene {
+  background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 100%;
+}
+.interactive-container #sceneCanvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* ── BOTTOM PANEL ── */
+.interactive-container #bottomPanel {
+  flex-shrink: 0;
+  background: #0d1020;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── STEP TRACKER — horizontal scrollable like thumbnail bar ── */
+.interactive-container #stepBar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.interactive-container #stepBar::-webkit-scrollbar { display: none; }
+
+.interactive-container .step-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #607d8b;
+  background: transparent;
+  transition: all 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.interactive-container .step-chip.active {
+  background: #4fc3f7;
+  color: #000;
+  border-color: #4fc3f7;
+  box-shadow: 0 0 14px rgba(79,195,247,0.5);
+}
+.interactive-container .step-chip.done {
+  background: rgba(105,240,174,0.1);
+  color: #69f0ae;
+  border-color: #69f0ae;
+}
+
+/* ── INFO ROW — story + waveform + params + buttons horizontal ── */
+.interactive-container #infoRow {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  padding: 10px 16px;
+  overflow: hidden;
+  height: 125px; /* Locked height so it doesn't jump when params appear */
+}
+
+/* Story Box — floating right panel overlaid on stage */
+.interactive-container #storyBox {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 300px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  background: rgba(10, 14, 26, 0.88);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 20;
+  scrollbar-width: thin;
+}
+.interactive-container #storyBox::-webkit-scrollbar { width: 4px; }
+.interactive-container #storyBox::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+.interactive-container #storyTitle { color: #e8eaf6; }
+.interactive-container #storyHighlight {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: none;
+}
+
+/* Signal Box */
+.interactive-container #signalBox {
+  flex: 1;
+  min-width: 0;
+  background: rgba(19, 24, 38, 0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+}
+.interactive-container #signalBox h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  color: #4fc3f7;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.interactive-container #waveCanvas {
+  width: 100%;
+  flex: 1;
+  min-height: 40px;
+  display: block;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Param Box */
+.interactive-container #paramBox {
+  flex: 1;
+  min-width: 0;
+  background: rgba(19, 24, 38, 0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+}
+.interactive-container #paramBox h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  color: #4fc3f7;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.interactive-container .param-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.interactive-container .param-label {
+  font-size: 0.65rem;
+  font-family: 'Space Mono', monospace;
+  color: #607d8b;
+  width: 55px;
+  flex-shrink: 0;
+}
+.interactive-container .param-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.interactive-container .param-bar {
+  height: 100%;
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1s ease;
+}
+.interactive-container .param-val {
+  font-size: 0.65rem;
+  font-family: 'Space Mono', monospace;
+  width: 30px;
+  text-align: right;
+}
+
+/* Button Area */
+.interactive-container #btnArea {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.interactive-container #btnNext {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #4fc3f7, #0288d1);
+  color: #000;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 3px 12px rgba(79,195,247,0.3);
+  white-space: nowrap;
+}
+.interactive-container #btnNext:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79,195,247,0.4);
+}
+.interactive-container #btnMute {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: #e8eaf6;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.interactive-container #btnMute:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: #4fc3f7;
+}
+.interactive-container #btnReset {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: #607d8b;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.interactive-container #btnReset:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ── PARTICLE OVERLAY ── */
+.interactive-container #particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── CLICK RIPPLE ── */
+.interactive-container .ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  pointer-events: none;
+  animation: rippleOut 0.6s ease-out forwards;
+}
+@keyframes rippleOut {
+  from { width:10px;height:10px;opacity:1;transform:translate(-50%,-50%) scale(1); }
+  to { width:80px;height:80px;opacity:0;transform:translate(-50%,-50%) scale(1); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .interactive-container #infoRow {
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 200px;
+  }
+  .interactive-container #btnArea {
+    flex-direction: row;
+  }
+}
