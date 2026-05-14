@@ -1007,9 +1007,9 @@ span.desktop-only {
   }
 
   .drawer-nav-item.active {
-    background: var(--accent-color);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    color: var(--accent-text);
+    background: var(--nav-hover);
+    box-shadow: none;
+    color: var(--text-main);
   }
 
   .drawer-nav-item.active svg {
@@ -1041,11 +1041,11 @@ span.desktop-only {
 
   .drawer-nav-item.active .drawer-nav-text span:first-child {
     font-weight: 800;
-    color: var(--accent-text);
+    color: var(--text-main);
   }
 
   .drawer-nav-item.active .drawer-nav-text .drawer-sub {
-    color: var(--accent-text);
+    color: var(--text-main);
     opacity: 0.55;
   }
 
@@ -1068,46 +1068,51 @@ span.desktop-only {
   }
 
   .drawer-theme-slider {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    align-items: center;
     position: relative;
-    background: var(--border-light);
-    border-radius: 12px;
-    padding: 4px;
-    gap: 0;
+    background: var(--nav-hover);
+    border-radius: 99px;
+    padding: 2px;
+    height: 36px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border-light);
   }
 
   .drawer-slider-thumb {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: calc(33.333% - 2.67px);
-    height: calc(100% - 8px);
-    background: var(--bg-panel);
-    border-radius: 9px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 0;
+    left: 2px;
+    top: 2px;
+    bottom: 2px;
+    width: calc((100% - 4px) / 3);
+    background: var(--accent-color);
+    border-radius: 99px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 1;
   }
 
   .drawer-slider-opt {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    z-index: 2;
     cursor: pointer;
-    z-index: 1;
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
-  }
-
-  .drawer-slider-opt.active {
-    opacity: 1;
+    height: 100%;
+    transition: all 0.2s;
   }
 
   .drawer-slider-opt svg {
     width: 18px;
     height: 18px;
+    color: var(--text-muted);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .drawer-slider-opt.active svg {
+    color: var(--accent-text);
   }
 
   .mobile-header {
