@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
@@ -53,6 +53,7 @@ const ProfileImage = ({ src, alt, className }) => {
 
 const Layout = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { theme, setTheme, toggleTheme } = useTheme();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef(null);
@@ -104,7 +105,18 @@ const Layout = () => {
         <div className="app-shell" style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
             <header className="mobile-topbar">
-                <div className="brand">Elvan</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {location.pathname !== '/' && (
+                        <button 
+                            className="mobile-back-btn" 
+                            onClick={() => navigate(-1)}
+                            aria-label="Go back"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+                        </button>
+                    )}
+                    <div className="brand">Elvan</div>
+                </div>
                 <div className="top-bar-actions">
                     <div className="mobile-menu-zone" ref={mobileMenuRef}>
                         <button 

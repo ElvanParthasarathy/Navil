@@ -891,6 +891,28 @@ span.desktop-only {
     line-height: 1.1;
   }
 
+  .mobile-back-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    cursor: pointer;
+    padding: 0;
+    margin-right: 4px;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.2s, transform 0.1s;
+  }
+
+  .mobile-back-btn:active {
+    background: var(--nav-hover);
+    transform: scale(0.92);
+  }
+
   /* --- 3-DOT MENU BUTTON (Neram Match) --- */
   .top-bar-actions {
     display: flex !important;

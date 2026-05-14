@@ -352,8 +352,9 @@ const ReadingView = () => {
                 >
                     {displayPrimaryTitle}
                 </h1>
-                <Link to={`/writings/${category}`} className="back-pill">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                <Link to={`/writings/${category}`} className="back-pill desktop-only">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+                    பின்செல்
                 </Link>
             </div>
 
