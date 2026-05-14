@@ -171,9 +171,14 @@ const Home = () => {
                 }
 
                 .contact-info-block h3 {
-                    font-size: 1.35rem;
                     font-weight: 800;
                     margin: 0;
+                }
+                .contact-info-block h3:first-child {
+                    font-size: 1.5rem;
+                }
+                .contact-info-block h3:last-child {
+                    font-size: 1.4rem;
                 }
 
                 .contact-info-block p {
@@ -235,10 +240,10 @@ const Home = () => {
                     .mobile-text { display: inline; }
                     
                     .contact-footer { padding: 36px 24px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; }
-                    .contact-header { flex-direction: column; gap: 4px; }
+                    .contact-header { flex-direction: column; gap: 0px; }
                     .contact-divider { display: none; }
-                    .contact-info-block h3:last-child { font-size: 1.1rem; color: var(--text-muted); font-weight: 600; }
                     .contact-info-block h3:first-child { font-size: 1.4rem; }
+                    .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
                     .contact-info-block p { font-size: 1rem; line-height: 1.6; max-width: 260px; margin: 0 auto; }
                     .contact-socials { justify-content: center; gap: 20px; }
                     .social-icon-link { width: 48px; height: 48px; }
@@ -291,9 +296,9 @@ const Home = () => {
             <div className="contact-footer animate-entry">
                 <div className="contact-info-block">
                     <div className="contact-header">
-                        <h3 lang="ta" style={{ fontSize: '1.5rem' }}>இணைவோம்</h3>
+                        <h3 lang="ta">இணைவோம்</h3>
                         <div className="contact-divider"></div>
-                        <h3 style={{ fontSize: '1.4rem' }}>Let's Connect</h3>
+                        <h3>Let's Connect</h3>
                     </div>
 
                     <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
