@@ -927,21 +927,21 @@ span.desktop-only {
     pointer-events: auto;
   }
 
-  /* --- MOBILE DRAWER SIDEBAR --- */
+  /* --- MOBILE DRAWER SIDEBAR (Right Side) --- */
   .mobile-drawer {
     display: flex !important;
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
     bottom: 0;
     width: 280px;
     z-index: 1300;
     flex-direction: column;
     background: var(--bg-panel);
-    border-right: 1px solid var(--border-light);
-    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.15);
+    border-left: 1px solid var(--border-light);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
     padding: 24px 20px;
-    transform: translateX(-100%);
+    transform: translateX(100%);
     transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
   }
 
@@ -1024,6 +1024,67 @@ span.desktop-only {
     font-size: 0.8rem;
     opacity: 0.6;
     font-weight: 500;
+  }
+
+  /* --- DRAWER THEME TOGGLE --- */
+  .mobile-drawer-bottom {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .drawer-theme-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .drawer-theme-slider {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    position: relative;
+    background: var(--border-light);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 0;
+  }
+
+  .drawer-slider-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(33.333% - 2.67px);
+    height: calc(100% - 8px);
+    background: var(--bg-panel);
+    border-radius: 9px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+  }
+
+  .drawer-slider-opt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+
+  .drawer-slider-opt.active {
+    opacity: 1;
+  }
+
+  .drawer-slider-opt svg {
+    width: 18px;
+    height: 18px;
   }
 
   .mobile-header {

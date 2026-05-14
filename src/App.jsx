@@ -115,7 +115,7 @@ const Layout = () => {
                 onClick={() => setIsMobileDrawerOpen(false)}
             />
 
-            {/* Mobile Drawer Sidebar */}
+            {/* Mobile Drawer Sidebar (opens from right) */}
             <aside className={`mobile-drawer ${isMobileDrawerOpen ? 'open' : ''}`}>
                 <div className="mobile-drawer-header">
                     <div className="brand">Elvan</div>
@@ -128,10 +128,24 @@ const Layout = () => {
                         <FiMonitor size={20} />
                         <div className="drawer-nav-text"><span lang="ta">பயிற்றுவிப்பு</span><span className="drawer-sub">Teaching</span></div>
                     </Link>
-                    <Link to="/settings" className={`drawer-nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
-                        <FiSettings size={20} />
-                        <div className="drawer-nav-text"><span>Settings</span><span className="drawer-sub">அமைப்புகள்</span></div>
-                    </Link>
+                </div>
+                <div className="mobile-drawer-bottom">
+                    <span className="drawer-theme-label">Appearance</span>
+                    <div className="drawer-theme-slider">
+                        <div
+                            className="drawer-slider-thumb"
+                            style={{ transform: `translateX(${theme === 'light' ? '0%' : theme === 'auto' ? '100%' : '200%'})` }}
+                        />
+                        <div className={`drawer-slider-opt ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')} title="Light">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+                        </div>
+                        <div className={`drawer-slider-opt ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
+                        </div>
+                        <div className={`drawer-slider-opt ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                        </div>
+                    </div>
                 </div>
             </aside>
 
