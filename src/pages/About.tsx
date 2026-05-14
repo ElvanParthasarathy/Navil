@@ -176,12 +176,13 @@ const About = () => {
                 .contact-card-bento {
                     background: var(--bg-panel);
                     border: 1px solid var(--border-light);
-                    padding: 48px 40px;
+                    padding: 40px;
                     border-radius: 32px;
                     display: flex;
+                    flex-direction: row;
                     justify-content: space-between;
                     align-items: center;
-                    gap: 40px;
+                    gap: 32px;
                     transition: all 0.3s ease;
                     margin-top: 40px;
                 }
@@ -196,10 +197,10 @@ const About = () => {
                 }
 
                 .contact-header {
-                    margin-bottom: 12px;
                     display: flex;
                     align-items: center;
                     gap: 16px;
+                    flex-shrink: 0;
                 }
 
                 .contact-divider {
@@ -226,8 +227,10 @@ const About = () => {
                 }
 
                 .contact-bio {
-                    margin-bottom: 32px;
                     color: var(--text-muted);
+                    flex: 1;
+                    max-width: 300px;
+                    text-align: left;
                 }
 
                 .contact-bio p:first-child {
@@ -246,14 +249,16 @@ const About = () => {
                     align-items: center;
                     gap: 8px;
                     color: var(--text-muted);
-                    font-size: 0.9rem;
-                    margin-top: 16px;
+                    font-size: 0.85rem;
+                    max-width: 200px;
+                    text-align: left;
                 }
 
                 .contact-socials {
                     display: flex;
-                    justify-content: center;
+                    justify-content: flex-end;
                     gap: 12px;
+                    flex-shrink: 0;
                 }
 
                 .social-icon-link {
@@ -308,12 +313,12 @@ const About = () => {
                         flex-direction: column;
                         text-align: center;
                         gap: 32px;
+                        align-items: center;
                     }
 
                     .contact-header {
                         flex-direction: column;
                         gap: 0;
-                        margin-bottom: 20px;
                     }
 
                     .contact-divider {
@@ -323,10 +328,20 @@ const About = () => {
                     .contact-header h3:first-child { font-size: 1.6rem; }
                     .contact-header h3:last-child { font-size: 0.95rem; margin-top: 4px; }
                     
+                    .contact-bio {
+                        max-width: 100%;
+                        text-align: center;
+                    }
+
                     .contact-location {
                         justify-content: center;
+                        text-align: center;
                         font-size: 0.85rem;
-                        margin-top: 24px;
+                        max-width: 100%;
+                    }
+
+                    .contact-socials {
+                        justify-content: center;
                     }
 
                     .social-icon-link { width: 42px; height: 42px; }
