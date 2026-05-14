@@ -219,15 +219,23 @@ const About = () => {
                     display: flex;
                     flex-direction: column;
                     align-items: flex-end;
-                    gap: 16px;
+                    gap: 12px;
                 }
 
                 .contact-location {
                     display: flex;
-                    align-items: center;
+                    align-items: flex-start;
+                    justify-content: flex-end;
+                    text-align: right;
                     gap: 8px;
                     color: var(--text-muted);
-                    font-size: 0.95rem;
+                    font-size: 0.85rem;
+                    line-height: 1.5;
+                }
+                
+                .contact-location svg {
+                    flex-shrink: 0;
+                    margin-top: 3px;
                 }
 
                 .contact-socials { display: flex; gap: 12px; }
