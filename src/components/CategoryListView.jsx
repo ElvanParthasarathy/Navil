@@ -4,6 +4,7 @@ import { FiCalendar } from 'react-icons/fi';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
+import { Helmet } from 'react-helmet-async';
 
 const CATEGORY_META = {
     'blog': {
@@ -164,6 +165,11 @@ const CategoryListView = () => {
 
     return (
         <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
+            <Helmet>
+                <title>{meta.subtitle} | Elvan Parthasarathy</title>
+                <meta name="description" content={meta.descEn} />
+                <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
+            </Helmet>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
                 <div>
                     <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '-1.5px', lineHeight: 1.1, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>

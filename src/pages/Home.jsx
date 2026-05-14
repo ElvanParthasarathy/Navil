@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight, FiGithub } from 'react-icons/fi';
 import profileData from '../data/profile.json';
 import AdBanner from '../components/AdBanner';
+import { Helmet } from 'react-helmet-async';
 
 const Home = () => {
     return (
-        <div className="home-page page-view fadeIn">
-            <style>{`
+        <>
+            <Helmet>
+                <title>Elvan Parthasarathy | Creative Portfolio & Writings</title>
+                <meta name="description" content="Welcome to the creative space of Elvan Parthasarathy (Jaiprakash P). Explore my writings, poems, essays, and personal reflections." />
+                <link rel="canonical" href="https://elvanparthasarathy.vercel.app/" />
+            </Helmet>
+            <div className="home-page page-view fadeIn">
+                <style>{`
                 .home-page {
                     max-width: 1200px;
                     margin: 0 auto;
@@ -227,6 +234,9 @@ const Home = () => {
                         <span lang="ta" style={{ display: 'block', marginBottom: '4px' }}>
                             "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
                         </span>
+                        <span lang="ml" style={{ display: 'block', marginBottom: '4px' }}>
+                            "എന്തുകൊണ്ട് പാടില്ല?" എന്ന് ചോദിക്കുമ്പോൾ പുതിയൊരു ചിന്ത ജനിക്കുന്നു.
+                        </span>
                         <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block', marginBottom: '16px' }}>{profileData.bio}</span>
 
                         <span lang="ta" style={{ display: 'block', fontWeight: 600 }}>இயற்பெயர்: பா. ஜெய்பிரகாஷ்</span>
@@ -286,6 +296,7 @@ const Home = () => {
 
             <div style={{ height: '40px' }}></div>
         </div>
+        </>
     );
 };
 

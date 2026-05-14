@@ -2,11 +2,18 @@ import React from 'react';
 import profileData from '../data/profile.json';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
+import { Helmet } from 'react-helmet-async';
 
 const About = () => {
     return (
-        <div className="about-page page-view animate-entry">
-            <style>{`
+        <>
+            <Helmet>
+                <title>About Elvan Parthasarathy</title>
+                <meta name="description" content="Learn more about Jaiprakash P (Elvan Parthasarathy), a pre-final year engineering student, writer, and creator based in Tamil Nadu." />
+                <link rel="canonical" href="https://elvanparthasarathy.vercel.app/about" />
+            </Helmet>
+            <div className="about-page page-view animate-entry">
+                <style>{`
                 .about-page {
                     max-width: 1200px;
                     margin: 0 auto;
@@ -304,6 +311,7 @@ const About = () => {
             </footer>
 
         </div>
+        </>
     );
 };
 

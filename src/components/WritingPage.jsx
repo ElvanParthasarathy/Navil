@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { db } from '../lib/firebaseClient';
 import { ref, get, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
+import { Helmet } from 'react-helmet-async';
 
 // Friendly bilingual genre/theme labels (shared default)
 const DEFAULT_THEME_LABELS = {
@@ -235,6 +236,11 @@ const WritingPage = ({
 
     return (
         <div className="writings-page-wrapper">
+            <Helmet>
+                <title>{pageTitle} | Elvan Parthasarathy</title>
+                <meta name="description" content={pageSubtitleEnglish || pageSubtitle} />
+                <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${tableName}`} />
+            </Helmet>
             <style>{`
                 /* =========================================
                    MINIMAL, KINETIC, TOUCH-OPTIMIZED UI

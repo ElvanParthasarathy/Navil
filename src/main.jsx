@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import { HelmetProvider } from 'react-helmet-async'
 
 if ('serviceWorker' in navigator) {
     if (import.meta.env.PROD) {
@@ -23,6 +24,8 @@ if ('serviceWorker' in navigator) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <App />
+        <HelmetProvider>
+            <App />
+        </HelmetProvider>
     </React.StrictMode>,
 )
