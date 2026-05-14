@@ -221,10 +221,11 @@ const About = () => {
                    
                    .contact-footer { flex-direction: column; text-align: center; padding: 32px 20px; }
                    .contact-info { width: 100%; display: flex; flex-direction: column; align-items: center; }
-                   .contact-header { flex-direction: column; gap: 0px; align-items: center; margin-bottom: 12px !important; }
+                   .contact-header { flex-direction: column; gap: 0px; align-items: center; margin-bottom: 8px !important; }
                    .contact-divider { display: none; }
                    .contact-info .contact-header h3:first-child { font-size: 1.4rem; }
                    .contact-info .contact-header h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+                   .contact-info p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; text-align: center; }
                    .contact-location { justify-content: center; text-align: center; margin-top: 20px; margin-bottom: 8px; }
                    .contact-location span { max-width: 240px; }
                    .contact-socials { justify-content: center; flex-wrap: wrap; }
