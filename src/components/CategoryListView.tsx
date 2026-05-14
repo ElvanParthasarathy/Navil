@@ -18,20 +18,10 @@ const CATEGORY_META = {
         descTa: 'பல்வேறு பொதுத் தலைப்புகளிலான விரிவான பார்வைகள்.', descEn: 'Detailed perspectives on general topics.',
         table: 'articles_v2', classification: 'Article',
     },
-    'essays': {
-        title: 'ஆய்வுரைகள்', subtitle: 'Essays',
-        descTa: 'ஆழமான சிந்தனைகளும் இலக்கியப் பார்வைகளும்.', descEn: 'Deep thoughts and literary perspectives.',
-        table: 'essays_v2', classification: 'Essay',
-    },
     'stories': {
         title: 'சிறுகதைகள்', subtitle: 'Short Stories',
         descTa: 'என் கற்பனையில் உருவான சிறு புனைவுகள்.', descEn: 'My original fiction and short narratives.',
         table: 'short_stories_v2', classification: 'Fiction',
-    },
-    'thoughts': {
-        title: 'எண்ணங்கள்', subtitle: 'Thoughts',
-        descTa: 'சிந்தனைக் குறிப்புகளும் குறுங்கதைகளும்.', descEn: 'Quick notes, reflections, and micro-tales.',
-        table: 'thoughts_v2', classification: 'Quick',
     },
     'diary': {
         title: 'நாளேடு', subtitle: 'Diary',

@@ -266,16 +266,7 @@ const Writings = () => {
                     <div className="cat-footer">கட்டுரைகளைப் படிக்க <FiArrowRight /></div>
                 </Link>
 
-                <Link to="/writings/essays" className="category-card">
-                    <div className="cat-icon-box"><BsFileText /></div>
-                    <div className="cat-content">
-                        <div className="cat-title">ஆய்வுரைகள்</div>
-                        <div className="cat-title-sub">Essays</div>
-                        <p className="cat-desc">என் கருத்துரைகளும் திறனாய்வுகளும்.</p>
-                        <p className="cat-desc-sub">My formal reviews and critical observations.</p>
-                    </div>
-                    <div className="cat-footer">ஆய்வுரைகளைப் பார்க்க <FiArrowRight /></div>
-                </Link>
+
 
                 <Link to="/writings/stories" className="category-card">
                     <div className="cat-icon-box"><BsBook /></div>
@@ -289,16 +280,7 @@ const Writings = () => {
                 </Link>
 
 
-                <Link to="/writings/thoughts" className="category-card">
-                    <div className="cat-icon-box"><BsCloud /></div>
-                    <div className="cat-content">
-                        <div className="cat-title">எண்ணங்கள்</div>
-                        <div className="cat-title-sub">Thoughts</div>
-                        <p className="cat-desc">என் உள்ளத்தின் தடையற்ற எண்ண ஓட்டங்கள்.</p>
-                        <p className="cat-desc-sub">My unfiltered thoughts and quick ideas.</p>
-                    </div>
-                    <div className="cat-footer">எண்ணங்களை அறிய <FiArrowRight /></div>
-                </Link>
+
 
                 <Link to="/writings/diary" className="category-card">
                     <div className="cat-icon-box"><BsMoonStars /></div>

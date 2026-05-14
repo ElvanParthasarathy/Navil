@@ -9,9 +9,7 @@ import AdBanner from './AdBanner';
 const CATEGORY_META = {
     'blog': { title: 'வலைப்பதிவுகள்' },
     'articles': { title: 'கட்டுரைகள்' },
-    'essays': { title: 'ஆய்வுரைகள்' },
     'stories': { title: 'சிறுகதைகள்' },
-    'thoughts': { title: 'எண்ணங்கள்' },
     'diary': { title: 'நாளேடு' }
 };
 
