@@ -912,7 +912,6 @@ const WritingPage = ({
                     background: var(--text-main);
                     color: var(--bg-app);
                     border-color: var(--text-main);
-                    box-shadow: 0 4px 15px color-mix(in srgb, var(--text-main) 30%, transparent);
                 }
                 .pagination-nav-pill {
                     display: flex;

@@ -268,23 +268,19 @@ const Layout = () => {
                         
                     </div>
                     
-                    {/* Always rendered to avoid mount/unmount layout shifts — hidden via display:none */}
-                    <div style={{
-                        display: (location.pathname.startsWith('/teaching') && !isSidebarCollapsed) ? 'block' : 'none',
-                    }}>
-                        <AdBanner variant="inline" wrapperClass="sidebar-ad" wrapperStyle={{ width: '100%', padding: '10px 15px 0', flexShrink: 0 }} />
-                    </div>
+
                 </div>
 
                 <div className="sidebar-bottom" ref={settingsZoneRef}>
                     <div className="settings-profile-container">
                         <div
                             className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''} ${isSidebarCollapsed ? 'collapsed-trigger' : ''}`}
-                            onClick={() => setIsSidebarCollapsed(false)} // Expand on profile click if collapsed
-                            onMouseEnter={() => { }} // Optional: peek expand? Nah, let's stick to click
+                            onClick={() => {
+                                setIsSettingsOpen(!isSettingsOpen);
+                            }}
                         >
                             {!isSidebarCollapsed && (
-                                <div onClick={(e) => { e.stopPropagation(); setIsSettingsOpen(!isSettingsOpen); }} style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
                                     <ProfileImage
                                         src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
                                         alt="Profile"
@@ -306,7 +302,7 @@ const Layout = () => {
                         </div>
 
                         {isSettingsOpen && (
-                            <div className="settings-popup">
+                            <div className={`settings-popup ${isSidebarCollapsed ? 'side-popup' : ''}`}>
                                 <div className="popup-theme-section" onClick={(e) => e.stopPropagation()}>
                                     <span className="popup-theme-label">Appearance</span>
                                     <div className="theme-slider-container">

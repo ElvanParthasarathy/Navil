@@ -6,6 +6,11 @@ import '../components/vocoder/vocoder-global.css';
 
 const VocoderView = () => {
     const [activeTab, setActiveTab] = useState('presentation');
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const totalSlides = 22;
+    const stageDomRef = React.useRef(null);
+
     const { setPageTitle } = useOutletContext();
 
     useEffect(() => {
@@ -16,11 +21,27 @@ const VocoderView = () => {
         window.scrollTo(0, 0);
     }, []);
 
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement && stageDomRef.current) {
+            stageDomRef.current.requestFullscreen().catch(err => console.log(err));
+        } else if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+    };
+
+    useEffect(() => {
+        const onFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', onFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+    }, []);
+
     return (
         <div className="page-view fadeIn vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
             <style>{`
-                /* Lock absolute scrolling for the entire document while this component is active */
-                html, body, #root, .app-shell, .main-content {
+                /* Lock scrolling only for the main content area while this component is active */
+                .main-content {
                     overflow: hidden !important;
                 }
                 .main-content {
@@ -29,7 +50,7 @@ const VocoderView = () => {
                 @media (max-width: 768px) {
                     .vocoder-page-container {
                         padding-top: 60px !important;
-                        padding-bottom: 64px !important;
+                        padding-bottom: 74px !important;
                     }
                 }
 
@@ -308,7 +329,7 @@ const VocoderView = () => {
                 @media (max-width: 768px) {
                     .slide-stage { padding: 10px; }
                     .slide-frame { border-radius: 4px; }
-                    .slide-thumbs-bar { padding: 0 12px 16px 12px; gap: 10px; }
+                    .slide-thumbs-bar { padding: 16px 12px; gap: 10px; }
                     .slide-thumb { width: 80px; }
                     .vocoder-topbar { 
                         display: flex; 
@@ -335,18 +356,80 @@ const VocoderView = () => {
                     🎤 Vocoder
                 </span>
 
-                <Link to="/teaching" className="back-pill desktop-only">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                </Link>
+                <div className="vocoder-topbar-controls" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifySelf: 'end' }}>
+                    {activeTab === 'presentation' && (
+                        <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ fontSize: '0.8rem', fontWeight: '600', color: 'var(--text-muted)', fontVariantNumeric: 'tabular-nums', minWidth: '42px', textAlign: 'center' }}>
+                                {currentSlide + 1}/{totalSlides}
+                            </span>
+                            <button
+                                onClick={toggleFullscreen}
+                                title={isFullscreen ? "Exit Full Screen" : "Full Screen"}
+                                className="vocoder-fs-btn"
+                                style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: 'var(--text-muted)',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s',
+                                }}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <polyline points="9 21 3 21 3 15" />
+                                    <line x1="21" y1="3" x2="14" y2="10" />
+                                    <line x1="3" y1="21" x2="10" y2="14" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+                    <Link to="/teaching" className="back-pill desktop-only">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                    </Link>
+                </div>
             </div>
 
 
             {/* Slide Stage */}
-            {activeTab === 'presentation' ? <PresentationStage /> : (
-                <div style={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
-                    <Interactive />
+            {activeTab === 'presentation' ? (
+                <PresentationStage 
+                    currentSlide={currentSlide} 
+                    setCurrentSlide={setCurrentSlide}
+                    isFullscreen={isFullscreen}
+                    toggleFullscreen={toggleFullscreen}
+                    totalSlides={totalSlides}
+                    stageDomRef={stageDomRef}
+                />
+            ) : (
+                <div style={{ flex: 1, overflow: 'hidden', minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="mobile-only" style={{ 
+                        background: 'color-mix(in srgb, var(--text-main) 5%, transparent)', 
+                        padding: '40px 24px', 
+                        borderRadius: '24px', 
+                        textAlign: 'center',
+                        border: '1px solid var(--border-light)',
+                        margin: '24px',
+                        maxWidth: '320px'
+                    }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>💻</div>
+                        <h3 style={{ marginBottom: '12px', fontSize: '1.25rem', fontWeight: 700 }}>Desktop Experience</h3>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>
+                            The Interactive Story requires a larger workspace to display complex models. Please switch to a desktop to explore.
+                        </p>
+                    </div>
+                    <div className="desktop-only" style={{ width: '100%', height: '100%' }}>
+                        <Interactive />
+                    </div>
                 </div>
             )}
+
+
         </div>
     );
 };
@@ -377,34 +460,14 @@ const SLIDE_TITLES = [
     'நன்றி — Thank You'
 ];
 
-const PresentationStage = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+const PresentationStage = ({ currentSlide, setCurrentSlide, isFullscreen, toggleFullscreen, totalSlides, stageDomRef }) => {
     const [scale, setScale] = useState(1);
-    const [isFullscreen, setIsFullscreen] = useState(false);
     
-    const totalSlides = 22;
     const thumbsRef = React.useRef(null);
     const frameRef = React.useRef(null);
-    const stageDomRef = React.useRef(null);
 
     const goToSlide = (i) => {
         if (i >= 0 && i < totalSlides) setCurrentSlide(i);
-    };
-
-    useEffect(() => {
-        const onFullscreenChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
-        };
-        document.addEventListener('fullscreenchange', onFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
-    }, []);
-
-    const toggleFullscreen = () => {
-        if (!document.fullscreenElement && stageDomRef.current) {
-            stageDomRef.current.requestFullscreen().catch(err => console.log(err));
-        } else if (document.fullscreenElement) {
-            document.exitFullscreen();
-        }
     };
 
     // Calculate explicit 16:9 bounds relative to the parent stage to guarantee zero structural gaps
@@ -535,8 +598,8 @@ const PresentationStage = () => {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
                 </button>
 
-                {/* Right-side controls: counter + fullscreen — Canva toolbar style */}
-                <div style={{ marginRight: '16px', flexShrink: 0, paddingLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {/* Right-side controls: counter + fullscreen — Canva toolbar style (Desktop Only) */}
+                <div className="desktop-only" style={{ marginRight: '16px', flexShrink: 0, paddingLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span style={{ fontSize: '0.8rem', fontWeight: '600', color: 'var(--text-muted)', fontVariantNumeric: 'tabular-nums', minWidth: '42px', textAlign: 'center' }}>
                         {currentSlide + 1}/{totalSlides}
                     </span>

@@ -150,6 +150,10 @@ body {
 @media (max-width: 768px) {
   .mobile-hide { display: none !important; }
 }
+
+@media (min-width: 769px) {
+  .mobile-only { display: none !important; }
+}
 [lang="ta"],
 [lang="ta"] * {
   font-family: "Mukta Malar", "Google Sans", sans-serif !important;
@@ -533,7 +537,7 @@ body {
   position: absolute;
   bottom: calc(100% + 10px);
   left: 0;
-  right: 0;
+  width: 240px;
   background: var(--bg-panel);
   border-radius: 20px;
   padding: 16px;
@@ -541,6 +545,24 @@ body {
   z-index: 2000;
   border: 1px solid var(--border-light);
   animation: popupSlideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.settings-popup.side-popup {
+  bottom: 0;
+  left: calc(100% + 20px);
+  animation: popupSlideRight 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes popupSlideRight {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
 }
 
 @keyframes popupSlideUp {
