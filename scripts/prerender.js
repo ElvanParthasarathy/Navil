@@ -36,7 +36,7 @@ async function startServer() {
     const app = express();
     app.use(express.static(DIST_DIR));
     // Fallback for SPA routing
-    app.get('*', (req, res) => {
+    app.get('{*path}', (req, res) => {
         res.sendFile(path.join(DIST_DIR, 'index.html'));
     });
 
