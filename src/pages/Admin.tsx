@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings } from 'react-icons/fi';
+import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { db, auth } from '../lib/firebaseClient';
@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS } from '../components/admin/AdminShared';
 import { ProfileEditor } from '../components/admin/ProfileEditor';
+import { AboutEditor } from '../components/admin/AboutEditor';
 import { PoemEditor } from '../components/admin/PoemEditor';
 import { QuoteEditor } from '../components/admin/QuoteEditor';
 import { BlogEditor } from '../components/admin/BlogEditor';
@@ -580,6 +581,9 @@ const Admin = () => {
                     <button className={`admin-nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { setActiveTab('profile'); setEditingId(null); setMobileMenuOpen(false); }}>
                         <div className="nav-icon"><FiUser size={16} /></div> <span>Profile</span>
                     </button>
+                    <button className={`admin-nav-item ${activeTab === 'about' ? 'active' : ''}`} onClick={() => { setActiveTab('about'); setEditingId(null); setMobileMenuOpen(false); }}>
+                        <div className="nav-icon"><FiFileText size={16} /></div> <span>About Page</span>
+                    </button>
                     {Object.keys(SCHEMAS).map(key => (
                         <button key={key} className={`admin-nav-item ${activeTab === key ? 'active' : ''}`} onClick={() => { setActiveTab(key); setEditingId(null); setMobileMenuOpen(false); }}>
                             <div className="nav-icon">{SCHEMAS[key].icon}</div> <span>{SCHEMAS[key].label}</span>
@@ -707,6 +711,8 @@ const Admin = () => {
                         onUpdateProfile={updateProfile}
                         onSave={() => handleSaveCollection('profile')}
                     />
+                ) : activeTab === 'about' ? (
+                    <AboutEditor />
                 ) : activeTab === 'settings' ? (
                     <div className="admin-content-area" style={{ padding: '32px', maxWidth: '600px' }}>
                         <h2 style={{ marginBottom: '24px', color: 'var(--text-main)' }}>Default Author Names</h2>

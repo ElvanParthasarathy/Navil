@@ -76,7 +76,7 @@ const Home = () => {
                 .hero-title {
                     font-size: clamp(2.6rem, 3.2vw, 3.25rem);
                     font-weight: 800;
-                    line-height: 1.1;
+                    line-height: 1.3;
                     margin-bottom: 12px;
                     letter-spacing: 0;
                     color: var(--text-main);

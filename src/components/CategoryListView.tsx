@@ -25,7 +25,7 @@ const CATEGORY_META = {
     },
     'diary': {
         title: 'நாளேடு', subtitle: 'Diary',
-        descTa: 'என் தனிப்பட்ட நாட்குறிப்புகள்.', descEn: 'My personal journal entries.',
+        descTa: 'என் நாள்களின் நினைவுகளும் பதிவுகளும்', descEn: 'Memories and records of my days.',
         table: 'diary_v2', classification: 'Journal',
     }
 };
@@ -168,11 +168,13 @@ const CategoryListView = () => {
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <div>
-                    <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '-1.5px', lineHeight: 1.1, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>
-                    <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '16px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
+                <div className="mobile-hide">
+                    <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>
+                </div>
+                <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
+                <div className="header-desc">
                     <p lang="ta" style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{meta.descTa}</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px' }}>{meta.descEn}</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '2px' }}>{meta.descEn}</p>
                 </div>
 
                 <Link to="/writings" className="back-pill desktop-only">
@@ -209,6 +211,46 @@ const CategoryListView = () => {
                     </select>
                 )}
             </div>
+
+            {totalPages > 1 && (
+                <div className="pagination-wrapper" style={{ marginTop: 0, paddingTop: 0, marginBottom: '32px', borderTop: 'none', borderBottom: '1px solid var(--border-light)', paddingBottom: '20px' }}>
+                    <button
+                        className="page-btn"
+                        lang="ta"
+                        disabled={currentPage === 1}
+                        onClick={() => {
+                            setCurrentPage(prev => Math.max(prev - 1, 1));
+                        }}
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முன்பு
+                    </button>
+
+                    <div className="page-numbers">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                            <button
+                                key={num}
+                                className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
+                                onClick={() => {
+                                    setCurrentPage(num);
+                                }}
+                            >
+                                {num}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button
+                        className="page-btn"
+                        lang="ta"
+                        disabled={currentPage === totalPages}
+                        onClick={() => {
+                            setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                        }}
+                    >
+                        அடுத்து <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                    </button>
+                </div>
+            )}
 
             <div style={{ display: 'grid', gap: '40px', maxWidth: '800px' }}>
                 {loading ? (
@@ -355,7 +397,7 @@ const CategoryListView = () => {
                             setCurrentPage(prev => Math.max(prev - 1, 1));
                         }}
                     >
-                        &larr; முன்பு
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முன்பு
                     </button>
 
                     <div className="page-numbers">
@@ -380,7 +422,7 @@ const CategoryListView = () => {
                             setCurrentPage(prev => Math.min(prev + 1, totalPages));
                         }}
                     >
-                        அடுத்து &rarr;
+                        அடுத்து <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                     </button>
                 </div>
             )}
@@ -410,10 +452,10 @@ const CategoryListView = () => {
                 .pagination-wrapper {
                     display: flex;
                     align-items: center;
-                    justify-content: center;
+                    justify-content: flex-start;
                     gap: 24px;
-                    margin-top: 60px;
-                    padding-top: 40px;
+                    margin-top: 32px;
+                    padding-top: 32px;
                     border-top: 1px solid var(--border-light);
                     margin-bottom: 20px;
                 }
@@ -431,13 +473,13 @@ const CategoryListView = () => {
                     background: transparent;
                     color: var(--text-muted);
                     border: 1px solid var(--border-light);
-                    width: 40px;
-                    height: 40px;
+                    width: 32px;
+                    height: 32px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     border-radius: 50%;
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s ease;
@@ -457,12 +499,15 @@ const CategoryListView = () => {
                     background: color-mix(in srgb, var(--text-main) 6%, transparent);
                     color: var(--text-main);
                     border: none;
-                    padding: 10px 24px;
+                    padding: 8px 20px;
                     border-radius: 100px;
                     font-size: 0.85rem;
                     font-weight: 700;
                     cursor: pointer;
                     transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
                 }
                 .page-btn:hover:not(:disabled) {
                     background: var(--text-main);
@@ -536,8 +581,8 @@ const CategoryListView = () => {
                     align-items: center;
                     justify-content: center;
                     gap: 24px;
-                    margin-top: 60px;
-                    padding-top: 40px;
+                    margin-top: 32px;
+                    padding-top: 32px;
                     border-top: 1px solid var(--border-light);
                 }
                 .page-info {
@@ -549,7 +594,7 @@ const CategoryListView = () => {
                     background: color-mix(in srgb, var(--text-main) 6%, transparent);
                     color: var(--text-main);
                     border: none;
-                    padding: 10px 24px;
+                    padding: 8px 20px;
                     border-radius: 100px;
                     font-size: 0.85rem;
                     font-weight: 700;
@@ -581,7 +626,7 @@ const CategoryListView = () => {
 
                 /* Filters & Search */
                 .controls-area {
-                    margin-bottom: 40px;
+                    margin-bottom: 24px;
                     display: flex;
                     flex-direction: row;
                     gap: 16px;
@@ -828,6 +873,25 @@ const CategoryListView = () => {
                     color: var(--text-main);
                     white-space: pre-wrap;
                     word-break: break-word;
+                }
+                
+                @media (max-width: 600px) {
+                    .pagination-wrapper {
+                        gap: 8px;
+                        margin-top: 24px;
+                        padding-top: 24px;
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+                    .page-btn {
+                        padding: 8px 12px;
+                        font-size: 0.75rem;
+                    }
+                    .page-number-btn {
+                        width: 44px !important;
+                        height: 44px !important;
+                        font-size: 1rem !important;
+                    }
                 }
             `}</style>
         </div >

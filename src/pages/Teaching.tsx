@@ -16,7 +16,7 @@ const Teaching = () => {
             <style>{`
                 .writings-page { max-width: 1200px; margin: 0 auto; padding: 10px 20px; }
                 .writings-header { margin-bottom: 48px; text-align: left; }
-                .writings-title { font-size: clamp(2.4rem, 3vw, 3rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 10px; color: var(--text-main); line-height: 1.1; }
+                .writings-title { font-size: clamp(2.4rem, 3vw, 3rem); font-weight: 800; letter-spacing: 0; margin-bottom: 10px; color: var(--text-main); line-height: 1.3; }
                 .writings-title-sub { font-size: 1rem; font-weight: 500; color: #888888; margin-bottom: 16px; letter-spacing: 0.5px; }
                 .writings-subtitle { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
                 .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; margin-top: 32px; }
@@ -24,7 +24,7 @@ const Teaching = () => {
                 .category-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px; padding: 24px; text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.2, 0, 0, 1); display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; min-height: 220px; }
                 .cat-icon-box { width: 56px; height: 56px; background: var(--bg-panel); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--text-main); transition: all 0.3s ease; }
                 .cat-content { flex: 1; }
-                .cat-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 2px; color: var(--text-main); line-height: 1.1; }
+                .cat-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 2px; color: var(--text-main); line-height: 1.3; }
                 .cat-title-sub { font-size: 0.8rem; font-weight: 500; color: #888888; margin-bottom: 8px; }
                 .cat-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
                 .cat-desc-sub { font-size: 0.82rem; color: #888888; line-height: 1.4; margin-top: 2px; }
@@ -42,7 +42,7 @@ const Teaching = () => {
                 @media (max-width: 768px) {
                     .writings-page { padding: 24px 0; }
                     .writings-header { padding: 40px 20px 20px; text-align: center; margin-bottom: 32px; }
-                    .writings-title { font-size: 2.1rem; margin-bottom: 10px; }
+                    .writings-title { display: none; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; }
                     .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
                     .category-card { min-height: auto; padding: 20px; gap: 16px; border-radius: 18px; }

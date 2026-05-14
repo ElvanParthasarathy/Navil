@@ -473,6 +473,11 @@ const Archive = () => {
                                 <div
                                     key={idx}
                                     className={`feed-dot ${idx === currentIndex ? 'active' : ''}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        scrollTo(idx);
+                                    }}
+                                    style={{ cursor: 'pointer' }}
                                 />
                             ))}
                         </div>

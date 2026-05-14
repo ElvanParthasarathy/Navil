@@ -259,7 +259,7 @@ const WritingPage = ({
                 }
 
                 .poems-nav {
-                    margin-bottom: 24px;
+                    margin-bottom: 12px;
                     display: flex;
                     align-items: flex-start;
                     justify-content: space-between;
@@ -296,13 +296,13 @@ const WritingPage = ({
 
                 /* Header Area */
                 .poems-header-area {
-                    margin-bottom: 24px;
+                    margin-bottom: 12px;
                 }
                 .poems-main-title {
                     font-size: 2.4rem;
                     font-weight: 800;
-                    letter-spacing: -1.5px;
-                    line-height: 1.1;
+                    letter-spacing: 0;
+                    line-height: 1.3;
                     margin-bottom: 10px;
                     color: var(--text-main);
                 }
@@ -310,7 +310,7 @@ const WritingPage = ({
                     font-size: 1rem;
                     font-weight: 500;
                     color: #888888;
-                    margin-bottom: 16px;
+                    margin-bottom: 8px;
                     letter-spacing: 0.5px;
                 }
                 .poems-subtitle {
@@ -323,7 +323,7 @@ const WritingPage = ({
 
                 /* Filters & Search */
                 .controls-area {
-                    margin-bottom: 40px;
+                    margin-bottom: 24px;
                     display: flex;
                     flex-direction: row;
                     gap: 16px;
@@ -748,11 +748,11 @@ const WritingPage = ({
 
                 .pagination-wrapper {
                     display: flex;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: center;
                     gap: 24px;
-                    padding: 40px 0;
-                    margin-top: 40px;
+                    padding: 32px 0;
+                    margin-top: 32px;
                     border-top: 1px solid var(--border-light);
                 }
                 .page-numbers {
@@ -764,13 +764,13 @@ const WritingPage = ({
                     background: transparent;
                     color: var(--text-muted);
                     border: 1px solid var(--border-light);
-                    width: 40px;
-                    height: 40px;
+                    width: 32px;
+                    height: 32px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     border-radius: 50%;
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s ease;
@@ -790,12 +790,15 @@ const WritingPage = ({
                     background: color-mix(in srgb, var(--text-main) 6%, transparent);
                     color: var(--text-main);
                     border: none;
-                    padding: 10px 24px;
+                    padding: 8px 20px;
                     border-radius: 100px;
                     font-size: 0.85rem;
                     font-weight: 700;
                     cursor: pointer;
                     transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
                 }
                 .page-btn:hover:not(:disabled) {
                     background: var(--text-main);
@@ -835,8 +838,7 @@ const WritingPage = ({
                         margin-bottom: 16px;
                     }
                     .poems-main-title {
-                        font-size: 2.2rem;
-                        margin-bottom: 12px;
+                        display: none;
                     }
                     .poems-subtitle {
                         font-size: 0.95rem;
@@ -876,6 +878,22 @@ const WritingPage = ({
                     .pill-btn {
                         padding: 8px 16px;
                         font-size: 0.85rem;
+                    }
+                    .pagination-wrapper {
+                        gap: 8px;
+                        margin-top: 40px;
+                        padding-top: 24px;
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+                    .page-btn {
+                        padding: 8px 12px;
+                        font-size: 0.75rem;
+                    }
+                    .page-number-btn {
+                        width: 44px !important;
+                        height: 44px !important;
+                        font-size: 1rem !important;
                     }
                 }
             `}</style>
@@ -925,6 +943,46 @@ const WritingPage = ({
                         ))}
                     </select>
                 </div>
+
+                {totalPages > 1 && (
+                    <div className="pagination-wrapper" style={{ marginTop: 0, paddingTop: 0, marginBottom: '20px', borderTop: 'none', borderBottom: '1px solid var(--border-light)', paddingBottom: '20px' }}>
+                        <button
+                            className="page-btn"
+                            lang="ta"
+                            disabled={currentPage === 1}
+                            onClick={() => {
+                                setCurrentPage(prev => Math.max(prev - 1, 1));
+                            }}
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முன்பு
+                        </button>
+
+                        <div className="page-numbers">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                                <button
+                                    key={num}
+                                    className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setCurrentPage(num);
+                                    }}
+                                >
+                                    {num}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            className="page-btn"
+                            lang="ta"
+                            disabled={currentPage === totalPages}
+                            onClick={() => {
+                                setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                            }}
+                        >
+                            அடுத்து <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                        </button>
+                    </div>
+                )}
 
                 <div className="poems-list">
                     {isLoading ? (
@@ -1104,7 +1162,7 @@ const WritingPage = ({
                                 setCurrentPage(prev => Math.max(prev - 1, 1));
                             }}
                         >
-                            &larr; முன்பு
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முன்பு
                         </button>
 
                         <div className="page-numbers">
@@ -1129,7 +1187,7 @@ const WritingPage = ({
                                 setCurrentPage(prev => Math.min(prev + 1, totalPages));
                             }}
                         >
-                            அடுத்து &rarr;
+                            அடுத்து <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                         </button>
                     </div>
                 )}

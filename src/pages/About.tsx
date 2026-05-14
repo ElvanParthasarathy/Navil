@@ -1,17 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import profileData from '../data/profile.json';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
-
 import { useOutletContext } from 'react-router-dom';
+import { db } from '../lib/firebaseClient';
+import { ref, onValue } from 'firebase/database';
+
+const getInitialAbout = () => {
+    try {
+        const cached = localStorage.getItem('elvan_about_cache');
+        if (cached) return JSON.parse(cached);
+    } catch (e) { console.error(e); }
+    return null;
+};
 
 const About = () => {
     const { setPageTitle } = useOutletContext();
+    const [about, setAbout] = useState(getInitialAbout());
 
-    React.useEffect(() => {
-        setPageTitle('பற்றி');
-    }, [setPageTitle]);
+    useEffect(() => { setPageTitle('பற்றி'); }, [setPageTitle]);
+
+    // Real-time Firebase listener — syncs and updates cache
+    useEffect(() => {
+        const unsub = onValue(ref(db, 'config/about_page'), (snap) => {
+            if (snap.exists()) {
+                const data = snap.val();
+                setAbout(data);
+                localStorage.setItem('elvan_about_cache', JSON.stringify(data));
+            }
+        });
+        return () => unsub();
+    }, []);
+
+    if (!about) {
+        return <div style={{ height: '100vh', background: 'var(--bg-app)' }} />;
+    }
 
     return (
         <>
@@ -179,6 +203,9 @@ const About = () => {
                     flex-direction: column;
                     gap: 6px;
                 }
+                .philosophy-text p {
+                    margin: 0;
+                }
 
                 /* CONTACT FOOTER */
                 .contact-footer {
@@ -322,16 +349,12 @@ const About = () => {
             <section className="about-hero animate-entry">
                 <div className="hero-avatar-wrapper">
                     <div className="hero-avatar-bg"></div>
-                    <img
-                        src={profileData.profilePic}
-                        alt={profileData.name}
-                        className="hero-avatar"
-                    />
+                    <img src={profileData.profilePic} alt={profileData.name} className="hero-avatar" />
                 </div>
-                <h1 className="hero-title">Elvan Parthasarathy</h1>
-                <h2 className="hero-subtitle">(Known as Jaiprakash P)</h2>
+                <h1 className="hero-title">{about.hero_title}</h1>
+                <h2 className="hero-subtitle">{about.hero_subtitle}</h2>
 
-                <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
+                <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
                     View Portfolio <FiArrowRight />
                 </a>
             </section>
@@ -339,55 +362,43 @@ const About = () => {
             <div className="about-grid animate-entry" style={{ animationDelay: '0.1s' }}>
                 <div className="about-card card-identity">
                     <h3 className="card-title">Identity</h3>
-                    <p className="card-text">
-                        My real name is <strong>Jaiprakash P</strong>.<br />
-                        <strong>Elvan Parthasarathy</strong> is the name I chose for my creations, inventions, and innovations.<br />
-                        Academically, I go by <strong>Jaiprakash P</strong>.
-                    </p>
+                    <p className="card-text" dangerouslySetInnerHTML={{ __html: about.identity_text }} />
                 </div>
 
                 <div className="about-card card-education">
                     <h3 className="card-title">Education</h3>
-                    <p className="card-text">
-                        I'm currently pursuing my <strong>Bachelor of Engineering</strong> at <strong>RMD Engineering College</strong>, and I'm in my <strong>pre-final year</strong>.
-                    </p>
+                    <p className="card-text" dangerouslySetInnerHTML={{ __html: about.education_text }} />
                 </div>
 
                 <div className="about-card card-social">
                     <h3 className="card-title">Social Presence</h3>
-                    <p className="card-text">
-                        I'm not active on social media apart from WhatsApp, LinkedIn, and Snapchat. I prefer a quieter space where I can write, think, and create freely.
-                    </p>
+                    <p className="card-text" dangerouslySetInnerHTML={{ __html: about.social_text }} />
                 </div>
 
                 <div className="about-card card-philosophy">
-                    <div className="philosophy-text">
-                        <span>"This website is where I share:</span>
-                        <span>A simple place.</span>
-                        <span>My own place.</span>
-                        <span>Where every word is mine."</span>
-                    </div>
+                    <div className="philosophy-text" dangerouslySetInnerHTML={{ __html: about.philosophy_lines || '' }} />
                 </div>
             </div>
+
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
             <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="contact-info-block">
                     <div className="contact-header">
-                        <h3 lang="ta">இணைவோம்</h3>
+                        <h3 lang="ta">{about.contact_tamil}</h3>
                         <div className="contact-divider"></div>
-                        <h3>Let's Connect</h3>
+                        <h3>{about.contact_english}</h3>
                     </div>
 
-                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
+                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>{about.contact_desc_tamil}</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>{about.contact_desc_english}</p>
                 </div>
 
                 <div className="contact-right-side">
                     <div className="contact-location">
                         <FiMapPin size={14} />
-                        <span>Arani, Tamil Nadu · Currently in Chennai</span>
+                        <span>{about.location}</span>
                     </div>
 
                     <div className="contact-socials">

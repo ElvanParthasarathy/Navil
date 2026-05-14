@@ -108,7 +108,7 @@ body {
   --nav-hover: rgba(0, 0, 0, 0.08);
   --accent-color: #000;
   --accent-text: #fff;
-  --link-color: #0066cc;
+  --link-color: #088370;
 }
 
 [data-theme='dark'] {
@@ -123,7 +123,7 @@ body {
   --nav-hover: rgba(255, 255, 255, 0.1);
   --accent-color: #fff;
   --accent-text: #000;
-  --link-color: #4cb5f9;
+  --link-color: #0aa189;
 }
 
 body {
@@ -138,6 +138,9 @@ body {
 /* Tamil content uses Mukta Malar */
 [lang="ta"], :lang(ta) {
   font-family: "Mukta Malar", "Google Sans", sans-serif;
+  line-height: 1.4;
+  letter-spacing: normal !important;
+  padding: 0 2px;
 }
 
 .app-shell {
@@ -145,9 +148,9 @@ body {
   min-height: 100vh;
 }
 
-/* =========================================
-   TAMIL FONT STRICTNESS
-========================================= */
+@media (max-width: 768px) {
+  .mobile-hide { display: none !important; }
+}
 [lang="ta"],
 [lang="ta"] * {
   font-family: "Mukta Malar", "Google Sans", sans-serif !important;
@@ -203,10 +206,7 @@ body {
   padding: 30px 24px;
   z-index: 100;
 
-  transition: width 0.4s cubic-bezier(0.2, 0, 0, 1),
-    padding 0.4s cubic-bezier(0.2, 0, 0, 1),
-    background 0.3s ease,
-    color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
   contain: layout style;
   /* REMOVED 'paint' TO ALLOW OVERFLOW VISIBILITY */
   overflow: visible;
@@ -292,6 +292,16 @@ body {
   height: 16px;
   stroke-width: 1.5px;
   opacity: 0.6;
+}
+
+@media (min-width: 769px) {
+  /* Only animate when manually toggling (via the .animate-layout class) */
+  .animate-layout .sidebar {
+    transition: width 0.4s cubic-bezier(0.2, 0, 0, 1), padding 0.4s cubic-bezier(0.2, 0, 0, 1), background 0.3s ease, color 0.3s ease;
+  }
+  .animate-layout .main-content {
+    transition: margin-left 0.4s cubic-bezier(0.2, 0, 0, 1), width 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
 }
 
 .sidebar-nav {
@@ -886,24 +896,51 @@ span.desktop-only {
   .mobile-topbar .brand {
     font-size: 26px;
     font-weight: 900;
-    letter-spacing: -1.2px;
+    letter-spacing: 0.2px;
     color: var(--text-main);
-    line-height: 1.1;
+    line-height: 1.3;
+    padding: 0 4px;
+    margin-right: auto; /* Default to left-aligned */
+  }
+
+  .mobile-topbar.has-back .brand {
+    margin-right: 0; /* Reset for centering */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 60%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-topbar-left {
+    width: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-topbar.has-back .mobile-topbar-left {
+    width: 40px;
   }
 
   .mobile-back-btn {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
     border-radius: 50%;
-    background: transparent;
-    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-main);
+    background: var(--bg-card);
+    border: none;
     cursor: pointer;
     padding: 0;
-    margin-right: 4px;
+    margin-right: 8px;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.2s, transform 0.1s;
   }
@@ -927,12 +964,15 @@ span.desktop-only {
   .top-dot-btn {
     width: 40px;
     height: 40px;
+    flex-shrink: 0;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-main);
     background: var(--bg-card);
+    z-index: 1201; /* Above backdrop (1199) and dropdown (1200) */
+    pointer-events: auto !important;
     border: none;
     cursor: pointer;
     padding: 0;
@@ -954,6 +994,7 @@ span.desktop-only {
 
   /* --- NERAM DROPDOWN CARD --- */
   .top-menu-dropdown {
+    display: block !important;
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
@@ -1142,6 +1183,7 @@ span.desktop-only {
     min-height: 100vh;
     overflow: visible !important;
     background: var(--bg-app);
+    transition: none !important; /* Disable margin/width transitions when switching to mobile */
   }
 
   /* --- D. CONTENT CARD --- */
@@ -1179,7 +1221,7 @@ span.desktop-only {
     border-top: 1px solid var(--border-light) !important;
     border-radius: 0 !important;
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease; /* Only animate colors, not layout */
   }
 
   /* No Scoops in IG Style */

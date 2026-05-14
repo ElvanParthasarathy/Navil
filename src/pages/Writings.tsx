@@ -28,10 +28,10 @@ const Writings = () => {
                 .writings-title {
                     font-size: clamp(2.4rem, 3vw, 3rem);
                     font-weight: 800;
-                    letter-spacing: -1.5px;
+                    letter-spacing: 0;
                     margin-bottom: 10px;
                     color: var(--text-main);
-                    line-height: 1.1;
+                    line-height: 1.3;
                 }
 
                 .writings-title-sub {
@@ -94,7 +94,7 @@ const Writings = () => {
                     font-weight: 700;
                     margin-bottom: 2px;
                     color: var(--text-main);
-                    line-height: 1.1;
+                    line-height: 1.3;
                 }
 
                 .cat-title-sub {
@@ -174,7 +174,7 @@ const Writings = () => {
                 @media (max-width: 768px) {
                     .writings-page { padding: 24px 0; }
                     .writings-header { padding: 40px 28px 20px; text-align: left; margin-bottom: 32px; }
-                    .writings-title { font-size: 2.1rem; margin-bottom: 10px; }
+                    .writings-title { display: none; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; }
                     .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
                     
@@ -287,8 +287,8 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">நாளேடு</div>
                         <div className="cat-title-sub">Diary</div>
-                        <p className="cat-desc">என் தனிப்பட்ட குறிப்புகளும் காலச்சுவடுகளும்.</p>
-                        <p className="cat-desc-sub">My private logs and personal milestones.</p>
+                        <p className="cat-desc">என் நாள்களின் நினைவுகளும் பதிவுகளும்</p>
+                        <p className="cat-desc-sub">Memories and records of my days.</p>
                     </div>
                     <div className="cat-footer">நாளேட்டைத் திறக்க <FiArrowRight /></div>
                 </Link>

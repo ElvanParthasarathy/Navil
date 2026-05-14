@@ -215,7 +215,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
     const [isPaused, setIsPaused] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [duration, setDuration] = useState(0);
+    const [duration, setDuration] = useState(0); const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState(false);
 
     useEffect(() => {
         if (isActive && videoRef.current) {
@@ -354,7 +354,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                                 <FiSend size={24} color="white" />
                             </div>
                         </div>
-                        <div className="v-action-btn" onClick={(e) => e.stopPropagation()}>
+                        <div className="v-action-btn" onClick={(e) => { e.stopPropagation(); setIsOptionsMenuOpen(true); }}>
                             <div className="v-icon-circle">
                                 <FiMoreHorizontal size={24} color="white" />
                             </div>
@@ -365,6 +365,38 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                             </div>
                         </div>
                     </div>
+                    {/* Options Menu Overlay */}
+                    {isOptionsMenuOpen && (
+                        <div className="v-menu-overlay" onClick={(e) => { e.stopPropagation(); setIsOptionsMenuOpen(false); }}>
+                            <div className="v-menu-card" onClick={(e) => e.stopPropagation()}>
+                                <button className="v-menu-item" onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigator.clipboard.writeText(window.location.href);
+                                    setIsOptionsMenuOpen(false);
+                                    alert("Link copied to clipboard!");
+                                }}>
+                                    Copy Link
+                                </button>
+                                <button className="v-menu-item" onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (navigator.share) {
+                                        navigator.share({
+                                            title: reel.caption || 'Instagram Reel',
+                                            url: window.location.href
+                                        }).catch(() => {});
+                                    } else {
+                                        alert("Sharing not supported on this browser.");
+                                    }
+                                    setIsOptionsMenuOpen(false);
+                                }}>
+                                    Share
+                                </button>
+                                <button className="v-menu-item cancel" onClick={(e) => { e.stopPropagation(); setIsOptionsMenuOpen(false); }}>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -577,6 +609,44 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                     /* On mobile, make scrubber thumb always visible for easier seeking */
                     .v-scrubber::-webkit-slider-thumb { opacity: 1; width: 8px; height: 8px; }
                 }
+
+                /* Options Menu Styles */
+                .v-menu-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: rgba(0,0,0,0.6);
+                    z-index: 100;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backdrop-filter: blur(4px);
+                    animation: vFadeIn 0.2s ease;
+                }
+                .v-menu-card {
+                    width: 260px;
+                    background: #262626;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    animation: vSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                .v-menu-item {
+                    width: 100%;
+                    padding: 14px;
+                    background: none;
+                    border: none;
+                    border-bottom: 1px solid #363636;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    text-align: center;
+                }
+                .v-menu-item:last-child { border-bottom: none; }
+                .v-menu-item:active { background: #333; }
+                .v-menu-item.cancel { color: #ed4956; font-weight: 700; }
+
+                @keyframes vFadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes vSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
             `}</style>
         </div>
     );

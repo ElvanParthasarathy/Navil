@@ -64,6 +64,13 @@ const Layout = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(() => {
         return localStorage.getItem('sidebarCollapsed') === 'true';
     });
+    const [shouldAnimate, setShouldAnimate] = React.useState(false);
+
+    const handleSidebarToggle = () => {
+        setShouldAnimate(true);
+        setIsSidebarCollapsed(!isSidebarCollapsed);
+        setTimeout(() => setShouldAnimate(false), 500);
+    };
 
     React.useEffect(() => {
         localStorage.setItem('sidebarCollapsed', isSidebarCollapsed);
@@ -76,9 +83,13 @@ const Layout = () => {
 
     // Close mobile menu on click outside
     React.useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
-                setIsMobileMenuOpen(false);
+        const handleClickOutside = (event) => {
+            const isInside = event.target.closest('.mobile-menu-zone');
+            if (mobileMenuRef.current && !isInside) {
+                if (isMobileMenuOpen) {
+                    console.log("Closing mobile menu. Clicked on:", event.target);
+                    setIsMobileMenuOpen(false);
+                }
             }
         };
         if (isMobileMenuOpen) {
@@ -109,11 +120,11 @@ const Layout = () => {
     }, [location.pathname]);
 
     return (
-        <div className="app-shell" style={{ display: 'flex' }}>
+        <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''}`} style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
-            <header className="mobile-topbar">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {location.pathname.split('/').filter(Boolean).length >= 2 && (
+            <header className={`mobile-topbar ${location.pathname.split('/').filter(Boolean).length >= 2 || location.pathname.startsWith('/teaching') ? 'has-back' : ''}`}>
+                <div className="mobile-topbar-left">
+                    { (location.pathname.split('/').filter(Boolean).length >= 2 || location.pathname.startsWith('/teaching')) && (
                         <button 
                             className="mobile-back-btn" 
                             onClick={() => navigate(-1)}
@@ -122,13 +133,19 @@ const Layout = () => {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
                         </button>
                     )}
-                    <div className="brand">{pageTitle}</div>
                 </div>
+                
+                <div className="brand">{pageTitle}</div>
+
                 <div className="top-bar-actions">
                     <div className="mobile-menu-zone" ref={mobileMenuRef}>
                         <button 
                             className="top-dot-btn"
-                            onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setMobileMenuView('main'); }}
+                            onClick={(e) => { 
+                                e.stopPropagation();
+                                setIsMobileMenuOpen(prev => !prev); 
+                                setMobileMenuView('main'); 
+                            }}
                             aria-label="More options"
                         >
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -206,7 +223,7 @@ const Layout = () => {
                         {!isSidebarCollapsed && <div className="brand">Elvan</div>}
                         <button
                             className="sidebar-toggle-btn"
-                            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                            onClick={handleSidebarToggle}
                             title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                         >
                             {isSidebarCollapsed ? <RiMenuUnfoldLine size={20} /> : <RiMenuFoldLine size={20} />}
@@ -299,7 +316,7 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)', transition: 'margin-left 0.4s cubic-bezier(0.2, 0, 0, 1), width 0.4s cubic-bezier(0.2, 0, 0, 1)' }}>
+            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' }}>
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle }} />
             </main>
         </div>
