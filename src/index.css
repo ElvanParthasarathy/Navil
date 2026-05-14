@@ -884,10 +884,11 @@ span.desktop-only {
   }
 
   .mobile-topbar .brand {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -1px;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -1.2px;
     color: var(--text-main);
+    line-height: 1.1;
   }
 
   .mobile-hamburger {
@@ -1053,6 +1054,7 @@ span.desktop-only {
   .mobile-drawer-bottom {
     margin-top: auto;
     padding-top: 20px;
+    padding-bottom: 32px;
     border-top: 1px solid var(--border-light);
   }
 
