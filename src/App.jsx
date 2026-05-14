@@ -97,14 +97,17 @@ const Layout = () => {
 
     return (
         <div className="app-shell" style={{ display: 'flex' }}>
-            {/* Mobile Hamburger Button */}
-            <button 
-                className="mobile-hamburger"
-                onClick={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-                aria-label="Toggle sidebar menu"
-            >
-                {isMobileDrawerOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-            </button>
+            {/* Mobile Top Bar */}
+            <header className="mobile-topbar">
+                <div className="brand">Elvan</div>
+                <button 
+                    className="mobile-hamburger"
+                    onClick={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
+                    aria-label="Toggle sidebar menu"
+                >
+                    {isMobileDrawerOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+                </button>
+            </header>
 
             {/* Mobile Drawer Overlay */}
             <div 
