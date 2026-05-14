@@ -215,13 +215,19 @@ const About = () => {
                     line-height: 1.6;
                 }
 
+                .contact-right-side {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 16px;
+                }
+
                 .contact-location {
                     display: flex;
                     align-items: center;
                     gap: 8px;
                     color: var(--text-muted);
                     font-size: 0.95rem;
-                    margin-top: 8px;
                 }
 
                 .contact-socials { display: flex; gap: 12px; }
@@ -284,9 +290,13 @@ const About = () => {
                    .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
                    .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; }
                    
+                   .contact-right-side {
+                       align-items: center;
+                       gap: 20px;
+                   }
+                   
                    .contact-location { 
                        align-items: flex-start; 
-                       margin-top: 16px; 
                        line-height: 1.5; 
                        text-align: left; 
                        justify-content: center;
@@ -361,26 +371,28 @@ const About = () => {
 
                     <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
                     <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
+                </div>
 
+                <div className="contact-right-side">
                     <div className="contact-location">
                         <FiMapPin size={16} />
                         <span>Arani, Tamil Nadu - 632317 <br className="mobile-break" />(Currently in Chennai)</span>
                     </div>
-                </div>
 
-                <div className="contact-socials">
-                    <a href="tel:+919345128797" className="social-icon-link">
-                        <FiPhone size={20} />
-                    </a>
-                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                        <FiMail size={20} />
-                    </a>
-                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiLinkedin size={20} />
-                    </a>
-                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiGithub size={20} />
-                    </a>
+                    <div className="contact-socials">
+                        <a href="tel:+919345128797" className="social-icon-link">
+                            <FiPhone size={20} />
+                        </a>
+                        <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
+                            <FiMail size={20} />
+                        </a>
+                        <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
+                            <FiLinkedin size={20} />
+                        </a>
+                        <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
+                            <FiGithub size={20} />
+                        </a>
+                    </div>
                 </div>
             </div>
 
