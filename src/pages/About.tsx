@@ -298,7 +298,7 @@ const About = () => {
                    .contact-divider { display: none; }
                    .contact-info-block h3:first-child { font-size: 1.4rem; }
                    .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-                   .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; }
+                   .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; }
                    
                    .contact-right-side {
                        flex-direction: column;
