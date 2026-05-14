@@ -244,7 +244,7 @@ const Home = () => {
                     .contact-divider { display: none; }
                     .contact-info-block h3:first-child { font-size: 1.4rem; }
                     .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-                    .contact-info-block p { font-size: 1rem; line-height: 1.6; max-width: 260px; margin: 0; }
+                    .contact-info-block p { font-size: 1rem; line-height: 1.6; max-width: 100%; margin: 0; }
                     .contact-socials { width: 100%; justify-content: space-between; gap: 0; }
                     .social-icon-link { width: 48px; height: 48px; }
                 }
