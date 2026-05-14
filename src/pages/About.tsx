@@ -184,6 +184,10 @@ const About = () => {
                     gap: 24px;
                 }
 
+                .contact-info .contact-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+                .contact-info .contact-header h3:first-child { font-size: 1.5rem; }
+                .contact-info .contact-header h3:last-child { font-size: 1.4rem; }
+                .contact-divider { width: 2px; height: 24px; background: var(--border-color); opacity: 0.6; }
                 .contact-info h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
                 .contact-location { display: flex; align-items: center; gap: 8px; color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
                 .contact-socials { display: flex; gap: 12px; }
@@ -214,8 +218,12 @@ const About = () => {
                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
                    .about-card { padding: 28px; border-radius: 24px; }
                    
-                   .contact-footer { flex-direction: column; text-align: center; padding: 32px 24px; }
+                   .contact-footer { flex-direction: column; text-align: center; padding: 32px 20px; }
                    .contact-info { width: 100%; }
+                   .contact-header { flex-direction: column; gap: 0px; align-items: center; }
+                   .contact-divider { display: none; }
+                   .contact-info .contact-header h3:first-child { font-size: 1.4rem; }
+                   .contact-info .contact-header h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
                    .contact-location { justify-content: center; }
                    .contact-socials { justify-content: center; flex-wrap: wrap; }
                    .social-icon-link { width: 48px; height: 48px; }
@@ -277,10 +285,10 @@ const About = () => {
 
             <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                 <div className="contact-info">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                        <h3 lang="ta" style={{ fontSize: '1.5rem', margin: 0 }}>இணைவோம்</h3>
-                        <div style={{ width: '2px', height: '24px', background: 'var(--border-color)', opacity: 0.6 }}></div>
-                        <h3 style={{ fontSize: '1.4rem', margin: 0 }}>Let's Connect</h3>
+                    <div className="contact-header">
+                        <h3 lang="ta" style={{ margin: 0 }}>இணைவோம்</h3>
+                        <div className="contact-divider"></div>
+                        <h3 style={{ margin: 0 }}>Let's Connect</h3>
                     </div>
                     <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
                     <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
