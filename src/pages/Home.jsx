@@ -239,13 +239,13 @@ const Home = () => {
                     .desktop-text { display: none; }
                     .mobile-text { display: inline; }
                     
-                    .contact-footer { padding: 36px 24px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; }
-                    .contact-header { flex-direction: column; gap: 0px; }
+                    .contact-footer { padding: 36px 24px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: left; align-items: flex-start; }
+                    .contact-header { flex-direction: column; gap: 0px; align-items: flex-start; }
                     .contact-divider { display: none; }
                     .contact-info-block h3:first-child { font-size: 1.4rem; }
                     .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-                    .contact-info-block p { font-size: 1rem; line-height: 1.6; max-width: 260px; margin: 0 auto; }
-                    .contact-socials { justify-content: center; gap: 20px; }
+                    .contact-info-block p { font-size: 1rem; line-height: 1.6; max-width: 260px; margin: 0; }
+                    .contact-socials { justify-content: flex-start; gap: 20px; }
                     .social-icon-link { width: 48px; height: 48px; }
                 }
             `}</style>
