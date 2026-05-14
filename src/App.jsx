@@ -57,6 +57,7 @@ const Layout = () => {
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const [mobileMenuView, setMobileMenuView] = React.useState('main');
     const mobileMenuRef = React.useRef(null);
 
     const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(() => {
@@ -104,52 +105,79 @@ const Layout = () => {
             {/* Mobile Top Bar */}
             <header className="mobile-topbar">
                 <div className="brand">Elvan</div>
-                <div className="mobile-menu-zone" ref={mobileMenuRef}>
-                    <button 
-                        className="mobile-menu-btn"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label="More options"
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="5" r="2" />
-                            <circle cx="12" cy="12" r="2" />
-                            <circle cx="12" cy="19" r="2" />
-                        </svg>
-                    </button>
+                <div className="top-bar-actions">
+                    <div className="mobile-menu-zone" ref={mobileMenuRef}>
+                        <button 
+                            className="top-dot-btn"
+                            onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setMobileMenuView('main'); }}
+                            aria-label="More options"
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="5" cy="12" r="2" />
+                                <circle cx="12" cy="12" r="2" />
+                                <circle cx="19" cy="12" r="2" />
+                            </svg>
+                        </button>
 
-                    {isMobileMenuOpen && (
-                        <div className="mobile-dropdown">
-                            <Link 
-                                to="/teaching" 
-                                className={`mobile-dropdown-item ${location.pathname.startsWith('/teaching') ? 'active' : ''}`}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                <FiMonitor size={18} />
-                                <span>Teaching</span>
-                            </Link>
+                        {isMobileMenuOpen && (
+                            <>
+                                <div className="menu-backdrop" onClick={() => setIsMobileMenuOpen(false)} />
+                                <div className="top-menu-dropdown" style={{ height: mobileMenuView === 'main' ? '112px' : '220px' }}>
+                                    <div className="menu-slider-track" style={{ transform: mobileMenuView === 'main' ? 'translateX(0%)' : 'translateX(-50%)' }}>
 
-                            <div className="mobile-dropdown-divider" />
+                                        {/* MAIN MENU */}
+                                        <div className="menu-view">
+                                            <Link to="/teaching" onClick={() => setIsMobileMenuOpen(false)} className="menu-item">
+                                                <FiMonitor className="menu-icon" />
+                                                Teaching
+                                            </Link>
+                                            <button onClick={() => setMobileMenuView('appearance')} className="menu-item space-between">
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                    <svg className="menu-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M12 2.25c5.385 0 9.75 4.365 9.75 9.75s-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12 6.615 2.25 12 2.25Zm0 1.5v16.5c4.557 0 8.25-3.693 8.25-8.25 0-4.557-3.693-8.25-8.25-8.25Z" clipRule="evenodd" />
+                                                    </svg>
+                                                    <span>Appearance</span>
+                                                </div>
+                                                <svg style={{ width: '18px', height: '18px', opacity: 0.4 }} viewBox="0 0 24 24" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
 
-                            <div className="mobile-dropdown-theme" onClick={(e) => e.stopPropagation()}>
-                                <span className="mobile-dropdown-theme-label">Appearance</span>
-                                <div className="drawer-theme-slider">
-                                    <div
-                                        className="drawer-slider-thumb"
-                                        style={{ transform: `translateX(${theme === 'light' ? '0%' : theme === 'auto' ? '100%' : '200%'})` }}
-                                    />
-                                    <div className={`drawer-slider-opt ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')} title="Light">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
-                                    </div>
-                                    <div className={`drawer-slider-opt ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
-                                    </div>
-                                    <div className={`drawer-slider-opt ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                                        {/* APPEARANCE SUB-MENU */}
+                                        <div className="menu-view">
+                                            <button onClick={() => setMobileMenuView('main')} className="menu-item back-btn">
+                                                <svg style={{ width: '20px', height: '20px' }} viewBox="0 0 24 24" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+                                                </svg>
+                                                Back
+                                            </button>
+                                            <button onClick={() => setTheme('auto')} className={`menu-item ${theme === 'auto' ? 'selected' : ''}`}>
+                                                <svg className="menu-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M10.5 18.75a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" />
+                                                    <path fillRule="evenodd" d="M8.625 1.5A3.375 3.375 0 0 0 5.25 4.875v14.25a3.375 3.375 0 0 0 3.375 3.375h6.75a3.375 3.375 0 0 0 3.375-3.375V4.875A3.375 3.375 0 0 0 15.375 1.5h-6.75ZM7.5 4.875a1.125 1.125 0 0 1 1.125-1.125h6.75a1.125 1.125 0 0 1 1.125 1.125v14.25a1.125 1.125 0 0 1-1.125 1.125h-6.75A1.125 1.125 0 0 1 7.5 19.125V4.875Z" clipRule="evenodd" />
+                                                </svg>
+                                                Auto System
+                                            </button>
+                                            <button onClick={() => setTheme('light')} className={`menu-item ${theme === 'light' ? 'selected' : ''}`}>
+                                                <svg className="menu-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+                                                </svg>
+                                                Light Mode
+                                            </button>
+                                            <button onClick={() => setTheme('dark')} className={`menu-item ${theme === 'dark' ? 'selected' : ''}`}>
+                                                <svg className="menu-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clipRule="evenodd" />
+                                                </svg>
+                                                Dark Mode
+                                            </button>
+                                        </div>
+
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    )}
+                            </>
+                        )}
+                    </div>
                 </div>
             </header>
 
