@@ -172,35 +172,23 @@ const About = () => {
                     gap: 6px;
                 }
 
-                /* CONTACT CARD - BENTO STYLE */
-                .contact-card-bento {
-                    background: var(--bg-panel);
-                    border: 1px solid var(--border-light);
-                    padding: 40px;
-                    border-radius: 32px;
+                /* CONTACT FOOTER */
+                .contact-footer {
                     display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
+                    flex-direction: column;
                     align-items: center;
-                    gap: 32px;
-                    transition: all 0.3s ease;
-                    margin-top: 40px;
-                }
-
-                @media (hover: hover) and (pointer: fine) {
-                    .contact-card-bento:hover {
-                        transform: translateY(-4px);
-                        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-                        background: var(--bg-card);
-                        border-color: var(--border-light);
-                    }
+                    text-align: center;
+                    padding: 40px 32px;
+                    background: var(--bg-panel);
+                    border-radius: 32px;
+                    gap: 28px;
                 }
 
                 .contact-header {
                     display: flex;
                     align-items: center;
-                    gap: 16px;
-                    flex-shrink: 0;
+                    gap: 12px;
+                    margin-bottom: 4px;
                 }
 
                 .contact-divider {
@@ -210,38 +198,26 @@ const About = () => {
                     opacity: 0.6;
                 }
 
-                .contact-header h3:first-child {
-                    font-size: 1.8rem;
+                .contact-info-block h3 {
                     font-weight: 800;
-                    margin-bottom: 4px;
-                    color: var(--text-main);
+                    margin: 0;
+                }
+                .contact-info-block h3:first-child {
+                    font-size: 1.5rem;
+                }
+                .contact-info-block h3:last-child {
+                    font-size: 1.4rem;
                 }
 
-                .contact-header h3:last-child {
-                    font-size: 1.1rem;
-                    font-weight: 600;
+                .contact-info-block p {
                     color: var(--text-muted);
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    opacity: 0.8;
+                    margin: 0;
+                    line-height: 1.6;
                 }
 
-                .contact-bio {
-                    color: var(--text-muted);
-                    flex: 1;
-                    max-width: 300px;
-                    text-align: left;
-                }
-
-                .contact-bio p:first-child {
-                    font-size: 1.05rem;
-                    font-weight: 500;
-                    margin-bottom: 6px;
-                }
-
-                .contact-bio p:last-child {
+                .contact-info-block .contact-sub {
                     font-size: 0.9rem;
-                    opacity: 0.7;
+                    margin-top: 4px;
                 }
 
                 .contact-location {
@@ -249,21 +225,16 @@ const About = () => {
                     align-items: center;
                     gap: 8px;
                     color: var(--text-muted);
-                    font-size: 0.85rem;
-                    max-width: 200px;
-                    text-align: left;
+                    font-size: 0.95rem;
+                    margin-top: 16px;
+                    justify-content: center;
                 }
 
-                .contact-socials {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 12px;
-                    flex-shrink: 0;
-                }
+                .contact-socials { display: flex; gap: 16px; }
 
                 .social-icon-link {
-                    width: 44px;
-                    height: 44px;
+                    width: 48px;
+                    height: 48px;
                     background: var(--bg-card);
                     border: 1px solid var(--border-color);
                     border-radius: 50%;
@@ -274,20 +245,25 @@ const About = () => {
                     transition: all 0.3s ease;
                 }
 
-                .social-icon-link:hover {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    transform: translateY(-3px);
+                @media (hover: hover) and (pointer: fine) {
+                    .social-icon-link:hover {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        transform: translateY(-3px);
+                    }
                 }
 
                 .social-icon-link:active {
+                    background: var(--text-main);
+                    color: var(--bg-app);
                     transform: scale(0.95);
                 }
+
+                .about-footer-text { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.7; }
 
                 /* RESPONSIVE & DESKTOP GRID */
                 @media (min-width: 768px) {
                     .about-grid {
-                        display: grid;
                         grid-template-columns: repeat(12, 1fr);
                         gap: 24px;
                     }
@@ -302,49 +278,19 @@ const About = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .about-page { padding: 40px 20px 80px; }
-                    .hero-avatar-wrapper { width: 140px; height: 140px; }
-                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
-                    .about-card { padding: 28px; border-radius: 24px; }
-                    
-                    .contact-card-bento {
-                        padding: 40px 24px;
-                        border-radius: 28px;
-                        flex-direction: column;
-                        text-align: center;
-                        gap: 32px;
-                        align-items: center;
-                    }
-
-                    .contact-header {
-                        flex-direction: column;
-                        gap: 0;
-                    }
-
-                    .contact-divider {
-                        display: none;
-                    }
-
-                    .contact-header h3:first-child { font-size: 1.6rem; }
-                    .contact-header h3:last-child { font-size: 0.95rem; margin-top: 4px; }
-                    
-                    .contact-bio {
-                        max-width: 100%;
-                        text-align: center;
-                    }
-
-                    .contact-location {
-                        justify-content: center;
-                        text-align: center;
-                        font-size: 0.85rem;
-                        max-width: 100%;
-                    }
-
-                    .contact-socials {
-                        justify-content: center;
-                    }
-
-                    .social-icon-link { width: 42px; height: 42px; }
+                   .about-page { padding: 40px 20px 80px; }
+                   .hero-avatar-wrapper { width: 140px; height: 140px; }
+                   .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
+                   .about-card { padding: 28px; border-radius: 24px; }
+                   
+                   .contact-footer { padding: 32px 20px; border-radius: 24px; gap: 20px; }
+                   .contact-header { flex-direction: column; gap: 2px; }
+                   .contact-divider { display: none; }
+                   .contact-info-block h3:first-child { font-size: 1.4rem; }
+                   .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; }
+                   .contact-info-block p { font-size: 0.95rem; padding: 0 16px; }
+                   .contact-location { font-size: 0.9rem; }
+                   .social-icon-link { width: 48px; height: 48px; }
                 }
             `}</style>
 
@@ -378,14 +324,14 @@ const About = () => {
                 <div className="about-card card-education">
                     <h3 className="card-title">Education</h3>
                     <p className="card-text">
-                        I’m currently pursuing my <strong>Bachelor of Engineering</strong> at <strong>RMD Engineering College</strong>, and I’m in my <strong>pre-final year</strong>.
+                        I'm currently pursuing my <strong>Bachelor of Engineering</strong> at <strong>RMD Engineering College</strong>, and I'm in my <strong>pre-final year</strong>.
                     </p>
                 </div>
 
                 <div className="about-card card-social">
                     <h3 className="card-title">Social Presence</h3>
                     <p className="card-text">
-                        I’m not active on social media apart from WhatsApp, LinkedIn, and Snapchat. I prefer a quieter space where I can write, think, and create freely.
+                        I'm not active on social media apart from WhatsApp, LinkedIn, and Snapchat. I prefer a quieter space where I can write, think, and create freely.
                     </p>
                 </div>
 
@@ -401,20 +347,21 @@ const About = () => {
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
-            <div className="contact-card-bento animate-entry" style={{ animationDelay: '0.2s' }}>
-                <div className="contact-header">
-                    <h3 lang="ta">இணைவோம்</h3>
-                    <h3>Let's Connect</h3>
-                </div>
+            <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
+                <div className="contact-info-block">
+                    <div className="contact-header">
+                        <h3 lang="ta">இணைவோம்</h3>
+                        <div className="contact-divider"></div>
+                        <h3>Let's Connect</h3>
+                    </div>
 
-                <div className="contact-bio">
                     <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p>Open for collaborations and creative conversations.</p>
-                </div>
+                    <p className="contact-sub">Open for collaborations and creative conversations.</p>
 
-                <div className="contact-location">
-                    <FiMapPin size={16} /> 
-                    <span>Arani, Tamil Nadu • (Currently in Chennai)</span>
+                    <div className="contact-location">
+                        <FiMapPin size={16} />
+                        <span>Arani, Tamil Nadu - 632317 (Currently in Chennai)</span>
+                    </div>
                 </div>
 
                 <div className="contact-socials">
