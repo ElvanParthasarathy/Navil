@@ -234,9 +234,6 @@ const Home = () => {
                         <span lang="ta" style={{ display: 'block', marginBottom: '4px' }}>
                             "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
                         </span>
-                        <span lang="ml" style={{ display: 'block', marginBottom: '4px' }}>
-                            "എന്തുകൊണ്ട് പാടില്ല?" എന്ന് ചോദിക്കുമ്പോൾ പുതിയൊരു ചിന്ത ജനിക്കുന്നു.
-                        </span>
                         <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block', marginBottom: '16px' }}>{profileData.bio}</span>
 
                         <span lang="ta" style={{ display: 'block', fontWeight: 600 }}>இயற்பெயர்: பா. ஜெய்பிரகாஷ்</span>
