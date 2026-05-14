@@ -172,132 +172,101 @@ const About = () => {
                     gap: 6px;
                 }
 
-                /* PREMIUM CONTACT CARD REDESIGN */
-                .contact-section-wrapper {
-                    position: relative;
-                    margin-top: 80px;
-                    padding: 40px 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-
-                .contact-glow {
-                    position: absolute;
-                    width: 300px;
-                    height: 300px;
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-                    filter: blur(50px);
-                    z-index: 0;
-                }
-
-                [data-theme='dark'] .contact-glow {
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-                }
-
-                .premium-contact-card {
-                    position: relative;
-                    width: 100%;
-                    max-width: 800px;
+                /* CONTACT CARD - BENTO STYLE */
+                .contact-card-bento {
                     background: var(--bg-panel);
-                    border: 1px solid var(--border-color);
-                    border-radius: 40px;
-                    padding: 60px 40px;
+                    border: 1px solid var(--border-light);
+                    padding: 48px 32px;
+                    border-radius: 32px;
                     text-align: center;
-                    z-index: 1;
-                    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    transition: all 0.3s ease;
+                    margin-top: 40px;
                 }
 
-                .premium-contact-card:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+                @media (hover: hover) and (pointer: fine) {
+                    .contact-card-bento:hover {
+                        transform: translateY(-4px);
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+                        background: var(--bg-card);
+                        border-color: var(--border-light);
+                    }
                 }
 
-                .premium-contact-header {
-                    margin-bottom: 32px;
+                .contact-header {
+                    margin-bottom: 24px;
                 }
 
-                .premium-contact-header h3:first-child {
-                    font-size: 2.2rem;
+                .contact-header h3:first-child {
+                    font-size: 1.8rem;
                     font-weight: 800;
                     margin-bottom: 4px;
                     color: var(--text-main);
                 }
 
-                .premium-contact-header h3:last-child {
-                    font-size: 1.2rem;
+                .contact-header h3:last-child {
+                    font-size: 1.1rem;
                     font-weight: 600;
                     color: var(--text-muted);
-                    letter-spacing: 1px;
                     text-transform: uppercase;
-                }
-
-                .premium-contact-bio {
-                    margin-bottom: 40px;
-                    max-width: 500px;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-
-                .premium-contact-bio p:first-child {
-                    font-size: 1.1rem;
-                    font-weight: 500;
-                    margin-bottom: 8px;
-                    color: var(--text-main);
-                }
-
-                .premium-contact-bio p:last-child {
-                    font-size: 0.95rem;
-                    color: var(--text-muted);
+                    letter-spacing: 1px;
                     opacity: 0.8;
                 }
 
-                .premium-location {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 10px 20px;
-                    background: var(--bg-app);
-                    border-radius: 20px;
-                    font-size: 0.9rem;
+                .contact-bio {
+                    margin-bottom: 32px;
                     color: var(--text-muted);
-                    margin-bottom: 40px;
-                    border: 1px solid var(--border-light);
                 }
 
-                .premium-socials-pill {
+                .contact-bio p:first-child {
+                    font-size: 1.05rem;
+                    font-weight: 500;
+                    margin-bottom: 6px;
+                }
+
+                .contact-bio p:last-child {
+                    font-size: 0.9rem;
+                    opacity: 0.7;
+                }
+
+                .contact-location {
                     display: inline-flex;
-                    gap: 16px;
-                    padding: 12px 24px;
+                    align-items: center;
+                    gap: 8px;
+                    color: var(--text-muted);
+                    font-size: 0.9rem;
+                    margin-bottom: 32px;
+                    padding: 8px 16px;
                     background: var(--bg-app);
                     border-radius: 99px;
                     border: 1px solid var(--border-light);
-                    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
                 }
 
-                .premium-social-link {
-                    width: 48px;
-                    height: 48px;
-                    background: var(--bg-panel);
-                    color: var(--text-main);
+                .contact-socials {
+                    display: flex;
+                    justify-content: center;
+                    gap: 12px;
+                }
+
+                .social-icon-link {
+                    width: 44px;
+                    height: 44px;
+                    background: var(--bg-card);
+                    border: 1px solid var(--border-color);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-                    border: 1px solid var(--border-light);
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                    color: var(--text-main);
+                    transition: all 0.3s ease;
                 }
 
-                .premium-social-link:hover {
+                .social-icon-link:hover {
                     background: var(--text-main);
                     color: var(--bg-app);
-                    transform: translateY(-5px) scale(1.1);
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                    transform: translateY(-3px);
                 }
 
-                .premium-social-link:active {
+                .social-icon-link:active {
                     transform: scale(0.95);
                 }
 
@@ -307,33 +276,15 @@ const About = () => {
                     .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
                     .about-card { padding: 28px; border-radius: 24px; }
                     
-                    .premium-contact-card {
-                        padding: 50px 24px;
-                        border-radius: 32px;
+                    .contact-card-bento {
+                        padding: 40px 20px;
+                        border-radius: 28px;
                     }
 
-                    .premium-contact-header h3:first-child {
-                        font-size: 1.8rem;
-                    }
-
-                    .premium-contact-header h3:last-child {
-                        font-size: 1rem;
-                    }
-
-                    .premium-location {
-                        font-size: 0.85rem;
-                        padding: 8px 16px;
-                    }
-
-                    .premium-socials-pill {
-                        gap: 12px;
-                        padding: 10px 16px;
-                    }
-
-                    .premium-social-link {
-                        width: 42px;
-                        height: 42px;
-                    }
+                    .contact-header h3:first-child { font-size: 1.6rem; }
+                    .contact-header h3:last-child { font-size: 0.95rem; }
+                    .contact-location { font-size: 0.85rem; padding: 6px 14px; }
+                    .social-icon-link { width: 42px; height: 42px; }
                 }
             `}</style>
 
@@ -390,40 +341,35 @@ const About = () => {
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
-            <div className="contact-section-wrapper animate-entry" style={{ animationDelay: '0.2s' }}>
-                <div className="contact-glow"></div>
-                <div className="premium-contact-card">
-                    <div className="premium-contact-header">
-                        <h3 lang="ta">இணைவோம்</h3>
-                        <h3>Let's Connect</h3>
-                    </div>
+            <div className="contact-card-bento animate-entry" style={{ animationDelay: '0.2s' }}>
+                <div className="contact-header">
+                    <h3 lang="ta">இணைவோம்</h3>
+                    <h3>Let's Connect</h3>
+                </div>
 
-                    <div className="premium-contact-bio">
-                        <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                        <p>Open for collaborations and creative conversations.</p>
-                    </div>
+                <div className="contact-bio">
+                    <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                    <p>Open for collaborations and creative conversations.</p>
+                </div>
 
-                    <div className="premium-location">
-                        <FiMapPin size={16} /> 
-                        <span>Arani, Tamil Nadu • (Currently in Chennai)</span>
-                    </div>
+                <div className="contact-location">
+                    <FiMapPin size={16} /> 
+                    <span>Arani, Tamil Nadu • (Currently in Chennai)</span>
+                </div>
 
-                    <div className="social-pill-container">
-                        <div className="premium-socials-pill">
-                            <a href="tel:+919345128797" className="premium-social-link">
-                                <FiPhone size={20} />
-                            </a>
-                            <a href="mailto:jaiprakashpartha@gmail.com" className="premium-social-link">
-                                <FiMail size={20} />
-                            </a>
-                            <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="premium-social-link">
-                                <FiLinkedin size={20} />
-                            </a>
-                            <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="premium-social-link">
-                                <FiGithub size={20} />
-                            </a>
-                        </div>
-                    </div>
+                <div className="contact-socials">
+                    <a href="tel:+919345128797" className="social-icon-link">
+                        <FiPhone size={20} />
+                    </a>
+                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
+                        <FiMail size={20} />
+                    </a>
+                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
+                        <FiLinkedin size={20} />
+                    </a>
+                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
+                        <FiGithub size={20} />
+                    </a>
                 </div>
             </div>
 
