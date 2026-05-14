@@ -14,8 +14,6 @@ import Arts from './pages/Arts';
 import ArtsGallery from './pages/ArtsGallery';
 import VocoderView from './pages/VocoderView';
 const Archive = React.lazy(() => import('./pages/Archive'));
-import Quotes from './pages/writings/Quotes';
-import Poems from './pages/writings/Poems';
 import Admin from './pages/Admin';
 import CategoryListView from './components/CategoryListView';
 import ReadingView from './components/ReadingView';
@@ -24,8 +22,12 @@ import AdBanner from './components/AdBanner';
 // Create a Context for Theme
 const ThemeContext = React.createContext({ theme: 'auto', setTheme: () => { }, toggleTheme: () => { } });
 
-// Export a hook for easy access
+// Create a Context for Settings
+export const SettingsContext = React.createContext({ autoThumbnails: true, setAutoThumbnails: (val) => { } });
+
+// Export hooks for easy access
 export const useTheme = () => React.useContext(ThemeContext);
+export const useSettings = () => React.useContext(SettingsContext);
 
 const ProfileImage = ({ src, alt, className }) => {
     const [loading, setLoading] = React.useState(true);
@@ -57,6 +59,7 @@ const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { theme, setTheme, toggleTheme } = useTheme();
+    const { autoThumbnails, setAutoThumbnails } = useSettings();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -324,6 +327,18 @@ const Layout = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="popup-theme-section" style={{ marginTop: '24px' }} onClick={(e) => e.stopPropagation()}>
+                                    <span className="popup-theme-label">Preferences</span>
+                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', cursor: 'pointer' }}>
+                                        <span style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: 500 }}>Auto Thumbnails</span>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={autoThumbnails} 
+                                            onChange={(e) => setAutoThumbnails(e.target.checked)} 
+                                            style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--link-color)' }}
+                                        />
+                                    </label>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -331,7 +346,7 @@ const Layout = () => {
             </nav>
 
             <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' }}>
-                <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle }} />
+                <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle, autoThumbnails }} />
             </main>
         </div>
     );
@@ -416,10 +431,7 @@ const router = createBrowserRouter([
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
             { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
-            { path: "writings/quotes", element: <Quotes /> },
-            { path: "writings/poems", element: <Poems /> },
-
-            // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary)
+            // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary, Poems, Quotes)
             { path: "writings/:category", element: <CategoryListView /> },
             { path: "writings/:category/:slug", element: <ReadingView /> },
         ]
@@ -439,6 +451,14 @@ function App() {
     const [theme, setTheme] = React.useState(() => {
         return localStorage.getItem('theme') || 'auto';
     });
+    
+    const [autoThumbnails, setAutoThumbnails] = React.useState(() => {
+        return localStorage.getItem('autoThumbnails') !== 'false';
+    });
+
+    React.useEffect(() => {
+        localStorage.setItem('autoThumbnails', autoThumbnails);
+    }, [autoThumbnails]);
 
     React.useEffect(() => {
         const root = document.documentElement;
@@ -473,6 +493,7 @@ function App() {
     };
 
     return (
+        <SettingsContext.Provider value={{ autoThumbnails, setAutoThumbnails }}>
         <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
             <style>{`
                 .mobile-topbar .brand {
@@ -517,6 +538,7 @@ function App() {
             <RouterProvider router={router} />
             <Analytics />
         </ThemeContext.Provider>
+        </SettingsContext.Provider>
     );
 }
 

@@ -51,7 +51,7 @@ const Writings = () => {
                 }
 
                 .writings-title {
-                    font-size: clamp(2.4rem, 3vw, 3rem);
+                    font-size: 2.4rem;
                     font-weight: 800;
                     letter-spacing: 0;
                     margin-bottom: 10px;

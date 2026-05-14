@@ -26,6 +26,7 @@ export const SCHEMAS = {
             { key: 'tags', label: 'Tags / Style', type: 'tags', placeholder: 'e.g. சங்கம், தமிழாளம், Free Verse', suggestions: ['சங்கம்', 'தமிழாளம்', 'Modern', 'Free Verse', 'Haiku', 'Sonnet', 'Couplet'] },
         ],
         extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
             { key: 'urai', label: 'Urai / Meaning', type: 'textarea', rows: 2, placeholder: 'Prose meaning or commentary...' },
             { key: 'notes', label: 'Notes / Context', type: 'textarea', rows: 2, placeholder: 'Background, inspiration...' },
         ],
@@ -46,6 +47,7 @@ export const SCHEMAS = {
             { key: 'tags', label: 'Tags / Style', type: 'tags', placeholder: 'e.g. சங்கம், தமிழாளம், Free Verse', suggestions: ['சங்கம்', 'தமிழாளம்', 'Modern', 'Free Verse', 'Haiku', 'Sonnet', 'Venba', 'Akaval'] },
         ],
         extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
             { key: 'urai', label: 'Urai / Commentary', type: 'textarea', rows: 3, placeholder: 'Prose explanation or meaning...' },
             { key: 'notes', label: 'Notes / Context', type: 'textarea', rows: 2, placeholder: 'Background, inspiration...' },
         ],
@@ -161,6 +163,8 @@ export const SCHEMAS = {
                 { value: 'painting', label: 'Paintings' },
                 { value: 'quotes', label: 'Quotes' },
                 { value: 'poems', label: 'Poems' },
+                { value: 'illustrations', label: 'Illustrations' },
+                { value: 'digital_arts', label: 'Digital Arts' },
             ]},
             { key: 'date', label: 'Date', type: 'text', placeholder: 'e.g. Mar 25, 2025' },
             { key: 'timestamp', label: 'Sort Order (timestamp ms)', type: 'text', placeholder: 'e.g. 1742867580000 — used for sorting' },

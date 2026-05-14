@@ -7,10 +7,12 @@ import { ref, get, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
 
 const CATEGORY_META = {
-    'blog': { title: 'வலைப்பதிவுகள்' },
-    'articles': { title: 'கட்டுரைகள்' },
-    'stories': { title: 'சிறுகதைகள்' },
-    'diary': { title: 'நாளேடு' }
+    'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts' },
+    'articles': { title: 'கட்டுரைகள்', subtitle: 'Articles' },
+    'stories': { title: 'சிறுகதைகள்', subtitle: 'Short Stories' },
+    'diary': { title: 'நாளேடு', subtitle: 'Diary' },
+    'poems': { title: 'செய்யுள்கள்', subtitle: 'Poems' },
+    'quotes': { title: 'பொன்மொழிகள்', subtitle: 'Quotes' }
 };
 
 const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
@@ -45,6 +47,32 @@ const ReadingView = () => {
     const [loading, setLoading] = useState(true);
     const [seriesParts, setSeriesParts] = useState([]);
     const [variantTranslStates, setVariantTranslStates] = useState({}); // { "postId-vIndex": activeLang | null }
+
+    const { setPageTitle, autoThumbnails } = useOutletContext();
+
+    // Safely compute primary title for page context
+    const variants = post?.variants || [];
+    const contentObj = post?.content || {};
+    const hasVariants = variants.length > 0;
+    const primaryTitle = hasVariants ? (variants[0]?.title || post?.title || '') : (contentObj[Object.keys(contentObj)[0]]?.title || post?.title || '');
+    const firstVariantKey = `${post?.id}-0`;
+    const firstVariantActiveLang = variantTranslStates[firstVariantKey] || null;
+    let displayPrimaryTitle = primaryTitle;
+    if (hasVariants && firstVariantActiveLang) {
+        if (variants[0]?.titleTransliterations?.[firstVariantActiveLang]) {
+            displayPrimaryTitle = variants[0].titleTransliterations[firstVariantActiveLang];
+        } else if (post?.titleTransliterations?.[firstVariantActiveLang]) {
+            displayPrimaryTitle = post.titleTransliterations[firstVariantActiveLang];
+        }
+    }
+
+    const finalCoverImage = post ? (post.cover_image || (autoThumbnails ? `https://picsum.photos/seed/${post.id}/800/400` : null)) : null;
+
+    useEffect(() => {
+        if (meta) {
+            setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
+        }
+    }, [setPageTitle, meta]);
 
     const toggleVariantTransl = (vKey, lang) => {
         setVariantTranslStates(prev => ({
@@ -223,24 +251,8 @@ const ReadingView = () => {
         );
     }
 
-    // Support both new variants[] model and old content{} model
-    const variants = post.variants || [];
-    const contentObj = post.content || {};
-    const hasVariants = variants.length > 0;
-
     const isStory = category === 'stories';
     const isMinimal = category === 'thoughts';
-
-    // Get primary title for cover alt text
-    const primaryTitle = hasVariants ? (variants[0]?.title || '') : (contentObj[Object.keys(contentObj)[0]]?.title || '');
-
-    // Support transliteration on the main title if first variant is toggled
-    const firstVariantKey = `${post.id}-0`;
-    const firstVariantActiveLang = variantTranslStates[firstVariantKey] || null;
-    let displayPrimaryTitle = primaryTitle;
-    if (hasVariants && firstVariantActiveLang && variants[0]?.titleTransliterations?.[firstVariantActiveLang]) {
-        displayPrimaryTitle = variants[0].titleTransliterations[firstVariantActiveLang];
-    }
 
     let nextPart = null;
     let prevPart = null;
@@ -249,11 +261,6 @@ const ReadingView = () => {
         if (currIndex < seriesParts.length - 1) nextPart = seriesParts[currIndex + 1];
         if (currIndex > 0) prevPart = seriesParts[currIndex - 1];
     }
-
-    const { setPageTitle } = useOutletContext();
-    useEffect(() => {
-        if (displayPrimaryTitle) setPageTitle(`${displayPrimaryTitle}|${meta?.subtitle || ''}`);
-    }, [setPageTitle, displayPrimaryTitle, meta?.subtitle]);
 
     return (
         <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
@@ -351,7 +358,7 @@ const ReadingView = () => {
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '40px', flexWrap: 'wrap' }}>
                 <h1
                     lang={firstVariantActiveLang || (hasVariants ? variants[0]?.lang : Object.keys(contentObj)[0]) || 'ta'}
-                    style={{ fontSize: isStory ? '3rem' : '2.5rem', fontWeight: isStory ? '800' : '700', fontFamily: isStory ? 'serif' : 'inherit', lineHeight: '1.2', color: 'var(--text-main)', margin: 0, letterSpacing: '-1px', maxWidth: '80%' }}
+                    style={{ fontSize: isStory ? '2.5rem' : '2rem', fontWeight: isStory ? '800' : '700', fontFamily: isStory ? 'serif' : 'inherit', lineHeight: '1.2', color: 'var(--text-main)', margin: 0, letterSpacing: '-0.5px', maxWidth: '80%' }}
                 >
                     {displayPrimaryTitle}
                 </h1>
@@ -362,9 +369,9 @@ const ReadingView = () => {
             </div>
 
             <article style={{ maxWidth: '800px' }}>
-                {!isMinimal && post.cover_image && (
-                    <div style={{ width: '100%', height: '400px', borderRadius: isStory ? '0' : '24px', overflow: 'hidden', marginBottom: '40px' }}>
-                        <img src={post.cover_image} alt={primaryTitle || 'Cover'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                {!isMinimal && finalCoverImage && category !== 'poems' && category !== 'quotes' && (
+                    <div style={{ width: '100%', borderRadius: isStory ? '0' : '24px', overflow: 'hidden', marginBottom: '40px' }}>
+                        <img src={finalCoverImage} alt={primaryTitle || 'Cover'} style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', display: 'block' }} />
                     </div>
                 )}
 
@@ -394,9 +401,13 @@ const ReadingView = () => {
                                 : ['en', ...translKeys.filter(k => k !== 'en')];
 
                             // Determine displayed content
-                            let displayTitle = variant.title;
-                            if (activeLang && variant.titleTransliterations?.[activeLang]) {
-                                displayTitle = variant.titleTransliterations[activeLang];
+                            let displayTitle = variant.title || post?.title;
+                            if (activeLang) {
+                                if (variant.titleTransliterations?.[activeLang]) {
+                                    displayTitle = variant.titleTransliterations[activeLang];
+                                } else if (post?.titleTransliterations?.[activeLang]) {
+                                    displayTitle = post.titleTransliterations[activeLang];
+                                }
                             }
                             let displayText = variant.text;
                             if (activeLang && translObj[activeLang]) {
@@ -430,7 +441,7 @@ const ReadingView = () => {
                                         ))}
                                     </div>
 
-                                    {isMulti && displayTitle && displayTitle !== displayPrimaryTitle && (
+                                    {isMulti && displayTitle && ((variant.title || post?.title) !== primaryTitle) && (
                                         <h1
                                             lang={activeLang || variant.lang}
                                             style={{
@@ -480,6 +491,35 @@ const ReadingView = () => {
                     </div>
                 )}
 
+                {/* Bottom Cover Image for Poems & Quotes */}
+                {!isMinimal && finalCoverImage && (category === 'poems' || category === 'quotes') && (
+                    <div style={{ width: '100%', borderRadius: '24px', overflow: 'hidden', marginTop: '40px', background: 'var(--bg-panel)' }}>
+                        <img src={finalCoverImage} alt={primaryTitle || 'Cover'} style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', display: 'block' }} />
+                    </div>
+                )}
+
+                {/* Urai & Notes section */}
+                {(post.urai || post.notes) && (
+                    <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-light)' }}>
+                        {post.urai && (
+                            <div style={{ marginBottom: '32px' }}>
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '16px' }}>விளக்கம் / Meaning</h3>
+                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap' }}>
+                                    {post.urai}
+                                </div>
+                            </div>
+                        )}
+                        {post.notes && (
+                            <div>
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '16px' }}>குறிப்புகள் / Notes</h3>
+                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap' }}>
+                                    {post.notes}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* Story Series Navigation */}
                 {isStory && (nextPart || prevPart) && (
                     <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-light)' }}>
@@ -509,7 +549,7 @@ const ReadingView = () => {
             <style>{`
                 .rich-content-body h2 { font-size: 1.8rem; margin: 40px 0 16px; font-weight: 700; color: var(--text-main); }
                 .rich-content-body h3 { font-size: 1.4rem; margin: 32px 0 12px; font-weight: 600; color: var(--text-main); }
-                .rich-content-body p { margin: 0; color: var(--text-main); }
+                .rich-content-body p { margin: 0; color: var(--text-main); line-height: inherit; }
                 .rich-content-body blockquote { border-left: 4px solid var(--text-main); padding-left: 24px; margin: 32px 0; font-style: italic; color: var(--text-muted); font-size: 1.25rem; }
                 .rich-content-body img { max-width: 100%; border-radius: 16px; margin: 32px 0; }
                 .rich-content-body ul, .rich-content-body ol { padding-left: 24px; margin-bottom: 24px; }

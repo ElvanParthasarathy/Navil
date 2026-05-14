@@ -386,13 +386,33 @@ export const VariantListEditor = ({
                                     {SCHEMAS[collection].extraFields?.map(f => (
                                         <div key={f.key} className="adm-field">
                                             <label className="adm-label">{f.label}</label>
-                                            <textarea
-                                                className="adm-input"
-                                                style={{ minHeight: f.rows ? `${f.rows * 22}px` : '60px' }}
-                                                value={item[f.key] || ''}
-                                                onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
-                                                placeholder={f.placeholder || ''}
-                                            />
+                                            {f.type === 'textarea' ? (
+                                                <textarea
+                                                    className="adm-input"
+                                                    style={{ minHeight: f.rows ? `${f.rows * 22}px` : '60px' }}
+                                                    value={item[f.key] || ''}
+                                                    onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
+                                                    placeholder={f.placeholder || ''}
+                                                />
+                                            ) : f.type === 'checkbox' ? (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={`extra-${f.key}`}
+                                                        checked={item[f.key] !== false} // Default to true if undefined
+                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
+                                                    />
+                                                    <label htmlFor={`extra-${f.key}`} style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{f.placeholder || 'Enable'}</label>
+                                                </div>
+                                            ) : (
+                                                <input
+                                                    className="adm-input"
+                                                    type={f.type || 'text'}
+                                                    value={item[f.key] || ''}
+                                                    onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
+                                                    placeholder={f.placeholder || ''}
+                                                />
+                                            )}
                                         </div>
                                     ))}
                                 </div>

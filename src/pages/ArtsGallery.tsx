@@ -44,6 +44,18 @@ const CATEGORY_META = {
         descTa: 'கவிதைகளின் காட்சி வடிவமைப்புகள்',
         descEn: 'Visual poem cards and creative typography.',
     },
+    illustrations: {
+        titleTa: 'சித்திரங்கள்',
+        titleEn: 'Illustrations',
+        descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்',
+        descEn: 'Digital illustrations, logos, and vector art.',
+    },
+    digital_arts: {
+        titleTa: 'டிஜிட்டல் கலை',
+        titleEn: 'Digital Arts',
+        descTa: 'கணினி மென்பொருளில் உருவாக்கிய கலைப்படைப்புகள்',
+        descEn: 'Artworks created using digital software.',
+    },
 };
 
 const ITEMS_PER_PAGE = 9;
@@ -158,26 +170,26 @@ const ArtsGallery = () => {
                     padding: 0 20px 100px;
                 }
                 .arts-gallery-header {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 16px;
+                    flex-wrap: wrap;
                     margin-bottom: 32px;
                 }
                 .arts-gallery-title {
-                    font-size: clamp(2rem, 3vw, 2.8rem);
+                    font-size: 2.4rem;
                     font-weight: 800;
+                    letter-spacing: 0;
+                    margin-bottom: 10px;
                     color: var(--text-main);
                     line-height: 1.3;
-                    margin-bottom: 4px;
                 }
                 .arts-gallery-sub {
                     font-size: 1rem;
                     font-weight: 500;
-                    color: #888;
+                    color: #888888;
                     letter-spacing: 0.5px;
-                    margin-bottom: 12px;
-                }
-                .arts-gallery-desc {
-                    font-size: 1rem;
-                    color: var(--text-muted);
-                    line-height: 1.5;
                 }
 
                 /* Masonry-inspired grid */
@@ -450,10 +462,9 @@ const ArtsGallery = () => {
 
                 @media (max-width: 768px) {
                     .arts-gallery-page { padding: 0 0 100px 0; }
-                    .arts-gallery-header { padding: 20px 24px 8px; text-align: center; }
-                    .arts-gallery-title { display: none; }
-                    .arts-gallery-sub { display: none; }
-                    .arts-gallery-desc { text-align: center; font-size: 0.95rem; }
+                    .arts-gallery-header { padding: 28px 28px 10px; text-align: center; justify-content: center; }
+                    .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
+                    .arts-gallery-sub { font-size: 0.95rem; }
                     .arts-grid { columns: 2; column-gap: 4px; padding: 0 4px; }
                     .arts-grid-item { margin-bottom: 4px; border-radius: 4px; }
                     .arts-grid-overlay { display: none; }
@@ -496,20 +507,13 @@ const ArtsGallery = () => {
 
             <div className="arts-gallery-page">
                 <header className="arts-gallery-header animate-entry">
-                    <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                        <div className="mobile-hide">
-                            <h1 className="arts-gallery-title">{meta.titleTa}</h1>
-                        </div>
-                        <div className="mobile-hide" style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.titleEn}</div>
-
-                        <Link to="/arts" className="back-pill desktop-only">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                        </Link>
+                    <div style={{ flex: 1, minWidth: '200px' }}>
+                        <h1 className="arts-gallery-title">{meta.titleTa}</h1>
+                        <div className="arts-gallery-sub">{meta.titleEn}</div>
                     </div>
-                    <p className="arts-gallery-desc">{meta.descTa}</p>
-                    <p className="arts-gallery-desc" style={{ fontSize: '0.85rem', color: '#888', marginTop: '4px' }}>
-                        {meta.descEn}
-                    </p>
+                    <Link to="/arts" className="back-pill desktop-only">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                    </Link>
                 </header>
 
                 {loading ? (

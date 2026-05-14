@@ -857,6 +857,7 @@ const WritingPage = ({
                 }
                 .poem-text-content p {
                     margin: 0;
+                    line-height: inherit;
                 }
 
                 .poem-attribution {

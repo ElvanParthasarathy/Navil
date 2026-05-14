@@ -53,6 +53,23 @@ const PoemIcon = () => (
     </svg>
 );
 
+const IllustrationIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.71 3.29c-.78-.78-2.05-.78-2.83 0l-3.3 3.3a3 3 0 1 0 4.24 4.24l3.3-3.3c.78-.78.78-2.05 0-2.83Z" />
+        <path d="M16 11l-8 8H4v-4l8-8" />
+        <path d="M3 21l3-3" />
+    </svg>
+);
+
+const DigitalArtIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+        <path d="M7 11l2 2 4-4"/>
+    </svg>
+);
+
 const CATEGORIES = {
     pencil: {
         titleTa: 'ஓவியங்கள்',
@@ -102,6 +119,22 @@ const CATEGORIES = {
         footerTa: 'கவிதைகளைக் காண',
         icon: <PoemIcon />,
     },
+    illustrations: {
+        titleTa: 'சித்திரங்கள்',
+        titleEn: 'Illustrations',
+        descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்',
+        descEn: 'Digital illustrations, logos, and vector art.',
+        footerTa: 'படைப்புகளைக் காண',
+        icon: <IllustrationIcon />,
+    },
+    digital_arts: {
+        titleTa: 'டிஜிட்டல் கலை',
+        titleEn: 'Digital Arts',
+        descTa: 'கணினி மென்பொருளில் உருவாக்கிய கலைப்படைப்புகள்',
+        descEn: 'Artworks created using digital software.',
+        footerTa: 'படைப்புகளைக் காண',
+        icon: <DigitalArtIcon />,
+    },
 };
 
 const Arts = () => {
@@ -146,7 +179,7 @@ const Arts = () => {
                     text-align: left;
                 }
                 .writings-title {
-                    font-size: clamp(2.4rem, 3vw, 3rem);
+                    font-size: 2.4rem;
                     font-weight: 800;
                     letter-spacing: 0;
                     margin-bottom: 10px;
@@ -168,9 +201,14 @@ const Arts = () => {
                 }
                 .category-grid {
                     display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 24px;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
                     margin-top: 32px;
+                }
+                @media (max-width: 1024px) {
+                    .category-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
                 }
                 .category-card {
                     background: var(--bg-card);

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText } from 'react-icons/fi';
+import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText, FiMonitor } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { db, auth } from '../lib/firebaseClient';
@@ -33,6 +33,231 @@ import initialPoems from '../data/poems.json';
 // We now load all 6 writing categories from Supabase!
 
 
+// ─── TESTER PANEL COMPONENT ───
+const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumbnails, setAutoThumbnails }) => {
+    const [selectedCollections, setSelectedCollections] = useState(['poems']);
+    const [count, setCount] = useState(25);
+
+    const WRITINGS_OPTIONS = [
+        { id: 'poems', label: 'Poems' },
+        { id: 'quotes', label: 'Quotes' },
+        { id: 'blog', label: 'Blog' },
+        { id: 'articles', label: 'Articles' },
+        { id: 'stories', label: 'Stories' },
+        { id: 'diary', label: 'Diary' }
+    ];
+
+    const ARTS_OPTIONS = [
+        { id: 'arts_pencil', label: 'Pencil Drawings', cat: 'pencil' },
+        { id: 'arts_editing', label: 'Editings', cat: 'editing' },
+        { id: 'arts_poster', label: 'Posters', cat: 'poster' },
+        { id: 'arts_painting', label: 'Paintings', cat: 'painting' },
+        { id: 'arts_quotes', label: 'Quote Cards', cat: 'quotes' },
+        { id: 'arts_poems', label: 'Poem Cards', cat: 'poems' },
+        { id: 'arts_illustrations', label: 'Illustrations', cat: 'illustrations' },
+        { id: 'arts_digital_arts', label: 'Digital Arts', cat: 'digital_arts' }
+    ];
+
+    const toggleCollection = (key) => {
+        setSelectedCollections(prev => 
+            prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+        );
+    };
+
+    const generateMocks = () => {
+        if (selectedCollections.length === 0) {
+            setMessage('Please select at least one collection.');
+            setStatus('error');
+            setTimeout(() => setMessage(''), 3000);
+            return;
+        }
+
+        const newDataStore = { ...dataStore };
+
+        selectedCollections.forEach(selId => {
+            const isArt = selId.startsWith('arts_');
+            const targetCol = isArt ? 'arts' : selId;
+            const artCat = isArt ? selId.replace('arts_', '') : null;
+
+            const mocks = Array.from({ length: count }).map((_, i) => {
+                const id = uuidv4();
+                const num = Math.floor(Math.random() * 1000);
+                
+                if (isArt) {
+                    return {
+                        id,
+                        title: `Mock Art ${num}`,
+                        category: artCat,
+                        image: `https://picsum.photos/seed/${id}/600/600`,
+                        images: [`https://picsum.photos/seed/${id}/600/600`, `https://picsum.photos/seed/${id}-2/600/600`],
+                        caption: `Mock Art ${num} - randomly generated mock post.`,
+                        timestamp: Date.now() - (i * 100000),
+                        is_mock: true
+                    };
+                }
+
+                const needsCoverImage = targetCol !== 'arts';
+
+                return {
+                    id,
+                    ...((targetCol === 'poems' || targetCol === 'quotes') && { 
+                        classification: ['அகம்', 'புறம்'][Math.floor(Math.random() * 2)] 
+                    }),
+                    is_pinned: false,
+                    display_order: 999,
+                    date: new Date(Date.now() - (i * 10000000)).toISOString().split('T')[0],
+                    publish_date: new Date(Date.now() - (i * 10000000)).toISOString(),
+                    is_mock: true,
+                    ...(needsCoverImage && { cover_image: `https://picsum.photos/seed/${id}/800/400` }),
+                    variants: [
+                        {
+                            lang: 'ta',
+                            title: `மாதிரிப் பதிவு ${num}`,
+                            text: `<p>இது ஒரு சோதனைப் பதிவு ${num}. நீண்ட உரைகளைச் சோதிக்க இது உதவுகிறது.</p><p>இரண்டாவது பத்தி.</p>`,
+                            author: 'எழுத்தாளர்'
+                        },
+                        {
+                            lang: 'en',
+                            title: `Mock Post ${num}`,
+                            text: `<p>This is a test post ${num}. It is used to test UI pagination and layout wrapping.</p><p>Second paragraph here.</p>`,
+                            author: 'Author'
+                        }
+                    ]
+                };
+            });
+
+            newDataStore[targetCol] = [...(newDataStore[targetCol] || []), ...mocks];
+        });
+
+        setDataStore(newDataStore);
+        setMessage(`Added ${count} mock items per selection. Don't forget to click Save!`);
+        setStatus('success');
+        setTimeout(() => setMessage(''), 5000);
+    };
+
+    const clearMocks = () => {
+        if (selectedCollections.length === 0) {
+            setMessage('Please select at least one collection.');
+            setStatus('error');
+            setTimeout(() => setMessage(''), 3000);
+            return;
+        }
+
+        const newDataStore = { ...dataStore };
+        let totalRemoved = 0;
+
+        selectedCollections.forEach(selId => {
+            const isArt = selId.startsWith('arts_');
+            if (isArt) {
+                const cat = selId.replace('arts_', '');
+                if (newDataStore.arts) {
+                    const originalLength = newDataStore.arts.length;
+                    newDataStore.arts = newDataStore.arts.filter(item => !(item.is_mock && item.category === cat));
+                    totalRemoved += (originalLength - newDataStore.arts.length);
+                }
+            } else {
+                if (newDataStore[selId]) {
+                    const originalLength = newDataStore[selId].length;
+                    newDataStore[selId] = newDataStore[selId].filter(item => !item.is_mock);
+                    totalRemoved += (originalLength - newDataStore[selId].length);
+                }
+            }
+        });
+
+        setDataStore(newDataStore);
+        setMessage(`Cleared ${totalRemoved} mock items from selections. Click Save to apply to Firebase.`);
+        setStatus('success');
+        setTimeout(() => setMessage(''), 5000);
+    };
+
+    return (
+        <div className="adm-panel animate-entry" style={{ padding: '24px' }}>
+            <div className="adm-header" style={{ marginBottom: '24px' }}>
+                <h2 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Testing Tools</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Generate mock data to test pagination and UI.</p>
+            </div>
+            <div className="adm-content" style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '800px' }}>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    <div className="adm-field">
+                        <label className="adm-label">Writings Categories (6)</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', background: 'var(--bg-card)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-light)' }}>
+                            {WRITINGS_OPTIONS.map(opt => (
+                                <label key={opt.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.95rem', color: 'var(--text-main)' }}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={selectedCollections.includes(opt.id)} 
+                                        onChange={() => toggleCollection(opt.id)} 
+                                        style={{ width: '16px', height: '16px', accentColor: 'var(--text-main)' }}
+                                    />
+                                    {opt.label}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    <div className="adm-field">
+                        <label className="adm-label">Arts Categories (8)</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', background: 'var(--bg-card)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-light)' }}>
+                            {ARTS_OPTIONS.map(opt => (
+                                <label key={opt.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.95rem', color: 'var(--text-main)' }}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={selectedCollections.includes(opt.id)} 
+                                        onChange={() => toggleCollection(opt.id)} 
+                                        style={{ width: '16px', height: '16px', accentColor: 'var(--text-main)' }}
+                                    />
+                                    {opt.label}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="adm-field" style={{ maxWidth: '300px' }}>
+                    <label className="adm-label">Number of Posts per Selection</label>
+                    <input className="adm-input" type="number" min="1" max="100" value={count} onChange={e => setCount(parseInt(e.target.value) || 25)} />
+                </div>
+                
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                    <button className="adm-btn primary" onClick={generateMocks}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Generate Mocks
+                    </button>
+                    <button className="adm-btn danger" onClick={clearMocks} style={{ background: '#d32f2f', color: 'white', border: 'none' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        Clear Mocks
+                    </button>
+                </div>
+                
+                <div className="adm-field" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--border-light)' }}>
+                    <label className="adm-label">Global Preferences</label>
+                    <button 
+                        className="adm-btn" 
+                        onClick={() => {
+                            const val = !autoThumbnails;
+                            setAutoThumbnails(val);
+                            setMessage(`Auto Thumbnails ${val ? 'Enabled' : 'Disabled'} across the entire site.`);
+                            setStatus('success');
+                            setTimeout(() => setMessage(''), 3000);
+                        }}
+                        style={{ background: autoThumbnails ? 'color-mix(in srgb, var(--link-color) 15%, transparent)' : 'var(--bg-panel)', color: autoThumbnails ? 'var(--link-color)' : 'var(--text-main)', border: `1px solid ${autoThumbnails ? 'var(--link-color)' : 'var(--border-light)'}`, display: 'inline-flex', width: 'fit-content' }}
+                    >
+                        {autoThumbnails ? 'Disable Auto Thumbnails' : 'Enable Auto Thumbnails'}
+                    </button>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '8px' }}>
+                        Toggles the random fallback thumbnails (https://picsum.photos) across all lists and poem/quote reading views.
+                    </p>
+                </div>
+                
+                <div className="adm-alert info" style={{ marginTop: '16px', background: 'color-mix(in srgb, var(--text-main) 10%, transparent)', padding: '16px', borderRadius: '12px', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                    <strong style={{ color: 'var(--text-main)' }}>Note:</strong> Generating or clearing mocks only updates your local unsaved draft. You still need to click <strong style={{ color: 'var(--text-main)' }}>"Save All Changes"</strong> in the main dashboard to push these changes to Firebase.
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // ─── MAIN ADMIN COMPONENT ───
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -52,7 +277,12 @@ const Admin = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('admin_sidebar_collapsed') === 'true');
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
+    const [autoThumbnails, setAutoThumbnails] = useState(() => localStorage.getItem('autoThumbnails') !== 'false');
     const profileZoneRef = useRef(null);
+
+    useEffect(() => {
+        localStorage.setItem('autoThumbnails', autoThumbnails);
+    }, [autoThumbnails]);
 
     // Internal sub-view scroll restoration state
     const savedScrollsRef = useRef({});
@@ -631,6 +861,7 @@ const Admin = () => {
             case 'thoughts': return <ThoughtEditor {...commonProps} />;
             case 'diary': return <DiaryEditor {...commonProps} />;
             case 'arts': return <ArtEditor {...commonProps} />;
+            case 'tester': return <TesterPanel dataStore={dataStore} setDataStore={setDataStore} setStatus={setStatus} setMessage={setMessage} schemas={SCHEMAS} autoThumbnails={autoThumbnails} setAutoThumbnails={setAutoThumbnails} />;
             default: return null;
         }
     };
@@ -674,6 +905,9 @@ const Admin = () => {
                     <div className="nav-group-label">System</div>
                     <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => { setActiveTab('settings'); setEditingId(null); setMobileMenuOpen(false); }}>
                         <div className="nav-icon"><FiSettings size={16} /></div> <span>Settings</span>
+                    </button>
+                    <button className={`admin-nav-item ${activeTab === 'tester' ? 'active' : ''}`} onClick={() => { setActiveTab('tester'); setEditingId(null); setMobileMenuOpen(false); }}>
+                        <div className="nav-icon"><FiMonitor size={16} /></div> <span>Testing Tools</span>
                     </button>
                 </nav>
 
@@ -719,6 +953,19 @@ const Admin = () => {
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
                                             </div>
                                         </div>
+                                    </div>
+                                    
+                                    <div className="popup-theme-section" style={{ marginTop: '24px' }} onClick={(e) => e.stopPropagation()}>
+                                        <span className="popup-theme-label">Preferences</span>
+                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', cursor: 'pointer' }}>
+                                            <span style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: 500 }}>Auto Thumbnails</span>
+                                            <input 
+                                                type="checkbox" 
+                                                checked={autoThumbnails} 
+                                                onChange={(e) => setAutoThumbnails(e.target.checked)} 
+                                                style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--link-color)' }}
+                                            />
+                                        </label>
                                     </div>
                                 </div>
 

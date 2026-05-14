@@ -28,27 +28,67 @@ const CATEGORY_META = {
         title: 'நாளேடு', subtitle: 'Diary',
         descTa: 'என் நாள்களின் நினைவுகளும் பதிவுகளும்', descEn: 'Memories and records of my days.',
         table: 'diary_v2', classification: 'Journal',
+    },
+    'poems': {
+        title: 'செய்யுள்கள்', subtitle: 'Poems',
+        descTa: 'என் உள்ளத்தின் உணர்வுகள் கவிதைகளாக...', descEn: 'My heartfelt poems and verses.',
+        table: 'poems_v2', classification: 'Poetry',
+    },
+    'quotes': {
+        title: 'பொன்மொழிகள்', subtitle: 'Quotes',
+        descTa: 'வாழ்க்கையின் தத்துவங்கள் சுருக்கமாக.', descEn: 'Short philosophical thoughts.',
+        table: 'quotes_v2', classification: 'Quote',
     }
 };
 
 const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മலயாளம்', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
 
+const globalPostsCache = {};
+
 const CategoryListView = () => {
     const { category } = useParams();
     const meta = CATEGORY_META[category] || null;
 
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [activeGenre, setActiveGenre] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 10;
+    const [posts, setPosts] = useState(() => globalPostsCache[category] || []);
+    const [loading, setLoading] = useState(() => !globalPostsCache[category]);
+    const [searchTerm, setSearchTerm] = useState(() => sessionStorage.getItem(`elvan_${category}_search`) || '');
+    const [activeGenre, setActiveGenre] = useState(() => sessionStorage.getItem(`elvan_${category}_genre`) || '');
+    const [currentPage, setCurrentPage] = useState(() => {
+        const saved = sessionStorage.getItem(`elvan_${category}_page`);
+        return saved ? parseInt(saved, 10) : 1;
+    });
+
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_${category}_search`, searchTerm);
+    }, [searchTerm, category]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_${category}_genre`, activeGenre);
+    }, [activeGenre, category]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_${category}_page`, currentPage.toString());
+    }, [currentPage, category]);
+
+    // Sync state when category changes
+    useEffect(() => {
+        setPosts(globalPostsCache[category] || []);
+        setLoading(!globalPostsCache[category]);
+        setSearchTerm(sessionStorage.getItem(`elvan_${category}_search`) || '');
+        setActiveGenre(sessionStorage.getItem(`elvan_${category}_genre`) || '');
+        const savedPage = sessionStorage.getItem(`elvan_${category}_page`);
+        setCurrentPage(savedPage ? parseInt(savedPage, 10) : 1);
+    }, [category]);
+
+    const ITEMS_PER_PAGE = 5;
 
     useScrollRestore(loading);
 
     useEffect(() => {
         if (!meta) return;
-        setLoading(true);
+        if (!globalPostsCache[category]) {
+            setLoading(true);
+        }
         const catRef = ref(db, category);
         const unsubscribe = onValue(catRef, (snapshot) => {
             if (snapshot.exists()) {
@@ -68,13 +108,19 @@ const CategoryListView = () => {
                 });
                 
                 dataArray.sort((a, b) => {
+                    const isAPinned = a.is_pinned || a.pin_type === 'permanent';
+                    const isBPinned = b.is_pinned || b.pin_type === 'permanent';
+                    if (isAPinned && !isBPinned) return -1;
+                    if (!isAPinned && isBPinned) return 1;
                     if (a.display_order !== b.display_order) return (a.display_order || 0) - (b.display_order || 0);
                     const da = new Date(a.publish_date || a.date || 0);
                     const dbDate = new Date(b.publish_date || b.date || 0);
                     return dbDate - da;
                 });
+                globalPostsCache[category] = dataArray;
                 setPosts(dataArray);
             } else {
+                globalPostsCache[category] = [];
                 setPosts([]);
             }
             setLoading(false);
@@ -83,11 +129,10 @@ const CategoryListView = () => {
             setLoading(false);
         });
 
-        setCurrentPage(1);
         return () => unsubscribe();
     }, [category, meta]);
 
-    const { setPageTitle } = useOutletContext();
+    const { setPageTitle, autoThumbnails } = useOutletContext();
 
     useEffect(() => {
         if (meta?.title) setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
@@ -172,10 +217,10 @@ const CategoryListView = () => {
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>
             <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <div className="mobile-hide">
+                <div style={{ flex: 1, minWidth: '200px' }}>
                     <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>
+                    <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
                 </div>
-                <div className="mobile-hide" style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
 
                 <Link to="/writings" className="back-pill desktop-only">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
@@ -302,23 +347,21 @@ const CategoryListView = () => {
 
 
 
-            <div style={{ display: 'grid', gap: '40px', maxWidth: '800px' }}>
+            <div className="blog-grid-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', width: '100%' }}>
                 {loading ? (
-                    <div className="skeleton-loader">
-                        {[0, 1, 2].map(i => (
-                            <div key={i} className="skeleton-item">
-                                <div className="skeleton-badge" />
-                                <div className="skeleton-title" />
-                                <div className="skeleton-meta" />
+                    Array(6).fill(0).map((_, i) => (
+                        <div key={i} className="skeleton-item" style={{ background: 'var(--bg-card)', borderRadius: '16px', overflow: 'hidden' }}>
+                            <div className="skeleton-cover" style={{ height: '200px', background: 'color-mix(in srgb, var(--border-light) 50%, transparent)' }} />
+                            <div style={{ padding: '24px' }}>
+                                <div className="skeleton-meta" style={{ height: '14px', width: '40%', marginBottom: '16px', background: 'var(--border-light)', borderRadius: '4px' }} />
+                                <div className="skeleton-title" style={{ height: '24px', width: '80%', marginBottom: '16px', background: 'var(--border-light)', borderRadius: '6px' }} />
                                 <div className="skeleton-lines">
-                                    <div className="skeleton-line" />
-                                    <div className="skeleton-line" />
-                                    <div className="skeleton-line" />
-                                    <div className="skeleton-line" />
+                                    <div className="skeleton-line" style={{ height: '14px', width: '100%', marginBottom: '8px', background: 'color-mix(in srgb, var(--border-light) 40%, transparent)', borderRadius: '4px' }} />
+                                    <div className="skeleton-line" style={{ height: '14px', width: '90%', background: 'color-mix(in srgb, var(--border-light) 40%, transparent)', borderRadius: '4px' }} />
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))
                 ) : currentPosts.length > 0 ? (
                     currentPosts.map((post, index) => {
                         // Support both old content{} model and new variants[] model
@@ -327,18 +370,18 @@ const CategoryListView = () => {
                         const hasVariants = variants.length > 0;
 
                         // Get primary title for card display
-                        let primaryTitle = '';
+                        let primaryTitle = post.title || '';
                         let primaryExcerpt = '';
                         let primaryLang = '';
                         if (hasVariants) {
                             primaryLang = variants[0]?.lang || '';
-                            primaryTitle = variants[0]?.title || '';
+                            primaryTitle = variants[0]?.title || post.title || '';
                             // Strip HTML tags for excerpt from text
                             const textHtml = variants[0]?.text || '';
-                            primaryExcerpt = textHtml.replace(/<[^>]+>/g, '').substring(0, 150);
+                            primaryExcerpt = textHtml.replace(/<[^>]+>/g, '').substring(0, 120);
                         } else {
                             primaryLang = Object.keys(contentObj)[0] || '';
-                            primaryTitle = contentObj[primaryLang]?.title || '';
+                            primaryTitle = contentObj[primaryLang]?.title || post.title || '';
                             primaryExcerpt = contentObj[primaryLang]?.excerpt || '';
                         }
 
@@ -350,69 +393,70 @@ const CategoryListView = () => {
                             post.meter
                         ].filter(Boolean);
 
-                        const displayIndex = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
+                        const coverImage = post.cover_image || (autoThumbnails ? `https://picsum.photos/seed/${post.id}/800/400` : null);
 
                         return (
                             <Link
                                 to={`/writings/${category}/${post.slug || post.id}`}
                                 key={post.id}
-                                style={{
-                                    textDecoration: 'none',
-                                    display: 'block',
-                                    color: 'inherit'
-                                }}
-                                className="poem-link-card"
+                                style={{ textDecoration: 'none', color: 'inherit' }}
+                                className="blog-link-card"
                             >
-                                <article className="poem-item">
-                                    {(post.pin_type === 'permanent' || post.classification || meta.classification) && (
-                                        <div className="poem-badges-wrapper">
-                                            {post.pin_type === 'permanent' && (
-                                                <div className="pinned-badge">
-                                                    <span>✨</span> Featured
-                                                </div>
+                                <article className="blog-card-item">
+                                    {coverImage && (
+                                        <div className="blog-cover-wrapper">
+                                            <img src={coverImage} alt={primaryTitle} loading="lazy" />
+                                            {(post.is_pinned || post.pin_type === 'permanent') && (
+                                                <span className="blog-featured-badge">✨ Featured</span>
                                             )}
-                                            {(post.classification || meta.classification) && (
-                                                <span className="classification-badge">
-                                                    {post.classification || meta.classification}
-                                                </span>
+                                            {post.classification && (
+                                                <span className={`blog-classification-badge ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>{post.classification}</span>
                                             )}
                                         </div>
                                     )}
-
-                                    <div className="poem-header">
-                                        <span className="poem-number">{displayIndex}</span>
-                                        {primaryTitle && <h2 className="poem-title" lang={primaryLang}>{primaryTitle}</h2>}
-                                    </div>
-
-                                    <div className="poem-meta-minimal">
-                                        <span className="meta-date">
-                                            {new Date(post.publish_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                        </span>
-                                        {genres.length > 0 && <div className="meta-separator" />}
-                                        {genres.map((g, i) => (
-                                            <React.Fragment key={i}>
-                                                <span>{g}</span>
-                                                {i < genres.length - 1 && <div className="meta-separator" />}
-                                            </React.Fragment>
-                                        ))}
-                                    </div>
-
-                                    {post.series_name && (
-                                        <div className="poem-dedication">Part {post.series_part} of {post.series_name}</div>
-                                    )}
-
-                                    {primaryExcerpt && (
-                                        <div className="poem-text-content" lang={primaryLang} style={{ marginTop: '16px', color: 'var(--text-muted)' }}>
-                                            {primaryExcerpt}...
+                                    <div className="blog-card-content">
+                                        {!coverImage && ((post.is_pinned || post.pin_type === 'permanent') || post.classification) && (
+                                            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                                                {(post.is_pinned || post.pin_type === 'permanent') && (
+                                                    <span className="blog-featured-badge inline">✨ Featured</span>
+                                                )}
+                                                {post.classification && (
+                                                    <span className={`blog-classification-badge inline ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>{post.classification}</span>
+                                                )}
+                                            </div>
+                                        )}
+                                        <div className="blog-meta-minimal">
+                                            <span className="meta-date">
+                                                {new Date(post.publish_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                            </span>
+                                            {genres.length > 0 && <span className="meta-dot">•</span>}
+                                            {genres.slice(0, 2).map((g, i) => (
+                                                <React.Fragment key={i}>
+                                                    <span>{g}</span>
+                                                    {i < Math.min(genres.length, 2) - 1 && <span className="meta-dot">•</span>}
+                                                </React.Fragment>
+                                            ))}
                                         </div>
-                                    )}
 
-                                    <div className="read-more-wrapper">
-                                        <div className="read-more-pill">
-                                            <span lang="ta" style={{ fontFamily: '"Mukta Malar", sans-serif' }}>மேலும் வாசிக்க</span>
-                                            <span style={{ margin: '0 6px', opacity: 0.4 }}>/</span>
-                                            Read article
-                                            <span className="arrow">→</span>
+                                        {primaryTitle && <h2 className="blog-title" lang={primaryLang}>{primaryTitle}</h2>}
+                                        
+                                        {post.series_name && (
+                                            <div className="blog-series-badge">Part {post.series_part} of {post.series_name}</div>
+                                        )}
+
+                                        {primaryExcerpt && (
+                                            <div className="blog-excerpt" lang={primaryLang}>
+                                                {primaryExcerpt}...
+                                            </div>
+                                        )}
+
+                                        <div className="blog-read-more">
+                                            {category === 'poems' ? 'செய்யுளை வாசிக்க' :
+                                             category === 'quotes' ? 'பொன்மொழியை வாசிக்க' :
+                                             category === 'stories' ? 'கதையை வாசிக்க' :
+                                             category === 'diary' ? 'நாளேட்டை வாசிக்க' :
+                                             category === 'articles' || category === 'blog' ? 'கட்டுரையை வாசிக்க' :
+                                             'வாசிக்க'} <span className="arrow">→</span>
                                         </div>
                                     </div>
                                 </article>
@@ -421,16 +465,18 @@ const CategoryListView = () => {
                     })
                     .reduce((acc, item, idx) => {
                         acc.push(item);
-                        // Insert a native-looking ad after the 3rd item
-                        if (idx === 2) {
+                        // Insert a native-looking ad after the 5th item
+                        if (idx === 4) {
                             acc.push(
-                                <AdBanner key="ad-feed" variant="inline" wrapperStyle={{ padding: '48px 0' }} />
+                                <div key="ad-feed" style={{ gridColumn: '1 / -1', padding: '24px 0' }}>
+                                    <AdBanner variant="inline" />
+                                </div>
                             );
                         }
                         return acc;
                     }, [])
                 ) : (
-                    <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
+                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
                         <p>No content available yet. Check back soon!</p>
                         <AdBanner variant="inline" wrapperStyle={{ padding: '40px 0', marginTop: '20px' }} />
                     </div>
@@ -734,14 +780,165 @@ const CategoryListView = () => {
                     transform: scale(0.95);
                 }
 
-                .poem-item {
-                    border-top: 1px solid var(--border-light);
-                    padding: 48px 0;
+                .blog-card-item {
+                    background: var(--bg-card);
+                    border-radius: 16px;
+                    overflow: hidden;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
                 }
-                /* First item has no top border so it aligns perfectly with the header box */
-                .poem-item:first-child {
-                    border-top: none;
-                    padding-top: 0;
+                .blog-link-card:hover .blog-card-item {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 24px color-mix(in srgb, var(--text-main) 8%, transparent);
+                }
+
+                .blog-cover-wrapper {
+                    width: 100%;
+                    height: 200px;
+                    position: relative;
+                    overflow: hidden;
+                    background: var(--bg-panel);
+                }
+                .blog-cover-wrapper img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform 0.5s ease;
+                }
+                .blog-link-card:hover .blog-cover-wrapper img {
+                    transform: scale(1.05);
+                }
+
+                .blog-featured-badge {
+                    position: absolute;
+                    top: 12px;
+                    left: 12px;
+                    background: color-mix(in srgb, #f59e0b 20%, rgba(0,0,0,0.7));
+                    backdrop-filter: blur(8px);
+                    color: #fbbf24;
+                    padding: 4px 12px;
+                    border-radius: 100px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                }
+
+                .blog-classification-badge {
+                    position: absolute;
+                    top: 12px;
+                    right: 12px;
+                    background: rgba(0, 0, 0, 0.6);
+                    backdrop-filter: blur(8px);
+                    color: #fff;
+                    padding: 4px 12px;
+                    border-radius: 100px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                }
+                .blog-classification-badge.inline {
+                    position: static;
+                    display: inline-block;
+                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+                    color: var(--text-main);
+                    backdrop-filter: none;
+                    margin-bottom: 12px;
+                }
+                .blog-featured-badge.inline {
+                    position: static;
+                    display: inline-block;
+                    background: color-mix(in srgb, #f59e0b 10%, transparent);
+                    backdrop-filter: none;
+                    color: #f59e0b;
+                    margin-bottom: 12px;
+                }
+                .blog-classification-badge.agam {
+                    background: color-mix(in srgb, #ec4899 20%, rgba(0,0,0,0.7));
+                    color: #fbcfe8;
+                }
+                .blog-classification-badge.puram {
+                    background: color-mix(in srgb, #eab308 20%, rgba(0,0,0,0.7));
+                    color: #fef08a;
+                }
+
+                .blog-card-content {
+                    padding: 24px;
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                }
+
+                .blog-meta-minimal {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    color: var(--text-muted);
+                    margin-bottom: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                .meta-dot {
+                    opacity: 0.4;
+                }
+
+                .blog-title {
+                    font-size: 1.4rem;
+                    font-weight: 700;
+                    line-height: 1.3;
+                    color: var(--text-main);
+                    margin-bottom: 12px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    transition: color 0.2s ease;
+                }
+                .blog-link-card:hover .blog-title {
+                    color: color-mix(in srgb, var(--text-main) 80%, var(--bg-app));
+                }
+
+                .blog-series-badge {
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    color: var(--text-main);
+                    margin-bottom: 12px;
+                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+                    padding: 4px 10px;
+                    border-radius: 6px;
+                    display: inline-block;
+                }
+
+                .blog-excerpt {
+                    font-size: 0.95rem;
+                    line-height: 1.6;
+                    color: var(--text-muted);
+                    margin-bottom: 24px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    flex: 1;
+                }
+
+                .blog-read-more {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    color: var(--text-main);
+                    margin-top: auto;
+                    transition: gap 0.2s ease;
+                }
+                .blog-link-card:hover .blog-read-more {
+                    gap: 10px;
+                }
+                .blog-read-more .arrow {
+                    transition: transform 0.2s ease;
                 }
 
                 .controls-area {
@@ -929,9 +1126,7 @@ const CategoryListView = () => {
                 /* Mobile overrides for search */
                 @media (max-width: 768px) {
                     .controls-area {
-                        flex-direction: column;
-                        align-items: stretch;
-                        gap: 12px;
+                        gap: 8px;
                     }
                     .theme-dropdown {
                         width: 100%;
