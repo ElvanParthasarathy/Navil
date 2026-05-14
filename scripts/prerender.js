@@ -50,6 +50,16 @@ async function startServer() {
 
 async function prerender() {
     console.log('Starting prerender process...');
+
+    if (process.env.VERCEL) {
+        console.warn('================================================================');
+        console.warn('⚠️ VERCEL ENVIRONMENT DETECTED: Skipping Puppeteer prerendering.');
+        console.warn('Vercel build containers do not contain the necessary OS libraries');
+        console.warn('(like libnspr4.so) to run headless Chromium.');
+        console.warn('The site will be deployed as a standard Single Page Application (SPA).');
+        console.warn('================================================================');
+        return; // Skip the rest of the prerender process
+    }
     
     // Ensure dist/index.html exists
     const indexPath = path.join(DIST_DIR, 'index.html');
