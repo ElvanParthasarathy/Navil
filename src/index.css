@@ -893,7 +893,7 @@ span.desktop-only {
 
   /* --- 3-DOT MENU BUTTON (Neram Match) --- */
   .top-bar-actions {
-    display: flex;
+    display: flex !important;
     gap: 8px;
     align-items: center;
   }
