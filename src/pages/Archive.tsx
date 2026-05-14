@@ -12,9 +12,11 @@ import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
 import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
+import { useScrollRestore } from '../lib/scrollRestoration';
 
 const Archive = () => {
     const { setPageTitle } = useOutletContext();
+    useScrollRestore(false); // Instant static rendering
 
     useEffect(() => {
         setPageTitle('காப்புகள்|Archive');

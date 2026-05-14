@@ -6,6 +6,7 @@ import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 import AdBanner from './AdBanner';
 import { Helmet } from 'react-helmet-async';
+import { useScrollRestore } from '../lib/scrollRestoration';
 
 const CATEGORY_META = {
     'blog': {
@@ -42,6 +43,8 @@ const CategoryListView = () => {
     const [activeGenre, setActiveGenre] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 10;
+
+    useScrollRestore(loading);
 
     useEffect(() => {
         if (!meta) return;

@@ -3,9 +3,11 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
+import { useScrollRestore } from '../lib/scrollRestoration';
 
 const Writings = () => {
     const { setPageTitle } = useOutletContext();
+    useScrollRestore(false); // Instantly restore since it is a static page
 
     useEffect(() => {
         setPageTitle('எழுத்துகள்|Writings');
