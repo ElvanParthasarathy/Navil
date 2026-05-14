@@ -881,9 +881,7 @@ const WritingPage = ({
 
                 /* Interactive Urai/Notes Pill Component */
                 .info-pills-container {
-                    margin-top: 36px;
-                    border-top: 1px solid var(--border-light);
-                    padding-top: 24px;
+                    margin-top: 28px;
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
@@ -905,8 +903,8 @@ const WritingPage = ({
                     font-size: 0.85rem;
                     cursor: pointer;
                     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-                    border: 1px solid var(--border-color);
-                    background: var(--bg-card);
+                    border: none;
+                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
                     color: var(--text-muted);
                     user-select: none;
                     letter-spacing: 0.3px;
@@ -914,7 +912,7 @@ const WritingPage = ({
 
                 .info-pill-btn:hover {
                     color: var(--text-main);
-                    border-color: var(--text-main);
+                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
                     transform: translateY(-1.5px);
                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
                 }
@@ -922,7 +920,6 @@ const WritingPage = ({
                 .info-pill-btn.active {
                     background: var(--text-main);
                     color: var(--bg-app);
-                    border-color: var(--text-main);
                     box-shadow: 0 6px 16px color-mix(in srgb, var(--text-main) 15%, transparent);
                 }
 
@@ -952,8 +949,7 @@ const WritingPage = ({
                 }
 
                 .info-pill-box {
-                    background: color-mix(in srgb, var(--text-main) 2.5%, transparent);
-                    border: 1px solid var(--border-light);
+                    background: color-mix(in srgb, var(--text-main) 4%, transparent);
                     border-radius: 18px;
                     padding: 24px;
                     margin-top: 8px;
