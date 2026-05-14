@@ -293,7 +293,7 @@ const About = () => {
                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
                    .about-card { padding: 28px; border-radius: 24px; }
                    
-                   .contact-footer { padding: 32px 20px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; align-items: center; }
+                   .contact-footer { padding: 32px 28px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; align-items: center; }
                    .contact-header { flex-direction: column; gap: 0px; align-items: center; }
                    .contact-divider { display: none; }
                    .contact-info-block h3:first-child { font-size: 1.4rem; }
