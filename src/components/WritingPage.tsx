@@ -67,6 +67,66 @@ const textToHtml = (raw) => {
     return html;
 };
 
+// Sleek, interactive collapsible zone for Urai and Notes that transitions smoothly
+const PoemInfoZone = ({ urai, notes }) => {
+    const [activeSection, setActiveSection] = React.useState(null);
+
+    if (!urai && !notes) return null;
+
+    const toggleSection = (section) => {
+        setActiveSection(prev => prev === section ? null : section);
+    };
+
+    return (
+        <div className="info-pills-container">
+            <div className="info-pills-row">
+                {urai && (
+                    <button 
+                        className={`info-pill-btn ${activeSection === 'urai' ? 'active' : ''}`}
+                        onClick={() => toggleSection('urai')}
+                    >
+                        <span>உரை · Urai</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </button>
+                )}
+                {notes && (
+                    <button 
+                        className={`info-pill-btn ${activeSection === 'notes' ? 'active' : ''}`}
+                        onClick={() => toggleSection('notes')}
+                    >
+                        <span>Notes</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </button>
+                )}
+            </div>
+
+            <div className={`info-pill-content-wrapper ${activeSection ? 'expanded' : ''}`}>
+                <div className="info-pill-content-inner">
+                    <div className="info-pill-box">
+                        <div className="info-pill-box-header">
+                            {activeSection === 'urai' ? 'விளக்கவுரை · Commentary' : 'Additional Notes'}
+                        </div>
+                        {activeSection === 'urai' && (
+                            <div className="info-content urai animate-fade">
+                                {urai}
+                            </div>
+                        )}
+                        {activeSection === 'notes' && (
+                            <div className="info-content animate-fade">
+                                {notes}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 /**
  * Shared display component for Poems and Quotes pages.
  *
@@ -819,33 +879,116 @@ const WritingPage = ({
                     padding-left: 16px;
                 }
 
-                /* Minimal Interactive Urai/Notes */
-                .info-block {
-                    margin-top: 24px;
-                    padding: 24px 0;
+                /* Interactive Urai/Notes Pill Component */
+                .info-pills-container {
+                    margin-top: 36px;
                     border-top: 1px solid var(--border-light);
-                    transition: opacity 0.3s ease;
+                    padding-top: 24px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
                 }
-                .info-block:hover {
-                    opacity: 1; 
+
+                .info-pills-row {
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
                 }
-                
-                .info-label {
-                    font-size: 0.8rem;
+
+                .info-pill-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 10px 20px;
+                    border-radius: 99px;
+                    font-weight: 600;
+                    font-size: 0.85rem;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+                    border: 1px solid var(--border-color);
+                    background: var(--bg-card);
+                    color: var(--text-muted);
+                    user-select: none;
+                    letter-spacing: 0.3px;
+                }
+
+                .info-pill-btn:hover {
+                    color: var(--text-main);
+                    border-color: var(--text-main);
+                    transform: translateY(-1.5px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                }
+
+                .info-pill-btn.active {
+                    background: var(--text-main);
+                    color: var(--bg-app);
+                    border-color: var(--text-main);
+                    box-shadow: 0 6px 16px color-mix(in srgb, var(--text-main) 15%, transparent);
+                }
+
+                .info-pill-btn svg {
+                    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+                    opacity: 0.7;
+                }
+
+                .info-pill-btn.active svg {
+                    transform: rotate(180deg);
+                    opacity: 1;
+                }
+
+                .info-pill-content-wrapper {
+                    display: grid;
+                    grid-template-rows: 0fr;
+                    transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+                    overflow: hidden;
+                }
+
+                .info-pill-content-wrapper.expanded {
+                    grid-template-rows: 1fr;
+                }
+
+                .info-pill-content-inner {
+                    min-height: 0;
+                }
+
+                .info-pill-box {
+                    background: color-mix(in srgb, var(--text-main) 2.5%, transparent);
+                    border: 1px solid var(--border-light);
+                    border-radius: 18px;
+                    padding: 24px;
+                    margin-top: 8px;
+                    margin-bottom: 4px;
+                }
+
+                .info-pill-box-header {
+                    font-size: 0.75rem;
                     font-weight: 800;
                     text-transform: uppercase;
-                    letter-spacing: 1.5px;
-                    color: var(--text-main);
-                    margin-bottom: 16px;
+                    letter-spacing: 1.2px;
+                    color: var(--text-muted);
+                    margin-bottom: 14px;
+                    opacity: 0.8;
                 }
+
                 .info-content {
                     font-size: 0.95rem;
-                    line-height: 1.7;
+                    line-height: 1.75;
                     color: var(--text-muted);
                     white-space: pre-wrap;
                 }
+
                 .info-content.urai {
-                    color: color-mix(in srgb, var(--text-main) 85%, transparent);
+                    color: color-mix(in srgb, var(--text-main) 88%, transparent);
+                    font-size: 1.05rem;
+                }
+
+                .animate-fade {
+                    animation: fadeInContent 0.3s ease forwards;
+                }
+
+                @keyframes fadeInContent {
+                    from { opacity: 0; transform: translateY(6px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
 
                 /* Keyframes */
@@ -1314,19 +1457,7 @@ const WritingPage = ({
                                         })}
                                     </div>
 
-                                    {post.urai && (
-                                        <div className="info-block">
-                                            <div className="info-label">Urai · உரை</div>
-                                            <div className="info-content urai">{post.urai}</div>
-                                        </div>
-                                    )}
-
-                                    {post.notes && (
-                                        <div className="info-block" style={{ borderTop: post.urai ? 'none' : '1px solid var(--border-light)', paddingTop: post.urai ? '0' : '32px', marginTop: post.urai ? '0' : '24px' }}>
-                                            <div className="info-label">Notes</div>
-                                            <div className="info-content">{post.notes}</div>
-                                        </div>
-                                    )}
+                                    <PoemInfoZone urai={post.urai} notes={post.notes} />
                                 </article>
                             );
                         })
