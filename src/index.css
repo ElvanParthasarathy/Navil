@@ -1058,13 +1058,14 @@ span.desktop-only {
 
   .drawer-theme-label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+    text-transform: none;
+    letter-spacing: normal;
     color: var(--text-muted);
-    margin-bottom: 12px;
-    text-align: center;
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 4px;
   }
 
   .drawer-theme-slider {
@@ -1074,7 +1075,7 @@ span.desktop-only {
     background: var(--nav-hover);
     border-radius: 99px;
     padding: 2px;
-    height: 36px;
+    height: 38px;
     width: 100%;
     box-sizing: border-box;
     border: 1px solid var(--border-light);
@@ -1086,11 +1087,12 @@ span.desktop-only {
     top: 2px;
     bottom: 2px;
     width: calc((100% - 4px) / 3);
-    background: var(--accent-color);
+    background: var(--bg-panel);
     border-radius: 99px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     z-index: 1;
+    border: 1px solid var(--border-light);
   }
 
   .drawer-slider-opt {
@@ -1112,7 +1114,7 @@ span.desktop-only {
   }
 
   .drawer-slider-opt.active svg {
-    color: var(--accent-text);
+    color: var(--text-main);
   }
 
   .mobile-header {
