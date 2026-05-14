@@ -270,6 +270,23 @@ const About = () => {
                     transform: scale(0.95);
                 }
 
+                /* RESPONSIVE & DESKTOP GRID */
+                @media (min-width: 768px) {
+                    .about-grid {
+                        display: grid;
+                        grid-template-columns: repeat(12, 1fr);
+                        gap: 24px;
+                    }
+                    
+                    /* Row 1 */
+                    .card-identity { grid-column: span 7; }
+                    .card-education { grid-column: span 5; }
+                    
+                    /* Row 2 */
+                    .card-social { grid-column: span 5; }
+                    .card-philosophy { grid-column: span 7; }
+                }
+
                 @media (max-width: 768px) {
                     .about-page { padding: 40px 20px 80px; }
                     .hero-avatar-wrapper { width: 140px; height: 140px; }
