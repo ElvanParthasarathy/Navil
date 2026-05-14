@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiMenu, FiX } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
@@ -56,7 +56,8 @@ const Layout = () => {
     const { theme, setTheme, toggleTheme } = useTheme();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef(null);
-    const [isMobileDrawerOpen, setIsMobileDrawerOpen] = React.useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const mobileMenuRef = React.useRef(null);
 
     const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(() => {
         return localStorage.getItem('sidebarCollapsed') === 'true';
@@ -66,20 +67,23 @@ const Layout = () => {
         localStorage.setItem('sidebarCollapsed', isSidebarCollapsed);
     }, [isSidebarCollapsed]);
 
-    // Close mobile drawer on route change
+    // Close mobile menu on route change
     React.useEffect(() => {
-        setIsMobileDrawerOpen(false);
+        setIsMobileMenuOpen(false);
     }, [location.pathname]);
 
-    // Prevent body scroll when drawer is open
+    // Close mobile menu on click outside
     React.useEffect(() => {
-        if (isMobileDrawerOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
+        const handleClickOutside = (e) => {
+            if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+        if (isMobileMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
         }
-        return () => { document.body.style.overflow = ''; };
-    }, [isMobileDrawerOpen]);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isMobileMenuOpen]);
 
     // Close popup on click outside
     React.useEffect(() => {
@@ -99,56 +103,55 @@ const Layout = () => {
         <div className="app-shell" style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
             <header className="mobile-topbar">
-                <button 
-                    className="mobile-hamburger"
-                    onClick={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-                    aria-label="Toggle sidebar menu"
-                >
-                    {isMobileDrawerOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-                </button>
                 <div className="brand">Elvan</div>
-                <div style={{ width: 38 }}></div>
-            </header>
-
-            {/* Mobile Drawer Overlay */}
-            <div 
-                className={`mobile-drawer-overlay ${isMobileDrawerOpen ? 'open' : ''}`}
-                onClick={() => setIsMobileDrawerOpen(false)}
-            />
-
-            {/* Mobile Drawer Sidebar (opens from right) */}
-            <aside className={`mobile-drawer ${isMobileDrawerOpen ? 'open' : ''}`}>
-                <div className="mobile-drawer-header">
-                    <div className="brand">Elvan</div>
-                    <button className="mobile-drawer-close" onClick={() => setIsMobileDrawerOpen(false)}>
-                        <FiX size={22} />
+                <div className="mobile-menu-zone" ref={mobileMenuRef}>
+                    <button 
+                        className="mobile-menu-btn"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="More options"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="5" r="2" />
+                            <circle cx="12" cy="12" r="2" />
+                            <circle cx="12" cy="19" r="2" />
+                        </svg>
                     </button>
-                </div>
-                <div className="mobile-drawer-nav">
-                    <Link to="/teaching" className={`drawer-nav-item ${location.pathname.startsWith('/teaching') ? 'active' : ''}`}>
-                        <FiMonitor size={20} />
-                        <div className="drawer-nav-text"><span lang="ta">பயிற்றுவிப்பு</span><span className="drawer-sub">Teaching</span></div>
-                    </Link>
-                </div>
-                <div className="mobile-drawer-bottom">
-                    <span className="drawer-theme-label">Appearance</span>
-                    <div className="drawer-theme-slider">
-                        <div
-                            className="drawer-slider-thumb"
-                            style={{ transform: `translateX(${theme === 'light' ? '0%' : theme === 'auto' ? '100%' : '200%'})` }}
-                        />
-                        <div className={`drawer-slider-opt ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')} title="Light">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+
+                    {isMobileMenuOpen && (
+                        <div className="mobile-dropdown">
+                            <Link 
+                                to="/teaching" 
+                                className={`mobile-dropdown-item ${location.pathname.startsWith('/teaching') ? 'active' : ''}`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <FiMonitor size={18} />
+                                <span>Teaching</span>
+                            </Link>
+
+                            <div className="mobile-dropdown-divider" />
+
+                            <div className="mobile-dropdown-theme" onClick={(e) => e.stopPropagation()}>
+                                <span className="mobile-dropdown-theme-label">Appearance</span>
+                                <div className="drawer-theme-slider">
+                                    <div
+                                        className="drawer-slider-thumb"
+                                        style={{ transform: `translateX(${theme === 'light' ? '0%' : theme === 'auto' ? '100%' : '200%'})` }}
+                                    />
+                                    <div className={`drawer-slider-opt ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')} title="Light">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+                                    </div>
+                                    <div className={`drawer-slider-opt ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
+                                    </div>
+                                    <div className={`drawer-slider-opt ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className={`drawer-slider-opt ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
-                        </div>
-                        <div className={`drawer-slider-opt ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-                        </div>
-                    </div>
+                    )}
                 </div>
-            </aside>
+            </header>
 
             <nav className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-top">
