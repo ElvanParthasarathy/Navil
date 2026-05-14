@@ -1,17 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { useScrollRestore } from '../lib/scrollRestoration';
+import { db } from '../lib/firebaseClient';
+import { ref, onValue } from 'firebase/database';
+
+const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
 
 const Writings = () => {
     const { setPageTitle } = useOutletContext();
     useScrollRestore(false); // Instantly restore since it is a static page
 
+    const [counts, setCounts] = useState({});
+
     useEffect(() => {
         setPageTitle('எழுத்துகள்|Writings');
     }, [setPageTitle]);
+
+    useEffect(() => {
+        const unsubs = FIREBASE_KEYS.map(key => {
+            const catRef = ref(db, key);
+            return onValue(catRef, (snapshot) => {
+                const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                setCounts(prev => ({ ...prev, [key]: count }));
+            }, () => {});
+        });
+        return () => unsubs.forEach(fn => fn());
+    }, []);
+
+    const CountBadge = ({ category }) => {
+        const count = counts[category];
+        if (!count) return null;
+        return <span className="cat-count-badge">{count}</span>;
+    };
 
     return (
         <div className="writings-page page-view fadeIn">
@@ -117,6 +140,23 @@ const Writings = () => {
                     color: #888888;
                     line-height: 1.4;
                     margin-top: 2px;
+                }
+
+                /* COUNT BADGE */
+                .cat-count-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 24px;
+                    height: 24px;
+                    padding: 0 8px;
+                    border-radius: 100px;
+                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    color: var(--text-muted);
+                    margin-left: 8px;
+                    vertical-align: middle;
                 }
 
                 /* BASE FOOTER & DECORATION */
@@ -229,7 +269,7 @@ const Writings = () => {
                 <Link to="/writings/poems" className="category-card">
                     <div className="cat-icon-box"><BsPen /></div>
                     <div className="cat-content">
-                        <div className="cat-title">செய்யுள்கள்</div>
+                        <div className="cat-title">செய்யுள்கள்<CountBadge category="poems" /></div>
                         <div className="cat-title-sub">Poems</div>
                         <p className="cat-desc">என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்.</p>
                         <p className="cat-desc-sub">My lyrical verses and emotional expressions.</p>
@@ -240,7 +280,7 @@ const Writings = () => {
                 <Link to="/writings/quotes" className="category-card">
                     <div className="cat-icon-box"><BsChatQuote /></div>
                     <div className="cat-content">
-                        <div className="cat-title">பொன்மொழிகள்</div>
+                        <div className="cat-title">பொன்மொழிகள்<CountBadge category="quotes" /></div>
                         <div className="cat-title-sub">Quotes</div>
                         <p className="cat-desc">என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்.</p>
                         <p className="cat-desc-sub">My short quotes and personal insights.</p>
@@ -251,7 +291,7 @@ const Writings = () => {
                 <Link to="/writings/blog" className="category-card">
                     <div className="cat-icon-box"><BsPencilSquare /></div>
                     <div className="cat-content">
-                        <div className="cat-title">வலைப்பதிவுகள்</div>
+                        <div className="cat-title">வலைப்பதிவுகள்<CountBadge category="blog" /></div>
                         <div className="cat-title-sub">Blog Posts</div>
                         <p className="cat-desc">என் அன்றாடத் தேடல்களும் வாழ்வியல் பகிர்வுகளும்.</p>
                         <p className="cat-desc-sub">My daily reflections and personal updates.</p>
@@ -262,7 +302,7 @@ const Writings = () => {
                 <Link to="/writings/articles" className="category-card">
                     <div className="cat-icon-box"><BsNewspaper /></div>
                     <div className="cat-content">
-                        <div className="cat-title">கட்டுரைகள்</div>
+                        <div className="cat-title">கட்டுரைகள்<CountBadge category="articles" /></div>
                         <div className="cat-title-sub">Articles</div>
                         <p className="cat-desc">என் ஆழமான பகுப்பாய்வுப் பதிவுகள்.</p>
                         <p className="cat-desc-sub">My in-depth technical and structured writings.</p>
@@ -270,12 +310,10 @@ const Writings = () => {
                     <div className="cat-footer">கட்டுரைகளைப் படிக்க <FiArrowRight /></div>
                 </Link>
 
-
-
                 <Link to="/writings/stories" className="category-card">
                     <div className="cat-icon-box"><BsBook /></div>
                     <div className="cat-content">
-                        <div className="cat-title">சிறுகதைகள்</div>
+                        <div className="cat-title">சிறுகதைகள்<CountBadge category="stories" /></div>
                         <div className="cat-title-sub">Short Stories</div>
                         <p className="cat-desc">ஒரு கதை சொல்லட்டா சார்?</p>
                         <p className="cat-desc-sub">My original fiction and short narratives.</p>
@@ -283,13 +321,10 @@ const Writings = () => {
                     <div className="cat-footer">சிறுகதைகளை வாசிக்க <FiArrowRight /></div>
                 </Link>
 
-
-
-
                 <Link to="/writings/diary" className="category-card">
                     <div className="cat-icon-box"><BsMoonStars /></div>
                     <div className="cat-content">
-                        <div className="cat-title">நாளேடு</div>
+                        <div className="cat-title">நாளேடு<CountBadge category="diary" /></div>
                         <div className="cat-title-sub">Diary</div>
                         <p className="cat-desc">என் நாள்களின் நினைவுகளும் பதிவுகளும்</p>
                         <p className="cat-desc-sub">Memories and records of my days.</p>

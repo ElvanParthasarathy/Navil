@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiX, FiClock, FiAnchor } from 'react-icons/fi';
+import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiX, FiClock, FiAnchor, FiImage } from 'react-icons/fi';
 import RichTextEditor from './RichTextEditor';
 
 // ─── SCHEMAS ───
@@ -147,6 +147,33 @@ export const SCHEMAS = {
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Entry',
         getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
+    },
+    arts: {
+        label: 'Arts', icon: <FiImage size={16} />, type: 'simple',
+        fields: [
+            { key: 'image', label: 'Cover Image URL', type: 'text', placeholder: 'https://drive.google.com/... or any direct image URL' },
+            { key: 'images', label: 'Images', type: 'dynamic_list', fullWidth: true, isImageList: true },
+            { key: 'caption', label: 'Caption / Description', type: 'textarea', rows: 3, placeholder: 'About this artwork...', fullWidth: true },
+            { key: 'category', label: 'Category', type: 'select', options: [
+                { value: 'pencil', label: 'Pencil Drawings' },
+                { value: 'editing', label: 'Editings' },
+                { value: 'poster', label: 'Posters' },
+                { value: 'painting', label: 'Paintings' },
+                { value: 'quotes', label: 'Quotes' },
+                { value: 'poems', label: 'Poems' },
+            ]},
+            { key: 'date', label: 'Date', type: 'text', placeholder: 'e.g. Mar 25, 2025' },
+            { key: 'timestamp', label: 'Sort Order (timestamp ms)', type: 'text', placeholder: 'e.g. 1742867580000 — used for sorting' },
+        ],
+        getItemTitle: (item) => item.caption?.replace(/#\S+/g, '').trim().slice(0, 50) || item.category || 'Untitled Art',
+        getItemSubtitle: (item) => {
+            const parts = [];
+            if (item.category) parts.push(item.category.charAt(0).toUpperCase() + item.category.slice(1));
+            if (item.date) parts.push(item.date);
+            const imgCount = Array.isArray(item.images) ? item.images.length : (item.images ? item.images.split('\n').filter(Boolean).length : 0);
+            if (imgCount > 0) parts.push(`${imgCount} image${imgCount > 1 ? 's' : ''}`);
+            return parts.join(' • ');
+        },
     }
 };
 
@@ -274,6 +301,98 @@ const TagInput = ({ value, onChange, placeholder, suggestions = [] }) => {
 
 // ─── FIELD INPUT ───
 export const FieldInput = ({ field, value, onChange }) => {
+    // Dynamic image URL list with add/remove
+    if (field.isImageList) {
+        let urls = typeof value === 'string'
+            ? value.split('\n').filter(Boolean)
+            : (Array.isArray(value) ? value : []);
+        
+        if (urls.length === 0) urls = [''];
+
+        const updateUrl = (index, newVal) => {
+            const updated = [...urls];
+            updated[index] = newVal;
+            onChange(updated.join('\n'));
+        };
+        const removeUrl = (index) => {
+            const updated = urls.filter((_, i) => i !== index);
+            onChange(updated.join('\n'));
+        };
+        const addUrl = () => {
+            onChange([...urls, ''].join('\n'));
+        };
+        const moveUrl = (index, direction) => {
+            const updated = [...urls];
+            const target = index + direction;
+            if (target < 0 || target >= updated.length) return;
+            [updated[index], updated[target]] = [updated[target], updated[index]];
+            onChange(updated.join('\n'));
+        };
+
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {urls.map((url, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        {/* Thumbnail preview */}
+                        <div style={{
+                            width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden',
+                            background: 'var(--bg-panel)', flexShrink: 0, border: '1px solid var(--border-light)',
+                        }}>
+                            {url && <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; }} />}
+                        </div>
+                        {/* URL input */}
+                        <input
+                            className="adm-input"
+                            type="text"
+                            value={url}
+                            onChange={(e) => updateUrl(i, e.target.value)}
+                            placeholder={`Image URL ${i + 1}`}
+                            style={{ flex: 1 }}
+                        />
+                        {/* Reorder buttons */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <button type="button" onClick={() => moveUrl(i, -1)} disabled={i === 0}
+                                style={{
+                                    background: 'none', border: 'none', color: 'var(--text-muted)',
+                                    cursor: i === 0 ? 'default' : 'pointer', opacity: i === 0 ? 0.3 : 1,
+                                    padding: '0', lineHeight: 1, fontSize: '14px',
+                                }}>▲</button>
+                            <button type="button" onClick={() => moveUrl(i, 1)} disabled={i === urls.length - 1}
+                                style={{
+                                    background: 'none', border: 'none', color: 'var(--text-muted)',
+                                    cursor: i === urls.length - 1 ? 'default' : 'pointer', opacity: i === urls.length - 1 ? 0.3 : 1,
+                                    padding: '0', lineHeight: 1, fontSize: '14px',
+                                }}>▼</button>
+                        </div>
+                        {/* Remove button */}
+                        <button type="button" onClick={() => removeUrl(i)}
+                            style={{
+                                background: 'none', border: 'none', color: '#e53e3e',
+                                cursor: 'pointer', padding: '4px', fontSize: '16px', lineHeight: 1,
+                                opacity: 0.7, transition: 'opacity 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.target.style.opacity = '1'}
+                            onMouseLeave={(e) => e.target.style.opacity = '0.7'}
+                            title="Remove"
+                        >✕</button>
+                    </div>
+                ))}
+                <button type="button" onClick={addUrl}
+                    style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        padding: '10px 16px', border: '1px dashed var(--border-light)', borderRadius: '10px',
+                        background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer',
+                        fontSize: '0.82rem', fontWeight: 600, transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => { e.target.style.borderColor = 'var(--text-main)'; e.target.style.color = 'var(--text-main)'; }}
+                    onMouseLeave={(e) => { e.target.style.borderColor = 'var(--border-light)'; e.target.style.color = 'var(--text-muted)'; }}
+                >
+                    + Add Image URL
+                </button>
+            </div>
+        );
+    }
+
     if (field.type === 'textarea') {
         return (
             <textarea
@@ -288,9 +407,12 @@ export const FieldInput = ({ field, value, onChange }) => {
     if (field.type === 'select') {
         return (
             <select className="adm-input" value={value || ''} onChange={(e) => onChange(e.target.value)}>
-                {(field.options || []).map(opt => (
-                    <option key={opt} value={opt}>{opt || '— Select —'}</option>
-                ))}
+                <option value="">— Select —</option>
+                {(field.options || []).map(opt => {
+                    const optVal = typeof opt === 'string' ? opt : opt.value;
+                    const optLabel = typeof opt === 'string' ? opt : opt.label;
+                    return <option key={optVal} value={optVal}>{optLabel}</option>;
+                })}
             </select>
         );
     }

@@ -10,6 +10,8 @@ import Portfolio from './pages/Portfolio';
 import Settings from './pages/Settings';
 import Writings from './pages/Writings';
 import Teaching from './pages/Teaching';
+import Arts from './pages/Arts';
+import ArtsGallery from './pages/ArtsGallery';
 import VocoderView from './pages/VocoderView';
 const Archive = React.lazy(() => import('./pages/Archive'));
 import Quotes from './pages/writings/Quotes';
@@ -247,6 +249,7 @@ const Layout = () => {
                     <div className="sidebar-nav">
                         <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/arts" icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>} label="படைப்புகள்" subLabel="Arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="Teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
                         <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
@@ -409,6 +412,8 @@ const router = createBrowserRouter([
             { path: "settings", element: <Settings /> },
             { path: "writings", element: <Writings /> },
             { path: "teaching", element: <Teaching /> },
+            { path: "arts", element: <Arts /> },
+            { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
             { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
             { path: "writings/quotes", element: <Quotes /> },

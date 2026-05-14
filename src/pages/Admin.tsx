@@ -19,6 +19,7 @@ import { EssayEditor } from '../components/admin/EssayEditor';
 import { StoryEditor } from '../components/admin/StoryEditor';
 import { ThoughtEditor } from '../components/admin/ThoughtEditor';
 import { DiaryEditor } from '../components/admin/DiaryEditor';
+import { ArtEditor } from '../components/admin/ArtEditor';
 import AdminLogin from '../components/admin/AdminLogin';
 import AdminDashboard from '../components/admin/AdminDashboard';
 
@@ -104,6 +105,7 @@ const Admin = () => {
         stories: [],
         thoughts: [],
         diary: [],
+        arts: [],
         defaultAuthors: { ...DEFAULT_AUTHORS },
     });
 
@@ -202,7 +204,7 @@ const Admin = () => {
                     const allData = snapshot.val();
                     const newDataStore = { ...dataStore };
                     
-                    const categories = ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary'];
+                    const categories = ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary', 'arts'];
                     
                     categories.forEach(key => {
                         if (allData[key]) {
@@ -224,6 +226,11 @@ const Admin = () => {
                                     }
                                 }
                                 
+                                // Arts: convert images array to newline string for textarea editing
+                                if (key === 'arts' && Array.isArray(item.images)) {
+                                    item.images = item.images.join('\n');
+                                }
+
                                 // Normalize tags: string → array
                                 if (item.tags && typeof item.tags === 'string') {
                                     item.tags = item.tags.split(',').map(t => t.trim()).filter(Boolean);
@@ -300,7 +307,10 @@ const Admin = () => {
                 let key = String(item.id);
                 const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(key);
 
-                if (isUUID) {
+                if (isUUID && collection === 'arts') {
+                    // Arts: generate art_timestamp key
+                    key = `art_${Date.now()}_${index}`;
+                } else if (isUUID) {
                     // New item with temp UUID — generate a proper slug
                     const firstVariant = item.variants?.[0];
                     const titleTransl = firstVariant?.titleTransliterations || {};
@@ -334,6 +344,18 @@ const Admin = () => {
                 // Normalize tags to array
                 if (row.tags && typeof row.tags === 'string') {
                     row.tags = row.tags.split(',').map(t => t.trim()).filter(Boolean);
+                }
+
+                // Arts-specific: normalize images field and auto-set cover
+                if (collection === 'arts') {
+                    if (row.images && typeof row.images === 'string') {
+                        row.images = row.images.split('\n').map(u => u.trim()).filter(Boolean);
+                    }
+                    if (!Array.isArray(row.images)) row.images = [];
+                    if (!row.image && row.images.length > 0) row.image = row.images[0];
+                    if (row.timestamp && typeof row.timestamp === 'string') row.timestamp = parseInt(row.timestamp, 10) || Date.now();
+                    if (!row.timestamp) row.timestamp = Date.now();
+                    if (!row.type) row.type = 'image';
                 }
 
                 // Clean up variants
@@ -372,8 +394,15 @@ const Admin = () => {
     const addItem = (collection) => {
         const newId = uuidv4();
         let newItem;
+        const schema = SCHEMAS[collection];
 
-        if (collection === 'quotes' || collection === 'poems') {
+        if (schema?.type === 'simple') {
+            // Simple schema (e.g. arts) — flat fields, no variants
+            newItem = { id: newId };
+            (schema.fields || []).forEach(f => {
+                newItem[f.key] = f.type === 'datetime-local' ? new Date().toISOString().slice(0, 16) : '';
+            });
+        } else if (collection === 'quotes' || collection === 'poems') {
             newItem = {
                 id: newId, title: '', date: new Date().toISOString().slice(0, 16),
                 style: '', theme: '', meter: '', dedication: '', classification: '', urai: '', notes: '',
@@ -399,12 +428,23 @@ const Admin = () => {
             const item = items?.find(i => i.id === id);
             if (item) {
                 const schema = SCHEMAS[activeTab];
-                const isBiling = schema?.type === 'bilingual_post';
+                const isSimple = schema?.type === 'simple';
 
-                const hasLegacyTitle = item.title && item.title.trim();
-                const hasVariantText = item.variants?.some(v => (v.text && v.text.trim()) || (v.title && v.title.trim()));
+                let isEmpty = false;
+                if (isSimple) {
+                    // Simple schema (arts): check if any meaningful field has content
+                    const hasAnyContent = (schema.fields || []).some(f => {
+                        const val = item[f.key];
+                        return val && String(val).trim();
+                    });
+                    isEmpty = !hasAnyContent;
+                } else {
+                    const hasLegacyTitle = item.title && item.title.trim();
+                    const hasVariantText = item.variants?.some(v => (v.text && v.text.trim()) || (v.title && v.title.trim()));
+                    isEmpty = !hasLegacyTitle && !hasVariantText;
+                }
 
-                if (!hasLegacyTitle && !hasVariantText) {
+                if (isEmpty) {
                     // Item is blank — remove it
                     setDataStore(prev => ({
                         ...prev,
@@ -590,6 +630,7 @@ const Admin = () => {
             case 'stories': return <StoryEditor {...commonProps} />;
             case 'thoughts': return <ThoughtEditor {...commonProps} />;
             case 'diary': return <DiaryEditor {...commonProps} />;
+            case 'arts': return <ArtEditor {...commonProps} />;
             default: return null;
         }
     };

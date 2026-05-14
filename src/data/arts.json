@@ -8,7 +8,8 @@
     "caption": "Biriyaani Kaaviyam பிரியாணி காவியம்",
     "date": "Mar 25, 2025 7:23 am",
     "timestamp": 1742867580000,
-    "type": "image"
+    "type": "image",
+    "category": "poster"
   },
   {
     "id": "art_2_1770151909546",
@@ -19,7 +20,8 @@
     "caption": "",
     "date": "Mar 20, 2025 11:48 am",
     "timestamp": 1742451480000,
-    "type": "image"
+    "type": "image",
+    "category": "editing"
   },
   {
     "id": "art_3_1770151909546",
@@ -30,7 +32,8 @@
     "caption": "",
     "date": "Mar 09, 2025 3:17 am",
     "timestamp": 1741470420000,
-    "type": "image"
+    "type": "image",
+    "category": "editing"
   },
   {
     "id": "art_4_1770151909546",
@@ -38,10 +41,11 @@
     "images": [
       "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/elvan.jp/posts/202502/480460403_17913812217074513_6006378603240905747_n_18139415770380502.webp"
     ],
-    "caption": "Check out the banner I designed for #Saankethika2k25 \n\nDesign By\n&#064;jaiprakash_elvan\n\nthe National Level Technical Symposium of RMD Engineering College’s ECE Department! Open to all engineering students looking to innovate, compete, and connect.\n\nDon’t miss your chance to be part of this tech extravaganza. For more details and registration, visit &#064;saankethika_2k25.\n\n#rmdengineeringcollege #TechnicalSymposium #TechFest #CollegeEvents #EngineeringLife #Innovation #StudentTech #FutureEngineers #Hackathon #EngineeringStudents #ECE #Electronics #TechChallenges #CollegeCompetitions #StudentLife #Engineering #AI #IoT #VLSI #ProjectShowcase #CodingCompetition #HackTheFuture",
+    "caption": "Check out the banner I designed for #Saankethika2k25 \n\nDesign By\n&#064;jaiprakash_elvan\n\nthe National Level Technical Symposium of RMD Engineering College's ECE Department! Open to all engineering students looking to innovate, compete, and connect.\n\nDon't miss your chance to be part of this tech extravaganza. For more details and registration, visit &#064;saankethika_2k25.\n\n#rmdengineeringcollege #TechnicalSymposium #TechFest #CollegeEvents #EngineeringLife #Innovation #StudentTech #FutureEngineers #Hackathon #EngineeringStudents #ECE #Electronics #TechChallenges #CollegeCompetitions #StudentLife #Engineering #AI #IoT #VLSI #ProjectShowcase #CodingCompetition #HackTheFuture",
     "date": "Feb 18, 2025 9:29 am",
     "timestamp": 1739851140000,
-    "type": "image"
+    "type": "image",
+    "category": "poster"
   },
   {
     "id": "art_5_1770151909546",
@@ -55,7 +59,8 @@
     "caption": "Sketched after a long time #2 🌟✨️🖤\n\n#ArtByElvan #SketchLove #PortraitArt #OriginalArtwork #sketch #pencilart #drawingoftheday #pencilsketch #artwork #artistsoninstagram #creativeart #artsy #instaart #arte #artoftheday#sketchdaily #sketchoftheday #handdrawnart #originalsketch #portraitart  #customart #artfeatures #artdiscover #supportartists#artinspiration #artlovers  #artcommunity #drawingislife #artsharing #createeveryday",
     "date": "Dec 08, 2024 3:39 am",
     "timestamp": 1733609340000,
-    "type": "image"
+    "type": "image",
+    "category": "pencil"
   },
   {
     "id": "art_6_1770151909546",
@@ -68,7 +73,8 @@
     "caption": "Sketched after a long time🌟✨️\n\n#ArtByElvan #SketchLove #PortraitArt #OriginalArtwork #sketch #pencilart #drawingoftheday #pencilsketch #artwork #artistsoninstagram #creativeart #artsy #instaart #arte #artoftheday#sketchdaily #sketchoftheday #handdrawnart #originalsketch #portraitart  #customart #artfeatures #artdiscover #supportartists#artinspiration #artlovers  #artcommunity #drawingislife #artsharing #createeveryday",
     "date": "Dec 05, 2024 4:45 am",
     "timestamp": 1733354100000,
-    "type": "image"
+    "type": "image",
+    "category": "pencil"
   },
   {
     "id": "art_7_1770151909547",
@@ -79,7 +85,8 @@
     "caption": "My old pencil sketch #3 .\n\nMore to come! ✏️ #PencilSketch #ArtSeries\"",
     "date": "Jul 23, 2024 8:33 pm",
     "timestamp": 1721746980000,
-    "type": "image"
+    "type": "image",
+    "category": "pencil"
   },
   {
     "id": "art_8_1770151909547",
@@ -87,10 +94,11 @@
     "images": [
       "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/elvan.jp/posts/202407/451735421_840713784245428_3830761426190214260_n_18031998871935782.webp"
     ],
-    "caption": "My old pencil sketch #2\n\nMore to come! ✏️ #PencilSketch #ArtSeries",
+    "caption": "My old pencil sketch #2\n\nMore to come! ✏️ #PencilSketch #ArtSeries",
     "date": "Jul 17, 2024 9:54 am",
     "timestamp": 1721190240000,
-    "type": "image"
+    "type": "image",
+    "category": "pencil"
   },
   {
     "id": "art_9_1770151909547",
@@ -101,6 +109,7 @@
     "caption": "My old pencil sketch #1.\n\nMore to come! ✏️ #PencilSketch #ArtSeries\"",
     "date": "Jul 17, 2024 2:19 am",
     "timestamp": 1721162940000,
-    "type": "image"
+    "type": "image",
+    "category": "pencil"
   }
 ]
