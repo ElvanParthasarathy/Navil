@@ -121,25 +121,9 @@ const Layout = () => {
                     </button>
                 </div>
                 <div className="mobile-drawer-nav">
-                    <Link to="/" className={`drawer-nav-item ${location.pathname === '/' ? 'active' : ''}`}>
-                        <FiHome size={20} />
-                        <div className="drawer-nav-text"><span lang="ta">முகப்பு</span><span className="drawer-sub">Home</span></div>
-                    </Link>
-                    <Link to="/writings" className={`drawer-nav-item ${location.pathname.startsWith('/writings') ? 'active' : ''}`}>
-                        <FiEdit3 size={20} />
-                        <div className="drawer-nav-text"><span lang="ta">எழுத்துகள்</span><span className="drawer-sub">Writings</span></div>
-                    </Link>
                     <Link to="/teaching" className={`drawer-nav-item ${location.pathname.startsWith('/teaching') ? 'active' : ''}`}>
                         <FiMonitor size={20} />
                         <div className="drawer-nav-text"><span lang="ta">பயிற்றுவிப்பு</span><span className="drawer-sub">Teaching</span></div>
-                    </Link>
-                    <Link to="/archive" className={`drawer-nav-item ${location.pathname === '/archive' ? 'active' : ''}`}>
-                        <FiInstagram size={20} />
-                        <div className="drawer-nav-text"><span lang="ta">காப்புகள்</span><span className="drawer-sub">Archive</span></div>
-                    </Link>
-                    <Link to="/about" className={`drawer-nav-item ${location.pathname === '/about' ? 'active' : ''}`}>
-                        <FiUser size={20} />
-                        <div className="drawer-nav-text"><span lang="ta">பற்றி</span><span className="drawer-sub">About</span></div>
                     </Link>
                     <Link to="/settings" className={`drawer-nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
                         <FiSettings size={20} />
