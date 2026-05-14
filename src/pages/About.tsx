@@ -224,18 +224,20 @@ const About = () => {
 
                 .contact-location {
                     display: flex;
-                    align-items: flex-start;
-                    justify-content: flex-end;
-                    text-align: right;
+                    align-items: center;
+                    justify-content: center;
                     gap: 8px;
                     color: var(--text-muted);
                     font-size: 0.85rem;
                     line-height: 1.5;
+                    padding: 8px 16px;
+                    background: var(--bg-app);
+                    border: 1px solid var(--border-light);
+                    border-radius: 99px;
                 }
                 
                 .contact-location svg {
                     flex-shrink: 0;
-                    margin-top: 3px;
                 }
 
                 .contact-socials { display: flex; gap: 12px; }
@@ -302,14 +304,6 @@ const About = () => {
                        align-items: center;
                        gap: 20px;
                    }
-                   
-                   .contact-location { 
-                       align-items: flex-start; 
-                       line-height: 1.5; 
-                       text-align: left; 
-                       justify-content: center;
-                   }
-                   .contact-location svg { flex-shrink: 0; margin-top: 4px; }
                    
                    .contact-socials { justify-content: center; gap: 20px; flex-wrap: wrap; }
                    .social-icon-link { width: 48px; height: 48px; }
@@ -383,8 +377,8 @@ const About = () => {
 
                 <div className="contact-right-side">
                     <div className="contact-location">
-                        <FiMapPin size={16} />
-                        <span>Arani, Tamil Nadu - 632317 <br className="mobile-break" />(Currently in Chennai)</span>
+                        <FiMapPin size={14} />
+                        <span>Arani, Tamil Nadu · Currently in Chennai</span>
                     </div>
 
                     <div className="contact-socials">
