@@ -231,8 +231,8 @@ const About = () => {
                     font-size: 0.85rem;
                     line-height: 1.5;
                     padding: 8px 16px;
-                    background: var(--bg-app);
-                    border: 1px solid var(--border-light);
+                    background: var(--bg-card);
+                    border: 1px solid var(--border-color);
                     border-radius: 99px;
                 }
                 
