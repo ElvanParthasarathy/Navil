@@ -96,19 +96,19 @@ body {
 }
 
 :root {
-  --bg-app: #FFFFFF;
-  --bg-app-rgb: 255, 255, 255;
-  --bg-panel: #F7F7F7;
+  --bg-app: #F5F5F7;
+  --bg-app-rgb: 245, 245, 247;
+  --bg-panel: #FFFFFF;
   --bg-card: #FFFFFF;
-  --text-main: #111;
-  --text-muted: #666;
-  --border-color: #dbdbdb;
-  --border-light: rgba(0, 0, 0, 0.04);
+  --text-main: #1D1D1F;
+  --text-muted: #3C3C43;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-light: rgba(0, 0, 0, 0.05);
   --sidebar-width: 280px;
-  --nav-hover: rgba(0, 0, 0, 0.04);
+  --nav-hover: rgba(0, 0, 0, 0.08);
   --accent-color: #000;
   --accent-text: #fff;
-  --link-color: #0095f6;
+  --link-color: #0066cc;
 }
 
 [data-theme='dark'] {
