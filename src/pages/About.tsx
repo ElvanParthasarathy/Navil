@@ -298,7 +298,7 @@ const About = () => {
                    .contact-divider { display: none; }
                    .contact-info-block h3:first-child { font-size: 1.4rem; }
                    .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-                   .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; }
+                   .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; }
                    
                    .contact-right-side {
                        flex-direction: column;
@@ -372,12 +372,8 @@ const About = () => {
                         <h3>Let's Connect</h3>
                     </div>
 
-                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0, lineHeight: '1.6' }}>
-                        புதிய படைப்புகளுக்கும் <br className="mobile-break" />உரையாடல்களுக்கும்.
-                    </p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '6px', marginBottom: 0, lineHeight: '1.5' }}>
-                        Open for collaborations <br className="mobile-break" />and creative conversations.
-                    </p>
+                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
                 </div>
 
                 <div className="contact-right-side">
