@@ -176,9 +176,12 @@ const About = () => {
                 .contact-card-bento {
                     background: var(--bg-panel);
                     border: 1px solid var(--border-light);
-                    padding: 48px 32px;
+                    padding: 48px 40px;
                     border-radius: 32px;
-                    text-align: center;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 40px;
                     transition: all 0.3s ease;
                     margin-top: 40px;
                 }
@@ -193,7 +196,17 @@ const About = () => {
                 }
 
                 .contact-header {
-                    margin-bottom: 24px;
+                    margin-bottom: 12px;
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                }
+
+                .contact-divider {
+                    width: 2px;
+                    height: 24px;
+                    background: var(--border-color);
+                    opacity: 0.6;
                 }
 
                 .contact-header h3:first-child {
@@ -229,16 +242,12 @@ const About = () => {
                 }
 
                 .contact-location {
-                    display: inline-flex;
+                    display: flex;
                     align-items: center;
                     gap: 8px;
                     color: var(--text-muted);
                     font-size: 0.9rem;
-                    margin-bottom: 32px;
-                    padding: 8px 16px;
-                    background: var(--bg-app);
-                    border-radius: 99px;
-                    border: 1px solid var(--border-light);
+                    margin-top: 16px;
                 }
 
                 .contact-socials {
@@ -294,13 +303,32 @@ const About = () => {
                     .about-card { padding: 28px; border-radius: 24px; }
                     
                     .contact-card-bento {
-                        padding: 40px 20px;
+                        padding: 40px 24px;
                         border-radius: 28px;
+                        flex-direction: column;
+                        text-align: center;
+                        gap: 32px;
+                    }
+
+                    .contact-header {
+                        flex-direction: column;
+                        gap: 0;
+                        margin-bottom: 20px;
+                    }
+
+                    .contact-divider {
+                        display: none;
                     }
 
                     .contact-header h3:first-child { font-size: 1.6rem; }
-                    .contact-header h3:last-child { font-size: 0.95rem; }
-                    .contact-location { font-size: 0.85rem; padding: 6px 14px; }
+                    .contact-header h3:last-child { font-size: 0.95rem; margin-top: 4px; }
+                    
+                    .contact-location {
+                        justify-content: center;
+                        font-size: 0.85rem;
+                        margin-top: 24px;
+                    }
+
                     .social-icon-link { width: 42px; height: 42px; }
                 }
             `}</style>
