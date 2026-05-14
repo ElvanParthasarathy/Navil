@@ -8,7 +8,7 @@ const Writings = () => {
     const { setPageTitle } = useOutletContext();
 
     useEffect(() => {
-        setPageTitle('எழுத்துகள்');
+        setPageTitle('எழுத்துகள்|Writings');
     }, [setPageTitle]);
 
     return (
@@ -17,7 +17,7 @@ const Writings = () => {
                 .writings-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 10px 20px;
+                    padding: 0 20px 32px;
                 }
 
                 .writings-header {
@@ -172,10 +172,12 @@ const Writings = () => {
 
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
-                    .writings-page { padding: 24px 0; }
-                    .writings-header { padding: 40px 28px 20px; text-align: left; margin-bottom: 32px; }
+                    .mobile-hide { display: none; }
+                    .writings-page { padding: 0; }
+                    .writings-header { padding: 28px 28px 10px; text-align: center; margin-bottom: 24px; }
                     .writings-title { display: none; }
-                    .writings-subtitle { font-size: 1rem; line-height: 1.5; }
+                    .writings-title-sub { display: none; }
+                    .writings-subtitle { font-size: 1rem; line-height: 1.5; text-align: center; }
                     .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
                     
                     .category-card { 
@@ -214,10 +216,10 @@ const Writings = () => {
                 <h1 className="writings-title">எழுத்துகள்</h1>
                 <div className="writings-title-sub">Writings</div>
                 <p className="writings-subtitle">
-                    என் வாழ்வியற் சிந்தனைகள், கதைகள், பட்டறிவுகளின் தொகுப்பு. வாசிக்கப் பகுதிகளைத் தேர்வுசெய்க.
+                    சிந்தனைகள், கதைகள் & பட்டறிவுகள்
                 </p>
                 <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                    A collection of thoughts, stories, and observations from my journey. Select a category to explore.
+                    Thoughts, Stories & Observations
                 </p>
             </header>
 
@@ -273,7 +275,7 @@ const Writings = () => {
                     <div className="cat-content">
                         <div className="cat-title">சிறுகதைகள்</div>
                         <div className="cat-title-sub">Short Stories</div>
-                        <p className="cat-desc">என் கற்பனையில் உருவான சிறு புனைவுகள்.</p>
+                        <p className="cat-desc">ஒரு கதை சொல்லட்டா சார்?</p>
                         <p className="cat-desc-sub">My original fiction and short narratives.</p>
                     </div>
                     <div className="cat-footer">சிறுகதைகளை வாசிக்க <FiArrowRight /></div>

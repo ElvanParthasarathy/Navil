@@ -122,12 +122,18 @@ const Layout = () => {
     return (
         <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''}`} style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
-            <header className={`mobile-topbar ${location.pathname.split('/').filter(Boolean).length >= 2 || location.pathname.startsWith('/teaching') ? 'has-back' : ''}`}>
+            <header className={`mobile-topbar ${location.pathname !== '/' ? 'is-centered' : ''} ${location.pathname !== '/' ? 'has-back' : ''}`}>
                 <div className="mobile-topbar-left">
-                    { (location.pathname.split('/').filter(Boolean).length >= 2 || location.pathname.startsWith('/teaching')) && (
+                    { location.pathname !== '/' && (
                         <button 
                             className="mobile-back-btn" 
-                            onClick={() => navigate(-1)}
+                            onClick={() => {
+                                if (location.pathname.split('/').filter(Boolean).length > 1) {
+                                    navigate(-1);
+                                } else {
+                                    navigate('/');
+                                }
+                            }}
                             aria-label="Go back"
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
@@ -135,7 +141,16 @@ const Layout = () => {
                     )}
                 </div>
                 
-                <div className="brand">{pageTitle}</div>
+                <div className="brand">
+                    {pageTitle.includes('|') ? (
+                        <>
+                            <div className="brand-main">{pageTitle.split('|')[0]}</div>
+                            <div className="brand-sub">{pageTitle.split('|')[1]}</div>
+                        </>
+                    ) : (
+                        pageTitle
+                    )}
+                </div>
 
                 <div className="top-bar-actions">
                     <div className="mobile-menu-zone" ref={mobileMenuRef}>
@@ -438,7 +453,7 @@ function App() {
         };
 
         applyTheme();
-
+        
         if (theme === 'auto') {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             const handleChange = () => applyTheme();
@@ -458,6 +473,46 @@ function App() {
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+            <style>{`
+                .mobile-topbar .brand {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: center;
+                    line-height: 1.1;
+                    gap: 2px;
+                    flex: 1;
+                }
+
+                .brand-main {
+                    font-size: 20px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                }
+
+                .brand-sub {
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: var(--text-muted);
+                    text-transform: none;
+                    letter-spacing: 0;
+                    opacity: 0.7;
+                }
+
+                .mobile-topbar.is-centered .brand,
+                .mobile-topbar.has-back .brand {
+                    margin-right: 0;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    width: auto;
+                    max-width: 60%;
+                    text-align: center;
+                    align-items: center;
+                    white-space: nowrap;
+                }
+            `}</style>
             <RouterProvider router={router} />
             <Analytics />
         </ThemeContext.Provider>

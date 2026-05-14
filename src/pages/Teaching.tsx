@@ -8,13 +8,13 @@ const Teaching = () => {
     const { setPageTitle } = useOutletContext();
 
     React.useEffect(() => {
-        setPageTitle('பயிற்றுவிப்பு');
+        setPageTitle('பயிற்றுவிப்பு|Teaching');
     }, [setPageTitle]);
 
     return (
         <div className="writings-page page-view fadeIn">
             <style>{`
-                .writings-page { max-width: 1200px; margin: 0 auto; padding: 10px 20px; }
+                .writings-page { max-width: 1200px; margin: 0 auto; padding: 0 20px 32px; }
                 .writings-header { margin-bottom: 48px; text-align: left; }
                 .writings-title { font-size: clamp(2.4rem, 3vw, 3rem); font-weight: 800; letter-spacing: 0; margin-bottom: 10px; color: var(--text-main); line-height: 1.3; }
                 .writings-title-sub { font-size: 1rem; font-weight: 500; color: #888888; margin-bottom: 16px; letter-spacing: 0.5px; }
@@ -43,6 +43,7 @@ const Teaching = () => {
                     .writings-page { padding: 24px 0; }
                     .writings-header { padding: 40px 20px 20px; text-align: center; margin-bottom: 32px; }
                     .writings-title { display: none; }
+                    .writings-title-sub { display: none; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; }
                     .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
                     .category-card { min-height: auto; padding: 20px; gap: 16px; border-radius: 18px; }

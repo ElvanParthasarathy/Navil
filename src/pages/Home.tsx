@@ -18,7 +18,7 @@ const Home = () => {
                 .home-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 32px 20px;
+                    padding: 50px 20px 32px;
                 }
 
                 /* HERO SECTION */
@@ -225,7 +225,7 @@ const Home = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .home-page { padding: 40px 20px; }
+                    .home-page { padding: 16px 20px; }
                     .home-hero { flex-direction: column; gap: 0; padding: 0; align-items: center; text-align: center; margin-bottom: 40px; }
                     .hero-visual { order: -1; margin-bottom: 24px; }
                     .hero-content { width: 100%; display: flex; flex-direction: column; align-items: center; }

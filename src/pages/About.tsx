@@ -19,7 +19,7 @@ const About = () => {
     const { setPageTitle } = useOutletContext();
     const [about, setAbout] = useState(getInitialAbout());
 
-    useEffect(() => { setPageTitle('பற்றி'); }, [setPageTitle]);
+    useEffect(() => { setPageTitle('பற்றி|About'); }, [setPageTitle]);
 
     // Real-time Firebase listener — syncs and updates cache
     useEffect(() => {
@@ -49,7 +49,7 @@ const About = () => {
                 .about-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 10px 20px 80px;
+                    padding: 0 20px 80px;
                 }
 
                 .about-hero {
@@ -323,7 +323,7 @@ const About = () => {
                 }
 
                 @media (max-width: 768px) {
-                   .about-page { padding: 40px 20px 80px; }
+                   .about-page { padding: 16px 20px 80px; }
                    .hero-avatar-wrapper { width: 140px; height: 140px; }
                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
                    .about-card { padding: 28px; border-radius: 24px; }

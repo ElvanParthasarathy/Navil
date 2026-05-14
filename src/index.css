@@ -80,7 +80,6 @@
 img,
 video {
   -webkit-user-drag: none;
-  user-drag: none;
   pointer-events: none;
 }
 
@@ -674,8 +673,7 @@ body {
 /* Main Content (Desktop) */
 .main-content {
   margin-left: var(--sidebar-width);
-  padding: 50px 40px;
-  /* Increased padding */
+  padding: 30px 40px;
 }
 
 /* --- UTILITIES --- */
@@ -1197,7 +1195,7 @@ span.desktop-only {
     border-radius: 0 !important;
     position: relative;
     z-index: 1;
-    padding: 20px 0 !important;
+    padding: 0 0 40px 0 !important;
     overflow: visible !important;
     box-shadow: none;
   }

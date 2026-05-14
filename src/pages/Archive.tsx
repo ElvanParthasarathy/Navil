@@ -17,7 +17,7 @@ const Archive = () => {
     const { setPageTitle } = useOutletContext();
 
     useEffect(() => {
-        setPageTitle('காப்புகள்');
+        setPageTitle('காப்புகள்|Archive');
     }, [setPageTitle]);
 
     // Destructure Data
@@ -512,7 +512,7 @@ const Archive = () => {
                     display: flex;
                     max-width: 935px;
                     margin: 0 auto 36px;
-                    padding: 24px 20px 0;
+                    padding: 0 20px 0;
                     align-items: flex-start;
                     color: var(--text-main);
                 }

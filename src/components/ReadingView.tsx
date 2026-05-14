@@ -252,8 +252,8 @@ const ReadingView = () => {
 
     const { setPageTitle } = useOutletContext();
     useEffect(() => {
-        if (displayPrimaryTitle) setPageTitle(displayPrimaryTitle);
-    }, [setPageTitle, displayPrimaryTitle]);
+        if (displayPrimaryTitle) setPageTitle(`${displayPrimaryTitle}|${meta?.subtitle || ''}`);
+    }, [setPageTitle, displayPrimaryTitle, meta?.subtitle]);
 
     return (
         <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
@@ -472,7 +472,6 @@ const ReadingView = () => {
                                 <div key={langCode} style={{ paddingBottom: isMulti ? '48px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
                                     {isMulti && <div className="variant-badge" style={{ marginBottom: '16px' }}>{LANG_LABELS[langCode] || langCode.toUpperCase()}</div>}
                                     {lContent.title && lContent.title !== displayPrimaryTitle && <h1 lang={langCode} style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.2', color: 'var(--text-main)', marginBottom: '16px' }}>{lContent.title}</h1>}
-                                    {lContent.excerpt && <p lang={langCode} style={{ fontSize: '1.25rem', lineHeight: '1.6', color: 'var(--text-muted)', fontWeight: 500, marginBottom: '24px' }}>{lContent.excerpt}</p>}
                                     <div lang={langCode} className="rich-content-body" style={{ fontSize: '1.15rem', lineHeight: '1.9', color: 'var(--text-main)', whiteSpace: 'pre-wrap' }}
                                         dangerouslySetInnerHTML={{ __html: textToHtml(lContent.body) || '<p>No content available.</p>' }} />
                                 </div>

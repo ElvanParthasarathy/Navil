@@ -20,7 +20,7 @@ const CATEGORY_META = {
     },
     'stories': {
         title: 'சிறுகதைகள்', subtitle: 'Short Stories',
-        descTa: 'என் கற்பனையில் உருவான சிறு புனைவுகள்.', descEn: 'My original fiction and short narratives.',
+        descTa: 'ஒரு கதை சொல்லட்டா சார்?', descEn: 'My original fiction and short narratives.',
         table: 'short_stories_v2', classification: 'Fiction',
     },
     'diary': {
@@ -87,8 +87,8 @@ const CategoryListView = () => {
     const { setPageTitle } = useOutletContext();
 
     useEffect(() => {
-        if (meta?.title) setPageTitle(meta.title);
-    }, [setPageTitle, meta?.title]);
+        if (meta?.title) setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
+    }, [setPageTitle, meta?.title, meta?.subtitle]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -148,6 +148,7 @@ const CategoryListView = () => {
     }, [searchTerm, activeGenre, posts]);
 
     // Pagination logic
+    const [isPaginationExpanded, setIsPaginationExpanded] = React.useState(false);
     const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE);
     const currentPosts = filteredPosts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
@@ -167,15 +168,11 @@ const CategoryListView = () => {
                 <meta name="description" content={meta.descEn} />
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
+            <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
                 <div className="mobile-hide">
                     <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>
                 </div>
-                <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
-                <div className="header-desc">
-                    <p lang="ta" style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{meta.descTa}</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '2px' }}>{meta.descEn}</p>
-                </div>
+                <div className="mobile-hide" style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
 
                 <Link to="/writings" className="back-pill desktop-only">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
@@ -198,59 +195,109 @@ const CategoryListView = () => {
                     />
                 </div>
 
-                {allGenres.length > 0 && (
+                <div className="filter-icon-wrapper">
+                    <svg className="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
                     <select
                         className="theme-dropdown"
                         value={activeGenre}
                         onChange={(e) => setActiveGenre(e.target.value)}
                     >
-                        <option value="">All Genres</option>
+                        <option value="">வகைகள்</option>
                         {allGenres.map(g => (
                             <option key={g} value={g}>{g}</option>
                         ))}
                     </select>
+                </div>
+                {totalPages > 1 && (
+                    <button 
+                        className={`pagination-toggle-btn ${isPaginationExpanded ? 'active' : ''}`}
+                        onClick={() => setIsPaginationExpanded(!isPaginationExpanded)}
+                        aria-label="Toggle Pages"
+                    >
+                        {isPaginationExpanded ? (
+                            <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        ) : (
+                            <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                        )}
+                    </button>
                 )}
             </div>
 
             {totalPages > 1 && (
-                <div className="pagination-wrapper" style={{ marginTop: 0, paddingTop: 0, marginBottom: '32px', borderTop: 'none', borderBottom: '1px solid var(--border-light)', paddingBottom: '20px' }}>
-                    <button
-                        className="page-btn"
-                        lang="ta"
-                        disabled={currentPage === 1}
-                        onClick={() => {
-                            setCurrentPage(prev => Math.max(prev - 1, 1));
-                        }}
-                    >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முன்பு
-                    </button>
+                <div className={`pagination-collapsible ${isPaginationExpanded ? 'expanded' : ''}`}>
+                    <div className="pagination-collapsible-inner">
+                        <div className="pagination-wrapper" style={{ marginTop: '0', paddingTop: '16px', borderTop: 'none', paddingBottom: '16px' }}>
+                            <div className="pagination-inner">
+                                {(() => {
+                                    const pages: (number | string)[] = [];
+                                    if (totalPages <= 7) {
+                                        for (let i = 1; i <= totalPages; i++) pages.push(i);
+                                    } else {
+                                        pages.push(1);
+                                        if (currentPage > 4) pages.push('...');
+                                        
+                                        const start = Math.max(2, currentPage - 1);
+                                        const end = Math.min(totalPages - 1, currentPage + 1);
+                                        
+                                        for (let i = start; i <= end; i++) {
+                                            if (!pages.includes(i)) pages.push(i);
+                                        }
+                                        
+                                        if (currentPage < totalPages - 3) pages.push('...');
+                                        if (!pages.includes(totalPages)) pages.push(totalPages);
+                                    }
+                                    
+                                    return (
+                                        <div className={`page-numbers ${pages.length <= 5 ? 'centered' : 'spread'}`}>
+                                            {pages.map((num, i) => (
+                                                num === '...' ? (
+                                                    <span key={`dots-${i}`} className="pagination-dots">...</span>
+                                                ) : (
+                                                    <button
+                                                        key={num}
+                                                        className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
+                                                        onClick={() => {
+                                                            setCurrentPage(num as number);
+                                                        }}
+                                                    >
+                                                        {num}
+                                                    </button>
+                                                )
+                                            ))}
+                                        </div>
+                                    );
+                                })()}
 
-                    <div className="page-numbers">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
-                            <button
-                                key={num}
-                                className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
-                                onClick={() => {
-                                    setCurrentPage(num);
-                                }}
-                            >
-                                {num}
-                            </button>
-                        ))}
+                                <div className="pagination-nav-pill">
+                                    <button
+                                        className="page-btn prev-btn"
+                                        lang="ta"
+                                        disabled={currentPage === 1}
+                                        onClick={() => {
+                                            setCurrentPage(prev => Math.max(prev - 1, 1));
+                                        }}
+                                    >
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முந்தை
+                                    </button>
+                                    <span className="pagination-label">{currentPage} / {totalPages}</span>
+                                    <button
+                                        className="page-btn next-btn"
+                                        lang="ta"
+                                        disabled={currentPage === totalPages}
+                                        onClick={() => {
+                                            setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                                        }}
+                                    >
+                                        அடுத்து <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <button
-                        className="page-btn"
-                        lang="ta"
-                        disabled={currentPage === totalPages}
-                        onClick={() => {
-                            setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                        }}
-                    >
-                        அடுத்து <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-                    </button>
                 </div>
             )}
+
+
 
             <div style={{ display: 'grid', gap: '40px', maxWidth: '800px' }}>
                 {loading ? (
@@ -388,42 +435,75 @@ const CategoryListView = () => {
             </div>
 
             {totalPages > 1 && (
-                <div className="pagination-wrapper">
-                    <button
-                        className="page-btn"
-                        lang="ta"
-                        disabled={currentPage === 1}
-                        onClick={() => {
-                            setCurrentPage(prev => Math.max(prev - 1, 1));
-                        }}
-                    >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முன்பு
-                    </button>
+                <div className="pagination-wrapper" style={{ marginTop: '40px' }}>
+                    <div className="pagination-inner">
+                        {(() => {
+                            const pages: (number | string)[] = [];
+                            if (totalPages <= 7) {
+                                for (let i = 1; i <= totalPages; i++) pages.push(i);
+                            } else {
+                                pages.push(1);
+                                if (currentPage > 4) pages.push('...');
+                                
+                                const start = Math.max(2, currentPage - 1);
+                                const end = Math.min(totalPages - 1, currentPage + 1);
+                                
+                                for (let i = start; i <= end; i++) {
+                                    if (!pages.includes(i)) pages.push(i);
+                                }
+                                
+                                if (currentPage < totalPages - 3) pages.push('...');
+                                if (!pages.includes(totalPages)) pages.push(totalPages);
+                            }
+                            
+                            return (
+                                <div className={`page-numbers ${pages.length <= 5 ? 'centered' : 'spread'}`}>
+                                    {pages.map((num, i) => (
+                                        num === '...' ? (
+                                            <span key={`dots-${i}`} className="pagination-dots">...</span>
+                                        ) : (
+                                            <button
+                                                key={`bottom-${num}`}
+                                                className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setCurrentPage(num as number);
+                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                }}
+                                            >
+                                                {num}
+                                            </button>
+                                        )
+                                    ))}
+                                </div>
+                            );
+                        })()}
 
-                    <div className="page-numbers">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                        <div className="pagination-nav-pill">
                             <button
-                                key={num}
-                                className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
+                                className="page-btn prev-btn"
+                                lang="ta"
+                                disabled={currentPage === 1}
                                 onClick={() => {
-                                    setCurrentPage(num);
+                                    setCurrentPage(prev => Math.max(prev - 1, 1));
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
-                                {num}
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முந்தை
                             </button>
-                        ))}
+                            <span className="pagination-label">{currentPage} / {totalPages}</span>
+                            <button
+                                className="page-btn next-btn"
+                                lang="ta"
+                                disabled={currentPage === totalPages}
+                                onClick={() => {
+                                    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                            >
+                                அடுத்து <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                            </button>
+                        </div>
                     </div>
-
-                    <button
-                        className="page-btn"
-                        lang="ta"
-                        disabled={currentPage === totalPages}
-                        onClick={() => {
-                            setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                        }}
-                    >
-                        அடுத்து <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-                    </button>
                 </div>
             )}
             {/* INJECTED POEM CSS FOR EXACT UI MATCH */}
@@ -451,9 +531,9 @@ const CategoryListView = () => {
                 /* Pagination Styles */
                 .pagination-wrapper {
                     display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                    gap: 24px;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 16px;
                     margin-top: 32px;
                     padding-top: 32px;
                     border-top: 1px solid var(--border-light);
@@ -464,15 +544,34 @@ const CategoryListView = () => {
                     font-weight: 600;
                     color: var(--text-muted);
                 }
+                .pagination-inner {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 16px;
+                }
                 .page-numbers {
                     display: flex;
                     align-items: center;
+                    width: 100%;
+                }
+                .page-numbers.spread {
+                    justify-content: space-between;
+                }
+                .page-numbers.centered {
+                    justify-content: center;
                     gap: 8px;
                 }
-                .page-number-btn {
-                    background: transparent;
+                .pagination-dots {
                     color: var(--text-muted);
-                    border: 1px solid var(--border-light);
+                    padding: 0 4px;
+                    font-weight: 600;
+                    opacity: 0.5;
+                }
+                .page-number-btn {
+                    background: var(--bg-panel);
+                    color: var(--text-main);
+                    border: none;
                     width: 32px;
                     height: 32px;
                     display: flex;
@@ -495,24 +594,34 @@ const CategoryListView = () => {
                     border-color: var(--text-main);
                     box-shadow: 0 4px 15px color-mix(in srgb, var(--text-main) 30%, transparent);
                 }
+                .pagination-nav-pill {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                }
                 .page-btn {
-                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    background: var(--bg-panel);
                     color: var(--text-main);
                     border: none;
-                    padding: 8px 20px;
-                    border-radius: 100px;
+                    padding: 8px 18px;
                     font-size: 0.85rem;
                     font-weight: 700;
                     cursor: pointer;
                     transition: all 0.2s ease;
                     display: flex;
                     align-items: center;
-                    gap: 6px;
+                    gap: 3px;
+                    border-radius: 100px;
+                    white-space: nowrap;
                 }
                 .page-btn:hover:not(:disabled) {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    transform: translateY(-2px);
+                    background: color-mix(in srgb, var(--text-main) 20%, transparent);
+                }
+                .page-btn.prev-btn {
+                    padding-left: 12px;
+                }
+                .page-btn.next-btn {
+                    padding-right: 12px;
                 }
                 .page-btn:disabled {
                     opacity: 0.3;
@@ -520,6 +629,15 @@ const CategoryListView = () => {
                 }
                 .page-btn:active:not(:disabled) {
                     transform: scale(0.95);
+                }
+                .pagination-label {
+                    flex: 1;
+                    text-align: center;
+                    padding: 8px 16px;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    color: var(--text-muted);
+                    font-family: "Mukta Malar", sans-serif;
                 }
                 .back-pill {
                     display: inline-flex;
@@ -624,12 +742,11 @@ const CategoryListView = () => {
                     padding-top: 0;
                 }
 
-                /* Filters & Search */
                 .controls-area {
                     margin-bottom: 24px;
                     display: flex;
                     flex-direction: row;
-                    gap: 16px;
+                    gap: 12px;
                     align-items: center;
                 }
                 .minimal-search {
@@ -664,38 +781,143 @@ const CategoryListView = () => {
                     border: none;
                     color: var(--text-main);
                     border-radius: 0;
+                    font-family: "Mukta Malar", sans-serif;
                 }
                 .minimal-search input:focus {
                     outline: none;
                 }
                 .minimal-search input::placeholder {
-                    color: color-mix(in srgb, var(--text-muted) 40%, transparent);
-                    font-weight: 300;
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    opacity: 0.7;
                 }
                 
-                .theme-dropdown {
-                    padding: 12px 18px;
-                    font-size: 0.9rem;
-                    font-weight: 600;
+                .filter-icon-wrapper {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 44px;
+                    height: 44px;
                     background: color-mix(in srgb, var(--text-main) 6%, transparent);
-                    border: none;
-                    border-radius: 100px;
-                    color: var(--text-muted);
+                    border-radius: 50%;
+                    flex-shrink: 0;
                     cursor: pointer;
-                    min-width: 140px;
-                    outline: none;
-                    transition: background 0.3s ease, color 0.3s;
-                    -webkit-appearance: none;
-                    -moz-appearance: none;
-                    appearance: none;
-                    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-                    background-repeat: no-repeat;
-                    background-position: right 16px center;
-                    padding-right: 36px;
+                    transition: all 0.3s ease;
                 }
-                .theme-dropdown:focus {
-                    background-color: color-mix(in srgb, var(--text-main) 12%, transparent);
-                    color: var(--text-main);
+                .filter-icon-wrapper:hover {
+                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                }
+                .filter-icon {
+                    color: var(--text-muted);
+                    pointer-events: none;
+                }
+                .filter-icon-wrapper .theme-dropdown {
+                    position: absolute;
+                    top: 0; left: 0; width: 100%; height: 100%;
+                    opacity: 0;
+                    cursor: pointer;
+                    padding: 0;
+                    min-width: 0;
+                    -webkit-appearance: none;
+                }
+
+                .pagination-toggle-btn {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 44px;
+                    height: 44px;
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    border-radius: 50%;
+                    flex-shrink: 0;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    border: none;
+                }
+                .pagination-toggle-btn:hover {
+                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                }
+                .pagination-toggle-btn.active {
+                    background: var(--text-main);
+                }
+                .pagination-toggle-btn .icon {
+                    color: var(--text-muted);
+                    pointer-events: none;
+                }
+                .pagination-toggle-btn.active .icon {
+                    color: var(--bg-app);
+                }
+
+                .pagination-collapsible {
+                    display: grid;
+                    grid-template-rows: 0fr;
+                    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    margin-bottom: 24px;
+                }
+                .pagination-collapsible.expanded {
+                    grid-template-rows: 1fr;
+                }
+                .pagination-collapsible-inner {
+                    overflow: hidden;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                }
+                .pagination-collapsible.expanded .pagination-collapsible-inner {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+
+                @media (min-width: 769px) {
+                    .controls-area {
+                        gap: 16px;
+                    }
+                    .filter-icon-wrapper {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                        border-radius: 100px;
+                        padding: 0 16px;
+                        width: auto;
+                        height: auto;
+                        transition: all 0.3s ease;
+                    }
+                    .filter-icon-wrapper:hover {
+                        background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                    }
+                    .filter-icon {
+                        display: block;
+                        color: var(--text-muted);
+                        opacity: 0.6;
+                    }
+                    .filter-icon-wrapper .theme-dropdown {
+                        position: static;
+                        opacity: 1;
+                        padding: 12px 8px 12px 8px;
+                        padding-right: 28px;
+                        min-width: 90px;
+                        width: auto;
+                        background: none;
+                        border: none;
+                        outline: none;
+                        box-shadow: none;
+                        border-radius: 0;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        color: var(--text-muted);
+                        font-family: "Mukta Malar", sans-serif;
+                        appearance: none;
+                        background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                        background-repeat: no-repeat;
+                        background-position: right 4px center;
+                        cursor: pointer;
+                    }
+                    .filter-icon-wrapper .theme-dropdown:focus {
+                        color: var(--text-main);
+                    }
                 }
                 .theme-dropdown option {
                     background: var(--bg-app);
@@ -875,22 +1097,29 @@ const CategoryListView = () => {
                     word-break: break-word;
                 }
                 
-                @media (max-width: 600px) {
+                @media (max-width: 768px) {
                     .pagination-wrapper {
-                        gap: 8px;
-                        margin-top: 24px;
-                        padding-top: 24px;
-                        justify-content: space-between;
+                        gap: 24px;
+                        margin-top: 60px;
+                        padding-top: 32px;
+                        align-items: center;
                         width: 100%;
                     }
+                    .page-numbers.centered {
+                        gap: 20px;
+                    }
+                    .page-numbers.spread {
+                        gap: 10px;
+                        justify-content: center;
+                    }
                     .page-btn {
-                        padding: 8px 12px;
-                        font-size: 0.75rem;
+                        padding: 10px 20px;
+                        font-size: 0.9rem;
                     }
                     .page-number-btn {
-                        width: 44px !important;
-                        height: 44px !important;
-                        font-size: 1rem !important;
+                        width: 48px !important;
+                        height: 48px !important;
+                        font-size: 1.1rem !important;
                     }
                 }
             `}</style>
