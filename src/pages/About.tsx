@@ -172,64 +172,168 @@ const About = () => {
                     gap: 6px;
                 }
 
-                /* CONTACT FOOTER */
-                .contact-footer {
+                /* PREMIUM CONTACT CARD REDESIGN */
+                .contact-section-wrapper {
+                    position: relative;
+                    margin-top: 80px;
+                    padding: 40px 0;
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
-                    padding: 32px;
-                    background: var(--bg-panel);
-                    border-radius: 32px;
-                    flex-wrap: wrap;
-                    gap: 24px;
                 }
 
-                .contact-info .contact-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-                .contact-info .contact-header h3:first-child { font-size: 1.5rem; margin: 0; }
-                .contact-info .contact-header h3:last-child { font-size: 1.4rem; margin: 0; }
-                .contact-divider { width: 2px; height: 24px; background: var(--border-color); opacity: 0.6; }
-                .contact-info h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
-                .contact-location { display: flex; align-items: flex-start; gap: 8px; color: var(--text-muted); margin-top: 16px; font-size: 0.95rem; line-height: 1.5; text-align: left; }
-                .contact-location svg { flex-shrink: 0; margin-top: 4px; }
-                .contact-socials { display: flex; gap: 12px; }
-                .social-icon-link { width: 44px; height: 44px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: all 0.3s ease; }
-                @media (hover: hover) and (pointer: fine) { .social-icon-link:hover { background: var(--text-main); color: var(--bg-app); transform: translateY(-3px); } }
-                .social-icon-link:active { background: var(--text-main); color: var(--bg-app); transform: scale(0.95); }
-                .about-footer-text { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.7; }
+                .contact-glow {
+                    position: absolute;
+                    width: 300px;
+                    height: 300px;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+                    filter: blur(50px);
+                    z-index: 0;
+                }
 
-                /* RESPONSIVE & DESKTOP GRID */
-                @media (min-width: 768px) {
-                    .about-grid {
-                        grid-template-columns: repeat(12, 1fr);
-                        gap: 24px;
-                    }
-                    
-                    /* Row 1 */
-                    .card-identity { grid-column: span 7; }
-                    .card-education { grid-column: span 5; }
-                    
-                    /* Row 2 */
-                    .card-social { grid-column: span 5; }
-                    .card-philosophy { grid-column: span 7; }
+                [data-theme='dark'] .contact-glow {
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+                }
+
+                .premium-contact-card {
+                    position: relative;
+                    width: 100%;
+                    max-width: 800px;
+                    background: var(--bg-panel);
+                    border: 1px solid var(--border-color);
+                    border-radius: 40px;
+                    padding: 60px 40px;
+                    text-align: center;
+                    z-index: 1;
+                    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+
+                .premium-contact-card:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+                }
+
+                .premium-contact-header {
+                    margin-bottom: 32px;
+                }
+
+                .premium-contact-header h3:first-child {
+                    font-size: 2.2rem;
+                    font-weight: 800;
+                    margin-bottom: 4px;
+                    color: var(--text-main);
+                }
+
+                .premium-contact-header h3:last-child {
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    color: var(--text-muted);
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                }
+
+                .premium-contact-bio {
+                    margin-bottom: 40px;
+                    max-width: 500px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                .premium-contact-bio p:first-child {
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                    margin-bottom: 8px;
+                    color: var(--text-main);
+                }
+
+                .premium-contact-bio p:last-child {
+                    font-size: 0.95rem;
+                    color: var(--text-muted);
+                    opacity: 0.8;
+                }
+
+                .premium-location {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 10px 20px;
+                    background: var(--bg-app);
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    color: var(--text-muted);
+                    margin-bottom: 40px;
+                    border: 1px solid var(--border-light);
+                }
+
+                .premium-socials-pill {
+                    display: inline-flex;
+                    gap: 16px;
+                    padding: 12px 24px;
+                    background: var(--bg-app);
+                    border-radius: 99px;
+                    border: 1px solid var(--border-light);
+                    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+                }
+
+                .premium-social-link {
+                    width: 48px;
+                    height: 48px;
+                    background: var(--bg-panel);
+                    color: var(--text-main);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+                    border: 1px solid var(--border-light);
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                }
+
+                .premium-social-link:hover {
+                    background: var(--text-main);
+                    color: var(--bg-app);
+                    transform: translateY(-5px) scale(1.1);
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                }
+
+                .premium-social-link:active {
+                    transform: scale(0.95);
                 }
 
                 @media (max-width: 768px) {
-                   .about-page { padding: 40px 20px 80px; }
-                   .hero-avatar-wrapper { width: 140px; height: 140px; }
-                   .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
-                   .about-card { padding: 28px; border-radius: 24px; }
-                   
-                   .contact-footer { flex-direction: column; text-align: center; padding: 32px 20px; }
-                   .contact-info { width: 100%; display: flex; flex-direction: column; align-items: center; }
-                   .contact-header { flex-direction: column; gap: 0px; align-items: center; margin-bottom: 8px !important; }
-                   .contact-divider { display: none; }
-                   .contact-info .contact-header h3:first-child { font-size: 1.4rem; }
-                   .contact-info .contact-header h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-                   .contact-info p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; text-align: center; }
-                   .contact-location { justify-content: center; text-align: center; margin-top: 20px; margin-bottom: 8px; }
-                   .contact-location span { max-width: 240px; }
-                   .contact-socials { justify-content: center; flex-wrap: wrap; }
-                   .social-icon-link { width: 48px; height: 48px; }
+                    .about-page { padding: 40px 20px 80px; }
+                    .hero-avatar-wrapper { width: 140px; height: 140px; }
+                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
+                    .about-card { padding: 28px; border-radius: 24px; }
+                    
+                    .premium-contact-card {
+                        padding: 50px 24px;
+                        border-radius: 32px;
+                    }
+
+                    .premium-contact-header h3:first-child {
+                        font-size: 1.8rem;
+                    }
+
+                    .premium-contact-header h3:last-child {
+                        font-size: 1rem;
+                    }
+
+                    .premium-location {
+                        font-size: 0.85rem;
+                        padding: 8px 16px;
+                    }
+
+                    .premium-socials-pill {
+                        gap: 12px;
+                        padding: 10px 16px;
+                    }
+
+                    .premium-social-link {
+                        width: 42px;
+                        height: 42px;
+                    }
                 }
             `}</style>
 
@@ -286,34 +390,40 @@ const About = () => {
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
-            <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
-                <div className="contact-info">
-                    <div className="contact-header">
-                        <h3>இணைவோம்</h3>
-                        <div className="contact-divider"></div>
+            <div className="contact-section-wrapper animate-entry" style={{ animationDelay: '0.2s' }}>
+                <div className="contact-glow"></div>
+                <div className="premium-contact-card">
+                    <div className="premium-contact-header">
+                        <h3 lang="ta">இணைவோம்</h3>
                         <h3>Let's Connect</h3>
                     </div>
-                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
-                    <div className="contact-location">
-                        <FiMapPin /> 
-                        <span>Arani, Tamil Nadu - 632317 <br className="mobile-break" />(Currently in Chennai)</span>
-                    </div>
-                </div>
 
-                <div className="contact-socials">
-                    <a href="tel:+919345128797" className="social-icon-link">
-                        <FiPhone size={20} />
-                    </a>
-                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                        <FiMail size={20} />
-                    </a>
-                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiLinkedin size={20} />
-                    </a>
-                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiGithub size={20} />
-                    </a>
+                    <div className="premium-contact-bio">
+                        <p lang="ta">புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
+                        <p>Open for collaborations and creative conversations.</p>
+                    </div>
+
+                    <div className="premium-location">
+                        <FiMapPin size={16} /> 
+                        <span>Arani, Tamil Nadu • (Currently in Chennai)</span>
+                    </div>
+
+                    <div className="social-pill-container">
+                        <div className="premium-socials-pill">
+                            <a href="tel:+919345128797" className="premium-social-link">
+                                <FiPhone size={20} />
+                            </a>
+                            <a href="mailto:jaiprakashpartha@gmail.com" className="premium-social-link">
+                                <FiMail size={20} />
+                            </a>
+                            <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="premium-social-link">
+                                <FiLinkedin size={20} />
+                            </a>
+                            <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="premium-social-link">
+                                <FiGithub size={20} />
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
