@@ -106,7 +106,7 @@ const Layout = () => {
             {/* Mobile Top Bar */}
             <header className="mobile-topbar">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {location.pathname !== '/' && (
+                    {location.pathname.split('/').filter(Boolean).length >= 2 && (
                         <button 
                             className="mobile-back-btn" 
                             onClick={() => navigate(-1)}
