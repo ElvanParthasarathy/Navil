@@ -167,7 +167,7 @@ const Writings = () => {
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
                     .writings-page { padding: 24px 0; }
-                    .writings-header { padding: 40px 20px 20px; text-align: left; margin-bottom: 32px; }
+                    .writings-header { padding: 40px 28px 20px; text-align: left; margin-bottom: 32px; }
                     .writings-title { font-size: 2.1rem; margin-bottom: 10px; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; }
                     .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
