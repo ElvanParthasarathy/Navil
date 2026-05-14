@@ -217,7 +217,7 @@ const About = () => {
 
                 .contact-right-side {
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: column-reverse;
                     align-items: flex-end;
                     gap: 12px;
                 }
@@ -301,6 +301,7 @@ const About = () => {
                    .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; }
                    
                    .contact-right-side {
+                       flex-direction: column;
                        align-items: center;
                        gap: 20px;
                    }
