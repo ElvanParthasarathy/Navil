@@ -63,35 +63,15 @@ const ITEMS_PER_PAGE = 9;
 
 const cleanCaption = (cap) => {
     if (!cap) return '';
-    // Remove hashtags and trailing whitespace
     return cap.replace(/#\S+/g, '').replace(/\n{2,}/g, '\n').trim();
 };
 
-const ArtCard = React.memo(({ item, onOpen, onImageLoad, isLoading, caption }) => {
-    const [isInView, setIsInView] = React.useState(false);
-    const cardRef = React.useRef(null);
+const ArtCard = React.memo(({ item, onOpen, caption }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
     const imgs = item.images || [item.image];
-
-    React.useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsInView(true);
-                } else if (Math.abs(entry.boundingClientRect.top) > 2000) {
-                    // Unload if very far to save RAM
-                    setIsInView(false);
-                }
-            },
-            { rootMargin: '600px 0px' }
-        );
-
-        if (cardRef.current) observer.observe(cardRef.current);
-        return () => observer.disconnect();
-    }, []);
 
     return (
         <div
-            ref={cardRef}
             className="arts-grid-item"
             onClick={() => onOpen(item)}
             role="button"
@@ -100,34 +80,31 @@ const ArtCard = React.memo(({ item, onOpen, onImageLoad, isLoading, caption }) =
             onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
             style={{ minHeight: '200px' }}
         >
-            {isInView ? (
-                <>
-                    {isLoading && <div className="arts-img-shimmer" />}
-                    <img
-                        src={getOptimizedImage(item.image, 'thumb')}
-                        alt={caption || 'Artwork'}
-                        loading="lazy"
-                        decoding="async"
-                        onLoad={() => onImageLoad(item.id)}
-                        draggable={false}
-                        style={{ opacity: isLoading ? 0 : 1 }}
-                    />
-                    {imgs.length > 1 && (
-                        <div className="arts-multi-badge">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <path d="M8 1v2M16 1v2M1 8h2M1 16h2" />
-                            </svg>
-                            {imgs.length}
-                        </div>
-                    )}
-                    <div className="arts-grid-overlay">
-                        {caption && <div className="arts-grid-overlay-text">{caption}</div>}
-                    </div>
-                </>
-            ) : (
-                <div className="arts-img-shimmer" />
+            {!isLoaded && <div className="arts-img-shimmer" />}
+            <img
+                src={getOptimizedImage(imgs[0], 'thumb')}
+                alt={caption || 'Artwork'}
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setIsLoaded(true)}
+                draggable={false}
+                style={{
+                    opacity: isLoaded ? 1 : 0,
+                    transition: 'opacity 0.3s ease-in, transform 0.3s cubic-bezier(0.2, 0, 0, 1)'
+                }}
+            />
+            {imgs.length > 1 && (
+                <div className="arts-multi-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M8 1v2M16 1v2M1 8h2M1 16h2" />
+                    </svg>
+                    {imgs.length}
+                </div>
             )}
+            <div className="arts-grid-overlay">
+                {caption && <div className="arts-grid-overlay-text">{caption}</div>}
+            </div>
         </div>
     );
 });
@@ -137,7 +114,6 @@ const ArtsGallery = () => {
     const meta = CATEGORY_META[category];
     const { setPageTitle } = useOutletContext();
 
-    // Data state
     const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(() => {
@@ -145,7 +121,6 @@ const ArtsGallery = () => {
         return saved ? parseInt(saved, 10) : ITEMS_PER_PAGE;
     });
 
-    // Flatten all images from all posts into a single sequence for the lightbox
     const flattenedImages = React.useMemo(() => {
         return allItems.flatMap(item => {
             const imgs = item.images || [item.image];
@@ -161,9 +136,7 @@ const ArtsGallery = () => {
         });
     }, [allItems]);
 
-    // Lightbox state using global index in flattened list
     const [lightboxGlobalIdx, setLightboxGlobalIdx] = useState(null);
-    const [imageLoading, setImageLoading] = useState({});
 
     useEffect(() => {
         if (meta) setPageTitle(`${meta.titleTa}|${meta.titleEn}`);
@@ -173,7 +146,13 @@ const ArtsGallery = () => {
         sessionStorage.setItem(`elvan_arts_${category}_visible`, visibleCount.toString());
     }, [visibleCount, category]);
 
-    // Fetch from Firebase
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeResizeListener?.(handleResize) || window.removeEventListener('resize', handleResize);
+    }, []);
+
     useEffect(() => {
         if (!category) return;
         setLoading(true);
@@ -201,7 +180,6 @@ const ArtsGallery = () => {
     const hasMore = visibleCount < allItems.length;
     const remainingCount = allItems.length - visibleCount;
 
-    // Lightbox Navigation Logic
     const closeLightbox = useCallback(() => {
         if (window.history.state?.lightboxOpen) {
             window.history.back();
@@ -216,7 +194,6 @@ const ArtsGallery = () => {
         window.history.pushState({ lightboxOpen: true }, '');
     }, [flattenedImages]);
 
-    // Handle back button natively and background suspension
     useEffect(() => {
         const handlePopState = (e) => {
             if (e.state?.lightboxOpen !== true) {
@@ -225,7 +202,6 @@ const ArtsGallery = () => {
         };
         window.addEventListener('popstate', handlePopState);
 
-        // Suspension logic to save mobile RAM/CPU
         const mainContent = document.querySelector('.arts-gallery-page');
         if (lightboxGlobalIdx !== null) {
             document.body.style.overflow = 'hidden';
@@ -264,9 +240,6 @@ const ArtsGallery = () => {
         }
     }, [lightboxGlobalIdx]);
 
-
-
-    // Keyboard nav for lightbox
     useEffect(() => {
         if (lightboxGlobalIdx === null) return;
         const handleKey = (e) => {
@@ -282,16 +255,35 @@ const ArtsGallery = () => {
     const touchStartY = useRef(0);
     const [dragX, setDragX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
+
+    const scaleRef = useRef(1);
+    const offsetRef = useRef({ x: 0, y: 0 });
+    const activeImgRef = useRef(null);
+    const transformPending = useRef(false);
+
     const [scale, setScale] = useState(1);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
+
     const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
     const [showCaptionModal, setShowCaptionModal] = useState(false);
     const touchStartTime = useRef(0);
     const lastPinchDistance = useRef(0);
     const pointerStart = useRef({ x: 0, y: 0 });
-    const wheelSwipeX = useRef(0);
-    const wheelSwipeResetTimer = useRef(null);
-    const wheelSwipeIgnoreUntil = useRef(0);
+
+    const applyTransforms = () => {
+        if (!transformPending.current) return;
+        if (activeImgRef.current) {
+            activeImgRef.current.style.transform = `translate3d(${offsetRef.current.x}px, ${offsetRef.current.y}px, 0) scale(${scaleRef.current})`;
+        }
+        transformPending.current = false;
+    };
+
+    const requestTransform = () => {
+        if (!transformPending.current) {
+            transformPending.current = true;
+            requestAnimationFrame(applyTransforms);
+        }
+    };
 
     const preventImageDrag = (e) => {
         e.preventDefault();
@@ -306,12 +298,15 @@ const ArtsGallery = () => {
     };
 
     const handlePointerMove = (e) => {
-        if (e.pointerType === 'touch' || !isDragging || scale <= 1.01) return;
+        if (e.pointerType === 'touch' || !isDragging || scaleRef.current <= 1.01) return;
         e.preventDefault();
         const dx = e.clientX - pointerStart.current.x;
         const dy = e.clientY - pointerStart.current.y;
-        setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+
+        offsetRef.current.x += dx;
+        offsetRef.current.y += dy;
         pointerStart.current = { x: e.clientX, y: e.clientY };
+        requestTransform();
     };
 
     const handlePointerEnd = (e) => {
@@ -320,29 +315,36 @@ const ArtsGallery = () => {
             e.currentTarget.releasePointerCapture(e.pointerId);
         }
         setIsDragging(false);
+        setOffset({ ...offsetRef.current });
     };
 
+    // FIXED: Synchronize React State with the DOM Transform to ensure zoom works instantly
     const updateScale = useCallback((nextScale) => {
         setScale(prev => {
             const rawScale = typeof nextScale === 'function' ? nextScale(prev) : nextScale;
             const clampedScale = Math.min(Math.max(rawScale, 1), 4);
 
+            scaleRef.current = clampedScale;
+
             if (clampedScale <= 1.05) {
                 setOffset({ x: 0, y: 0 });
+                offsetRef.current = { x: 0, y: 0 };
                 setDragX(0);
+                requestTransform();
                 return 1;
             }
 
+            requestTransform();
             return clampedScale;
         });
     }, []);
 
-    // Reset zoom and caption state when image changes
     useEffect(() => {
         setScale(1);
         setOffset({ x: 0, y: 0 });
+        scaleRef.current = 1;
+        offsetRef.current = { x: 0, y: 0 };
         setDragX(0);
-        wheelSwipeX.current = 0;
         setIsCaptionExpanded(false);
         setShowCaptionModal(false);
     }, [lightboxGlobalIdx]);
@@ -350,10 +352,12 @@ const ArtsGallery = () => {
     useEffect(() => {
         if (scale <= 1.01) {
             setOffset({ x: 0, y: 0 });
+            offsetRef.current = { x: 0, y: 0 };
+            requestTransform();
         }
     }, [scale]);
 
-    const handleTouchStart = (e) => { 
+    const handleTouchStart = (e) => {
         if (e.touches.length === 2) {
             const dist = Math.hypot(
                 e.touches[0].pageX - e.touches[1].pageX,
@@ -362,24 +366,28 @@ const ArtsGallery = () => {
             lastPinchDistance.current = dist;
             setIsDragging(false);
         } else {
-            touchStartX.current = e.touches[0].screenX; 
+            touchStartX.current = e.touches[0].screenX;
             touchStartY.current = e.touches[0].screenY;
             touchStartTime.current = Date.now();
             setIsDragging(true);
             setDragX(0);
         }
     };
-    
+
     const handleTouchMove = (e) => {
         if (e.touches.length === 2) {
-            // Pinch zoom
             const dist = Math.hypot(
                 e.touches[0].pageX - e.touches[1].pageX,
                 e.touches[0].pageY - e.touches[1].pageY
             );
             if (lastPinchDistance.current > 0) {
                 const delta = dist / lastPinchDistance.current;
-                updateScale(prev => prev * delta);
+                const nextScale = Math.min(Math.max(scaleRef.current * delta, 1), 4);
+                scaleRef.current = nextScale;
+                if (nextScale <= 1.01) {
+                    offsetRef.current = { x: 0, y: 0 };
+                }
+                requestTransform();
             }
             lastPinchDistance.current = dist;
             return;
@@ -388,70 +396,69 @@ const ArtsGallery = () => {
         if (!isDragging) return;
         const currentX = e.touches[0].screenX;
         const currentY = e.touches[0].screenY;
-        
-        if (scale > 1.01) {
-            // Pan zoomed image
+
+        if (scaleRef.current > 1.01) {
             const dx = currentX - touchStartX.current;
             const dy = currentY - touchStartY.current;
-            setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+            offsetRef.current.x += dx;
+            offsetRef.current.y += dy;
             touchStartX.current = currentX;
             touchStartY.current = currentY;
-        } else {
-            // Slide to next/prev
-            let deltaX = currentX - touchStartX.current;
-            
-            // Add resistance at edges
-            const isAtStart = lightboxGlobalIdx === 0;
-            const isAtEnd = lightboxGlobalIdx === flattenedImages.length - 1;
-            if ((isAtStart && deltaX > 0) || (isAtEnd && deltaX < 0)) {
-                deltaX *= 0.35; // Rubber band effect
-            }
-            
-            setDragX(deltaX);
+            requestTransform();
+            if (e.cancelable) e.preventDefault();
         }
     };
-
-    const handleSwipeComplete = useCallback((dist, velocity = 0) => {
-        // Legacy swipe logic removed in favor of native scroll-snap
-    }, []);
 
     const handleTouchEnd = (e) => {
         lastPinchDistance.current = 0;
-        if (scale <= 1.05) {
-            setScale(1);
-            setOffset({ x: 0, y: 0 });
+        setIsDragging(false);
+
+        if (scaleRef.current <= 1.05) {
+            scaleRef.current = 1;
+            offsetRef.current = { x: 0, y: 0 };
+            requestTransform();
         }
+
+        setScale(scaleRef.current);
+        setOffset({ ...offsetRef.current });
     };
 
     const containerRef = useRef(null);
+    const scrollTimeout = useRef(null);
 
-    // Synchronize native scroll with lightboxGlobalIdx
     const handleScroll = useCallback((e) => {
-        if (scale > 1.01) return;
-        const container = e.currentTarget;
-        const index = Math.round(container.scrollLeft / container.clientWidth);
-        if (index !== lightboxGlobalIdx && !isDragging) {
-            setLightboxGlobalIdx(index);
-        }
-    }, [lightboxGlobalIdx, scale, isDragging]);
+        if (scaleRef.current > 1.01 || isDragging) return;
 
-    // Handle external index changes (dots, thumbs)
+        const container = e.currentTarget;
+        const width = container.clientWidth;
+        const scrollX = container.scrollLeft;
+
+        const slideIdx = Math.round(scrollX / width);
+
+        if (slideIdx !== 1) {
+            if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+            scrollTimeout.current = setTimeout(() => {
+                if (slideIdx === 0 && lightboxGlobalIdx > 0) {
+                    setLightboxGlobalIdx(prev => prev - 1);
+                } else if (slideIdx === 2 && lightboxGlobalIdx < flattenedImages.length - 1) {
+                    setLightboxGlobalIdx(prev => prev + 1);
+                }
+            }, 50);
+        }
+    }, [lightboxGlobalIdx, isDragging, flattenedImages.length]);
+
     useEffect(() => {
         if (lightboxGlobalIdx !== null && containerRef.current) {
             const container = containerRef.current;
-            const targetScroll = lightboxGlobalIdx * container.clientWidth;
-            if (Math.abs(container.scrollLeft - targetScroll) > 10) {
-                container.scrollTo({ left: targetScroll, behavior: 'smooth' });
-            }
+            container.scrollTo({ left: container.clientWidth, behavior: 'auto' });
         }
     }, [lightboxGlobalIdx]);
 
-    // Trackpad / Wheel zoom and panning
+    // FIXED: Ensured pan logic directly triggers high-performance transform 
     const handleWheel = useCallback((e) => {
         if (lightboxGlobalIdx === null) return;
 
-        // Allow native scrolling for the thumbnail filmstrip
-        if (e.target.closest('.arts-lb-filmstrip')) {
+        if (e.target.closest('.arts-lb-filmstrip') || e.target.closest('.arts-lb-sidebar')) {
             return;
         }
 
@@ -462,15 +469,15 @@ const ArtsGallery = () => {
             return;
         }
 
-        if (scale > 1.01) {
+        if (scaleRef.current > 1.01) {
             e.preventDefault();
-            setOffset(prev => ({
-                x: prev.x - e.deltaX,
-                y: prev.y - e.deltaY
-            }));
+            offsetRef.current.x -= e.deltaX;
+            offsetRef.current.y -= e.deltaY;
+            setOffset({ x: offsetRef.current.x, y: offsetRef.current.y });
+            requestTransform();
             return;
         }
-    }, [lightboxGlobalIdx, scale, updateScale]);
+    }, [lightboxGlobalIdx, updateScale]);
 
     useEffect(() => {
         window.addEventListener('wheel', handleWheel, { passive: false });
@@ -478,18 +485,6 @@ const ArtsGallery = () => {
             window.removeEventListener('wheel', handleWheel);
         };
     }, [handleWheel]);
-
-    useEffect(() => {
-        return () => {
-            if (wheelSwipeResetTimer.current) {
-                window.clearTimeout(wheelSwipeResetTimer.current);
-            }
-        };
-    }, []);
-
-    const handleImageLoad = useCallback((id) => {
-        setImageLoading(prev => ({ ...prev, [id]: false }));
-    }, []);
 
     if (!meta) {
         return (
@@ -499,8 +494,6 @@ const ArtsGallery = () => {
             </div>
         );
     }
-
-
 
     return (
         <div className="page-view fadeIn">
@@ -514,10 +507,6 @@ const ArtsGallery = () => {
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 0 20px 100px;
-                    /* Hardware acceleration for butter-smooth scroll */
-                    transform: translate3d(0, 0, 0);
-                    backface-visibility: hidden;
-                    perspective: 1000px;
                 }
                 .arts-gallery-header {
                     display: flex;
@@ -542,14 +531,11 @@ const ArtsGallery = () => {
                     letter-spacing: 0.5px;
                 }
 
-                /* Masonry-inspired grid */
                 .arts-grid {
                     columns: 3;
                     column-gap: 8px;
-                    /* GPU isolation */
-                    transform: translate3d(0, 0, 0);
-                    backface-visibility: hidden;
                 }
+                
                 .arts-grid-item {
                     position: relative;
                     overflow: hidden;
@@ -558,18 +544,18 @@ const ArtsGallery = () => {
                     border-radius: 8px;
                     margin-bottom: 8px;
                     break-inside: avoid;
-                    /* Modern performance optimization */
-                    contain: paint layout;
-                    isolation: isolate;
-                    backface-visibility: hidden;
-                    transform: translateZ(0);
+                    transform: translateZ(0); 
+                    will-change: transform;
                 }
+                
                 @media (max-width: 768px) {
                     .arts-grid-item {
-                        content-visibility: auto;
-                        contain-intrinsic-size: 1px 250px;
+                        margin-bottom: 4px; 
+                        border-radius: 4px;
+                        background: transparent;
                     }
                 }
+                
                 .arts-img-shimmer {
                     position: absolute;
                     inset: 0;
@@ -583,7 +569,7 @@ const ArtsGallery = () => {
                     height: auto;
                     display: block;
                     object-fit: contain;
-                    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s;
+                    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s;
                 }
                 @media (hover: hover) {
                     .arts-grid-item:hover img {
@@ -621,8 +607,7 @@ const ArtsGallery = () => {
                     position: absolute;
                     top: 10px;
                     right: 10px;
-                    background: rgba(0,0,0,0.6);
-                    backdrop-filter: blur(8px);
+                    background: rgba(0,0,0,0.8);
                     color: white;
                     font-size: 0.7rem;
                     font-weight: 700;
@@ -634,13 +619,11 @@ const ArtsGallery = () => {
                     pointer-events: none;
                 }
 
-                /* Lightbox */
                 .arts-lightbox {
                     position: fixed;
                     inset: 0;
                     z-index: 9999;
-                    background: rgba(0,0,0,0.95);
-                    backdrop-filter: blur(30px);
+                    background: rgba(0,0,0,0.98);
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -681,7 +664,7 @@ const ArtsGallery = () => {
                     justify-content: center;
                     cursor: pointer;
                     z-index: 100;
-                    transition: all 0.2s;
+                    transition: transform 0.2s ease, background-color 0.2s ease;
                 }
                 .arts-lb-close:hover { 
                     background: white; 
@@ -755,29 +738,14 @@ const ArtsGallery = () => {
                 }
                 .arts-lb-footer-content > * { pointer-events: auto; }
 
-                /* Unified Footer Background - handled by base class with bottom: 0 */
-
                 .arts-lb-footer-row {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     gap: 16px;
                 }
-                .arts-lb-header > * { pointer-events: auto; }
 
-                .arts-lb-footer-profile {
-                    position: fixed;
-                    bottom: 120px;
-                    left: 24px;
-                    z-index: 40;
-                    pointer-events: auto;
-                }
-                @media (max-width: 768px) {
-                    .arts-lb-footer-profile {
-                        bottom: calc(130px + env(safe-area-inset-bottom, 0px));
-                    }
-                }
-
+                /* FIXED: Removed mobile padding on Desktop allowing the image to expand fully */
                 @media (min-width: 1000px) {
                     .arts-lb-main-container {
                         display: grid;
@@ -788,7 +756,7 @@ const ArtsGallery = () => {
                         width: 100%;
                         height: 100%;
                         align-items: center;
-                        padding: 40px 60px 140px; /* Reduced top padding for better alignment */
+                        padding: 40px 60px 140px; 
                     }
                     .arts-lb-header { 
                         display: flex;
@@ -796,12 +764,12 @@ const ArtsGallery = () => {
                         border: none;
                         pointer-events: none;
                     }
-                    .arts-lb-header .arts-lb-profile { display: none !important; } /* Hidden here because it's in sidebar */
+                    .arts-lb-header .arts-lb-profile { display: none !important; } 
                     .arts-lb-header .arts-lb-close { 
                         display: flex !important;
                         pointer-events: auto;
                         position: fixed;
-                        top: 40px; /* Base top */
+                        top: 40px; 
                         right: 40px;
                         align-items: center;
                         justify-content: center;
@@ -822,7 +790,7 @@ const ArtsGallery = () => {
                         background: none;
                         border: none;
                         border-radius: 0;
-                        padding: 4px 40px 20px 0; /* 4px top padding to align centers: (40-32)/2 = 4px */
+                        padding: 4px 40px 20px 0; 
                         backdrop-filter: none;
                         display: flex !important;
                         flex-direction: column;
@@ -850,15 +818,16 @@ const ArtsGallery = () => {
                         opacity: 0.4;
                         letter-spacing: 0.5px;
                     }
-
                     .arts-lb-nav {
                         position: absolute;
                         top: 50%;
                         transform: translateY(-50%);
                         z-index: 60;
                     }
-                    .arts-lb-nav.prev { left: -40px; }
-                    .arts-lb-nav.next { right: -40px; }
+                    
+                    /* FIXED: Placed nav arrows back inside container bounds */
+                    .arts-lb-nav.prev { left: 0px; }
+                    .arts-lb-nav.next { right: 0px; }
 
                     .arts-lb-pagination.floating {
                         display: none !important;
@@ -873,11 +842,16 @@ const ArtsGallery = () => {
                     }
                     .arts-lb-meta-header {
                         display: flex;
-                        flex-direction: column-reverse; /* Dots on top, Caption below */
+                        flex-direction: column-reverse; 
                         align-items: flex-start;
                         justify-content: flex-start;
                         gap: 12px;
                         width: 100%;
+                    }
+                    
+                    /* FIXED: Desktop slide removes padding allowing image to maximize */
+                    .arts-lb-slide {
+                        padding: 0 !important; 
                     }
                 }
 
@@ -906,16 +880,11 @@ const ArtsGallery = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 100px 20px 220px; /* Space for fixed header and footer on mobile */
+                    padding: 100px 20px 220px; 
                     scroll-snap-align: center;
                     scroll-snap-stop: always;
                 }
-                @media (min-width: 1000px) {
-                    .arts-lb-slide {
-                        padding: 0; /* Desktop uses grid/sidebar, so no padding needed on slides */
-                    }
-                }
-                .arts-lb-img-wrapper img {
+                .arts-lb-slide img {
                     max-width: 100%;
                     max-height: 100%;
                     width: auto;
@@ -924,12 +893,16 @@ const ArtsGallery = () => {
                     border-radius: 0;
                     user-select: none;
                     pointer-events: none;
+                    transition: transform 0.12s linear;
+                }
+                .arts-lb-slide img.is-dragging {
+                    transition: none !important;
                 }
                 .arts-lb-nav {
                     position: absolute;
                     top: 50%;
                     transform: translateY(-50%);
-                    background: rgba(255,255,255,0.1);
+                    background: rgba(255,255,255,0.12);
                     border: none;
                     color: white;
                     width: 48px;
@@ -939,20 +912,13 @@ const ArtsGallery = () => {
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    transition: all 0.2s;
+                    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
                     z-index: 10;
-                    background: rgba(255,255,255,0.1);
-                }
-                @media (min-width: 769px) {
-                    .arts-lb-nav {
-                        backdrop-filter: blur(10px);
-                    }
                 }
                 .arts-lb-nav:hover { background: white; color: black; }
                 .arts-lb-nav.prev { left: 24px; }
                 .arts-lb-nav.next { right: 24px; }
 
-                /* Pinterest Style Sidebar */
                 .arts-lb-profile {
                     display: flex;
                     align-items: center;
@@ -1023,15 +989,10 @@ const ArtsGallery = () => {
                     align-items: center;
                     gap: 6px;
                     padding: 8px 12px;
-                    background: rgba(255,255,255,0.12); /* Slightly more opaque for mobile readability without blur */
+                    background: rgba(255,255,255,0.12);
                     border-radius: 100px;
                     border: 1px solid rgba(255,255,255,0.05);
                     z-index: 100;
-                }
-                @media (min-width: 769px) {
-                    .arts-lb-pagination {
-                        backdrop-filter: blur(10px);
-                    }
                 }
                 .arts-lb-pagination.floating {
                     display: inline-flex !important;
@@ -1051,18 +1012,18 @@ const ArtsGallery = () => {
                     height: 5px;
                     border-radius: 3px;
                     background: rgba(255,255,255,0.25);
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
                     cursor: pointer;
                 }
                 .arts-lb-dot:hover {
                     background: rgba(255,255,255,0.5);
                 }
                 .arts-lb-dot.active {
-                    width: 14px; /* More subtle pill */
+                    width: 14px; 
                     background: white;
                     border-radius: 3px;
                 }
-                /* Caption Bottom Sheet */
+                
                 .arts-lb-caption-sheet-overlay {
                     position: fixed;
                     inset: 0;
@@ -1136,7 +1097,7 @@ const ArtsGallery = () => {
                     border: none;
                     padding: 0;
                     cursor: pointer;
-                    transition: all 0.2s;
+                    transition: transform 0.2s ease, background-color 0.2s ease;
                 }
                 .arts-lb-dot.active {
                     background: white;
@@ -1152,10 +1113,10 @@ const ArtsGallery = () => {
                     gap: 8px;
                     overflow-x: auto;
                     padding: 10px 16px calc(30px + env(safe-area-inset-bottom, 0px));
-                    background: transparent; /* Background now handled by footer-content */
+                    background: transparent; 
                     max-width: 100vw;
                     width: 100%;
-                    scroll-behavior: smooth;
+                    scroll-behavior: auto;
                     -webkit-overflow-scrolling: touch;
                     z-index: 50;
                 }
@@ -1168,7 +1129,7 @@ const ArtsGallery = () => {
                     overflow: hidden;
                     cursor: pointer;
                     opacity: 0.3;
-                    transition: all 0.2s;
+                    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
                     border: 2px solid transparent;
                 }
                 .arts-lb-fs-item.active {
@@ -1189,7 +1150,6 @@ const ArtsGallery = () => {
                     font-size: 1.1rem;
                 }
 
-                /* Shimmer for loading images */
                 .arts-img-shimmer {
                     position: absolute;
                     inset: 0;
@@ -1202,7 +1162,6 @@ const ArtsGallery = () => {
                     100% { background-position: 400px 0; }
                 }
 
-                /* Show More button */
                 .arts-show-more-wrapper {
                     display: flex;
                     justify-content: center;
@@ -1220,7 +1179,7 @@ const ArtsGallery = () => {
                     font-weight: 600;
                     border-radius: 100px;
                     cursor: pointer;
-                    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+                    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.3s ease, color 0.3s ease;
                 }
                 .arts-show-more-btn:hover {
                     background: var(--text-main);
@@ -1248,7 +1207,6 @@ const ArtsGallery = () => {
                     background: rgba(255,255,255,0.2);
                 }
 
-                /* Loading skeleton */
                 .arts-skeleton-grid {
                     columns: 3;
                     column-gap: 8px;
@@ -1276,11 +1234,12 @@ const ArtsGallery = () => {
                     .arts-gallery-header { padding: 28px 28px 10px; text-align: center; justify-content: center; }
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
-                    .arts-grid { columns: 2; column-gap: 4px; padding: 0 4px; }
-                    .arts-grid-item { 
-                        margin-bottom: 4px; 
-                        border-radius: 4px;
-                        background: transparent; /* Reduce overdraw on mobile */
+                    .arts-grid { 
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 4px;
+                        padding: 0 4px;
+                        columns: unset;
                     }
                     .arts-grid-overlay { display: none; }
                     .arts-lb-nav { width: 36px; height: 36px; }
@@ -1288,16 +1247,27 @@ const ArtsGallery = () => {
                     .arts-lb-nav.next { right: 8px; }
                     .arts-lb-header {
                         padding: calc(22px + env(safe-area-inset-top, 0px)) 22px 18px;
+                        background: rgba(0,0,0,0.45); 
+                        backdrop-filter: none !important;
                     }
-                    .arts-lb-img-wrapper { padding: 56px 12px 8px; }
-                    .arts-lb-img-wrapper img { max-height: calc(100vh - 160px); }
-                    .arts-lb-footer { padding: 12px 16px 20px; }
+                    .arts-lb-footer { 
+                        padding: 12px 16px 20px;
+                        background: rgba(0,0,0,0.45); 
+                        backdrop-filter: none !important;
+                    }
+                    .arts-lb-footer-content {
+                        background: rgba(0,0,0,0.45);
+                        backdrop-filter: none !important;
+                    }
+                    .arts-lb-nav, .arts-lb-pagination, .arts-lb-close, .arts-lb-fs-item {
+                        backdrop-filter: none !important;
+                        background: rgba(255,255,255,0.12) !important;
+                    }
                     .arts-skeleton-grid { columns: 2; column-gap: 4px; padding: 0 4px; }
                     .arts-skeleton-item { margin-bottom: 4px; border-radius: 4px; }
                     .arts-show-more-wrapper { padding: 0 20px; }
                     .arts-show-more-btn { width: 100%; justify-content: center; }
                     
-                    /* Google Photos Butter-Smooth Scroll Tweaks */
                     .arts-gallery-page {
                         text-rendering: optimizeSpeed;
                         image-rendering: -webkit-optimize-contrast;
@@ -1318,7 +1288,7 @@ const ArtsGallery = () => {
                     padding: 10px 20px;
                     flex-shrink: 0;
                     white-space: nowrap;
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
                 }
                 .back-pill:hover {
                     background: color-mix(in srgb, var(--text-main) 12%, transparent);
@@ -1360,8 +1330,6 @@ const ArtsGallery = () => {
                                     key={item.id}
                                     item={item}
                                     onOpen={openLightbox}
-                                    onImageLoad={handleImageLoad}
-                                    isLoading={imageLoading[item.id] !== false}
                                     caption={cleanCaption(item.caption)}
                                 />
                             ))}
@@ -1382,18 +1350,20 @@ const ArtsGallery = () => {
                 )}
             </div>
 
-            {/* Lightbox Modal */}
             {lightboxGlobalIdx !== null && flattenedImages[lightboxGlobalIdx] && (() => {
                 const currentImg = flattenedImages[lightboxGlobalIdx];
                 return (
                     <div className="arts-lightbox" onClick={closeLightbox}>
-                        
-                        {/* TOP: Close + Author/Meta */}
-                        <div className="arts-lb-header" onClick={(e) => e.stopPropagation()}>
+
+                        <div
+                            className="arts-lb-header"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
+                        >
                             <button className="arts-lb-close" onClick={closeLightbox} aria-label="Close">
                                 <FiX size={18} />
                             </button>
-                            
+
                             <div className="arts-lb-profile">
                                 <div className="arts-lb-avatar">
                                     <img src={profileData.profilePic} alt={profileData.fullName} />
@@ -1403,8 +1373,8 @@ const ArtsGallery = () => {
                         </div>
 
                         <div className="arts-lb-main-container" onClick={(e) => e.stopPropagation()}>
-                            <div 
-                                className="arts-lb-img-wrapper" 
+                            <div
+                                className="arts-lb-img-wrapper"
                                 onTouchStart={handleTouchStart}
                                 onTouchMove={handleTouchMove}
                                 onTouchEnd={handleTouchEnd}
@@ -1413,31 +1383,35 @@ const ArtsGallery = () => {
                                 onPointerUp={handlePointerEnd}
                                 onPointerCancel={handlePointerEnd}
                                 onPointerLeave={handlePointerEnd}
-                                style={{ touchAction: scale > 1.01 ? 'none' : 'pan-y' }}
+                                style={{ touchAction: scaleRef.current > 1.01 ? 'none' : 'auto' }}
                             >
-                                <div 
+                                <div
                                     className={`arts-lb-img-container ${scale > 1.01 ? 'zoomed' : ''}`}
                                     onScroll={handleScroll}
                                     ref={containerRef}
                                 >
-                                    {flattenedImages.map((img, i) => {
-                                        const isVisible = Math.abs(i - lightboxGlobalIdx) <= 1;
-                                        const isCurrent = i === lightboxGlobalIdx;
+                                    {[-1, 0, 1].map(offset => {
+                                        const i = lightboxGlobalIdx + offset;
+                                        if (i < 0 || i >= flattenedImages.length) {
+                                            return <div key={`spacer-${offset}`} className="arts-lb-slide spacer" />;
+                                        }
+
+                                        const img = flattenedImages[i];
+                                        const isCurrent = offset === 0;
+
                                         return (
                                             <div className="arts-lb-slide" key={img.id}>
-                                                {isVisible && (
-                                                    <img
-                                                        src={getOptimizedImage(img.url, window.innerWidth <= 768 ? 'medium' : 'full')}
-                                                        alt={img.caption || 'Artwork'}
-                                                        loading={i === lightboxGlobalIdx ? "eager" : "lazy"}
-                                                        draggable={false}
-                                                        onDragStart={preventImageDrag}
-                                                        style={{
-                                                            transform: isCurrent ? `translate3d(${offset.x}px, ${offset.y}px, 0) scale(${scale})` : 'none',
-                                                            transition: isDragging ? 'none' : 'transform 0.45s cubic-bezier(0.2, 0, 0, 1)'
-                                                        }}
-                                                    />
-                                                )}
+                                                <img
+                                                    ref={isCurrent ? activeImgRef : null}
+                                                    className={isDragging ? 'is-dragging' : ''}
+                                                    src={getOptimizedImage(img.url, isMobile ? 'medium' : 'full')}
+                                                    alt={img.caption || 'Artwork'}
+                                                    loading={isCurrent ? "eager" : "lazy"}
+                                                    decoding="async"
+                                                    draggable={false}
+                                                    onDragStart={preventImageDrag}
+                                                    style={{ transform: 'none' }}
+                                                />
                                             </div>
                                         );
                                     })}
@@ -1455,7 +1429,6 @@ const ArtsGallery = () => {
                                 )}
                             </div>
 
-                            {/* Desktop Unified Sidebar */}
                             <div className="arts-lb-sidebar">
                                 <div className="arts-lb-sidebar-header">
                                     <div className="arts-lb-profile">
@@ -1465,19 +1438,18 @@ const ArtsGallery = () => {
                                         <div className="arts-lb-author">{profileData.fullName}</div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="arts-lb-sidebar-body">
                                     <div className="arts-lb-meta-header">
                                         {currentImg.caption && <h2 className="arts-lb-caption">{currentImg.caption}</h2>}
-                                        
-                                        {/* Desktop Pagination Dots */}
+
                                         {currentImg.totalInPost > 1 && (
                                             <div className="arts-lb-pagination">
                                                 {[...Array(currentImg.totalInPost)].map((_, i) => {
                                                     const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
                                                     return (
-                                                        <div 
-                                                            key={i} 
+                                                        <div
+                                                            key={i}
                                                             className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -1494,15 +1466,18 @@ const ArtsGallery = () => {
                             </div>
                         </div>
 
-                        {/* BOTTOM: Title (Caption) - Mobile Overlay */}
-                        <div className="arts-lb-footer-content" onClick={(e) => e.stopPropagation()}>
+                        <div
+                            className="arts-lb-footer-content"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
+                        >
                             <div className="arts-lb-meta-header">
                                 {currentImg.caption && (
                                     <h2 className="arts-lb-caption">
                                         {currentImg.caption.length > 60 ? (
                                             <>
                                                 {currentImg.caption.slice(0, 60)}...
-                                                <button 
+                                                <button
                                                     className="arts-lb-view-more"
                                                     onClick={() => setShowCaptionModal(true)}
                                                 >
@@ -1513,14 +1488,13 @@ const ArtsGallery = () => {
                                     </h2>
                                 )}
 
-                                {/* Mobile Floating Pagination Dots Integrated into Footer */}
                                 {currentImg.totalInPost > 1 && (
                                     <div className="arts-lb-pagination floating">
                                         {[...Array(currentImg.totalInPost)].map((_, i) => {
                                             const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
                                             return (
-                                                <div 
-                                                    key={i} 
+                                                <div
+                                                    key={i}
                                                     className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
@@ -1539,26 +1513,30 @@ const ArtsGallery = () => {
                                 </div>
                             </div>
                         </div>
-                        
-                        {/* Filmstrip Navigation */}
+
                         <div className="arts-lb-filmstrip" onClick={(e) => e.stopPropagation()}>
                             {allItems.map((item, idx) => {
                                 const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === item.id);
-                                const isActive = flattenedImages[lightboxGlobalIdx]?.postId === item.id;
+                                const currentPostId = flattenedImages[lightboxGlobalIdx]?.postId;
+                                const isActive = currentPostId === item.id;
+
+                                const currentItemIdxInAll = allItems.findIndex(it => it.id === currentPostId);
+                                const isNear = !isMobile || Math.abs(idx - currentItemIdxInAll) < 8;
+
+                                if (!isNear) return <div key={item.id} className="arts-lb-fs-spacer" />;
+
                                 return (
-                                    <div 
-                                        key={item.id} 
+                                    <div
+                                        key={item.id}
                                         className={`arts-lb-fs-item ${isActive ? 'active' : ''}`}
                                         onClick={() => setLightboxGlobalIdx(itemGlobalIdx)}
-                                        ref={isActive ? (el) => el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }) : null}
                                     >
-                                        <img src={getOptimizedImage(item.images?.[0] || item.image, 'thumb')} alt="" loading="lazy" draggable={false} onDragStart={preventImageDrag} />
+                                        <img src={getOptimizedImage(item.images?.[0] || item.image, 'thumb')} alt="" loading="lazy" decoding="async" draggable={false} onDragStart={preventImageDrag} />
                                     </div>
                                 );
                             })}
                         </div>
 
-                        {/* Caption Bottom Sheet Modal */}
                         {showCaptionModal && (
                             <div className="arts-lb-caption-sheet-overlay" onClick={() => setShowCaptionModal(false)}>
                                 <div className="arts-lb-caption-sheet" onClick={e => e.stopPropagation()}>
