@@ -3,49 +3,49 @@
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 200;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-ExtraLight.ttf') format('truetype');
 }
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 300;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-Light.ttf') format('truetype');
 }
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-Regular.ttf') format('truetype');
 }
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 500;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-Medium.ttf') format('truetype');
 }
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 600;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-SemiBold.ttf') format('truetype');
 }
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 700;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-Bold.ttf') format('truetype');
 }
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;
   font-weight: 800;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/MuktaMalar-ExtraBold.ttf') format('truetype');
 }
 
@@ -54,7 +54,7 @@
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-Regular.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -62,7 +62,7 @@
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 500;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-Medium.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -70,7 +70,7 @@
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 600;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-SemiBold.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -78,7 +78,7 @@
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 700;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-Bold.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -86,7 +86,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 400;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-Italic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -94,7 +94,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 500;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-MediumItalic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -102,7 +102,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 600;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-SemiBoldItalic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -110,7 +110,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 700;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/GoogleSans-BoldItalic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
