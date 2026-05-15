@@ -493,6 +493,14 @@ const ArtsGallery = () => {
                     border-radius: 8px;
                     margin-bottom: 8px;
                     break-inside: avoid;
+                    /* Modern performance optimization */
+                    contain: paint layout;
+                }
+                @media (max-width: 768px) {
+                    .arts-grid-item {
+                        content-visibility: auto;
+                        contain-intrinsic-size: 1px 300px;
+                    }
                 }
                 .arts-grid-item img {
                     width: 100%;
