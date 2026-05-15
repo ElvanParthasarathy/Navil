@@ -5,6 +5,7 @@ import { FiCalendar } from 'react-icons/fi';
 import { subscribe, getCached } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 import { Helmet } from 'react-helmet-async';
+import { getOptimizedImage } from '../lib/media';
 
 const CATEGORY_META = {
     'blog': {
@@ -39,7 +40,38 @@ const CATEGORY_META = {
     }
 };
 
-const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മலயാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
+const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
+const LANG_SHORT = { ta: 'த', en: 'Aa', ml: 'മ', hi: 'हि', te: 'తె', sa: 'सं' };
+
+/** Analyze variants to produce grouped summary: variants, transliterations, translations */
+const analyzePostVersions = (variants: any[]) => {
+    if (!variants || variants.length === 0) return null;
+
+    // Collect variant labels (Original, Variant, etc.)
+    const variantEntries: { lang: string; label: string }[] = [];
+    // Collect unique transliterations across all variants
+    const translitLangs = new Set<string>();
+    // Collect translations (variants with label === 'Translation')
+    const translationEntries: { lang: string }[] = [];
+
+    variants.forEach(v => {
+        const lang = v.lang || '';
+        if (v.label === 'Translation') {
+            translationEntries.push({ lang });
+        } else {
+            variantEntries.push({ lang, label: v.label || 'Original' });
+        }
+        // Gather transliterations
+        const translits = v.transliterations || {};
+        Object.keys(translits).forEach(tl => translitLangs.add(tl));
+    });
+
+    return {
+        variants: variantEntries,
+        transliterations: [...translitLangs],
+        translations: translationEntries,
+    };
+};
 
 const CategoryListView = () => {
     const { category } = useParams();
@@ -339,7 +371,13 @@ const CategoryListView = () => {
                             primaryTitle = variants[0]?.title || post.title || '';
                             // Strip HTML tags for excerpt from text
                             const textHtml = variants[0]?.text || '';
-                            primaryExcerpt = textHtml.replace(/<[^>]+>/g, '').substring(0, 120);
+                            primaryExcerpt = textHtml
+                                .replace(/<[^>]+>/g, '')
+                                .replace(/&nbsp;/g, ' ')
+                                .replace(/&amp;/g, '&')
+                                .replace(/&lt;/g, '<')
+                                .replace(/&gt;/g, '>')
+                                .substring(0, 120);
                         } else {
                             primaryLang = Object.keys(contentObj)[0] || '';
                             primaryTitle = contentObj[primaryLang]?.title || post.title || '';
@@ -366,7 +404,7 @@ const CategoryListView = () => {
                                 <article className="blog-card-item">
                                     {coverImage && (
                                         <div className="blog-cover-wrapper">
-                                            <img src={coverImage} alt={primaryTitle} loading="lazy" />
+                                            <img src={getOptimizedImage(coverImage, 'thumb')} alt={primaryTitle} loading="lazy" />
                                             {(post.is_pinned || post.pin_type === 'permanent') && (
                                                 <span className="blog-featured-badge">✨ Featured</span>
                                             )}
@@ -411,13 +449,46 @@ const CategoryListView = () => {
                                             </div>
                                         )}
 
-                                        <div className="blog-read-more">
-                                            {category === 'poems' ? 'செய்யுளை வாசிக்க' :
-                                             category === 'quotes' ? 'பொன்மொழியை வாசிக்க' :
-                                             category === 'stories' ? 'கதையை வாசிக்க' :
-                                             category === 'diary' ? 'நாளேட்டை வாசிக்க' :
-                                             category === 'articles' || category === 'blog' ? 'கட்டுரையை வாசிக்க' :
-                                             'வாசிக்க'} <span className="arrow">→</span>
+                                        {/* Footer area (always bottom aligned) */}
+                                        <div className="blog-card-footer">
+                                            {/* Included Versions Indicator */}
+                                            {hasVariants && (() => {
+                                                const info = analyzePostVersions(variants);
+                                                if (!info) return null;
+                                                const { variants: vEntries, transliterations: tLangs, translations: trEntries } = info;
+                                                // Build flat tag list
+                                                const tags: { text: string; type: string }[] = [];
+                                                vEntries.forEach(ve => {
+                                                    const name = LANG_LABELS[ve.lang] || ve.lang;
+                                                    const isMain = ve.label === 'Original';
+                                                    tags.push({ text: !isMain ? `${name} ${ve.label}` : name, type: isMain ? 'main' : 'v' });
+                                                });
+                                                trEntries.forEach(te => {
+                                                    tags.push({ text: `${LANG_LABELS[te.lang] || te.lang} Translation`, type: 't' });
+                                                });
+                                                tLangs.forEach(tl => {
+                                                    tags.push({ text: `${LANG_LABELS[tl] || tl} Transliteration`, type: 'tl' });
+                                                });
+                                                return (
+                                                    <div className="vs-line">
+                                                        {tags.map((t, i) => (
+                                                            <React.Fragment key={i}>
+                                                                {i > 0 && <span className="vs-sep">·</span>}
+                                                                <span className={`vs-tag vs-${t.type}`}>{t.text}</span>
+                                                            </React.Fragment>
+                                                        ))}
+                                                    </div>
+                                                );
+                                            })()}
+
+                                            <div className="blog-read-more">
+                                                {category === 'poems' ? 'செய்யுளை வாசிக்க' :
+                                                 category === 'quotes' ? 'பொன்மொழியை வாசிக்க' :
+                                                 category === 'stories' ? 'கதையை வாசிக்க' :
+                                                 category === 'diary' ? 'நாளேட்டை வாசிக்க' :
+                                                 category === 'articles' || category === 'blog' ? 'கட்டுரையை வாசிக்க' :
+                                                 'வாசிக்க'} <span className="arrow">→</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </article>
@@ -875,16 +946,21 @@ const CategoryListView = () => {
 
                 .blog-excerpt {
                     font-size: 0.95rem;
-                    line-height: 1.6;
+                    line-height: 1.7;
                     color: var(--text-muted);
-                    margin-bottom: 24px;
+                    margin-bottom: 20px;
+                    padding-bottom: 4px;
                     display: -webkit-box;
                     -webkit-line-clamp: 3;
                     -webkit-box-orient: vertical;
                     overflow: hidden;
-                    flex: 1;
                 }
 
+                .blog-card-footer {
+                    margin-top: auto;
+                    display: flex;
+                    flex-direction: column;
+                }
                 .blog-read-more {
                     display: flex;
                     align-items: center;
@@ -892,7 +968,6 @@ const CategoryListView = () => {
                     font-size: 0.85rem;
                     font-weight: 700;
                     color: var(--text-main);
-                    margin-top: auto;
                     transition: gap 0.2s ease;
                 }
                 .blog-link-card:hover .blog-read-more {
@@ -900,6 +975,36 @@ const CategoryListView = () => {
                 }
                 .blog-read-more .arrow {
                     transition: transform 0.2s ease;
+                }
+
+                /* ─── Compact Versions Line ─── */
+                .vs-line {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 4px;
+                    margin-top: 12px;
+                    margin-bottom: 14px;
+                    font-size: 0.72rem;
+                    line-height: 1.4;
+                }
+                .vs-sep {
+                    color: var(--text-muted);
+                    opacity: 0.3;
+                    font-weight: 600;
+                    user-select: none;
+                }
+                .vs-tag {
+                    font-weight: 600;
+                    letter-spacing: 0.1px;
+                    white-space: nowrap;
+                }
+                .vs-v, .vs-t, .vs-tl {
+                    color: var(--text-muted);
+                }
+                .vs-main {
+                    color: var(--text-main);
+                    font-weight: 800;
                 }
 
                 .controls-area {
