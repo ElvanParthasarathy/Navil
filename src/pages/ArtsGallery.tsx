@@ -66,7 +66,6 @@ const cleanCaption = (cap) => {
     return cap.replace(/#\S+/g, '').replace(/\n{2,}/g, '\n').trim();
 };
 
-// 1. GRID CARD
 const ArtCard = React.memo(({ item, onOpen, caption }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const imgs = item.images || [item.image];
@@ -110,11 +109,10 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
     );
 });
 
-// 2. LIGHTBOX INDIVIDUAL IMAGE (Fixes the black screen issue with a spinner and fade)
+// FIXED: Removed inline transition wipeout. CSS class handles animations cleanly now.
 const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preventImageDrag, activeImgRef }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Reset loading state if the image URL changes
     useEffect(() => {
         setIsLoaded(false);
     }, [img.url]);
@@ -128,7 +126,7 @@ const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preven
             )}
             <img
                 ref={isCurrent ? activeImgRef : null}
-                className={isDragging ? 'is-dragging' : ''}
+                className={`arts-lb-img ${isDragging ? 'is-dragging' : ''}`}
                 src={getOptimizedImage(img.url, isMobile ? 'medium' : 'full')}
                 alt={img.caption || 'Artwork'}
                 loading={isCurrent ? "eager" : "lazy"}
@@ -137,10 +135,7 @@ const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preven
                 onDragStart={preventImageDrag}
                 onLoad={() => setIsLoaded(true)}
                 style={{
-                    transform: 'none',
-                    opacity: isLoaded ? 1 : 0,
-                    // Smooth fade-in once the high-res image finishes downloading
-                    transition: isDragging ? 'none' : 'opacity 0.4s ease-out'
+                    opacity: isLoaded ? 1 : 0
                 }}
             />
         </div>
@@ -175,7 +170,7 @@ const ArtsGallery = () => {
     }, [allItems]);
 
     const [lightboxGlobalIdx, setLightboxGlobalIdx] = useState(null);
-    const filmstripRef = useRef(null); // Ref for the bottom filmstrip scroll container
+    const filmstripRef = useRef(null);
 
     useEffect(() => {
         if (meta) setPageTitle(`${meta.titleTa}|${meta.titleEn}`);
@@ -233,7 +228,6 @@ const ArtsGallery = () => {
         window.history.pushState({ lightboxOpen: true }, '');
     }, [flattenedImages]);
 
-    // Handle back button natively and background suspension
     useEffect(() => {
         const handlePopState = (e) => {
             if (e.state?.lightboxOpen !== true) {
@@ -245,12 +239,14 @@ const ArtsGallery = () => {
         const mainContent = document.querySelector('.arts-gallery-page');
         if (lightboxGlobalIdx !== null) {
             document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
             if (mainContent) {
                 mainContent.style.visibility = 'hidden';
                 mainContent.setAttribute('aria-hidden', 'true');
             }
         } else {
             document.body.style.overflow = '';
+            document.body.style.touchAction = '';
             if (mainContent) {
                 mainContent.style.visibility = 'visible';
                 mainContent.removeAttribute('aria-hidden');
@@ -260,6 +256,7 @@ const ArtsGallery = () => {
         return () => {
             window.removeEventListener('popstate', handlePopState);
             document.body.style.overflow = '';
+            document.body.style.touchAction = '';
             if (mainContent) {
                 mainContent.style.visibility = 'visible';
             }
@@ -280,7 +277,6 @@ const ArtsGallery = () => {
         }
     }, [lightboxGlobalIdx]);
 
-    // Keyboard nav for lightbox
     useEffect(() => {
         if (lightboxGlobalIdx === null) return;
         const handleKey = (e) => {
@@ -292,14 +288,11 @@ const ArtsGallery = () => {
         return () => window.removeEventListener('keydown', handleKey);
     }, [lightboxGlobalIdx, goToNext, goToPrev, closeLightbox]);
 
-    // FILMSTRIP AUTO-SCROLL EFFECT (Fixes the filmstrip static position issue)
     useEffect(() => {
         if (filmstripRef.current && lightboxGlobalIdx !== null) {
-            // Find the active thumbnail DOM node
             const activeEl = filmstripRef.current.querySelector('.arts-lb-fs-item.active');
             if (activeEl) {
                 const container = filmstripRef.current;
-                // Calculate center position
                 const scrollPos = activeEl.offsetLeft - (container.clientWidth / 2) + (activeEl.clientWidth / 2);
                 container.scrollTo({
                     left: scrollPos,
@@ -414,6 +407,7 @@ const ArtsGallery = () => {
         }
     }, [scale]);
 
+    // FIXED: Gesture State Machine securely tracks finger counts to prevent native swipe drifting
     const handleTouchStart = (e) => {
         if (e.touches.length === 2) {
             const dist = Math.hypot(
@@ -421,12 +415,16 @@ const ArtsGallery = () => {
                 e.touches[0].pageY - e.touches[1].pageY
             );
             lastPinchDistance.current = dist;
-            setIsDragging(false);
-        } else {
+            setIsDragging(true); // Lock immediately to prevent native swipe
+        } else if (e.touches.length === 1) {
             touchStartX.current = e.touches[0].screenX;
             touchStartY.current = e.touches[0].screenY;
             touchStartTime.current = Date.now();
-            setIsDragging(true);
+
+            // Only set dragging if already zoomed, so native swipe can still happen at scale 1
+            if (scaleRef.current > 1.01) {
+                setIsDragging(true);
+            }
             setDragX(0);
         }
     };
@@ -439,11 +437,16 @@ const ArtsGallery = () => {
             );
             if (lastPinchDistance.current > 0) {
                 const delta = dist / lastPinchDistance.current;
-                const nextScale = Math.min(Math.max(scaleRef.current * delta, 1), 4);
+                // Allow zooming out to 0.6 for a nice spring-back feel
+                const nextScale = Math.min(Math.max(scaleRef.current * delta, 0.6), 4);
                 scaleRef.current = nextScale;
-                if (nextScale <= 1.01) {
-                    offsetRef.current = { x: 0, y: 0 };
+
+                // Gently re-center offset if zooming out past 1 to prevent getting stuck off-screen
+                if (nextScale <= 1.0) {
+                    offsetRef.current.x *= 0.8;
+                    offsetRef.current.y *= 0.8;
                 }
+
                 requestTransform();
             }
             lastPinchDistance.current = dist;
@@ -451,10 +454,10 @@ const ArtsGallery = () => {
         }
 
         if (!isDragging) return;
-        const currentX = e.touches[0].screenX;
-        const currentY = e.touches[0].screenY;
 
-        if (scaleRef.current > 1.01) {
+        if (scaleRef.current > 1.0) {
+            const currentX = e.touches[0].screenX;
+            const currentY = e.touches[0].screenY;
             const dx = currentX - touchStartX.current;
             const dy = currentY - touchStartY.current;
             offsetRef.current.x += dx;
@@ -467,17 +470,25 @@ const ArtsGallery = () => {
     };
 
     const handleTouchEnd = (e) => {
-        lastPinchDistance.current = 0;
-        setIsDragging(false);
+        if (e.touches.length === 0) {
+            lastPinchDistance.current = 0;
+            setIsDragging(false);
 
-        if (scaleRef.current <= 1.05) {
-            scaleRef.current = 1;
-            offsetRef.current = { x: 0, y: 0 };
-            requestTransform();
+            // Snap beautifully back to 1.0, restoring normal size and native swiping
+            if (scaleRef.current <= 1.05) {
+                scaleRef.current = 1;
+                offsetRef.current = { x: 0, y: 0 };
+                requestTransform();
+            }
+
+            setScale(scaleRef.current);
+            setOffset({ ...offsetRef.current });
+        } else if (e.touches.length === 1) {
+            // User lifted one finger but left the other down: re-anchor pan coordinates seamlessly
+            lastPinchDistance.current = 0;
+            touchStartX.current = e.touches[0].screenX;
+            touchStartY.current = e.touches[0].screenY;
         }
-
-        setScale(scaleRef.current);
-        setOffset({ ...offsetRef.current });
     };
 
     const containerRef = useRef(null);
@@ -559,7 +570,6 @@ const ArtsGallery = () => {
             </Helmet>
 
             <style>{`
-                /* ================= CSS ADDITIONS FOR FIXES ================= */
                 .arts-lb-loader {
                     position: absolute;
                     inset: 0;
@@ -580,7 +590,6 @@ const ArtsGallery = () => {
                     0% { transform: rotate(0deg); } 
                     100% { transform: rotate(360deg); } 
                 }
-                /* =========================================================== */
 
                 .arts-gallery-page {
                     max-width: 1200px;
@@ -708,6 +717,8 @@ const ArtsGallery = () => {
                     align-items: center;
                     justify-content: center;
                     animation: lbFadeIn 0.3s cubic-bezier(0.2, 0, 0, 1);
+                    touch-action: none;
+                    overscroll-behavior: none;
                 }
                 .arts-lb-close {
                     background: rgba(255,255,255,0.15);
@@ -768,7 +779,6 @@ const ArtsGallery = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    touch-action: pan-y;
                 }
 
                 .arts-lb-header {
@@ -946,9 +956,12 @@ const ArtsGallery = () => {
                 .arts-lb-img-container::-webkit-scrollbar {
                     display: none;
                 }
+                
+                /* FIXED: Now reliably shuts down native scroll when scale is anything but perfectly 1 */
                 .arts-lb-img-container.zoomed {
                     overflow-x: hidden;
                 }
+                
                 .arts-lb-slide {
                     flex: 0 0 100%;
                     width: 100%;
@@ -961,7 +974,9 @@ const ArtsGallery = () => {
                     scroll-snap-stop: always;
                     position: relative;
                 }
-                .arts-lb-slide img {
+
+                /* FIXED: Clean transition class that works perfectly with JS transforms */
+                .arts-lb-img {
                     max-width: 100%;
                     max-height: 100%;
                     width: auto;
@@ -970,10 +985,12 @@ const ArtsGallery = () => {
                     border-radius: 0;
                     user-select: none;
                     pointer-events: none;
+                    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.4s ease-out;
                 }
-                .arts-lb-slide img.is-dragging {
+                .arts-lb-img.is-dragging {
                     transition: none !important;
                 }
+
                 .arts-lb-nav {
                     position: absolute;
                     top: 50%;
@@ -1445,14 +1462,15 @@ const ArtsGallery = () => {
                                 onPointerUp={handlePointerEnd}
                                 onPointerCancel={handlePointerEnd}
                                 onPointerLeave={handlePointerEnd}
-                                style={{ touchAction: scaleRef.current > 1.01 ? 'none' : 'auto' }}
+                                // FIXED: Freezes native touch-action whenever image is zoomed in OR out
+                                style={{ touchAction: scale !== 1 ? 'none' : 'pan-x pan-y' }}
                             >
                                 <div
-                                    className={`arts-lb-img-container ${scale > 1.01 ? 'zoomed' : ''}`}
+                                    // FIXED: Applies the zoomed class (which cuts off overflow-x natively) when scale is not perfectly 1
+                                    className={`arts-lb-img-container ${scale !== 1 ? 'zoomed' : ''}`}
                                     onScroll={handleScroll}
                                     ref={containerRef}
                                 >
-                                    {/* USE THE NEW LIGHTBOX IMAGE COMPONENT */}
                                     {[-1, 0, 1].map(offset => {
                                         const i = lightboxGlobalIdx + offset;
                                         if (i < 0 || i >= flattenedImages.length) {
@@ -1573,7 +1591,6 @@ const ArtsGallery = () => {
                             </div>
                         </div>
 
-                        {/* FILMSTRIP: Now has filmstripRef to track scrolling */}
                         <div className="arts-lb-filmstrip" ref={filmstripRef} onClick={(e) => e.stopPropagation()}>
                             {allItems.map((item) => {
                                 const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === item.id);
