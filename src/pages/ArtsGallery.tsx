@@ -66,6 +66,7 @@ const cleanCaption = (cap) => {
     return cap.replace(/#\S+/g, '').replace(/\n{2,}/g, '\n').trim();
 };
 
+// 1. GRID CARD
 const ArtCard = React.memo(({ item, onOpen, caption }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const imgs = item.images || [item.image];
@@ -109,6 +110,43 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
     );
 });
 
+// 2. LIGHTBOX INDIVIDUAL IMAGE (Fixes the black screen issue with a spinner and fade)
+const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preventImageDrag, activeImgRef }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    // Reset loading state if the image URL changes
+    useEffect(() => {
+        setIsLoaded(false);
+    }, [img.url]);
+
+    return (
+        <div className="arts-lb-slide">
+            {!isLoaded && (
+                <div className="arts-lb-loader">
+                    <div className="arts-lb-spinner"></div>
+                </div>
+            )}
+            <img
+                ref={isCurrent ? activeImgRef : null}
+                className={isDragging ? 'is-dragging' : ''}
+                src={getOptimizedImage(img.url, isMobile ? 'medium' : 'full')}
+                alt={img.caption || 'Artwork'}
+                loading={isCurrent ? "eager" : "lazy"}
+                decoding="async"
+                draggable={false}
+                onDragStart={preventImageDrag}
+                onLoad={() => setIsLoaded(true)}
+                style={{
+                    transform: 'none',
+                    opacity: isLoaded ? 1 : 0,
+                    // Smooth fade-in once the high-res image finishes downloading
+                    transition: isDragging ? 'none' : 'opacity 0.4s ease-out'
+                }}
+            />
+        </div>
+    );
+});
+
 const ArtsGallery = () => {
     const { category } = useParams();
     const meta = CATEGORY_META[category];
@@ -137,6 +175,7 @@ const ArtsGallery = () => {
     }, [allItems]);
 
     const [lightboxGlobalIdx, setLightboxGlobalIdx] = useState(null);
+    const filmstripRef = useRef(null); // Ref for the bottom filmstrip scroll container
 
     useEffect(() => {
         if (meta) setPageTitle(`${meta.titleTa}|${meta.titleEn}`);
@@ -194,6 +233,7 @@ const ArtsGallery = () => {
         window.history.pushState({ lightboxOpen: true }, '');
     }, [flattenedImages]);
 
+    // Handle back button natively and background suspension
     useEffect(() => {
         const handlePopState = (e) => {
             if (e.state?.lightboxOpen !== true) {
@@ -240,6 +280,7 @@ const ArtsGallery = () => {
         }
     }, [lightboxGlobalIdx]);
 
+    // Keyboard nav for lightbox
     useEffect(() => {
         if (lightboxGlobalIdx === null) return;
         const handleKey = (e) => {
@@ -250,6 +291,23 @@ const ArtsGallery = () => {
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
     }, [lightboxGlobalIdx, goToNext, goToPrev, closeLightbox]);
+
+    // FILMSTRIP AUTO-SCROLL EFFECT (Fixes the filmstrip static position issue)
+    useEffect(() => {
+        if (filmstripRef.current && lightboxGlobalIdx !== null) {
+            // Find the active thumbnail DOM node
+            const activeEl = filmstripRef.current.querySelector('.arts-lb-fs-item.active');
+            if (activeEl) {
+                const container = filmstripRef.current;
+                // Calculate center position
+                const scrollPos = activeEl.offsetLeft - (container.clientWidth / 2) + (activeEl.clientWidth / 2);
+                container.scrollTo({
+                    left: scrollPos,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [lightboxGlobalIdx]);
 
     const touchStartX = useRef(0);
     const touchStartY = useRef(0);
@@ -318,7 +376,6 @@ const ArtsGallery = () => {
         setOffset({ ...offsetRef.current });
     };
 
-    // FIXED: Synchronize React State with the DOM Transform to ensure zoom works instantly
     const updateScale = useCallback((nextScale) => {
         setScale(prev => {
             const rawScale = typeof nextScale === 'function' ? nextScale(prev) : nextScale;
@@ -454,7 +511,6 @@ const ArtsGallery = () => {
         }
     }, [lightboxGlobalIdx]);
 
-    // FIXED: Ensured pan logic directly triggers high-performance transform 
     const handleWheel = useCallback((e) => {
         if (lightboxGlobalIdx === null) return;
 
@@ -503,6 +559,29 @@ const ArtsGallery = () => {
             </Helmet>
 
             <style>{`
+                /* ================= CSS ADDITIONS FOR FIXES ================= */
+                .arts-lb-loader {
+                    position: absolute;
+                    inset: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: -1;
+                }
+                .arts-lb-spinner {
+                    width: 40px;
+                    height: 40px;
+                    border: 3px solid rgba(255,255,255,0.1);
+                    border-top-color: white;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                }
+                @keyframes spin { 
+                    0% { transform: rotate(0deg); } 
+                    100% { transform: rotate(360deg); } 
+                }
+                /* =========================================================== */
+
                 .arts-gallery-page {
                     max-width: 1200px;
                     margin: 0 auto;
@@ -745,7 +824,6 @@ const ArtsGallery = () => {
                     gap: 16px;
                 }
 
-                /* FIXED: Removed mobile padding on Desktop allowing the image to expand fully */
                 @media (min-width: 1000px) {
                     .arts-lb-main-container {
                         display: grid;
@@ -825,7 +903,6 @@ const ArtsGallery = () => {
                         z-index: 60;
                     }
                     
-                    /* FIXED: Placed nav arrows back inside container bounds */
                     .arts-lb-nav.prev { left: 0px; }
                     .arts-lb-nav.next { right: 0px; }
 
@@ -849,7 +926,6 @@ const ArtsGallery = () => {
                         width: 100%;
                     }
                     
-                    /* FIXED: Desktop slide removes padding allowing image to maximize */
                     .arts-lb-slide {
                         padding: 0 !important; 
                     }
@@ -883,6 +959,7 @@ const ArtsGallery = () => {
                     padding: 100px 20px 220px; 
                     scroll-snap-align: center;
                     scroll-snap-stop: always;
+                    position: relative;
                 }
                 .arts-lb-slide img {
                     max-width: 100%;
@@ -893,7 +970,6 @@ const ArtsGallery = () => {
                     border-radius: 0;
                     user-select: none;
                     pointer-events: none;
-                    transition: transform 0.12s linear;
                 }
                 .arts-lb-slide img.is-dragging {
                     transition: none !important;
@@ -1150,18 +1226,6 @@ const ArtsGallery = () => {
                     font-size: 1.1rem;
                 }
 
-                .arts-img-shimmer {
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(90deg, var(--bg-panel) 25%, color-mix(in srgb, var(--text-main) 6%, var(--bg-panel)) 50%, var(--bg-panel) 75%);
-                    background-size: 800px 100%;
-                    animation: shimmerAnim 1.5s ease-in-out infinite;
-                }
-                @keyframes shimmerAnim {
-                    0% { background-position: -400px 0; }
-                    100% { background-position: 400px 0; }
-                }
-
                 .arts-show-more-wrapper {
                     display: flex;
                     justify-content: center;
@@ -1390,6 +1454,7 @@ const ArtsGallery = () => {
                                     onScroll={handleScroll}
                                     ref={containerRef}
                                 >
+                                    {/* USE THE NEW LIGHTBOX IMAGE COMPONENT */}
                                     {[-1, 0, 1].map(offset => {
                                         const i = lightboxGlobalIdx + offset;
                                         if (i < 0 || i >= flattenedImages.length) {
@@ -1400,19 +1465,15 @@ const ArtsGallery = () => {
                                         const isCurrent = offset === 0;
 
                                         return (
-                                            <div className="arts-lb-slide" key={img.id}>
-                                                <img
-                                                    ref={isCurrent ? activeImgRef : null}
-                                                    className={isDragging ? 'is-dragging' : ''}
-                                                    src={getOptimizedImage(img.url, isMobile ? 'medium' : 'full')}
-                                                    alt={img.caption || 'Artwork'}
-                                                    loading={isCurrent ? "eager" : "lazy"}
-                                                    decoding="async"
-                                                    draggable={false}
-                                                    onDragStart={preventImageDrag}
-                                                    style={{ transform: 'none' }}
-                                                />
-                                            </div>
+                                            <LightboxImage
+                                                key={img.id}
+                                                img={img}
+                                                isCurrent={isCurrent}
+                                                isMobile={isMobile}
+                                                isDragging={isDragging}
+                                                preventImageDrag={preventImageDrag}
+                                                activeImgRef={isCurrent ? activeImgRef : null}
+                                            />
                                         );
                                     })}
                                 </div>
@@ -1514,16 +1575,12 @@ const ArtsGallery = () => {
                             </div>
                         </div>
 
-                        <div className="arts-lb-filmstrip" onClick={(e) => e.stopPropagation()}>
-                            {allItems.map((item, idx) => {
+                        {/* FILMSTRIP: Now has filmstripRef to track scrolling */}
+                        <div className="arts-lb-filmstrip" ref={filmstripRef} onClick={(e) => e.stopPropagation()}>
+                            {allItems.map((item) => {
                                 const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === item.id);
                                 const currentPostId = flattenedImages[lightboxGlobalIdx]?.postId;
                                 const isActive = currentPostId === item.id;
-
-                                const currentItemIdxInAll = allItems.findIndex(it => it.id === currentPostId);
-                                const isNear = !isMobile || Math.abs(idx - currentItemIdxInAll) < 8;
-
-                                if (!isNear) return <div key={item.id} className="arts-lb-fs-spacer" />;
 
                                 return (
                                     <div
