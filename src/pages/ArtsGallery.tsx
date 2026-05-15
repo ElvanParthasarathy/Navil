@@ -151,7 +151,7 @@ const ArtsGallery = () => {
         window.history.pushState({ lightboxOpen: true }, '');
     }, [flattenedImages]);
 
-    // Handle back button natively
+    // Handle back button natively and background suspension
     useEffect(() => {
         const handlePopState = (e) => {
             if (e.state?.lightboxOpen !== true) {
@@ -159,8 +159,31 @@ const ArtsGallery = () => {
             }
         };
         window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
-    }, []);
+
+        // Suspension logic to save mobile RAM/CPU
+        const mainContent = document.querySelector('.arts-gallery-page');
+        if (lightboxGlobalIdx !== null) {
+            document.body.style.overflow = 'hidden';
+            if (mainContent) {
+                mainContent.style.visibility = 'hidden';
+                mainContent.setAttribute('aria-hidden', 'true');
+            }
+        } else {
+            document.body.style.overflow = '';
+            if (mainContent) {
+                mainContent.style.visibility = 'visible';
+                mainContent.removeAttribute('aria-hidden');
+            }
+        }
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+            document.body.style.overflow = '';
+            if (mainContent) {
+                mainContent.style.visibility = 'visible';
+            }
+        };
+    }, [lightboxGlobalIdx]);
 
     const goToNext = useCallback(() => {
         if (lightboxGlobalIdx === null) return;
@@ -198,6 +221,7 @@ const ArtsGallery = () => {
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
     const [showCaptionModal, setShowCaptionModal] = useState(false);
+    const touchStartTime = useRef(0);
     const lastPinchDistance = useRef(0);
     const pointerStart = useRef({ x: 0, y: 0 });
     const wheelSwipeX = useRef(0);
@@ -275,6 +299,7 @@ const ArtsGallery = () => {
         } else {
             touchStartX.current = e.touches[0].screenX; 
             touchStartY.current = e.touches[0].screenY;
+            touchStartTime.current = Date.now();
             setIsDragging(true);
             setDragX(0);
         }
@@ -308,14 +333,24 @@ const ArtsGallery = () => {
             touchStartY.current = currentY;
         } else {
             // Slide to next/prev
-            setDragX(currentX - touchStartX.current);
+            let deltaX = currentX - touchStartX.current;
+            
+            // Add resistance at edges
+            const isAtStart = lightboxGlobalIdx === 0;
+            const isAtEnd = lightboxGlobalIdx === flattenedImages.length - 1;
+            if ((isAtStart && deltaX > 0) || (isAtEnd && deltaX < 0)) {
+                deltaX *= 0.35; // Rubber band effect
+            }
+            
+            setDragX(deltaX);
         }
     };
 
-    const handleSwipeComplete = useCallback((dist) => {
-        const threshold = 100;
-        const wantsNext = dist < -threshold;
-        const wantsPrev = dist > threshold;
+    const handleSwipeComplete = useCallback((dist, velocity = 0) => {
+        const threshold = 50; // Lower threshold for more responsiveness
+        const isFlick = velocity > 0.4; // px/ms - native feel flick
+        const wantsNext = dist < -threshold || (dist < -20 && isFlick);
+        const wantsPrev = dist > threshold || (dist > 20 && isFlick);
 
         setIsDragging(false);
         setDragX(0);
@@ -331,8 +366,13 @@ const ArtsGallery = () => {
     }, [lightboxGlobalIdx, flattenedImages.length, goToNext, goToPrev]);
 
     const handleTouchEnd = (e) => {
+        if (!isDragging) return;
+        
+        const duration = Date.now() - touchStartTime.current;
+        const dist = e.changedTouches[0].screenX - touchStartX.current;
+        const velocity = Math.abs(dist) / duration;
+
         setIsDragging(false);
-        setDragX(0);
         lastPinchDistance.current = 0;
 
         if (scale <= 1.05) {
@@ -340,10 +380,12 @@ const ArtsGallery = () => {
             setOffset({ x: 0, y: 0 });
         }
 
-        if (scale > 1.01) return;
+        if (scale > 1.01) {
+            setDragX(0);
+            return;
+        }
 
-        const dist = e.changedTouches[0].screenX - touchStartX.current;
-        handleSwipeComplete(dist);
+        handleSwipeComplete(dist, velocity);
     };
 
     // Trackpad / Wheel zoom and panning
