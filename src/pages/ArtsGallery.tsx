@@ -525,14 +525,14 @@ const ArtsGallery = () => {
                     break-inside: avoid;
                     /* Modern performance optimization */
                     contain: paint layout;
+                    isolation: isolate;
                     backface-visibility: hidden;
                     transform: translateZ(0);
-                    will-change: transform;
                 }
                 @media (max-width: 768px) {
                     .arts-grid-item {
                         content-visibility: auto;
-                        contain-intrinsic-size: 1px 300px;
+                        contain-intrinsic-size: 1px 250px;
                     }
                 }
                 .arts-img-shimmer {
@@ -550,8 +550,10 @@ const ArtsGallery = () => {
                     object-fit: contain;
                     transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s;
                 }
-                .arts-grid-item:hover img {
-                    transform: scale(1.03);
+                @media (hover: hover) {
+                    .arts-grid-item:hover img {
+                        transform: scale(1.03);
+                    }
                 }
                 .arts-grid-overlay {
                     position: absolute;
@@ -563,8 +565,10 @@ const ArtsGallery = () => {
                     align-items: flex-end;
                     padding: 16px;
                 }
-                .arts-grid-item:hover .arts-grid-overlay {
-                    opacity: 1;
+                @media (hover: hover) {
+                    .arts-grid-item:hover .arts-grid-overlay {
+                        opacity: 1;
+                    }
                 }
                 .arts-grid-overlay-text {
                     color: white;
