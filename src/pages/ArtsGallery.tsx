@@ -6,6 +6,7 @@ import { getOptimizedImage } from '../lib/media';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
+import profileData from '../data/profile.json';
 
 const CATEGORY_META = {
     pencil: {
@@ -404,7 +405,7 @@ const ArtsGallery = () => {
     return (
         <div className="page-view fadeIn">
             <Helmet>
-                <title>{meta.titleEn} | Elvan Parthasarathy</title>
+                <title>{meta.titleEn} | {profileData.fullName}</title>
                 <meta name="description" content={meta.descEn} />
             </Helmet>
 
@@ -742,9 +743,10 @@ const ArtsGallery = () => {
                     }
                     .arts-lb-meta-header {
                         display: flex;
+                        flex-direction: column-reverse; /* Dots on top, Caption below */
                         align-items: flex-start;
-                        justify-content: space-between;
-                        gap: 20px;
+                        justify-content: flex-start;
+                        gap: 12px;
                         width: 100%;
                     }
                 }
@@ -753,7 +755,7 @@ const ArtsGallery = () => {
                     position: absolute;
                     inset: 0;
                     display: flex;
-                    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+                    transition: transform 0.45s cubic-bezier(0.2, 0, 0, 1);
                     will-change: transform;
                     width: 100%;
                 }
@@ -800,7 +802,12 @@ const ArtsGallery = () => {
                     cursor: pointer;
                     transition: all 0.2s;
                     z-index: 10;
-                    backdrop-filter: blur(10px);
+                    background: rgba(255,255,255,0.1);
+                }
+                @media (min-width: 769px) {
+                    .arts-lb-nav {
+                        backdrop-filter: blur(10px);
+                    }
                 }
                 .arts-lb-nav:hover { background: white; color: black; }
                 .arts-lb-nav.prev { left: 24px; }
@@ -816,14 +823,13 @@ const ArtsGallery = () => {
                     width: 32px;
                     height: 32px;
                     border-radius: 50%;
-                    background: rgba(255,255,255,0.1);
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-weight: 700;
-                    font-size: 0.8rem;
+                    overflow: hidden;
                     border: 1px solid rgba(255,255,255,0.1);
+                }
+                .arts-lb-avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
                 }
                 .arts-lb-author {
                     font-weight: 600;
@@ -878,11 +884,15 @@ const ArtsGallery = () => {
                     align-items: center;
                     gap: 6px;
                     padding: 8px 12px;
-                    background: rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.12); /* Slightly more opaque for mobile readability without blur */
                     border-radius: 100px;
-                    backdrop-filter: blur(10px);
                     border: 1px solid rgba(255,255,255,0.05);
                     z-index: 100;
+                }
+                @media (min-width: 769px) {
+                    .arts-lb-pagination {
+                        backdrop-filter: blur(10px);
+                    }
                 }
                 .arts-lb-pagination.floating {
                     display: inline-flex !important;
@@ -1265,8 +1275,10 @@ const ArtsGallery = () => {
                             </button>
                             
                             <div className="arts-lb-profile">
-                                <div className="arts-lb-avatar">E</div>
-                                <div className="arts-lb-author">Elvan Parthasarathy</div>
+                                <div className="arts-lb-avatar">
+                                    <img src={profileData.profilePic} alt={profileData.fullName} />
+                                </div>
+                                <div className="arts-lb-author">{profileData.fullName}</div>
                             </div>
                         </div>
 
@@ -1285,7 +1297,7 @@ const ArtsGallery = () => {
                             >
                                 <div 
                                     className={`arts-lb-img-container ${isDragging ? 'dragging' : ''}`}
-                                    style={{ transform: `translateX(calc(-${lightboxGlobalIdx * 100}% + ${dragX}px))` }}
+                                    style={{ transform: `translate3d(calc(-${lightboxGlobalIdx * 100}% + ${dragX}px), 0, 0)` }}
                                 >
                                     {flattenedImages.map((img, i) => {
                                         const isVisible = Math.abs(i - lightboxGlobalIdx) <= 1;
@@ -1326,8 +1338,10 @@ const ArtsGallery = () => {
                             <div className="arts-lb-sidebar">
                                 <div className="arts-lb-sidebar-header">
                                     <div className="arts-lb-profile">
-                                        <div className="arts-lb-avatar">E</div>
-                                        <div className="arts-lb-author">Elvan Parthasarathy</div>
+                                        <div className="arts-lb-avatar">
+                                            <img src={profileData.profilePic} alt={profileData.fullName} />
+                                        </div>
+                                        <div className="arts-lb-author">{profileData.fullName}</div>
                                     </div>
                                 </div>
                                 
