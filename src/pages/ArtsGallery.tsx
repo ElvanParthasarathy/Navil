@@ -1348,7 +1348,7 @@ const ArtsGallery = () => {
                                             <div className="arts-lb-slide" key={img.id}>
                                                 {isVisible && (
                                                     <img
-                                                        src={getOptimizedImage(img.url, 'full')}
+                                                        src={getOptimizedImage(img.url, window.innerWidth <= 768 ? 'medium' : 'full')}
                                                         alt={img.caption || 'Artwork'}
                                                         loading={i === lightboxGlobalIdx ? "eager" : "lazy"}
                                                         draggable={false}
