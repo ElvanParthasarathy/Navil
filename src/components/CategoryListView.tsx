@@ -477,6 +477,7 @@ const CategoryListView = () => {
                                                 className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
                                                 onClick={() => {
                                                     setCurrentPage(num as number);
+                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                                 }}
                                             >
                                                 {num}
@@ -494,6 +495,7 @@ const CategoryListView = () => {
                                 disabled={currentPage === 1}
                                 onClick={() => {
                                     setCurrentPage(prev => Math.max(prev - 1, 1));
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முந்தை
@@ -505,6 +507,7 @@ const CategoryListView = () => {
                                 disabled={currentPage === totalPages}
                                 onClick={() => {
                                     setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
                                 அடுத்து <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
