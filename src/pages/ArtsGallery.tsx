@@ -79,7 +79,7 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
             tabIndex={0}
             aria-label={caption || 'View artwork'}
             onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
-            style={{ minHeight: '200px' }}
+            style={{ minHeight: '100px' }}
         >
             {!isLoaded && <div className="arts-img-shimmer" />}
             <img
@@ -1299,11 +1299,9 @@ const ArtsGallery = () => {
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
                     .arts-grid { 
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 4px;
+                        columns: 2;
+                        column-gap: 4px;
                         padding: 0 4px;
-                        columns: unset;
                     }
                     .arts-grid-overlay { display: none; }
                     .arts-lb-nav { width: 36px; height: 36px; }
