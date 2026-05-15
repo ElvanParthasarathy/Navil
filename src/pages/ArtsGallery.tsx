@@ -68,38 +68,66 @@ const cleanCaption = (cap) => {
 };
 
 const ArtCard = React.memo(({ item, onOpen, onImageLoad, isLoading, caption }) => {
+    const [isInView, setIsInView] = React.useState(false);
+    const cardRef = React.useRef(null);
     const imgs = item.images || [item.image];
+
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsInView(true);
+                } else if (Math.abs(entry.boundingClientRect.top) > 2000) {
+                    // Unload if very far to save RAM
+                    setIsInView(false);
+                }
+            },
+            { rootMargin: '600px 0px' }
+        );
+
+        if (cardRef.current) observer.observe(cardRef.current);
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div
+            ref={cardRef}
             className="arts-grid-item"
             onClick={() => onOpen(item)}
             role="button"
             tabIndex={0}
             aria-label={caption || 'View artwork'}
             onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
+            style={{ minHeight: '200px' }}
         >
-            {isLoading && <div className="arts-img-shimmer" />}
-            <img
-                src={getOptimizedImage(item.image, 'thumb')}
-                alt={caption || 'Artwork'}
-                loading="lazy"
-                decoding="async"
-                onLoad={() => onImageLoad(item.id)}
-                draggable={false}
-                style={{ opacity: isLoading ? 0 : 1 }}
-            />
-            {imgs.length > 1 && (
-                <div className="arts-multi-badge">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <path d="M8 1v2M16 1v2M1 8h2M1 16h2" />
-                    </svg>
-                    {imgs.length}
-                </div>
+            {isInView ? (
+                <>
+                    {isLoading && <div className="arts-img-shimmer" />}
+                    <img
+                        src={getOptimizedImage(item.image, 'thumb')}
+                        alt={caption || 'Artwork'}
+                        loading="lazy"
+                        decoding="async"
+                        onLoad={() => onImageLoad(item.id)}
+                        draggable={false}
+                        style={{ opacity: isLoading ? 0 : 1 }}
+                    />
+                    {imgs.length > 1 && (
+                        <div className="arts-multi-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <path d="M8 1v2M16 1v2M1 8h2M1 16h2" />
+                            </svg>
+                            {imgs.length}
+                        </div>
+                    )}
+                    <div className="arts-grid-overlay">
+                        {caption && <div className="arts-grid-overlay-text">{caption}</div>}
+                    </div>
+                </>
+            ) : (
+                <div className="arts-img-shimmer" />
             )}
-            <div className="arts-grid-overlay">
-                {caption && <div className="arts-grid-overlay-text">{caption}</div>}
-            </div>
         </div>
     );
 });
@@ -486,6 +514,10 @@ const ArtsGallery = () => {
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 0 20px 100px;
+                    /* Hardware acceleration for butter-smooth scroll */
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    perspective: 1000px;
                 }
                 .arts-gallery-header {
                     display: flex;
@@ -514,6 +546,9 @@ const ArtsGallery = () => {
                 .arts-grid {
                     columns: 3;
                     column-gap: 8px;
+                    /* GPU isolation */
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
                 }
                 .arts-grid-item {
                     position: relative;
@@ -1242,7 +1277,11 @@ const ArtsGallery = () => {
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
                     .arts-grid { columns: 2; column-gap: 4px; padding: 0 4px; }
-                    .arts-grid-item { margin-bottom: 4px; border-radius: 4px; }
+                    .arts-grid-item { 
+                        margin-bottom: 4px; 
+                        border-radius: 4px;
+                        background: transparent; /* Reduce overdraw on mobile */
+                    }
                     .arts-grid-overlay { display: none; }
                     .arts-lb-nav { width: 36px; height: 36px; }
                     .arts-lb-nav.prev { left: 8px; }
@@ -1257,6 +1296,13 @@ const ArtsGallery = () => {
                     .arts-skeleton-item { margin-bottom: 4px; border-radius: 4px; }
                     .arts-show-more-wrapper { padding: 0 20px; }
                     .arts-show-more-btn { width: 100%; justify-content: center; }
+                    
+                    /* Google Photos Butter-Smooth Scroll Tweaks */
+                    .arts-gallery-page {
+                        text-rendering: optimizeSpeed;
+                        image-rendering: -webkit-optimize-contrast;
+                        -webkit-font-smoothing: antialiased;
+                    }
                 }
 
                 .back-pill {
