@@ -12,11 +12,9 @@ import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
 import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
-import { useScrollRestore } from '../lib/scrollRestoration';
 
 const Archive = () => {
     const { setPageTitle } = useOutletContext();
-    useScrollRestore(false); // Instant static rendering
 
     useEffect(() => {
         setPageTitle('காப்புகள்|Archive');
@@ -58,7 +56,6 @@ const Archive = () => {
     // --- CLEANUP: Reset body scroll when navigating away ---
     useEffect(() => {
         return () => {
-            document.body.style.overflow = 'auto';
         };
     }, []);
 
@@ -83,13 +80,10 @@ const Archive = () => {
                     setSelectedPost(foundPost);
                     setPostImageIndex(0);
                 }
-                document.body.style.overflow = 'hidden';
             }
         } else {
             setSelectedPost(null);
             setIsMobileFeed(false);
-            // Only reset overflow if no other modals are open
-            if (!storyId && !reelId && !listType) document.body.style.overflow = 'auto';
         }
 
         // Handle Reel
@@ -98,12 +92,9 @@ const Archive = () => {
             const foundReel = allContent.find(r => r.id === reelId);
             if (foundReel) {
                 setSelectedReel(foundReel);
-                document.body.style.overflow = 'hidden';
             }
         } else {
             setSelectedReel(null);
-            // Only reset overflow if no other modals are open
-            if (!postId && !storyId && !listType) document.body.style.overflow = 'auto';
         }
 
         // Handle Story
@@ -111,27 +102,20 @@ const Archive = () => {
             const foundHighlight = highlights.find(h => h.id === storyId);
             if (foundHighlight) {
                 setViewingHighlight(foundHighlight);
-                document.body.style.overflow = 'hidden';
             }
         } else {
             setViewingHighlight(null);
-            // Only reset overflow if no other modals are open
-            if (!postId && !reelId && !listType) document.body.style.overflow = 'auto';
         }
 
         // Handle List
         if (listType) {
             if (listType === 'followers') {
                 setUserListModal({ open: true, title: 'Followers', users: profileData.followersList || [] });
-                document.body.style.overflow = 'hidden';
             } else if (listType === 'following') {
                 setUserListModal({ open: true, title: 'Following', users: profileData.followingList || [] });
-                document.body.style.overflow = 'hidden';
             }
         } else {
             setUserListModal(prev => ({ ...prev, open: false }));
-            // Only reset overflow if no other modals are open
-            if (!postId && !storyId && !reelId) document.body.style.overflow = 'auto';
         }
     }, [searchParams, posts, reels, archivedPosts, highlights]);
 
@@ -1731,7 +1715,6 @@ const Archive = () => {
                                 }, { replace: true });
                                 setUserListModal(prev => ({ ...prev, open: false }));
                                 setUserSearchQuery('');
-                                document.body.style.overflow = 'auto';
                             }} />
                         </div>
                         <div className="user-list-search">

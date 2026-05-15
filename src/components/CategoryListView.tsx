@@ -2,11 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useOutletContext } from 'react-router-dom';
 import { FiCalendar } from 'react-icons/fi';
-import { db } from '../lib/firebaseClient';
-import { ref, onValue } from 'firebase/database';
+import { subscribe, getCached } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 import { Helmet } from 'react-helmet-async';
-import { useScrollRestore } from '../lib/scrollRestoration';
 
 const CATEGORY_META = {
     'blog': {
@@ -41,16 +39,14 @@ const CATEGORY_META = {
     }
 };
 
-const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മலயாளம்', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
-
-const globalPostsCache = {};
+const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മலயാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
 
 const CategoryListView = () => {
     const { category } = useParams();
     const meta = CATEGORY_META[category] || null;
 
-    const [posts, setPosts] = useState(() => globalPostsCache[category] || []);
-    const [loading, setLoading] = useState(() => !globalPostsCache[category]);
+    const [posts, setPosts] = useState(() => getCached(category) || []);
+    const [loading, setLoading] = useState(() => !getCached(category));
     const [searchTerm, setSearchTerm] = useState(() => sessionStorage.getItem(`elvan_${category}_search`) || '');
     const [activeGenre, setActiveGenre] = useState(() => sessionStorage.getItem(`elvan_${category}_genre`) || '');
     const [currentPage, setCurrentPage] = useState(() => {
@@ -72,8 +68,9 @@ const CategoryListView = () => {
 
     // Sync state when category changes
     useEffect(() => {
-        setPosts(globalPostsCache[category] || []);
-        setLoading(!globalPostsCache[category]);
+        const cached = getCached(category);
+        setPosts(cached || []);
+        setLoading(!cached);
         setSearchTerm(sessionStorage.getItem(`elvan_${category}_search`) || '');
         setActiveGenre(sessionStorage.getItem(`elvan_${category}_genre`) || '');
         const savedPage = sessionStorage.getItem(`elvan_${category}_page`);
@@ -82,50 +79,14 @@ const CategoryListView = () => {
 
     const ITEMS_PER_PAGE = 5;
 
-    useScrollRestore(loading);
-
+    // Subscribe to the shared Firebase cache — no redundant listeners
     useEffect(() => {
         if (!meta) return;
-        if (!globalPostsCache[category]) {
-            setLoading(true);
-        }
-        const catRef = ref(db, category);
-        const unsubscribe = onValue(catRef, (snapshot) => {
-            if (snapshot.exists()) {
-                const dataObj = snapshot.val();
-                const dataArray = Object.entries(dataObj).map(([slug, val]) => {
-                    const item = { ...val, id: slug };
-                    if (item.variants) {
-                        if (!Array.isArray(item.variants)) item.variants = Object.values(item.variants);
-                        item.variants.forEach(v => {
-                            if (v.transliterations?._empty) delete v.transliterations._empty;
-                            if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
-                            if (!v.transliterations) v.transliterations = {};
-                            if (!v.titleTransliterations) v.titleTransliterations = {};
-                        });
-                    }
-                    return item;
-                });
-                
-                dataArray.sort((a, b) => {
-                    const isAPinned = a.is_pinned || a.pin_type === 'permanent';
-                    const isBPinned = b.is_pinned || b.pin_type === 'permanent';
-                    if (isAPinned && !isBPinned) return -1;
-                    if (!isAPinned && isBPinned) return 1;
-                    if (a.display_order !== b.display_order) return (a.display_order || 0) - (b.display_order || 0);
-                    const da = new Date(a.publish_date || a.date || 0);
-                    const dbDate = new Date(b.publish_date || b.date || 0);
-                    return dbDate - da;
-                });
-                globalPostsCache[category] = dataArray;
-                setPosts(dataArray);
-            } else {
-                globalPostsCache[category] = [];
-                setPosts([]);
-            }
-            setLoading(false);
-        }, (error) => {
-            console.error("Firebase fetch error:", error);
+        const cached = getCached(category);
+        if (!cached) setLoading(true);
+
+        const unsubscribe = subscribe(category, (data) => {
+            setPosts(data || []);
             setLoading(false);
         });
 
@@ -137,10 +98,6 @@ const CategoryListView = () => {
     useEffect(() => {
         if (meta?.title) setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
     }, [setPageTitle, meta?.title, meta?.subtitle]);
-
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [currentPage]);
 
     // Reset pagination when search or filters change
     useEffect(() => {
@@ -516,7 +473,6 @@ const CategoryListView = () => {
                                                 className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
                                                 onClick={() => {
                                                     setCurrentPage(num as number);
-                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                                 }}
                                             >
                                                 {num}
@@ -534,7 +490,6 @@ const CategoryListView = () => {
                                 disabled={currentPage === 1}
                                 onClick={() => {
                                     setCurrentPage(prev => Math.max(prev - 1, 1));
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முந்தை
@@ -546,7 +501,6 @@ const CategoryListView = () => {
                                 disabled={currentPage === totalPages}
                                 onClick={() => {
                                     setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
                                 அடுத்து <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>

@@ -17,9 +17,6 @@ const VocoderView = () => {
         setPageTitle(activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story');
     }, [activeTab, setPageTitle]);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement && stageDomRef.current) {

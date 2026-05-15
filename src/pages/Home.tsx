@@ -4,10 +4,7 @@ import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, Fi
 import profileData from '../data/profile.json';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
-import { useScrollRestore } from '../lib/scrollRestoration';
-
 const Home = () => {
-    useScrollRestore(false); // Instant static page restore
     return (
         <>
             <Helmet>

@@ -3,24 +3,15 @@
    ========================================= */
 
 .auth-container {
-    position: fixed;
-    inset: 0;
+    position: relative;
     z-index: 10010;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     background-color: var(--bg-app);
-    overflow-y: auto;
-    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.auth-container::-webkit-scrollbar {
-    display: none;
 }
 
 .auth-content {

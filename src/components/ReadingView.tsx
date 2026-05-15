@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
-import { db } from '../lib/firebaseClient';
-import { ref, get, onValue } from 'firebase/database';
+import { subscribe, getCachedRaw } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 
 const CATEGORY_META = {
@@ -38,13 +37,39 @@ const textToHtml = (raw) => {
     return html;
 };
 
+/** Clean up a single post item from raw Firebase data */
+const cleanItem = (data) => {
+    if (data.variants) {
+        if (!Array.isArray(data.variants)) data.variants = Object.values(data.variants);
+        data.variants.forEach(v => {
+            if (v.transliterations?._empty) delete v.transliterations._empty;
+            if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+            if (!v.transliterations) v.transliterations = {};
+            if (!v.titleTransliterations) v.titleTransliterations = {};
+        });
+    }
+    return data;
+};
+
 const ReadingView = () => {
     const { category, slug } = useParams();
     const navigate = useNavigate();
     const meta = CATEGORY_META[category] || null;
 
-    const [post, setPost] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [post, setPost] = useState(() => {
+        // Try to resolve from cache immediately — no loading spinner needed
+        const raw = getCachedRaw(category);
+        if (raw && raw[slug]) return { ...cleanItem({ ...raw[slug] }), id: slug };
+        if (raw) {
+            const found = Object.entries(raw).find(([key, val]) => val.id === slug || key === slug);
+            if (found) return { ...cleanItem({ ...found[1] }), id: found[0] };
+        }
+        return null;
+    });
+    const [loading, setLoading] = useState(() => {
+        const raw = getCachedRaw(category);
+        return !raw;
+    });
     const [seriesParts, setSeriesParts] = useState([]);
     const [variantTranslStates, setVariantTranslStates] = useState({}); // { "postId-vIndex": activeLang | null }
 
@@ -81,71 +106,41 @@ const ReadingView = () => {
         }));
     };
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [slug]);
 
+    // Subscribe to the shared cache — reuses existing listener, no duplicate DB calls
     useEffect(() => {
         if (!meta) return;
-        const fetchPost = () => {
-            setLoading(true);
-            const cleanItem = (data) => {
-                if (data.variants) {
-                    if (!Array.isArray(data.variants)) data.variants = Object.values(data.variants);
-                    data.variants.forEach(v => {
-                        if (v.transliterations?._empty) delete v.transliterations._empty;
-                        if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
-                        if (!v.transliterations) v.transliterations = {};
-                        if (!v.titleTransliterations) v.titleTransliterations = {};
-                    });
+
+        const unsubscribe = subscribe(category, (data) => {
+            if (!data) return;
+            // The cache gives us a sorted array — find our post by slug/id from the raw map
+            const raw = getCachedRaw(category);
+            if (!raw) return;
+
+            let foundPost = null;
+            if (raw[slug]) {
+                foundPost = { ...cleanItem({ ...raw[slug] }), id: slug };
+            } else {
+                const found = Object.entries(raw).find(([key, val]) => val.id === slug || key === slug);
+                if (found) foundPost = { ...cleanItem({ ...found[1] }), id: found[0] };
+            }
+
+            if (foundPost) {
+                setPost(foundPost);
+                // Build series parts for stories
+                if (category === 'stories' && foundPost.series_name) {
+                    const siblings = Object.entries(raw)
+                        .map(([sKey, sVal]) => ({ ...cleanItem({ ...sVal }), id: sKey, slug: sKey }))
+                        .filter(p => p.series_name === foundPost.series_name)
+                        .sort((a, b) => (a.series_part || 0) - (b.series_part || 0));
+                    setSeriesParts(siblings);
                 }
-                return data;
-            };
+            } else {
+                setPost(null);
+            }
+            setLoading(false);
+        });
 
-            const catRef = ref(db, category);
-            const unsubscribe = onValue(catRef, (snapshot) => {
-                try {
-                    if (snapshot.exists()) {
-                        const allPosts = snapshot.val();
-                        let foundPost = null;
-                        
-                        if (allPosts[slug]) {
-                            foundPost = { ...cleanItem(allPosts[slug]), id: slug };
-                        } else {
-                            const found = Object.entries(allPosts).find(([key, val]) => val.id === slug || key === slug);
-                            if (found) {
-                                foundPost = { ...cleanItem(found[1]), id: found[0] };
-                            }
-                        }
-
-                        if (foundPost) {
-                            setPost(foundPost);
-
-                            if (category === 'stories' && foundPost.series_name) {
-                                const siblings = Object.entries(allPosts)
-                                    .map(([sKey, sVal]) => ({ ...cleanItem(sVal), id: sKey, slug: sKey }))
-                                    .filter(p => p.series_name === foundPost.series_name)
-                                    .sort((a, b) => (a.series_part || 0) - (b.series_part || 0));
-                                setSeriesParts(siblings);
-                            }
-                        } else {
-                            setPost(null);
-                        }
-                    } else {
-                        setPost(null);
-                    }
-                } catch (error) {
-                    console.error("Firebase fetch error:", error);
-                }
-                setLoading(false);
-            }, (error) => {
-                console.error("Firebase listen error:", error);
-                setLoading(false);
-            });
-
-            return unsubscribe;
-        };
-        const unsubscribe = fetchPost();
         return () => unsubscribe();
     }, [category, slug, meta]);
 

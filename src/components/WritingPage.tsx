@@ -1,8 +1,7 @@
 // @ts-nocheck
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { db } from '../lib/firebaseClient';
-import { ref, get, onValue } from 'firebase/database';
+import { subscribe, getCached } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 import { Helmet } from 'react-helmet-async';
 
@@ -147,8 +146,17 @@ const WritingPage = ({
     themeLabels = DEFAULT_THEME_LABELS,
     classificationLabels,
 }) => {
-    const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState(() => {
+        const cached = getCached(tableName);
+        return cached ? cached.map(p => ({
+            ...p,
+            isPinned: p.is_pinned,
+            pinExpiresAt: p.pin_expires_at,
+            pinType: p.pin_type || 'auto',
+            variants: p.variants || [],
+        })) : [];
+    });
+    const [isLoading, setIsLoading] = useState(() => !getCached(tableName));
     const [currentPage, setCurrentPage] = useState(1);
     const [activeGenre, setActiveGenre] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
@@ -162,48 +170,19 @@ const WritingPage = ({
         setPageTitle(`${pageTitleTamil || pageTitle}|${pageTitle}`);
     }, [setPageTitle, pageTitle, pageTitleTamil]);
 
+    // Subscribe to the shared Firebase cache
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [currentPage]);
-
-    useEffect(() => {
-        const dataRef = ref(db, tableName);
-        const unsubscribe = onValue(dataRef, (snapshot) => {
-            try {
-                if (!snapshot.exists()) {
-                    setData([]);
-                    setIsLoading(false);
-                    return;
-                }
-                const dataObj = snapshot.val();
-                const rows = Object.entries(dataObj).map(([key, val]) => {
-                    const item = { ...val, id: key };
-                    // Clean up _empty placeholders and normalize variants
-                    if (item.variants) {
-                        if (!Array.isArray(item.variants)) item.variants = Object.values(item.variants);
-                        item.variants.forEach(v => {
-                            if (v.transliterations?._empty) delete v.transliterations._empty;
-                            if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
-                            if (!v.transliterations) v.transliterations = {};
-                            if (!v.titleTransliterations) v.titleTransliterations = {};
-                        });
-                    }
-                    return item;
-                });
-
-                const mapped = rows.map(p => ({
-                    ...p,
-                    isPinned: p.is_pinned,
-                    pinExpiresAt: p.pin_expires_at,
-                    pinType: p.pin_type || 'auto',
-                    variants: p.variants || [],
-                }));
-                setData(mapped);
-            } catch (err) {
-                console.error("Error processing data:", err);
-            } finally {
-                setIsLoading(false);
-            }
+        const unsubscribe = subscribe(tableName, (rows) => {
+            if (!rows) { setData([]); setIsLoading(false); return; }
+            const mapped = rows.map(p => ({
+                ...p,
+                isPinned: p.is_pinned,
+                pinExpiresAt: p.pin_expires_at,
+                pinType: p.pin_type || 'auto',
+                variants: p.variants || [],
+            }));
+            setData(mapped);
+            setIsLoading(false);
         });
         return () => unsubscribe();
     }, [tableName]);
@@ -1514,7 +1493,6 @@ const WritingPage = ({
                                                     className={`page-number-btn ${currentPage === num ? 'active' : ''}`}
                                                     onClick={() => {
                                                         setCurrentPage(num as number);
-                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
                                                     }}
                                                 >
                                                     {num}
@@ -1532,7 +1510,6 @@ const WritingPage = ({
                                     disabled={currentPage === 1}
                                     onClick={() => {
                                         setCurrentPage(prev => Math.max(prev - 1, 1));
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
                                     }}
                                 >
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> முந்தை
@@ -1544,7 +1521,6 @@ const WritingPage = ({
                                     disabled={currentPage === totalPages}
                                     onClick={() => {
                                         setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
                                     }}
                                 >
                                     அடுத்து <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>

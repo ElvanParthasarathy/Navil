@@ -284,44 +284,9 @@ const Admin = () => {
         localStorage.setItem('autoThumbnails', autoThumbnails);
     }, [autoThumbnails]);
 
-    // Internal sub-view scroll restoration state
-    const savedScrollsRef = useRef({});
     const prevStateRef = useRef({ activeTab, editingId, isProfileEditing });
 
     useEffect(() => {
-        const prev = prevStateRef.current;
-
-        // 1. Save current scroll before entering details/editors
-        if (!prev.editingId && editingId) {
-            savedScrollsRef.current[`${activeTab}_list`] = window.scrollY;
-        }
-        if (!prev.isProfileEditing && isProfileEditing) {
-            savedScrollsRef.current[`profile_view`] = window.scrollY;
-        }
-
-        // 2. Save/Restore scroll positions when toggling root tabs
-        if (prev.activeTab !== activeTab) {
-            savedScrollsRef.current[prev.activeTab] = window.scrollY;
-            const targetScroll = savedScrollsRef.current[activeTab] || 0;
-            requestAnimationFrame(() => {
-                window.scrollTo(0, targetScroll);
-            });
-        }
-
-        // 3. Restore scroll when backing out of an editor to the list
-        if (prev.editingId && !editingId) {
-            const targetScroll = savedScrollsRef.current[`${activeTab}_list`] || 0;
-            setTimeout(() => {
-                window.scrollTo(0, targetScroll);
-            }, 25);
-        }
-        if (prev.isProfileEditing && !isProfileEditing) {
-            const targetScroll = savedScrollsRef.current[`profile_view`] || 0;
-            setTimeout(() => {
-                window.scrollTo(0, targetScroll);
-            }, 25);
-        }
-
         prevStateRef.current = { activeTab, editingId, isProfileEditing };
     }, [activeTab, editingId, isProfileEditing]);
 
@@ -990,7 +955,7 @@ const Admin = () => {
             )}
 
             {/* Content Area — fills remaining space */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden', position: 'relative' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, position: 'relative' }}>
 
                 {/* Mobile Header (Hamburger) */}
                 <div className="admin-mobile-header">

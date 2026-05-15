@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
-import { useScrollRestore } from '../lib/scrollRestoration';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 
@@ -139,7 +138,6 @@ const CATEGORIES = {
 
 const Arts = () => {
     const { setPageTitle } = useOutletContext();
-    useScrollRestore(false);
 
     const [categoryCounts, setCategoryCounts] = useState({});
 

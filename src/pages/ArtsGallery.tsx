@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link, useOutletContext } from 'react-router-dom';
 import { FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
-import { useScrollRestore } from '../lib/scrollRestoration';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 
@@ -64,7 +63,6 @@ const ArtsGallery = () => {
     const { category } = useParams();
     const meta = CATEGORY_META[category];
     const { setPageTitle } = useOutletContext();
-    useScrollRestore(false);
 
     // Data state
     const [allItems, setAllItems] = useState([]);
@@ -109,15 +107,7 @@ const ArtsGallery = () => {
     const hasMore = visibleCount < allItems.length;
     const remainingCount = allItems.length - visibleCount;
 
-    // Lock body scroll when lightbox is open
-    useEffect(() => {
-        if (lightboxItem) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => { document.body.style.overflow = ''; };
-    }, [lightboxItem]);
+    // Lock body scroll when lightbox is open (Removed per user request)
 
     // Keyboard nav for lightbox
     useEffect(() => {
