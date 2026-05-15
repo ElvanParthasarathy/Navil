@@ -1,61 +1,12 @@
-/* Mukta Malar — Served locally for instant Tamil typography */
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 200;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-ExtraLight.ttf') format('truetype');
-}
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-Light.ttf') format('truetype');
-}
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-Regular.ttf') format('truetype');
-}
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-Medium.ttf') format('truetype');
-}
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-SemiBold.ttf') format('truetype');
-}
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-Bold.ttf') format('truetype');
-}
-@font-face {
-  font-family: "Mukta Malar";
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('/fonts/MuktaMalar-ExtraBold.ttf') format('truetype');
-}
+@import url('https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@200;300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@300;400;500;600;700;800&display=swap');
 
-/* Google Sans — Served locally for instant loading and offline support */
+/* Google Sans — loaded manually with unicode-range excluding Tamil (U+0B80-0BFF) */
 @font-face {
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/GoogleSans-Regular.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrwEIKli.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -63,7 +14,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/fonts/GoogleSans-Medium.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrw2IKli.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -71,7 +22,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/fonts/GoogleSans-SemiBold.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzaJ6li.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -79,7 +30,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/fonts/GoogleSans-Bold.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzjJ6li.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -87,7 +38,7 @@
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/GoogleSans-Italic.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY0Ehpyw.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -95,7 +46,7 @@
   font-style: italic;
   font-weight: 500;
   font-display: swap;
-  src: url('/fonts/GoogleSans-MediumItalic.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY3Mhpyw.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -103,7 +54,7 @@
   font-style: italic;
   font-weight: 600;
   font-display: swap;
-  src: url('/fonts/GoogleSans-SemiBoldItalic.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY58mpyw.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -111,7 +62,7 @@
   font-style: italic;
   font-weight: 700;
   font-display: swap;
-  src: url('/fonts/GoogleSans-BoldItalic.ttf') format('truetype');
+  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY6Ympyw.ttf) format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 
