@@ -99,10 +99,8 @@ const CategoryListView = () => {
         if (meta?.title) setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
     }, [setPageTitle, meta?.title, meta?.subtitle]);
 
-    // Reset pagination when search or filters change
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, activeGenre]);
+    // We no longer reset pagination automatically in a useEffect to avoid mount-time resets.
+    // Instead, we reset explicitly in the onChange handlers below.
 
     // Compute all unique genres/tags for the filter bar
     const allGenres = React.useMemo(() => {
@@ -195,7 +193,10 @@ const CategoryListView = () => {
                         type="text"
                         placeholder="தேடுக..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
                         aria-label={`Search ${meta.title}`}
                     />
                 </div>
@@ -205,7 +206,10 @@ const CategoryListView = () => {
                     <select
                         className="theme-dropdown"
                         value={activeGenre}
-                        onChange={(e) => setActiveGenre(e.target.value)}
+                        onChange={(e) => {
+                            setActiveGenre(e.target.value);
+                            setCurrentPage(1);
+                        }}
                     >
                         <option value="">வகைகள்</option>
                         {allGenres.map(g => (

@@ -67,7 +67,10 @@ const ArtsGallery = () => {
     // Data state
     const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    const [visibleCount, setVisibleCount] = useState(() => {
+        const saved = sessionStorage.getItem(`elvan_arts_${category}_visible`);
+        return saved ? parseInt(saved, 10) : ITEMS_PER_PAGE;
+    });
 
     // Lightbox state
     const [lightboxItem, setLightboxItem] = useState(null);
@@ -78,11 +81,16 @@ const ArtsGallery = () => {
         if (meta) setPageTitle(`${meta.titleTa}|${meta.titleEn}`);
     }, [setPageTitle, meta]);
 
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_arts_${category}_visible`, visibleCount.toString());
+    }, [visibleCount, category]);
+
     // Fetch from Firebase
     useEffect(() => {
         if (!category) return;
         setLoading(true);
-        setVisibleCount(ITEMS_PER_PAGE);
+        // We rely on the useState initializer and category-sync logic for visibleCount
+        // setVisibleCount(ITEMS_PER_PAGE); // Removed to allow persistence
         const artsRef = ref(db, 'arts');
         const unsubscribe = onValue(artsRef, (snapshot) => {
             if (snapshot.exists()) {

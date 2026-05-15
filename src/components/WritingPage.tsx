@@ -157,9 +157,12 @@ const WritingPage = ({
         })) : [];
     });
     const [isLoading, setIsLoading] = useState(() => !getCached(tableName));
-    const [currentPage, setCurrentPage] = useState(1);
-    const [activeGenre, setActiveGenre] = useState('All');
-    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(() => {
+        const saved = sessionStorage.getItem(`elvan_${tableName}_page`);
+        return saved ? parseInt(saved, 10) : 1;
+    });
+    const [activeGenre, setActiveGenre] = useState(() => sessionStorage.getItem(`elvan_${tableName}_genre`) || 'All');
+    const [searchTerm, setSearchTerm] = useState(() => sessionStorage.getItem(`elvan_${tableName}_search`) || '');
     const [variantTranslStates, setVariantTranslStates] = useState({});
 
     const ITEMS_PER_PAGE = 5;
@@ -169,6 +172,18 @@ const WritingPage = ({
     useEffect(() => {
         setPageTitle(`${pageTitleTamil || pageTitle}|${pageTitle}`);
     }, [setPageTitle, pageTitle, pageTitleTamil]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_${tableName}_search`, searchTerm);
+    }, [searchTerm, tableName]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_${tableName}_genre`, activeGenre);
+    }, [activeGenre, tableName]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`elvan_${tableName}_page`, currentPage.toString());
+    }, [currentPage, tableName]);
 
     // Subscribe to the shared Firebase cache
     useEffect(() => {
