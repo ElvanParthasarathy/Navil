@@ -67,6 +67,43 @@ const cleanCaption = (cap) => {
     return cap.replace(/#\S+/g, '').replace(/\n{2,}/g, '\n').trim();
 };
 
+const ArtCard = React.memo(({ item, onOpen, onImageLoad, isLoading, caption }) => {
+    const imgs = item.images || [item.image];
+    return (
+        <div
+            className="arts-grid-item"
+            onClick={() => onOpen(item)}
+            role="button"
+            tabIndex={0}
+            aria-label={caption || 'View artwork'}
+            onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
+        >
+            {isLoading && <div className="arts-img-shimmer" />}
+            <img
+                src={getOptimizedImage(item.image, 'thumb')}
+                alt={caption || 'Artwork'}
+                loading="lazy"
+                decoding="async"
+                onLoad={() => onImageLoad(item.id)}
+                draggable={false}
+                style={{ opacity: isLoading ? 0 : 1 }}
+            />
+            {imgs.length > 1 && (
+                <div className="arts-multi-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M8 1v2M16 1v2M1 8h2M1 16h2" />
+                    </svg>
+                    {imgs.length}
+                </div>
+            )}
+            <div className="arts-grid-overlay">
+                {caption && <div className="arts-grid-overlay-text">{caption}</div>}
+            </div>
+        </div>
+    );
+});
+
 const ArtsGallery = () => {
     const { category } = useParams();
     const meta = CATEGORY_META[category];
@@ -347,46 +384,39 @@ const ArtsGallery = () => {
     };
 
     const handleSwipeComplete = useCallback((dist, velocity = 0) => {
-        const threshold = 50; // Lower threshold for more responsiveness
-        const isFlick = velocity > 0.4; // px/ms - native feel flick
-        const wantsNext = dist < -threshold || (dist < -20 && isFlick);
-        const wantsPrev = dist > threshold || (dist > 20 && isFlick);
-
-        setIsDragging(false);
-        setDragX(0);
-        wheelSwipeX.current = 0;
-
-        if (wantsNext && lightboxGlobalIdx < flattenedImages.length - 1) {
-            wheelSwipeIgnoreUntil.current = Date.now() + 300;
-            goToNext();
-        } else if (wantsPrev && lightboxGlobalIdx > 0) {
-            wheelSwipeIgnoreUntil.current = Date.now() + 300;
-            goToPrev();
-        }
-    }, [lightboxGlobalIdx, flattenedImages.length, goToNext, goToPrev]);
+        // Legacy swipe logic removed in favor of native scroll-snap
+    }, []);
 
     const handleTouchEnd = (e) => {
-        if (!isDragging) return;
-        
-        const duration = Date.now() - touchStartTime.current;
-        const dist = e.changedTouches[0].screenX - touchStartX.current;
-        const velocity = Math.abs(dist) / duration;
-
-        setIsDragging(false);
         lastPinchDistance.current = 0;
-
         if (scale <= 1.05) {
             setScale(1);
             setOffset({ x: 0, y: 0 });
         }
-
-        if (scale > 1.01) {
-            setDragX(0);
-            return;
-        }
-
-        handleSwipeComplete(dist, velocity);
     };
+
+    const containerRef = useRef(null);
+
+    // Synchronize native scroll with lightboxGlobalIdx
+    const handleScroll = useCallback((e) => {
+        if (scale > 1.01) return;
+        const container = e.currentTarget;
+        const index = Math.round(container.scrollLeft / container.clientWidth);
+        if (index !== lightboxGlobalIdx && !isDragging) {
+            setLightboxGlobalIdx(index);
+        }
+    }, [lightboxGlobalIdx, scale, isDragging]);
+
+    // Handle external index changes (dots, thumbs)
+    useEffect(() => {
+        if (lightboxGlobalIdx !== null && containerRef.current) {
+            const container = containerRef.current;
+            const targetScroll = lightboxGlobalIdx * container.clientWidth;
+            if (Math.abs(container.scrollLeft - targetScroll) > 10) {
+                container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            }
+        }
+    }, [lightboxGlobalIdx]);
 
     // Trackpad / Wheel zoom and panning
     const handleWheel = useCallback((e) => {
@@ -495,12 +525,23 @@ const ArtsGallery = () => {
                     break-inside: avoid;
                     /* Modern performance optimization */
                     contain: paint layout;
+                    backface-visibility: hidden;
+                    transform: translateZ(0);
+                    will-change: transform;
                 }
                 @media (max-width: 768px) {
                     .arts-grid-item {
                         content-visibility: auto;
                         contain-intrinsic-size: 1px 300px;
                     }
+                }
+                .arts-img-shimmer {
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(90deg, var(--bg-panel) 25%, color-mix(in srgb, var(--text-main) 6%, var(--bg-panel)) 50%, var(--bg-panel) 75%);
+                    background-size: 800px 100%;
+                    animation: shimmerAnim 1.5s ease-in-out infinite;
+                    z-index: 1;
                 }
                 .arts-grid-item img {
                     width: 100%;
@@ -805,12 +846,19 @@ const ArtsGallery = () => {
                     position: absolute;
                     inset: 0;
                     display: flex;
-                    transition: transform 0.45s cubic-bezier(0.2, 0, 0, 1);
-                    will-change: transform;
                     width: 100%;
+                    overflow-x: auto;
+                    scroll-snap-type: x mandatory;
+                    scroll-behavior: auto;
+                    -webkit-overflow-scrolling: touch;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
                 }
-                .arts-lb-img-container.dragging {
-                    transition: none;
+                .arts-lb-img-container::-webkit-scrollbar {
+                    display: none;
+                }
+                .arts-lb-img-container.zoomed {
+                    overflow-x: hidden;
                 }
                 .arts-lb-slide {
                     flex: 0 0 100%;
@@ -820,6 +868,8 @@ const ArtsGallery = () => {
                     align-items: center;
                     justify-content: center;
                     padding: 100px 20px 220px; /* Space for fixed header and footer on mobile */
+                    scroll-snap-align: center;
+                    scroll-snap-stop: always;
                 }
                 @media (min-width: 1000px) {
                     .arts-lb-slide {
@@ -1255,46 +1305,16 @@ const ArtsGallery = () => {
                 ) : (
                     <>
                         <div className="arts-grid animate-entry">
-                            {visibleItems.map((item) => {
-                                const imgs = item.images || [item.image];
-                                const isLoading = imageLoading[item.id] !== false;
-                                const caption = cleanCaption(item.caption);
-
-                                return (
-                                    <div
-                                        key={item.id}
-                                        className="arts-grid-item"
-                                        onClick={() => openLightbox(item)}
-                                        role="button"
-                                        tabIndex={0}
-                                        aria-label={caption || 'View artwork'}
-                                        onKeyDown={(e) => e.key === 'Enter' && openLightbox(item)}
-                                    >
-                                        {isLoading && <div className="arts-img-shimmer" />}
-                                        <img
-                                            src={getOptimizedImage(item.image, 'thumb')}
-                                            alt={caption || 'Artwork'}
-                                            loading="lazy"
-                                            onLoad={() => handleImageLoad(item.id)}
-                                            draggable={false}
-                                            onDragStart={preventImageDrag}
-                                            style={{ opacity: isLoading ? 0 : 1 }}
-                                        />
-                                        {imgs.length > 1 && (
-                                            <div className="arts-multi-badge">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                                                    <path d="M8 1v2M16 1v2M1 8h2M1 16h2" />
-                                                </svg>
-                                                {imgs.length}
-                                            </div>
-                                        )}
-                                        <div className="arts-grid-overlay">
-                                            {caption && <div className="arts-grid-overlay-text">{caption}</div>}
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                            {visibleItems.map((item) => (
+                                <ArtCard
+                                    key={item.id}
+                                    item={item}
+                                    onOpen={openLightbox}
+                                    onImageLoad={handleImageLoad}
+                                    isLoading={imageLoading[item.id] !== false}
+                                    caption={cleanCaption(item.caption)}
+                                />
+                            ))}
                         </div>
 
                         {hasMore && (
@@ -1346,8 +1366,9 @@ const ArtsGallery = () => {
                                 style={{ touchAction: scale > 1.01 ? 'none' : 'pan-y' }}
                             >
                                 <div 
-                                    className={`arts-lb-img-container ${isDragging ? 'dragging' : ''}`}
-                                    style={{ transform: `translate3d(calc(-${lightboxGlobalIdx * 100}% + ${dragX}px), 0, 0)` }}
+                                    className={`arts-lb-img-container ${scale > 1.01 ? 'zoomed' : ''}`}
+                                    onScroll={handleScroll}
+                                    ref={containerRef}
                                 >
                                     {flattenedImages.map((img, i) => {
                                         const isVisible = Math.abs(i - lightboxGlobalIdx) <= 1;
