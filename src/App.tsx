@@ -327,18 +327,7 @@ const Layout = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="popup-theme-section" style={{ marginTop: '24px' }} onClick={(e) => e.stopPropagation()}>
-                                    <span className="popup-theme-label">Preferences</span>
-                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', cursor: 'pointer' }}>
-                                        <span style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: 500 }}>Auto Thumbnails</span>
-                                        <input 
-                                            type="checkbox" 
-                                            checked={autoThumbnails} 
-                                            onChange={(e) => setAutoThumbnails(e.target.checked)} 
-                                            style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--link-color)' }}
-                                        />
-                                    </label>
-                                </div>
+
                             </div>
                         )}
                     </div>

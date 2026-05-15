@@ -1,12 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@200;300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@300;400;500;600;700;800&display=swap');
+/* Mukta Malar — Served locally for instant Tamil typography */
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-ExtraLight.ttf') format('truetype');
+}
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: "Mukta Malar";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/MuktaMalar-ExtraBold.ttf') format('truetype');
+}
 
-/* Google Sans — loaded manually with unicode-range excluding Tamil (U+0B80-0BFF) */
+/* Google Sans — Served locally for instant loading and offline support */
 @font-face {
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrwEIKli.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-Regular.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -14,7 +63,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrw2IKli.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-Medium.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -22,7 +71,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzaJ6li.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-SemiBold.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -30,7 +79,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJfC6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzjJ6li.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-Bold.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -38,7 +87,7 @@
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY0Ehpyw.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-Italic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -46,7 +95,7 @@
   font-style: italic;
   font-weight: 500;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY3Mhpyw.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-MediumItalic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -54,7 +103,7 @@
   font-style: italic;
   font-weight: 600;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY58mpyw.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-SemiBoldItalic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 @font-face {
@@ -62,7 +111,7 @@
   font-style: italic;
   font-weight: 700;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua9rENHsxJlGDuGo1OIlL3L2JB874GPhFI9_IqmuRqGpjeaLi42kO8QvnQOs5beU3yksanMY6Ympyw.ttf) format('truetype');
+  src: url('/fonts/GoogleSans-BoldItalic.ttf') format('truetype');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
 
@@ -107,7 +156,7 @@ body {
   --nav-hover: rgba(0, 0, 0, 0.08);
   --accent-color: #000;
   --accent-text: #fff;
-  --link-color: #088370;
+  --link-color: var(--text-main);
 }
 
 [data-theme='dark'] {
@@ -122,7 +171,7 @@ body {
   --nav-hover: rgba(255, 255, 255, 0.1);
   --accent-color: #fff;
   --accent-text: #000;
-  --link-color: #0aa189;
+  --link-color: var(--text-main);
 }
 
 body {
@@ -1106,14 +1155,16 @@ span.desktop-only {
   }
 
   .menu-item.back-btn {
-    color: var(--link-color) !important;
+    color: var(--text-main) !important;
     font-size: 16px;
+    opacity: 0.6;
   }
 
   .menu-item.back-btn:hover,
   .menu-item.back-btn:active,
   .menu-item.back-btn:focus {
-    color: var(--link-color) !important;
+    color: var(--text-main) !important;
+    opacity: 1;
   }
 
   /* Selected State (Grey Pill + Checkmark) */
@@ -1134,7 +1185,7 @@ span.desktop-only {
     width: 20px;
     height: 20px;
     margin-left: auto;
-    background-color: var(--link-color);
+    background-color: var(--text-main);
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center;
     -webkit-mask-size: contain;

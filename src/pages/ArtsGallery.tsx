@@ -59,7 +59,8 @@ const CATEGORY_META = {
     },
 };
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 8;
+const PAGINATION_INCREMENT = 12;
 
 const cleanCaption = (cap) => {
     if (!cap) return '';
@@ -68,7 +69,13 @@ const cleanCaption = (cap) => {
 
 const ArtCard = React.memo(({ item, onOpen, caption }) => {
     const [isLoaded, setIsLoaded] = useState(false);
-    const imgs = item.images || [item.image];
+    
+    // Normalize images: ensure we have a valid array of strings
+    const imgs = Array.isArray(item.images) 
+        ? item.images.filter(img => typeof img === 'string')
+        : (typeof item.images === 'string' ? [item.images] : (item.image ? [item.image] : []));
+
+    const thumbUrl = imgs.length > 0 ? getOptimizedImage(imgs[0], 'thumb') : '';
 
     return (
         <div
@@ -78,21 +85,28 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
             tabIndex={0}
             aria-label={caption || 'View artwork'}
             onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
-            style={{ minHeight: '100px' }}
+            style={{ 
+                minHeight: '150px',
+                aspectRatio: item.aspectRatio || 'auto' 
+            }}
         >
             {!isLoaded && <div className="arts-img-shimmer" />}
-            <img
-                src={getOptimizedImage(imgs[0], 'thumb')}
-                alt={caption || 'Artwork'}
-                loading="lazy"
-                decoding="async"
-                onLoad={() => setIsLoaded(true)}
-                draggable={false}
-                style={{
-                    opacity: isLoaded ? 1 : 0,
-                    transition: 'opacity 0.3s ease-in, transform 0.3s cubic-bezier(0.2, 0, 0, 1)'
-                }}
-            />
+            {thumbUrl && (
+                <img
+                    src={thumbUrl}
+                    alt={caption || 'Artwork'}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() => setIsLoaded(true)}
+                    onError={() => setIsLoaded(true)}
+                    draggable={false}
+                    style={{
+                        opacity: isLoaded ? 1 : 0,
+                        visibility: isLoaded ? 'visible' : 'hidden',
+                        transition: 'opacity 0.2s ease-in, transform 0.3s cubic-bezier(0.2, 0, 0, 1)'
+                    }}
+                />
+            )}
             {imgs.length > 1 && (
                 <div className="arts-multi-badge">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -149,14 +163,21 @@ const ArtsGallery = () => {
 
     const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(() => {
-        const saved = sessionStorage.getItem(`elvan_arts_${category}_visible`);
-        return saved ? parseInt(saved, 10) : ITEMS_PER_PAGE;
-    });
+    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
     const flattenedImages = React.useMemo(() => {
         return allItems.flatMap(item => {
-            const imgs = item.images || [item.image];
+            // Robust check: Ensure imgs is an array. 
+            // Some items might have images as a string (if legacy or manually edited)
+            let imgs = [];
+            if (Array.isArray(item.images)) {
+                imgs = item.images;
+            } else if (typeof item.images === 'string') {
+                imgs = [item.images];
+            } else if (item.image) {
+                imgs = [item.image];
+            }
+
             return imgs.map((img, idx) => ({
                 id: `${item.id}-${idx}`,
                 postId: item.id,
@@ -177,8 +198,9 @@ const ArtsGallery = () => {
     }, [setPageTitle, meta]);
 
     useEffect(() => {
-        sessionStorage.setItem(`elvan_arts_${category}_visible`, visibleCount.toString());
-    }, [visibleCount, category]);
+        // Reset visible count when switching categories
+        setVisibleCount(ITEMS_PER_PAGE);
+    }, [category]);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     useEffect(() => {
@@ -1311,8 +1333,8 @@ const ArtsGallery = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .arts-gallery-page { padding: 0 0 100px 0; }
-                    .arts-gallery-header { padding: 28px 28px 10px; text-align: center; justify-content: center; }
+                    .arts-gallery-page { padding: 20px 0 100px 0; }
+                    .arts-gallery-header { display: none; }
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
                     .arts-grid { 
@@ -1418,7 +1440,7 @@ const ArtsGallery = () => {
                             <div className="arts-show-more-wrapper animate-entry">
                                 <button
                                     className="arts-show-more-btn"
-                                    onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
+                                    onClick={() => setVisibleCount(prev => prev + PAGINATION_INCREMENT)}
                                 >
                                     மேலும் காட்டு / Show More
                                     <span className="arts-show-more-count">{remainingCount}</span>
@@ -1618,8 +1640,10 @@ const ArtsGallery = () => {
                                     <div className="arts-lb-sheet-title">{currentImg.caption}</div>
                                     <div className="arts-lb-sheet-meta">
                                         <div className="arts-lb-profile">
-                                            <div className="arts-lb-avatar">E</div>
-                                            <div className="arts-lb-author">Elvan Parthasarathy</div>
+                                            <div className="arts-lb-avatar">
+                                                <img src={profileData.profilePic} alt={profileData.fullName} />
+                                            </div>
+                                            <div className="arts-lb-author">{profileData.fullName}</div>
                                         </div>
                                         <div className="arts-lb-date">{currentImg.date}</div>
                                     </div>

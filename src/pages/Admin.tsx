@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText, FiMonitor } from 'react-icons/fi';
+import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText, FiMonitor, FiUploadCloud } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { db, auth } from '../lib/firebaseClient';
@@ -34,7 +34,7 @@ import initialPoems from '../data/poems.json';
 
 
 // ─── TESTER PANEL COMPONENT ───
-const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumbnails, setAutoThumbnails }) => {
+const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumbnails, setAutoThumbnails, onMasterSave }) => {
     const [selectedCollections, setSelectedCollections] = useState(['poems']);
     const [count, setCount] = useState(25);
 
@@ -64,8 +64,11 @@ const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumb
         );
     };
 
-    const generateMocks = () => {
-        if (selectedCollections.length === 0) {
+    const generateMocks = (forceCollections = null, forceCount = null) => {
+        const collectionsToUse = forceCollections || selectedCollections;
+        const itemsToGenerate = forceCount || count;
+
+        if (collectionsToUse.length === 0) {
             setMessage('Please select at least one collection.');
             setStatus('error');
             setTimeout(() => setMessage(''), 3000);
@@ -74,12 +77,12 @@ const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumb
 
         const newDataStore = { ...dataStore };
 
-        selectedCollections.forEach(selId => {
+        collectionsToUse.forEach(selId => {
             const isArt = selId.startsWith('arts_');
             const targetCol = isArt ? 'arts' : selId;
             const artCat = isArt ? selId.replace('arts_', '') : null;
 
-            const mocks = Array.from({ length: count }).map((_, i) => {
+            const mocks = Array.from({ length: itemsToGenerate }).map((_, i) => {
                 const id = uuidv4();
                 const num = Math.floor(Math.random() * 1000);
                 
@@ -130,13 +133,17 @@ const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumb
         });
 
         setDataStore(newDataStore);
-        setMessage(`Added ${count} mock items per selection. Don't forget to click Save!`);
+        if (forceCollections) {
+            setMessage(`MASTER MODE: Auto-populated ${itemsToGenerate} posts per category! Click Save.`);
+        } else {
+            setMessage(`Added ${itemsToGenerate} mock items per selection. Don't forget to click Save!`);
+        }
         setStatus('success');
         setTimeout(() => setMessage(''), 5000);
     };
 
-    const clearMocks = () => {
-        if (selectedCollections.length === 0) {
+    const clearMocks = (isMasterPurge = false) => {
+        if (!isMasterPurge && selectedCollections.length === 0) {
             setMessage('Please select at least one collection.');
             setStatus('error');
             setTimeout(() => setMessage(''), 3000);
@@ -146,28 +153,68 @@ const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumb
         const newDataStore = { ...dataStore };
         let totalRemoved = 0;
 
-        selectedCollections.forEach(selId => {
+        // If it's a master purge, we clear everything. Otherwise, just selected.
+        const collectionsToClear = isMasterPurge 
+            ? ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary', 'arts']
+            : selectedCollections;
+
+        collectionsToClear.forEach(selId => {
             const isArt = selId.startsWith('arts_');
-            if (isArt) {
-                const cat = selId.replace('arts_', '');
-                if (newDataStore.arts) {
-                    const originalLength = newDataStore.arts.length;
-                    newDataStore.arts = newDataStore.arts.filter(item => !(item.is_mock && item.category === cat));
-                    totalRemoved += (originalLength - newDataStore.arts.length);
+            const targetCol = isArt ? 'arts' : (selId === 'arts' ? 'arts' : selId);
+            
+            if (targetCol === 'arts') {
+                const originalLength = newDataStore.arts?.length || 0;
+                // If master purge, clear ALL mocks in arts. If specific, clear by category.
+                if (isMasterPurge) {
+                    newDataStore.arts = (newDataStore.arts || []).filter(item => !item.is_mock);
+                } else if (isArt) {
+                    const cat = selId.replace('arts_', '');
+                    newDataStore.arts = (newDataStore.arts || []).filter(item => !(item.is_mock && item.category === cat));
                 }
+                totalRemoved += (originalLength - (newDataStore.arts?.length || 0));
             } else {
-                if (newDataStore[selId]) {
-                    const originalLength = newDataStore[selId].length;
-                    newDataStore[selId] = newDataStore[selId].filter(item => !item.is_mock);
-                    totalRemoved += (originalLength - newDataStore[selId].length);
+                if (newDataStore[targetCol]) {
+                    const originalLength = newDataStore[targetCol].length;
+                    newDataStore[targetCol] = newDataStore[targetCol].filter(item => !item.is_mock);
+                    totalRemoved += (originalLength - newDataStore[targetCol].length);
                 }
             }
         });
 
         setDataStore(newDataStore);
-        setMessage(`Cleared ${totalRemoved} mock items from selections. Click Save to apply to Firebase.`);
+        if (isMasterPurge) {
+            setMessage(`MASTER PURGE: Removed ${totalRemoved} mock items from ALL collections. Click Save to commit.`);
+        } else {
+            setMessage(`Cleared ${totalRemoved} mock items from selections. Click Save to commit.`);
+        }
         setStatus('success');
         setTimeout(() => setMessage(''), 5000);
+    };
+
+    const handleMasterToggle = () => {
+        const newVal = !autoThumbnails;
+        
+        if (!newVal) {
+            // Turning OFF: Ask for confirmation and purge data
+            if (window.confirm('Master Control OFF: This will disable auto-thumbnails and REMOVE ALL populated tester data from your draft. Proceed?')) {
+                setAutoThumbnails(false);
+                clearMocks(true); // Master purge
+            }
+        } else {
+            // Turning ON: Enable thumbnails AND auto-populate ALL categories
+            setAutoThumbnails(true);
+            
+            // Collect ALL category IDs
+            const allWritings = WRITINGS_OPTIONS.map(o => o.id);
+            const allArts = ARTS_OPTIONS.map(o => o.id);
+            const allCategories = [...allWritings, ...allArts];
+            
+            generateMocks(allCategories, 25);
+            
+            setMessage('Master Tester Mode: ON (Auto-populated all categories + Thumbnails active).');
+            setStatus('success');
+            setTimeout(() => setMessage(''), 5000);
+        }
     };
 
     return (
@@ -230,24 +277,43 @@ const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumb
                     </button>
                 </div>
                 
-                <div className="adm-field" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--border-light)' }}>
-                    <label className="adm-label">Global Preferences</label>
+                <div className="adm-field" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '2px solid var(--border-light)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                        <div>
+                            <label className="adm-label" style={{ color: 'var(--link-color)', fontSize: '1.1rem', marginBottom: '4px' }}>MASTER TESTER CONTROL</label>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                                Global switch for development tools and mock data.
+                            </p>
+                        </div>
+                        <button 
+                            className={`adm-btn ${autoThumbnails ? 'primary' : ''}`}
+                            onClick={handleMasterToggle}
+                            style={{ 
+                                minWidth: '140px',
+                                background: autoThumbnails ? 'var(--link-color)' : 'var(--bg-panel)', 
+                                color: autoThumbnails ? 'white' : 'var(--text-main)', 
+                                border: `1px solid ${autoThumbnails ? 'var(--link-color)' : 'var(--border-light)'}`,
+                                fontWeight: '700'
+                            }}
+                        >
+                            {autoThumbnails ? 'MASTER: ON' : 'MASTER: OFF'}
+                        </button>
+                    </div>
+                    
+                    <div style={{ background: 'color-mix(in srgb, var(--text-main) 5%, transparent)', padding: '12px', borderRadius: '8px', fontSize: '0.8rem' }}>
+                        <ul style={{ margin: 0, paddingLeft: '18px', color: 'var(--text-muted)' }}>
+                            <li><strong>ON:</strong> Auto-populates all categories + enables thumbnails.</li>
+                            <li><strong>OFF:</strong> Clears all mock data from your draft.</li>
+                        </ul>
+                    </div>
+
                     <button 
-                        className="adm-btn" 
-                        onClick={() => {
-                            const val = !autoThumbnails;
-                            setAutoThumbnails(val);
-                            setMessage(`Auto Thumbnails ${val ? 'Enabled' : 'Disabled'} across the entire site.`);
-                            setStatus('success');
-                            setTimeout(() => setMessage(''), 3000);
-                        }}
-                        style={{ background: autoThumbnails ? 'color-mix(in srgb, var(--link-color) 15%, transparent)' : 'var(--bg-panel)', color: autoThumbnails ? 'var(--link-color)' : 'var(--text-main)', border: `1px solid ${autoThumbnails ? 'var(--link-color)' : 'var(--border-light)'}`, display: 'inline-flex', width: 'fit-content' }}
+                        className="adm-btn primary" 
+                        onClick={onMasterSave}
+                        style={{ width: '100%', marginTop: '8px', background: '#FFCA28', color: '#333' }}
                     >
-                        {autoThumbnails ? 'Disable Auto Thumbnails' : 'Enable Auto Thumbnails'}
+                        <FiUploadCloud size={16} /> Save All (Commit to Live)
                     </button>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '8px' }}>
-                        Toggles the random fallback thumbnails (https://picsum.photos) across all lists and poem/quote reading views.
-                    </p>
                 </div>
                 
                 <div className="adm-alert info" style={{ marginTop: '16px', background: 'color-mix(in srgb, var(--text-main) 10%, transparent)', padding: '16px', borderRadius: '12px', fontSize: '0.9rem', lineHeight: '1.5' }}>
@@ -387,6 +453,149 @@ const Admin = () => {
         } catch (err) {
             console.error('Google login error:', err.message);
             return { success: false, error: err.message || 'An unexpected error occurred.' };
+        }
+    };
+
+    const [isMigrating, setIsMigrating] = useState(false);
+
+    // ── Migration Helpers ──
+    const generateSlug = (text) => {
+        let slug = String(text)
+            .replace(/<[^>]+>/g, '')
+            .trim().toLowerCase()
+            .replace(/[.#$\[\]\/]/g, '')
+            .replace(/[\s\n\r]+/g, '-')
+            .substring(0, 50)
+            .replace(/^-+|-+$/g, '');
+        return slug || 'untitled';
+    };
+
+    const getBestTitle = (item) => {
+        const firstVariant = item.variants?.[0];
+        const englishVariant = item.variants?.find(v => v.lang === 'en' && v.title);
+        const titleTransl = firstVariant?.titleTransliterations || {};
+        const bestTitleTransl = titleTransl.en || Object.values(titleTransl).filter(v => v && v !== true)[0];
+        return item.title || bestTitleTransl || englishVariant?.title || firstVariant?.title || firstVariant?.text || 'untitled';
+    };
+
+    const textToHtml = (raw) => {
+        if (!raw) return '';
+        if (/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) return raw;
+        return raw.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
+    };
+
+    const cleanForStorage = (item, displayOrder) => {
+        const clean = JSON.parse(JSON.stringify(item));
+        delete clean.id;
+        delete clean.style; delete clean.theme; delete clean.meter; delete clean.slug;
+        clean.display_order = displayOrder;
+        if (clean.tags && typeof clean.tags === 'string') {
+            clean.tags = clean.tags.split(',').map(t => t.trim()).filter(Boolean);
+        }
+        if (clean.variants) {
+            clean.variants.forEach(v => {
+                if (v.transliterations?._empty) delete v.transliterations._empty;
+                if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                if (v.text) v.text = textToHtml(v.text);
+                if (v.transliterations) {
+                    Object.keys(v.transliterations).forEach(lang => {
+                        if (v.transliterations[lang]) v.transliterations[lang] = textToHtml(v.transliterations[lang]);
+                    });
+                }
+                if (v.transliterations && Object.keys(v.transliterations).length === 0) delete v.transliterations;
+                if (v.titleTransliterations && Object.keys(v.titleTransliterations).length === 0) delete v.titleTransliterations;
+            });
+        }
+
+        // Arts-specific normalization (Moved here to cover both Single Save and Master Save)
+        if (clean.category && (clean.images || clean.image)) {
+            if (clean.images && typeof clean.images === 'string') {
+                clean.images = clean.images.split('\n').map(u => u.trim()).filter(Boolean);
+            }
+            if (!Array.isArray(clean.images)) clean.images = [];
+            if (!clean.image && clean.images.length > 0) clean.image = clean.images[0];
+            if (clean.timestamp && typeof clean.timestamp === 'string') clean.timestamp = parseInt(clean.timestamp, 10) || Date.now();
+            if (!clean.timestamp) clean.timestamp = Date.now();
+            if (!clean.type) clean.type = 'image';
+        }
+
+        return clean;
+    };
+
+    const handleMigrateToFirebase = async () => {
+        if (!window.confirm("MASTER SAVE: This will sync your current draft (including any Mock Test Data) to the live site. Real poems will be PRESERVED, but mock items will be added/updated. Proceed?")) return;
+        setIsMigrating(true);
+        try {
+            const collectionsToWipe = ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary', 'arts'];
+            for (const coll of collectionsToWipe) {
+                await set(ref(db, coll), null);
+            }
+            await set(ref(db, 'config/profile'), dataStore.profile);
+
+            let count = 0;
+            const promises = [];
+
+            // Fetch existing data to ensure we don't accidentally wipe real items not in current local state
+            const snapshot = await get(ref(db));
+            const liveData = snapshot.exists() ? snapshot.val() : {};
+
+            Object.entries(dataStore).forEach(([collection, items]) => {
+                if (collection === 'profile' || collection === 'defaultAuthors') return;
+                if (!Array.isArray(items)) return;
+
+                const usedKeys = new Set();
+                // Start with existing live data for this collection, but ONLY keep non-mock items
+                const collectionData = {};
+                if (liveData[collection]) {
+                    Object.entries(liveData[collection]).forEach(([key, val]) => {
+                        if (!val.is_mock) {
+                            collectionData[key] = val;
+                            usedKeys.add(key);
+                        }
+                    });
+                }
+
+                // Now add/overwrite with current local items (Real + Mocks)
+                items.forEach((item, index) => {
+                    if (!item.id) return;
+                    
+                    // If it's an existing item with a slug ID, use it
+                    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(String(item.id));
+                    let finalKey = isUUID ? generateSlug(getBestTitle(item)) : String(item.id);
+
+                    // IDENTIFIER KEY: Prefix mock data IDs to ensure they NEVER collide with real content
+                    if (item.is_mock && !finalKey.startsWith('mock_')) {
+                        finalKey = `mock_${finalKey}`;
+                    }
+                    
+                    // Handle duplicates
+                    let baseKey = finalKey;
+                    let suffix = 1;
+                    
+                    if (isUUID) {
+                        while (usedKeys.has(finalKey)) {
+                            finalKey = `${baseKey}-${suffix}`;
+                            suffix++;
+                        }
+                    }
+
+                    usedKeys.add(finalKey);
+                    collectionData[finalKey] = cleanForStorage(item, index);
+                    count++;
+                });
+                promises.push(set(ref(db, collection), collectionData));
+            });
+
+            await Promise.all(promises);
+            setMessage(`Successfully committed ${count} items to live site!`);
+            setStatus('success');
+        } catch (error) {
+            console.error("Migration error:", error);
+            setMessage("Failed to save: " + error.message);
+            setStatus('error');
+        } finally {
+            setIsMigrating(false);
+            setTimeout(() => { setStatus('idle'); setMessage(''); }, 4000);
         }
     };
 
@@ -541,16 +750,9 @@ const Admin = () => {
                     row.tags = row.tags.split(',').map(t => t.trim()).filter(Boolean);
                 }
 
-                // Arts-specific: normalize images field and auto-set cover
+                // Arts-specific: handled by cleanForStorage
                 if (collection === 'arts') {
-                    if (row.images && typeof row.images === 'string') {
-                        row.images = row.images.split('\n').map(u => u.trim()).filter(Boolean);
-                    }
-                    if (!Array.isArray(row.images)) row.images = [];
-                    if (!row.image && row.images.length > 0) row.image = row.images[0];
-                    if (row.timestamp && typeof row.timestamp === 'string') row.timestamp = parseInt(row.timestamp, 10) || Date.now();
-                    if (!row.timestamp) row.timestamp = Date.now();
-                    if (!row.type) row.type = 'image';
+                    // Handled centrally now
                 }
 
                 // Clean up variants
@@ -996,6 +1198,7 @@ const Admin = () => {
                         dataStore={dataStore}
                         username={username}
                         onNavigate={(tab) => { setActiveTab(tab); setEditingId(null); }}
+                        onMasterSave={handleMigrateToFirebase}
                     />
                 ) : activeTab === 'profile' ? (
                     <ProfileEditor
@@ -1015,7 +1218,7 @@ const Admin = () => {
                         </p>
                         {[
                             { code: 'ta', name: 'தமிழ் (Tamil)' },
-                            { code: 'ml', name: 'മലയാളം (Malayalam)' },
+                            { code: 'ml', name: 'മലയാളம் (Malayalam)' },
                             { code: 'en', name: 'English' },
                         ].map(({ code, name }) => (
                             <div key={code} className="adm-field" style={{ marginBottom: '16px' }}>
@@ -1049,6 +1252,16 @@ const Admin = () => {
                             <FiSave size={16} /> Save Author Defaults
                         </button>
                     </div>
+                ) : activeTab === 'tester' ? (
+                    <TesterPanel 
+                        dataStore={dataStore}
+                        setDataStore={setDataStore}
+                        setStatus={setStatus}
+                        setMessage={setMessage}
+                        autoThumbnails={autoThumbnails}
+                        setAutoThumbnails={setAutoThumbnails}
+                        onMasterSave={handleMigrateToFirebase}
+                    />
                 ) : renderEditor()}
             </div>
         </div>

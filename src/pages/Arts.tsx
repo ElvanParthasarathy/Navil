@@ -137,7 +137,7 @@ const CATEGORIES = {
 };
 
 const Arts = () => {
-    const { setPageTitle } = useOutletContext();
+    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
 
     const [categoryCounts, setCategoryCounts] = useState({});
 
@@ -150,8 +150,8 @@ const Arts = () => {
         const artsRef = ref(db, 'arts');
         const unsubscribe = onValue(artsRef, (snapshot) => {
             if (snapshot.exists()) {
-                const dataObj = snapshot.val();
-                const counts = {};
+                const dataObj = snapshot.val() as Record<string, any>;
+                const counts: Record<string, number> = {};
                 Object.values(dataObj).forEach(item => {
                     const cat = item.category || 'other';
                     counts[cat] = (counts[cat] || 0) + 1;
@@ -222,6 +222,10 @@ const Arts = () => {
                     position: relative;
                     overflow: hidden;
                     min-height: 220px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+                }
+                [data-theme='dark'] .category-card {
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
                 }
                 .cat-icon-box {
                     width: 56px;
@@ -285,10 +289,12 @@ const Arts = () => {
                 }
                 @media (hover: hover) {
                     .category-card:hover {
-                        transform: translateY(-6px);
-                        border-color: color-mix(in srgb, var(--text-main) 15%, var(--border-light));
-                        background: color-mix(in srgb, var(--text-main) 3%, var(--bg-card));
-                        box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+                        transform: translateY(-8px);
+                        background: color-mix(in srgb, var(--text-main) 4%, var(--bg-card));
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+                    }
+                    [data-theme='dark'] .category-card:hover {
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
                     }
                     .category-card:hover .cat-icon-box {
                         background: var(--text-main);
@@ -325,13 +331,14 @@ const Arts = () => {
                         color: var(--text-muted);
                     }
                     .category-card:active {
-                        transform: scale(0.97);
-                        background: color-mix(in srgb, var(--text-main) 4%, var(--bg-card));
-                        border-color: color-mix(in srgb, var(--text-main) 20%, var(--border-light));
+                        transform: scale(0.95);
+                        background: color-mix(in srgb, var(--text-main) 5%, var(--bg-card));
+                        transition: transform 0.1s ease;
                     }
                     .category-card:active .cat-icon-box {
                         background: var(--text-main);
                         color: var(--bg-app);
+                        transform: scale(1.1);
                     }
                     .cat-icon-box { width: 48px; height: 48px; font-size: 1.25rem; border-radius: 12px; }
                     .cat-title { font-size: 1.2rem; margin-bottom: 4px; }
