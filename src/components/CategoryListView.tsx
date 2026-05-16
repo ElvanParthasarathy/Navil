@@ -1370,47 +1370,47 @@ const CategoryListView = () => {
                 
                 @media (max-width: 768px) {
                     .pagination-wrapper {
-                        gap: 16px !important;
+                        gap: 20px !important;
                         margin-top: 30px !important;
-                        padding-top: 20px !important;
-                        padding-bottom: 20px !important;
+                        padding-top: 24px !important;
+                        padding-bottom: 24px !important;
                         align-items: center;
                         width: 100%;
                     }
                     .pagination-inner {
-                        gap: 10px;
+                        gap: 20px;
                         width: 100%;
                     }
                     .page-numbers.centered {
-                        gap: 8px;
+                        gap: 10px;
                     }
                     .page-numbers.spread {
-                        gap: 2px;
+                        gap: 4px;
                         justify-content: center;
                     }
                     .pagination-nav-pill {
                         justify-content: center;
-                        gap: 4px;
+                        gap: 12px;
                     }
                     .page-btn {
-                        padding: 8px 12px;
-                        font-size: 0.75rem;
+                        padding: 12px 14px;
+                        font-size: 0.85rem;
                         flex: 1;
                         justify-content: center;
-                        max-width: 100px;
+                        max-width: 130px;
                     }
                     .page-number-btn {
-                        width: 34px !important;
-                        height: 34px !important;
-                        font-size: 0.9rem !important;
+                        width: 42px !important;
+                        height: 42px !important;
+                        font-size: 1rem !important;
                     }
                     .pagination-dots {
-                        font-size: 0.8rem;
-                        padding: 0 2px;
+                        font-size: 0.9rem;
+                        padding: 0 4px;
                     }
                     .pagination-label {
-                        font-size: 0.75rem;
-                        padding: 8px 6px;
+                        font-size: 0.85rem;
+                        padding: 8px 10px;
                         flex: 0 1 auto;
                         white-space: nowrap;
                     }
