@@ -19,7 +19,7 @@ const About = () => {
     const { setPageTitle } = useOutletContext();
     const [about, setAbout] = useState(getInitialAbout());
 
-    useEffect(() => { setPageTitle('பற்றி|About'); }, [setPageTitle]);
+    useEffect(() => { setPageTitle('பற்றி|about'); }, [setPageTitle]);
 
     // Real-time Firebase listener — syncs and updates cache
     useEffect(() => {

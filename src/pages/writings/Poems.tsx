@@ -5,7 +5,7 @@ import legacyPoemsData from '../../data/poems.json';
 
 const Poems = () => (
     <WritingPage
-        pageTitle="Poems"
+        pageTitle="poems"
         pageTitleTamil="செய்யுள்கள்"
         pageSubtitle="என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்."
         pageSubtitleEnglish="My lyrical verses and emotional expressions."
@@ -15,4 +15,3 @@ const Poems = () => (
 );
 
 export default Poems;
-

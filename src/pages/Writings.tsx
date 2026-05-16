@@ -14,7 +14,7 @@ const Writings = () => {
     const [counts, setCounts] = useState({});
 
     useEffect(() => {
-        setPageTitle('எழுத்துகள்|Writings');
+        setPageTitle('எழுத்துகள்|writings');
 
         // CLEAR CATEGORY MEMORY: When entering the hub, reset all sub-category states
         // This ensures entering Poems/Quotes always starts from Page 1 with no filters.
@@ -81,166 +81,32 @@ const Writings = () => {
                     margin: 0;
                 }
 
-                .category-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 24px;
-                    margin-top: 32px;
-                }
-
-                .category-card {
-                    background: var(--bg-card);
-                    border: 1px solid var(--border-light);
-                    border-radius: 20px;
-                    padding: 24px;
-                    text-decoration: none;
-                    color: inherit;
-                    transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
-                    display: flex;
-                    flex-direction: column;
-                    gap: 20px;
-                    position: relative;
-                    overflow: hidden;
-                    min-height: 220px;
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-                }
-                [data-theme='dark'] .category-card {
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-                }
-
-                .cat-icon-box {
-                    width: 56px;
-                    height: 56px;
-                    background: var(--bg-panel);
-                    border-radius: 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.5rem;
-                    color: var(--text-main);
-                    transition: all 0.3s ease;
-                }
-
-                .cat-content {
-                    flex: 1;
-                }
-
-                .cat-title {
-                    font-size: 1.35rem;
-                    font-weight: 700;
-                    margin-bottom: 2px;
-                    color: var(--text-main);
-                    line-height: 1.3;
-                }
-
-                .cat-title-sub {
-                    font-size: 0.8rem;
-                    font-weight: 500;
-                    color: #888888;
-                    margin-bottom: 8px;
-                }
-
-                .cat-desc {
-                    font-size: 0.95rem;
-                    color: var(--text-muted);
-                    line-height: 1.5;
-                }
-
-                .cat-desc-sub {
-                    font-size: 0.82rem;
-                    color: #888888;
-                    line-height: 1.4;
-                    margin-top: 2px;
-                }
-
-                /* COUNT BADGE */
-                .cat-count-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-width: 24px;
-                    height: 24px;
-                    padding: 0 8px;
-                    border-radius: 100px;
-                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
-                    font-size: 0.75rem;
-                    font-weight: 700;
-                    color: var(--text-muted);
-                    margin-left: 8px;
-                    vertical-align: middle;
-                }
-
-                /* BASE FOOTER & DECORATION */
-                .cat-footer {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    font-weight: 600;
-                    font-size: 0.85rem;
-                    color: var(--text-main);
-                    opacity: 0;
-                    transform: translateX(-10px);
-                    transition: all 0.3s ease;
-                }
-
-                .category-card::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -20px;
-                    right: -20px;
-                    width: 100px;
-                    height: 100px;
-                    background: var(--text-main);
-                    opacity: 0.03;
-                    border-radius: 50%;
-                    transition: all 0.5s ease;
-                }
-
-                /* HOVER EFFECTS - DESKTOP ONLY */
-
-                .category-card:active {
-                    transform: scale(0.985);
-                    background: color-mix(in srgb, var(--text-main) 8%, var(--bg-card));
-                    transition-duration: 0.1s;
-                }
-
+                    .category-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
 
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
+                @media (max-width: 1024px) {
+                    .category-grid { grid-template-columns: repeat(2, 1fr); }
+                }
                 @media (max-width: 768px) {
-                    .mobile-hide { display: none; }
+
                     .writings-page { padding: 0 0 100px 0; }
                     .writings-header { padding: 28px 28px 10px; text-align: center; margin-bottom: 24px; }
                     .writings-title { display: none; }
                     .writings-title-sub { display: none; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; text-align: center; }
-                    .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
+                    .category-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 20px; margin-top: 24px; }
                     
                     .category-card { 
                         min-height: auto; 
-                        padding: 20px; 
-                        gap: 16px; 
-                        border-radius: 18px; 
+                        padding: 24px; 
                     }
-                    
+
                     .cat-footer {
                         opacity: 1;
                         transform: translateX(0);
-                        font-size: 0.8rem;
-                        color: var(--text-muted);
                     }
-
-
-                    
-                    .category-card:active .cat-icon-box {
-                        background: var(--text-main);
-                        color: var(--bg-app);
-                        transform: scale(1.1);
-                    }
-
-                    .cat-icon-box { width: 48px; height: 48px; font-size: 1.25rem; border-radius: 12px; }
-                    .cat-title { font-size: 1.2rem; margin-bottom: 4px; }
-                    .cat-desc { font-size: 0.95rem; line-height: 1.4; }
                 }
+
             `}</style>
 
             <header className="writings-header animate-entry">

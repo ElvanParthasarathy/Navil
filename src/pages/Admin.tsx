@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText, FiMonitor, FiUploadCloud } from 'react-icons/fi';
+import { FiSave, FiPlus, FiUser, FiX, FiMenu, FiHome, FiGrid, FiChevronLeft, FiLogOut, FiSettings, FiFileText, FiMonitor, FiUploadCloud, FiMessageCircle, FiHeart } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { db, auth } from '../lib/firebaseClient';
-import { ref, get, set } from 'firebase/database';
+import { ref, get, set, onValue } from 'firebase/database';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,6 +22,7 @@ import { DiaryEditor } from '../components/admin/DiaryEditor';
 import { ArtEditor } from '../components/admin/ArtEditor';
 import AdminLogin from '../components/admin/AdminLogin';
 import AdminDashboard from '../components/admin/AdminDashboard';
+import { addComment } from '../lib/engagement';
 
 import '../styles/admin.css';
 
@@ -319,6 +320,209 @@ const TesterPanel = ({ dataStore, setDataStore, setStatus, setMessage, autoThumb
                 <div className="adm-alert info" style={{ marginTop: '16px', background: 'color-mix(in srgb, var(--text-main) 10%, transparent)', padding: '16px', borderRadius: '12px', fontSize: '0.9rem', lineHeight: '1.5' }}>
                     <strong style={{ color: 'var(--text-main)' }}>Note:</strong> Generating or clearing mocks only updates your local unsaved draft. You still need to click <strong style={{ color: 'var(--text-main)' }}>"Save All Changes"</strong> in the main dashboard to push these changes to Firebase.
                 </div>
+            </div>
+        </div>
+    );
+};
+
+import { FiTrash2 } from 'react-icons/fi';
+import { remove } from 'firebase/database';
+
+// ─── COMMENTS MANAGER COMPONENT ───
+const CommentsManager = ({ username, profilePic }) => {
+    const [allComments, setAllComments] = useState({}); // { postId: { comments: [], likes: 0 } }
+    const [loading, setLoading] = useState(true);
+    const [replyingTo, setReplyingTo] = useState(null); // { postId, commentId }
+    const [replyText, setReplyText] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        const engRef = ref(db, 'engagement');
+        const unsubscribe = onValue(engRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const processed = {};
+                const likes = data.likes || {};
+                const commentsMap = data.comments || {};
+
+                const allPostIds = new Set([...Object.keys(likes), ...Object.keys(commentsMap)]);
+
+                allPostIds.forEach(id => {
+                    const postComments = commentsMap[id] ? Object.entries(commentsMap[id]).map(([cId, val]) => ({ ...val, id: cId })) : [];
+                    const likeData = likes[id];
+                    const likeCount = typeof likeData === 'object' ? Object.keys(likeData).length : (likeData || 0);
+                    
+                    processed[id] = {
+                        likes: likeCount,
+                        comments: postComments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+                    };
+                });
+                setAllComments(processed);
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    const handleDelete = async (postId, commentId) => {
+        if (window.confirm('Delete this comment permanently?')) {
+            await remove(ref(db, `engagement/comments/${postId}/${commentId}`));
+        }
+    };
+
+    const handleReply = async (postId, parentId, adminName) => {
+        if (!replyText.trim() || isSubmitting) return;
+        setIsSubmitting(true);
+        try {
+            await addComment(postId, {
+                name: 'Author',
+                text: replyText.trim(),
+                userId: auth.currentUser?.uid || 'admin',
+                isAdmin: true,
+                parentId: parentId
+            });
+            setReplyText('');
+            setReplyingTo(null);
+        } catch (err) {
+            console.error("Reply failed:", err);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (loading) return <div className="adm-panel">Loading engagement data...</div>;
+
+    const postsWithEngagement = Object.entries(allComments);
+
+    return (
+        <div className="adm-panel animate-entry" style={{ padding: '24px' }}>
+            <div className="adm-header" style={{ marginBottom: '24px' }}>
+                <h2 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Engagement Manager</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Manage comments and monitor likes across all posts.</p>
+            </div>
+
+            <div className="adm-content" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                {postsWithEngagement.length === 0 ? (
+                    <div style={{ padding: '40px', textAlign: 'center', opacity: 0.5 }}>No comments or likes found.</div>
+                ) : (
+                    postsWithEngagement.map(([postId, data]) => (
+                        <div key={postId} className="engagement-container" style={{ background: 'var(--bg-card)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-light)', marginBottom: '32px' }}>
+                            <div className="discussion-header" style={{ marginBottom: '20px', borderBottom: '1px solid var(--border-light)', paddingBottom: '12px' }}>
+                                <div className="discussion-title">
+                                    <span className="title-ta">பதிவு</span>
+                                    <span className="title-en">{postId}</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ff4757', fontWeight: '700' }}>
+                                    <FiHeart /> {data.likes}
+                                </div>
+                            </div>
+
+                            <div className="comments-thread">
+                                {data.comments.filter(c => !c.parentId).map(comment => (
+                                    <div key={comment.id} className="comment-group" style={{ marginBottom: '24px' }}>
+                                        <article className="comment-article">
+                                            <footer className="comment-footer" style={{ border: 'none', padding: 0 }}>
+                                                <div className="author-meta">
+                                                    <div className="author-avatar">
+                                                        {comment.isAdmin && profilePic ? (
+                                                            <img src={profilePic} alt="Author" className="admin-pfp" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                                        ) : (
+                                                            <div className="guest-avatar">{comment.name[0]}</div>
+                                                        )}
+                                                    </div>
+                                                    <div className="author-info">
+                                                        <p className="author-name">
+                                                            {comment.isAdmin ? 'Author' : comment.name}
+                                                        </p>
+                                                        <p className="comment-date">{comment.timestamp ? new Date(comment.timestamp).toLocaleString() : ''}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="comment-actions">
+                                                    <button 
+                                                        className="comment-reply-btn" 
+                                                        onClick={() => setReplyingTo(replyingTo?.commentId === comment.id ? null : { postId, commentId: comment.id })}
+                                                    >
+                                                        <FiMessageCircle className="reply-icon" />
+                                                        <div className="action-text-stack">
+                                                            <span className="action-ta">பதில்</span>
+                                                            <span className="action-en">reply</span>
+                                                        </div>
+                                                    </button>
+                                                    <button 
+                                                        className="adm-btn icon-only danger" 
+                                                        onClick={() => handleDelete(postId, comment.id)}
+                                                        style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', opacity: 0.6 }}
+                                                    >
+                                                        <FiTrash2 size={16} />
+                                                    </button>
+                                                </div>
+                                            </footer>
+                                            <p className="comment-body" style={{ marginTop: '12px' }}>{comment.text}</p>
+                                        </article>
+
+                                        {/* Replies */}
+                                        <div className="replies-container" style={{ marginLeft: '32px', marginTop: '16px' }}>
+                                            {data.comments.filter(r => r.parentId === comment.id).map(reply => (
+                                                <article key={reply.id} className="comment-article reply-article" style={{ marginBottom: '12px' }}>
+                                                    <footer className="comment-footer" style={{ border: 'none', padding: 0 }}>
+                                                        <div className="author-meta">
+                                                            <div className="author-avatar mini">
+                                                                {reply.isAdmin && profilePic ? (
+                                                                    <img src={profilePic} alt="Author" className="admin-pfp" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                                                ) : (
+                                                                    <div className="guest-avatar">{reply.name[0]}</div>
+                                                                )}
+                                                            </div>
+                                                            <div className="author-info">
+                                                                <p className="author-name">
+                                                                    {reply.isAdmin ? 'Author' : reply.name}
+                                                                </p>
+                                                                <p className="comment-date">{reply.timestamp ? new Date(reply.timestamp).toLocaleString() : ''}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button 
+                                                            className="adm-btn icon-only danger" 
+                                                            onClick={() => handleDelete(postId, reply.id)}
+                                                            style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', opacity: 0.6 }}
+                                                        >
+                                                            <FiTrash2 size={14} />
+                                                        </button>
+                                                    </footer>
+                                                    <p className="comment-body" style={{ marginTop: '8px' }}>{reply.text}</p>
+                                                </article>
+                                            ))}
+                                        </div>
+
+                                        {/* Reply Input */}
+                                        {replyingTo?.commentId === comment.id && (
+                                            <div className="discussion-form-flat" style={{ marginLeft: '32px', marginTop: '16px', border: '1px solid var(--link-color)' }}>
+                                                <textarea 
+                                                    className="flat-text-input"
+                                                    value={replyText}
+                                                    onChange={(e) => setReplyText(e.target.value)}
+                                                    placeholder="Write your admin reply..."
+                                                    style={{ minHeight: '80px', marginBottom: '12px' }}
+                                                    autoFocus
+                                                />
+                                                <div className="flat-form-footer" style={{ justifyContent: 'flex-end', gap: '12px' }}>
+                                                    <button className="flat-cancel-btn" onClick={() => setReplyingTo(null)}>Cancel</button>
+                                                    <button 
+                                                        className="flat-submit-btn" 
+                                                        onClick={() => handleReply(postId, comment.id, username)}
+                                                        disabled={!replyText.trim() || isSubmitting}
+                                                    >
+                                                        {isSubmitting ? 'Sending...' : 'Send Reply'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );
@@ -1028,6 +1232,7 @@ const Admin = () => {
             case 'thoughts': return <ThoughtEditor {...commonProps} />;
             case 'diary': return <DiaryEditor {...commonProps} />;
             case 'arts': return <ArtEditor {...commonProps} />;
+            case 'comments': return <CommentsManager username={username} profilePic={dataStore.profile?.profilePic || dataStore.profile?.avatar} />;
             case 'tester': return <TesterPanel dataStore={dataStore} setDataStore={setDataStore} setStatus={setStatus} setMessage={setMessage} schemas={SCHEMAS} autoThumbnails={autoThumbnails} setAutoThumbnails={setAutoThumbnails} />;
             default: return null;
         }
@@ -1069,6 +1274,10 @@ const Admin = () => {
                             <div className="nav-icon">{SCHEMAS[key].icon}</div> <span>{SCHEMAS[key].label}</span>
                         </button>
                     ))}
+                    <div className="nav-group-label">Engagement</div>
+                    <button className={`admin-nav-item ${activeTab === 'comments' ? 'active' : ''}`} onClick={() => { setActiveTab('comments'); setEditingId(null); setMobileMenuOpen(false); }}>
+                        <div className="nav-icon"><FiMessageCircle size={16} /></div> <span>Comments</span>
+                    </button>
                     <div className="nav-group-label">System</div>
                     <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => { setActiveTab('settings'); setEditingId(null); setMobileMenuOpen(false); }}>
                         <div className="nav-icon"><FiSettings size={16} /></div> <span>Settings</span>

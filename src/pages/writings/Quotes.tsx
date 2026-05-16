@@ -5,7 +5,7 @@ import legacyQuotesData from '../../data/quotes.json';
 
 const Quotes = () => (
     <WritingPage
-        pageTitle="Quotes"
+        pageTitle="quotes"
         pageTitleTamil="பொன்மொழிகள்"
         pageSubtitle="என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்."
         pageSubtitleEnglish="My short quotes and personal insights."
@@ -15,4 +15,3 @@ const Quotes = () => (
 );
 
 export default Quotes;
-

@@ -6,54 +6,55 @@ import { getOptimizedImage } from '../lib/media';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
+import { Engagement } from '../components/Engagement';
 import profileData from '../data/profile.json';
 
 const CATEGORY_META = {
     pencil: {
         titleTa: 'ஓவியங்கள்',
-        titleEn: 'Pencil Drawings',
+        titleEn: 'pencil drawings',
         descTa: 'கையால் வரைந்த பென்சில் ஓவியங்கள்',
         descEn: 'Freehand pencil sketches and portrait art.',
     },
     editing: {
         titleTa: 'தொகுப்புகள்',
-        titleEn: 'Editings',
+        titleEn: 'editings',
         descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் டிஜிட்டல் படைப்புகள்',
         descEn: 'Photo manipulations and digital creations.',
     },
     poster: {
         titleTa: 'சுவரொட்டிகள்',
-        titleEn: 'Posters',
+        titleEn: 'posters',
         descTa: 'நிகழ்வுகளுக்கான போஸ்டர் வடிவமைப்புகள்',
         descEn: 'Event banners and creative poster designs.',
     },
     painting: {
         titleTa: 'ஓவியக்கலை',
-        titleEn: 'Paintings',
+        titleEn: 'paintings',
         descTa: 'வண்ணங்களில் வரையப்பட்ட ஓவியங்கள்',
         descEn: 'Color paintings and mixed media artworks.',
     },
     quotes: {
         titleTa: 'மேற்கோள் அட்டைகள்',
-        titleEn: 'Quotes',
+        titleEn: 'quotes',
         descTa: 'பொன்மொழிகளின் காட்சி வடிவமைப்புகள்',
         descEn: 'Visual quote cards and typographic designs.',
     },
     poems: {
         titleTa: 'கவிதை அட்டைகள்',
-        titleEn: 'Poems',
+        titleEn: 'poems',
         descTa: 'கவிதைகளின் காட்சி வடிவமைப்புகள்',
         descEn: 'Visual poem cards and creative typography.',
     },
     illustrations: {
         titleTa: 'சித்திரங்கள்',
-        titleEn: 'Illustrations',
+        titleEn: 'illustrations',
         descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்',
         descEn: 'Digital illustrations, logos, and vector art.',
     },
     digital_arts: {
         titleTa: 'டிஜிட்டல் கலை',
-        titleEn: 'Digital Arts',
+        titleEn: 'digital arts',
         descTa: 'கணினி மென்பொருளில் உருவாக்கிய கலைப்படைப்புகள்',
         descEn: 'Artworks created using digital software.',
     },
@@ -513,6 +514,32 @@ const ArtsGallery = () => {
         }
     };
 
+    const wrapperRef = useRef(null);
+
+    useEffect(() => {
+        const wrapper = wrapperRef.current;
+        if (!wrapper) return;
+
+        const onTouchStart = (e) => handleTouchStart(e);
+        const onTouchMove = (e) => {
+            if (e.touches.length === 2) {
+                if (e.cancelable) e.preventDefault();
+            }
+            handleTouchMove(e);
+        };
+        const onTouchEnd = (e) => handleTouchEnd(e);
+
+        wrapper.addEventListener('touchstart', onTouchStart, { passive: false });
+        wrapper.addEventListener('touchmove', onTouchMove, { passive: false });
+        wrapper.addEventListener('touchend', onTouchEnd, { passive: false });
+
+        return () => {
+            wrapper.removeEventListener('touchstart', onTouchStart);
+            wrapper.removeEventListener('touchmove', onTouchMove);
+            wrapper.removeEventListener('touchend', onTouchEnd);
+        };
+    }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
+
     const containerRef = useRef(null);
     const scrollTimeout = useRef(null);
 
@@ -948,6 +975,9 @@ const ArtsGallery = () => {
                         justify-content: flex-end;
                         gap: 6px;
                         width: fit-content;
+                        padding: 6px 14px; 
+                        height: 32px; 
+                        box-sizing: border-box;
                     }
                     .arts-lb-meta-header {
                         display: flex;
@@ -991,7 +1021,7 @@ const ArtsGallery = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 100px 20px 220px; 
+                    padding: 100px 20px 180px; 
                     scroll-snap-align: center;
                     scroll-snap-stop: always;
                     position: relative;
@@ -1122,6 +1152,41 @@ const ArtsGallery = () => {
                     width: 100%;
                     margin-bottom: 8px;
                 }
+                .arts-lb-meta-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    width: 100%;
+                    margin-top: 12px;
+                }
+                .arts-lb-meta-row.floating {
+                    position: static;
+                    margin: 0;
+                    justify-content: flex-start;
+                    pointer-events: auto;
+                }
+                @media (max-width: 768px) {
+                    .arts-lb-meta-row.floating {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 12px;
+                    }
+                }
+
+                .arts-lb-caption-row {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 12px;
+                    width: 100%;
+                }
+                .arts-lb-caption-row .arts-lb-pagination {
+                    margin-top: 4px;
+                }
+                .arts-lb-caption-row .arts-lb-caption {
+                    margin-top: 0;
+                }
+
                 .arts-lb-dot {
                     width: 5px;
                     height: 5px;
@@ -1137,6 +1202,38 @@ const ArtsGallery = () => {
                     width: 14px; 
                     background: white;
                     border-radius: 3px;
+                }
+                
+                .arts-lb-engagement-pill {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 0 12px;
+                    height: 32px;
+                    box-sizing: border-box;
+                    background: rgba(255,255,255,0.12);
+                    border-radius: 100px;
+                    border: 1px solid rgba(255,255,255,0.05);
+                    backdrop-filter: blur(10px);
+                }
+
+                .engagement-minimal {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .engagement-minimal .mini-like-btn {
+                    background: transparent;
+                    border: none;
+                    padding: 0;
+                    color: white;
+                    height: auto;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .engagement-minimal .mini-count {
+                    font-size: 0.85rem;
+                    font-weight: 700;
                 }
                 
                 .arts-lb-caption-sheet-overlay {
@@ -1357,7 +1454,11 @@ const ArtsGallery = () => {
                         backdrop-filter: none !important;
                     }
                     .arts-lb-footer-content {
-                        background: rgba(0,0,0,0.45);
+                        background: linear-gradient(to top, 
+                            rgba(0,0,0,0.7) 0%, 
+                            rgba(0,0,0,0.3) 50%, 
+                            transparent 100%);
+                        padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
                         backdrop-filter: none !important;
                     }
                     .arts-lb-nav, .arts-lb-pagination, .arts-lb-close, .arts-lb-fs-item {
@@ -1373,6 +1474,13 @@ const ArtsGallery = () => {
                         text-rendering: optimizeSpeed;
                         image-rendering: -webkit-optimize-contrast;
                         -webkit-font-smoothing: antialiased;
+                    }
+
+                    .arts-lb-meta-header {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 16px;
                     }
                 }
 
@@ -1476,9 +1584,7 @@ const ArtsGallery = () => {
                         <div className="arts-lb-main-container" onClick={(e) => e.stopPropagation()}>
                             <div
                                 className="arts-lb-img-wrapper"
-                                onTouchStart={handleTouchStart}
-                                onTouchMove={handleTouchMove}
-                                onTouchEnd={handleTouchEnd}
+                                ref={wrapperRef}
                                 onPointerDown={handlePointerDown}
                                 onPointerMove={handlePointerMove}
                                 onPointerUp={handlePointerEnd}
@@ -1541,7 +1647,87 @@ const ArtsGallery = () => {
                                 <div className="arts-lb-sidebar-body">
                                     <div className="arts-lb-meta-header">
                                         {currentImg.caption && <h2 className="arts-lb-caption">{currentImg.caption}</h2>}
+                                        
+                                        <div className="arts-lb-meta-row">
+                                            {currentImg.totalInPost > 1 && (
+                                                <div className="arts-lb-pagination">
+                                                    {[...Array(currentImg.totalInPost)].map((_, i) => {
+                                                        const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
+                                                        return (
+                                                            <div
+                                                                key={i}
+                                                                className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setLightboxGlobalIdx(postBaseIdx + i);
+                                                                }}
+                                                            />
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                            <div className="arts-lb-engagement-pill">
+                                                <Engagement postId={currentImg.postId} category="arts" minimal={true} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="arts-lb-date">{currentImg.date}</div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div
+                            className="arts-lb-footer-content"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
+                        >
+                            <div className="arts-lb-meta-header">
+                                <div className="arts-lb-engagement-pill mobile-only">
+                                    <Engagement postId={currentImg.postId} category="arts" minimal={true} />
+                                </div>
+
+                                <div className="arts-lb-caption-row mobile-only">
+                                    {currentImg.caption && (
+                                        <h2 className="arts-lb-caption">
+                                            {currentImg.caption.length > 60 ? (
+                                                <>
+                                                    {currentImg.caption.slice(0, 60)}...
+                                                    <button
+                                                        className="arts-lb-view-more"
+                                                        onClick={() => setShowCaptionModal(true)}
+                                                    >
+                                                        more
+                                                    </button>
+                                                </>
+                                            ) : currentImg.caption}
+                                        </h2>
+                                    )}
+
+                                    {currentImg.totalInPost > 1 && (
+                                        <div className="arts-lb-pagination floating">
+                                            {[...Array(currentImg.totalInPost)].map((_, i) => {
+                                                const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setLightboxGlobalIdx(postBaseIdx + i);
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Desktop-only version of caption and pagination */}
+                                <div className="desktop-only">
+                                    {currentImg.caption && (
+                                        <h2 className="arts-lb-caption">{currentImg.caption}</h2>
+                                    )}
+                                    <div className="arts-lb-meta-row floating">
                                         {currentImg.totalInPost > 1 && (
                                             <div className="arts-lb-pagination">
                                                 {[...Array(currentImg.totalInPost)].map((_, i) => {
@@ -1559,51 +1745,11 @@ const ArtsGallery = () => {
                                                 })}
                                             </div>
                                         )}
+                                        <div className="arts-lb-engagement-pill">
+                                            <Engagement postId={currentImg.postId} category="arts" minimal={true} />
+                                        </div>
                                     </div>
-                                    <div className="arts-lb-date">{currentImg.date}</div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div
-                            className="arts-lb-footer-content"
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
-                        >
-                            <div className="arts-lb-meta-header">
-                                {currentImg.caption && (
-                                    <h2 className="arts-lb-caption">
-                                        {currentImg.caption.length > 60 ? (
-                                            <>
-                                                {currentImg.caption.slice(0, 60)}...
-                                                <button
-                                                    className="arts-lb-view-more"
-                                                    onClick={() => setShowCaptionModal(true)}
-                                                >
-                                                    more
-                                                </button>
-                                            </>
-                                        ) : currentImg.caption}
-                                    </h2>
-                                )}
-
-                                {currentImg.totalInPost > 1 && (
-                                    <div className="arts-lb-pagination floating">
-                                        {[...Array(currentImg.totalInPost)].map((_, i) => {
-                                            const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
-                                            return (
-                                                <div
-                                                    key={i}
-                                                    className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setLightboxGlobalIdx(postBaseIdx + i);
-                                                    }}
-                                                />
-                                            );
-                                        })}
-                                    </div>
-                                )}
                             </div>
 
                             <div className="arts-lb-footer-row">
@@ -1646,6 +1792,9 @@ const ArtsGallery = () => {
                                             <div className="arts-lb-author">{profileData.fullName}</div>
                                         </div>
                                         <div className="arts-lb-date">{currentImg.date}</div>
+                                    </div>
+                                    <div style={{ marginTop: '24px' }}>
+                                        <Engagement postId={currentImg.postId} category="arts" hideComments={true} />
                                     </div>
                                 </div>
                             </div>

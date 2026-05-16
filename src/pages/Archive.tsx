@@ -17,7 +17,7 @@ const Archive = () => {
     const { setPageTitle } = useOutletContext();
 
     useEffect(() => {
-        setPageTitle('காப்புகள்|Archive');
+        setPageTitle('காப்புகள்|archive');
     }, [setPageTitle]);
 
     // Destructure Data

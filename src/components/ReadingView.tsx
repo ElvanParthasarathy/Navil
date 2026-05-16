@@ -5,14 +5,15 @@ import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
 import { subscribe, getCachedRaw } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 import { getOptimizedImage } from '../lib/media';
+import { Engagement } from './Engagement';
 
 const CATEGORY_META = {
-    'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts' },
-    'articles': { title: 'கட்டுரைகள்', subtitle: 'Articles' },
-    'stories': { title: 'சிறுகதைகள்', subtitle: 'Short Stories' },
-    'diary': { title: 'நாளேடு', subtitle: 'Diary' },
-    'poems': { title: 'செய்யுள்கள்', subtitle: 'Poems' },
-    'quotes': { title: 'பொன்மொழிகள்', subtitle: 'Quotes' }
+    'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'blog posts' },
+    'articles': { title: 'கட்டுரைகள்', subtitle: 'articles' },
+    'stories': { title: 'சிறுகதைகள்', subtitle: 'short stories' },
+    'diary': { title: 'நாளேடு', subtitle: 'diary' },
+    'poems': { title: 'செய்யுள்கள்', subtitle: 'poems' },
+    'quotes': { title: 'பொன்மொழிகள்', subtitle: 'quotes' }
 };
 
 const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
@@ -73,6 +74,7 @@ const ReadingView = () => {
     });
     const [seriesParts, setSeriesParts] = useState([]);
     const [variantTranslStates, setVariantTranslStates] = useState({}); // { "postId-vIndex": activeLang | null }
+    const [activeSection, setActiveSection] = useState(null); // 'urai' | 'notes' | null
 
     const { setPageTitle, autoThumbnails } = useOutletContext();
 
@@ -348,6 +350,86 @@ const ReadingView = () => {
                     transform: scale(0.95);
                     background: color-mix(in srgb, var(--text-main) 18%, transparent);
                 }
+                .expand-pill {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 12px;
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    border-radius: 100px;
+                    padding: 10px 18px;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+                    border: none;
+                    color: var(--text-main);
+                    min-width: 120px;
+                }
+                .expand-pill:hover {
+                    background: color-mix(in srgb, var(--text-main) 10%, transparent);
+                }
+                .expand-pill.active {
+                    background: var(--text-main);
+                    color: var(--bg-app);
+                }
+                .expand-pill.active .pill-en {
+                    color: var(--bg-app);
+                    opacity: 0.6;
+                }
+                .pill-text-stack {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    line-height: 1.1;
+                }
+                @media (max-width: 600px) {
+                    .expand-pill {
+                        padding: 8px 16px;
+                        gap: 8px;
+                        flex: 1;
+                    }
+                }
+                .expand-pill .pill-ta {
+                    font-family: "Mukta Malar", sans-serif;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    line-height: 1;
+                }
+                .expand-pill .pill-en {
+                    font-size: 0.7rem;
+                    font-weight: 500;
+                    color: var(--text-muted);
+                    opacity: 0.7;
+                    text-transform: lowercase;
+                    letter-spacing: 0.01em;
+                }
+                .expand-pill svg {
+                    transition: transform 0.3s ease;
+                    opacity: 0.6;
+                    flex-shrink: 0;
+                }
+                .expand-pill.active svg {
+                    opacity: 1;
+                }
+                .expand-pill.active svg {
+                    transform: rotate(180deg);
+                }
+                .collapsible-section {
+                    position: relative;
+                    overflow: hidden;
+                    transition: max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                                opacity 0.4s ease,
+                                margin 0.4s ease;
+                }
+                .collapsible-section.collapsed {
+                    max-height: 0;
+                    opacity: 0;
+                    margin-bottom: 0;
+                }
+                .collapsible-section:not(.collapsed) {
+                    max-height: 800px; /* Reduced for smoother transition speed */
+                    opacity: 1;
+                    margin-bottom: 24px;
+                }
             `}</style>
 
             {/* Header: Title and Back Button */}
@@ -506,18 +588,47 @@ const ReadingView = () => {
                 {/* Urai & Notes section */}
                 {(post.urai || post.notes) && (
                     <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-light)' }}>
+                        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: activeSection ? '24px' : '0', transition: 'margin 0.3s ease' }}>
+                            {post.urai && (
+                                <button 
+                                    className={`expand-pill ${activeSection === 'urai' ? 'active' : ''}`}
+                                    onClick={() => setActiveSection(activeSection === 'urai' ? null : 'urai')}
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                    <div className="pill-text-stack">
+                                        <span className="pill-ta">விளக்கம்</span>
+                                        <span className="pill-en">meaning</span>
+                                    </div>
+                                </button>
+                            )}
+                            {post.notes && (
+                                <button 
+                                    className={`expand-pill ${activeSection === 'notes' ? 'active' : ''}`}
+                                    onClick={() => setActiveSection(activeSection === 'notes' ? null : 'notes')}
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                    <div className="pill-text-stack">
+                                        <span className="pill-ta">குறிப்புகள்</span>
+                                        <span className="pill-en">notes</span>
+                                    </div>
+                                </button>
+                            )}
+                        </div>
+
                         {post.urai && (
-                            <div style={{ marginBottom: '32px' }}>
-                                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '16px' }}>விளக்கம் / Meaning</h3>
-                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap' }}>
+                            <div className={`collapsible-section ${activeSection !== 'urai' ? 'collapsed' : ''}`}>
+                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap', padding: '12px 0' }}>
                                     {post.urai}
                                 </div>
                             </div>
                         )}
                         {post.notes && (
-                            <div>
-                                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '16px' }}>குறிப்புகள் / Notes</h3>
-                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap' }}>
+                            <div className={`collapsible-section ${activeSection !== 'notes' ? 'collapsed' : ''}`}>
+                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap', padding: '12px 0' }}>
                                     {post.notes}
                                 </div>
                             </div>
@@ -546,7 +657,11 @@ const ReadingView = () => {
                         </div>
                     </div>
                 )}
+
+                {/* Real-time Likes & Comments */}
+                <Engagement postId={post.id} category={category} />
             </article>
+
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 

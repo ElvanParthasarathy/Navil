@@ -9,32 +9,32 @@ import { getOptimizedImage } from '../lib/media';
 
 const CATEGORY_META = {
     'blog': {
-        title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts',
+        title: 'வலைப்பதிவுகள்', subtitle: 'blog posts',
         descTa: 'என் அன்றாடத் தேடல்களும் வாழ்வியல் பகிர்வுகளும்.', descEn: 'My daily reflections and personal updates.',
         table: 'blog_posts', classification: 'General',
     },
     'articles': {
-        title: 'கட்டுரைகள்', subtitle: 'Articles',
+        title: 'கட்டுரைகள்', subtitle: 'articles',
         descTa: 'பல்வேறு பொதுத் தலைப்புகளிலான விரிவான பார்வைகள்.', descEn: 'Detailed perspectives on general topics.',
         table: 'articles_v2', classification: 'Article',
     },
     'stories': {
-        title: 'சிறுகதைகள்', subtitle: 'Short Stories',
+        title: 'சிறுகதைகள்', subtitle: 'short stories',
         descTa: 'ஒரு கதை சொல்லட்டா சார்?', descEn: 'My original fiction and short narratives.',
         table: 'short_stories_v2', classification: 'Fiction',
     },
     'diary': {
-        title: 'நாளேடு', subtitle: 'Diary',
+        title: 'நாளேடு', subtitle: 'diary',
         descTa: 'என் நாள்களின் நினைவுகளும் பதிவுகளும்', descEn: 'Memories and records of my days.',
         table: 'diary_v2', classification: 'Journal',
     },
     'poems': {
-        title: 'செய்யுள்கள்', subtitle: 'Poems',
+        title: 'செய்யுள்கள்', subtitle: 'poems',
         descTa: 'என் உள்ளத்தின் உணர்வுகள் கவிதைகளாக...', descEn: 'My heartfelt poems and verses.',
         table: 'poems_v2', classification: 'Poetry',
     },
     'quotes': {
-        title: 'பொன்மொழிகள்', subtitle: 'Quotes',
+        title: 'பொன்மொழிகள்', subtitle: 'quotes',
         descTa: 'வாழ்க்கையின் தத்துவங்கள் சுருக்கமாக.', descEn: 'Short philosophical thoughts.',
         table: 'quotes_v2', classification: 'Quote',
     }

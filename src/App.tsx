@@ -119,7 +119,7 @@ const Layout = () => {
 
     const [pageTitle, setPageTitle] = React.useState('Elvan');
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/portfolio', '/settings'];
+    const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/portfolio', '/settings', '/teaching'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
 
@@ -255,13 +255,13 @@ const Layout = () => {
                         </button>
                     </div>
                     <div className="sidebar-nav">
-                        <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="Home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="Writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/arts" icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>} label="படைப்புகள்" subLabel="Arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="Teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
+                        <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/arts" icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
-                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="Archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="About" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
+                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
                             icon={
@@ -339,11 +339,17 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className={`main-content ${!isMainLevel ? 'no-bottom-nav' : ''}`} style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' }}>
+            <main className={`main-content ${!isMainLevel ? 'no-bottom-nav' : ''} ${!isMainLevel ? 'mobile-full-width' : ''}`} style={{ 
+                flexGrow: 1, 
+                minHeight: '100vh', 
+                width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', 
+                marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' 
+            }}>
                 <ScrollRestoration />
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle, autoThumbnails }} />
             </main>
         </div>
+
     );
 };
 

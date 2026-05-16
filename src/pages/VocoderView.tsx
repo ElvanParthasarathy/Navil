@@ -35,7 +35,8 @@ const VocoderView = () => {
     }, []);
 
     return (
-        <div className="page-view fadeIn vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
+        <div className="page-view animate-entry vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
+
             <style>{`
                 /* Lock scrolling only for the main content area while this component is active */
                 .main-content {
