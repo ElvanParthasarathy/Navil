@@ -119,11 +119,9 @@ const Layout = () => {
 
     const [pageTitle, setPageTitle] = React.useState('Elvan');
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/teaching', '/portfolio', '/settings'];
+    const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/portfolio', '/settings'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
-    
-    // Debug log (user can see this in console if needed)
-    console.log('Path:', normalizedPath, 'isMainLevel:', isMainLevel);
+
 
     // Reset title on navigation to home
     React.useEffect(() => {
