@@ -210,7 +210,7 @@ const Arts = () => {
                 }
                 .category-card {
                     background: var(--bg-card);
-                    border: 1px solid var(--border-light);
+                    border: none;
                     border-radius: 20px;
                     padding: 24px;
                     text-decoration: none;
