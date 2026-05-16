@@ -595,20 +595,30 @@ const CategoryListView = () => {
                     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     display: block;
                 }
-                .poem-link-card:hover {
-                    transform: translateY(-4px);
-                }
                 .poem-link-card:active {
                     transform: translateY(0) scale(0.98);
                 }
-                .poem-link-card:hover .poem-number {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    box-shadow: 0 0 20px color-mix(in srgb, var(--text-main) 50%, transparent);
-                }
-                .poem-link-card:hover .poem-title {
-                    color: var(--text-main);
-                    text-shadow: 0 0 15px color-mix(in srgb, var(--text-main) 30%, transparent);
+                @media (hover: hover) {
+                    .poem-link-card:hover {
+                        transform: translateY(-4px);
+                    }
+                    .poem-link-card:hover .poem-number {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        box-shadow: 0 0 20px color-mix(in srgb, var(--text-main) 50%, transparent);
+                    }
+                    .poem-link-card:hover .poem-title {
+                        color: var(--text-main);
+                        text-shadow: 0 0 15px color-mix(in srgb, var(--text-main) 30%, transparent);
+                    }
+                    .poem-link-card:hover .read-more-pill {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        box-shadow: 0 4px 15px color-mix(in srgb, var(--text-main) 30%, transparent);
+                    }
+                    .poem-link-card:hover .read-more-pill .arrow {
+                        opacity: 1;
+                    }
                 }
 
                 /* Pagination Styles */
@@ -666,10 +676,12 @@ const CategoryListView = () => {
                     cursor: pointer;
                     transition: all 0.2s ease;
                 }
-                .page-number-btn:hover {
-                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
-                    color: var(--text-main);
-                    border-color: var(--text-main);
+                @media (hover: hover) {
+                    .page-number-btn:hover {
+                        background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                        color: var(--text-main);
+                        border-color: var(--text-main);
+                    }
                 }
                 .page-number-btn.active {
                     background: var(--text-main);
@@ -801,10 +813,12 @@ const CategoryListView = () => {
                     cursor: pointer;
                     transition: all 0.2s ease;
                 }
-                .page-btn:hover:not(:disabled) {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    transform: translateY(-2px);
+                @media (hover: hover) {
+                    .page-btn:hover:not(:disabled) {
+                        background: var(--text-main);
+                        color: var(--bg-app);
+                        transform: translateY(-2px);
+                    }
                 }
                 .page-btn:disabled {
                     opacity: 0.3;
@@ -823,14 +837,25 @@ const CategoryListView = () => {
                     display: flex;
                     flex-direction: column;
                 }
-                .blog-link-card:hover .blog-card-item {
-                    transform: translateY(-4px);
-                    box-shadow: 0 12px 24px color-mix(in srgb, var(--text-main) 8%, transparent);
-                }
                 .blog-link-card:active .blog-card-item {
                     transform: scale(0.97);
                     background: var(--nav-hover);
                     transition-duration: 0.1s;
+                }
+                @media (hover: hover) {
+                    .blog-link-card:hover .blog-card-item {
+                        transform: translateY(-4px);
+                        box-shadow: 0 12px 24px color-mix(in srgb, var(--text-main) 8%, transparent);
+                    }
+                    .blog-link-card:hover .blog-cover-wrapper img {
+                        transform: scale(1.05);
+                    }
+                    .blog-link-card:hover .blog-title {
+                        color: color-mix(in srgb, var(--text-main) 80%, var(--bg-app));
+                    }
+                    .blog-link-card:hover .blog-read-more {
+                        gap: 10px;
+                    }
                 }
 
                 .blog-cover-wrapper {
@@ -1078,8 +1103,10 @@ const CategoryListView = () => {
                     cursor: pointer;
                     transition: all 0.3s ease;
                 }
-                .filter-icon-wrapper:hover {
-                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                @media (hover: hover) {
+                    .filter-icon-wrapper:hover {
+                        background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                    }
                 }
                 .filter-icon {
                     color: var(--text-muted);
@@ -1109,8 +1136,10 @@ const CategoryListView = () => {
                     transition: all 0.3s ease;
                     border: none;
                 }
-                .pagination-toggle-btn:hover {
-                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                @media (hover: hover) {
+                    .pagination-toggle-btn:hover {
+                        background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                    }
                 }
                 .pagination-toggle-btn.active {
                     background: var(--text-main);

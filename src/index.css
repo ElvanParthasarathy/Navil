@@ -361,10 +361,12 @@ body {
   justify-content: center;
 }
 
-/* Hover: Scale UP slightly + light background */
-.nav-item:hover {
-  background: var(--nav-hover);
-  transform: scale(1.02);
+@media (hover: hover) {
+  /* Hover: Scale UP slightly + light background */
+  .nav-item:hover {
+    background: var(--nav-hover);
+    transform: scale(1.02);
+  }
 }
 
 /* Active Click: Slight shrink */
@@ -818,13 +820,15 @@ span.desktop-only {
   top: 0;
 }
 
-/* Hover State */
-.category-card:hover {
-  transform: translateY(-4px);
-  /* Reduced lift */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  /* Reduced shadow spread */
-  border-color: rgba(0, 0, 0, 0.1);
+/* Hover State (Desktop Only) */
+@media (hover: hover) {
+  .category-card:hover {
+    transform: translateY(-4px);
+    /* Reduced lift */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    /* Reduced shadow spread */
+    border-color: rgba(0, 0, 0, 0.1);
+  }
 }
 
 .category-card:active {
@@ -1531,8 +1535,10 @@ span.desktop-only {
   transition: transform 0.2s ease;
 }
 
-.info-card:hover {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .info-card:hover {
+    transform: translateY(-2px);
+  }
 }
 
 .card-title {
