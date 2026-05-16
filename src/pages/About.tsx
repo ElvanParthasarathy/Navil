@@ -148,8 +148,8 @@ const About = () => {
                 }
 
                 .about-card {
-                    background: var(--bg-panel);
-                    border: 1px solid transparent;
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+                    border: none;
                     padding: 32px;
                     border-radius: 28px;
                     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -159,14 +159,18 @@ const About = () => {
                     position: relative;
                     overflow: hidden;
                     height: 100%;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+                }
+
+                [data-theme='dark'] .about-card {
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
                 }
 
                 @media (hover: hover) and (pointer: fine) {
                     .about-card:hover {
                         transform: translateY(-4px);
                         box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-                        background: var(--bg-card);
-                        border-color: var(--border-light);
                         z-index: 2;
                     }
                 }
@@ -213,10 +217,17 @@ const About = () => {
                     justify-content: space-between;
                     align-items: center;
                     padding: 32px;
-                    background: var(--bg-panel);
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+                    border: none;
                     border-radius: 32px;
                     flex-wrap: wrap;
                     gap: 24px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 30px 60px rgba(0, 0, 0, 0.03);
+                }
+
+                [data-theme='dark'] .contact-footer {
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 30px 70px rgba(0, 0, 0, 0.2);
                 }
 
                 .contact-header {

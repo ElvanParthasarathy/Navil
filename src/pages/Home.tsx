@@ -151,11 +151,17 @@ const Home = () => {
                     justify-content: space-between;
                     align-items: center;
                     padding: 32px;
-                    background: var(--bg-panel);
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+                    border: none;
                     border-radius: 32px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 30px 60px rgba(0, 0, 0, 0.03);
                 }
 
-                .contact-header {
+                [data-theme='dark'] .contact-footer {
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 30px 70px rgba(0, 0, 0, 0.2);
+                }
+               .contact-header {
                     display: flex;
                     align-items: center;
                     gap: 12px;
