@@ -372,6 +372,7 @@ body {
 /* Active Click: Slight shrink */
 .nav-item:active {
   transform: scale(0.96);
+  transition-duration: 0.1s;
 }
 
 .nav-icon {
@@ -832,10 +833,10 @@ span.desktop-only {
 }
 
 .category-card:active {
-  transform: scale(0.97) translateY(0);
+  transform: scale(0.96) translateY(0);
   background: var(--nav-hover);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition-duration: 0.1s;
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cat-title {

@@ -596,7 +596,8 @@ const CategoryListView = () => {
                     display: block;
                 }
                 .poem-link-card:active {
-                    transform: translateY(0) scale(0.98);
+                    transform: translateY(0) scale(0.96);
+                    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
                 }
                 @media (hover: hover) {
                     .poem-link-card:hover {
@@ -838,9 +839,9 @@ const CategoryListView = () => {
                     flex-direction: column;
                 }
                 .blog-link-card:active .blog-card-item {
-                    transform: scale(0.97);
+                    transform: scale(0.96);
                     background: var(--nav-hover);
-                    transition-duration: 0.1s;
+                    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
                 }
                 @media (hover: hover) {
                     .blog-link-card:hover .blog-card-item {
