@@ -361,18 +361,10 @@ body {
   justify-content: center;
 }
 
-@media (hover: hover) {
-  /* Hover: Scale UP slightly + light background */
-  .nav-item:hover {
-    background: var(--nav-hover);
-    transform: scale(1.02);
-  }
-}
 
 /* Active Click: Slight shrink */
 .nav-item:active {
   transform: scale(0.96);
-  transition-duration: 0.1s;
 }
 
 .nav-icon {
@@ -821,22 +813,12 @@ span.desktop-only {
   top: 0;
 }
 
-/* Hover State (Desktop Only) */
-@media (hover: hover) {
-  .category-card:hover {
-    transform: translateY(-4px);
-    /* Reduced lift */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    /* Reduced shadow spread */
-    border-color: rgba(0, 0, 0, 0.1);
-  }
-}
 
 .category-card:active {
-  transform: scale(0.96) translateY(0);
+  transform: scale(0.97) translateY(0);
   background: var(--nav-hover);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.1s;
 }
 
 .cat-title {
@@ -1536,11 +1518,6 @@ span.desktop-only {
   transition: transform 0.2s ease;
 }
 
-@media (hover: hover) {
-  .info-card:hover {
-    transform: translateY(-2px);
-  }
-}
 
 .card-title {
   font-size: 0.9rem;

@@ -197,33 +197,6 @@ const Writings = () => {
                 }
 
                 /* HOVER EFFECTS - DESKTOP ONLY */
-                @media (hover: hover) {
-                    .category-card:hover {
-                        transform: translateY(-8px);
-                        background: color-mix(in srgb, var(--text-main) 4%, var(--bg-card));
-                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-                    }
-                    [data-theme='dark'] .category-card:hover {
-                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-                    }
-
-                    .category-card:hover .cat-icon-box {
-                        background: var(--text-main);
-                        color: var(--bg-app);
-                        transform: scale(1.08) rotate(-4deg);
-                        box-shadow: 0 8px 16px color-mix(in srgb, var(--text-main) 20%, transparent);
-                    }
-
-                    .category-card:hover .cat-footer {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-
-                    .category-card:hover::after {
-                        transform: scale(2.2);
-                        opacity: 0.06;
-                    }
-                }
 
                 .category-card:active {
                     transform: scale(0.96);
