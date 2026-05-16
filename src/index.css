@@ -828,8 +828,9 @@ span.desktop-only {
 }
 
 .category-card:active {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transform: scale(0.97) translateY(0);
+  background: var(--nav-hover);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition-duration: 0.1s;
 }
 
@@ -1405,7 +1406,17 @@ span.desktop-only {
   .quote-card:focus-visible {
     outline: none;
   }
+  .sidebar.mobile-hidden-nav {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .main-content.no-bottom-nav {
+    padding-bottom: 24px !important;
+  }
 }
+
 
 /* =========================================
    6. ABOUT PAGE REDESIGN

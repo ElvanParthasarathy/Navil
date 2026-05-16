@@ -15,6 +15,15 @@ const Writings = () => {
 
     useEffect(() => {
         setPageTitle('எழுத்துகள்|Writings');
+
+        // CLEAR CATEGORY MEMORY: When entering the hub, reset all sub-category states
+        // This ensures entering Poems/Quotes always starts from Page 1 with no filters.
+        const categories = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
+        categories.forEach(cat => {
+            sessionStorage.removeItem(`elvan_${cat}_search`);
+            sessionStorage.removeItem(`elvan_${cat}_genre`);
+            sessionStorage.removeItem(`elvan_${cat}_page`);
+        });
     }, [setPageTitle]);
 
     useEffect(() => {
@@ -216,6 +225,13 @@ const Writings = () => {
                     }
                 }
 
+                .category-card:active {
+                    transform: scale(0.96);
+                    background: color-mix(in srgb, var(--text-main) 8%, var(--bg-card));
+                    transition-duration: 0.1s;
+                }
+
+
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
                     .mobile-hide { display: none; }
@@ -240,11 +256,7 @@ const Writings = () => {
                         color: var(--text-muted);
                     }
 
-                    .category-card:active { 
-                        transform: scale(0.95); 
-                        background: color-mix(in srgb, var(--text-main) 5%, var(--bg-card));
-                        transition: transform 0.1s ease;
-                    }
+
                     
                     .category-card:active .cat-icon-box {
                         background: var(--text-main);

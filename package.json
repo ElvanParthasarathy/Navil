@@ -21,6 +21,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "firebase": "^12.13.0",
+    "framer-motion": "^12.38.0",
     "glob": "^13.0.0",
     "imagekit": "^6.0.0",
     "lucide-react": "^0.576.0",

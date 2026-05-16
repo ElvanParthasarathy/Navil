@@ -311,6 +311,13 @@ const Arts = () => {
                         opacity: 0.06;
                     }
                 }
+
+                .category-card:active {
+                    transform: scale(0.96);
+                    background: color-mix(in srgb, var(--text-main) 8%, var(--bg-card));
+                    transition-duration: 0.1s;
+                }
+
                 @media (max-width: 768px) {
                     .writings-page { padding: 0 0 100px 0; }
                     .writings-header { padding: 28px 28px 10px; text-align: center; margin-bottom: 24px; }
@@ -330,11 +337,7 @@ const Arts = () => {
                         font-size: 0.8rem;
                         color: var(--text-muted);
                     }
-                    .category-card:active {
-                        transform: scale(0.95);
-                        background: color-mix(in srgb, var(--text-main) 5%, var(--bg-card));
-                        transition: transform 0.1s ease;
-                    }
+
                     .category-card:active .cat-icon-box {
                         background: var(--text-main);
                         color: var(--bg-app);

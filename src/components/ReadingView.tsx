@@ -373,7 +373,7 @@ const ReadingView = () => {
                 </Link>
             </div>
 
-            <article style={{ maxWidth: '800px' }}>
+            <article className="animate-entry" style={{ maxWidth: '800px' }}>
                 {!isMinimal && finalCoverImage && category !== 'poems' && category !== 'quotes' && (
                     <div style={{ width: '100%', borderRadius: isStory ? '0' : '24px', overflow: 'hidden', marginBottom: '40px' }}>
                         <img src={getOptimizedImage(finalCoverImage, 'medium')} alt={primaryTitle || 'Cover'} style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', display: 'block' }} />

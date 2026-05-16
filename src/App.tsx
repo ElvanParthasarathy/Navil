@@ -118,6 +118,12 @@ const Layout = () => {
 
 
     const [pageTitle, setPageTitle] = React.useState('Elvan');
+    const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+    const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/teaching', '/portfolio', '/settings'];
+    const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
+    
+    // Debug log (user can see this in console if needed)
+    console.log('Path:', normalizedPath, 'isMainLevel:', isMainLevel);
 
     // Reset title on navigation to home
     React.useEffect(() => {
@@ -237,7 +243,8 @@ const Layout = () => {
                 </div>
             </header>
 
-            <nav className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+            <nav className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''} ${!isMainLevel ? 'mobile-hidden-nav' : ''}`}>
+
                 <div className="sidebar-top">
                     <div className="sidebar-header">
                         {!isSidebarCollapsed && <div className="brand">Elvan</div>}
@@ -334,7 +341,7 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <main className="main-content" style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' }}>
+            <main className={`main-content ${!isMainLevel ? 'no-bottom-nav' : ''}`} style={{ flexGrow: 1, minHeight: '100vh', width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' }}>
                 <ScrollRestoration />
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle, autoThumbnails }} />
             </main>

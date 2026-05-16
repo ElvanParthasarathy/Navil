@@ -271,11 +271,12 @@ const CategoryListView = () => {
                             <div className="pagination-inner">
                                 {(() => {
                                     const pages: (number | string)[] = [];
-                                    if (totalPages <= 7) {
+                                    if (totalPages <= 5) {
                                         for (let i = 1; i <= totalPages; i++) pages.push(i);
                                     } else {
                                         pages.push(1);
-                                        if (currentPage > 4) pages.push('...');
+                                        
+                                        if (currentPage > 3) pages.push('...');
                                         
                                         const start = Math.max(2, currentPage - 1);
                                         const end = Math.min(totalPages - 1, currentPage + 1);
@@ -284,7 +285,7 @@ const CategoryListView = () => {
                                             if (!pages.includes(i)) pages.push(i);
                                         }
                                         
-                                        if (currentPage < totalPages - 3) pages.push('...');
+                                        if (currentPage < totalPages - 2) pages.push('...');
                                         if (!pages.includes(totalPages)) pages.push(totalPages);
                                     }
                                     
@@ -340,7 +341,7 @@ const CategoryListView = () => {
 
 
 
-            <div className="blog-grid-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', width: '100%' }}>
+            <div className="blog-grid-container animate-entry" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', width: '100%' }}>
                 {loading ? (
                     Array(6).fill(0).map((_, i) => (
                         <div key={i} className="skeleton-item" style={{ background: 'var(--bg-card)', borderRadius: '16px', overflow: 'hidden' }}>
@@ -520,11 +521,12 @@ const CategoryListView = () => {
                     <div className="pagination-inner">
                         {(() => {
                             const pages: (number | string)[] = [];
-                            if (totalPages <= 7) {
+                            if (totalPages <= 5) {
                                 for (let i = 1; i <= totalPages; i++) pages.push(i);
                             } else {
                                 pages.push(1);
-                                if (currentPage > 4) pages.push('...');
+                                
+                                if (currentPage > 3) pages.push('...');
                                 
                                 const start = Math.max(2, currentPage - 1);
                                 const end = Math.min(totalPages - 1, currentPage + 1);
@@ -533,7 +535,7 @@ const CategoryListView = () => {
                                     if (!pages.includes(i)) pages.push(i);
                                 }
                                 
-                                if (currentPage < totalPages - 3) pages.push('...');
+                                if (currentPage < totalPages - 2) pages.push('...');
                                 if (!pages.includes(totalPages)) pages.push(totalPages);
                             }
                             
@@ -825,6 +827,11 @@ const CategoryListView = () => {
                     transform: translateY(-4px);
                     box-shadow: 0 12px 24px color-mix(in srgb, var(--text-main) 8%, transparent);
                 }
+                .blog-link-card:active .blog-card-item {
+                    transform: scale(0.97);
+                    background: var(--nav-hover);
+                    transition-duration: 0.1s;
+                }
 
                 .blog-cover-wrapper {
                     width: 100%;
@@ -920,9 +927,10 @@ const CategoryListView = () => {
                 .blog-title {
                     font-size: 1.4rem;
                     font-weight: 700;
-                    line-height: 1.3;
+                    line-height: 1.5; /* Increased for Malayalam script breathing room */
                     color: var(--text-main);
                     margin-bottom: 12px;
+                    padding: 4px 0; /* Prevents clipping of tall characters */
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
@@ -946,7 +954,7 @@ const CategoryListView = () => {
 
                 .blog-excerpt {
                     font-size: 0.95rem;
-                    line-height: 1.7;
+                    line-height: 1.8; /* Increased for Malayalam/Tamil clarity */
                     color: var(--text-muted);
                     margin-bottom: 20px;
                     padding-bottom: 4px;
