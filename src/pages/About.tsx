@@ -277,8 +277,8 @@ const About = () => {
                     font-size: 0.85rem;
                     line-height: 1.5;
                     padding: 8px 16px;
-                    background: var(--bg-card);
-                    border: 1px solid var(--border-color);
+                    background: color-mix(in srgb, var(--text-main), transparent 92%);
+                    border: none;
                     border-radius: 99px;
                 }
                 
@@ -291,8 +291,8 @@ const About = () => {
                 .social-icon-link {
                     width: 44px;
                     height: 44px;
-                    background: var(--bg-card);
-                    border: 1px solid var(--border-color);
+                    background: color-mix(in srgb, var(--text-main), transparent 92%);
+                    border: none;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;

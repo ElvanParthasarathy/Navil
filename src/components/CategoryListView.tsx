@@ -794,13 +794,19 @@ const CategoryListView = () => {
                 }
 
                 .blog-card-item {
-                    background: var(--bg-card);
+                    background: linear-gradient(145deg, var(--bg-card), color-mix(in srgb, var(--bg-card), transparent 20%));
                     border-radius: 16px;
                     overflow: hidden;
                     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
                     height: 100%;
                     display: flex;
                     flex-direction: column;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+                }
+
+                [data-theme='dark'] .blog-card-item {
+                    background: linear-gradient(145deg, var(--bg-card), color-mix(in srgb, var(--bg-card), transparent 45%));
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
                 }
                 .blog-link-card:active .blog-card-item {
                     transform: scale(0.985);

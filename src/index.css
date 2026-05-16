@@ -250,6 +250,18 @@ body {
   padding-left: 8px;
   white-space: nowrap;
   overflow: hidden;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.brand-subtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+  text-transform: lowercase;
 }
 
 .sidebar-header {
@@ -805,7 +817,7 @@ body {
 /* --- PREMIUM CATEGORY CARDS --- */
 .category-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  border: none;
   padding: 28px;
   border-radius: 24px;
   text-decoration: none;
@@ -1029,6 +1041,12 @@ body {
     line-height: 1.3;
     padding: 0 4px;
     margin-right: auto; /* Default to left-aligned */
+  }
+
+  .brand-bilingual {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
   }
 
   .mobile-topbar.has-back .brand {

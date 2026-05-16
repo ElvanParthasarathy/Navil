@@ -117,7 +117,7 @@ const Layout = () => {
     }, [isSettingsOpen]);
 
 
-    const [pageTitle, setPageTitle] = React.useState('Elvan');
+    const [pageTitle, setPageTitle] = React.useState('எல்வன்');
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
     const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/portfolio', '/settings', '/teaching'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
@@ -125,7 +125,7 @@ const Layout = () => {
 
     // Reset title on navigation to home
     React.useEffect(() => {
-        if (location.pathname === '/') setPageTitle('Elvan');
+        if (location.pathname === '/') setPageTitle('எல்வன்');
     }, [location.pathname]);
 
     return (
@@ -151,7 +151,12 @@ const Layout = () => {
                 </div>
                 
                 <div className="brand">
-                    {pageTitle.includes('|') ? (
+                    {pageTitle === 'எல்வன்' || pageTitle === 'எல்வன்|elvan' ? (
+                        <div className="brand-bilingual" lang="ta">
+                            எல்வன்
+                            <span className="brand-subtitle">elvan</span>
+                        </div>
+                    ) : pageTitle.includes('|') ? (
                         <>
                             <div className="brand-main">{pageTitle.split('|')[0]}</div>
                             <div className="brand-sub">{pageTitle.split('|')[1]}</div>
@@ -245,7 +250,12 @@ const Layout = () => {
 
                 <div className="sidebar-top">
                     <div className="sidebar-header">
-                        {!isSidebarCollapsed && <div className="brand">Elvan</div>}
+                        {!isSidebarCollapsed && (
+                            <div className="brand" lang="ta">
+                                எல்வன்
+                                <span className="brand-subtitle">elvan</span>
+                            </div>
+                        )}
                         <button
                             className="sidebar-toggle-btn"
                             onClick={handleSidebarToggle}
