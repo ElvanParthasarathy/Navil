@@ -1371,36 +1371,38 @@ const CategoryListView = () => {
                 @media (max-width: 768px) {
                     .pagination-wrapper {
                         gap: 20px !important;
-                        margin-top: 30px !important;
+                        margin-top: 40px !important;
                         padding-top: 24px !important;
                         padding-bottom: 24px !important;
                         align-items: center;
                         width: 100%;
                     }
                     .pagination-inner {
-                        gap: 20px;
+                        gap: 24px; /* Increased vertical space between rows */
                         width: 100%;
                     }
                     .page-numbers.centered {
-                        gap: 10px;
+                        gap: 12px;
+                        flex-wrap: wrap;
                     }
                     .page-numbers.spread {
-                        gap: 4px;
+                        gap: 8px;
                         justify-content: center;
+                        flex-wrap: wrap; /* Allow wrapping to prevent horizontal cutting */
                     }
                     .pagination-nav-pill {
                         justify-content: center;
-                        gap: 12px;
+                        gap: 10px;
                     }
                     .page-btn {
-                        padding: 12px 14px;
+                        padding: 12px 18px; /* Larger tap target */
                         font-size: 0.85rem;
                         flex: 1;
                         justify-content: center;
-                        max-width: 130px;
+                        max-width: 140px;
                     }
                     .page-number-btn {
-                        width: 42px !important;
+                        width: 42px !important; /* Larger touch target */
                         height: 42px !important;
                         font-size: 1rem !important;
                     }
@@ -1409,16 +1411,17 @@ const CategoryListView = () => {
                         padding: 0 4px;
                     }
                     .pagination-label {
-                        font-size: 0.85rem;
-                        padding: 8px 10px;
+                        font-size: 0.8rem;
+                        padding: 8px 12px;
                         flex: 0 1 auto;
                         white-space: nowrap;
                     }
                     .controls-area {
                         padding: 0 4px;
+                        gap: 10px;
                     }
                     .minimal-search {
-                        padding: 0 14px;
+                        padding: 0 16px;
                     }
                 }
             `}</style>
