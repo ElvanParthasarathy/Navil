@@ -1370,27 +1370,55 @@ const CategoryListView = () => {
                 
                 @media (max-width: 768px) {
                     .pagination-wrapper {
-                        gap: 24px;
-                        margin-top: 60px;
-                        padding-top: 32px;
+                        gap: 16px !important;
+                        margin-top: 30px !important;
+                        padding-top: 20px !important;
+                        padding-bottom: 20px !important;
                         align-items: center;
                         width: 100%;
                     }
+                    .pagination-inner {
+                        gap: 10px;
+                        width: 100%;
+                    }
                     .page-numbers.centered {
-                        gap: 20px;
+                        gap: 8px;
                     }
                     .page-numbers.spread {
-                        gap: 10px;
+                        gap: 2px;
                         justify-content: center;
                     }
+                    .pagination-nav-pill {
+                        justify-content: center;
+                        gap: 4px;
+                    }
                     .page-btn {
-                        padding: 10px 20px;
-                        font-size: 0.9rem;
+                        padding: 8px 12px;
+                        font-size: 0.75rem;
+                        flex: 1;
+                        justify-content: center;
+                        max-width: 100px;
                     }
                     .page-number-btn {
-                        width: 48px !important;
-                        height: 48px !important;
-                        font-size: 1.1rem !important;
+                        width: 34px !important;
+                        height: 34px !important;
+                        font-size: 0.9rem !important;
+                    }
+                    .pagination-dots {
+                        font-size: 0.8rem;
+                        padding: 0 2px;
+                    }
+                    .pagination-label {
+                        font-size: 0.75rem;
+                        padding: 8px 6px;
+                        flex: 0 1 auto;
+                        white-space: nowrap;
+                    }
+                    .controls-area {
+                        padding: 0 4px;
+                    }
+                    .minimal-search {
+                        padding: 0 14px;
                     }
                 }
             `}</style>
