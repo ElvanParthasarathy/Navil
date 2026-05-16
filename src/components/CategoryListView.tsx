@@ -592,12 +592,12 @@ const CategoryListView = () => {
             {/* INJECTED POEM CSS FOR EXACT UI MATCH */}
             <style>{`
                 .poem-link-card {
-                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                     display: block;
                 }
                 .poem-link-card:active {
-                    transform: scale(0.94);
-                    transition: transform 0.1s ease;
+                    transform: scale(0.985);
+                    transition-duration: 0.1s;
                 }
 
                 /* Pagination Styles */
@@ -797,15 +797,15 @@ const CategoryListView = () => {
                     background: var(--bg-card);
                     border-radius: 16px;
                     overflow: hidden;
-                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
                     height: 100%;
                     display: flex;
                     flex-direction: column;
                 }
                 .blog-link-card:active .blog-card-item {
-                    transform: scale(0.94);
+                    transform: scale(0.985);
                     background: var(--nav-hover);
-                    transition: transform 0.1s ease;
+                    transition-duration: 0.1s;
                 }
 
                 .blog-cover-wrapper {

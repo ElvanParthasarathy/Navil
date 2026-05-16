@@ -198,14 +198,10 @@ const Writings = () => {
 
                 /* HOVER EFFECTS - DESKTOP ONLY */
 
-                .category-card {
-                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
-                }
-
                 .category-card:active {
-                    transform: scale(0.94);
+                    transform: scale(0.985);
                     background: color-mix(in srgb, var(--text-main) 8%, var(--bg-card));
-                    transition: transform 0.1s ease;
+                    transition-duration: 0.1s;
                 }
 
 
