@@ -1,4 +1,4 @@
-/* Local fonts only. Keep Tamil on Mukta Malar and prevent CDN font-swap movement. */
+/* Local fonts only. Preloaded weights use block; others use swap to prevent invisible-text delays. */
 @font-face {
   font-family: "Mukta Malar";
   font-style: normal;

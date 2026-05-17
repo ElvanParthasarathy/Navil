@@ -13,8 +13,11 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/instagram/profile.jpg" />
   <link rel="preload" href="/fonts/MuktaMalar-Regular.woff" as="font" type="font/woff" crossorigin />
+  <link rel="preload" href="/fonts/MuktaMalar-Medium.woff" as="font" type="font/woff" crossorigin />
+  <link rel="preload" href="/fonts/MuktaMalar-SemiBold.woff" as="font" type="font/woff" crossorigin />
   <link rel="preload" href="/fonts/MuktaMalar-ExtraBold.woff" as="font" type="font/woff" crossorigin />
   <link rel="preload" href="/fonts/GoogleSans-Regular.woff" as="font" type="font/woff" crossorigin />
+  <link rel="preload" href="/fonts/GoogleSans-Medium.woff" as="font" type="font/woff" crossorigin />
   <link rel="preload" href="/fonts/GoogleSans-Bold.woff" as="font" type="font/woff" crossorigin />
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5392072917035799"
@@ -24,7 +27,16 @@
 </head>
 
 <body>
-  <!-- Blocking script to prevent theme flicker -->
+  <!-- Blocking script to prevent theme flicker and font flashes -->
+  <style>
+    html.fonts-loading #root {
+      opacity: 0;
+    }
+    html.fonts-loaded #root {
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+  </style>
   <script>
     (function () {
       const theme = localStorage.getItem('theme') || 'auto';
@@ -33,6 +45,13 @@
         effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
       document.documentElement.setAttribute('data-theme', effectiveTheme);
+
+      // Prevent font FOIT/FOUT by waiting for fonts
+      document.documentElement.classList.add('fonts-loading');
+      document.fonts.ready.then(() => {
+        document.documentElement.classList.remove('fonts-loading');
+        document.documentElement.classList.add('fonts-loaded');
+      });
     })();
   </script>
   <div id="root"></div>
