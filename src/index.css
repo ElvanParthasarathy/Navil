@@ -229,7 +229,7 @@ body {
 }
 
 [data-theme='dark'] .sidebar {
-  background: linear-gradient(185deg, #1a1a1e 0%, #101012 100%);
+  background: linear-gradient(185deg, #121212 0%, #080808 100%);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border-right: none;
