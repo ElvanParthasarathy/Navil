@@ -84,17 +84,19 @@ const GradientCustomizer = () => {
     const [startColor, setStartColor] = React.useState('#1c1c1f');
     const [endColor, setEndColor] = React.useState('#131315');
     const [angle, setAngle] = React.useState(145);
+    const [shadowX, setShadowX] = React.useState(25);
     const [shadowBlur, setShadowBlur] = React.useState(80);
+    const [shadowSpread, setShadowSpread] = React.useState(0);
     const [shadowOpacity, setShadowOpacity] = React.useState(0.75);
 
     // Apply values in real-time
     React.useEffect(() => {
         const root = document.documentElement;
         root.style.setProperty('--sidebar-bg-dark', `linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%)`);
-        root.style.setProperty('--sidebar-shadow-dark', `25px 0 ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`);
-    }, [startColor, endColor, angle, shadowBlur, shadowOpacity]);
+        root.style.setProperty('--sidebar-shadow-dark', `${shadowX}px 0 ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, ${shadowOpacity})`);
+    }, [startColor, endColor, angle, shadowX, shadowBlur, shadowSpread, shadowOpacity]);
 
-    const cssString = `background: linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%);\nbox-shadow: 25px 0 ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity});`;
+    const cssString = `background: linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%);\nbox-shadow: ${shadowX}px 0 ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, ${shadowOpacity});`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(cssString);
@@ -202,6 +204,22 @@ const GradientCustomizer = () => {
                         />
                     </div>
 
+                    {/* Shadow Offset X */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa', fontWeight: 600 }}>
+                            <span>SHADOW OFFSET X</span>
+                            <span>{shadowX}px</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="-30" 
+                            max="80" 
+                            value={shadowX} 
+                            onChange={(e) => setShadowX(Number(e.target.value))} 
+                            style={{ width: '100%', accentColor: '#DD2476', cursor: 'pointer' }}
+                        />
+                    </div>
+
                     {/* Shadow Blur */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa', fontWeight: 600 }}>
@@ -214,6 +232,22 @@ const GradientCustomizer = () => {
                             max="150" 
                             value={shadowBlur} 
                             onChange={(e) => setShadowBlur(Number(e.target.value))} 
+                            style={{ width: '100%', accentColor: '#DD2476', cursor: 'pointer' }}
+                        />
+                    </div>
+
+                    {/* Shadow Spread */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa', fontWeight: 600 }}>
+                            <span>SHADOW SPREAD</span>
+                            <span>{shadowSpread}px</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="-30" 
+                            max="50" 
+                            value={shadowSpread} 
+                            onChange={(e) => setShadowSpread(Number(e.target.value))} 
                             style={{ width: '100%', accentColor: '#DD2476', cursor: 'pointer' }}
                         />
                     </div>
