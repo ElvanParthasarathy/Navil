@@ -1608,15 +1608,24 @@ body {
     opacity: 1 !important;
   }
 
-  /* Tab switch (nav-none) - smooth fade up like desktop to prevent flashes */
+  /* Tab switch (nav-none) - smooth pure fade-in to prevent flashes and keep it static */
   .nav-none .animate-entry>* {
     opacity: 0;
-    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: fadeInSoft 0.4s ease-out forwards;
   }
 
   .nav-none .home-page {
     opacity: 0;
-    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: fadeInSoft 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeInSoft {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes slideInRight {
