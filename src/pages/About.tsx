@@ -16,7 +16,7 @@ const getInitialAbout = () => {
 };
 
 const About = () => {
-    const { setPageTitle } = useOutletContext();
+    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
     const [about, setAbout] = useState(getInitialAbout());
 
     useEffect(() => { setPageTitle('பற்றி|about'); }, [setPageTitle]);

@@ -187,7 +187,7 @@ const TagInput = ({ value, onChange, placeholder, suggestions = [] }) => {
     const [input, setInput] = React.useState('');
     const [showSuggestions, setShowSuggestions] = React.useState(false);
 
-    const addTag = (tag) => {
+    const addTag = (tag?: string) => {
         const trimmed = (tag || input).trim();
         if (trimmed && !tags.includes(trimmed)) {
             onChange([...tags, trimmed]);
@@ -342,7 +342,7 @@ export const FieldInput = ({ field, value, onChange }) => {
                             width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden',
                             background: 'var(--bg-panel)', flexShrink: 0, border: '1px solid var(--border-light)',
                         }}>
-                            {url && <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; }} />}
+                            {url && <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
                         </div>
                         {/* URL input */}
                         <input
@@ -375,8 +375,8 @@ export const FieldInput = ({ field, value, onChange }) => {
                                 cursor: 'pointer', padding: '4px', fontSize: '16px', lineHeight: 1,
                                 opacity: 0.7, transition: 'opacity 0.2s',
                             }}
-                            onMouseEnter={(e) => e.target.style.opacity = '1'}
-                            onMouseLeave={(e) => e.target.style.opacity = '0.7'}
+                            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
                             title="Remove"
                         >✕</button>
                     </div>
@@ -388,8 +388,8 @@ export const FieldInput = ({ field, value, onChange }) => {
                         background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer',
                         fontSize: '0.82rem', fontWeight: 600, transition: 'all 0.2s',
                     }}
-                    onMouseEnter={(e) => { e.target.style.borderColor = 'var(--text-main)'; e.target.style.color = 'var(--text-main)'; }}
-                    onMouseLeave={(e) => { e.target.style.borderColor = 'var(--border-light)'; e.target.style.color = 'var(--text-muted)'; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--text-main)'; e.currentTarget.style.color = 'var(--text-main)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-light)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
                 >
                     + Add Image URL
                 </button>
@@ -532,10 +532,10 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
                 </div>
             ))}
             <div className="adm-translit-add">
-                <input id={`add - transl - ${idPrefix} `} className="adm-input" list="lang-options" placeholder="e.g. ml" style={{ width: '80px', padding: '5px 8px' }} maxLength="3" />
+                <input id={`add - transl - ${idPrefix} `} className="adm-input" list="lang-options" placeholder="e.g. ml" style={{ width: '80px', padding: '5px 8px' }} maxLength={3} />
                 <button className="adm-btn" onClick={(e) => {
                     e.preventDefault();
-                    const input = document.getElementById(`add - transl - ${idPrefix} `);
+                    const input = document.getElementById(`add - transl - ${idPrefix} `) as HTMLInputElement | null;
                     if (input?.value.trim()) {
                         onUpdateTransl('transliterations', input.value.trim().toLowerCase(), '');
                         onUpdateTransl('titleTransliterations', input.value.trim().toLowerCase(), '');
@@ -547,8 +547,21 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
     );
 };
 
+export interface VariantCardProps {
+    variant: any;
+    vIndex: number;
+    totalVariants: number;
+    onUpdate: (field: string, value: any) => void;
+    onUpdateTransl: (fieldObj: string, langKey: string, value: any) => void;
+    onToggleLang: (tLang: string) => void;
+    onRemove: () => void;
+    onMove: (direction: 'up' | 'down') => void;
+    idPrefix: string;
+    defaultAuthors?: Record<string, string>;
+}
+
 // ─── VARIANT CARD ───
-export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdateTransl, onToggleLang, onRemove, onMove, idPrefix, defaultAuthors }) => {
+export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdateTransl, onToggleLang, onRemove, onMove, idPrefix, defaultAuthors }: VariantCardProps) => {
     const authors = defaultAuthors || DEFAULT_AUTHORS;
     return (
     <div className="adm-variant">

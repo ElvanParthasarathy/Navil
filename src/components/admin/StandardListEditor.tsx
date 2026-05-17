@@ -23,7 +23,14 @@ export const StandardListEditor = ({
     updateTransliteration,
     toggleTransliterationLang
 }) => {
-    const [confirmState, setConfirmState] = useState({ open: false, type: '', payload: null });
+    interface ConfirmState {
+        open: boolean;
+        type: string;
+        title?: string;
+        message?: string;
+        payload: any;
+    }
+    const [confirmState, setConfirmState] = useState<ConfirmState>({ open: false, type: '', payload: null });
     const schema = SCHEMAS[collection];
     const isBilingual = schema.type === 'bilingual_post';
 

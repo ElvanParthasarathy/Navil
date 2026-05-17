@@ -119,7 +119,7 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
         if (editor) {
             const formatted = formatHTML(content);
             if (content !== editor.getHTML() && formatted !== editor.getHTML()) {
-                editor.commands.setContent(formatted, false);
+                editor.commands.setContent(formatted, { emitUpdate: false });
             }
         }
     }, [content]);

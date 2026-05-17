@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+declare global {
+    interface Window {
+        adsbygoogle?: any[];
+    }
+}
+
 /**
  * AdBanner — Fully integrated Google AdSense component.
  * 
@@ -96,12 +102,12 @@ const AdBanner = ({ variant = 'inline', slot = '1749945992', className = '', wra
 
     // When NOT filled: zero height, zero margin, zero padding — truly invisible
     // When filled: smoothly expand with the caller's intended wrapper styles
-    const computedStyle = isFilled
+    const computedStyle: React.CSSProperties = isFilled
         ? {
             ...wrapperStyle,
             overflow: 'hidden',
             transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-        }
+        } as React.CSSProperties
         : {
             maxHeight: 0,
             margin: 0,

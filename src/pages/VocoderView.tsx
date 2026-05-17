@@ -11,7 +11,7 @@ const VocoderView = () => {
     const totalSlides = 22;
     const stageDomRef = React.useRef(null);
 
-    const { setPageTitle } = useOutletContext();
+    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
 
     useEffect(() => {
         setPageTitle(activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story');

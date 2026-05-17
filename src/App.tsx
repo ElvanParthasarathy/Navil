@@ -19,17 +19,41 @@ import CategoryListView from './components/CategoryListView';
 import ReadingView from './components/ReadingView';
 import AdBanner from './components/AdBanner';
 
+interface ThemeContextType {
+    theme: string;
+    setTheme: React.Dispatch<React.SetStateAction<string>>;
+    toggleTheme: () => void;
+}
+
 // Create a Context for Theme
-const ThemeContext = React.createContext({ theme: 'auto', setTheme: () => { }, toggleTheme: () => { } });
+const ThemeContext = React.createContext<ThemeContextType>({
+    theme: 'auto',
+    setTheme: () => {},
+    toggleTheme: () => {}
+});
+
+interface SettingsContextType {
+    autoThumbnails: boolean;
+    setAutoThumbnails: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 // Create a Context for Settings
-export const SettingsContext = React.createContext({ autoThumbnails: true, setAutoThumbnails: (val) => { } });
+export const SettingsContext = React.createContext<SettingsContextType>({
+    autoThumbnails: true,
+    setAutoThumbnails: () => {}
+});
 
 // Export hooks for easy access
 export const useTheme = () => React.useContext(ThemeContext);
 export const useSettings = () => React.useContext(SettingsContext);
 
-const ProfileImage = ({ src, alt, className }) => {
+interface ProfileImageProps {
+    src: string;
+    alt: string;
+    className?: string;
+}
+
+const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
 
@@ -78,7 +102,7 @@ const Layout = () => {
     };
 
     React.useEffect(() => {
-        localStorage.setItem('sidebarCollapsed', isSidebarCollapsed);
+        localStorage.setItem('sidebarCollapsed', String(isSidebarCollapsed));
     }, [isSidebarCollapsed]);
 
     // Close mobile menu on route change
@@ -150,7 +174,7 @@ const Layout = () => {
                     )}
                 </div>
                 
-                <div className="brand">
+                <div className="brand" key={pageTitle}>
                     {pageTitle === 'எல்வன்' || pageTitle === 'எல்வன்|elvan' ? (
                         <div className="brand-bilingual" lang="ta">
                             எல்வன்
@@ -363,7 +387,17 @@ const Layout = () => {
     );
 };
 
-const NavLink = ({ to, icon, label, subLabel, active, className = '', collapsed }) => (
+interface NavLinkProps {
+    to: string;
+    icon: React.ReactNode;
+    label: string;
+    subLabel?: string;
+    active: boolean;
+    className?: string;
+    collapsed: boolean;
+}
+
+const NavLink = ({ to, icon, label, subLabel, active, className = '', collapsed }: NavLinkProps) => (
     <Link to={to} className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} title={collapsed ? label : ''}>
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
         {!collapsed && (
@@ -468,7 +502,7 @@ function App() {
     });
 
     React.useEffect(() => {
-        localStorage.setItem('autoThumbnails', autoThumbnails);
+        localStorage.setItem('autoThumbnails', String(autoThumbnails));
     }, [autoThumbnails]);
 
     React.useEffect(() => {
@@ -515,6 +549,12 @@ function App() {
                     line-height: 1.1;
                     gap: 2px;
                     flex: 1;
+                    animation: headerFadeIn 0.22s ease-out;
+                }
+
+                @keyframes headerFadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
 
                 .brand-main {

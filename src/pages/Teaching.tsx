@@ -5,7 +5,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import AdBanner from '../components/AdBanner';
 
 const Teaching = () => {
-    const { setPageTitle } = useOutletContext();
+    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
 
     React.useEffect(() => {
         setPageTitle('பயிற்றுவிப்பு|teaching');
