@@ -1299,12 +1299,6 @@ const Archive = () => {
             `}</style>
 
             {/* --- HERO SECTION --- */}
-            {/* --- BACK BUTTON (DESKTOP) --- */}
-            <div style={{ maxWidth: '935px', margin: '0 auto 16px', padding: '0 20px', display: 'flex', justifyContent: 'flex-end' }} className="desktop-only">
-                <Link to="/" className="back-pill">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                </Link>
-            </div>
             {/* --- PROFILE HEADER --- */}
             <div className="profile-header">
                 {/* Desktop Avatar Container */}
@@ -1362,9 +1356,14 @@ const Archive = () => {
 
                 {/* Desktop Profile Info */}
                 <div className="profile-info desktop-only-flex">
-                    <div className="profile-username-row">
-                        <h2 className="username-text">{profileData?.username}</h2>
-                        <FiHeart size={24} style={{ marginLeft: 10, cursor: 'pointer' }} />
+                    <div className="profile-username-row" style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <h2 className="username-text">{profileData?.username}</h2>
+                            <FiHeart size={24} style={{ marginLeft: 10, cursor: 'pointer' }} />
+                        </div>
+                        <Link to="/" className="back-pill desktop-only">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                        </Link>
                     </div>
                     <div className="profile-stats-row">
                         <span className="stat-item stat-clickable" onClick={() => setSearchParams({ list: 'followers' })}>

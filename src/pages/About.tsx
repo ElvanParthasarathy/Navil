@@ -50,6 +50,7 @@ const About = () => {
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 0 20px 80px;
+                    position: relative;
                 }
 
                 .about-hero {
@@ -357,7 +358,7 @@ const About = () => {
                 }
             `}</style>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '0 0 16px 0' }} className="desktop-only">
+            <div style={{ position: 'absolute', top: '24px', right: '20px', zIndex: 10 }} className="desktop-only">
                 <Link to="/" className="back-pill">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                 </Link>

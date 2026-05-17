@@ -16,9 +16,13 @@ const Settings = () => {
                 }
 
                 .settings-hero {
-                    text-align: center;
+                    text-align: left;
                     margin-bottom: 48px;
                     padding-top: 24px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 20px;
                 }
 
                 .settings-title {
@@ -137,17 +141,22 @@ const Settings = () => {
                     to { transform: rotate(360deg); }
                 }
 
+                @media (max-width: 768px) {
+                    .settings-hero {
+                        text-align: center;
+                        display: block;
+                    }
+                }
             `}</style>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '0 0 16px 0' }} className="desktop-only">
-                <Link to="/" className="back-pill">
+            <div className="settings-hero animate-entry">
+                <div>
+                    <h1 className="settings-title">Settings</h1>
+                    <h2 className="settings-subtitle">Personalize your experience.</h2>
+                </div>
+                <Link to="/" className="back-pill desktop-only">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                 </Link>
-            </div>
-
-            <div className="settings-hero animate-entry">
-                <h1 className="settings-title">Settings</h1>
-                <h2 className="settings-subtitle">Personalize your experience.</h2>
             </div>
 
             <div className="settings-section animate-entry" style={{ animationDelay: '0.1s' }}>
