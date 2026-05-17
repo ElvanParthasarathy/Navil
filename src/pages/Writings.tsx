@@ -85,12 +85,9 @@ const Writings = () => {
                     margin: 0;
                 }
 
-                    .category-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
+                    .category-grid { gap: 24px; margin-top: 32px; }
 
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
-                @media (max-width: 1024px) {
-                    .category-grid { grid-template-columns: repeat(2, 1fr); }
-                }
                 @media (max-width: 768px) {
 
                     .writings-page { padding: 0 0 100px 0; }
