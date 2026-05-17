@@ -202,8 +202,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  background: transparent;
-  border-right: none;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-light);
   box-shadow: 4px 0 30px rgba(0, 0, 0, 0.03);
   border-radius: 0;
   display: flex;
@@ -227,33 +227,8 @@ body {
 }
 
 [data-theme='dark'] .sidebar {
-  background: transparent;
+  background: var(--bg-panel);
   box-shadow: 10px 0 50px rgba(0, 0, 0, 0.3);
-}
-
-/* Sidebar Glassmorphism Backdrop with Left Edge Mask Fade */
-.sidebar-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(135deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 25%));
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  mask-image: linear-gradient(to right, transparent 0%, black 15%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%);
-  transition: background 0.3s ease;
-  pointer-events: none;
-  border-radius: 0;
-}
-
-[data-theme='dark'] .sidebar-backdrop {
-  background: linear-gradient(135deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 55%));
-}
-
-@media (max-width: 768px) {
-  .sidebar-backdrop {
-    display: none !important;
-  }
 }
 
 /* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */
