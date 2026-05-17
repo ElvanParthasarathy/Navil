@@ -94,6 +94,10 @@ body {
   min-height: 100vh;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --bg-app: #F5F5F7;
   --bg-app-rgb: 245, 245, 247;
