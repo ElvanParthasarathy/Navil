@@ -223,21 +223,15 @@ const Home = () => {
                 }
 
                 /* RESPONSIVE */
-                @media (max-width: 1024px) {
-                    .hero-avatar-wrapper { width: 220px; height: 220px; }
-                    .hero-title { font-size: 2.6rem; }
-                    .hero-subtitle { font-size: 1.5rem; }
-                }
-
-                @media (max-width: 768px) {
+                @media (max-width: 1023px) {
                     .home-page { padding: 16px 20px; }
                     .home-hero { flex-direction: column; gap: 0; padding: 0; align-items: center; text-align: center; margin-bottom: 40px; }
                     .hero-visual { order: -1; margin-bottom: 24px; }
                     .hero-content { width: 100%; display: flex; flex-direction: column; align-items: center; }
-                    .hero-avatar-wrapper { width: 120px; height: 120px; }
+                    .hero-avatar-wrapper { width: clamp(120px, 20vw, 180px); height: clamp(120px, 20vw, 180px); }
                     .hero-avatar { border-radius: 50%; border-width: 3px; }
-                    .hero-title { font-size: 1.8rem; margin-bottom: 6px; letter-spacing: -0.5px; }
-                    .hero-subtitle { font-size: 1.1rem; margin-bottom: 14px; opacity: 0.9; }
+                    .hero-title { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 6px; letter-spacing: -0.5px; }
+                    .hero-subtitle { font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-bottom: 14px; opacity: 0.9; }
                     .hero-bio { font-size: 1rem; margin-bottom: 28px; line-height: 1.6; max-width: 100%; margin-left: 0; margin-right: 0; white-space: pre-line; }
                     .hero-actions { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px; }
                     .hero-btn { width: auto; flex: 1; min-width: 140px; justify-content: center; margin: 0; padding: 12px 16px; font-size: 0.95rem; font-weight: 600; }

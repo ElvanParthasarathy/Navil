@@ -47,7 +47,7 @@ const HighlightBar = ({ highlights, onOpenHighlight }) => {
             <style>{`
                 .highlight-bar-container {
                     position: relative;
-                    padding: 10px 0 20px;
+                    padding: 10px 20px 20px;
                     width: 100%;
                     max-width: 935px;
                     margin: 0 auto;

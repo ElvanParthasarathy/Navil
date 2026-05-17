@@ -319,7 +319,7 @@ const About = () => {
                 .about-footer-text { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.7; }
 
                 /* RESPONSIVE & DESKTOP GRID */
-                @media (min-width: 768px) {
+                @media (min-width: 1024px) {
                     .about-grid {
                         grid-template-columns: repeat(12, 1fr);
                         gap: 24px;
@@ -334,7 +334,7 @@ const About = () => {
                     .card-philosophy { grid-column: span 7; }
                 }
 
-                @media (max-width: 768px) {
+                @media (max-width: 1023px) {
                    .about-page { padding: 16px 20px 80px; }
                    .hero-avatar-wrapper { width: 140px; height: 140px; }
                    .about-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }

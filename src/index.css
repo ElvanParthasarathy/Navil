@@ -537,7 +537,6 @@ body {
 .settings-trigger {
   display: flex;
   align-items: center;
-  gap: 10px;
   padding: 8px 12px;
   background: transparent;
   border: none;
@@ -546,6 +545,7 @@ body {
   transition: all 0.3s ease, transform 0.1s ease;
   width: 100%;
   user-select: none;
+  box-sizing: border-box;
 }
 
 .settings-trigger:hover {
@@ -575,6 +575,7 @@ body {
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
+  margin-right: 12px;
 }
 
 .trigger-avatar img {
@@ -583,29 +584,47 @@ body {
   object-fit: cover;
 }
 
+.trigger-inner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  flex-grow: 1;
+}
+
 .trigger-text {
   flex-grow: 1;
+  min-width: 0;
+  text-align: left;
 }
 
 .trigger-name {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
-.trigger-gear {
+.trigger-theme-icon {
   color: var(--text-muted);
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
-.settings-trigger:hover .trigger-gear {
-  opacity: 1;
+.settings-trigger:hover .trigger-theme-icon {
+  opacity: 0.85;
+  transform: scale(1.1) rotate(15deg);
 }
 
-.settings-trigger.active-trigger .trigger-gear {
+.settings-trigger.active-trigger .trigger-theme-icon {
   opacity: 1;
-  transform: rotate(90deg);
+  color: var(--accent-color);
+  transform: scale(1.1) rotate(30deg);
 }
 
 /* Settings Popup */

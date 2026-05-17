@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiSun, FiMoon } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
@@ -394,7 +394,16 @@ const Layout = () => {
                                     <div className="trigger-text">
                                         <span className="trigger-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</span>
                                     </div>
-                                    <FiSettings size={16} className="trigger-gear" />
+                                    {theme === 'light' ? (
+                                        <FiSun size={16} className="trigger-theme-icon" />
+                                    ) : theme === 'dark' ? (
+                                        <FiMoon size={16} className="trigger-theme-icon" />
+                                    ) : (
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="trigger-theme-icon" style={{ width: 16, height: 16 }}>
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
+                                        </svg>
+                                    )}
                                 </div>
                             )}
                             {isSidebarCollapsed && (
@@ -419,7 +428,7 @@ const Layout = () => {
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
                                         </div>
                                         <div className={`slider-option ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2v20" /></svg>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" /></svg>
                                         </div>
                                         <div className={`slider-option ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>

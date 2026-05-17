@@ -503,11 +503,11 @@ const Archive = () => {
                     color: var(--text-main);
                 }
                 .profile-avatar-container {
-                    flex-grow: 1;
+                    flex-shrink: 0;
                     margin-right: 30px;
                     display: flex;
                     justify-content: center;
-                    max-width: 290px; /* Standard IG width for avatar col */
+                    width: 150px;
                 }
                 .profile-avatar {
                     width: 150px; height: 150px;
@@ -520,13 +520,14 @@ const Archive = () => {
                     flex-grow: 2;
                     display: flex;
                     flex-direction: column;
+                    min-width: 0; /* Enable shrinking */
                 }
                 .profile-username-row {
                     display: flex; align-items: center;
                     margin-bottom: 20px;
                 }
                 .username-text {
-                    font-size: 28px;
+                    font-size: clamp(20px, 2.2vw, 28px);
                     font-weight: 300;
                     margin-right: 20px;
                     line-height: 32px;
@@ -1355,8 +1356,8 @@ const Archive = () => {
 
 
                 {/* Desktop Profile Info */}
-                <div className="profile-info desktop-only-flex">
-                    <div className="profile-username-row" style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="profile-info desktop-only-flex" style={{ minWidth: 0 }}>
+                    <div className="profile-username-row" style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <h2 className="username-text">{profileData?.username}</h2>
                             <FiHeart size={24} style={{ marginLeft: 10, cursor: 'pointer' }} />
