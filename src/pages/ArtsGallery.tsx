@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, Link, useOutletContext } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import MobileTopBar from '../components/MobileTopBar';
 import { FiHeart, FiMessageCircle, FiX, FiChevronLeft, FiChevronRight, FiMaximize2, FiExternalLink } from 'react-icons/fi';
 import { getOptimizedImage } from '../lib/media';
 import { Helmet } from 'react-helmet-async';
@@ -160,7 +161,7 @@ const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preven
 const ArtsGallery = () => {
     const { category } = useParams();
     const meta = CATEGORY_META[category];
-    const { setPageTitle } = useOutletContext();
+
 
     const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -194,9 +195,7 @@ const ArtsGallery = () => {
     const [lightboxGlobalIdx, setLightboxGlobalIdx] = useState(null);
     const filmstripRef = useRef(null);
 
-    useEffect(() => {
-        if (meta) setPageTitle(`${meta.titleTa}|${meta.titleEn}`);
-    }, [setPageTitle, meta]);
+
 
     useEffect(() => {
         // Reset visible count when switching categories
@@ -612,7 +611,9 @@ const ArtsGallery = () => {
     }
 
     return (
-        <div className="page-view fadeIn">
+        <>
+            <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl="/arts" />
+            <div className="page-view fadeIn">
             <Helmet>
                 <title>{meta.titleEn} | {profileData.fullName}</title>
                 <meta name="description" content={meta.descEn} />
@@ -1803,6 +1804,7 @@ const ArtsGallery = () => {
                 );
             })()}
         </div>
+        </>
     );
 };
 

@@ -3,7 +3,8 @@ import profileData from '../data/profile.json';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
-import { useOutletContext, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import MobileTopBar from '../components/MobileTopBar';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 
@@ -16,10 +17,7 @@ const getInitialAbout = () => {
 };
 
 const About = () => {
-    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
     const [about, setAbout] = useState(getInitialAbout());
-
-    useEffect(() => { setPageTitle('பற்றி|about'); }, [setPageTitle]);
 
     // Real-time Firebase listener — syncs and updates cache
     useEffect(() => {
@@ -34,11 +32,17 @@ const About = () => {
     }, []);
 
     if (!about) {
-        return <div style={{ height: '100vh', background: 'var(--bg-app)' }} />;
+        return (
+            <>
+                <MobileTopBar title="பற்றி|about" />
+                <div style={{ height: '100vh', background: 'var(--bg-app)' }} />
+            </>
+        );
     }
 
     return (
         <>
+            <MobileTopBar title="பற்றி|about" />
             <Helmet>
                 <title>About Elvan Parthasarathy</title>
                 <meta name="description" content="Learn more about Jaiprakash P (Elvan Parthasarathy), a pre-final year engineering student, writer, and creator based in Tamil Nadu." />

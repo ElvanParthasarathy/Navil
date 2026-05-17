@@ -4,6 +4,8 @@ import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, Fi
 import profileData from '../data/profile.json';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
+import MobileTopBar from '../components/MobileTopBar';
+
 const Home = () => {
     return (
         <>
@@ -12,6 +14,7 @@ const Home = () => {
                 <meta name="description" content="Welcome to the creative space of Elvan Parthasarathy (Jaiprakash P). Explore my writings, poems, essays, and personal reflections." />
                 <link rel="canonical" href="https://elvanparthasarathy.vercel.app/" />
             </Helmet>
+            <MobileTopBar title="எல்வன்" />
             <div className="home-page page-view fadeIn">
                 <style>{`
                 .home-page {

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiBox } from 'react-icons/fi';
+import MobileTopBar from '../components/MobileTopBar';
 
 const Portfolio = () => {
     return (
-        <div className="page-view page-fade" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 40px' }}>
+        <>
+            <MobileTopBar title="தொகுப்பு|portfolio" />
+            <div className="page-view page-fade" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 40px' }}>
             <style>{`
         /* LOCAL STYLES FOR PORTFOLIO PAGE */
         
@@ -95,6 +98,7 @@ const Portfolio = () => {
             {/* Add some bottom spacing */}
             <div style={{ height: '40px' }}></div>
         </div>
+        </>
     );
 };
 

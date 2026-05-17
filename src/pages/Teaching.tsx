@@ -1,18 +1,16 @@
 import React from 'react';
 import { BsDisplay } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AdBanner from '../components/AdBanner';
+import MobileTopBar from '../components/MobileTopBar';
 
 const Teaching = () => {
-    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
-
-    React.useEffect(() => {
-        setPageTitle('பயிற்றுவிப்பு|teaching');
-    }, [setPageTitle]);
 
     return (
-        <div className="writings-page page-view fadeIn">
+        <>
+            <MobileTopBar title="பயிற்றுவிப்பு|teaching" />
+            <div className="writings-page page-view fadeIn">
             <style>{`
                 .writings-page { max-width: 1200px; margin: 0 auto; padding: 10px 20px 32px; }
                 .writings-header { margin-bottom: 48px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
@@ -73,6 +71,7 @@ const Teaching = () => {
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
         </div>
+        </>
     );
 };
 

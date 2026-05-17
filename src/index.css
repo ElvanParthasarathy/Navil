@@ -557,6 +557,16 @@ body {
   justify-content: center;
 }
 
+.settings-trigger.collapsed-trigger .settings-avatar {
+  margin-right: 0 !important;
+}
+
+.settings-trigger.collapsed-trigger:hover,
+.settings-trigger.collapsed-trigger.active-trigger {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 .settings-trigger:hover {
   background: var(--nav-hover);
 }
@@ -569,7 +579,7 @@ body {
   background: var(--nav-hover);
 }
 
-.trigger-avatar {
+.settings-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -578,13 +588,13 @@ body {
   margin-right: 12px;
 }
 
-.trigger-avatar img {
+.settings-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.trigger-inner {
+.settings-inner {
   display: flex;
   align-items: center;
   width: 100%;
@@ -592,13 +602,13 @@ body {
   flex-grow: 1;
 }
 
-.trigger-text {
+.settings-text {
   flex-grow: 1;
   min-width: 0;
   text-align: left;
 }
 
-.trigger-name {
+.settings-name {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-main);
@@ -608,7 +618,7 @@ body {
   display: block;
 }
 
-.trigger-theme-icon {
+.settings-theme-icon {
   color: var(--text-muted);
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -616,12 +626,12 @@ body {
   margin-left: auto;
 }
 
-.settings-trigger:hover .trigger-theme-icon {
+.settings-trigger:hover .settings-theme-icon {
   opacity: 0.85;
   transform: scale(1.1) rotate(15deg);
 }
 
-.settings-trigger.active-trigger .trigger-theme-icon {
+.settings-trigger.active-trigger .settings-theme-icon {
   opacity: 1;
   color: var(--accent-color);
   transform: scale(1.1) rotate(30deg);

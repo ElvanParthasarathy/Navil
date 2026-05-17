@@ -2,12 +2,15 @@
 import React from 'react';
 import { FiSettings, FiMoon, FiSun, FiMonitor } from 'react-icons/fi';
 import { useOutletContext, Link } from 'react-router-dom';
+import MobileTopBar from '../components/MobileTopBar';
 
 const Settings = () => {
     const { theme, setTheme } = useOutletContext();
 
     return (
-        <div className="settings-page page-view animate-entry">
+        <>
+            <MobileTopBar title="அமைப்புகள்|settings" />
+            <div className="settings-page page-view animate-entry">
             <style>{`
                 .settings-page {
                     max-width: 800px;
@@ -214,6 +217,7 @@ const Settings = () => {
             </div>
 
         </div>
+        </>
     );
 };
 

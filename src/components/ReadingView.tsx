@@ -6,6 +6,7 @@ import { subscribe, getCachedRaw } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 import { getOptimizedImage } from '../lib/media';
 import { Engagement } from './Engagement';
+import MobileTopBar from './MobileTopBar';
 
 const CATEGORY_META = {
     'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'blog posts' },
@@ -76,7 +77,7 @@ const ReadingView = () => {
     const [variantTranslStates, setVariantTranslStates] = useState({}); // { "postId-vIndex": activeLang | null }
     const [activeSection, setActiveSection] = useState(null); // 'urai' | 'notes' | null
 
-    const { setPageTitle, autoThumbnails } = useOutletContext();
+    const { autoThumbnails } = useOutletContext();
 
     // Safely compute primary title for page context
     const variants = post?.variants || [];
@@ -96,11 +97,7 @@ const ReadingView = () => {
 
     const finalCoverImage = post ? (post.cover_image || (autoThumbnails ? `https://picsum.photos/seed/${post.id}/800/400` : null)) : null;
 
-    useEffect(() => {
-        if (meta) {
-            setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
-        }
-    }, [setPageTitle, meta]);
+
 
     const toggleVariantTransl = (vKey, lang) => {
         setVariantTranslStates(prev => ({
@@ -151,7 +148,9 @@ const ReadingView = () => {
 
     if (loading) {
         return (
-            <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
+            <>
+                <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+                <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
                 <style>{`
                     .reader-skeleton-wrapper {
                         max-width: 800px;
@@ -237,15 +236,19 @@ const ReadingView = () => {
                     </div>
                 </div>
             </div>
+            </>
         );
     }
 
     if (!post) {
         return (
-            <div className="page-view fadeIn" style={{ padding: '60px', textAlign: 'center' }}>
-                <h2>Post Not Found</h2>
-                <button onClick={() => navigate(`/writings/${category}`)} className="adm-btn ghost">Return to {meta.title}</button>
-            </div>
+            <>
+                <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+                <div className="page-view fadeIn" style={{ padding: '60px', textAlign: 'center' }}>
+                    <h2>Post Not Found</h2>
+                    <button onClick={() => navigate(`/writings/${category}`)} className="adm-btn ghost">Return to {meta.title}</button>
+                </div>
+            </>
         );
     }
 
@@ -261,7 +264,9 @@ const ReadingView = () => {
     }
 
     return (
-        <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
+        <>
+            <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+            <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             {/* Transliteration toggle styles (same as WritingPage) */}
             <style>{`
                 .transl-switch {
@@ -682,6 +687,7 @@ const ReadingView = () => {
                 .story-format blockquote { font-family: serif; }
             `}</style>
         </div>
+        </>
     );
 };
 

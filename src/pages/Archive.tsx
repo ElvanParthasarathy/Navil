@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useOutletContext, Link } from 'react-router-dom';
+import MobileTopBar from '../components/MobileTopBar';
 import profileData from '../data/profile.json';
 import initialHighlights from '../data/stories.json';
 import postsData from '../data/posts.json';
@@ -14,11 +15,6 @@ import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
 
 const Archive = () => {
-    const { setPageTitle } = useOutletContext();
-
-    useEffect(() => {
-        setPageTitle('காப்புகள்|archive');
-    }, [setPageTitle]);
 
     // Destructure Data
     // Data from JSON files
@@ -491,7 +487,9 @@ const Archive = () => {
     }, [selectedPost]);
 
     return (
-        <div className="page-view page-fade">
+        <>
+            <MobileTopBar title="காப்புகள்|archive" />
+            <div className="page-view page-fade">
             <style>{`
                 /* --- PROFILE HEADER STYLES --- */
                 .profile-header {
@@ -1753,6 +1751,7 @@ const Archive = () => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 

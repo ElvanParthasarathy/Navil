@@ -6,6 +6,7 @@ import { subscribe, getCached } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { getOptimizedImage } from '../lib/media';
+import MobileTopBar from './MobileTopBar';
 
 const CATEGORY_META = {
     'blog': {
@@ -125,11 +126,7 @@ const CategoryListView = () => {
         return () => unsubscribe();
     }, [category, meta]);
 
-    const { setPageTitle, autoThumbnails } = useOutletContext();
-
-    useEffect(() => {
-        if (meta?.title) setPageTitle(`${meta.title}|${meta.subtitle || ''}`);
-    }, [setPageTitle, meta?.title, meta?.subtitle]);
+    const { autoThumbnails } = useOutletContext();
 
     // We no longer reset pagination automatically in a useEffect to avoid mount-time resets.
     // Instead, we reset explicitly in the onChange handlers below.
@@ -197,7 +194,9 @@ const CategoryListView = () => {
     }
 
     return (
-        <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
+        <>
+            <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl="/writings" />
+            <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             <Helmet>
                 <title>{meta.subtitle} | Elvan Parthasarathy</title>
                 <meta name="description" content={meta.descEn} />
@@ -1406,6 +1405,7 @@ const CategoryListView = () => {
                 }
             `}</style>
         </div >
+        </>
     );
 };
 

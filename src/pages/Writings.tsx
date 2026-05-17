@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
+import MobileTopBar from '../components/MobileTopBar';
 
 const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
 
 const Writings = () => {
-    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
-
     const [counts, setCounts] = useState({});
 
     useEffect(() => {
-        setPageTitle('எழுத்துகள்|writings');
-
         // CLEAR CATEGORY MEMORY: When entering the hub, reset all sub-category states
         // This ensures entering Poems/Quotes always starts from Page 1 with no filters.
         const categories = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
@@ -24,7 +21,7 @@ const Writings = () => {
             sessionStorage.removeItem(`elvan_${cat}_genre`);
             sessionStorage.removeItem(`elvan_${cat}_page`);
         });
-    }, [setPageTitle]);
+    }, []);
 
     useEffect(() => {
         const unsubs = FIREBASE_KEYS.map(key => {
@@ -44,7 +41,9 @@ const Writings = () => {
     };
 
     return (
-        <div className="writings-page page-view fadeIn">
+        <>
+            <MobileTopBar title="எழுத்துகள்|writings" />
+            <div className="writings-page page-view fadeIn">
             <style>{`
                 .writings-page {
                     max-width: 1200px;
@@ -196,6 +195,7 @@ const Writings = () => {
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
         </div>
+        </>
     );
 };
 

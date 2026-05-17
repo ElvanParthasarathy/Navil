@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import MobileTopBar from '../components/MobileTopBar';
 import Presentation from '../components/vocoder/Presentation';
 import Interactive from '../components/vocoder/Interactive';
 import '../components/vocoder/vocoder-global.css';
@@ -11,11 +12,7 @@ const VocoderView = () => {
     const totalSlides = 22;
     const stageDomRef = React.useRef(null);
 
-    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
 
-    useEffect(() => {
-        setPageTitle(activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story');
-    }, [activeTab, setPageTitle]);
 
 
     const toggleFullscreen = () => {
@@ -35,7 +32,9 @@ const VocoderView = () => {
     }, []);
 
     return (
-        <div className="page-view animate-entry vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
+        <>
+            <MobileTopBar title={activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story'} showBack={true} backUrl="/teaching" />
+            <div className="page-view animate-entry vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
 
             <style>{`
                 /* Lock scrolling only for the main content area while this component is active */
@@ -429,6 +428,7 @@ const VocoderView = () => {
 
 
         </div>
+        </>
     );
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import MobileTopBar from '../components/MobileTopBar';
 import { FiArrowRight } from 'react-icons/fi';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
@@ -137,13 +138,7 @@ const CATEGORIES = {
 };
 
 const Arts = () => {
-    const { setPageTitle } = useOutletContext<{ setPageTitle: (title: string) => void }>();
-
     const [categoryCounts, setCategoryCounts] = useState({});
-
-    useEffect(() => {
-        setPageTitle('படைப்புகள்|arts');
-    }, [setPageTitle]);
 
     // Fetch counts from Firebase
     useEffect(() => {
@@ -165,7 +160,9 @@ const Arts = () => {
     }, []);
 
     return (
-        <div className="writings-page arts-hub-page page-view fadeIn">
+        <>
+            <MobileTopBar title="படைப்புகள்|arts" />
+            <div className="writings-page arts-hub-page page-view fadeIn">
             <style>{`
                 .writings-page {
                     max-width: 1200px;
@@ -278,6 +275,7 @@ const Arts = () => {
                 ))}
             </div>
         </div>
+        </>
     );
 };
 
