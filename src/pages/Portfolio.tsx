@@ -4,7 +4,7 @@ import { FiBox } from 'react-icons/fi';
 
 const Portfolio = () => {
     return (
-        <div className="page-view page-fade">
+        <div className="page-view page-fade" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 40px' }}>
             <style>{`
         /* LOCAL STYLES FOR PORTFOLIO PAGE */
         

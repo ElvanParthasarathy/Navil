@@ -14,7 +14,7 @@ const Teaching = () => {
     return (
         <div className="writings-page page-view fadeIn">
             <style>{`
-                .writings-page { max-width: 1200px; margin: 0 auto; padding: 0 20px 32px; }
+                .writings-page { max-width: 1200px; margin: 0 auto; padding: 10px 20px 32px; }
                 .writings-header { margin-bottom: 48px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
                 .writings-title { font-size: 2.4rem; font-weight: 800; letter-spacing: 0; margin-bottom: 10px; color: var(--text-main); line-height: 1.3; }
 

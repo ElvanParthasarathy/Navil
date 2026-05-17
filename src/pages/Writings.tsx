@@ -49,7 +49,7 @@ const Writings = () => {
                 .writings-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 0 20px 32px;
+                    padding: 10px 20px 32px;
                 }
 
                 .writings-header {
