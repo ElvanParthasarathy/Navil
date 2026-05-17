@@ -83,49 +83,57 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [prevPath, setPrevPath] = React.useState(location.pathname);
-    const [navDirection, setNavDirection] = React.useState('forward');
+    const [navState, setNavState] = React.useState({
+        prevPath: location.pathname,
+        direction: 'forward'
+    });
 
-    React.useEffect(() => {
-        const getPathDepth = (path: string) => {
-            return path.split('/').filter(Boolean).length;
-        };
+    const getPathDepth = (path: string) => {
+        return path.split('/').filter(Boolean).length;
+    };
 
-        const getTabIndex = (path: string) => {
-            const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
-            if (normalized === '/') return 0;
-            if (normalized.startsWith('/writings')) return 1;
-            if (normalized.startsWith('/arts')) return 2;
-            if (normalized.startsWith('/archive')) return 3;
-            if (normalized.startsWith('/teaching')) return 4;
-            if (normalized.startsWith('/about')) return 5;
-            return 99;
-        };
+    const getTabIndex = (path: string) => {
+        const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
+        if (normalized === '/') return 0;
+        if (normalized.startsWith('/writings')) return 1;
+        if (normalized.startsWith('/arts')) return 2;
+        if (normalized.startsWith('/archive')) return 3;
+        if (normalized.startsWith('/teaching')) return 4;
+        if (normalized.startsWith('/about')) return 5;
+        return 99;
+    };
 
+    let currentDirection = navState.direction;
+
+    if (location.pathname !== navState.prevPath) {
         const currentDepth = getPathDepth(location.pathname);
-        const prevDepth = getPathDepth(prevPath);
+        const prevDepth = getPathDepth(navState.prevPath);
+        let newDirection = 'forward';
 
-        if (location.pathname !== prevPath) {
-            if (currentDepth <= 1 && prevDepth <= 1) {
-                setNavDirection('none');
-            } else if (currentDepth < prevDepth) {
-                setNavDirection('backward');
-            } else if (currentDepth > prevDepth) {
-                setNavDirection('forward');
+        if (currentDepth <= 1 && prevDepth <= 1) {
+            newDirection = 'none';
+        } else if (currentDepth < prevDepth) {
+            newDirection = 'backward';
+        } else if (currentDepth > prevDepth) {
+            newDirection = 'forward';
+        } else {
+            const currentIndex = getTabIndex(location.pathname);
+            const prevIndex = getTabIndex(navState.prevPath);
+            if (currentIndex < prevIndex) {
+                newDirection = 'backward';
             } else {
-                const currentIndex = getTabIndex(location.pathname);
-                const prevIndex = getTabIndex(prevPath);
-                if (currentIndex < prevIndex) {
-                    setNavDirection('backward');
-                } else {
-                    setNavDirection('forward');
-                }
+                newDirection = 'forward';
             }
-            setPrevPath(location.pathname);
         }
-    }, [location.pathname, prevPath]);
 
-    const navClass = navDirection === 'none' ? 'nav-none' : navDirection === 'backward' ? 'nav-pop' : 'nav-push';
+        currentDirection = newDirection;
+        setNavState({
+            prevPath: location.pathname,
+            direction: newDirection
+        });
+    }
+
+    const navClass = currentDirection === 'none' ? 'nav-none' : currentDirection === 'backward' ? 'nav-pop' : 'nav-push';
     const { theme, setTheme, toggleTheme } = useTheme();
     const { autoThumbnails, setAutoThumbnails } = useSettings();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
