@@ -174,7 +174,8 @@ const Layout = () => {
                         </button>
                     )}
                 </div>
-                                <div className="brand">
+                
+                <div className="brand">
                     {pageTitle === 'எல்வன்' || pageTitle === 'எல்வன்|elvan' ? (
                         <div className="brand-bilingual" lang="ta">
                             எல்வன்
@@ -545,18 +546,17 @@ function App() {
                 .mobile-topbar .brand {
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
+                    align-items: flex-start;
                     justify-content: center;
                     line-height: 1.1;
                     gap: 2px;
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
-                    width: auto;
-                    max-width: 60%;
-                    text-align: center;
-                    white-space: nowrap;
+                    flex: 1;
+                    animation: headerFadeIn 0.22s ease-out;
+                }
+
+                @keyframes headerFadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
 
                 .brand-main {
@@ -572,6 +572,20 @@ function App() {
                     text-transform: none;
                     letter-spacing: 0;
                     opacity: 0.7;
+                }
+
+                .mobile-topbar.is-centered .brand,
+                .mobile-topbar.has-back .brand {
+                    margin-right: 0;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    width: auto;
+                    max-width: 60%;
+                    text-align: center;
+                    align-items: center;
+                    white-space: nowrap;
                 }
             `}</style>
             <RouterProvider router={router} />
