@@ -106,7 +106,9 @@ const Layout = () => {
         const prevDepth = getPathDepth(prevPath);
 
         if (location.pathname !== prevPath) {
-            if (currentDepth < prevDepth) {
+            if (currentDepth <= 1 && prevDepth <= 1) {
+                setNavDirection('none');
+            } else if (currentDepth < prevDepth) {
                 setNavDirection('backward');
             } else if (currentDepth > prevDepth) {
                 setNavDirection('forward');
@@ -123,7 +125,7 @@ const Layout = () => {
         }
     }, [location.pathname, prevPath]);
 
-    const navClass = navDirection === 'backward' ? 'nav-pop' : 'nav-push';
+    const navClass = navDirection === 'none' ? 'nav-none' : navDirection === 'backward' ? 'nav-pop' : 'nav-push';
     const { theme, setTheme, toggleTheme } = useTheme();
     const { autoThumbnails, setAutoThumbnails } = useSettings();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
