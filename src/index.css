@@ -236,24 +236,37 @@ body {
   box-shadow: var(--sidebar-shadow-dark, -30px 0 80px 48px rgba(0, 0, 0, 0.75));
 }
 
-.sidebar-backdrop {
+.sidebar-color-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -2;
+  background: var(--sidebar-bg, linear-gradient(185deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 8%)));
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+[data-theme='dark'] .sidebar-color-layer {
+  background: var(--sidebar-bg-dark, linear-gradient(93deg, #000000 0%, #151414 100%));
+}
+
+.sidebar-blur-layer {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: -1;
-  background: var(--sidebar-bg, linear-gradient(185deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 8%)));
   -webkit-backdrop-filter: blur(var(--blur-amount, 25px));
   backdrop-filter: blur(var(--blur-amount, 25px));
   -webkit-mask-image: linear-gradient(to right, black var(--blur-start, 0%), transparent var(--blur-end, 100%));
   mask-image: linear-gradient(to right, black var(--blur-start, 0%), transparent var(--blur-end, 100%));
   pointer-events: none;
-  transition: background 0.3s ease;
 }
 
-[data-theme='dark'] .sidebar-backdrop {
-  background: var(--sidebar-bg-dark, linear-gradient(93deg, #000000 0%, #151414 100%));
+[data-theme='dark'] .sidebar-blur-layer {
   -webkit-backdrop-filter: blur(var(--blur-amount, 30px));
   backdrop-filter: blur(var(--blur-amount, 30px));
 }
