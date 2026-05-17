@@ -128,10 +128,22 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
 // FIXED: Removed inline transition wipeout. CSS class handles animations cleanly now.
 const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preventImageDrag, activeImgRef }) => {
     const [isLoaded, setIsLoaded] = useState(false);
+    const imgRef = useRef(null);
 
     useEffect(() => {
-        setIsLoaded(false);
+        if (imgRef.current && imgRef.current.complete) {
+            setIsLoaded(true);
+        } else {
+            setIsLoaded(false);
+        }
     }, [img.url]);
+
+    const setRefs = useCallback((el) => {
+        imgRef.current = el;
+        if (isCurrent && activeImgRef) {
+            activeImgRef.current = el;
+        }
+    }, [isCurrent, activeImgRef]);
 
     return (
         <div className="arts-lb-slide">
@@ -141,7 +153,7 @@ const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preven
                 </div>
             )}
             <img
-                ref={isCurrent ? activeImgRef : null}
+                ref={setRefs}
                 className={`arts-lb-img ${isDragging ? 'is-dragging' : ''}`}
                 src={getOptimizedImage(img.url, isMobile ? 'medium' : 'full')}
                 alt={img.caption || 'Artwork'}
@@ -326,7 +338,8 @@ const ArtsGallery = () => {
 
     const touchStartX = useRef(0);
     const touchStartY = useRef(0);
-    const [dragX, setDragX] = useState(0);
+    const containerDragX = useRef(0);
+    const isTransitioning = useRef(false);
     const [isDragging, setIsDragging] = useState(false);
 
     const scaleRef = useRef(1);
@@ -401,7 +414,6 @@ const ArtsGallery = () => {
             if (clampedScale <= 1.05) {
                 setOffset({ x: 0, y: 0 });
                 offsetRef.current = { x: 0, y: 0 };
-                setDragX(0);
                 requestTransform();
                 return 1;
             }
@@ -416,7 +428,6 @@ const ArtsGallery = () => {
         setOffset({ x: 0, y: 0 });
         scaleRef.current = 1;
         offsetRef.current = { x: 0, y: 0 };
-        setDragX(0);
         setIsCaptionExpanded(false);
         setShowCaptionModal(false);
     }, [lightboxGlobalIdx]);
@@ -431,23 +442,40 @@ const ArtsGallery = () => {
 
     // FIXED: Gesture State Machine securely tracks finger counts to prevent native swipe drifting
     const handleTouchStart = (e) => {
+        if (scaleRef.current > 1.01 || isTransitioning.current) {
+            if (e.touches.length === 2) {
+                const dist = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                lastPinchDistance.current = dist;
+                setIsDragging(true);
+            } else if (e.touches.length === 1 && scaleRef.current > 1.01) {
+                touchStartX.current = e.touches[0].clientX;
+                touchStartY.current = e.touches[0].clientY;
+                touchStartTime.current = Date.now();
+                setIsDragging(true);
+            }
+            return;
+        }
+
         if (e.touches.length === 2) {
             const dist = Math.hypot(
                 e.touches[0].pageX - e.touches[1].pageX,
                 e.touches[0].pageY - e.touches[1].pageY
             );
             lastPinchDistance.current = dist;
-            setIsDragging(true); // Lock immediately to prevent native swipe
+            setIsDragging(true);
         } else if (e.touches.length === 1) {
-            touchStartX.current = e.touches[0].screenX;
-            touchStartY.current = e.touches[0].screenY;
+            touchStartX.current = e.touches[0].clientX;
+            touchStartY.current = e.touches[0].clientY;
             touchStartTime.current = Date.now();
+            containerDragX.current = 0;
+            setIsDragging(true);
 
-            // Only set dragging if already zoomed, so native swipe can still happen at scale 1
-            if (scaleRef.current > 1.01) {
-                setIsDragging(true);
+            if (containerRef.current) {
+                containerRef.current.style.transition = 'none';
             }
-            setDragX(0);
         }
     };
 
@@ -459,11 +487,9 @@ const ArtsGallery = () => {
             );
             if (lastPinchDistance.current > 0) {
                 const delta = dist / lastPinchDistance.current;
-                // Allow zooming out to 0.6 for a nice spring-back feel
                 const nextScale = Math.min(Math.max(scaleRef.current * delta, 0.6), 4);
                 scaleRef.current = nextScale;
 
-                // Gently re-center offset if zooming out past 1 to prevent getting stuck off-screen
                 if (nextScale <= 1.0) {
                     offsetRef.current.x *= 0.8;
                     offsetRef.current.y *= 0.8;
@@ -475,11 +501,11 @@ const ArtsGallery = () => {
             return;
         }
 
-        if (!isDragging) return;
+        if (!isDragging || isTransitioning.current) return;
 
-        if (scaleRef.current > 1.0) {
-            const currentX = e.touches[0].screenX;
-            const currentY = e.touches[0].screenY;
+        if (scaleRef.current > 1.01) {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
             const dx = currentX - touchStartX.current;
             const dy = currentY - touchStartY.current;
             offsetRef.current.x += dx;
@@ -488,6 +514,30 @@ const ArtsGallery = () => {
             touchStartY.current = currentY;
             requestTransform();
             if (e.cancelable) e.preventDefault();
+        } else {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const dx = currentX - touchStartX.current;
+            const dy = currentY - touchStartY.current;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (e.cancelable) e.preventDefault();
+                
+                let finalDx = dx;
+                const isFirst = lightboxGlobalIdx === 0;
+                const isLast = lightboxGlobalIdx === flattenedImages.length - 1;
+
+                if (dx > 0 && isFirst) {
+                    finalDx = dx * 0.35;
+                } else if (dx < 0 && isLast) {
+                    finalDx = dx * 0.35;
+                }
+
+                containerDragX.current = finalDx;
+                if (containerRef.current) {
+                    containerRef.current.style.transform = `translate3d(calc(-33.333% + ${finalDx}px), 0, 0)`;
+                }
+            }
         }
     };
 
@@ -496,20 +546,39 @@ const ArtsGallery = () => {
             lastPinchDistance.current = 0;
             setIsDragging(false);
 
-            // Snap beautifully back to 1.0, restoring normal size and native swiping
             if (scaleRef.current <= 1.05) {
                 scaleRef.current = 1;
                 offsetRef.current = { x: 0, y: 0 };
                 requestTransform();
-            }
 
-            setScale(scaleRef.current);
-            setOffset({ ...offsetRef.current });
+                if (containerRef.current && !isTransitioning.current) {
+                    const dx = containerDragX.current;
+                    const dt = Date.now() - touchStartTime.current;
+                    const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
+                    
+                    const swipeThreshold = width * 0.22;
+                    const isFlick = dt < 250 && Math.abs(dx) > 30;
+                    const direction = dx > 0 ? -1 : 1;
+
+                    const hasNext = lightboxGlobalIdx < flattenedImages.length - 1;
+                    const hasPrev = lightboxGlobalIdx > 0;
+
+                    if (direction === 1 && hasNext && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                        slideContainer(1);
+                    } else if (direction === -1 && hasPrev && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                        slideContainer(-1);
+                    } else {
+                        slideContainer(0);
+                    }
+                }
+            } else {
+                setScale(scaleRef.current);
+                setOffset({ ...offsetRef.current });
+            }
         } else if (e.touches.length === 1) {
-            // User lifted one finger but left the other down: re-anchor pan coordinates seamlessly
             lastPinchDistance.current = 0;
-            touchStartX.current = e.touches[0].screenX;
-            touchStartY.current = e.touches[0].screenY;
+            touchStartX.current = e.touches[0].clientX;
+            touchStartY.current = e.touches[0].clientY;
         }
     };
 
@@ -540,34 +609,40 @@ const ArtsGallery = () => {
     }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
 
     const containerRef = useRef(null);
-    const scrollTimeout = useRef(null);
 
-    const handleScroll = useCallback((e) => {
-        if (scaleRef.current > 1.01 || isDragging) return;
+    const slideContainer = useCallback((direction) => {
+        if (!containerRef.current || isTransitioning.current) return;
 
-        const container = e.currentTarget;
-        const width = container.clientWidth;
-        const scrollX = container.scrollLeft;
+        isTransitioning.current = true;
+        const container = containerRef.current;
+        container.style.transition = 'transform 0.20s cubic-bezier(0.2, 0, 0, 1)';
 
-        const slideIdx = Math.round(scrollX / width);
-
-        if (slideIdx !== 1) {
-            if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-            scrollTimeout.current = setTimeout(() => {
-                if (slideIdx === 0 && lightboxGlobalIdx > 0) {
-                    setLightboxGlobalIdx(prev => prev - 1);
-                } else if (slideIdx === 2 && lightboxGlobalIdx < flattenedImages.length - 1) {
-                    setLightboxGlobalIdx(prev => prev + 1);
-                }
-            }, 50);
+        if (direction === 1) {
+            container.style.transform = 'translate3d(-66.666%, 0, 0)';
+            setTimeout(() => {
+                setLightboxGlobalIdx(prev => prev + 1);
+            }, 200);
+        } else if (direction === -1) {
+            container.style.transform = 'translate3d(0%, 0, 0)';
+            setTimeout(() => {
+                setLightboxGlobalIdx(prev => prev - 1);
+            }, 200);
+        } else {
+            container.style.transform = 'translate3d(-33.333%, 0, 0)';
+            setTimeout(() => {
+                container.style.transition = 'none';
+                isTransitioning.current = false;
+            }, 200);
         }
-    }, [lightboxGlobalIdx, isDragging, flattenedImages.length]);
+    }, [setLightboxGlobalIdx]);
 
     useEffect(() => {
-        if (lightboxGlobalIdx !== null && containerRef.current) {
-            const container = containerRef.current;
-            container.scrollTo({ left: container.clientWidth, behavior: 'auto' });
+        if (containerRef.current) {
+            containerRef.current.style.transition = 'none';
+            containerRef.current.style.transform = 'translate3d(-33.333%, 0, 0)';
         }
+        isTransitioning.current = false;
+        containerDragX.current = 0;
     }, [lightboxGlobalIdx]);
 
     const handleWheel = useCallback((e) => {
@@ -822,6 +897,7 @@ const ArtsGallery = () => {
                 }
 
                 .arts-lb-img-wrapper {
+                    position: relative;
                     width: 100%;
                     height: 100%;
                     background: transparent;
@@ -884,7 +960,11 @@ const ArtsGallery = () => {
                     gap: 16px;
                 }
 
-                @media (min-width: 1000px) {
+                .arts-lb-sidebar {
+                    display: none;
+                }
+
+                @media (min-width: 769px) {
                     .arts-lb-main-container {
                         display: grid;
                         grid-template-columns: minmax(0, 1fr) 440px;
@@ -998,33 +1078,20 @@ const ArtsGallery = () => {
                     position: absolute;
                     inset: 0;
                     display: flex;
-                    width: 100%;
-                    overflow-x: auto;
-                    scroll-snap-type: x mandatory;
-                    scroll-behavior: auto;
-                    -webkit-overflow-scrolling: touch;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                }
-                .arts-lb-img-container::-webkit-scrollbar {
-                    display: none;
-                }
-                
-                /* FIXED: Now reliably shuts down native scroll when scale is anything but perfectly 1 */
-                .arts-lb-img-container.zoomed {
-                    overflow-x: hidden;
+                    width: 300%;
+                    overflow: hidden;
+                    will-change: transform;
+                    transform: translate3d(-33.333%, 0, 0);
                 }
                 
                 .arts-lb-slide {
-                    flex: 0 0 100%;
-                    width: 100%;
+                    flex: 0 0 33.333%;
+                    width: 33.333%;
                     height: 100%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     padding: 100px 20px 180px; 
-                    scroll-snap-align: center;
-                    scroll-snap-stop: always;
                     position: relative;
                 }
 
@@ -1595,10 +1662,9 @@ const ArtsGallery = () => {
                                 style={{ touchAction: scale !== 1 ? 'none' : 'pan-x pan-y' }}
                             >
                                 <div
-                                    // FIXED: Applies the zoomed class (which cuts off overflow-x natively) when scale is not perfectly 1
-                                    className={`arts-lb-img-container ${scale !== 1 ? 'zoomed' : ''}`}
-                                    onScroll={handleScroll}
+                                    className="arts-lb-img-container"
                                     ref={containerRef}
+                                    style={{ transform: 'translate3d(-33.333%, 0, 0)' }}
                                 >
                                     {[-1, 0, 1].map(offset => {
                                         const i = lightboxGlobalIdx + offset;
@@ -1779,7 +1845,13 @@ const ArtsGallery = () => {
                         </div>
 
                         {showCaptionModal && (
-                            <div className="arts-lb-caption-sheet-overlay" onClick={() => setShowCaptionModal(false)}>
+                            <div
+                                className="arts-lb-caption-sheet-overlay"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowCaptionModal(false);
+                                }}
+                            >
                                 <div className="arts-lb-caption-sheet" onClick={e => e.stopPropagation()}>
                                     <button className="arts-lb-sheet-close" onClick={() => setShowCaptionModal(false)}>
                                         <FiX size={18} />
@@ -1793,9 +1865,6 @@ const ArtsGallery = () => {
                                             <div className="arts-lb-author">{profileData.fullName}</div>
                                         </div>
                                         <div className="arts-lb-date">{currentImg.date}</div>
-                                    </div>
-                                    <div style={{ marginTop: '24px' }}>
-                                        <Engagement postId={currentImg.postId} category="arts" hideComments={true} />
                                     </div>
                                 </div>
                             </div>
