@@ -79,6 +79,196 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
     );
 };
 
+const GradientCustomizer = () => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [startColor, setStartColor] = React.useState('#1c1c1f');
+    const [endColor, setEndColor] = React.useState('#131315');
+    const [angle, setAngle] = React.useState(145);
+    const [shadowBlur, setShadowBlur] = React.useState(80);
+    const [shadowOpacity, setShadowOpacity] = React.useState(0.75);
+
+    // Apply values in real-time
+    React.useEffect(() => {
+        const root = document.documentElement;
+        root.style.setProperty('--sidebar-bg-dark', `linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%)`);
+        root.style.setProperty('--sidebar-shadow-dark', `25px 0 ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`);
+    }, [startColor, endColor, angle, shadowBlur, shadowOpacity]);
+
+    const cssString = `background: linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%);\nbox-shadow: 25px 0 ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity});`;
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(cssString);
+        alert("Awesome! Gradient values copied to clipboard! Tell Antigravity these values now!");
+    };
+
+    return (
+        <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 99999, fontFamily: 'sans-serif' }} className="desktop-only">
+            {!isOpen ? (
+                <button 
+                    onClick={() => setIsOpen(true)}
+                    style={{
+                        background: 'linear-gradient(135deg, #FF512F, #DD2476)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50px',
+                        padding: '12px 24px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontSize: '14px',
+                        transition: 'transform 0.2s',
+                    }}
+                >
+                    🎨 Customizer
+                </button>
+            ) : (
+                <div style={{
+                    background: 'rgba(30, 30, 35, 0.95)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '20px',
+                    padding: '20px',
+                    width: '300px',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+                    color: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '14px' }}>🎨 Sidebar Gradient Customizer</span>
+                        <button 
+                            onClick={() => setIsOpen(false)}
+                            style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '18px' }}
+                        >
+                            &times;
+                        </button>
+                    </div>
+
+                    {/* Start Color */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '10px', color: '#aaa', fontWeight: 600 }}>START COLOR</label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <input 
+                                type="color" 
+                                value={startColor} 
+                                onChange={(e) => setStartColor(e.target.value)} 
+                                style={{ width: '30px', height: '24px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: 'none' }}
+                            />
+                            <input 
+                                type="text" 
+                                value={startColor} 
+                                onChange={(e) => setStartColor(e.target.value)} 
+                                style={{ flex: 1, background: '#121214', border: '1px solid #333', color: '#fff', padding: '4px 8px', borderRadius: '6px', fontSize: '12px' }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* End Color */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '10px', color: '#aaa', fontWeight: 600 }}>END COLOR</label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <input 
+                                type="color" 
+                                value={endColor} 
+                                onChange={(e) => setEndColor(e.target.value)} 
+                                style={{ width: '30px', height: '24px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: 'none' }}
+                            />
+                            <input 
+                                type="text" 
+                                value={endColor} 
+                                onChange={(e) => setEndColor(e.target.value)} 
+                                style={{ flex: 1, background: '#121214', border: '1px solid #333', color: '#fff', padding: '4px 8px', borderRadius: '6px', fontSize: '12px' }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Angle */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa', fontWeight: 600 }}>
+                            <span>ANGLE</span>
+                            <span>{angle}deg</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="360" 
+                            value={angle} 
+                            onChange={(e) => setAngle(Number(e.target.value))} 
+                            style={{ width: '100%', accentColor: '#DD2476', cursor: 'pointer' }}
+                        />
+                    </div>
+
+                    {/* Shadow Blur */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa', fontWeight: 600 }}>
+                            <span>SHADOW BLUR</span>
+                            <span>{shadowBlur}px</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="10" 
+                            max="150" 
+                            value={shadowBlur} 
+                            onChange={(e) => setShadowBlur(Number(e.target.value))} 
+                            style={{ width: '100%', accentColor: '#DD2476', cursor: 'pointer' }}
+                        />
+                    </div>
+
+                    {/* Shadow Opacity */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa', fontWeight: 600 }}>
+                            <span>SHADOW OPACITY</span>
+                            <span>{shadowOpacity}</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.05" 
+                            value={shadowOpacity} 
+                            onChange={(e) => setShadowOpacity(Number(e.target.value))} 
+                            style={{ width: '100%', accentColor: '#DD2476', cursor: 'pointer' }}
+                        />
+                    </div>
+
+                    {/* Code Display */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '9px', color: '#777', fontWeight: 600 }}>CURRENT CSS</label>
+                        <textarea 
+                            readOnly 
+                            value={cssString} 
+                            style={{ background: '#121214', border: '1px solid #333', color: '#00ff66', padding: '8px', borderRadius: '6px', fontSize: '10px', fontFamily: 'monospace', height: '50px', resize: 'none', outline: 'none' }}
+                        />
+                    </div>
+
+                    {/* Done Button */}
+                    <button 
+                        onClick={handleCopy}
+                        style={{
+                            background: 'linear-gradient(135deg, #00FF87, #60EFFF)',
+                            color: '#121214',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            fontSize: '12px',
+                            transition: 'opacity 0.2s',
+                        }}
+                    >
+                        ✅ Okay, Copy Values!
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};
+
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -382,6 +572,7 @@ const Layout = () => {
                 <ScrollRestoration />
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, setPageTitle, autoThumbnails }} />
             </main>
+            <GradientCustomizer />
         </div>
 
     );
