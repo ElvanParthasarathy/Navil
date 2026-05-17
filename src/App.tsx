@@ -43,7 +43,6 @@ export const SettingsContext = React.createContext<SettingsContextType>({
     setAutoThumbnails: () => {}
 });
 
-// Export hooks for easy access
 export const useTheme = () => React.useContext(ThemeContext);
 export const useSettings = () => React.useContext(SettingsContext);
 
@@ -83,6 +82,11 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const isFirstRender = React.useRef(true);
+
+    React.useEffect(() => {
+        isFirstRender.current = false;
+    }, []);
     const [navState, setNavState] = React.useState({
         prevPath: location.pathname,
         direction: 'forward'
@@ -138,7 +142,7 @@ const Layout = () => {
         });
     }
 
-    const navClass = currentDirection === 'none' ? 'nav-none' : currentDirection === 'backward' ? 'nav-pop' : 'nav-push';
+    const navClass = isFirstRender.current ? 'nav-initial' : currentDirection === 'none' ? 'nav-none' : currentDirection === 'backward' ? 'nav-pop' : 'nav-push';
     const { theme, setTheme, toggleTheme } = useTheme();
     const { autoThumbnails, setAutoThumbnails } = useSettings();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
