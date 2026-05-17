@@ -108,15 +108,12 @@ const GradientCustomizer = () => {
         root.style.setProperty('--sidebar-bg-dark', `linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%)`);
         root.style.setProperty('--sidebar-shadow-dark', `${shadowX}px 0 ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, ${shadowOpacity})`);
         root.style.setProperty('--blur-amount', `${blurAmount}px`);
-        root.style.setProperty('--blur-start', `${blurStart}%`);
-        root.style.setProperty('--blur-end', `${blurEnd}%`);
+        root.style.setProperty('--sidebar-mask', `linear-gradient(to right, black ${blurStart}%, transparent ${blurEnd}%)`);
     }, [startColor, endColor, angle, shadowX, shadowBlur, shadowSpread, shadowOpacity, blurAmount, blurStart, blurEnd]);
 
     const cssString = `/* --- Sidebar Permanent CSS --- */
-[data-theme='dark'] .sidebar-color-layer {
+[data-theme='dark'] .sidebar-backdrop {
   background: linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%);
-}
-[data-theme='dark'] .sidebar-blur-layer {
   -webkit-backdrop-filter: blur(${blurAmount}px);
   backdrop-filter: blur(${blurAmount}px);
   -webkit-mask-image: linear-gradient(to right, black ${blurStart}%, transparent ${blurEnd}%);
@@ -532,8 +529,7 @@ const Layout = () => {
             </header>
 
             <nav className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''} ${!isMainLevel ? 'mobile-hidden-nav' : ''}`}>
-                <div className="sidebar-color-layer" />
-                <div className="sidebar-blur-layer" />
+                <div className="sidebar-backdrop" />
 
                 <div className="sidebar-top">
                     <div className="sidebar-header">
