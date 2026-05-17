@@ -89,7 +89,7 @@ const Layout = () => {
     }, []);
     const [navState, setNavState] = React.useState({
         prevPath: location.pathname,
-        direction: 'forward'
+        direction: 'none'
     });
 
     const getPathDepth = (path: string) => {
