@@ -91,7 +91,7 @@ const Settings = () => {
                 }
 
                 .theme-option.active {
-                    color: var(--bg-app);
+                    color: var(--accent-text);
                 }
 
                 /* Active Indicator pill */
@@ -99,7 +99,7 @@ const Settings = () => {
                     position: absolute;
                     top: 6px;
                     bottom: 6px;
-                    background: var(--text-main);
+                    background: var(--accent-color);
                     border-radius: 14px;
                     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
                     z-index: 1;
