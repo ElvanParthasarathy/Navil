@@ -174,8 +174,7 @@ const Layout = () => {
                         </button>
                     )}
                 </div>
-                
-                <div className="brand">
+                                <div className="brand">
                     {pageTitle === 'எல்வன்' || pageTitle === 'எல்வன்|elvan' ? (
                         <div className="brand-bilingual" lang="ta">
                             எல்வன்
