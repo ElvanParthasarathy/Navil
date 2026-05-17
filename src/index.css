@@ -202,11 +202,11 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: linear-gradient(135deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 10%));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-right: none;
-  box-shadow: var(--sidebar-shadow, 10px 0 50px rgba(0, 0, 0, 0.04));
+  box-shadow: 10px 0 50px rgba(0, 0, 0, 0.03);
   border-radius: 0;
   display: flex;
   flex-direction: column;
@@ -214,7 +214,7 @@ body {
   padding: 30px 24px;
   z-index: 100;
 
-  transition: box-shadow 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   contain: layout style;
   /* REMOVED 'paint' TO ALLOW OVERFLOW VISIBILITY */
   overflow: visible;
@@ -229,33 +229,11 @@ body {
 }
 
 [data-theme='dark'] .sidebar {
-  background: transparent;
+  background: linear-gradient(135deg, #161618, #0c0c0e);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-right: none;
-  box-shadow: var(--sidebar-shadow-dark, -30px 0 80px 48px rgba(0, 0, 0, 0.75));
-}
-
-.sidebar-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  background: var(--sidebar-bg, linear-gradient(185deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 8%)));
-  -webkit-backdrop-filter: blur(var(--blur-amount, 25px));
-  backdrop-filter: blur(var(--blur-amount, 25px));
-  -webkit-mask-image: var(--sidebar-mask, linear-gradient(to right, black 0%, transparent 100%));
-  mask-image: var(--sidebar-mask, linear-gradient(to right, black 0%, transparent 100%));
-  pointer-events: none;
-  transition: background 0.3s ease;
-}
-
-[data-theme='dark'] .sidebar-backdrop {
-  background: var(--sidebar-bg-dark, linear-gradient(93deg, #000000 0%, #151414 100%));
-  -webkit-backdrop-filter: blur(var(--blur-amount, 30px));
-  backdrop-filter: blur(var(--blur-amount, 30px));
+  box-shadow: 20px 0 80px rgba(0, 0, 0, 0.65);
 }
 
 /* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */
