@@ -165,7 +165,7 @@ const Arts = () => {
     }, []);
 
     return (
-        <div className="writings-page page-view fadeIn">
+        <div className="writings-page arts-hub-page page-view fadeIn">
             <style>{`
                 .writings-page {
                     max-width: 1200px;
@@ -200,6 +200,9 @@ const Arts = () => {
                     color: var(--text-muted);
                     line-height: 1.6;
                     margin: 0;
+                }
+                .arts-hub-page .category-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
                 }
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
