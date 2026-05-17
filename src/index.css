@@ -1608,26 +1608,15 @@ body {
     opacity: 1 !important;
   }
 
-  /* Tab switch (nav-none) - Clean Subtle Lift */
+  /* Tab switch (nav-none) - Instant load with absolutely no animation to match professional native apps */
   .nav-none .animate-entry>* {
-    opacity: 0;
-    animation: slideUpSubtle 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: none !important;
+    opacity: 1 !important;
   }
 
   .nav-none .home-page {
-    opacity: 0;
-    animation: slideUpSubtle 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  }
-
-  @keyframes slideUpSubtle {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    animation: none !important;
+    opacity: 1 !important;
   }
 
   @keyframes slideInRight {
