@@ -110,7 +110,12 @@ const Layout = () => {
         const prevDepth = getPathDepth(navState.prevPath);
         let newDirection = 'forward';
 
-        if (currentDepth <= 1 && prevDepth <= 1) {
+        const isBottomTab = (path: string) => {
+            const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
+            return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/archive' || normalized === '/about';
+        };
+
+        if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
             newDirection = 'none';
         } else if (currentDepth < prevDepth) {
             newDirection = 'backward';
