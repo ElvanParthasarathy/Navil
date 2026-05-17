@@ -1593,6 +1593,21 @@ body {
     animation: slideInLeft 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 
+  /* Animate the Home page as a single cohesive unit on mobile */
+  .home-page {
+    opacity: 0;
+    animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  .nav-pop .home-page {
+    animation: slideInLeft 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  .home-page .animate-entry>* {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
   @keyframes slideInRight {
     from {
       opacity: 0;
