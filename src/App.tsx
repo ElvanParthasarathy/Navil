@@ -156,7 +156,7 @@ const Layout = () => {
     return (
         <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''}`} style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
-            <header className={`mobile-topbar ${location.pathname !== '/' ? 'is-centered' : ''} ${location.pathname !== '/' ? 'has-back' : ''}`}>
+            <header className={`mobile-topbar ${location.pathname !== '/' ? 'is-centered has-back' : ''}`}>
                 <div className="mobile-topbar-left">
                     { location.pathname !== '/' && (
                         <button 
@@ -551,12 +551,6 @@ function App() {
                     line-height: 1.1;
                     gap: 2px;
                     flex: 1;
-                    animation: headerFadeIn 0.22s ease-out;
-                }
-
-                @keyframes headerFadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
                 }
 
                 .brand-main {

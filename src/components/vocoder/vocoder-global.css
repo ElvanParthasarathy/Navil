@@ -1,4 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;800;900&family=Arima:wght@400;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: block;
+  src: url('/fonts/GoogleSans-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: block;
+  src: url('/fonts/GoogleSans-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: block;
+  src: url('/fonts/GoogleSans-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: block;
+  src: url('/fonts/GoogleSans-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: block;
+  src: url('/fonts/GoogleSans-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Arima';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: block;
+  src: url('/fonts/MuktaMalar-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Arima';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/MuktaMalar-Bold.woff') format('woff');
+}
 
 /* Vocoder CSS variables — scoped to .vocoder-wrapper to avoid polluting site */
 .vocoder-wrapper {
