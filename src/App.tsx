@@ -83,7 +83,47 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const navType = useNavigationType();
+    const [prevPath, setPrevPath] = React.useState(location.pathname);
+    const [navDirection, setNavDirection] = React.useState('forward');
+
+    React.useEffect(() => {
+        const getPathDepth = (path: string) => {
+            return path.split('/').filter(Boolean).length;
+        };
+
+        const getTabIndex = (path: string) => {
+            const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
+            if (normalized === '/') return 0;
+            if (normalized.startsWith('/writings')) return 1;
+            if (normalized.startsWith('/arts')) return 2;
+            if (normalized.startsWith('/archive')) return 3;
+            if (normalized.startsWith('/teaching')) return 4;
+            if (normalized.startsWith('/about')) return 5;
+            return 99;
+        };
+
+        const currentDepth = getPathDepth(location.pathname);
+        const prevDepth = getPathDepth(prevPath);
+
+        if (location.pathname !== prevPath) {
+            if (currentDepth < prevDepth) {
+                setNavDirection('backward');
+            } else if (currentDepth > prevDepth) {
+                setNavDirection('forward');
+            } else {
+                const currentIndex = getTabIndex(location.pathname);
+                const prevIndex = getTabIndex(prevPath);
+                if (currentIndex < prevIndex) {
+                    setNavDirection('backward');
+                } else {
+                    setNavDirection('forward');
+                }
+            }
+            setPrevPath(location.pathname);
+        }
+    }, [location.pathname, prevPath]);
+
+    const navClass = navDirection === 'backward' ? 'nav-pop' : 'nav-push';
     const { theme, setTheme, toggleTheme } = useTheme();
     const { autoThumbnails, setAutoThumbnails } = useSettings();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
@@ -155,7 +195,7 @@ const Layout = () => {
     }, [location.pathname]);
 
     return (
-        <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''} nav-${navType.toLowerCase()}`} style={{ display: 'flex' }}>
+        <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''} ${navClass}`} style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
             <header className={`mobile-topbar ${location.pathname !== '/' ? 'is-centered has-back' : ''}`}>
                 <div className="mobile-topbar-left">
