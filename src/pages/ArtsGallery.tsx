@@ -643,7 +643,7 @@ const ArtsGallery = () => {
                 .arts-gallery-page {
                     max-width: 1200px;
                     margin: 0 auto;
-                    padding: 0 20px 100px;
+                    padding: 10px 20px 100px;
                 }
                 .arts-gallery-header {
                     display: flex;
