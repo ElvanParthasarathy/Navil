@@ -1608,27 +1608,20 @@ body {
     opacity: 1 !important;
   }
 
-  /* Tab switch (nav-none) - instant fast fade rather than sliding */
+  /* Tab switch (nav-none) - smooth fade up like desktop to prevent flashes */
   .nav-none .animate-entry>* {
-    animation: fadeInFast 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+    animation: fadeInUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 
   .nav-none .home-page {
-    animation: fadeInFast 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  }
-
-  @keyframes fadeInFast {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    opacity: 0;
+    animation: fadeInUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 
   @keyframes slideInRight {
     from {
-      opacity: 0;
+      opacity: 0.45;
       transform: translateX(40px);
     }
 
@@ -1640,7 +1633,7 @@ body {
 
   @keyframes slideInLeft {
     from {
-      opacity: 0;
+      opacity: 0.45;
       transform: translateX(-40px);
     }
 
