@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
 import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
@@ -83,6 +83,7 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const navType = useNavigationType();
     const { theme, setTheme, toggleTheme } = useTheme();
     const { autoThumbnails, setAutoThumbnails } = useSettings();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
@@ -154,7 +155,7 @@ const Layout = () => {
     }, [location.pathname]);
 
     return (
-        <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''}`} style={{ display: 'flex' }}>
+        <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''} nav-${navType.toLowerCase()}`} style={{ display: 'flex' }}>
             {/* Mobile Top Bar */}
             <header className={`mobile-topbar ${location.pathname !== '/' ? 'is-centered has-back' : ''}`}>
                 <div className="mobile-topbar-left">

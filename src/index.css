@@ -1586,18 +1586,34 @@ body {
     ========================================= */
   .animate-entry>* {
     opacity: 0;
-    animation: fadeInUp 0.4s ease-out forwards;
+    animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 
-  @keyframes fadeInUp {
+  .nav-pop .animate-entry>* {
+    animation: slideInLeft 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes slideInRight {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateX(40px);
     }
 
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 
