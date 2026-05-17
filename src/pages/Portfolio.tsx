@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FiBox } from 'react-icons/fi';
 
 const Portfolio = () => {
@@ -62,11 +63,22 @@ const Portfolio = () => {
             max-width: 400px; 
             line-height: 1.6; 
         }
+        .hero-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
       `}</style>
 
             <div className="hero-section">
-                <h1 className="title">Portfolio</h1>
-                <h2 className="subtitle">Selected works and ongoing experiments.</h2>
+                <div style={{ flex: 1 }}>
+                    <h1 className="title">Portfolio</h1>
+                    <h2 className="subtitle">Selected works and ongoing experiments.</h2>
+                </div>
+                <Link to="/" className="back-pill desktop-only">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                </Link>
             </div>
 
             {/* WORK IN PROGRESS CONTAINER */}

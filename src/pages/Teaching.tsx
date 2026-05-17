@@ -15,7 +15,7 @@ const Teaching = () => {
         <div className="writings-page page-view fadeIn">
             <style>{`
                 .writings-page { max-width: 1200px; margin: 0 auto; padding: 0 20px 32px; }
-                .writings-header { margin-bottom: 48px; text-align: left; }
+                .writings-header { margin-bottom: 48px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
                 .writings-title { font-size: 2.4rem; font-weight: 800; letter-spacing: 0; margin-bottom: 10px; color: var(--text-main); line-height: 1.3; }
 
                 .writings-title-sub { font-size: 1rem; font-weight: 500; color: #888888; margin-bottom: 16px; letter-spacing: 0.5px; }
@@ -43,14 +43,19 @@ const Teaching = () => {
             `}</style>
 
             <header className="writings-header animate-entry">
-                <h1 className="writings-title">பயிற்றுவிப்பு</h1>
-                <div className="writings-title-sub">Teaching & Presentations</div>
-                <p className="writings-subtitle">
-                    கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.
-                </p>
-                <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                    Interactive teaching materials, slides, and educational resources.
-                </p>
+                <div style={{ flex: 1 }}>
+                    <h1 className="writings-title">பயிற்றுவிப்பு</h1>
+                    <div className="writings-title-sub">Teaching & Presentations</div>
+                    <p className="writings-subtitle">
+                        கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.
+                    </p>
+                    <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                        Interactive teaching materials, slides, and educational resources.
+                    </p>
+                </div>
+                <Link to="/" className="back-pill desktop-only">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                </Link>
             </header>
 
             <div className="category-grid animate-entry">

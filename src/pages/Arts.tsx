@@ -175,6 +175,10 @@ const Arts = () => {
                 .writings-header {
                     margin-bottom: 48px;
                     text-align: left;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 20px;
                 }
                 .writings-title {
                     font-size: 2.4rem;
@@ -236,14 +240,19 @@ const Arts = () => {
             `}</style>
 
             <header className="writings-header animate-entry">
-                <h1 className="writings-title">படைப்புகள்</h1>
-                <div className="writings-title-sub">Arts & Creations</div>
-                <p className="writings-subtitle">
-                    வரைவுகள், வடிவமைப்புகள் & டிஜிட்டல் படைப்புகள்
-                </p>
-                <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                    Drawings, Designs & Digital Creations
-                </p>
+                <div style={{ flex: 1 }}>
+                    <h1 className="writings-title">படைப்புகள்</h1>
+                    <div className="writings-title-sub">Arts & Creations</div>
+                    <p className="writings-subtitle">
+                        வரைவுகள், வடிவமைப்புகள் & டிஜிட்டல் படைப்புகள்
+                    </p>
+                    <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                        Drawings, Designs & Digital Creations
+                    </p>
+                </div>
+                <Link to="/" className="back-pill desktop-only">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                </Link>
             </header>
 
             <div className="category-grid animate-entry">

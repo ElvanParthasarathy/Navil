@@ -3,7 +3,7 @@ import profileData from '../data/profile.json';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, Link } from 'react-router-dom';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 
@@ -356,6 +356,12 @@ const About = () => {
                    .social-icon-link { width: 48px; height: 48px; }
                 }
             `}</style>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '0 0 16px 0' }} className="desktop-only">
+                <Link to="/" className="back-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                </Link>
+            </div>
 
             <section className="about-hero animate-entry">
                 <div className="hero-avatar-wrapper">

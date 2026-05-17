@@ -2425,3 +2425,30 @@ body {
     border: 1px solid var(--border-light);
     padding: 8px 16px;
 }
+
+/* --- GLOBAL BACK BUTTON PILL (DESKTOP) --- */
+.back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+    border-radius: 100px;
+    padding: 10px 20px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
+}
+
+.back-pill:hover {
+    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+    color: var(--text-main);
+}
+
+.back-pill:active {
+    transform: scale(0.95);
+    background: color-mix(in srgb, var(--text-main) 18%, transparent);
+}

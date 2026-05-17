@@ -55,6 +55,10 @@ const Writings = () => {
                 .writings-header {
                     margin-bottom: 48px;
                     text-align: left;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 20px;
                 }
 
                 .writings-title {
@@ -110,14 +114,19 @@ const Writings = () => {
             `}</style>
 
             <header className="writings-header animate-entry">
-                <h1 className="writings-title">எழுத்துகள்</h1>
-                <div className="writings-title-sub">Writings</div>
-                <p className="writings-subtitle">
-                    சிந்தனைகள், கதைகள் & பட்டறிவுகள்
-                </p>
-                <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                    Thoughts, Stories & Observations
-                </p>
+                <div style={{ flex: 1 }}>
+                    <h1 className="writings-title">எழுத்துகள்</h1>
+                    <div className="writings-title-sub">Writings</div>
+                    <p className="writings-subtitle">
+                        சிந்தனைகள், கதைகள் & பட்டறிவுகள்
+                    </p>
+                    <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                        Thoughts, Stories & Observations
+                    </p>
+                </div>
+                <Link to="/" className="back-pill desktop-only">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                </Link>
             </header>
 
             <div className="category-grid animate-entry">
