@@ -84,9 +84,6 @@ const Layout = () => {
     const navigate = useNavigate();
     const isFirstRender = React.useRef(true);
 
-    React.useEffect(() => {
-        isFirstRender.current = false;
-    }, []);
     const [navState, setNavState] = React.useState({
         prevPath: location.pathname,
         direction: 'none'
@@ -110,6 +107,7 @@ const Layout = () => {
     let currentDirection = navState.direction;
 
     if (location.pathname !== navState.prevPath) {
+        isFirstRender.current = false;
         const currentDepth = getPathDepth(location.pathname);
         const prevDepth = getPathDepth(navState.prevPath);
         let newDirection = 'forward';
