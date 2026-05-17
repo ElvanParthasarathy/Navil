@@ -86,15 +86,15 @@ const GradientCustomizer = () => {
     const [startColor, setStartColor] = React.useState('#000000');
     const [endColor, setEndColor] = React.useState('#151414');
     const [angle, setAngle] = React.useState(93);
-    const [shadowX, setShadowX] = React.useState(-30);
-    const [shadowBlur, setShadowBlur] = React.useState(80);
-    const [shadowSpread, setShadowSpread] = React.useState(48);
-    const [shadowOpacity, setShadowOpacity] = React.useState(0.75);
+    const [shadowX, setShadowX] = React.useState(10);
+    const [shadowBlur, setShadowBlur] = React.useState(50);
+    const [shadowSpread, setShadowSpread] = React.useState(0);
+    const [shadowOpacity, setShadowOpacity] = React.useState(0.3);
     
     // Blur Placement States
-    const [blurAmount, setBlurAmount] = React.useState(30);
+    const [blurAmount, setBlurAmount] = React.useState(25);
     const [blurStart, setBlurStart] = React.useState(0);
-    const [blurEnd, setBlurEnd] = React.useState(100);
+    const [blurEnd, setBlurEnd] = React.useState(15);
 
     const toggleCustomizer = () => {
         const nextState = !isOpen;
@@ -108,7 +108,7 @@ const GradientCustomizer = () => {
         root.style.setProperty('--sidebar-bg-dark', `linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%)`);
         root.style.setProperty('--sidebar-shadow-dark', `${shadowX}px 0 ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, ${shadowOpacity})`);
         root.style.setProperty('--blur-amount', `${blurAmount}px`);
-        root.style.setProperty('--sidebar-mask', `linear-gradient(to right, black ${blurStart}%, transparent ${blurEnd}%)`);
+        root.style.setProperty('--sidebar-mask', `linear-gradient(to right, transparent ${blurStart}%, black ${blurEnd}%)`);
     }, [startColor, endColor, angle, shadowX, shadowBlur, shadowSpread, shadowOpacity, blurAmount, blurStart, blurEnd]);
 
     const cssString = `/* --- Sidebar Permanent CSS --- */
@@ -116,8 +116,8 @@ const GradientCustomizer = () => {
   background: linear-gradient(${angle}deg, ${startColor} 0%, ${endColor} 100%);
   -webkit-backdrop-filter: blur(${blurAmount}px);
   backdrop-filter: blur(${blurAmount}px);
-  -webkit-mask-image: linear-gradient(to right, black ${blurStart}%, transparent ${blurEnd}%);
-  mask-image: linear-gradient(to right, black ${blurStart}%, transparent ${blurEnd}%);
+  -webkit-mask-image: linear-gradient(to right, transparent ${blurStart}%, black ${blurEnd}%);
+  mask-image: linear-gradient(to right, transparent ${blurStart}%, black ${blurEnd}%);
 }
 [data-theme='dark'] .sidebar {
   box-shadow: ${shadowX}px 0 ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, ${shadowOpacity});
@@ -201,7 +201,7 @@ const GradientCustomizer = () => {
                         {/* Blur Start (From Area) */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '8px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa' }}>
-                                <span>BLUR START (Full blur up to this % width)</span>
+                                <span>FADE START (Full transparent up to this % width)</span>
                                 <span>{blurStart}%</span>
                             </div>
                             <input 
@@ -217,7 +217,7 @@ const GradientCustomizer = () => {
                         {/* Blur End (To Area) */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#aaa' }}>
-                                <span>BLUR END (Fades completely transparent by this %)</span>
+                                <span>FADE END (Fully solid/opaque from this % width)</span>
                                 <span>{blurEnd}%</span>
                             </div>
                             <input 
