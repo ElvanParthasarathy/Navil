@@ -143,9 +143,6 @@ const About = () => {
                     line-height: 1.6;
                     color: var(--text-muted);
                     max-width: 600px;
-                    margin-top: 20px;
-                    white-space: pre-line;
-                    text-align: center;
                 }
 
                 .about-portfolio-btn {
@@ -160,7 +157,7 @@ const About = () => {
                     border-radius: 99px;
                     font-weight: 700;
                     text-decoration: none;
-                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
                     font-size: 1.05rem;
                     border: none;
                     cursor: pointer;
@@ -168,15 +165,13 @@ const About = () => {
 
                 @media (hover: hover) and (pointer: fine) {
                     .about-portfolio-btn:hover {
-                        transform: translateY(-4px) scale(1.02);
                         background-color: color-mix(in srgb, var(--text-main) 85%, transparent);
-                        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1); /* Subtle glow for dark mode */
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
                     }
                 }
 
                 .about-portfolio-btn:active {
-                    transform: scale(0.96) translateY(0) !important;
-                    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    transform: scale(0.95) !important;
                 }
 
                 /* BENTO GRID LAYOUT */
@@ -207,13 +202,13 @@ const About = () => {
                     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
                 }
 
-                @media (hover: hover) and (pointer: fine) {
-                    .about-card:hover {
-                        transform: translateY(-4px);
-                        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-                        z-index: 2;
-                    }
-                }
+                 @media (hover: hover) and (pointer: fine) {
+                     .about-card:hover {
+                         transform: translateY(-2px);
+                         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+                         z-index: 2;
+                     }
+                 }
 
                 .card-title {
                     font-size: 0.95rem;
@@ -414,9 +409,7 @@ const About = () => {
                 <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
                 <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
 
-                <div className="hero-bio">
-                    <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block' }}>{profileData.bio}</span>
-                </div>
+
 
                 <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
                     View Portfolio <FiArrowRight />
