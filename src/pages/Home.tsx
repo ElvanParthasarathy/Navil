@@ -7,7 +7,7 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title>Elvan Navil | Under Construction</title>
+                <title>Elvan Navil | Home Page Under Construction</title>
                 <meta name="description" content="Welcome to the creative space of Elvan Navil. The home page is currently under construction." />
             </Helmet>
             <MobileTopBar title="நவில்" />
@@ -57,7 +57,7 @@ const Home = () => {
                 <div className="construction-icon">
                     <FiTool />
                 </div>
-                <h1 className="construction-title">Under Construction</h1>
+                <h1 className="construction-title">Home Page Under Construction</h1>
                 <p className="construction-subtitle">
                     The home page is currently being redesigned. Please use the sidebar or mobile menu to explore the other sections of the site!
                 </p>
