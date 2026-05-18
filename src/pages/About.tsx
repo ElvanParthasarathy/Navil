@@ -17,13 +17,12 @@ const getInitialAbout = () => {
 };
 
 const getSpanClass = (index: number) => {
-    const mod = index % 5;
-    if (mod === 0) return 'span-12';
-    if (mod === 1) return 'span-7';
+    const mod = index % 4;
+    if (mod === 0) return 'span-7';
+    if (mod === 1) return 'span-5';
     if (mod === 2) return 'span-5';
-    if (mod === 3) return 'span-5';
-    if (mod === 4) return 'span-7';
-    return 'span-12';
+    if (mod === 3) return 'span-7';
+    return 'span-7';
 };
 
 const About = () => {

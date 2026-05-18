@@ -77,13 +77,12 @@ export const AboutEditor = () => {
     }, [data]);
 
     const getSpanLabel = (index) => {
-        const mod = index % 5;
-        if (mod === 0) return 'Full Width (Span 12)';
-        if (mod === 1) return 'Large (Span 7)';
+        const mod = index % 4;
+        if (mod === 0) return 'Large (Span 7)';
+        if (mod === 1) return 'Small (Span 5)';
         if (mod === 2) return 'Small (Span 5)';
-        if (mod === 3) return 'Small (Span 5)';
-        if (mod === 4) return 'Large (Span 7)';
-        return 'Full Width (Span 12)';
+        if (mod === 3) return 'Large (Span 7)';
+        return 'Large (Span 7)';
     };
 
     const updateCardContent = (index, newContent) => {
