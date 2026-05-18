@@ -191,21 +191,22 @@ const About = () => {
                     gap: 10px;
                     height: 50px;
                     padding: 0 32px;
-                    background-color: var(--bg-panel);
+                    background-color: color-mix(in srgb, var(--text-main), transparent 92%);
                     color: var(--text-main);
                     border-radius: 99px;
                     font-weight: 700;
                     text-decoration: none;
-                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
                     font-size: 1.05rem;
-                    border: 1px solid var(--border-light);
+                    border: 1px solid transparent;
                     box-sizing: border-box;
                     cursor: pointer;
                 }
 
                 @media (hover: hover) and (pointer: fine) {
                     .about-insta-btn:hover {
-                        background-color: color-mix(in srgb, var(--bg-panel) 85%, transparent);
+                        background-color: var(--text-main);
+                        color: var(--bg-app);
                         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
                     }
                 }
