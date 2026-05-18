@@ -14,7 +14,7 @@ const Home = () => {
                 <meta name="description" content="Welcome to the creative space of Elvan Parthasarathy (Jaiprakash P). Explore my writings, poems, essays, and personal reflections." />
                 <link rel="canonical" href="https://elvanparthasarathy.vercel.app/" />
             </Helmet>
-            <MobileTopBar title="எல்வன்" />
+            <MobileTopBar title="நவில்" />
             <div className="home-page page-view fadeIn">
                 <style>{`
                 .home-page {
