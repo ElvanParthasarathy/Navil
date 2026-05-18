@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../components/MobileTopBar';
 import { FiHeart, FiMessageCircle, FiX, FiChevronLeft, FiChevronRight, FiMaximize2, FiExternalLink } from 'react-icons/fi';
@@ -71,9 +72,9 @@ const cleanCaption = (cap) => {
 
 const ArtCard = React.memo(({ item, onOpen, caption }) => {
     const [isLoaded, setIsLoaded] = useState(false);
-    
+
     // Normalize images: ensure we have a valid array of strings
-    const imgs = Array.isArray(item.images) 
+    const imgs = Array.isArray(item.images)
         ? item.images.filter(img => typeof img === 'string')
         : (typeof item.images === 'string' ? [item.images] : (item.image ? [item.image] : []));
 
@@ -87,9 +88,9 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
             tabIndex={0}
             aria-label={caption || 'View artwork'}
             onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
-            style={{ 
+            style={{
                 minHeight: '150px',
-                aspectRatio: item.aspectRatio || 'auto' 
+                aspectRatio: item.aspectRatio || 'auto'
             }}
         >
             {!isLoaded && <div className="arts-img-shimmer" />}
@@ -125,7 +126,6 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
     );
 });
 
-// FIXED: Removed inline transition wipeout. CSS class handles animations cleanly now.
 const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preventImageDrag, activeImgRef }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const imgRef = useRef(null);
@@ -175,15 +175,12 @@ const ArtsGallery = () => {
     const navigate = useNavigate();
     const meta = CATEGORY_META[category];
 
-
     const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
     const flattenedImages = React.useMemo(() => {
         return allItems.flatMap(item => {
-            // Robust check: Ensure imgs is an array. 
-            // Some items might have images as a string (if legacy or manually edited)
             let imgs = [];
             if (Array.isArray(item.images)) {
                 imgs = item.images;
@@ -208,10 +205,7 @@ const ArtsGallery = () => {
     const [lightboxGlobalIdx, setLightboxGlobalIdx] = useState(null);
     const filmstripRef = useRef(null);
 
-
-
     useEffect(() => {
-        // Reset visible count when switching categories
         setVisibleCount(ITEMS_PER_PAGE);
     }, [category]);
 
@@ -441,9 +435,12 @@ const ArtsGallery = () => {
         }
     }, [scale]);
 
-    // FIXED: Gesture State Machine securely tracks finger counts to prevent native swipe drifting
     const handleTouchStart = (e) => {
-        if (scaleRef.current > 1.01 || isTransitioning.current) {
+        if (isTransitioning.current) {
+            isTransitioning.current = false;
+        }
+
+        if (scaleRef.current > 1.01) {
             if (e.touches.length === 2) {
                 const dist = Math.hypot(
                     e.touches[0].pageX - e.touches[1].pageX,
@@ -523,7 +520,7 @@ const ArtsGallery = () => {
 
             if (Math.abs(dx) > Math.abs(dy)) {
                 if (e.cancelable) e.preventDefault();
-                
+
                 let finalDx = dx;
                 const isFirst = lightboxGlobalIdx === 0;
                 const isLast = lightboxGlobalIdx === flattenedImages.length - 1;
@@ -556,9 +553,9 @@ const ArtsGallery = () => {
                     const dx = containerDragX.current;
                     const dt = Date.now() - touchStartTime.current;
                     const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
-                    
-                    const swipeThreshold = width * 0.22;
-                    const isFlick = dt < 250 && Math.abs(dx) > 30;
+
+                    const swipeThreshold = width * 0.15;
+                    const isFlick = dt < 300 && Math.abs(dx) > 20;
                     const direction = dx > 0 ? -1 : 1;
 
                     const hasNext = lightboxGlobalIdx < flattenedImages.length - 1;
@@ -616,24 +613,24 @@ const ArtsGallery = () => {
 
         isTransitioning.current = true;
         const container = containerRef.current;
-        container.style.transition = 'transform 0.20s cubic-bezier(0.2, 0, 0, 1)';
+        container.style.transition = 'transform 0.15s cubic-bezier(0.2, 0, 0, 1)';
 
         if (direction === 1) {
             container.style.transform = 'translate3d(-66.666%, 0, 0)';
             setTimeout(() => {
                 setLightboxGlobalIdx(prev => prev + 1);
-            }, 200);
+            }, 150);
         } else if (direction === -1) {
             container.style.transform = 'translate3d(0%, 0, 0)';
             setTimeout(() => {
                 setLightboxGlobalIdx(prev => prev - 1);
-            }, 200);
+            }, 150);
         } else {
             container.style.transform = 'translate3d(-33.333%, 0, 0)';
             setTimeout(() => {
                 container.style.transition = 'none';
                 isTransitioning.current = false;
-            }, 200);
+            }, 150);
         }
     }, [setLightboxGlobalIdx]);
 
@@ -690,12 +687,12 @@ const ArtsGallery = () => {
         <>
             <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl="/arts" />
             <div className="page-view fadeIn">
-            <Helmet>
-                <title>{meta.titleEn} | {profileData.fullName}</title>
-                <meta name="description" content={meta.descEn} />
-            </Helmet>
+                <Helmet>
+                    <title>{meta.titleEn} | {profileData.fullName}</title>
+                    <meta name="description" content={meta.descEn} />
+                </Helmet>
 
-            <style>{`
+                <style>{`
                 .arts-lb-loader {
                     position: absolute;
                     inset: 0;
@@ -836,7 +833,9 @@ const ArtsGallery = () => {
                 .arts-lightbox {
                     position: fixed;
                     inset: 0;
-                    z-index: 9999;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 999999;
                     background: rgba(0,0,0,0.98);
                     display: flex;
                     flex-direction: column;
@@ -845,7 +844,9 @@ const ArtsGallery = () => {
                     animation: lbFadeIn 0.3s cubic-bezier(0.2, 0, 0, 1);
                     touch-action: none;
                     overscroll-behavior: none;
+                    overflow: hidden; 
                 }
+                
                 .arts-lb-close {
                     background: rgba(255,255,255,0.15);
                     border: 1px solid rgba(255,255,255,0.1);
@@ -865,6 +866,7 @@ const ArtsGallery = () => {
                     from { opacity: 0; transform: scale(1.02); }
                     to { opacity: 1; transform: scale(1); }
                 }
+                
                 .arts-lb-close {
                     position: absolute;
                     top: 24px;
@@ -889,7 +891,7 @@ const ArtsGallery = () => {
                 }
 
                 .arts-lb-main-container {
-                    position: fixed;
+                    position: absolute;
                     inset: 0;
                     width: 100%;
                     height: 100%;
@@ -909,7 +911,7 @@ const ArtsGallery = () => {
                 }
 
                 .arts-lb-header {
-                    position: fixed;
+                    position: absolute;
                     top: 0;
                     left: 0;
                     right: 0;
@@ -937,7 +939,7 @@ const ArtsGallery = () => {
                 }
 
                 .arts-lb-footer-content {
-                    position: fixed;
+                    position: absolute;
                     bottom: 0;
                     left: 0;
                     right: 0;
@@ -987,7 +989,7 @@ const ArtsGallery = () => {
                     .arts-lb-header .arts-lb-close { 
                         display: flex !important;
                         pointer-events: auto;
-                        position: fixed;
+                        position: absolute;
                         top: 40px; 
                         right: 40px;
                         align-items: center;
@@ -1080,6 +1082,7 @@ const ArtsGallery = () => {
                     inset: 0;
                     display: flex;
                     width: 300%;
+                    height: 100%;
                     overflow: hidden;
                     will-change: transform;
                     transform: translate3d(-33.333%, 0, 0);
@@ -1092,11 +1095,11 @@ const ArtsGallery = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 100px 20px 180px; 
+                    padding: 80px 10px 140px; 
                     position: relative;
+                    box-sizing: border-box;
                 }
 
-                /* FIXED: Clean transition class that works perfectly with JS transforms */
                 .arts-lb-img {
                     max-width: 100%;
                     max-height: 100%;
@@ -1306,7 +1309,7 @@ const ArtsGallery = () => {
                 }
                 
                 .arts-lb-caption-sheet-overlay {
-                    position: fixed;
+                    position: absolute;
                     inset: 0;
                     background: rgba(0,0,0,0.6);
                     z-index: 200;
@@ -1386,7 +1389,7 @@ const ArtsGallery = () => {
                 }
 
                 .arts-lb-filmstrip {
-                    position: fixed;
+                    position: absolute;
                     bottom: 0;
                     left: 0;
                     right: 0;
@@ -1395,7 +1398,6 @@ const ArtsGallery = () => {
                     overflow-x: auto;
                     padding: 10px 16px calc(30px + env(safe-area-inset-bottom, 0px));
                     background: transparent; 
-                    max-width: 100vw;
                     width: 100%;
                     scroll-behavior: auto;
                     -webkit-overflow-scrolling: touch;
@@ -1517,6 +1519,11 @@ const ArtsGallery = () => {
                         background: rgba(0,0,0,0.45); 
                         backdrop-filter: none !important;
                     }
+                    
+                    .arts-lb-slide {
+                        padding: calc(60px + env(safe-area-inset-top, 0px)) 10px calc(140px + env(safe-area-inset-bottom, 0px)) !important;
+                    }
+                    
                     .arts-lb-footer { 
                         padding: 12px 16px 20px;
                         background: rgba(0,0,0,0.45); 
@@ -1527,7 +1534,7 @@ const ArtsGallery = () => {
                             rgba(0,0,0,0.7) 0%, 
                             rgba(0,0,0,0.3) 50%, 
                             transparent 100%);
-                        padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+                        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
                         backdrop-filter: none !important;
                     }
                     .arts-lb-nav, .arts-lb-pagination, .arts-lb-close, .arts-lb-fs-item {
@@ -1578,154 +1585,235 @@ const ArtsGallery = () => {
                 }
             `}</style>
 
-            <div className="arts-gallery-page">
-                <header className="arts-gallery-header animate-entry">
-                    <div style={{ flex: 1, minWidth: '200px' }}>
-                        <h1 className="arts-gallery-title">{meta.titleTa}</h1>
-                        <div className="arts-gallery-sub">{meta.titleEn}</div>
-                    </div>
-                    <Link 
-                        to="/arts" 
-                        className="back-pill desktop-only"
-                        onClick={(e) => {
-                            if (window.history.state && window.history.state.idx > 0) {
-                                e.preventDefault();
-                                navigate(-1);
-                            }
-                        }}
-                    >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                    </Link>
-                </header>
+                <div className="arts-gallery-page">
+                    <header className="arts-gallery-header animate-entry">
+                        <div style={{ flex: 1, minWidth: '200px' }}>
+                            <h1 className="arts-gallery-title">{meta.titleTa}</h1>
+                            <div className="arts-gallery-sub">{meta.titleEn}</div>
+                        </div>
+                        <Link
+                            to="/arts"
+                            className="back-pill desktop-only"
+                            onClick={(e) => {
+                                if (window.history.state && window.history.state.idx > 0) {
+                                    e.preventDefault();
+                                    navigate(-1);
+                                }
+                            }}
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                        </Link>
+                    </header>
 
-                {loading ? (
-                    <div className="arts-skeleton-grid animate-entry">
-                        {[200, 280, 180, 240, 200, 260].map((h, i) => (
-                            <div key={i} className="arts-skeleton-item" style={{ paddingBottom: `${h}px` }} />
-                        ))}
-                    </div>
-                ) : allItems.length === 0 ? (
-                    <div className="arts-empty animate-entry">
-                        <p>இன்னும் படைப்புகள் இல்லை. விரைவில் சேர்க்கப்படும்!</p>
-                        <p style={{ fontSize: '0.9rem', marginTop: '8px' }}>No artworks yet. Check back soon!</p>
-                    </div>
-                ) : (
-                    <>
-                        <div className="arts-grid animate-entry">
-                            {visibleItems.map((item) => (
-                                <ArtCard
-                                    key={item.id}
-                                    item={item}
-                                    onOpen={openLightbox}
-                                    caption={cleanCaption(item.caption)}
-                                />
+                    {loading ? (
+                        <div className="arts-skeleton-grid animate-entry">
+                            {[200, 280, 180, 240, 200, 260].map((h, i) => (
+                                <div key={i} className="arts-skeleton-item" style={{ paddingBottom: `${h}px` }} />
                             ))}
                         </div>
-
-                        {hasMore && (
-                            <div className="arts-show-more-wrapper animate-entry">
-                                <button
-                                    className="arts-show-more-btn"
-                                    onClick={() => setVisibleCount(prev => prev + PAGINATION_INCREMENT)}
-                                >
-                                    மேலும் காட்டு / Show More
-                                    <span className="arts-show-more-count">{remainingCount}</span>
-                                </button>
+                    ) : allItems.length === 0 ? (
+                        <div className="arts-empty animate-entry">
+                            <p>இன்னும் படைப்புகள் இல்லை. விரைவில் சேர்க்கப்படும்!</p>
+                            <p style={{ fontSize: '0.9rem', marginTop: '8px' }}>No artworks yet. Check back soon!</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="arts-grid animate-entry">
+                                {visibleItems.map((item) => (
+                                    <ArtCard
+                                        key={item.id}
+                                        item={item}
+                                        onOpen={openLightbox}
+                                        caption={cleanCaption(item.caption)}
+                                    />
+                                ))}
                             </div>
-                        )}
-                    </>
-                )}
+
+                            {hasMore && (
+                                <div className="arts-show-more-wrapper animate-entry">
+                                    <button
+                                        className="arts-show-more-btn"
+                                        onClick={() => setVisibleCount(prev => prev + PAGINATION_INCREMENT)}
+                                    >
+                                        மேலும் காட்டு / Show More
+                                        <span className="arts-show-more-count">{remainingCount}</span>
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
 
-            {lightboxGlobalIdx !== null && flattenedImages[lightboxGlobalIdx] && (() => {
-                const currentImg = flattenedImages[lightboxGlobalIdx];
-                return (
-                    <div className="arts-lightbox" onClick={closeLightbox}>
+            {/* LIGHTBOX TELEPORTED OUT OF ANIMATED CONTAINER */}
+            {lightboxGlobalIdx !== null && flattenedImages[lightboxGlobalIdx] && typeof document !== 'undefined' && createPortal(
+                (() => {
+                    const currentImg = flattenedImages[lightboxGlobalIdx];
+                    return (
+                        <div className="arts-lightbox" onClick={closeLightbox}>
 
-                        <div
-                            className="arts-lb-header"
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
-                        >
-                            <button className="arts-lb-close" onClick={closeLightbox} aria-label="Close">
-                                <FiX size={18} />
-                            </button>
-
-                            <div className="arts-lb-profile">
-                                <div className="arts-lb-avatar">
-                                    <img src={profileData.profilePic} alt={profileData.fullName} />
-                                </div>
-                                <div className="arts-lb-author">{profileData.fullName}</div>
-                            </div>
-                        </div>
-
-                        <div className="arts-lb-main-container" onClick={(e) => e.stopPropagation()}>
                             <div
-                                className="arts-lb-img-wrapper"
-                                ref={wrapperRef}
-                                onPointerDown={handlePointerDown}
-                                onPointerMove={handlePointerMove}
-                                onPointerUp={handlePointerEnd}
-                                onPointerCancel={handlePointerEnd}
-                                onPointerLeave={handlePointerEnd}
-                                // FIXED: Freezes native touch-action whenever image is zoomed in OR out
-                                style={{ touchAction: scale !== 1 ? 'none' : 'pan-x pan-y' }}
+                                className="arts-lb-header"
+                                onClick={(e) => e.stopPropagation()}
+                                style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                             >
-                                <div
-                                    className="arts-lb-img-container"
-                                    ref={containerRef}
-                                    style={{ transform: 'translate3d(-33.333%, 0, 0)' }}
-                                >
-                                    {[-1, 0, 1].map(offset => {
-                                        const i = lightboxGlobalIdx + offset;
-                                        if (i < 0 || i >= flattenedImages.length) {
-                                            return <div key={`spacer-${offset}`} className="arts-lb-slide spacer" />;
-                                        }
+                                <button className="arts-lb-close" onClick={closeLightbox} aria-label="Close">
+                                    <FiX size={18} />
+                                </button>
 
-                                        const img = flattenedImages[i];
-                                        const isCurrent = offset === 0;
-
-                                        return (
-                                            <LightboxImage
-                                                key={img.id}
-                                                img={img}
-                                                isCurrent={isCurrent}
-                                                isMobile={isMobile}
-                                                isDragging={isDragging}
-                                                preventImageDrag={preventImageDrag}
-                                                activeImgRef={isCurrent ? activeImgRef : null}
-                                            />
-                                        );
-                                    })}
+                                <div className="arts-lb-profile">
+                                    <div className="arts-lb-avatar">
+                                        <img src={profileData.profilePic} alt={profileData.fullName} />
+                                    </div>
+                                    <div className="arts-lb-author">{profileData.fullName}</div>
                                 </div>
-
-                                {lightboxGlobalIdx > 0 && (
-                                    <button className="arts-lb-nav prev desktop-only" onClick={goToPrev}>
-                                        <FiChevronLeft size={22} />
-                                    </button>
-                                )}
-                                {lightboxGlobalIdx < flattenedImages.length - 1 && (
-                                    <button className="arts-lb-nav next desktop-only" onClick={goToNext}>
-                                        <FiChevronRight size={22} />
-                                    </button>
-                                )}
                             </div>
 
-                            <div className="arts-lb-sidebar">
-                                <div className="arts-lb-sidebar-header">
-                                    <div className="arts-lb-profile">
-                                        <div className="arts-lb-avatar">
-                                            <img src={profileData.profilePic} alt={profileData.fullName} />
+                            <div className="arts-lb-main-container" onClick={(e) => e.stopPropagation()}>
+                                <div
+                                    className="arts-lb-img-wrapper"
+                                    ref={wrapperRef}
+                                    onPointerDown={handlePointerDown}
+                                    onPointerMove={handlePointerMove}
+                                    onPointerUp={handlePointerEnd}
+                                    onPointerCancel={handlePointerEnd}
+                                    onPointerLeave={handlePointerEnd}
+                                    style={{ touchAction: scale !== 1 ? 'none' : 'pan-x pan-y' }}
+                                >
+                                    <div
+                                        className="arts-lb-img-container"
+                                        ref={containerRef}
+                                        style={{ transform: 'translate3d(-33.333%, 0, 0)' }}
+                                    >
+                                        {[-1, 0, 1].map(offset => {
+                                            const i = lightboxGlobalIdx + offset;
+                                            if (i < 0 || i >= flattenedImages.length) {
+                                                return <div key={`spacer-${offset}`} className="arts-lb-slide spacer" />;
+                                            }
+
+                                            const img = flattenedImages[i];
+                                            const isCurrent = offset === 0;
+
+                                            return (
+                                                <LightboxImage
+                                                    key={img.id}
+                                                    img={img}
+                                                    isCurrent={isCurrent}
+                                                    isMobile={isMobile}
+                                                    isDragging={isDragging}
+                                                    preventImageDrag={preventImageDrag}
+                                                    activeImgRef={isCurrent ? activeImgRef : null}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+
+                                    {lightboxGlobalIdx > 0 && (
+                                        <button className="arts-lb-nav prev desktop-only" onClick={goToPrev}>
+                                            <FiChevronLeft size={22} />
+                                        </button>
+                                    )}
+                                    {lightboxGlobalIdx < flattenedImages.length - 1 && (
+                                        <button className="arts-lb-nav next desktop-only" onClick={goToNext}>
+                                            <FiChevronRight size={22} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="arts-lb-sidebar">
+                                    <div className="arts-lb-sidebar-header">
+                                        <div className="arts-lb-profile">
+                                            <div className="arts-lb-avatar">
+                                                <img src={profileData.profilePic} alt={profileData.fullName} />
+                                            </div>
+                                            <div className="arts-lb-author">{profileData.fullName}</div>
                                         </div>
-                                        <div className="arts-lb-author">{profileData.fullName}</div>
+                                    </div>
+
+                                    <div className="arts-lb-sidebar-body">
+                                        <div className="arts-lb-meta-header">
+                                            {currentImg.caption && <h2 className="arts-lb-caption">{currentImg.caption}</h2>}
+
+                                            <div className="arts-lb-meta-row">
+                                                {currentImg.totalInPost > 1 && (
+                                                    <div className="arts-lb-pagination">
+                                                        {[...Array(currentImg.totalInPost)].map((_, i) => {
+                                                            const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
+                                                            return (
+                                                                <div
+                                                                    key={i}
+                                                                    className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setLightboxGlobalIdx(postBaseIdx + i);
+                                                                    }}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                                <div className="arts-lb-engagement-pill">
+                                                    <Engagement postId={currentImg.postId} category="arts" minimal={true} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="arts-lb-date">{currentImg.date}</div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div className="arts-lb-sidebar-body">
-                                    <div className="arts-lb-meta-header">
-                                        {currentImg.caption && <h2 className="arts-lb-caption">{currentImg.caption}</h2>}
-                                        
-                                        <div className="arts-lb-meta-row">
+                            <div
+                                className="arts-lb-footer-content"
+                                onClick={(e) => e.stopPropagation()}
+                                style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
+                            >
+                                <div className="arts-lb-meta-header">
+                                    <div className="arts-lb-engagement-pill mobile-only">
+                                        <Engagement postId={currentImg.postId} category="arts" minimal={true} />
+                                    </div>
+
+                                    <div className="arts-lb-caption-row mobile-only">
+                                        {currentImg.caption && (
+                                            <h2 className="arts-lb-caption">
+                                                {currentImg.caption.length > 60 ? (
+                                                    <>
+                                                        {currentImg.caption.slice(0, 60)}...
+                                                        <button
+                                                            className="arts-lb-view-more"
+                                                            onClick={() => setShowCaptionModal(true)}
+                                                        >
+                                                            more
+                                                        </button>
+                                                    </>
+                                                ) : currentImg.caption}
+                                            </h2>
+                                        )}
+
+                                        {currentImg.totalInPost > 1 && (
+                                            <div className="arts-lb-pagination floating">
+                                                {[...Array(currentImg.totalInPost)].map((_, i) => {
+                                                    const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
+                                                    return (
+                                                        <div
+                                                            key={i}
+                                                            className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setLightboxGlobalIdx(postBaseIdx + i);
+                                                            }}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Desktop-only version of caption and pagination */}
+                                    <div className="desktop-only">
+                                        {currentImg.caption && (
+                                            <h2 className="arts-lb-caption">{currentImg.caption}</h2>
+                                        )}
+                                        <div className="arts-lb-meta-row floating">
                                             {currentImg.totalInPost > 1 && (
                                                 <div className="arts-lb-pagination">
                                                     {[...Array(currentImg.totalInPost)].map((_, i) => {
@@ -1748,141 +1836,63 @@ const ArtsGallery = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="arts-lb-date">{currentImg.date}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            className="arts-lb-footer-content"
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
-                        >
-                            <div className="arts-lb-meta-header">
-                                <div className="arts-lb-engagement-pill mobile-only">
-                                    <Engagement postId={currentImg.postId} category="arts" minimal={true} />
                                 </div>
 
-                                <div className="arts-lb-caption-row mobile-only">
-                                    {currentImg.caption && (
-                                        <h2 className="arts-lb-caption">
-                                            {currentImg.caption.length > 60 ? (
-                                                <>
-                                                    {currentImg.caption.slice(0, 60)}...
-                                                    <button
-                                                        className="arts-lb-view-more"
-                                                        onClick={() => setShowCaptionModal(true)}
-                                                    >
-                                                        more
-                                                    </button>
-                                                </>
-                                            ) : currentImg.caption}
-                                        </h2>
-                                    )}
-
-                                    {currentImg.totalInPost > 1 && (
-                                        <div className="arts-lb-pagination floating">
-                                            {[...Array(currentImg.totalInPost)].map((_, i) => {
-                                                const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
-                                                return (
-                                                    <div
-                                                        key={i}
-                                                        className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setLightboxGlobalIdx(postBaseIdx + i);
-                                                        }}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Desktop-only version of caption and pagination */}
-                                <div className="desktop-only">
-                                    {currentImg.caption && (
-                                        <h2 className="arts-lb-caption">{currentImg.caption}</h2>
-                                    )}
-                                    <div className="arts-lb-meta-row floating">
-                                        {currentImg.totalInPost > 1 && (
-                                            <div className="arts-lb-pagination">
-                                                {[...Array(currentImg.totalInPost)].map((_, i) => {
-                                                    const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
-                                                    return (
-                                                        <div
-                                                            key={i}
-                                                            className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setLightboxGlobalIdx(postBaseIdx + i);
-                                                            }}
-                                                        />
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                        <div className="arts-lb-engagement-pill">
-                                            <Engagement postId={currentImg.postId} category="arts" minimal={true} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="arts-lb-footer-row">
-                                <div className="arts-lb-caption-group">
-                                    <div className="arts-lb-date">{currentImg.date}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="arts-lb-filmstrip" ref={filmstripRef} onClick={(e) => e.stopPropagation()}>
-                            {allItems.map((item) => {
-                                const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === item.id);
-                                const currentPostId = flattenedImages[lightboxGlobalIdx]?.postId;
-                                const isActive = currentPostId === item.id;
-
-                                return (
-                                    <div
-                                        key={item.id}
-                                        className={`arts-lb-fs-item ${isActive ? 'active' : ''}`}
-                                        onClick={() => setLightboxGlobalIdx(itemGlobalIdx)}
-                                    >
-                                        <img src={getOptimizedImage(item.images?.[0] || item.image, 'thumb')} alt="" loading="lazy" decoding="async" draggable={false} onDragStart={preventImageDrag} />
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {showCaptionModal && (
-                            <div
-                                className="arts-lb-caption-sheet-overlay"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setShowCaptionModal(false);
-                                }}
-                            >
-                                <div className="arts-lb-caption-sheet" onClick={e => e.stopPropagation()}>
-                                    <button className="arts-lb-sheet-close" onClick={() => setShowCaptionModal(false)}>
-                                        <FiX size={18} />
-                                    </button>
-                                    <div className="arts-lb-sheet-title">{currentImg.caption}</div>
-                                    <div className="arts-lb-sheet-meta">
-                                        <div className="arts-lb-profile">
-                                            <div className="arts-lb-avatar">
-                                                <img src={profileData.profilePic} alt={profileData.fullName} />
-                                            </div>
-                                            <div className="arts-lb-author">{profileData.fullName}</div>
-                                        </div>
+                                <div className="arts-lb-footer-row">
+                                    <div className="arts-lb-caption-group">
                                         <div className="arts-lb-date">{currentImg.date}</div>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                );
-            })()}
-        </div>
+
+                            <div className="arts-lb-filmstrip" ref={filmstripRef} onClick={(e) => e.stopPropagation()}>
+                                {allItems.map((item) => {
+                                    const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === item.id);
+                                    const currentPostId = flattenedImages[lightboxGlobalIdx]?.postId;
+                                    const isActive = currentPostId === item.id;
+
+                                    return (
+                                        <div
+                                            key={item.id}
+                                            className={`arts-lb-fs-item ${isActive ? 'active' : ''}`}
+                                            onClick={() => setLightboxGlobalIdx(itemGlobalIdx)}
+                                        >
+                                            <img src={getOptimizedImage(item.images?.[0] || item.image, 'thumb')} alt="" loading="lazy" decoding="async" draggable={false} onDragStart={preventImageDrag} />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {showCaptionModal && (
+                                <div
+                                    className="arts-lb-caption-sheet-overlay"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowCaptionModal(false);
+                                    }}
+                                >
+                                    <div className="arts-lb-caption-sheet" onClick={e => e.stopPropagation()}>
+                                        <button className="arts-lb-sheet-close" onClick={() => setShowCaptionModal(false)}>
+                                            <FiX size={18} />
+                                        </button>
+                                        <div className="arts-lb-sheet-title">{currentImg.caption}</div>
+                                        <div className="arts-lb-sheet-meta">
+                                            <div className="arts-lb-profile">
+                                                <div className="arts-lb-avatar">
+                                                    <img src={profileData.profilePic} alt={profileData.fullName} />
+                                                </div>
+                                                <div className="arts-lb-author">{profileData.fullName}</div>
+                                            </div>
+                                            <div className="arts-lb-date">{currentImg.date}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })(),
+                document.body
+            )}
         </>
     );
 };
