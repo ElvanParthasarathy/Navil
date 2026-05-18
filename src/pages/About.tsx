@@ -415,13 +415,7 @@ const About = () => {
                 <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
 
                 <div className="hero-bio">
-                    <span lang="ta" style={{ display: 'block', marginBottom: '4px' }}>
-                        "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
-                    </span>
-                    <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block', marginBottom: '16px' }}>{profileData.bio}</span>
-
-                    <span lang="ta" style={{ display: 'block', fontWeight: 600 }}>இயற்பெயர்: பா. ஜெய்பிரகாஷ்</span>
-                    <span style={{ fontSize: '0.85rem', opacity: 0.6 }}>(Real Name: Jaiprakash P)</span>
+                    <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block' }}>{profileData.bio}</span>
                 </div>
 
                 <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
