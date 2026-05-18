@@ -50,6 +50,72 @@ export const AboutEditor = () => {
         setData(prev => ({ ...prev, [key]: val }));
     };
 
+    const [cards, setCards] = useState([]);
+
+    useEffect(() => {
+        if (data) {
+            if (data.cards) {
+                setCards(data.cards);
+            } else {
+                const fallbackCards = [
+                    {
+                        content: `<span lang="ta" style="display: block; margin-bottom: 6px; font-weight: 500;">
+    "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+</span>
+<span style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
+    Every idea begins with a simple question — why not?
+</span>`
+                    },
+                    { content: data.identity_text || '' },
+                    { content: data.education_text || '' },
+                    { content: data.social_text || '' },
+                    { content: data.philosophy_lines || '' }
+                ];
+                setCards(fallbackCards);
+            }
+        }
+    }, [data]);
+
+    const getSpanLabel = (index) => {
+        const mod = index % 5;
+        if (mod === 0) return 'Full Width (Span 12)';
+        if (mod === 1) return 'Large (Span 7)';
+        if (mod === 2) return 'Small (Span 5)';
+        if (mod === 3) return 'Small (Span 5)';
+        if (mod === 4) return 'Large (Span 7)';
+        return 'Full Width (Span 12)';
+    };
+
+    const updateCardContent = (index, newContent) => {
+        const updated = cards.map((c, i) => i === index ? { ...c, content: newContent } : c);
+        setCards(updated);
+        setData(prev => ({ ...prev, cards: updated }));
+    };
+
+    const addCard = () => {
+        const newCard = { content: '' };
+        const updated = [...cards, newCard];
+        setCards(updated);
+        setData(prev => ({ ...prev, cards: updated }));
+    };
+
+    const deleteCard = (index) => {
+        const updated = cards.filter((_, i) => i !== index);
+        setCards(updated);
+        setData(prev => ({ ...prev, cards: updated }));
+    };
+
+    const moveCard = (index, direction) => {
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= cards.length) return;
+        const updated = [...cards];
+        const temp = updated[index];
+        updated[index] = updated[targetIndex];
+        updated[targetIndex] = temp;
+        setCards(updated);
+        setData(prev => ({ ...prev, cards: updated }));
+    };
+
     if (!data) {
         return (
             <div className="admin-content-area" style={{ padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -79,10 +145,17 @@ export const AboutEditor = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <PreviewCard label="Hero Title" value={data.hero_title} />
                     <PreviewCard label="Hero Subtitle" value={data.hero_subtitle} />
-                    <PreviewCard label="Identity" value={data.identity_text} isHtml />
-                    <PreviewCard label="Education" value={data.education_text} isHtml />
-                    <PreviewCard label="Social Presence" value={data.social_text} isHtml />
-                    <PreviewCard label="Philosophy" value={data.philosophy_lines} isHtml />
+                    
+                    <div style={{ margin: '24px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+                        Bento Grid Cards
+                    </div>
+                    {cards.map((card, idx) => (
+                        <PreviewCard key={idx} label={`Card #${idx + 1} (${getSpanLabel(idx)})`} value={card.content} isHtml />
+                    ))}
+                    
+                    <div style={{ margin: '24px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+                        Contact & Details
+                    </div>
                     <PreviewCard label="Contact Title (Tamil)" value={data.contact_tamil} />
                     <PreviewCard label="Contact Title (English)" value={data.contact_english} />
                     <PreviewCard label="Contact Desc (Tamil)" value={data.contact_desc_tamil} />
@@ -128,22 +201,62 @@ export const AboutEditor = () => {
                 <Field label="Hero Subtitle" value={data.hero_subtitle} onChange={v => updateField('hero_subtitle', v)} />
             </FieldRow>
 
-            <SectionLabel>Content Cards</SectionLabel>
-            <div className="adm-field" style={{ marginBottom: '16px' }}>
-                <label className="adm-label">Identity</label>
-                <RichTextEditor content={data.identity_text} onChange={v => updateField('identity_text', v)} placeholder="Write about your identity..." />
-            </div>
-            <div className="adm-field" style={{ marginBottom: '16px' }}>
-                <label className="adm-label">Education</label>
-                <RichTextEditor content={data.education_text} onChange={v => updateField('education_text', v)} placeholder="Write about your education..." />
-            </div>
-            <div className="adm-field" style={{ marginBottom: '16px' }}>
-                <label className="adm-label">Social Presence</label>
-                <RichTextEditor content={data.social_text} onChange={v => updateField('social_text', v)} placeholder="Write about your social presence..." />
-            </div>
-            <div className="adm-field" style={{ marginBottom: '16px' }}>
-                <label className="adm-label">Philosophy</label>
-                <RichTextEditor content={data.philosophy_lines} onChange={v => updateField('philosophy_lines', v)} placeholder="Write your philosophy..." />
+            <SectionLabel>Content Cards (Dynamic Bento Grid)</SectionLabel>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '32px' }}>
+                {cards.map((card, idx) => (
+                    <div key={idx} style={{
+                        background: 'var(--bg-panel)', borderRadius: '16px', padding: '24px',
+                        border: '1px solid var(--border-light)', position: 'relative'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                                Card #{idx + 1} ({getSpanLabel(idx)})
+                            </span>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button
+                                    type="button"
+                                    className="adm-btn"
+                                    style={{ padding: '4px 8px', fontSize: '0.8rem' }}
+                                    onClick={() => moveCard(idx, 'up')}
+                                    disabled={idx === 0}
+                                >
+                                    ↑ Move Up
+                                </button>
+                                <button
+                                    type="button"
+                                    className="adm-btn"
+                                    style={{ padding: '4px 8px', fontSize: '0.8rem' }}
+                                    onClick={() => moveCard(idx, 'down')}
+                                    disabled={idx === cards.length - 1}
+                                >
+                                    ↓ Move Down
+                                </button>
+                                <button
+                                    type="button"
+                                    className="adm-btn"
+                                    style={{ padding: '4px 8px', fontSize: '0.8rem', background: '#fee2e2', color: '#b91c1c', border: '1px solid #fee2e2' }}
+                                    onClick={() => deleteCard(idx)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <RichTextEditor
+                            content={card.content}
+                            onChange={v => updateCardContent(idx, v)}
+                            placeholder={`Write content for Card #${idx + 1}...`}
+                        />
+                    </div>
+                ))}
+                
+                <button
+                    type="button"
+                    className="adm-btn primary"
+                    style={{ alignSelf: 'flex-start' }}
+                    onClick={addCard}
+                >
+                    + Add New Card
+                </button>
             </div>
 
             <SectionLabel>Contact Section</SectionLabel>

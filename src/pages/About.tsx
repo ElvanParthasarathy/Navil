@@ -16,6 +16,16 @@ const getInitialAbout = () => {
     return null;
 };
 
+const getSpanClass = (index: number) => {
+    const mod = index % 5;
+    if (mod === 0) return 'span-12';
+    if (mod === 1) return 'span-7';
+    if (mod === 2) return 'span-5';
+    if (mod === 3) return 'span-5';
+    if (mod === 4) return 'span-7';
+    return 'span-12';
+};
+
 const About = () => {
     const navigate = useNavigate();
     const [about, setAbout] = useState(getInitialAbout());
@@ -40,6 +50,21 @@ const About = () => {
             </>
         );
     }
+
+    const cards = about.cards || [
+        {
+            content: `<span lang="ta" style="display: block; margin-bottom: 6px; font-weight: 500;">
+    "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+</span>
+<span style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
+    Every idea begins with a simple question — why not?
+</span>`
+        },
+        { content: about.identity_text || '' },
+        { content: about.education_text || '' },
+        { content: about.social_text || '' },
+        { content: about.philosophy_lines || '' }
+    ];
 
     return (
         <>
@@ -340,16 +365,9 @@ const About = () => {
                         gap: 24px;
                     }
                     
-                    /* Row 1 */
-                    .card-identity { grid-column: span 7; }
-                    .card-education { grid-column: span 5; }
-                    
-                    /* Row 2 */
-                    .card-social { grid-column: span 5; }
-                    .card-philosophy { grid-column: span 7; }
-
-                    /* Row 3 */
-                    .card-motto { grid-column: span 12; }
+                    .span-12 { grid-column: span 12; }
+                    .span-7 { grid-column: span 7; }
+                    .span-5 { grid-column: span 5; }
                 }
 
                 @media (max-width: 1023px) {
@@ -413,36 +431,11 @@ const About = () => {
             </section>
 
             <div className="about-grid animate-entry" style={{ animationDelay: '0.1s' }}>
-                <div className="about-card card-identity">
-                    <h3 className="card-title">Identity</h3>
-                    <p className="card-text" dangerouslySetInnerHTML={{ __html: about.identity_text }} />
-                </div>
-
-                <div className="about-card card-education">
-                    <h3 className="card-title">Education</h3>
-                    <p className="card-text" dangerouslySetInnerHTML={{ __html: about.education_text }} />
-                </div>
-
-                <div className="about-card card-social">
-                    <h3 className="card-title">Social Presence</h3>
-                    <p className="card-text" dangerouslySetInnerHTML={{ __html: about.social_text }} />
-                </div>
-
-                 <div className="about-card card-philosophy">
-                    <div className="philosophy-text" dangerouslySetInnerHTML={{ __html: about.philosophy_lines || '' }} />
-                </div>
-
-                <div className="about-card card-motto">
-                    <h3 className="card-title">Motto</h3>
-                    <div className="philosophy-text">
-                        <p lang="ta" style={{ fontSize: '1.5rem', fontWeight: 800, fontStyle: 'normal', lineHeight: '1.4', marginBottom: '10px' }}>
-                            "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
-                        </p>
-                        <p style={{ fontSize: '1.15rem', opacity: 0.8, fontStyle: 'italic', fontWeight: 500 }}>
-                            Every idea begins with a simple question — why not?
-                        </p>
+                {cards.map((card, idx) => (
+                    <div key={idx} className={`about-card ${getSpanClass(idx)}`}>
+                        <div className="card-text" dangerouslySetInnerHTML={{ __html: card.content }} />
                     </div>
-                </div>
+                ))}
             </div>
 
 
