@@ -145,13 +145,22 @@ const About = () => {
                     max-width: 600px;
                 }
 
+                .about-hero-actions {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    margin-top: 24px;
+                    flex-wrap: wrap;
+                }
+
                 .about-portfolio-btn {
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
                     gap: 10px;
-                    margin-top: 24px;
-                    padding: 14px 32px;
+                    height: 50px;
+                    padding: 0 32px;
                     background-color: var(--text-main);
                     color: var(--bg-app);
                     border-radius: 99px;
@@ -159,7 +168,8 @@ const About = () => {
                     text-decoration: none;
                     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
                     font-size: 1.05rem;
-                    border: none;
+                    border: 1px solid transparent;
+                    box-sizing: border-box;
                     cursor: pointer;
                 }
 
@@ -174,21 +184,13 @@ const About = () => {
                     transform: scale(0.95) !important;
                 }
 
-                .about-hero-actions {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 16px;
-                    margin-top: 24px;
-                    flex-wrap: wrap;
-                }
-
                 .about-insta-btn {
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
                     gap: 10px;
-                    padding: 14px 32px;
+                    height: 50px;
+                    padding: 0 32px;
                     background-color: var(--bg-panel);
                     color: var(--text-main);
                     border-radius: 99px;
@@ -197,6 +199,7 @@ const About = () => {
                     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
                     font-size: 1.05rem;
                     border: 1px solid var(--border-light);
+                    box-sizing: border-box;
                     cursor: pointer;
                 }
 
