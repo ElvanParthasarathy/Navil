@@ -492,6 +492,37 @@ const Archive = () => {
             <MobileTopBar title="காப்புகள்|archive" />
             <div className="page-view page-fade">
             <style>{`
+                .archive-back-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    font-family: "Google Sans", "Mukta Malar", sans-serif !important;
+                    color: var(--text-muted);
+                    text-decoration: none;
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    border-radius: 100px;
+                    padding: 10px 24px;
+                    flex-shrink: 0;
+                    white-space: nowrap;
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
+                }
+                .archive-back-btn:hover {
+                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                    color: var(--text-main);
+                }
+                .archive-back-btn:active {
+                    transform: scale(0.95);
+                    background: color-mix(in srgb, var(--text-main) 18%, transparent);
+                }
+                .archive-back-btn svg {
+                    display: inline-block !important;
+                    vertical-align: middle !important;
+                    margin-top: -1px !important;
+                    flex-shrink: 0 !important;
+                }
+
                 /* --- PROFILE HEADER STYLES --- */
                 .profile-header {
                     display: flex;
@@ -1363,7 +1394,7 @@ const Archive = () => {
                         </div>
                         <Link 
                             to="/" 
-                            className="back-pill desktop-only"
+                            className="archive-back-btn desktop-only"
                             onClick={(e) => {
                                 if (window.history.state && window.history.state.idx > 0) {
                                     e.preventDefault();
