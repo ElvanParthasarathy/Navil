@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import profileData from '../data/profile.json';
-import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
+import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight, FiInstagram } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
@@ -171,6 +171,43 @@ const About = () => {
                 }
 
                 .about-portfolio-btn:active {
+                    transform: scale(0.95) !important;
+                }
+
+                .about-hero-actions {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    margin-top: 24px;
+                    flex-wrap: wrap;
+                }
+
+                .about-insta-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    padding: 14px 32px;
+                    background-color: var(--bg-panel);
+                    color: var(--text-main);
+                    border-radius: 99px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+                    font-size: 1.05rem;
+                    border: 1px solid var(--border-light);
+                    cursor: pointer;
+                }
+
+                @media (hover: hover) and (pointer: fine) {
+                    .about-insta-btn:hover {
+                        background-color: color-mix(in srgb, var(--bg-panel) 85%, transparent);
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                    }
+                }
+
+                .about-insta-btn:active {
                     transform: scale(0.95) !important;
                 }
 
@@ -411,9 +448,14 @@ const About = () => {
 
 
 
-                <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
-                    View Portfolio <FiArrowRight />
-                </a>
+                <div className="about-hero-actions">
+                    <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
+                        View Portfolio <FiArrowRight />
+                    </a>
+                    <Link to="/archive" className="about-insta-btn">
+                        <FiInstagram /> Insta Archive
+                    </Link>
+                </div>
             </section>
 
             <div className="about-grid animate-entry" style={{ animationDelay: '0.1s' }}>
