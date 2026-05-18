@@ -1442,25 +1442,24 @@ const ArtsGallery = () => {
                     display: inline-flex;
                     align-items: center;
                     gap: 8px;
-                    padding: 14px 32px;
-                    border: 1px solid var(--border-light);
-                    background: var(--bg-card);
-                    color: var(--text-main);
-                    font-size: 0.9rem;
+                    padding: 10px 24px;
+                    border: none !important;
+                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+                    color: var(--text-muted);
+                    font-size: 0.85rem;
                     font-weight: 600;
                     border-radius: 100px;
                     cursor: pointer;
-                    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.3s ease, color 0.3s ease;
+                    white-space: nowrap;
+                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
                 }
                 .arts-show-more-btn:hover {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    border-color: var(--text-main);
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 20px color-mix(in srgb, var(--text-main) 20%, transparent);
+                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+                    color: var(--text-main);
                 }
                 .arts-show-more-btn:active {
-                    transform: scale(0.97);
+                    transform: scale(0.95) !important;
+                    background: color-mix(in srgb, var(--text-main) 18%, transparent);
                 }
                 .arts-show-more-count {
                     display: inline-flex;
@@ -1473,9 +1472,11 @@ const ArtsGallery = () => {
                     background: color-mix(in srgb, var(--text-main) 10%, transparent);
                     font-size: 0.75rem;
                     font-weight: 700;
+                    color: var(--text-main);
+                    transition: background-color 0.2s ease;
                 }
                 .arts-show-more-btn:hover .arts-show-more-count {
-                    background: rgba(255,255,255,0.2);
+                    background: color-mix(in srgb, var(--text-main) 18%, transparent);
                 }
 
                 .arts-skeleton-grid {
