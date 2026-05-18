@@ -1,11 +1,12 @@
 import React from 'react';
 import { BsDisplay } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AdBanner from '../components/AdBanner';
 import MobileTopBar from '../components/MobileTopBar';
 
 const Teaching = () => {
+    const navigate = useNavigate();
 
     return (
         <>
@@ -51,7 +52,16 @@ const Teaching = () => {
                         Interactive teaching materials, slides, and educational resources.
                     </p>
                 </div>
-                <Link to="/" className="back-pill desktop-only">
+                <Link 
+                    to="/" 
+                    className="back-pill desktop-only"
+                    onClick={(e) => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            e.preventDefault();
+                            navigate(-1);
+                        }
+                    }}
+                >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                 </Link>
             </header>

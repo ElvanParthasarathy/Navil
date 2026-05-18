@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, useOutletContext, Link } from 'react-router-dom';
+import { useSearchParams, useOutletContext, Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../components/MobileTopBar';
 import profileData from '../data/profile.json';
 import initialHighlights from '../data/stories.json';
@@ -15,6 +15,7 @@ import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
 
 const Archive = () => {
+    const navigate = useNavigate();
 
     // Destructure Data
     // Data from JSON files
@@ -1360,7 +1361,16 @@ const Archive = () => {
                             <h2 className="username-text">{profileData?.username}</h2>
                             <FiHeart size={24} style={{ marginLeft: 10, cursor: 'pointer' }} />
                         </div>
-                        <Link to="/" className="back-pill desktop-only">
+                        <Link 
+                            to="/" 
+                            className="back-pill desktop-only"
+                            onClick={(e) => {
+                                if (window.history.state && window.history.state.idx > 0) {
+                                    e.preventDefault();
+                                    navigate(-1);
+                                }
+                            }}
+                        >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                         </Link>
                     </div>

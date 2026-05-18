@@ -38,10 +38,10 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
     }, [isMobileMenuOpen]);
 
     const handleBack = () => {
-        if (backUrl) {
-            navigate(backUrl);
-        } else if (window.history.state && window.history.state.idx > 0) {
+        if (window.history.state && window.history.state.idx > 0) {
             navigate(-1);
+        } else if (backUrl) {
+            navigate(backUrl);
         } else {
             navigate('/');
         }

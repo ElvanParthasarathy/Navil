@@ -1,10 +1,11 @@
 // @ts-nocheck
 import React from 'react';
 import { FiSettings, FiMoon, FiSun, FiMonitor } from 'react-icons/fi';
-import { useOutletContext, Link } from 'react-router-dom';
+import { useOutletContext, Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../components/MobileTopBar';
 
 const Settings = () => {
+    const navigate = useNavigate();
     const { theme, setTheme } = useOutletContext();
 
     return (
@@ -157,7 +158,16 @@ const Settings = () => {
                     <h1 className="settings-title">Settings</h1>
                     <h2 className="settings-subtitle">Personalize your experience.</h2>
                 </div>
-                <Link to="/" className="back-pill desktop-only">
+                <Link 
+                    to="/" 
+                    className="back-pill desktop-only"
+                    onClick={(e) => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            e.preventDefault();
+                            navigate(-1);
+                        }
+                    }}
+                >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                 </Link>
             </div>

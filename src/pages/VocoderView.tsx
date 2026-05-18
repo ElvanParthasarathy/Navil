@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../components/MobileTopBar';
 import Presentation from '../components/vocoder/Presentation';
 import Interactive from '../components/vocoder/Interactive';
 import '../components/vocoder/vocoder-global.css';
 
 const VocoderView = () => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('presentation');
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -386,7 +387,16 @@ const VocoderView = () => {
                             </button>
                         </div>
                     )}
-                    <Link to="/teaching" className="back-pill desktop-only">
+                    <Link 
+                        to="/teaching" 
+                        className="back-pill desktop-only"
+                        onClick={(e) => {
+                            if (window.history.state && window.history.state.idx > 0) {
+                                e.preventDefault();
+                                navigate(-1);
+                            }
+                        }}
+                    >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                     </Link>
                 </div>

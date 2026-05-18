@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
@@ -10,6 +10,7 @@ import MobileTopBar from '../components/MobileTopBar';
 const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
 
 const Writings = () => {
+    const navigate = useNavigate();
     const [counts, setCounts] = useState({});
 
     useEffect(() => {
@@ -120,7 +121,16 @@ const Writings = () => {
                         Thoughts, Stories & Observations
                     </p>
                 </div>
-                <Link to="/" className="back-pill desktop-only">
+                <Link 
+                    to="/" 
+                    className="back-pill desktop-only"
+                    onClick={(e) => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            e.preventDefault();
+                            navigate(-1);
+                        }
+                    }}
+                >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
                 </Link>
             </header>
