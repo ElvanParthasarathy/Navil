@@ -143,6 +143,9 @@ const About = () => {
                     line-height: 1.6;
                     color: var(--text-muted);
                     max-width: 600px;
+                    margin-top: 20px;
+                    white-space: pre-line;
+                    text-align: center;
                 }
 
                 .about-portfolio-btn {
@@ -151,13 +154,13 @@ const About = () => {
                     justify-content: center;
                     gap: 10px;
                     margin-top: 24px;
-                    padding: 10px 24px;
+                    padding: 10px 26px;
                     background-color: var(--text-main);
                     color: var(--bg-app);
                     border-radius: 99px;
                     font-weight: 700;
                     text-decoration: none;
-                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
                     font-size: 0.95rem;
                     border: none;
                     cursor: pointer;
@@ -165,13 +168,15 @@ const About = () => {
 
                 @media (hover: hover) and (pointer: fine) {
                     .about-portfolio-btn:hover {
+                        transform: translateY(-2px) scale(1.01);
                         background-color: color-mix(in srgb, var(--text-main) 85%, transparent);
-                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1); /* Subtle glow for dark mode */
                     }
                 }
 
                 .about-portfolio-btn:active {
-                    transform: scale(0.95) !important;
+                    transform: scale(0.96) translateY(0) !important;
+                    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
                 }
 
                 /* BENTO GRID LAYOUT */
