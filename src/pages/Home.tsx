@@ -10,8 +10,8 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title>Elvan Parthasarathy | Creative Portfolio & Writings</title>
-                <meta name="description" content="Welcome to the creative space of Elvan Parthasarathy (Jaiprakash P). Explore my writings, poems, essays, and personal reflections." />
+                <title>Elvan Navil | Creative Portfolio & Writings</title>
+                <meta name="description" content="Welcome to the creative space of Elvan Navil (Jaiprakash P). Explore my writings, poems, essays, and personal reflections." />
                 <link rel="canonical" href="https://elvanparthasarathy.vercel.app/" />
             </Helmet>
             <MobileTopBar title="நவில்" />
@@ -45,8 +45,8 @@ const Home = () => {
 
                 .hero-avatar-wrapper {
                     position: relative;
-                    width: 260px;
-                    height: 260px;
+                    width: 320px;
+                    height: 320px;
                 }
 
                 .hero-avatar-bg {
@@ -76,7 +76,7 @@ const Home = () => {
                 }
 
                 .hero-title {
-                    font-size: clamp(2.6rem, 3.2vw, 3.25rem);
+                    font-size: clamp(2.8rem, 3.6vw, 3.75rem);
                     font-weight: 800;
                     line-height: 1.3;
                     margin-bottom: 12px;
@@ -85,7 +85,7 @@ const Home = () => {
                 }
 
                 .hero-subtitle {
-                    font-size: clamp(1.4rem, 2vw, 1.75rem);
+                    font-size: clamp(1.6rem, 2.2vw, 2rem);
                     color: var(--text-muted);
                     margin-bottom: 16px;
                 }
@@ -147,8 +147,6 @@ const Home = () => {
                 .mobile-text { display: none; }
 
                 /* GRID SECTIONS */
-
-
                 .contact-footer {
                     display: flex;
                     justify-content: space-between;
@@ -231,10 +229,10 @@ const Home = () => {
                     .home-hero { flex-direction: column; gap: 0; padding: 0; align-items: center; text-align: center; margin-bottom: 40px; }
                     .hero-visual { order: -1; margin-bottom: 24px; }
                     .hero-content { width: 100%; display: flex; flex-direction: column; align-items: center; }
-                    .hero-avatar-wrapper { width: clamp(120px, 20vw, 180px); height: clamp(120px, 20vw, 180px); }
-                    .hero-avatar { border-radius: 50%; border-width: 3px; }
-                    .hero-title { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 6px; letter-spacing: -0.5px; }
-                    .hero-subtitle { font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-bottom: 14px; opacity: 0.9; }
+                    .hero-avatar-wrapper { width: clamp(140px, 25vw, 220px); height: clamp(140px, 25vw, 220px); }
+                    .hero-avatar { border-radius: 50%; border-width: 4px; }
+                    .hero-title { font-size: clamp(2.1rem, 5vw, 2.8rem); margin-bottom: 6px; letter-spacing: -0.5px; }
+                    .hero-subtitle { font-size: clamp(1.3rem, 3vw, 1.7rem); margin-bottom: 14px; opacity: 0.9; }
                     .hero-bio { font-size: 1rem; margin-bottom: 28px; line-height: 1.6; max-width: 100%; margin-left: 0; margin-right: 0; white-space: pre-line; }
                     .hero-actions { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px; }
                     .hero-btn { width: auto; flex: 1; min-width: 140px; justify-content: center; margin: 0; padding: 12px 16px; font-size: 0.95rem; font-weight: 600; }
@@ -250,80 +248,91 @@ const Home = () => {
                     .contact-socials { justify-content: center; gap: 20px; }
                     .social-icon-link { width: 48px; height: 48px; }
                 }
+                
+                .desktop-instruction { display: block; }
+                .mobile-instruction { display: none; }
+                @media (max-width: 1023px) {
+                    .desktop-instruction { display: none; }
+                    .mobile-instruction { display: block; }
+                }
             `}</style>
 
-            <section className="home-hero animate-entry">
-                <div className="hero-content">
-                    <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
-                    <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
-
-                    <div className="hero-bio">
-                        <span lang="ta" style={{ display: 'block', marginBottom: '4px' }}>
-                            "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
-                        </span>
-                        <span style={{ fontSize: '0.95rem', opacity: 0.8, display: 'block', marginBottom: '16px' }}>{profileData.bio}</span>
-
-                        <span lang="ta" style={{ display: 'block', fontWeight: 600 }}>இயற்பெயர்: பா. ஜெய்பிரகாஷ்</span>
-                        <span style={{ fontSize: '0.85rem', opacity: 0.6 }}>(Real Name: Jaiprakash P)</span>
+                <section className="home-hero animate-entry">
+                    <div className="hero-content">
+                        <h1 className="hero-title" lang="ta">எல்வன் நவில்</h1>
+                        <h2 className="hero-subtitle">Elvan Navil</h2>
+                        <div className="hero-signature" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', opacity: 0.75 }}>
+                            <span lang="ta" style={{ fontWeight: 500 }}>எல்வன் பார்த்தசாரதியிடமிருந்து</span>
+                            <span style={{ fontWeight: 400 }}>from Elvan Parthasarathy</span>
+                        </div>
                     </div>
 
-                    <div className="hero-actions">
-                        <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn primary">
-                            <span className="desktop-text">View Portfolio</span>
-                            <span className="mobile-text">Portfolio</span>
-                            <FiArrowRight />
-                        </a>
-                        <Link to="/archive" className="hero-btn secondary">
-                            <FiInstagram />
-                            <span className="desktop-text">Explore Insta Archive</span>
-                            <span className="mobile-text">Insta Archive</span>
-                        </Link>
+                    <div className="hero-visual">
+                        <div className="hero-avatar-wrapper">
+                            <div className="hero-avatar-bg"></div>
+                            <img
+                                src={profileData.profilePic}
+                                alt={profileData.name}
+                                className="hero-avatar"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                <div className="category-grid animate-entry" style={{ marginBottom: '48px', animationDelay: '0.1s' }}>
+                    {/* Tamil Meaning Card */}
+                    <div className="category-card" style={{ cursor: 'default' }}>
+                        <div className="cat-icon-box" style={{ background: 'color-mix(in srgb, #f09433 15%, var(--bg-panel))', color: '#f09433' }}>
+                            <FiEdit3 />
+                        </div>
+                        <div className="cat-content">
+                            <div className="cat-title" lang="ta">நவில்</div>
+                            <div className="cat-title-sub">Tamil Origin</div>
+                            <p className="cat-desc" lang="ta" style={{ marginTop: '8px' }}>
+                                “நவில்” என்பது தமிழில் “நவிலுதல்” என்னும் சொல்லிலிருந்து வந்தது.
+                            </p>
+                            <p className="cat-desc-sub" lang="ta">
+                                பொருள் — பேசுதல், உரைத்தல், எண்ணங்களை வெளிப்படுத்துதல்.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* English Meaning Card */}
+                    <div className="category-card" style={{ cursor: 'default' }}>
+                        <div className="cat-icon-box" style={{ background: 'color-mix(in srgb, #3b82f6 15%, var(--bg-panel))', color: '#3b82f6' }}>
+                            <FiLayers />
+                        </div>
+                        <div className="cat-content">
+                            <div className="cat-title">Navil</div>
+                            <div className="cat-title-sub">Meaning</div>
+                            <p className="cat-desc" style={{ marginTop: '8px' }}>
+                                “Navil” is derived from the Tamil word “Naviluthal”.
+                            </p>
+                            <p className="cat-desc-sub">
+                                Means — to speak, utter, narrate, or express thoughts through words.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <div className="hero-visual">
-                    <div className="hero-avatar-wrapper">
-                        <div className="hero-avatar-bg"></div>
-                        <img
-                            src={profileData.profilePic}
-                            alt={profileData.name}
-                            className="hero-avatar"
-                        />
+                <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
+
+                <div className="contact-footer">
+                    <div className="contact-info-block" style={{ textAlign: 'center', width: '100%' }}>
+                        <div className="desktop-instruction">
+                            <h3 lang="ta" style={{ marginBottom: '4px' }}>பக்கங்களை ஆராய</h3>
+                            <h3 style={{ marginBottom: '8px' }}>பக்கப்பட்டியை பயன்படுத்துங்கள்.</h3>
+                            <p style={{ fontSize: '0.95rem' }}>Use the sidebar to explore the site.</p>
+                        </div>
+                        <div className="mobile-instruction">
+                            <h3 lang="ta" style={{ marginBottom: '4px' }}>கீழ்ப்பட்டியை பயன்படுத்தி</h3>
+                            <h3 style={{ marginBottom: '8px' }}>பக்கங்களை ஆராயுங்கள்.</h3>
+                            <p style={{ fontSize: '0.95rem' }}>Use the bottom navigation to explore the site.</p>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-            <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
-
-            <div className="contact-footer animate-entry">
-                <div className="contact-info-block">
-                    <div className="contact-header">
-                        <h3 lang="ta">இணைவோம்</h3>
-                        <div className="contact-divider"></div>
-                        <h3>Let's Connect</h3>
-                    </div>
-
-                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>புதிய படைப்புகளுக்கும் உரையாடல்களுக்கும்.</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>Open for collaborations and creative conversations.</p>
-                </div>
-                <div className="contact-socials">
-                    <a href="tel:+919345128797" className="social-icon-link">
-                        <FiPhone size={20} />
-                    </a>
-                    <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                        <FiMail size={20} />
-                    </a>
-                    <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiLinkedin size={20} />
-                    </a>
-                    <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiGithub size={20} />
-                    </a>
-                </div>
             </div>
-
-            <div style={{ height: '40px' }}></div>
-        </div>
         </>
     );
 };

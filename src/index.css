@@ -94,7 +94,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 400;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/GoogleSans-Italic.woff') format('woff');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -102,7 +102,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 500;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/GoogleSans-MediumItalic.woff') format('woff');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -110,7 +110,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 600;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/GoogleSans-SemiBoldItalic.woff') format('woff');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }
@@ -118,7 +118,7 @@
   font-family: "Google Sans";
   font-style: italic;
   font-weight: 700 900;
-  font-display: block;
+  font-display: swap;
   src: url('/fonts/GoogleSans-BoldItalic.woff') format('woff');
   unicode-range: U+0000-0B7F, U+0C00-10FFFF;
 }

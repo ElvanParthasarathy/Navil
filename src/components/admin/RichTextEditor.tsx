@@ -1,9 +1,35 @@
 import React from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Mark, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
+
+const SubtitleMark = Mark.create({
+    name: 'subtitle',
+
+    parseHTML() {
+        return [
+            {
+                tag: 'span[data-type="subtitle"]',
+            },
+            {
+                tag: 'span',
+                getAttrs: element => {
+                    const el = element as HTMLElement;
+                    return el.style.color === 'var(--text-muted)' || el.style.color === 'rgb(142, 142, 147)' ? {} : false;
+                }
+            }
+        ]
+    },
+
+    renderHTML({ HTMLAttributes }) {
+        return ['span', mergeAttributes(HTMLAttributes, { 
+            'data-type': 'subtitle',
+            style: 'color: var(--text-muted); font-style: italic; opacity: 0.8; font-weight: 400;' 
+        }), 0]
+    },
+});
 
 const MenuBar = ({ editor }) => {
     if (!editor) return null;
@@ -38,6 +64,9 @@ const MenuBar = ({ editor }) => {
             </button>
             <button type="button" style={btnStyle(editor.isActive('strike'))} onClick={() => editor.chain().focus().toggleStrike().run()} title="Strikethrough">
                 <s>S</s>
+            </button>
+            <button type="button" style={{ ...btnStyle(editor.isActive('subtitle')), fontStyle: 'italic', fontWeight: 'bold' }} onClick={() => editor.chain().focus().toggleMark('subtitle').run()} title="English Subtitle">
+                English Subtitle
             </button>
 
             <div className="rte-toolbar-divider" />
@@ -107,6 +136,7 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
             }),
             Image.configure({ inline: false }),
             Placeholder.configure({ placeholder }),
+            SubtitleMark,
         ],
         content: formatHTML(content),
         onUpdate: ({ editor }) => {
@@ -159,6 +189,12 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
                 }
                 .rte-wrapper .tiptap p {
                     margin: 0;
+                }
+                .rte-wrapper .tiptap span[data-type="subtitle"] {
+                    color: var(--text-muted) !important;
+                    font-style: italic !important;
+                    opacity: 0.8 !important;
+                    font-weight: 400 !important;
                 }
                 .rte-wrapper .tiptap p.is-editor-empty:first-child::before {
                     content: attr(data-placeholder);

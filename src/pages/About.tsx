@@ -148,7 +148,7 @@ const About = () => {
                     text-align: center;
                 }
 
-                .about-portfolio-btn {
+                .explore-portfolio-btn-unique {
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
@@ -160,23 +160,31 @@ const About = () => {
                     border-radius: 99px;
                     font-weight: 700;
                     text-decoration: none;
-                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
                     font-size: 0.95rem;
                     border: none;
                     cursor: pointer;
+                    
+                    /* Gold Standard GPU rendering rules */
+                    transform: translate3d(0, 0, 0);
+                    will-change: transform;
+                    backface-visibility: hidden;
+                    -webkit-font-smoothing: antialiased;
+                    
+                    /* Ultra subtle premium transition */
+                    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
                 }
 
                 @media (hover: hover) and (pointer: fine) {
-                    .about-portfolio-btn:hover {
-                        transform: translateY(-2px) scale(1.01);
+                    .explore-portfolio-btn-unique:hover {
+                        transform: translate3d(0, -1px, 0);
                         background-color: color-mix(in srgb, var(--text-main) 85%, transparent);
-                        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1); /* Subtle glow for dark mode */
+                        box-shadow: 0 6px 15px rgba(255, 255, 255, 0.08); /* Extremely subtle shadow/glow */
                     }
                 }
 
-                .about-portfolio-btn:active {
-                    transform: scale(0.96) translateY(0) !important;
-                    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                .explore-portfolio-btn-unique:active {
+                    transform: scale(0.98) translate3d(0, 0, 0) !important;
+                    transition: transform 0.1s ease !important;
                 }
 
                 /* BENTO GRID LAYOUT */
@@ -230,6 +238,10 @@ const About = () => {
                     line-height: 1.6;
                     color: var(--text-main);
                     font-weight: 500;
+                }
+
+                .card-text span[data-type="subtitle"] {
+                    font-weight: 400 !important;
                 }
 
                 .card-text strong {
@@ -416,8 +428,8 @@ const About = () => {
 
 
 
-                <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="about-portfolio-btn">
-                    View Portfolio <FiArrowRight />
+                <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="explore-portfolio-btn-unique">
+                    Explore Portfolio <FiArrowRight />
                 </a>
             </section>
 

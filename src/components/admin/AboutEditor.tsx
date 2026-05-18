@@ -157,10 +157,8 @@ export const AboutEditor = () => {
 
                 {/* Preview Cards */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <PreviewCard label="Hero Title" value={data.hero_title} />
-                    <PreviewCard label="Hero Subtitle" value={data.hero_subtitle} />
                     
-                    <div style={{ margin: '24px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+                    <div style={{ margin: '8px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
                         Bento Grid Cards
                     </div>
                     {cards.map((card, idx) => {
@@ -212,12 +210,6 @@ export const AboutEditor = () => {
                     {message}
                 </div>
             )}
-
-            <SectionLabel>Hero Section</SectionLabel>
-            <FieldRow>
-                <Field label="Hero Title" value={data.hero_title} onChange={v => updateField('hero_title', v)} />
-                <Field label="Hero Subtitle" value={data.hero_subtitle} onChange={v => updateField('hero_subtitle', v)} />
-            </FieldRow>
 
             <SectionLabel>Content Cards (Dynamic Bento Grid)</SectionLabel>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '32px' }}>
