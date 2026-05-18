@@ -126,13 +126,18 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
     );
 });
 
+const LOADED_IMAGES_CACHE = new Set();
+
 const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preventImageDrag, activeImgRef }) => {
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(() => LOADED_IMAGES_CACHE.has(img.url));
     const imgRef = useRef(null);
 
     useEffect(() => {
-        if (imgRef.current && imgRef.current.complete) {
+        if (LOADED_IMAGES_CACHE.has(img.url)) {
             setIsLoaded(true);
+        } else if (imgRef.current && imgRef.current.complete) {
+            setIsLoaded(true);
+            LOADED_IMAGES_CACHE.add(img.url);
         } else {
             setIsLoaded(false);
         }
@@ -161,7 +166,10 @@ const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preven
                 decoding="async"
                 draggable={false}
                 onDragStart={preventImageDrag}
-                onLoad={() => setIsLoaded(true)}
+                onLoad={() => {
+                    setIsLoaded(true);
+                    LOADED_IMAGES_CACHE.add(img.url);
+                }}
                 style={{
                     opacity: isLoaded ? 1 : 0
                 }}
