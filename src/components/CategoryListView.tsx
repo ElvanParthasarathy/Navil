@@ -849,7 +849,7 @@ const CategoryListView = () => {
                 }
 
                 [data-theme='dark'] .blog-card-item {
-                    background: linear-gradient(145deg, var(--bg-card), color-mix(in srgb, var(--bg-card), transparent 45%));
+                    background: linear-gradient(145deg, #141414, color-mix(in srgb, #141414, transparent 35%));
                     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
                 }
                 .blog-link-card:active .blog-card-item {

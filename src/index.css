@@ -931,7 +931,7 @@ body {
 
 [data-theme='dark'] .category-card {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(145deg, var(--bg-card), color-mix(in srgb, var(--bg-card), transparent 50%));
+  background: linear-gradient(145deg, #141414, color-mix(in srgb, #141414, transparent 35%));
 }
 
 /* (Hover effects removed as requested) */
