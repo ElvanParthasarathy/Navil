@@ -21,12 +21,35 @@ const Home = () => {
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 50px 20px 32px;
+                    position: relative;
                 }
 
-                /* HERO SECTION */
+                .home-page::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background-image: url('/assets/home-bg.webp');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    opacity: 0.12;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+
+                [data-theme='dark'] .home-page::before {
+                    opacity: 0.05;
+                    filter: grayscale(40%);
+                }
+
+                /* HERO SECTION - DICTIONARY AESTHETIC */
                 .home-hero {
                     display: flex;
                     align-items: center;
+                    justify-content: space-between;
                     gap: 40px;
                     margin-bottom: 56px;
                     padding: 24px 0;
@@ -45,17 +68,22 @@ const Home = () => {
 
                 .hero-avatar-wrapper {
                     position: relative;
-                    width: 320px;
-                    height: 320px;
+                    width: clamp(240px, 25vw, 320px);
+                    aspect-ratio: 1 / 1;
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+
+                .hero-avatar-wrapper:hover {
+                    transform: scale(1.02) translateY(-4px);
                 }
 
                 .hero-avatar-bg {
                     position: absolute;
                     inset: -20px;
-                    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+                    background: linear-gradient(135deg, color-mix(in srgb, var(--text-main) 10%, transparent), color-mix(in srgb, var(--bg-panel) 50%, transparent));
                     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-                    filter: blur(40px);
-                    opacity: 0.2;
+                    filter: blur(30px);
+                    opacity: 0.5;
                     animation: morph 10s linear infinite alternate;
                 }
 
@@ -67,202 +95,163 @@ const Home = () => {
                 .hero-avatar {
                     width: 100%;
                     height: 100%;
-                    border-radius: 20%;
+                    border-radius: 32px;
                     object-fit: cover;
-                    border: 8px solid var(--bg-card);
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+                    border: 4px solid var(--bg-card);
+                    background: color-mix(in srgb, var(--bg-panel), transparent 20%);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
                     position: relative;
                     z-index: 2;
                 }
 
+                /* TYPOGRAPHY */
                 .hero-title {
-                    font-size: clamp(2.8rem, 3.6vw, 3.75rem);
+                    font-size: clamp(2.8rem, 4vw, 4rem);
                     font-weight: 800;
-                    line-height: 1.3;
-                    margin-bottom: 12px;
-                    letter-spacing: 0;
+                    line-height: 1.2;
+                    margin-bottom: 8px;
+                    letter-spacing: -0.02em;
                     color: var(--text-main);
                 }
 
                 .hero-subtitle {
-                    font-size: clamp(1.6rem, 2.2vw, 2rem);
+                    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
                     color: var(--text-muted);
-                    margin-bottom: 16px;
+                    font-weight: 500;
+                    margin-bottom: 24px;
                 }
 
-                .hero-bio {
-                    font-size: 1.1rem;
-                    line-height: 1.6;
+                .hero-signature {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    font-size: 1rem;
                     color: var(--text-muted);
-                    max-width: 600px;
-                    margin-bottom: 28px;
-                    white-space: pre-line;
+                    opacity: 0.85;
                 }
 
-                /* QUICK CONTACT BAR */
-                .hero-actions {
-                    display: flex;
-                    gap: 16px;
-                    flex-wrap: wrap;
+                .hero-signature span {
+                    line-height: 1.4;
                 }
 
-                .hero-btn {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 10px 22px;
-                    border-radius: 99px;
-                    font-weight: 600;
-                    text-decoration: none;
-                    transition: all 0.2s ease;
+                /* MEANING CARDS */
+                .category-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 24px;
                 }
 
-                .hero-btn.primary {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                }
-
-                .hero-btn.secondary {
-                    background: color-mix(in srgb, var(--text-main), transparent 92%);
-                    color: var(--text-main);
-                    border: none;
-                }
-
-                @media (hover: hover) and (pointer: fine) {
-                    .hero-btn:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-                    }
-                    .hero-btn.secondary:hover {
-                        background: var(--text-main);
-                        color: var(--bg-app);
-                        border-color: var(--text-main);
-                    }
-                }
-
-                .hero-btn:active {
-                    transform: scale(0.98);
-                }
-
-                .mobile-text { display: none; }
-
-                /* GRID SECTIONS */
-                .contact-footer {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                .category-card {
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 40%));
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
+                    border: 1px solid color-mix(in srgb, var(--text-main), transparent 94%);
+                    border-radius: 28px;
                     padding: 32px;
-                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
-                    border: none;
-                    border-radius: 32px;
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 30px 60px rgba(0, 0, 0, 0.03);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
                 }
 
-                [data-theme='dark'] .contact-footer {
-                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 30px 70px rgba(0, 0, 0, 0.2);
-                }
-               .contact-header {
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    margin-bottom: 8px;
+                .category-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+                    border-color: color-mix(in srgb, var(--text-main), transparent 85%);
                 }
 
-                .contact-divider {
-                    width: 2px;
-                    height: 24px;
-                    background: var(--border-color);
-                    opacity: 0.6;
-                }
-
-                .contact-info-block h3 {
-                    font-weight: 800;
-                    margin: 0;
-                }
-                .contact-info-block h3:first-child {
-                    font-size: 1.5rem;
-                }
-                .contact-info-block h3:last-child {
-                    font-size: 1.4rem;
-                }
-
-                .contact-info-block p {
-                    color: var(--text-muted);
-                }
-
-                .contact-socials {
-                    display: flex;
-                    gap: 12px;
-                }
-
-                .social-icon-link {
-                    width: 44px;
-                    height: 44px;
-                    background: color-mix(in srgb, var(--text-main), transparent 92%);
-                    border: none;
-                    border-radius: 50%;
+                .cat-icon-box {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 16px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    font-size: 1.4rem;
+                    margin-bottom: 20px;
+                }
+
+                .cat-title {
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin-bottom: 4px;
                     color: var(--text-main);
-                    transition: all 0.3s ease;
                 }
 
-                @media (hover: hover) and (pointer: fine) {
-                    .social-icon-link:hover {
-                        background: var(--text-main);
-                        color: var(--bg-app);
-                        transform: translateY(-3px);
-                    }
+                .cat-title-sub {
+                    font-size: 0.9rem;
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 16px;
                 }
 
-                .social-icon-link:active {
-                    background: var(--text-main);
-                    color: var(--bg-app);
-                    transform: scale(0.95);
+                .cat-desc {
+                    font-size: 1.05rem;
+                    line-height: 1.7;
+                    color: var(--text-main);
+                    margin-bottom: 12px;
+                }
+
+                .cat-desc-sub {
+                    font-size: 1rem;
+                    line-height: 1.6;
+                    color: var(--text-muted);
+                }
+
+                /* EXPLORE FOOTER */
+                .explore-footer {
+                    margin-top: 40px;
+                    padding: 40px 32px;
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+                    border-radius: 32px;
+                    text-align: center;
+                    border: 1px solid color-mix(in srgb, var(--text-main), transparent 94%);
+                }
+
+                .explore-footer h3 {
+                    font-size: clamp(1.4rem, 4vw, 1.6rem);
+                    font-weight: 800;
+                    margin: 0 0 8px 0;
+                    color: var(--text-main);
+                }
+
+                .explore-footer p {
+                    font-size: 1.1rem;
+                    color: var(--text-muted);
+                    font-weight: 400;
+                    margin: 0;
                 }
 
                 /* RESPONSIVE */
                 @media (max-width: 1023px) {
-                    .home-page { padding: 16px 20px; }
-                    .home-hero { flex-direction: column; gap: 0; padding: 0; align-items: center; text-align: center; margin-bottom: 40px; }
-                    .hero-visual { order: -1; margin-bottom: 24px; }
+                    .home-page { padding: 24px 20px; }
+                    .home-hero { flex-direction: column; gap: 32px; padding: 0; align-items: center; text-align: center; }
+                    .hero-visual { order: -1; }
                     .hero-content { width: 100%; display: flex; flex-direction: column; align-items: center; }
-                    .hero-avatar-wrapper { width: clamp(140px, 25vw, 220px); height: clamp(140px, 25vw, 220px); }
-                    .hero-avatar { border-radius: 50%; border-width: 4px; }
-                    .hero-title { font-size: clamp(2.1rem, 5vw, 2.8rem); margin-bottom: 6px; letter-spacing: -0.5px; }
-                    .hero-subtitle { font-size: clamp(1.3rem, 3vw, 1.7rem); margin-bottom: 14px; opacity: 0.9; }
-                    .hero-bio { font-size: 1rem; margin-bottom: 28px; line-height: 1.6; max-width: 100%; margin-left: 0; margin-right: 0; white-space: pre-line; }
-                    .hero-actions { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px; }
-                    .hero-btn { width: auto; flex: 1; min-width: 140px; justify-content: center; margin: 0; padding: 12px 16px; font-size: 0.95rem; font-weight: 600; }
-                    .desktop-text { display: none; }
-                    .mobile-text { display: inline; }
+                    .hero-avatar-wrapper { width: clamp(180px, 45vw, 260px); }
+                    .hero-avatar { border-radius: 50%; }
+                    .hero-title { font-size: clamp(2.4rem, 8vw, 3.2rem); }
+                    .hero-subtitle { font-size: clamp(1.4rem, 5vw, 1.8rem); margin-bottom: 16px; }
                     
-                    .contact-footer { padding: 32px 20px; border-radius: 24px; flex-direction: column !important; gap: 24px; text-align: center; align-items: center; }
-                    .contact-header { flex-direction: column; gap: 0px; align-items: center; }
-                    .contact-divider { display: none; }
-                    .contact-info-block h3:first-child { font-size: 1.4rem; }
-                    .contact-info-block h3:last-child { font-size: 1.0rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-                    .contact-info-block p { font-size: 1rem; line-height: 1.5; max-width: 100%; margin: 0 auto; padding: 0 10px; }
-                    .contact-socials { justify-content: center; gap: 20px; }
-                    .social-icon-link { width: 48px; height: 48px; }
+                    .explore-footer { padding: 32px 20px; border-radius: 24px; }
                 }
-                
-                .desktop-instruction { display: block; }
-                .mobile-instruction { display: none; }
-                @media (max-width: 1023px) {
-                    .desktop-instruction { display: none; }
-                    .mobile-instruction { display: block; }
+
+                /* STAGGERED ENTRANCES */
+                .stagger-1 { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); animation-delay: 0.1s; }
+                .stagger-2 { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); animation-delay: 0.2s; }
+                .stagger-3 { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); animation-delay: 0.3s; }
+
+                @keyframes fadeUp {
+                    to { opacity: 1; transform: translateY(0); }
                 }
             `}</style>
 
-                <section className="home-hero animate-entry">
+                {/* HERO: The Identity */}
+                <section className="home-hero stagger-1">
                     <div className="hero-content">
                         <h1 className="hero-title" lang="ta">எல்வன் நவில்</h1>
                         <h2 className="hero-subtitle">Elvan Navil</h2>
-                        <div className="hero-signature" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', opacity: 0.75 }}>
-                            <span lang="ta" style={{ fontWeight: 500 }}>எல்வன் பார்த்தசாரதியிடமிருந்து</span>
+                        <div className="hero-signature">
+                            <span lang="ta" style={{ fontWeight: 600 }}>எல்வன் பார்த்தசாரதியிடமிருந்து</span>
                             <span style={{ fontWeight: 400 }}>from Elvan Parthasarathy</span>
                         </div>
                     </div>
@@ -279,7 +268,8 @@ const Home = () => {
                     </div>
                 </section>
 
-                <div className="category-grid animate-entry" style={{ marginBottom: '48px', animationDelay: '0.1s' }}>
+                {/* MEANING: The Definition Cards */}
+                <div className="category-grid stagger-2" style={{ marginBottom: '40px' }}>
                     {/* Tamil Meaning Card */}
                     <div className="category-card" style={{ cursor: 'default' }}>
                         <div className="cat-icon-box" style={{ background: 'color-mix(in srgb, #f09433 15%, var(--bg-panel))', color: '#f09433' }}>
@@ -288,7 +278,7 @@ const Home = () => {
                         <div className="cat-content">
                             <div className="cat-title" lang="ta">நவில்</div>
                             <div className="cat-title-sub">Tamil Origin</div>
-                            <p className="cat-desc" lang="ta" style={{ marginTop: '8px' }}>
+                            <p className="cat-desc" lang="ta">
                                 “நவில்” என்பது தமிழில் “நவிலுதல்” என்னும் சொல்லிலிருந்து வந்தது.
                             </p>
                             <p className="cat-desc-sub" lang="ta">
@@ -305,7 +295,7 @@ const Home = () => {
                         <div className="cat-content">
                             <div className="cat-title">Navil</div>
                             <div className="cat-title-sub">Meaning</div>
-                            <p className="cat-desc" style={{ marginTop: '8px' }}>
+                            <p className="cat-desc">
                                 “Navil” is derived from the Tamil word “Naviluthal”.
                             </p>
                             <p className="cat-desc-sub">
@@ -315,21 +305,12 @@ const Home = () => {
                     </div>
                 </div>
 
-                <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
+                <AdBanner variant="inline" wrapperStyle={{ margin: '40px 0' }} className="stagger-3" />
 
-                <div className="contact-footer">
-                    <div className="contact-info-block" style={{ textAlign: 'center', width: '100%' }}>
-                        <div className="desktop-instruction">
-                            <h3 lang="ta" style={{ marginBottom: '4px' }}>பக்கங்களை ஆராய</h3>
-                            <h3 style={{ marginBottom: '8px' }}>பக்கப்பட்டியை பயன்படுத்துங்கள்.</h3>
-                            <p style={{ fontSize: '0.95rem' }}>Use the sidebar to explore the site.</p>
-                        </div>
-                        <div className="mobile-instruction">
-                            <h3 lang="ta" style={{ marginBottom: '4px' }}>கீழ்ப்பட்டியை பயன்படுத்தி</h3>
-                            <h3 style={{ marginBottom: '8px' }}>பக்கங்களை ஆராயுங்கள்.</h3>
-                            <p style={{ fontSize: '0.95rem' }}>Use the bottom navigation to explore the site.</p>
-                        </div>
-                    </div>
+                {/* FOOTER: The Invitation to Explore */}
+                <div className="explore-footer stagger-3">
+                    <h3 lang="ta">பக்கங்களை ஆராயுங்கள்.</h3>
+                    <p>Explore the site.</p>
                 </div>
 
             </div>
