@@ -85,6 +85,21 @@ export const AboutEditor = () => {
         return 'Large (Span 7)';
     };
 
+    const getSpanClass = (index) => {
+        const mod = index % 4;
+        if (mod === 0) return 'span-7';
+        if (mod === 1) return 'span-5';
+        if (mod === 2) return 'span-5';
+        if (mod === 3) return 'span-7';
+        return 'span-7';
+    };
+
+    const updateCardSize = (index, newSize) => {
+        const updated = cards.map((c, i) => i === index ? { ...c, size: newSize } : c);
+        setCards(updated);
+        setData(prev => ({ ...prev, cards: updated }));
+    };
+
     const updateCardContent = (index, newContent) => {
         const updated = cards.map((c, i) => i === index ? { ...c, content: newContent } : c);
         setCards(updated);
@@ -148,9 +163,13 @@ export const AboutEditor = () => {
                     <div style={{ margin: '24px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
                         Bento Grid Cards
                     </div>
-                    {cards.map((card, idx) => (
-                        <PreviewCard key={idx} label={`Card #${idx + 1} (${getSpanLabel(idx)})`} value={card.content} isHtml />
-                    ))}
+                    {cards.map((card, idx) => {
+                        const size = card.size || getSpanClass(idx);
+                        const sizeLabel = size === 'span-5' ? 'Small (Span 5)' : size === 'span-7' ? 'Large (Span 7)' : 'Full Width (Span 12)';
+                        return (
+                            <PreviewCard key={idx} label={`Card #${idx + 1} (${sizeLabel})`} value={card.content} isHtml />
+                        );
+                    })}
                     
                     <div style={{ margin: '24px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
                         Contact & Details
@@ -207,10 +226,22 @@ export const AboutEditor = () => {
                         background: 'var(--bg-panel)', borderRadius: '16px', padding: '24px',
                         border: '1px solid var(--border-light)', position: 'relative'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                                Card #{idx + 1} ({getSpanLabel(idx)})
-                            </span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                                <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                                    Card #{idx + 1}
+                                </span>
+                                <select
+                                    className="adm-input"
+                                    style={{ padding: '4px 8px', fontSize: '0.8rem', width: '180px', height: '32px', background: 'var(--bg-app)', border: '1px solid var(--border-light)', borderRadius: '8px', color: 'var(--text-main)' }}
+                                    value={card.size || getSpanClass(idx)}
+                                    onChange={(e) => updateCardSize(idx, e.target.value)}
+                                >
+                                    <option value="span-5">Small (Span 5)</option>
+                                    <option value="span-7">Large (Span 7)</option>
+                                    <option value="span-12">Full Width (Span 12)</option>
+                                </select>
+                            </div>
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 <button
                                     type="button"

@@ -431,7 +431,7 @@ const About = () => {
 
             <div className="about-grid animate-entry" style={{ animationDelay: '0.1s' }}>
                 {cards.map((card, idx) => (
-                    <div key={idx} className={`about-card ${getSpanClass(idx)}`}>
+                    <div key={idx} className={`about-card ${card.size || getSpanClass(idx)}`}>
                         <div className="card-text" dangerouslySetInnerHTML={{ __html: card.content }} />
                     </div>
                 ))}
