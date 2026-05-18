@@ -308,7 +308,7 @@ body {
 .brand {
   font-size: 1.8rem;
   font-weight: 800;
-  padding-left: 8px;
+  padding-left: 18px;
   white-space: nowrap;
   overflow: hidden;
   display: flex;
@@ -322,7 +322,6 @@ body {
   color: var(--text-muted);
   opacity: 0.8;
   letter-spacing: 0.5px;
-  text-transform: lowercase;
 }
 
 .sidebar-header {

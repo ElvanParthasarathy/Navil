@@ -189,7 +189,7 @@ const Layout = () => {
                         {!isSidebarCollapsed && (
                             <div className="brand" lang="ta">
                                 நவில்
-                                <span className="brand-subtitle">navil</span>
+                                <span className="brand-subtitle">Navil</span>
                             </div>
                         )}
                         <button

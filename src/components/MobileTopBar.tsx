@@ -68,7 +68,7 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                 {title === 'நவில்' || title === 'நவில்|navil' || title === 'எல்வன்' || title === 'எல்வன்|elvan' ? (
                     <div className="brand-bilingual" lang="ta">
                         நவில்
-                        <span className="brand-subtitle">navil</span>
+                        <span className="brand-subtitle">Navil</span>
                     </div>
                 ) : title.includes('|') ? (
                     <>
