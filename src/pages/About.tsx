@@ -347,6 +347,9 @@ const About = () => {
                     /* Row 2 */
                     .card-social { grid-column: span 5; }
                     .card-philosophy { grid-column: span 7; }
+
+                    /* Row 3 */
+                    .card-motto { grid-column: span 12; }
                 }
 
                 @media (max-width: 1023px) {
@@ -425,8 +428,20 @@ const About = () => {
                     <p className="card-text" dangerouslySetInnerHTML={{ __html: about.social_text }} />
                 </div>
 
-                <div className="about-card card-philosophy">
+                 <div className="about-card card-philosophy">
                     <div className="philosophy-text" dangerouslySetInnerHTML={{ __html: about.philosophy_lines || '' }} />
+                </div>
+
+                <div className="about-card card-motto">
+                    <h3 className="card-title">Motto</h3>
+                    <div className="philosophy-text">
+                        <p lang="ta" style={{ fontSize: '1.5rem', fontWeight: 800, fontStyle: 'normal', lineHeight: '1.4', marginBottom: '10px' }}>
+                            "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+                        </p>
+                        <p style={{ fontSize: '1.15rem', opacity: 0.8, fontStyle: 'italic', fontWeight: 500 }}>
+                            Every idea begins with a simple question — why not?
+                        </p>
+                    </div>
                 </div>
             </div>
 
