@@ -444,6 +444,22 @@ body {
   transform: scale(0.98);
 }
 
+/* Hover state for inactive menu items */
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:not(.active):hover {
+    background: var(--nav-hover);
+  }
+
+  .nav-item:not(.active):hover .nav-icon {
+    opacity: 0.85;
+  }
+
+  .nav-item:not(.active):hover .sub-label {
+    color: var(--text-main);
+    opacity: 0.7;
+  }
+}
+
 .nav-icon {
   width: 22px;
   /* Reduced from 24px */
