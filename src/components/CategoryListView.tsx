@@ -96,14 +96,17 @@ const CategoryListView = () => {
         setCurrentPage(targetPage);
         const nextParams = new URLSearchParams(searchParams);
         nextParams.set('page', targetPage.toString());
-        setSearchParams(nextParams);
+        setSearchParams(nextParams, { preventScrollReset: true });
+        
+        // Beautiful native smooth scroll to top on page transition
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleFilterResetPage = () => {
         setCurrentPage(1);
         const nextParams = new URLSearchParams(searchParams);
         nextParams.set('page', '1');
-        setSearchParams(nextParams, { replace: true });
+        setSearchParams(nextParams, { replace: true, preventScrollReset: true });
     };
 
     useEffect(() => {
