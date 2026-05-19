@@ -245,7 +245,7 @@ const Layout = () => {
                             {!isSidebarCollapsed && (
                                 <>
                                     <div className="settings-text">
-                                        <span className="settings-name">{profileData?.name?.split(' ')[0] || 'Elvan'}</span>
+                                        <span className="settings-name">{profileData?.fullName || 'Elvan Parthasarathy'}</span>
                                     </div>
                                     {theme === 'light' ? (
                                         <FiSun size={16} className="settings-theme-icon" />
