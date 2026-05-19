@@ -234,7 +234,7 @@ const CategoryListView = () => {
             <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl="/writings" />
             <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             <Helmet>
-                <title>{meta.subtitle} | Elvan Parthasarathy</title>
+                <title>{meta.title} | {meta.subtitle}</title>
                 <meta name="description" content={meta.descEn} />
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>

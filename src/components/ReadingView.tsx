@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
 import { subscribe, getCachedRaw } from '../lib/firebaseCache';
 import AdBanner from './AdBanner';
@@ -266,6 +267,9 @@ const ReadingView = () => {
     return (
         <>
             <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+            <Helmet>
+                <title>{displayPrimaryTitle} | {meta.subtitle}</title>
+            </Helmet>
             <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             {/* Transliteration toggle styles (same as WritingPage) */}
             <style>{`

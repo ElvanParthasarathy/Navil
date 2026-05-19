@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
 import Presentation from '../components/vocoder/Presentation';
 import Interactive from '../components/vocoder/Interactive';
@@ -35,6 +36,9 @@ const VocoderView = () => {
     return (
         <>
             <MobileTopBar title={activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story'} showBack={true} backUrl="/teaching" />
+            <Helmet>
+                <title>{activeTab === 'presentation' ? 'உரைகுறியாக்கி | Vocoder' : 'ஊடாடும் கதை | Interactive Story'}</title>
+            </Helmet>
             <div className="page-view animate-entry vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
 
             <style>{`

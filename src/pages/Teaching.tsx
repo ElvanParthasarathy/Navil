@@ -2,6 +2,7 @@ import React from 'react';
 import { BsDisplay } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import AdBanner from '../components/AdBanner';
 import MobileTopBar from '../components/MobileTopBar';
 
@@ -11,6 +12,9 @@ const Teaching = () => {
     return (
         <>
             <MobileTopBar title="பயிற்றுவிப்பு|teaching" />
+            <Helmet>
+                <title>பயிற்றுவிப்பு | Teaching</title>
+            </Helmet>
             <div className="writings-page page-view fadeIn">
             <style>{`
                 .writings-page { max-width: 1200px; margin: 0 auto; padding: 10px 20px 32px; }

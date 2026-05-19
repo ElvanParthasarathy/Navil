@@ -464,7 +464,7 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title>Elvan Navil | Home</title>
+                <title>நவில் | Navil</title>
                 <meta name="description" content="Welcome to the digital home of Elvan Parthasarathy. A creative sanctuary for poetry, thoughts, writings, and artistic expressions." />
                 <link rel="canonical" href="https://elvanparthasarathy.vercel.app/" />
             </Helmet>

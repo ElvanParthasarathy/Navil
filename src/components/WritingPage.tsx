@@ -300,7 +300,7 @@ const WritingPage = ({
     return (
         <div className="writings-page-wrapper">
             <Helmet>
-                <title>{pageTitle} | Elvan Parthasarathy</title>
+                <title>{pageTitleTamil || pageTitle} | {pageTitle}</title>
                 <meta name="description" content={pageSubtitleEnglish || pageSubtitle} />
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${tableName}`} />
             </Helmet>

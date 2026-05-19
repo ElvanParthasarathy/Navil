@@ -69,7 +69,7 @@ const About = () => {
         <>
             <MobileTopBar title="பற்றி|about" />
             <Helmet>
-                <title>About Elvan Parthasarathy</title>
+                <title>பற்றி | About</title>
                 <meta name="description" content="Learn more about Jaiprakash P (Elvan Parthasarathy), a pre-final year engineering student, writer, and creator based in Tamil Nadu." />
                 <link rel="canonical" href="https://elvanparthasarathy.vercel.app/about" />
             </Helmet>

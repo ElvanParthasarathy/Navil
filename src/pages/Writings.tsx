@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
@@ -44,6 +45,9 @@ const Writings = () => {
     return (
         <>
             <MobileTopBar title="எழுத்துகள்|writings" />
+            <Helmet>
+                <title>எழுத்துகள் | Writings</title>
+            </Helmet>
             <div className="writings-page page-view fadeIn">
             <style>{`
                 .writings-page {

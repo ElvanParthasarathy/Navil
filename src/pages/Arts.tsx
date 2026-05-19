@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
 import { FiArrowRight } from 'react-icons/fi';
 import { db } from '../lib/firebaseClient';
@@ -163,6 +164,9 @@ const Arts = () => {
     return (
         <>
             <MobileTopBar title="படைப்புகள்|arts" />
+            <Helmet>
+                <title>படைப்புகள் | Arts</title>
+            </Helmet>
             <div className="writings-page arts-hub-page page-view fadeIn">
             <style>{`
                 .writings-page {

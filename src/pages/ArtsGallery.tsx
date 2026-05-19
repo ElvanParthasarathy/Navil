@@ -696,7 +696,7 @@ const ArtsGallery = () => {
             <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl="/arts" />
             <div className="page-view fadeIn">
                 <Helmet>
-                    <title>{meta.titleEn} | {profileData.fullName}</title>
+                    <title>{meta.titleTa} | {meta.titleEn}</title>
                     <meta name="description" content={meta.descEn} />
                 </Helmet>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { FiBox } from 'react-icons/fi';
 import MobileTopBar from '../components/MobileTopBar';
 
@@ -8,6 +9,9 @@ const Portfolio = () => {
     return (
         <>
             <MobileTopBar title="தொகுப்பு|portfolio" />
+            <Helmet>
+                <title>தொகுப்பு | Portfolio</title>
+            </Helmet>
             <div className="page-view page-fade" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 40px' }}>
             <style>{`
         /* LOCAL STYLES FOR PORTFOLIO PAGE */

@@ -2,6 +2,7 @@
 import React from 'react';
 import { FiSettings, FiMoon, FiSun, FiMonitor } from 'react-icons/fi';
 import { useOutletContext, Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
 
 const Settings = () => {
@@ -11,6 +12,9 @@ const Settings = () => {
     return (
         <>
             <MobileTopBar title="அமைப்புகள்|settings" />
+            <Helmet>
+                <title>அமைப்புகள் | Settings</title>
+            </Helmet>
             <div className="settings-page page-view animate-entry">
             <style>{`
                 .settings-page {

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useOutletContext, Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
 import profileData from '../data/profile.json';
 import initialHighlights from '../data/stories.json';
@@ -490,6 +491,9 @@ const Archive = () => {
     return (
         <>
             <MobileTopBar title="காப்புகள்|archive" />
+            <Helmet>
+                <title>காப்புகள் | Archive</title>
+            </Helmet>
             <div className="page-view page-fade">
             <style>{`
                 .archive-back-btn {
