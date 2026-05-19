@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiX, FiClock, FiAnchor, FiImage } from 'react-icons/fi';
+import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiX, FiClock, FiAnchor, FiImage, FiEdit, FiSliders, FiFeather } from 'react-icons/fi';
 import RichTextEditor from './RichTextEditor';
 
 // ─── SCHEMAS ───
@@ -10,6 +10,25 @@ export const DEFAULT_AUTHORS = {
     ml: 'എൽവൻ പാർത്തചാരതി',
     en: 'Elvan Parthasarathy',
 };
+
+const getArtSchema = (label, categoryVal, icon) => ({
+    label, icon, type: 'simple',
+    fields: [
+        { key: 'image', label: 'Cover Image URL', type: 'text', placeholder: 'https://drive.google.com/... or any direct image URL' },
+        { key: 'images', label: 'Images', type: 'dynamic_list', fullWidth: true, isImageList: true },
+        { key: 'caption', label: 'Caption / Description', type: 'textarea', rows: 3, placeholder: 'About this artwork...', fullWidth: true },
+        { key: 'date', label: 'Date', type: 'text', placeholder: 'e.g. Mar 25, 2025' },
+        { key: 'timestamp', label: 'Sort Order (timestamp ms)', type: 'text', placeholder: 'e.g. 1742867580000 — used for sorting' },
+    ],
+    getItemTitle: (item) => item.caption?.replace(/#\S+/g, '').trim().slice(0, 50) || label || 'Untitled Art',
+    getItemSubtitle: (item) => {
+        const parts = [];
+        if (item.date) parts.push(item.date);
+        const imgCount = Array.isArray(item.images) ? item.images.length : (item.images ? item.images.split('\n').filter(Boolean).length : 0);
+        if (imgCount > 0) parts.push(`${imgCount} image${imgCount > 1 ? 's' : ''}`);
+        return parts.join(' • ');
+    },
+});
 
 export const SCHEMAS = {
     quotes: {
@@ -23,15 +42,10 @@ export const SCHEMAS = {
             { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
         ],
         row3Fields: [
-            { key: 'tags', label: 'Tags / Style', type: 'tags', placeholder: 'e.g. சங்கம், தமிழாளம், Free Verse', suggestions: ['சங்கம்', 'தமிழாளம்', 'Modern', 'Free Verse', 'Haiku', 'Sonnet', 'Couplet'] },
+            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
         ],
-        extraFields: [
-            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
-            { key: 'urai', label: 'Urai / Meaning', type: 'textarea', rows: 2, placeholder: 'Prose meaning or commentary...' },
-            { key: 'notes', label: 'Notes / Context', type: 'textarea', rows: 2, placeholder: 'Background, inspiration...' },
-        ],
-        getItemTitle: (item) => item.title || 'Untitled Quote',
-        getItemSubtitle: (item) => [item.classification, ...(item.tags || [])].filter(Boolean).join(' • '),
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Quote',
+        getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
     },
     poems: {
         label: 'Poems', icon: <FiPenTool size={16} />, type: 'variant_based',
@@ -41,34 +55,44 @@ export const SCHEMAS = {
         ],
         row2Fields: [
             { key: 'classification', label: 'Classification', type: 'text', placeholder: 'அகம், புறம், etc.', datalist: 'poem-class' },
-            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
+            { key: 'style', label: 'Style / Form', type: 'text', placeholder: 'e.g. Haiku, Ghazal' },
+            { key: 'theme', label: 'Theme', type: 'text', placeholder: 'e.g. Love, Nature' },
         ],
         row3Fields: [
-            { key: 'tags', label: 'Tags / Style', type: 'tags', placeholder: 'e.g. சங்கம், தமிழாளம், Free Verse', suggestions: ['சங்கம்', 'தமிழாளம்', 'Modern', 'Free Verse', 'Haiku', 'Sonnet', 'Venba', 'Akaval'] },
+            { key: 'meter', label: 'Meter (யாப்பு)', type: 'text', placeholder: 'e.g. வெண்பா, ஆசிரியப்பா' },
+            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'Dedicated to...' },
+            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
         ],
-        extraFields: [
-            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
-            { key: 'urai', label: 'Urai / Commentary', type: 'textarea', rows: 3, placeholder: 'Prose explanation or meaning...' },
-            { key: 'notes', label: 'Notes / Context', type: 'textarea', rows: 2, placeholder: 'Background, inspiration...' },
-        ],
-        getItemTitle: (item) => item.title || 'Untitled Poem',
-        getItemSubtitle: (item) => [item.classification, ...(item.tags || [])].filter(Boolean).join(' • '),
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Poem',
+        getItemSubtitle: (item) => {
+            const parts = [];
+            if (item.is_private) parts.push('🔒 Private');
+            if (item.classification) parts.push(item.classification);
+            if (item.style) parts.push(item.style);
+            return parts.join(' • ');
+        },
     },
     blog: {
         label: 'Blog', icon: <FiEdit3 size={16} />, type: 'variant_based',
         itemFields: [
-            { key: 'title', label: 'Post Title', type: 'text', placeholder: 'Enter post title', flex: 2 },
+            { key: 'title', label: 'Post Title', type: 'text', placeholder: 'Enter blog title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Life, Tech, Tamil' },
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Life, Tech (comma separated)' },
             { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
         ],
-        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Blog',
-        getItemSubtitle: (item) => item.tags || '',
+        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Blog Post',
+        getItemSubtitle: (item) => {
+            const parts = [];
+            if (item.is_private) parts.push('🔒 Private');
+            if (item.tags) parts.push(item.tags);
+            return parts.join(' • ');
+        },
     },
     articles: {
         label: 'Articles', icon: <FiFileText size={16} />, type: 'variant_based',
@@ -111,45 +135,24 @@ export const SCHEMAS = {
     diary: {
         label: 'Diary', icon: <FiBook size={16} />, type: 'variant_based',
         itemFields: [
-            { key: 'title', label: 'Entry Title', type: 'text', placeholder: 'Today...', flex: 2 },
+            { key: 'title', label: 'Entry Title', type: 'text', placeholder: 'Today I...', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'is_private', label: 'Private Entry', type: 'toggle' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
+            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Travel, Thoughts' },
+            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Entry',
         getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
     },
-    arts: {
-        label: 'Arts', icon: <FiImage size={16} />, type: 'simple',
-        fields: [
-            { key: 'image', label: 'Cover Image URL', type: 'text', placeholder: 'https://drive.google.com/... or any direct image URL' },
-            { key: 'images', label: 'Images', type: 'dynamic_list', fullWidth: true, isImageList: true },
-            { key: 'caption', label: 'Caption / Description', type: 'textarea', rows: 3, placeholder: 'About this artwork...', fullWidth: true },
-            { key: 'category', label: 'Category', type: 'select', options: [
-                { value: 'pencil', label: 'Pencil Drawings' },
-                { value: 'editing', label: 'Editings' },
-                { value: 'poster', label: 'Posters' },
-                { value: 'painting', label: 'Paintings' },
-                { value: 'quotes', label: 'Quotes' },
-                { value: 'poems', label: 'Poems' },
-                { value: 'illustrations', label: 'Illustrations' },
-                { value: 'digital_arts', label: 'Digital Arts' },
-            ]},
-            { key: 'date', label: 'Date', type: 'text', placeholder: 'e.g. Mar 25, 2025' },
-            { key: 'timestamp', label: 'Sort Order (timestamp ms)', type: 'text', placeholder: 'e.g. 1742867580000 — used for sorting' },
-        ],
-        getItemTitle: (item) => item.caption?.replace(/#\S+/g, '').trim().slice(0, 50) || item.category || 'Untitled Art',
-        getItemSubtitle: (item) => {
-            const parts = [];
-            if (item.category) parts.push(item.category.charAt(0).toUpperCase() + item.category.slice(1));
-            if (item.date) parts.push(item.date);
-            const imgCount = Array.isArray(item.images) ? item.images.length : (item.images ? item.images.split('\n').filter(Boolean).length : 0);
-            if (imgCount > 0) parts.push(`${imgCount} image${imgCount > 1 ? 's' : ''}`);
-            return parts.join(' • ');
-        },
-    }
+    art_pencil: getArtSchema('Pencil Drawings', 'pencil', <FiEdit size={16} />),
+    art_editing: getArtSchema('Editings', 'editing', <FiSliders size={16} />),
+    art_poster: getArtSchema('Posters', 'poster', <FiFileText size={16} />),
+    art_painting: getArtSchema('Paintings', 'painting', <FiFeather size={16} />),
+    art_quotes: getArtSchema('Visual Quotes', 'quotes', <FiMessageCircle size={16} />),
+    art_poems: getArtSchema('Visual Poems', 'poems', <FiPenTool size={16} />),
+    art_illustrations: getArtSchema('Illustrations', 'illustrations', <FiAnchor size={16} />),
+    art_digital_arts: getArtSchema('Digital Arts', 'digital_arts', <FiImage size={16} />),
 };
 
 // ─── TAG INPUT COMPONENT ───

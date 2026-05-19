@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBook, FiImage, FiClock, FiTrendingUp, FiZap, FiArrowRight, FiDownload, FiUploadCloud } from 'react-icons/fi';
+import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBook, FiImage, FiClock, FiTrendingUp, FiZap, FiArrowRight, FiDownload, FiUploadCloud, FiSliders, FiFeather, FiAnchor } from 'react-icons/fi';
 import { db } from '../../lib/firebaseClient';
 import { ref, set } from 'firebase/database';
 
@@ -10,7 +10,14 @@ const COLLECTION_META = {
     articles: { label: 'Articles', icon: <FiFileText size={20} />, color: '#4ECDC4' },
     stories: { label: 'Stories', icon: <FiBook size={20} />, color: '#96CEB4' },
     diary: { label: 'Diary', icon: <FiBook size={20} />, color: '#DDA0DD' },
-    arts: { label: 'Arts', icon: <FiImage size={20} />, color: '#FF85A2' },
+    art_pencil: { label: 'Pencil Drawings', icon: <FiEdit3 size={20} />, color: '#B0C4DE' },
+    art_editing: { label: 'Editings', icon: <FiSliders size={20} />, color: '#87CEFA' },
+    art_poster: { label: 'Posters', icon: <FiFileText size={20} />, color: '#FFA07A' },
+    art_painting: { label: 'Paintings', icon: <FiFeather size={20} />, color: '#FFD700' },
+    art_quotes: { label: 'Visual Quotes', icon: <FiMessageCircle size={20} />, color: '#FFE4E1' },
+    art_poems: { label: 'Visual Poems', icon: <FiPenTool size={20} />, color: '#D8BFD8' },
+    art_illustrations: { label: 'Illustrations', icon: <FiAnchor size={20} />, color: '#7FFFD4' },
+    art_digital_arts: { label: 'Digital Arts', icon: <FiImage size={20} />, color: '#FF85A2' },
 };
 
 interface DashboardItem {

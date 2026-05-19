@@ -278,7 +278,14 @@ const Admin = () => {
         articles: [],
         stories: [],
         diary: [],
-        arts: [],
+        art_pencil: [],
+        art_editing: [],
+        art_poster: [],
+        art_painting: [],
+        art_quotes: [],
+        art_poems: [],
+        art_illustrations: [],
+        art_digital_arts: [],
         defaultAuthors: { ...DEFAULT_AUTHORS },
     });
 
@@ -451,52 +458,98 @@ const Admin = () => {
             const snapshot = await get(ref(db));
             const liveData = snapshot.exists() ? snapshot.val() : {};
 
+            // Compile all art subcategories into a unified arts collection object
+            const artsCollectionData = {};
+            const artsUsedKeys = new Set();
+
+            if (liveData.arts) {
+                Object.entries(liveData.arts).forEach(([key, val]) => {
+                    if (!(val as any).is_mock) {
+                        artsCollectionData[key] = val;
+                        artsUsedKeys.add(key);
+                    }
+                });
+            }
+
             Object.entries(dataStore).forEach(([collection, items]) => {
                 if (collection === 'profile' || collection === 'defaultAuthors') return;
                 if (!Array.isArray(items)) return;
 
-                const usedKeys = new Set();
-                // Start with existing live data for this collection, but ONLY keep non-mock items
-                const collectionData = {};
-                if (liveData[collection]) {
-                    Object.entries(liveData[collection]).forEach(([key, val]) => {
-                        if (!val.is_mock) {
-                            collectionData[key] = val;
-                            usedKeys.add(key);
+                const isArtCollection = collection.startsWith('art_');
+
+                if (isArtCollection) {
+                    items.forEach((item, index) => {
+                        if (!item.id) return;
+
+                        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(String(item.id));
+                        let finalKey = isUUID ? `art_${Date.now()}_${index}` : String(item.id);
+
+                        if (item.is_mock && !finalKey.startsWith('mock_')) {
+                            finalKey = `mock_${finalKey}`;
                         }
-                    });
-                }
 
-                // Now add/overwrite with current local items (Real + Mocks)
-                items.forEach((item, index) => {
-                    if (!item.id) return;
-                    
-                    // If it's an existing item with a slug ID, use it
-                    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(String(item.id));
-                    let finalKey = isUUID ? generateSlug(getBestTitle(item)) : String(item.id);
-
-                    // IDENTIFIER KEY: Prefix mock data IDs to ensure they NEVER collide with real content
-                    if (item.is_mock && !finalKey.startsWith('mock_')) {
-                        finalKey = `mock_${finalKey}`;
-                    }
-                    
-                    // Handle duplicates
-                    let baseKey = finalKey;
-                    let suffix = 1;
-                    
-                    if (isUUID) {
-                        while (usedKeys.has(finalKey)) {
+                        let baseKey = finalKey;
+                        let suffix = 1;
+                        while (artsUsedKeys.has(finalKey)) {
                             finalKey = `${baseKey}-${suffix}`;
                             suffix++;
                         }
+                        artsUsedKeys.add(finalKey);
+
+                        const row = cleanForStorage(item, index);
+                        row.category = collection.replace('art_', '');
+
+                        artsCollectionData[finalKey] = row;
+                        count++;
+                    });
+                } else {
+                    if (collection === 'arts') return; // Skip legacy unified arts array if present
+
+                    const usedKeys = new Set();
+                    const collectionData = {};
+                    if (liveData[collection]) {
+                        Object.entries(liveData[collection]).forEach(([key, val]) => {
+                            if (!(val as any).is_mock) {
+                                collectionData[key] = val;
+                                usedKeys.add(key);
+                            }
+                        });
                     }
 
-                    usedKeys.add(finalKey);
-                    collectionData[finalKey] = cleanForStorage(item, index);
-                    count++;
-                });
-                promises.push(set(ref(db, collection), collectionData));
+                    // Now add/overwrite with current local items (Real + Mocks)
+                    items.forEach((item, index) => {
+                        if (!item.id) return;
+                        
+                        // If it's an existing item with a slug ID, use it
+                        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(String(item.id));
+                        let finalKey = isUUID ? generateSlug(getBestTitle(item)) : String(item.id);
+
+                        // IDENTIFIER KEY: Prefix mock data IDs to ensure they NEVER collide with real content
+                        if (item.is_mock && !finalKey.startsWith('mock_')) {
+                            finalKey = `mock_${finalKey}`;
+                        }
+                        
+                        // Handle duplicates
+                        let baseKey = finalKey;
+                        let suffix = 1;
+                        
+                        if (isUUID) {
+                            while (usedKeys.has(finalKey)) {
+                                finalKey = `${baseKey}-${suffix}`;
+                                suffix++;
+                            }
+                        }
+
+                        usedKeys.add(finalKey);
+                        collectionData[finalKey] = cleanForStorage(item, index);
+                        count++;
+                    });
+                    promises.push(set(ref(db, collection), collectionData));
+                }
             });
+
+            // Sync the compiled arts data
+            promises.push(set(ref(db, 'arts'), artsCollectionData));
 
             await Promise.all(promises);
             setMessage(`Successfully committed ${count} items to live site!`);
@@ -567,9 +620,16 @@ const Admin = () => {
                             });
                             
                             newDataStore[key] = itemsArray;
+
+                            if (key === 'arts') {
+                                const subcategories = ['pencil', 'editing', 'poster', 'painting', 'quotes', 'poems', 'illustrations', 'digital_arts'];
+                                subcategories.forEach(sub => {
+                                    const storeKey = `art_${sub}`;
+                                    newDataStore[storeKey] = itemsArray.filter(item => item.category === sub);
+                                });
+                            }
                         }
                     });
-                    
                     if (allData.config && allData.config.profile) {
                         newDataStore.profile = allData.config.profile;
                     }
@@ -613,84 +673,99 @@ const Admin = () => {
                 return;
             }
 
-            const items = dataStore[collection];
-            const usedKeys = new Set();
-            const updateObj = {};
-            const updatedItems = [...items]; // Track id changes for local state
+            const isArtCollection = collection.startsWith('art_');
 
-            items.forEach((item, index) => {
-                // Determine the key
-                let key = String(item.id);
-                const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(key);
+            if (isArtCollection) {
+                // Save all art subcategories merged into a single arts node in Firebase
+                const subcategories = ['pencil', 'editing', 'poster', 'painting', 'quotes', 'poems', 'illustrations', 'digital_arts'];
+                const usedKeys = new Set();
+                const updateObj = {};
+                const localUpdates = {};
 
-                if (isUUID && collection === 'arts') {
-                    // Arts: generate art_timestamp key
-                    key = `art_${Date.now()}_${index}`;
-                } else if (isUUID) {
-                    // New item with temp UUID — generate a proper slug
-                    const firstVariant = item.variants?.[0];
-                    const titleTransl = firstVariant?.titleTransliterations || {};
-                    const bestTitle = item.title
-                        || titleTransl.en
-                        || item.variants?.find(v => v.lang === 'en')?.title
-                        || firstVariant?.title
-                        || 'untitled';
-                    key = generateSlug(bestTitle);
-                }
+                subcategories.forEach(sub => {
+                    const storeKey = `art_${sub}`;
+                    const items = dataStore[storeKey] || [];
+                    const updatedItems = [...items];
 
-                // Handle duplicate keys
-                let finalKey = key;
-                let suffix = 1;
-                while (usedKeys.has(finalKey)) {
-                    finalKey = `${key}-${suffix}`;
-                    suffix++;
-                }
-                usedKeys.add(finalKey);
+                    items.forEach((item, index) => {
+                        let key = String(item.id);
+                        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(key);
 
-                // Build clean record (no id inside, no _empty, no legacy fields)
-                const row = { ...item, display_order: index };
-                delete row.id; // Firebase key IS the id
-                delete row.style;
-                delete row.theme;
-                delete row.meter;
-                delete row.slug;
+                        if (isUUID) {
+                            key = `art_${Date.now()}_${index}`;
+                        }
 
-                if (!row.publish_date && !row.date) row.publish_date = new Date().toISOString();
+                        let finalKey = key;
+                        let suffix = 1;
+                        while (usedKeys.has(finalKey)) {
+                            finalKey = `${key}-${suffix}`;
+                            suffix++;
+                        }
+                        usedKeys.add(finalKey);
 
-                // Normalize tags to array
-                if (row.tags && typeof row.tags === 'string') {
-                    row.tags = row.tags.split(',').map(t => t.trim()).filter(Boolean);
-                }
+                        const row = cleanForStorage(item, index);
+                        row.category = sub;
 
-                // Arts-specific: handled by cleanForStorage
-                if (collection === 'arts') {
-                    // Handled centrally now
-                }
-
-                // Clean up variants
-                if (row.variants) {
-                    row.variants.forEach(v => {
-                        if (v.transliterations?._empty) delete v.transliterations._empty;
-                        if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
-                        if (v.transliterations && Object.keys(v.transliterations).length === 0) delete v.transliterations;
-                        if (v.titleTransliterations && Object.keys(v.titleTransliterations).length === 0) delete v.titleTransliterations;
+                        updateObj[finalKey] = row;
+                        updatedItems[index] = { ...item, id: finalKey };
                     });
-                }
 
-                updateObj[finalKey] = row;
+                    localUpdates[storeKey] = updatedItems;
+                });
 
-                // Update local state id to match the new key
-                updatedItems[index] = { ...item, id: finalKey };
-            });
+                await set(ref(db, 'arts'), updateObj);
+                setDataStore(prev => ({ ...prev, ...localUpdates }));
+                setStatus('success');
+                setMessage('Saved all Arts to Firebase!');
+            } else {
+                const items = dataStore[collection];
+                const usedKeys = new Set();
+                const updateObj = {};
+                const updatedItems = [...items]; // Track id changes for local state
 
-            // Atomic write of entire collection
-            await set(ref(db, collection), updateObj);
+                items.forEach((item, index) => {
+                    // Determine the key
+                    let key = String(item.id);
+                    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(key);
 
-            // Update local state with the new clean IDs
-            setDataStore(prev => ({ ...prev, [collection]: updatedItems }));
+                    if (isUUID) {
+                        // New item with temp UUID — generate a proper slug
+                        const firstVariant = item.variants?.[0];
+                        const titleTransl = firstVariant?.titleTransliterations || {};
+                        const bestTitle = item.title
+                            || titleTransl.en
+                            || item.variants?.find(v => v.lang === 'en')?.title
+                            || firstVariant?.title
+                            || 'untitled';
+                        key = generateSlug(bestTitle);
+                    }
 
-            setStatus('success');
-            setMessage('Saved to Firebase!');
+                    // Handle duplicate keys
+                    let finalKey = key;
+                    let suffix = 1;
+                    while (usedKeys.has(finalKey)) {
+                        finalKey = `${key}-${suffix}`;
+                        suffix++;
+                    }
+                    usedKeys.add(finalKey);
+
+                    // Build clean record (no id inside, no _empty, no legacy fields)
+                    const row = cleanForStorage(item, index);
+                    updateObj[finalKey] = row;
+
+                    // Update local state id to match the new key
+                    updatedItems[index] = { ...item, id: finalKey };
+                });
+
+                // Atomic write of entire collection
+                await set(ref(db, collection), updateObj);
+
+                // Update local state with the new clean IDs
+                setDataStore(prev => ({ ...prev, [collection]: updatedItems }));
+
+                setStatus('success');
+                setMessage('Saved to Firebase!');
+            }
         } catch (error) {
             setStatus('error');
             setMessage(error.message || 'Network error.');
@@ -711,6 +786,9 @@ const Admin = () => {
             (schema.fields || []).forEach(f => {
                 newItem[f.key] = f.type === 'datetime-local' ? new Date().toISOString().slice(0, 16) : '';
             });
+            if (collection.startsWith('art_')) {
+                newItem.category = collection.replace('art_', '');
+            }
         } else if (collection === 'quotes' || collection === 'poems') {
             newItem = {
                 id: newId, title: '', date: new Date().toISOString().slice(0, 16),
@@ -929,6 +1007,10 @@ const Admin = () => {
             onMoveItems: handleMoveItems,
             onCopyItems: handleCopyItems
         };
+
+        if (activeTab.startsWith('art_')) {
+            return <ArtEditor {...commonProps} collection={activeTab} />;
+        }
 
         switch (activeTab) {
             case 'poems': return <PoemEditor {...commonProps} />;

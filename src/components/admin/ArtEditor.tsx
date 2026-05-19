@@ -78,7 +78,7 @@ export const ArtEditor = (props) => {
                 </button>
             </div>
             
-            <StandardListEditor {...props} collection="arts" />
+            <StandardListEditor {...props} collection={props.collection || "arts"} />
         </div>
     );
 };
