@@ -612,10 +612,11 @@ body {
   flex-grow: 1;
   min-width: 0;
   text-align: left;
+  margin-right: 8px;
 }
 
 .settings-name {
-  font-size: 0.95rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: var(--text-main);
   white-space: nowrap;
