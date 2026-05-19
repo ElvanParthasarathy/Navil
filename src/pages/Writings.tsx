@@ -139,23 +139,23 @@ const Writings = () => {
                 <Link to="/writings/poems" className="category-card">
                     <div className="cat-icon-box"><BsPen /></div>
                     <div className="cat-content">
-                        <div className="cat-title">செய்யுள்கள்<CountBadge category="poems" /></div>
-                        <div className="cat-title-sub">Poems</div>
+                        <div className="cat-title">நவில் மிழிகள்<CountBadge category="poems" /></div>
+                        <div className="cat-title-sub">Navil Poems</div>
                         <p className="cat-desc">என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்.</p>
                         <p className="cat-desc-sub">My lyrical verses and emotional expressions.</p>
                     </div>
-                    <div className="cat-footer">செய்யுள்களை வாசிக்க <FiArrowRight /></div>
+                    <div className="cat-footer">நவில் மிழிகளை வாசிக்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/quotes" className="category-card">
                     <div className="cat-icon-box"><BsChatQuote /></div>
                     <div className="cat-content">
-                        <div className="cat-title">பொன்மொழிகள்<CountBadge category="quotes" /></div>
-                        <div className="cat-title-sub">Quotes</div>
+                        <div className="cat-title">நவில் மொழிகள்<CountBadge category="quotes" /></div>
+                        <div className="cat-title-sub">Navil Quotes</div>
                         <p className="cat-desc">என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்.</p>
                         <p className="cat-desc-sub">My short quotes and personal insights.</p>
                     </div>
-                    <div className="cat-footer">பொன்மொழிகளைப் பார்க்க <FiArrowRight /></div>
+                    <div className="cat-footer">நவில் மொழிகளைப் பார்க்க <FiArrowRight /></div>
                 </Link>
 
                 <Link to="/writings/blog" className="category-card">

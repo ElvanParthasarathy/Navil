@@ -73,7 +73,7 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                 ) : title.includes('|') ? (
                     <>
                         <div className="brand-main">{title.split('|')[0]}</div>
-                        <div className="brand-sub">{title.split('|')[1]}</div>
+                        <div className="brand-sub">{title.split('|')[1].toLowerCase()}</div>
                     </>
                 ) : (
                     title

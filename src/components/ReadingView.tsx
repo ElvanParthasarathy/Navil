@@ -9,12 +9,12 @@ import { Engagement } from './Engagement';
 import MobileTopBar from './MobileTopBar';
 
 const CATEGORY_META = {
-    'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'blog posts' },
-    'articles': { title: 'கட்டுரைகள்', subtitle: 'articles' },
-    'stories': { title: 'சிறுகதைகள்', subtitle: 'short stories' },
-    'diary': { title: 'நாளேடு', subtitle: 'diary' },
-    'poems': { title: 'செய்யுள்கள்', subtitle: 'poems' },
-    'quotes': { title: 'பொன்மொழிகள்', subtitle: 'quotes' }
+    'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts' },
+    'articles': { title: 'கட்டுரைகள்', subtitle: 'Articles' },
+    'stories': { title: 'சிறுகதைகள்', subtitle: 'Short Stories' },
+    'diary': { title: 'நாளேடு', subtitle: 'Diary' },
+    'poems': { title: 'நவில் மிழிகள்', subtitle: 'Navil Poems' },
+    'quotes': { title: 'நவில் மொழிகள்', subtitle: 'Navil Quotes' }
 };
 
 const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };

@@ -6,7 +6,7 @@ import legacyPoemsData from '../../data/poems.json';
 const Poems = () => (
     <WritingPage
         pageTitle="poems"
-        pageTitleTamil="செய்யுள்கள்"
+        pageTitleTamil="நவில் மிழிகள்"
         pageSubtitle="என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்."
         pageSubtitleEnglish="My lyrical verses and emotional expressions."
         tableName="poems"

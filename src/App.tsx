@@ -5,6 +5,7 @@ import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
 import Home from './pages/Home';
+import Home2 from './pages/Home2';
 import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Settings from './pages/Settings';
@@ -381,6 +382,7 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <Home /> },
+            { path: "home2", element: <Home2 /> },
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },

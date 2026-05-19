@@ -106,7 +106,7 @@ const CATEGORIES = {
     quotes: {
         titleTa: 'மேற்கோள் அட்டைகள்',
         titleEn: 'Quotes',
-        descTa: 'பொன்மொழிகளின் காட்சி வடிவமைப்புகள்',
+        descTa: 'நவில் மொழிகளின் காட்சி வடிவமைப்புகள்',
         descEn: 'Visual quote cards and typographic designs.',
         footerTa: 'மேற்கோள்களைக் காண',
         icon: <QuoteIcon />,

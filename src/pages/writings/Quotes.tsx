@@ -6,7 +6,7 @@ import legacyQuotesData from '../../data/quotes.json';
 const Quotes = () => (
     <WritingPage
         pageTitle="quotes"
-        pageTitleTamil="பொன்மொழிகள்"
+        pageTitleTamil="நவில் மொழிகள்"
         pageSubtitle="என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்."
         pageSubtitleEnglish="My short quotes and personal insights."
         tableName="quotes"
