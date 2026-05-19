@@ -16,6 +16,20 @@ import staticQuotes from '../data/quotes.json';
 import staticStories from '../data/stories.json';
 import staticArts from '../data/arts.json';
 
+const CLASSIFICATION_COLORS: Record<string, string> = {
+    'அகம்': '#e8a0bf',   // pink
+    'புறம்': '#d4af37',   // gold
+};
+
+const getClassColor = (name: string) => {
+    if (!name) return '#888';
+    if (CLASSIFICATION_COLORS[name]) return CLASSIFICATION_COLORS[name];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    const hue = ((hash % 360) + 360) % 360;
+    return `hsl(${hue}, 55%, 60%)`;
+};
+
 const Home = () => {
     // Dynamic counts state initialized with local static fallbacks
     const [counts, setCounts] = useState({
@@ -164,7 +178,7 @@ const Home = () => {
 
     // Helper to extract language-specific texts from quote object
     const getQuoteTexts = (quoteObj: any) => {
-        if (!quoteObj) return { id: '', main: '', sub: '', tag: 'Reflection', mainLang: 'ta', subLang: 'en' };
+        if (!quoteObj) return { id: '', classification: '', main: '', sub: '', tag: 'Reflection', mainLang: 'ta', subLang: 'en' };
 
         let variants = quoteObj.variants || [];
         if (variants && !Array.isArray(variants)) {
@@ -213,6 +227,7 @@ const Home = () => {
             }
             return {
                 id: quoteObj.id || '',
+                classification: quoteObj.classification || '',
                 main: cleanHtmlTags(rawText),
                 sub: subText || null,
                 tag: finalQuoteTag,
@@ -244,6 +259,7 @@ const Home = () => {
 
         return {
             id: quoteObj.id || '',
+            classification: quoteObj.classification || '',
             main: mainVar ? cleanHtmlTags(mainVar.text) : '',
             sub: subText || null,
             tag: finalQuoteTag,
@@ -317,6 +333,7 @@ const Home = () => {
     const getPoemDetails = (poemObj: any) => {
         const fallback = {
             id: '',
+            classification: '',
             theme: 'Literature',
             main: { title: 'Poem', text: '', lang: 'en', isTruncated: false },
             sub: null
@@ -373,6 +390,7 @@ const Home = () => {
             }
             return {
                 id: poemObj.id || '',
+                classification: poemObj.classification || '',
                 theme: finalTheme,
                 main: {
                     title: poemObj.title || 'Untitled',
@@ -417,6 +435,7 @@ const Home = () => {
 
         return {
             id: poemObj.id || '',
+            classification: poemObj.classification || '',
             theme: finalTheme,
             main: {
                 title: mainVar.title || poemObj.title || 'Untitled',
@@ -689,6 +708,20 @@ const Home = () => {
                     background: color-mix(in srgb, var(--text-main) 6%, transparent);
                     color: var(--text-main);
                     border-radius: 99px;
+                }
+
+                .classification-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1.5px;
+                    padding: 3px 10px;
+                    border: none;
+                    border-radius: 99px;
+                    background: color-mix(in srgb, currentColor 15%, transparent);
+                    white-space: nowrap;
                 }
 
                 .quote-refresh-btn {
@@ -1052,7 +1085,14 @@ const Home = () => {
                     {/* 4. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handlePoemCardClick}>
                         <div className="quote-header-row">
-                            <span className="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span className="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
+                                {poemDetails.classification && (
+                                    <span className="classification-badge" style={{ color: getClassColor(poemDetails.classification) }}>
+                                        {poemDetails.classification}
+                                    </span>
+                                )}
+                            </div>
                             <button
                                 className="quote-refresh-btn"
                                 onClick={handleNewPoem}
@@ -1092,7 +1132,14 @@ const Home = () => {
                     {/* 4b. DYNAMIC INTERACTIVE QUOTE PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handleQuoteCardClick}>
                         <div className="quote-header-row">
-                            <span className="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span className="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
+                                {quoteTexts.classification && (
+                                    <span className="classification-badge" style={{ color: getClassColor(quoteTexts.classification) }}>
+                                        {quoteTexts.classification}
+                                    </span>
+                                )}
+                            </div>
                             <button
                                 className="quote-refresh-btn"
                                 onClick={handleNewQuote}
