@@ -73,7 +73,7 @@ const DigitalArtIcon = () => (
 
 const CATEGORIES = {
     pencil: {
-        titleTa: 'ஓவியங்கள்',
+        titleTa: 'கரிக்கோல் ஓவியங்கள்',
         titleEn: 'Pencil Drawings',
         descTa: 'கையால் வரைந்த பென்சில் ஓவியங்கள்',
         descEn: 'Freehand pencil sketches and portrait art.',
@@ -97,7 +97,7 @@ const CATEGORIES = {
         icon: <PosterIcon />,
     },
     painting: {
-        titleTa: 'ஓவியக்கலை',
+        titleTa: 'ஓவியங்கள்',
         titleEn: 'Paintings',
         descTa: 'வண்ணங்களில் வரையப்பட்ட ஓவியங்கள்',
         descEn: 'Color paintings and mixed media artworks.',
@@ -105,7 +105,7 @@ const CATEGORIES = {
         icon: <PaintingIcon />,
     },
     quotes: {
-        titleTa: 'மேற்கோள் அட்டைகள்',
+        titleTa: 'நவில் மொழிகள்',
         titleEn: 'Quotes',
         descTa: 'நவில் மொழிகளின் காட்சி வடிவமைப்புகள்',
         descEn: 'Visual quote cards and typographic designs.',
@@ -113,7 +113,7 @@ const CATEGORIES = {
         icon: <QuoteIcon />,
     },
     poems: {
-        titleTa: 'கவிதை அட்டைகள்',
+        titleTa: 'நவில் மிழிகள்',
         titleEn: 'Poems',
         descTa: 'கவிதைகளின் காட்சி வடிவமைப்புகள்',
         descEn: 'Visual poem cards and creative typography.',
@@ -121,7 +121,7 @@ const CATEGORIES = {
         icon: <PoemIcon />,
     },
     illustrations: {
-        titleTa: 'சித்திரங்கள்',
+        titleTa: 'விளக்கப்படங்கள்',
         titleEn: 'Illustrations',
         descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்',
         descEn: 'Digital illustrations, logos, and vector art.',
@@ -129,7 +129,7 @@ const CATEGORIES = {
         icon: <IllustrationIcon />,
     },
     digital_arts: {
-        titleTa: 'டிஜிட்டல் கலை',
+        titleTa: 'எண்மக்கலைகள்',
         titleEn: 'Digital Arts',
         descTa: 'கணினி மென்பொருளில் உருவாக்கிய கலைப்படைப்புகள்',
         descEn: 'Artworks created using digital software.',
