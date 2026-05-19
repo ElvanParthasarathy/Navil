@@ -3,6 +3,7 @@ const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/manifest.webmanifest',
+    '/favicon.svg',
     '/assets/instagram/profile.jpg',
     '/assets/style.css',
     '/assets/mobile.css'
