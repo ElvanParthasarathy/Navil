@@ -1058,7 +1058,7 @@ const Home = () => {
                             </div>
                         </div>
                         <div style={{ marginTop: '16px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                            Theme: {poemDetails.theme} • Click card to read full poem, or refresh to load another.
+                            <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{poemDetails.theme}</span> • Click card to read full poem, or refresh to load another.
                         </div>
                     </section>
 
@@ -1097,7 +1097,7 @@ const Home = () => {
                             </div>
                         </div>
                         <div style={{ marginTop: '16px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                            Theme: {quoteTexts.tag} • Click card to read full quote, or refresh to load another.
+                            <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{quoteTexts.tag}</span> • Click card to read full quote, or refresh to load another.
                         </div>
                     </section>
 
