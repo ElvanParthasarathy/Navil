@@ -182,6 +182,24 @@ const Home = () => {
                 .trim();
         };
 
+        // Extract tags for quotes
+        let quoteTags: string[] = [];
+        if (Array.isArray(quoteObj.tags)) {
+            quoteTags = quoteObj.tags.map(t => t && typeof t === 'string' ? t.trim() : '').filter(Boolean);
+        } else if (quoteObj.tags && typeof quoteObj.tags === 'string') {
+            quoteTags = quoteObj.tags.split(',').map(t => t.trim()).filter(Boolean);
+        }
+
+        // If no tags, fall back to tag/theme fields (excluding classification)
+        if (quoteTags.length === 0) {
+            quoteTags = [
+                quoteObj.tag,
+                quoteObj.theme
+            ].map(t => t && typeof t === 'string' ? t.trim() : '').filter(Boolean);
+        }
+
+        const finalQuoteTag = quoteTags.length > 0 ? quoteTags.join(' • ') : 'Philosophy';
+
         if (variants.length === 0) {
             const rawText = quoteObj.text || '';
             let subText = '';
@@ -197,7 +215,7 @@ const Home = () => {
                 id: quoteObj.id || '',
                 main: cleanHtmlTags(rawText),
                 sub: subText || null,
-                tag: quoteObj.tag || 'Philosophy',
+                tag: finalQuoteTag,
                 mainLang: quoteObj.lang || 'ta',
                 subLang: subLang
             };
@@ -228,7 +246,7 @@ const Home = () => {
             id: quoteObj.id || '',
             main: mainVar ? cleanHtmlTags(mainVar.text) : '',
             sub: subText || null,
-            tag: quoteObj.tag || 'Philosophy',
+            tag: finalQuoteTag,
             mainLang: mainVar ? mainVar.lang : 'ta',
             subLang: subLang
         };
@@ -305,15 +323,24 @@ const Home = () => {
         };
         if (!poemObj) return fallback;
 
-        // Aggregate all multi-classification tags: classification, theme, style, meter
-        const terms = [
-            poemObj.classification,
-            poemObj.theme,
-            poemObj.style,
-            poemObj.meter
-        ]
-            .map(t => t && typeof t === 'string' ? t.trim() : '')
-            .filter(Boolean);
+        // Prioritize tags array/string for poem tags display
+        let terms: string[] = [];
+        if (Array.isArray(poemObj.tags)) {
+            terms = poemObj.tags.map(t => t && typeof t === 'string' ? t.trim() : '').filter(Boolean);
+        } else if (poemObj.tags && typeof poemObj.tags === 'string') {
+            terms = poemObj.tags.split(',').map(t => t.trim()).filter(Boolean);
+        }
+
+        // If no tags, fall back to other fields (excluding classification)
+        if (terms.length === 0) {
+            terms = [
+                poemObj.theme,
+                poemObj.style,
+                poemObj.meter
+            ]
+                .map(t => t && typeof t === 'string' ? t.trim() : '')
+                .filter(Boolean);
+        }
 
         const uniqueTerms = Array.from(new Set(terms));
         const finalTheme = uniqueTerms.length > 0 ? uniqueTerms.join(' • ') : 'Literature';
