@@ -86,22 +86,6 @@ export const SCHEMAS = {
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Article',
         getItemSubtitle: (item) => item.tags || '',
     },
-    essays: {
-        label: 'Essays', icon: <FiBookOpen size={16} />, type: 'variant_based',
-        itemFields: [
-            { key: 'title', label: 'Essay Title', type: 'text', placeholder: 'Enter essay title', flex: 2 },
-            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
-        ],
-        row2Fields: [
-            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Philosophy, Science' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        extraFields: [
-            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
-        ],
-        getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Essay',
-        getItemSubtitle: (item) => item.tags || '',
-    },
     stories: {
         label: 'Stories', icon: <FiBook size={16} />, type: 'variant_based',
         itemFields: [
@@ -123,19 +107,6 @@ export const SCHEMAS = {
             if (item.series_name) parts.push(`${item.series_name} #${item.series_part || '?'}`);
             return parts.filter(Boolean).join(' • ');
         },
-    },
-    thoughts: {
-        label: 'Thoughts', icon: <FiSun size={16} />, type: 'variant_based',
-        itemFields: [
-            { key: 'title', label: 'Title', type: 'text', placeholder: 'A quick thought...', flex: 2 },
-            { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
-        ],
-        row2Fields: [
-            { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Reflection, Daily' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
-        ],
-        getItemTitle: (item) => item.title || item.variants?.[0]?.text?.replace(/<[^>]+>/g, '').slice(0, 50) || 'Untitled Thought',
-        getItemSubtitle: (item) => item.tags || '',
     },
     diary: {
         label: 'Diary', icon: <FiBook size={16} />, type: 'variant_based',

@@ -15,9 +15,7 @@ import { PoemEditor } from '../components/admin/PoemEditor';
 import { QuoteEditor } from '../components/admin/QuoteEditor';
 import { BlogEditor } from '../components/admin/BlogEditor';
 import { ArticleEditor } from '../components/admin/ArticleEditor';
-import { EssayEditor } from '../components/admin/EssayEditor';
 import { StoryEditor } from '../components/admin/StoryEditor';
-import { ThoughtEditor } from '../components/admin/ThoughtEditor';
 import { DiaryEditor } from '../components/admin/DiaryEditor';
 import { ArtEditor } from '../components/admin/ArtEditor';
 import AdminLogin from '../components/admin/AdminLogin';
@@ -278,9 +276,7 @@ const Admin = () => {
         poems: initialPoems,
         blog: [],
         articles: [],
-        essays: [],
         stories: [],
-        thoughts: [],
         diary: [],
         arts: [],
         defaultAuthors: { ...DEFAULT_AUTHORS },
@@ -442,7 +438,7 @@ const Admin = () => {
         if (!window.confirm("MASTER SAVE: This will sync your current draft (including any Mock Test Data) to the live site. Real poems will be PRESERVED, but mock items will be added/updated. Proceed?")) return;
         setIsMigrating(true);
         try {
-            const collectionsToWipe = ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary', 'arts'];
+            const collectionsToWipe = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary', 'arts'];
             for (const coll of collectionsToWipe) {
                 await set(ref(db, coll), null);
             }
@@ -524,7 +520,7 @@ const Admin = () => {
                     const allData = snapshot.val();
                     const newDataStore = { ...dataStore };
                     
-                    const categories = ['poems', 'quotes', 'blog', 'articles', 'essays', 'stories', 'thoughts', 'diary', 'arts'];
+                    const categories = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary', 'arts'];
                     
                     categories.forEach(key => {
                         if (allData[key]) {
@@ -939,9 +935,7 @@ const Admin = () => {
             case 'quotes': return <QuoteEditor {...commonProps} />;
             case 'blog': return <BlogEditor {...commonProps} />;
             case 'articles': return <ArticleEditor {...commonProps} />;
-            case 'essays': return <EssayEditor {...commonProps} />;
             case 'stories': return <StoryEditor {...commonProps} />;
-            case 'thoughts': return <ThoughtEditor {...commonProps} />;
             case 'diary': return <DiaryEditor {...commonProps} />;
             case 'arts': return <ArtEditor {...commonProps} />;
             case 'comments': return <CommentsManager username={username} profilePic={dataStore.profile?.profilePic || dataStore.profile?.avatar} />;

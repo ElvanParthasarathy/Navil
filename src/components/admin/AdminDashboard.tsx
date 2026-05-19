@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiClock, FiTrendingUp, FiZap, FiArrowRight, FiDownload, FiUploadCloud } from 'react-icons/fi';
+import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBook, FiImage, FiClock, FiTrendingUp, FiZap, FiArrowRight, FiDownload, FiUploadCloud } from 'react-icons/fi';
 import { db } from '../../lib/firebaseClient';
 import { ref, set } from 'firebase/database';
 
@@ -8,10 +8,9 @@ const COLLECTION_META = {
     poems: { label: 'Poems', icon: <FiPenTool size={20} />, color: '#7C5CFC' },
     blog: { label: 'Blog', icon: <FiEdit3 size={20} />, color: '#FF6B6B' },
     articles: { label: 'Articles', icon: <FiFileText size={20} />, color: '#4ECDC4' },
-    essays: { label: 'Essays', icon: <FiBookOpen size={20} />, color: '#45B7D1' },
     stories: { label: 'Stories', icon: <FiBook size={20} />, color: '#96CEB4' },
-    thoughts: { label: 'Thoughts', icon: <FiSun size={20} />, color: '#FFEAA7' },
     diary: { label: 'Diary', icon: <FiBook size={20} />, color: '#DDA0DD' },
+    arts: { label: 'Arts', icon: <FiImage size={20} />, color: '#FF85A2' },
 };
 
 interface DashboardItem {
