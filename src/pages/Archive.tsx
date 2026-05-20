@@ -1339,7 +1339,7 @@ const Archive = () => {
                 {/* Desktop Avatar Container */}
                 <div className="profile-avatar-container desktop-only-flex">
                     <img
-                        src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                        src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
                         alt={profileData?.username}
                         className="profile-avatar"
                         onError={(e) => { e.target.src = 'https://via.placeholder.com/150' }}
@@ -1354,7 +1354,7 @@ const Archive = () => {
                 <div className="profile-mobile-top mobile-only-flex">
                     <div className="profile-avatar-container">
                         <img
-                            src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                            src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
                             alt={profileData?.username}
                             className="profile-avatar"
                             onError={(e) => { e.target.src = 'https://via.placeholder.com/150' }}
@@ -1663,7 +1663,7 @@ const Archive = () => {
                             <div className="modal-info desktop-only-flex">
                                 <div className="modal-header">
                                     <div className="modal-avatar">
-                                        <img src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                        <img src={profileData?.profilePic || "/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
                                     </div>
                                     <div className="modal-username">elvanparthasarathy</div>
                                     <FiX
@@ -1714,7 +1714,7 @@ const Archive = () => {
                                         <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
                                             <div className="modal-header">
                                                 <div className="modal-avatar">
-                                                    <img src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                                    <img src={profileData?.profilePic || "/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
                                                 </div>
                                                 <div className="modal-username">elvanparthasarathy</div>
                                             </div>

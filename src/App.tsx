@@ -213,7 +213,7 @@ const Layout = () => {
                             to="/about"
                             icon={
                                 <ProfileImage
-                                    src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                                    src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
                                     alt="Profile"
                                     className="nav-profile-avatar"
                                 />
@@ -238,7 +238,7 @@ const Layout = () => {
                             }}
                         >
                             <ProfileImage
-                                src={profileData?.profilePic || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/profile.jpg"}
+                                src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
                                 alt="Profile"
                                 className="settings-avatar"
                             />

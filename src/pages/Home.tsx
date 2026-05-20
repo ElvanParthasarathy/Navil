@@ -697,6 +697,16 @@ const Home = () => {
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 20px;
+                    gap: 12px;
+                }
+
+                .quote-badges-container {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 8px 6px;
+                    min-width: 0;
+                    flex: 1;
                 }
 
                 .quote-tag-badge {
@@ -708,6 +718,7 @@ const Home = () => {
                     background: color-mix(in srgb, var(--text-main) 6%, transparent);
                     color: var(--text-main);
                     border-radius: 99px;
+                    white-space: nowrap;
                 }
 
                 .classification-badge {
@@ -809,6 +820,8 @@ const Home = () => {
                     margin-top: 14px;
                     display: flex;
                     align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
                 }
 
                 .player-read-more-btn {
@@ -954,19 +967,46 @@ const Home = () => {
                           flex: 1;
                           max-width: 180px;
                           background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
-                          border: 1px solid var(--border-light);
+                          border: none;
                           color: var(--text-main);
-                          padding: 10px 16px;
+                          padding: 8px 12px 8px 8px;
                           border-radius: 100px;
-                          font-size: 0.85rem;
-                          font-weight: 500;
+                          display: flex;
+                          align-items: center;
+                          gap: 10px;
+                          cursor: pointer;
+                          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+                          text-align: left;
+                      }
+                      .mobile-quick-link-btn .btn-icon-wrapper {
                           display: flex;
                           align-items: center;
                           justify-content: center;
-                          gap: 6px;
-                          cursor: pointer;
-                          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-                          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+                          width: 32px;
+                          height: 32px;
+                          border-radius: 50%;
+                          background: color-mix(in srgb, var(--text-main) 8%, transparent);
+                          color: var(--text-main);
+                          flex-shrink: 0;
+                      }
+                      .mobile-quick-link-btn .btn-text-group {
+                          display: flex;
+                          flex-direction: column;
+                          gap: 1px;
+                          line-height: 1.15;
+                      }
+                      .mobile-quick-link-btn .btn-text-ta {
+                          font-size: 0.86rem;
+                          font-weight: 700;
+                          color: var(--text-main);
+                      }
+                      .mobile-quick-link-btn .btn-text-en {
+                          font-size: 0.68rem;
+                          font-weight: 600;
+                          color: var(--text-muted);
+                          text-transform: uppercase;
+                          letter-spacing: 0.03em;
                       }
                       .mobile-quick-link-btn:active {
                           transform: scale(0.97) !important;
@@ -974,7 +1014,10 @@ const Home = () => {
                       }
                       [data-theme='dark'] .mobile-quick-link-btn {
                           background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
-                          border-color: rgba(255, 255, 255, 0.08);
+                          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                      }
+                      [data-theme='dark'] .mobile-quick-link-btn .btn-icon-wrapper {
+                          background: rgba(255, 255, 255, 0.06);
                       }
                       [data-theme='dark'] .mobile-quick-link-btn:active {
                           transform: scale(0.97) !important;
@@ -1048,10 +1091,22 @@ const Home = () => {
                                 </p>
                                 <div className="mobile-quick-links">
                                     <button onClick={() => navigate('/writings')} className="mobile-quick-link-btn">
-                                        எழுத்துகள் • Writings
+                                        <div className="btn-icon-wrapper">
+                                            <FiFeather size={16} />
+                                        </div>
+                                        <div className="btn-text-group">
+                                            <span className="btn-text-ta" lang="ta">எழுத்துகள்</span>
+                                            <span className="btn-text-en">Writings</span>
+                                        </div>
                                     </button>
                                     <button onClick={() => navigate('/arts')} className="mobile-quick-link-btn">
-                                        படைப்புகள் • Arts
+                                        <div className="btn-icon-wrapper">
+                                            <FiImage size={16} />
+                                        </div>
+                                        <div className="btn-text-group">
+                                            <span className="btn-text-ta" lang="ta">படைப்புகள்</span>
+                                            <span className="btn-text-en">Arts</span>
+                                        </div>
                                     </button>
                                 </div>
                             </div>
@@ -1085,14 +1140,7 @@ const Home = () => {
                     {/* 4. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handlePoemCardClick}>
                         <div className="quote-header-row">
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span className="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
-                                {poemDetails.classification && (
-                                    <span className="classification-badge" style={{ color: getClassColor(poemDetails.classification) }}>
-                                        {poemDetails.classification}
-                                    </span>
-                                )}
-                            </div>
+                            <span className="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
                             <button
                                 className="quote-refresh-btn"
                                 onClick={handleNewPoem}
@@ -1122,6 +1170,11 @@ const Home = () => {
                                 <span className="player-read-more-btn">
                                     Click here to read more <FiArrowRight size={14} className="arrow" />
                                 </span>
+                                {poemDetails.classification && (
+                                    <span className="classification-badge" style={{ color: getClassColor(poemDetails.classification) }}>
+                                        {poemDetails.classification}
+                                    </span>
+                                )}
                             </div>
                         </div>
                         <div style={{ marginTop: '16px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -1132,14 +1185,7 @@ const Home = () => {
                     {/* 4b. DYNAMIC INTERACTIVE QUOTE PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handleQuoteCardClick}>
                         <div className="quote-header-row">
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span className="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
-                                {quoteTexts.classification && (
-                                    <span className="classification-badge" style={{ color: getClassColor(quoteTexts.classification) }}>
-                                        {quoteTexts.classification}
-                                    </span>
-                                )}
-                            </div>
+                            <span className="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
                             <button
                                 className="quote-refresh-btn"
                                 onClick={handleNewQuote}
@@ -1168,6 +1214,11 @@ const Home = () => {
                                 <span className="player-read-more-btn">
                                     Click here to read more <FiArrowRight size={14} className="arrow" />
                                 </span>
+                                {quoteTexts.classification && (
+                                    <span className="classification-badge" style={{ color: getClassColor(quoteTexts.classification) }}>
+                                        {quoteTexts.classification}
+                                    </span>
+                                )}
                             </div>
                         </div>
                         <div style={{ marginTop: '16px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
