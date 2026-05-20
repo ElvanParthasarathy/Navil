@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FiX, FiChevronLeft, FiChevronRight, FiPlay, FiPause, FiVolume2, FiVolumeX } from 'react-icons/fi';
+import profilePic from '../assets/instagram/profile.jpg';
 
 const StoryViewer = ({
     activeHighlight,
@@ -257,7 +258,7 @@ const StoryViewer = ({
 
                         <div className="sv-meta-row">
                             <div className="sv-user">
-                                <img src={profileData?.profilePic} className="sv-p-pic" alt="" />
+                                <img src={profilePic} className="sv-p-pic" alt="" />
                                 <div className="sv-p-text">
                                     <span className="sv-username">{profileData?.username || 'elvanparthasarathy'}</span>
                                     <span className="sv-time">{currentStory?.date}</span>

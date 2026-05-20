@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight, FiGithub } from 'react-icons/fi';
 import profileData from '../data/profile.json';
+import profilePic from '../assets/instagram/profile.jpg';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
@@ -285,7 +286,7 @@ const Home2 = () => {
                     <div className="hero-avatar-wrapper">
                         <div className="hero-avatar-bg"></div>
                         <img
-                            src={profileData.profilePic}
+                            src={profilePic}
                             alt={profileData.name}
                             className="hero-avatar"
                         />

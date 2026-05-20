@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FiX, FiHeart, FiMessageCircle, FiSend, FiMoreHorizontal, FiMusic, FiVolume2, FiVolumeX, FiPlay, FiPause, FiChevronUp, FiChevronDown } from 'react-icons/fi';
+import profilePic from '../assets/instagram/profile.jpg';
 
 const ReelsViewer = ({ reel, reels, onClose, onSwitchReel, profileData }) => {
     const [isMuted, setIsMuted] = useState(false);
@@ -305,7 +306,7 @@ const ReelItem = ({ reel, isActive, isMuted, onToggleMute, profileData, setRef }
                     {/* Bottom Info Overlay */}
                     <div className="v-info-card">
                         <div className="v-user-row">
-                            <img src={profileData?.profilePic} alt="" className="v-avatar" />
+                            <img src={profilePic} alt="" className="v-avatar" />
                             <span className="v-username">{profileData?.username}</span>
                             <button className="v-follow">Follow</button>
                         </div>

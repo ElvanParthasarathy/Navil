@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
 import profileData from '../data/profile.json';
+import profilePic from '../assets/instagram/profile.jpg';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 
@@ -1075,7 +1076,7 @@ const Home = () => {
                             <div className="hero-avatar-area">
                                 <div className="hero-avatar-bg-glow"></div>
                                 <img
-                                    src={profileData.profilePic}
+                                    src={profilePic}
                                     alt={profileData.fullName}
                                     className="hero-avatar-image"
                                 />

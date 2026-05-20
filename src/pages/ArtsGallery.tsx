@@ -10,6 +10,7 @@ import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 import { Engagement } from '../components/Engagement';
 import profileData from '../data/profile.json';
+import profilePic from '../assets/instagram/profile.jpg';
 
 const CATEGORY_META = {
     pencil: {
@@ -1672,7 +1673,7 @@ const ArtsGallery = () => {
 
                                 <div className="arts-lb-profile">
                                     <div className="arts-lb-avatar">
-                                        <img src={profileData.profilePic} alt={profileData.fullName} />
+                                        <img src={profilePic} alt={profileData.fullName} />
                                     </div>
                                     <div className="arts-lb-author">{profileData.fullName}</div>
                                 </div>
@@ -1733,7 +1734,7 @@ const ArtsGallery = () => {
                                     <div className="arts-lb-sidebar-header">
                                         <div className="arts-lb-profile">
                                             <div className="arts-lb-avatar">
-                                                <img src={profileData.profilePic} alt={profileData.fullName} />
+                                                <img src={profilePic} alt={profileData.fullName} />
                                             </div>
                                             <div className="arts-lb-author">{profileData.fullName}</div>
                                         </div>
@@ -1888,7 +1889,7 @@ const ArtsGallery = () => {
                                         <div className="arts-lb-sheet-meta">
                                             <div className="arts-lb-profile">
                                                 <div className="arts-lb-avatar">
-                                                    <img src={profileData.profilePic} alt={profileData.fullName} />
+                                                    <img src={profilePic} alt={profileData.fullName} />
                                                 </div>
                                                 <div className="arts-lb-author">{profileData.fullName}</div>
                                             </div>

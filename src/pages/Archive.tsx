@@ -4,6 +4,7 @@ import { useSearchParams, useOutletContext, Link, useNavigate } from 'react-rout
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../components/MobileTopBar';
 import profileData from '../data/profile.json';
+import profilePic from '../assets/instagram/profile.jpg';
 import initialHighlights from '../data/stories.json';
 import postsData from '../data/posts.json';
 import reelsData from '../data/reels.json';
@@ -1339,7 +1340,7 @@ const Archive = () => {
                 {/* Desktop Avatar Container */}
                 <div className="profile-avatar-container desktop-only-flex">
                     <img
-                        src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
+                        src={profilePic}
                         alt={profileData?.username}
                         className="profile-avatar"
                         onError={(e) => { e.target.src = 'https://via.placeholder.com/150' }}
@@ -1354,7 +1355,7 @@ const Archive = () => {
                 <div className="profile-mobile-top mobile-only-flex">
                     <div className="profile-avatar-container">
                         <img
-                            src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
+                            src={profilePic}
                             alt={profileData?.username}
                             className="profile-avatar"
                             onError={(e) => { e.target.src = 'https://via.placeholder.com/150' }}
@@ -1579,7 +1580,7 @@ const Archive = () => {
                             {/* Mobile Header (Top) */}
                             <div className="modal-header mobile-only">
                                 <div className="modal-avatar">
-                                    <img src={profileData?.profilePic} className="modal-avatar-img" alt="" loading="eager" />
+                                    <img src={profilePic} className="modal-avatar-img" alt="" loading="eager" />
                                 </div>
                                 <div className="modal-username">elvanparthasarathy</div>
                                 <FiX
@@ -1663,7 +1664,7 @@ const Archive = () => {
                             <div className="modal-info desktop-only-flex">
                                 <div className="modal-header">
                                     <div className="modal-avatar">
-                                        <img src={profileData?.profilePic || "/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                        <img src={profilePic} className="modal-avatar-img" alt="" />
                                     </div>
                                     <div className="modal-username">elvanparthasarathy</div>
                                     <FiX
@@ -1714,7 +1715,7 @@ const Archive = () => {
                                         <div key={post.id} id={`feed-post-${post.id}`} className="mobile-feed-item">
                                             <div className="modal-header">
                                                 <div className="modal-avatar">
-                                                    <img src={profileData?.profilePic || "/assets/instagram/profile.jpg"} className="modal-avatar-img" alt="" />
+                                                    <img src={profilePic} className="modal-avatar-img" alt="" />
                                                 </div>
                                                 <div className="modal-username">elvanparthasarathy</div>
                                             </div>

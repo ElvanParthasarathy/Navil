@@ -4,6 +4,7 @@ import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiSun, FiM
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
+import profilePic from './assets/instagram/profile.jpg';
 import Home from './pages/Home';
 import Home2 from './pages/Home2';
 import About from './pages/About';
@@ -213,7 +214,7 @@ const Layout = () => {
                             to="/about"
                             icon={
                                 <ProfileImage
-                                    src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
+                                    src={profilePic}
                                     alt="Profile"
                                     className="nav-profile-avatar"
                                 />
@@ -238,7 +239,7 @@ const Layout = () => {
                             }}
                         >
                             <ProfileImage
-                                src={profileData?.profilePic || "/assets/instagram/profile.jpg"}
+                                src={profilePic}
                                 alt="Profile"
                                 className="settings-avatar"
                             />

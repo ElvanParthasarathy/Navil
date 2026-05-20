@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import profileData from '../data/profile.json';
+import profilePic from '../assets/instagram/profile.jpg';
 import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { Helmet } from 'react-helmet-async';
@@ -421,7 +422,7 @@ const About = () => {
             <section className="about-hero animate-entry">
                 <div className="hero-avatar-wrapper">
                     <div className="hero-avatar-bg"></div>
-                    <img src={profileData.profilePic} alt={profileData.name} className="hero-avatar" />
+                    <img src={profilePic} alt={profileData.name} className="hero-avatar" />
                 </div>
                 <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
                 <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
