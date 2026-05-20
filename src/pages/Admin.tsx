@@ -257,7 +257,7 @@ const Admin = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('admin_sidebar_collapsed') === 'true');
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
-    const [autoThumbnails, setAutoThumbnails] = useState(() => localStorage.getItem('autoThumbnails') !== 'false');
+    const [autoThumbnails, setAutoThumbnails] = useState(() => localStorage.getItem('autoThumbnails') === 'true');
     const profileZoneRef = useRef(null);
 
     useEffect(() => {

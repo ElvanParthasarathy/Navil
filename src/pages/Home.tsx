@@ -481,8 +481,11 @@ const Home = () => {
 
                 /* BACKGROUND GRADIENT DECORATION */
                 .home-bg-blobs {
-                    position: absolute;
-                    inset: 0;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
                     overflow: hidden;
                     z-index: -2;
                     pointer-events: none;
@@ -994,20 +997,27 @@ const Home = () => {
                       .mobile-quick-link-btn .btn-text-group {
                           display: flex;
                           flex-direction: column;
-                          gap: 1px;
-                          line-height: 1.15;
+                          align-items: flex-start;
+                          gap: 0px;
+                          line-height: 1.2;
+                          min-width: 0;
+                          overflow: hidden;
                       }
                       .mobile-quick-link-btn .btn-text-ta {
-                          font-size: 0.86rem;
+                          font-size: 0.82rem;
                           font-weight: 700;
                           color: var(--text-main);
+                          white-space: nowrap;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          transform: translateX(-1.5px);
                       }
                       .mobile-quick-link-btn .btn-text-en {
-                          font-size: 0.68rem;
-                          font-weight: 600;
+                          font-size: 0.72rem;
+                          font-weight: 500;
                           color: var(--text-muted);
-                          text-transform: uppercase;
-                          letter-spacing: 0.03em;
+                          text-transform: none;
+                          letter-spacing: 0;
                       }
                       .mobile-quick-link-btn:active {
                           transform: scale(0.97) !important;
@@ -1097,7 +1107,7 @@ const Home = () => {
                                         </div>
                                         <div className="btn-text-group">
                                             <span className="btn-text-ta" lang="ta">எழுத்துகள்</span>
-                                            <span className="btn-text-en">Writings</span>
+                                            <span className="btn-text-en">writings</span>
                                         </div>
                                     </button>
                                     <button onClick={() => navigate('/arts')} className="mobile-quick-link-btn">
@@ -1106,7 +1116,7 @@ const Home = () => {
                                         </div>
                                         <div className="btn-text-group">
                                             <span className="btn-text-ta" lang="ta">படைப்புகள்</span>
-                                            <span className="btn-text-en">Arts</span>
+                                            <span className="btn-text-en">arts</span>
                                         </div>
                                     </button>
                                 </div>

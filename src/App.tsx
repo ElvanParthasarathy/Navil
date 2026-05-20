@@ -415,7 +415,7 @@ function App() {
     });
     
     const [autoThumbnails, setAutoThumbnails] = React.useState(() => {
-        return localStorage.getItem('autoThumbnails') !== 'false';
+        return localStorage.getItem('autoThumbnails') === 'true';
     });
 
     React.useEffect(() => {
