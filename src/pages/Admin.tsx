@@ -613,6 +613,11 @@ const Admin = () => {
                             
                             // Sort
                             itemsArray.sort((a, b) => {
+                                const isAPinned = a.isPinned || a.is_pinned || a.pinType === 'permanent' || a.pin_type === 'permanent';
+                                const isBPinned = b.isPinned || b.is_pinned || b.pinType === 'permanent' || b.pin_type === 'permanent';
+                                if (isAPinned && !isBPinned) return -1;
+                                if (!isAPinned && isBPinned) return 1;
+
                                 if (a.display_order !== b.display_order) return (a.display_order || 0) - (b.display_order || 0);
                                 const dateA = new Date(a.publish_date || a.date || 0);
                                 const dateB = new Date(b.publish_date || b.date || 0);

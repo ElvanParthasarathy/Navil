@@ -63,6 +63,9 @@ export const SCHEMAS = {
             { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'Dedicated to...' },
             { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
         ],
+        extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+        ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Poem',
         getItemSubtitle: (item) => {
             const parts = [];
@@ -141,6 +144,9 @@ export const SCHEMAS = {
         row2Fields: [
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Travel, Thoughts' },
             { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
+        ],
+        extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Entry',
         getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
