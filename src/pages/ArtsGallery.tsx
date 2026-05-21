@@ -66,9 +66,52 @@ const CATEGORY_META = {
 const ITEMS_PER_PAGE = 8;
 const PAGINATION_INCREMENT = 12;
 
+const stripHtml = (html) => {
+    if (!html) return '';
+    const clean = html.replace(/<[^>]*>/g, '');
+    return clean
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+};
+
 const cleanCaption = (cap) => {
     if (!cap) return '';
     return cap.replace(/#\S+/g, '').replace(/\n{2,}/g, '\n').trim();
+};
+
+const formatArtDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+        if (/^[A-Za-z]{3} \d{1,2}, \d{4}( \d{1,2}:\d{2} [ap]m)?$/i.test(dateString.trim())) {
+            return dateString.trim();
+        }
+        const parsed = new Date(dateString);
+        if (!isNaN(parsed.getTime())) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = months[parsed.getMonth()];
+            const day = String(parsed.getDate()).padStart(2, '0');
+            const year = parsed.getFullYear();
+            
+            if (!dateString.includes('T') && !dateString.includes(':')) {
+                return `${month} ${day}, ${year}`;
+            }
+
+            let hours = parsed.getHours();
+            const minutes = String(parsed.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+        }
+    } catch (e) {
+        // Fallback
+    }
+    return dateString;
 };
 
 const ArtCard = React.memo(({ item, onOpen, caption }) => {
@@ -87,10 +130,9 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
             onClick={() => onOpen(item)}
             role="button"
             tabIndex={0}
-            aria-label={caption || 'View artwork'}
+            aria-label={stripHtml(caption) || 'View artwork'}
             onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
             style={{
-                minHeight: '150px',
                 aspectRatio: item.aspectRatio || 'auto'
             }}
         >
@@ -98,7 +140,7 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
             {thumbUrl && (
                 <img
                     src={thumbUrl}
-                    alt={caption || 'Artwork'}
+                    alt={stripHtml(caption) || 'Artwork'}
                     loading="lazy"
                     decoding="async"
                     onLoad={() => setIsLoaded(true)}
@@ -121,7 +163,7 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
                 </div>
             )}
             <div className="arts-grid-overlay">
-                {caption && <div className="arts-grid-overlay-text">{caption}</div>}
+                {caption && <div className="arts-grid-overlay-text" dangerouslySetInnerHTML={{ __html: caption }} />}
             </div>
         </div>
     );
@@ -162,7 +204,7 @@ const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging, preven
                 ref={setRefs}
                 className={`arts-lb-img ${isDragging ? 'is-dragging' : ''}`}
                 src={getOptimizedImage(img.url, isMobile ? 'medium' : 'full')}
-                alt={img.caption || 'Artwork'}
+                alt={stripHtml(img.caption) || 'Artwork'}
                 loading={isCurrent ? "eager" : "lazy"}
                 decoding="async"
                 draggable={false}
@@ -235,7 +277,12 @@ const ArtsGallery = () => {
                 const dataArray = Object.entries(dataObj)
                     .map(([key, val]) => ({ ...val, id: key }))
                     .filter(item => item.category === category)
-                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    .sort((a, b) => {
+                        const orderA = a.display_order !== undefined ? a.display_order : 999999;
+                        const orderB = b.display_order !== undefined ? b.display_order : 999999;
+                        if (orderA !== orderB) return orderA - orderB;
+                        return (b.timestamp || 0) - (a.timestamp || 0);
+                    });
                 setAllItems(dataArray);
             } else {
                 setAllItems([]);
@@ -752,8 +799,15 @@ const ArtsGallery = () => {
                 }
 
                 .arts-grid {
-                    columns: 3;
-                    column-gap: 8px;
+                    display: flex;
+                    gap: 6px;
+                }
+                .arts-grid-column {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    min-width: 0;
                 }
                 
                 .arts-grid-item {
@@ -762,17 +816,17 @@ const ArtsGallery = () => {
                     cursor: pointer;
                     background: var(--bg-panel);
                     border-radius: 8px;
-                    margin-bottom: 8px;
-                    break-inside: avoid;
                     transform: translateZ(0); 
                     will-change: transform;
                 }
                 
                 @media (max-width: 768px) {
                     .arts-grid-item {
-                        margin-bottom: 4px; 
-                        border-radius: 4px;
+                        border-radius: 2px;
                         background: transparent;
+                    }
+                    .arts-grid-item img {
+                        object-fit: cover;
                     }
                 }
                 
@@ -1489,8 +1543,9 @@ const ArtsGallery = () => {
                 }
 
                 .arts-skeleton-grid {
-                    columns: 3;
-                    column-gap: 8px;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 8px;
                 }
                 .arts-skeleton-item {
                     background: var(--bg-panel);
@@ -1516,9 +1571,11 @@ const ArtsGallery = () => {
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
                     .arts-grid { 
-                        columns: 2;
-                        column-gap: 4px;
-                        padding: 0 4px;
+                        gap: 6px;
+                        padding: 0;
+                    }
+                    .arts-grid-column {
+                        gap: 6px;
                     }
                     .arts-grid-overlay { display: none; }
                     .arts-lb-nav { width: 36px; height: 36px; }
@@ -1551,7 +1608,7 @@ const ArtsGallery = () => {
                         backdrop-filter: none !important;
                         background: rgba(255,255,255,0.12) !important;
                     }
-                    .arts-skeleton-grid { columns: 2; column-gap: 4px; padding: 0 4px; }
+                    .arts-skeleton-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; padding: 0 4px; }
                     .arts-skeleton-item { margin-bottom: 4px; border-radius: 4px; }
                     .arts-show-more-wrapper { padding: 0 20px; }
                     .arts-show-more-btn { width: 100%; justify-content: center; }
@@ -1629,14 +1686,25 @@ const ArtsGallery = () => {
                     ) : (
                         <>
                             <div className="arts-grid animate-entry">
-                                {visibleItems.map((item) => (
-                                    <ArtCard
-                                        key={item.id}
-                                        item={item}
-                                        onOpen={openLightbox}
-                                        caption={cleanCaption(item.caption)}
-                                    />
-                                ))}
+                                {(() => {
+                                    const colCount = isMobile ? 2 : 3;
+                                    const columns = Array.from({ length: colCount }, () => []);
+                                    visibleItems.forEach((item, i) => {
+                                        columns[i % colCount].push(item);
+                                    });
+                                    return columns.map((colItems, colIdx) => (
+                                        <div key={colIdx} className="arts-grid-column">
+                                            {colItems.map((item) => (
+                                                <ArtCard
+                                                    key={item.id}
+                                                    item={item}
+                                                    onOpen={openLightbox}
+                                                    caption={cleanCaption(item.caption)}
+                                                />
+                                            ))}
+                                        </div>
+                                    ));
+                                })()}
                             </div>
 
                             {hasMore && (
@@ -1742,7 +1810,7 @@ const ArtsGallery = () => {
 
                                     <div className="arts-lb-sidebar-body">
                                         <div className="arts-lb-meta-header">
-                                            {currentImg.caption && <h2 className="arts-lb-caption">{currentImg.caption}</h2>}
+                                            {currentImg.caption && <h2 className="arts-lb-caption" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />}
 
                                             <div className="arts-lb-meta-row">
                                                 {currentImg.totalInPost > 1 && (
@@ -1767,7 +1835,7 @@ const ArtsGallery = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="arts-lb-date">{currentImg.date}</div>
+                                        <div className="arts-lb-date">{formatArtDate(currentImg.date)}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1783,21 +1851,26 @@ const ArtsGallery = () => {
                                     </div>
 
                                     <div className="arts-lb-caption-row mobile-only">
-                                        {currentImg.caption && (
-                                            <h2 className="arts-lb-caption">
-                                                {currentImg.caption.length > 60 ? (
-                                                    <>
-                                                        {currentImg.caption.slice(0, 60)}...
-                                                        <button
-                                                            className="arts-lb-view-more"
-                                                            onClick={() => setShowCaptionModal(true)}
-                                                        >
-                                                            more
-                                                        </button>
-                                                    </>
-                                                ) : currentImg.caption}
-                                            </h2>
-                                        )}
+                                        {currentImg.caption && (() => {
+                                            const plainText = stripHtml(currentImg.caption);
+                                            return (
+                                                <h2 className="arts-lb-caption">
+                                                    {plainText.length > 60 ? (
+                                                        <>
+                                                            <span dangerouslySetInnerHTML={{ __html: plainText.slice(0, 60) + '...' }} />
+                                                            <button
+                                                                className="arts-lb-view-more"
+                                                                onClick={() => setShowCaptionModal(true)}
+                                                            >
+                                                                more
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <span dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
+                                                    )}
+                                                </h2>
+                                            );
+                                        })()}
 
                                         {currentImg.totalInPost > 1 && (
                                             <div className="arts-lb-pagination floating">
@@ -1821,7 +1894,7 @@ const ArtsGallery = () => {
                                     {/* Desktop-only version of caption and pagination */}
                                     <div className="desktop-only">
                                         {currentImg.caption && (
-                                            <h2 className="arts-lb-caption">{currentImg.caption}</h2>
+                                            <h2 className="arts-lb-caption" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
                                         )}
                                         <div className="arts-lb-meta-row floating">
                                             {currentImg.totalInPost > 1 && (
@@ -1850,7 +1923,7 @@ const ArtsGallery = () => {
 
                                 <div className="arts-lb-footer-row">
                                     <div className="arts-lb-caption-group">
-                                        <div className="arts-lb-date">{currentImg.date}</div>
+                                        <div className="arts-lb-date">{formatArtDate(currentImg.date)}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1885,7 +1958,7 @@ const ArtsGallery = () => {
                                         <button className="arts-lb-sheet-close" onClick={() => setShowCaptionModal(false)}>
                                             <FiX size={18} />
                                         </button>
-                                        <div className="arts-lb-sheet-title">{currentImg.caption}</div>
+                                        <div className="arts-lb-sheet-title" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
                                         <div className="arts-lb-sheet-meta">
                                             <div className="arts-lb-profile">
                                                 <div className="arts-lb-avatar">
@@ -1893,7 +1966,7 @@ const ArtsGallery = () => {
                                                 </div>
                                                 <div className="arts-lb-author">{profileData.fullName}</div>
                                             </div>
-                                            <div className="arts-lb-date">{currentImg.date}</div>
+                                            <div className="arts-lb-date">{formatArtDate(currentImg.date)}</div>
                                         </div>
                                     </div>
                                 </div>

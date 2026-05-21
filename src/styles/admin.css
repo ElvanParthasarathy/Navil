@@ -931,6 +931,69 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
     letter-spacing: 0.5px;
 }
 
+/* ── Collapsible Section (Neram-inspired) ── */
+.adm-section-header--collapsible {
+    cursor: pointer;
+    padding: 10px 14px;
+    margin: 0 -14px;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+    user-select: none;
+    margin-bottom: 0;
+}
+
+.adm-section-header--collapsible:hover {
+    background: color-mix(in srgb, var(--text-main, #eee) 6%, transparent);
+}
+
+.adm-section-header--collapsible:active {
+    background: color-mix(in srgb, var(--text-main, #eee) 10%, transparent);
+}
+
+.adm-collapse-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-muted, #888);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+.adm-collapse-icon.open {
+    transform: rotate(90deg);
+    color: var(--text-main, #eee);
+}
+
+.adm-section-header--collapsible:hover .adm-collapse-icon {
+    background: color-mix(in srgb, var(--text-main, #eee) 8%, transparent);
+    color: var(--text-main, #eee);
+}
+
+/* Collapsible Body — CSS grid animation (0fr → 1fr) */
+.adm-collapse-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+    opacity: 0;
+}
+
+.adm-collapse-body.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+.adm-collapse-body-inner {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 4px;
+}
+
 .adm-divider {
     border: 0;
     border-top: 1px solid var(--border-light);
@@ -942,23 +1005,9 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
    VARIANT BLOCKS (Fluid layout)
    ══════════════════════════════════════════ */
 .adm-variant {
-    padding: 64px 0 32px 0;
-    position: relative;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
     border-bottom: 1px dotted var(--border-light);
-}
-
-.adm-variant-number {
-    position: absolute;
-    top: 0;
-    left: 14px;
-    font-size: 11px;
-    font-weight: 800;
-    color: var(--text-muted);
-    background: var(--bg-card);
-    padding: 4px 8px;
-    border-radius: 6px;
-    border: 1px solid var(--border-light);
-    opacity: 0.6;
 }
 
 .adm-variant:last-child {
@@ -968,9 +1017,6 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
 }
 
 .adm-variant-controls {
-    position: absolute;
-    top: 0;
-    right: 0;
     display: flex;
     gap: 10px;
     opacity: 0.5;
@@ -2120,6 +2166,14 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
         height: 100vh;
     }
 
+    .admin-content-area {
+        min-height: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
     /* Hamburger Sidebar Logic */
     .admin-sidebar {
         position: fixed;
@@ -2254,11 +2308,64 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
     }
 
     .admin-editor-body {
-        padding: 16px;
+        padding: 16px 12px;
         overflow-y: auto;
+        overflow-x: hidden;
         /* Fix: allow vertical scrolling on mobile */
         -ms-overflow-style: none;
         scrollbar-width: none;
+    }
+
+    .adm-form {
+        padding: 0;
+        gap: 20px;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .adm-form .adm-form {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .adm-form.side-by-side {
+        flex-direction: column;
+        gap: 24px;
+        padding: 0 16px;
+        margin: 0;
+        height: auto;
+    }
+
+    .adm-form-sidebar {
+        flex: none;
+        width: 100%;
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+        padding-right: 0;
+    }
+
+    .adm-form-main {
+        width: 100%;
+        gap: 24px;
+    }
+
+    .adm-variant {
+        padding: 0 0 20px 0;
+    }
+
+    .adm-variant-controls {
+        display: flex;
+        gap: 6px;
+        opacity: 1 !important;
+    }
+
+    .adm-variant-controls .adm-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+        height: 28px;
+        border-radius: 6px;
     }
 
     .admin-editor-body::-webkit-scrollbar {
@@ -2395,7 +2502,7 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    padding: 32px 40px;
+    padding: 16px 0;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -2406,7 +2513,7 @@ textarea.adm-input::-webkit-scrollbar-thumb:hover {
     gap: 40px;
     max-width: 1400px;
     margin: 0;
-    padding: 32px 40px;
+    padding: 16px 0;
     height: 100%;
 }
 

@@ -67,14 +67,43 @@ const textToHtml = (raw) => {
 };
 
 // Sleek, interactive collapsible zone for Urai and Notes that transitions smoothly
-const PoemInfoZone = ({ urai, notes }) => {
+const PoemInfoZone = ({ urai, notes, hint, isUraiNotesLocked, password, isPrivate }) => {
     const [activeSection, setActiveSection] = React.useState(null);
+    const [displaySection, setDisplaySection] = React.useState(null);
+    const [isUnlocked, setIsUnlocked] = React.useState(false);
+    const [pwdAttempt, setPwdAttempt] = React.useState('');
+    const [pwdError, setPwdError] = React.useState(false);
 
+    if (isPrivate) return null;
     if (!urai && !notes) return null;
+
+    // Locked only when lock toggle is on AND password exists
+    const isLocked = !!isUraiNotesLocked && !!password;
 
     const toggleSection = (section) => {
         setActiveSection(prev => prev === section ? null : section);
+        setPwdError(false);
+        setPwdAttempt('');
     };
+
+    const handleUnlock = (e) => {
+        e.preventDefault();
+        if (pwdAttempt.trim() === password) {
+            setIsUnlocked(true);
+            setPwdError(false);
+        } else {
+            setPwdError(true);
+        }
+    };
+
+    const displayUrai = isLocked ? (isUnlocked ? urai : null) : urai;
+    const displayNotes = isLocked ? (isUnlocked ? notes : null) : notes;
+
+    React.useEffect(() => {
+        if (activeSection) {
+            setDisplaySection(activeSection);
+        }
+    }, [activeSection]);
 
     return (
         <div className="info-pills-container">
@@ -97,7 +126,11 @@ const PoemInfoZone = ({ urai, notes }) => {
                     >
                         <span>Notes</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="6 9 12 15 18 9" />
+                            {isLocked ? (
+                                isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
+                            ) : (
+                                <polyline points="6 9 12 15 18 9" />
+                            )}
                         </svg>
                     </button>
                 )}
@@ -107,17 +140,47 @@ const PoemInfoZone = ({ urai, notes }) => {
                 <div className="info-pill-content-inner">
                     <div className="info-pill-box">
                         <div className="info-pill-box-header">
-                            {activeSection === 'urai' ? 'விளக்கவுரை · Commentary' : 'Additional Notes'}
+                            {displaySection === 'urai' ? 'விளக்கவுரை · Commentary' : 'Additional Notes'}
                         </div>
-                        {activeSection === 'urai' && (
-                            <div className="info-content urai animate-fade">
-                                {urai}
+                        
+                        {isLocked && !isUnlocked ? (
+                            <div className="info-content animate-fade" style={{ textAlign: 'center', padding: '20px 0' }}>
+                                <form onSubmit={handleUnlock} className="easter-egg-lock">
+                                    <div style={{ marginBottom: '16px', color: 'var(--text-muted)' }}>
+                                        This section is locked. Enter password to view.
+                                        {hint && <div style={{ marginTop: '8px', fontStyle: 'italic', fontSize: '0.9rem', color: 'var(--text-main)', opacity: 0.8 }}>Hint: {hint}</div>}
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                        <input 
+                                            type="password"
+                                            value={pwdAttempt}
+                                            onChange={(e) => { setPwdAttempt(e.target.value); setPwdError(false); }}
+                                            placeholder="Password..."
+                                            className="pwd-input"
+                                            style={{ padding: '8px 16px', borderRadius: '20px', border: pwdError ? '1px solid #ff4444' : '1px solid var(--border-light)', background: 'transparent', color: 'var(--text-main)', outline: 'none' }}
+                                        />
+                                        <button type="submit" style={{ padding: '8px 20px', borderRadius: '20px', border: 'none', background: 'var(--text-main)', color: 'var(--bg-app)', cursor: 'pointer', fontWeight: 'bold' }}>
+                                            Unlock
+                                        </button>
+                                    </div>
+                                    {pwdError && <div style={{ color: '#ff4444', fontSize: '0.8rem', marginTop: '8px' }}>Incorrect password.</div>}
+                                </form>
                             </div>
-                        )}
-                        {activeSection === 'notes' && (
-                            <div className="info-content animate-fade">
-                                {notes}
-                            </div>
+                        ) : (
+                            <>
+                                {displaySection === 'urai' && displayUrai && (
+                                    <div 
+                                        className={`info-content urai animate-fade ${!activeSection ? 'hiding' : ''}`}
+                                        dangerouslySetInnerHTML={{ __html: textToHtml(displayUrai) }}
+                                    />
+                                )}
+                                {displaySection === 'notes' && displayNotes && (
+                                    <div 
+                                        className={`info-content animate-fade ${!activeSection ? 'hiding' : ''}`}
+                                        dangerouslySetInnerHTML={{ __html: textToHtml(displayNotes) }}
+                                    />
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
@@ -216,18 +279,33 @@ const WritingPage = ({
         return new Date(b.date || 0) - new Date(a.date || 0);
     });
 
-    // Collect all unique classifications and tags
+    // Tags to exclude from the filter dropdown (badge classifications, language variants, meta-tags)
+    const EXCLUDED_TAGS = new Set([
+        'அகம்', 'புறம்',           // Tamil badge classifications
+        'അകം', 'പുറം',             // Malayalam equivalents
+        'agam', 'puram',           // English transliterations
+        'തമിഴാളം', 'തമிഴாழம்',     // Meta-tags
+    ].map(s => s.toLowerCase()));
+
+    const isExcludedTag = (tag) => {
+        if (!tag) return true;
+        return EXCLUDED_TAGS.has(tag.trim().toLowerCase());
+    };
+
+    // Collect only clean theme tags for the filter dropdown (exclude badge classifications)
     const existingClassifications = new Set();
     rawPosts.forEach(p => {
-        if (p.classification && typeof p.classification === 'string') {
-            existingClassifications.add(p.classification.trim());
-        }
+        // Do NOT add p.classification — those are badge-only values (அகம்/புறம்)
         if (p.tags && Array.isArray(p.tags)) {
             p.tags.forEach(tag => {
-                if (tag && typeof tag === 'string') {
+                if (tag && typeof tag === 'string' && !isExcludedTag(tag)) {
                     existingClassifications.add(tag.trim());
                 }
             });
+        }
+        // Also include theme if present (legacy field)
+        if (p.theme && typeof p.theme === 'string' && !isExcludedTag(p.theme)) {
+            existingClassifications.add(p.theme.trim());
         }
     });
     const filterOptions = [...existingClassifications].sort();
@@ -252,12 +330,17 @@ const WritingPage = ({
                     (v.text || '').toLowerCase().includes(s) ||
                     (v.title || '').toLowerCase().includes(s) ||
                     Object.values(v.transliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
-                    Object.values(v.titleTransliterations || {}).some(t => (t || '').toLowerCase().includes(s))
+                    Object.values(v.titleTransliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
+                    Object.values(v.authorTransliterations || {}).some(t => (t || '').toLowerCase().includes(s))
                 ));
             const matchesGenre = activeGenre === 'All' || 
                 post.classification === activeGenre || 
                 (post.tags && post.tags.includes(activeGenre));
-            return matchesSearch && matchesGenre;
+            
+            // Hide private/draft posts from the public view
+            const isPublic = !post.is_private;
+
+            return matchesSearch && matchesGenre && isPublic;
         });
         return filtered.sort((a, b) => {
             const orderA = typeof a.display_order === 'number' ? a.display_order : 999999;
@@ -489,7 +572,7 @@ const WritingPage = ({
                 .pagination-collapsible {
                     display: grid;
                     grid-template-rows: 0fr;
-                    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
                     margin-bottom: 24px;
                 }
                 .pagination-collapsible.expanded {
@@ -499,7 +582,7 @@ const WritingPage = ({
                     overflow: hidden;
                     opacity: 0;
                     transform: translateY(-10px);
-                    transition: opacity 0.3s ease, transform 0.3s ease;
+                    transition: opacity 0.25s ease, transform 0.25s ease;
                 }
                 .pagination-collapsible.expanded .pagination-collapsible-inner {
                     opacity: 1;
@@ -814,7 +897,7 @@ const WritingPage = ({
 
                 /* Variants Wrapper */
                 .variant-wrapper {
-                    margin-bottom: 32px;
+                    margin-bottom: 16px;
                 }
                 .variant-wrapper:last-child {
                     margin-bottom: 0;
@@ -1183,6 +1266,10 @@ const WritingPage = ({
                     .poems-title-sub { display: none; }
                     .poems-nav { display: none; }
                 }
+                .info-content.hiding {
+                    opacity: 0;
+                    transition: opacity 0.2s ease;
+                }
             `}</style>
 
             <div className="poems-container">
@@ -1444,14 +1531,18 @@ const WritingPage = ({
                                                         }}
                                                     />
                                                     {variant.author && (
-                                                        <div className="poem-attribution" lang={variant.lang}>{variant.author}</div>
+                                                        <div className="poem-attribution" lang={activeLang || variant.lang}>
+                                                            {activeLang && variant.authorTransliterations?.[activeLang]
+                                                                ? variant.authorTransliterations[activeLang]
+                                                                : variant.author}
+                                                        </div>
                                                     )}
                                                 </div>
                                             );
                                         })}
                                     </div>
 
-                                    <PoemInfoZone urai={post.urai} notes={post.notes} />
+                                    <PoemInfoZone urai={post.urai} notes={post.notes} hint={post.uraiNotesPasswordHint} isUraiNotesLocked={post.isUraiNotesLocked} password={post.uraiNotesPassword} isPrivate={post.is_private} />
                                 </article>
                             );
                         })

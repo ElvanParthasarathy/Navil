@@ -167,18 +167,34 @@ const CategoryListView = () => {
     // We no longer reset pagination automatically in a useEffect to avoid mount-time resets.
     // Instead, we reset explicitly in the onChange handlers below.
 
-    // Compute all unique genres/tags for the filter bar
+    // Tags to exclude from the filter dropdown (badge classifications, language variants, meta-tags)
+    const EXCLUDED_TAGS = new Set([
+        'அகம்', 'புறம்',
+        'അകം', 'പുറം',
+        'agam', 'puram',
+        'തമிഴാളம்', 'തமிഴாழம்',
+    ].map(s => s.toLowerCase()));
+
+    const isExcludedTag = (tag) => {
+        if (!tag) return true;
+        return EXCLUDED_TAGS.has(tag.trim().toLowerCase());
+    };
+
+    // Compute all unique genres/tags for the filter bar (excluding badge classifications)
     const allGenres = React.useMemo(() => {
         const genres = new Set();
         posts.forEach(post => {
             if (post.tags) {
                 const tagArray = typeof post.tags === 'string' ? post.tags.split(',') : post.tags;
-                tagArray.forEach(t => genres.add(t.trim()));
+                tagArray.forEach(t => {
+                    const trimmed = t.trim();
+                    if (trimmed && !isExcludedTag(trimmed)) genres.add(trimmed);
+                });
             }
-            if (post.style) genres.add(post.style);
-            if (post.theme) genres.add(post.theme);
-            if (post.meter) genres.add(post.meter);
-            if (post.classification) genres.add(post.classification);
+            if (post.style && !isExcludedTag(post.style)) genres.add(post.style);
+            if (post.theme && !isExcludedTag(post.theme)) genres.add(post.theme);
+            if (post.meter && !isExcludedTag(post.meter)) genres.add(post.meter);
+            // Do NOT add post.classification — those are badge-only values
         });
         return Array.from(genres).filter(Boolean).sort();
     }, [posts]);
@@ -1150,7 +1166,7 @@ const CategoryListView = () => {
                 .pagination-collapsible {
                     display: grid;
                     grid-template-rows: 0fr;
-                    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
                     margin-bottom: 24px;
                 }
                 .pagination-collapsible.expanded {
@@ -1160,7 +1176,7 @@ const CategoryListView = () => {
                     overflow: hidden;
                     opacity: 0;
                     transform: translateY(-10px);
-                    transition: opacity 0.3s ease, transform 0.3s ease;
+                    transition: opacity 0.25s ease, transform 0.25s ease;
                 }
                 .pagination-collapsible.expanded .pagination-collapsible-inner {
                     opacity: 1;

@@ -31,8 +31,10 @@ function normalise(dataObj: Record<string, any>): any[] {
             item.variants.forEach((v: any) => {
                 if (v.transliterations?._empty) delete v.transliterations._empty;
                 if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                if (v.authorTransliterations?._empty) delete v.authorTransliterations._empty;
                 if (!v.transliterations) v.transliterations = {};
                 if (!v.titleTransliterations) v.titleTransliterations = {};
+                if (!v.authorTransliterations) v.authorTransliterations = {};
             });
         }
         return item;

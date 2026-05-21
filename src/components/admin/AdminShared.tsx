@@ -1,5 +1,5 @@
-import React from 'react';
-import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiX, FiClock, FiAnchor, FiImage, FiEdit, FiSliders, FiFeather } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiChevronRight, FiX, FiClock, FiAnchor, FiImage, FiEdit, FiSliders, FiFeather, FiLock, FiUnlock } from 'react-icons/fi';
 import RichTextEditor from './RichTextEditor';
 
 // ─── SCHEMAS ───
@@ -9,21 +9,86 @@ export const DEFAULT_AUTHORS = {
     ta: 'எலவன் பார்த்தசாரதி',
     ml: 'എൽവൻ പാർത്തചാരതി',
     en: 'Elvan Parthasarathy',
+    ta_translit: 'Elvan Parthasarathy',
+    ml_translit: 'Elvan Parthasarathy',
+};
+
+export const formatTimestampToLegacy = (ts: number | string | Date): string => {
+    if (!ts) return '';
+    const parsed = new Date(ts);
+    if (isNaN(parsed.getTime())) return '';
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = months[parsed.getMonth()];
+    const day = String(parsed.getDate()).padStart(2, '0');
+    const year = parsed.getFullYear();
+    let hours = parsed.getHours();
+    const minutes = String(parsed.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+};
+
+export const formatArtDate = (dateString: string | undefined): string => {
+    if (!dateString) return '';
+    try {
+        if (/^[A-Za-z]{3} \d{1,2}, \d{4}( \d{1,2}:\d{2} [ap]m)?$/i.test(dateString.trim())) {
+            return dateString.trim();
+        }
+        const parsed = new Date(dateString);
+        if (!isNaN(parsed.getTime())) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = months[parsed.getMonth()];
+            const day = String(parsed.getDate()).padStart(2, '0');
+            const year = parsed.getFullYear();
+            
+            if (!dateString.includes('T') && !dateString.includes(':')) {
+                return `${month} ${day}, ${year}`;
+            }
+
+            let hours = parsed.getHours();
+            const minutes = String(parsed.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+        }
+    } catch (e) {
+        // Fallback
+    }
+    return dateString;
+};
+
+export const stripHtml = (html: string): string => {
+    if (!html) return '';
+    const clean = html.replace(/<[^>]*>/g, '');
+    return clean
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
 };
 
 const getArtSchema = (label, categoryVal, icon) => ({
     label, icon, type: 'simple',
     fields: [
+        { key: 'title', label: 'Admin Title (Only visible to admin)', type: 'text', placeholder: 'e.g. Tree sketch (not shown to users)' },
         { key: 'image', label: 'Cover Image URL', type: 'text', placeholder: 'https://drive.google.com/... or any direct image URL' },
         { key: 'images', label: 'Images', type: 'dynamic_list', fullWidth: true, isImageList: true },
-        { key: 'caption', label: 'Caption / Description', type: 'textarea', rows: 3, placeholder: 'About this artwork...', fullWidth: true },
-        { key: 'date', label: 'Date', type: 'text', placeholder: 'e.g. Mar 25, 2025' },
-        { key: 'timestamp', label: 'Sort Order (timestamp ms)', type: 'text', placeholder: 'e.g. 1742867580000 — used for sorting' },
+        { key: 'caption', label: 'Caption / Description', type: 'richtext', placeholder: 'About this artwork...', fullWidth: true },
+        { key: 'date', label: 'Date', type: 'datetime-local' },
     ],
-    getItemTitle: (item) => item.caption?.replace(/#\S+/g, '').trim().slice(0, 50) || label || 'Untitled Art',
+    getItemTitle: (item) => {
+        if (item.title) return item.title;
+        const plain = stripHtml(item.caption || '');
+        return plain.replace(/#\S+/g, '').trim().slice(0, 50) || label || 'Untitled Art';
+    },
     getItemSubtitle: (item) => {
         const parts = [];
-        if (item.date) parts.push(item.date);
+        if (item.date) parts.push(formatArtDate(item.date));
         const imgCount = Array.isArray(item.images) ? item.images.length : (item.images ? item.images.split('\n').filter(Boolean).length : 0);
         if (imgCount > 0) parts.push(`${imgCount} image${imgCount > 1 ? 's' : ''}`);
         return parts.join(' • ');
@@ -38,11 +103,19 @@ export const SCHEMAS = {
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'classification', label: 'Classification', type: 'text', placeholder: 'அகம், புறம், etc.', datalist: 'poem-class' },
-            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'For someone special...' },
+            { key: 'classification', label: 'Classification', type: 'combobox', options: ['அகம்', 'புறம்'], placeholder: 'அகம், புறம், or custom...' },
         ],
         row3Fields: [
+            { key: 'tags', label: 'Tags / Themes', type: 'tags', placeholder: 'Add a tag (e.g. Philosophy, Love, Hope)', suggestions: ['Philosophy', 'Love', 'Hope', 'Nature', 'Life', 'Perspective', 'Strength', 'Longing', 'Admiration', 'Happiness', 'Cosmos', 'Identity', 'Loss', 'Spirituality', 'Journey', 'War'] },
             { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
+        ],
+        extraFields: [
+            { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+            { key: 'urai', label: 'விளக்கம் / Meaning (Urai)', type: 'richtext', placeholder: 'Enter quote meaning/commentary here...' },
+            { key: 'notes', label: 'குறிப்புகள் / Notes', type: 'richtext', placeholder: 'Enter additional notes here...' },
+            { key: 'isUraiNotesLocked', label: 'Lock Urai & Notes with Password', type: 'checkbox' },
+            { key: 'uraiNotesPassword', label: 'Urai & Notes Password', type: 'text', placeholder: 'Enter password to unlock' },
+            { key: 'uraiNotesPasswordHint', label: 'Password Hint (Optional)', type: 'text', placeholder: 'e.g. My favorite color...' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Quote',
         getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
@@ -54,26 +127,22 @@ export const SCHEMAS = {
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
         ],
         row2Fields: [
-            { key: 'classification', label: 'Classification', type: 'text', placeholder: 'அகம், புறம், etc.', datalist: 'poem-class' },
-            { key: 'style', label: 'Style / Form', type: 'text', placeholder: 'e.g. Haiku, Ghazal' },
-            { key: 'theme', label: 'Theme', type: 'text', placeholder: 'e.g. Love, Nature' },
+            { key: 'classification', label: 'Classification', type: 'combobox', options: ['அகம்', 'புறம்'], placeholder: 'அகம், புறம், or custom...' },
         ],
         row3Fields: [
-            { key: 'meter', label: 'Meter (யாப்பு)', type: 'text', placeholder: 'e.g. வெண்பா, ஆசிரியப்பா' },
-            { key: 'dedication', label: 'Dedication', type: 'text', placeholder: 'Dedicated to...' },
+            { key: 'tags', label: 'Tags / Themes', type: 'tags', placeholder: 'Add a tag (e.g. Philosophy, Love, Hope)', suggestions: ['Philosophy', 'Love', 'Hope', 'Nature', 'Life', 'Perspective', 'Strength', 'Longing', 'Admiration', 'Happiness', 'Cosmos', 'Identity', 'Loss', 'Spirituality', 'Journey', 'War'] },
             { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
+            { key: 'urai', label: 'விளக்கம் / Meaning (Urai)', type: 'richtext', placeholder: 'Enter poem meaning/commentary here...' },
+            { key: 'notes', label: 'குறிப்புகள் / Notes', type: 'richtext', placeholder: 'Enter additional notes here...' },
+            { key: 'isUraiNotesLocked', label: 'Lock Urai & Notes with Password', type: 'checkbox' },
+            { key: 'uraiNotesPassword', label: 'Urai & Notes Password', type: 'text', placeholder: 'Enter password to unlock' },
+            { key: 'uraiNotesPasswordHint', label: 'Password Hint (Optional)', type: 'text', placeholder: 'e.g. My favorite color...' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Poem',
-        getItemSubtitle: (item) => {
-            const parts = [];
-            if (item.is_private) parts.push('🔒 Private');
-            if (item.classification) parts.push(item.classification);
-            if (item.style) parts.push(item.style);
-            return parts.join(' • ');
-        },
+        getItemSubtitle: (item) => item.is_private ? '🔒 Private' : '',
     },
     blog: {
         label: 'Blog', icon: <FiEdit3 size={16} />, type: 'variant_based',
@@ -83,7 +152,6 @@ export const SCHEMAS = {
         ],
         row2Fields: [
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Life, Tech (comma separated)' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
@@ -105,7 +173,6 @@ export const SCHEMAS = {
         ],
         row2Fields: [
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Politics, Review' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'text', placeholder: 'https://...' },
@@ -126,7 +193,6 @@ export const SCHEMAS = {
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Art URL', type: 'text', placeholder: 'https://...' },
-            { key: 'classification', label: 'Classification', type: 'text', datalist: 'poem-class' },
         ],
         getItemTitle: (item) => item.title || item.variants?.[0]?.title || 'Untitled Story',
         getItemSubtitle: (item) => {
@@ -377,6 +443,16 @@ export const FieldInput = ({ field, value, onChange }) => {
         );
     }
 
+    if (field.type === 'richtext') {
+        return (
+            <RichTextEditor
+                content={value || ''}
+                onChange={onChange}
+                placeholder={field.placeholder || ''}
+            />
+        );
+    }
+
     if (field.type === 'textarea') {
         return (
             <textarea
@@ -406,18 +482,69 @@ export const FieldInput = ({ field, value, onChange }) => {
     if (field.datalist) {
         return <input className="adm-input" type="text" list={field.datalist} value={value || ''} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder || ''} />;
     }
+    if (field.type === 'combobox') {
+        return (
+            <div style={{ position: 'relative' }}>
+                <input
+                    className="adm-input"
+                    type="text"
+                    list={field.datalist || `${field.key}-options`}
+                    value={value || ''}
+                    onChange={(e) => onChange(e.target.value)}
+                    placeholder={field.placeholder || ''}
+                />
+                {field.options && (
+                    <datalist id={`${field.key}-options`}>
+                        {field.options.map(opt => (
+                            <option key={opt} value={opt} />
+                        ))}
+                    </datalist>
+                )}
+            </div>
+        );
+    }
+    if (field.type === 'datetime-local') {
+        let inputValue = '';
+        if (value) {
+            if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) {
+                inputValue = value;
+            } else {
+                const parsed = new Date(value);
+                if (!isNaN(parsed.getTime())) {
+                    const tzOffset = parsed.getTimezoneOffset() * 60000;
+                    inputValue = new Date(parsed.getTime() - tzOffset).toISOString().slice(0, 16);
+                } else {
+                    inputValue = value;
+                }
+            }
+        }
+        return (
+            <input
+                className="adm-input"
+                type="datetime-local"
+                value={inputValue}
+                onChange={(e) => onChange(e.target.value)}
+            />
+        );
+    }
     return <input className="adm-input" type={field.type || 'text'} value={value || ''} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder || ''} />;
 };
 
 // ─── FIELD ROW ───
 export const renderFieldRow = (fields, item, collection, index, updateItemField) => (
-    <div className="adm-row">
-        {fields.map(f => (
-            <div key={f.key} style={{ flex: f.flex || 1 }}>
-                <label className="adm-label">{f.label}</label>
-                <FieldInput field={f} value={item[f.key]} onChange={(val) => updateItemField(collection, index, f.key, val)} />
-            </div>
-        ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '16px' }}>
+        {fields.map(f => {
+            // Hide password and hint fields if lock toggle is not enabled
+            if (!item.isUraiNotesLocked && (f.key === 'uraiNotesPassword' || f.key === 'uraiNotesPasswordHint')) {
+                return null;
+            }
+            return (
+                <div key={f.key} style={{ flex: f.flex || 1 }}>
+                    <label className="adm-label">{f.label}</label>
+                    <FieldInput field={f} value={item[f.key]} onChange={(val) => updateItemField(collection, index, f.key, val)} />
+                </div>
+            );
+        })}
     </div>
 );
 
@@ -481,47 +608,141 @@ export const PinEditor = ({ item, onUpdate, idPrefix }) => (
 );
 
 // ─── TRANSLITERATION EDITOR ───
-export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, idPrefix }) => {
+export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, idPrefix, defaultAuthors }) => {
     const indicLangs = ['ta', 'ml', 'hi', 'sa'];
     if (!indicLangs.includes(variant.lang)) return null;
     const keys = variant.transliterations ? Object.keys(variant.transliterations) : [];
+    const authors = defaultAuthors || DEFAULT_AUTHORS;
+    const [unlockedLangs, setUnlockedLangs] = useState<Record<string, boolean>>({});
+    const [isExpanded, setIsExpanded] = useState(true);
+
+    // Resolve the correct default author for a given base-lang → translit-lang pair.
+    // Returns { name, locked } — locked means the field is auto-managed and read-only.
+    const resolveAuthor = (baseLang: string, tLang: string) => {
+        if (baseLang === 'ta' && tLang === 'en') return { name: authors['ta_translit'] || authors['en'] || '', locked: true };
+        if (baseLang === 'ta' && tLang === 'ml') return { name: authors['ml'] || '', locked: true };
+        if (baseLang === 'ml' && tLang === 'en') return { name: authors['ml_translit'] || authors['en'] || '', locked: true };
+        if (baseLang === 'ml' && tLang === 'ta') return { name: authors['ta'] || '', locked: true };
+        // Hindi / Sanskrit to English
+        if ((baseLang === 'hi' || baseLang === 'sa') && tLang === 'en') return { name: authors['en'] || '', locked: true };
+        return { name: '', locked: false };
+    };
 
     return (
         <div className="adm-translit">
-            <div className="adm-translit-header">Transliterations</div>
-            {keys.map(tLang => (
-                <div key={tLang} className="adm-translit-lang">
-                    <div className="adm-translit-lang-top">
-                        <span>Lang: <code>{tLang}</code></span>
-                        <button className="adm-btn danger small" onClick={(e) => { e.preventDefault(); onToggleLang(tLang); }}><FiX size={12} /> Remove</button>
-                    </div>
-                    <div className="adm-form">
-                        <div className="adm-field">
-                            <label className="adm-label" style={{ paddingLeft: '14px' }}>Title</label>
-                            <input className="adm-input" value={variant.titleTransliterations?.[tLang] || ''} onChange={(e) => onUpdateTransl('titleTransliterations', tLang, e.target.value)} placeholder={`Romanized title`} />
-                        </div>
-                        <div className="adm-field">
-                            <label className="adm-label" style={{ paddingLeft: '14px' }}>Text</label>
-                            <RichTextEditor
-                                content={variant.transliterations?.[tLang] || ''}
-                                onChange={(html) => onUpdateTransl('transliterations', tLang, html)}
-                                placeholder="Write transliteration here..."
-                            />
-                        </div>
-                    </div>
+            <div 
+                className={`adm-section-header ${isExpanded ? 'adm-section-header--expanded' : ''} adm-section-header--collapsible`}
+                onClick={() => setIsExpanded(!isExpanded)}
+                style={{ 
+                    marginTop: '24px', 
+                    marginBottom: isExpanded ? '16px' : '0',
+                    borderTop: '1px solid var(--border-light)',
+                    paddingTop: '24px',
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    marginLeft: 0,
+                    marginRight: 0
+                }}
+            >
+                <h3>Transliterations ({keys.length})</h3>
+                <div className={`adm-collapse-icon ${isExpanded ? 'open' : ''}`}>
+                    <FiChevronRight size={18} />
                 </div>
-            ))}
+            </div>
+            
+            <div className={`adm-collapse-body ${isExpanded ? 'open' : ''}`}>
+                <div className="adm-collapse-body-inner" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    {keys.map(tLang => {
+                const resolved = resolveAuthor(variant.lang, tLang);
+                const isKnownPair = resolved.locked;
+                const currentAuthor = variant.authorTransliterations?.[tLang] || '';
+                const allDefaults = Object.values(authors);
+                const isAutoFilled = isKnownPair && (!currentAuthor || allDefaults.includes(currentAuthor));
+                const isUnlocked = unlockedLangs[tLang] === true;
+                const authorLocked = isKnownPair && !isUnlocked && isAutoFilled;
+                const displayValue = authorLocked ? resolved.name : currentAuthor;
+
+                return (
+                    <div key={tLang} className="adm-translit-lang">
+                        <div className="adm-translit-lang-top">
+                            <span>Lang: <code>{tLang}</code></span>
+                            <button className="adm-btn danger small" onClick={(e) => { e.preventDefault(); onToggleLang(tLang); }}><FiX size={12} /> Remove</button>
+                        </div>
+                        <div className="adm-form">
+                            <div className="adm-field">
+                                <label className="adm-label" style={{ paddingLeft: '14px' }}>Title</label>
+                                <input className="adm-input" value={variant.titleTransliterations?.[tLang] || ''} onChange={(e) => onUpdateTransl('titleTransliterations', tLang, e.target.value)} placeholder={`Romanized title`} />
+                            </div>
+                            <div className="adm-field">
+                                <label className="adm-label" style={{ paddingLeft: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    Author
+                                    {authorLocked && (
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>(auto)</span>
+                                    )}
+                                </label>
+                                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                    <input
+                                        className="adm-input"
+                                        list={authorLocked ? undefined : "author-names"}
+                                        value={displayValue}
+                                        readOnly={authorLocked}
+                                        onChange={authorLocked ? undefined : (e) => onUpdateTransl('authorTransliterations', tLang, e.target.value)}
+                                        placeholder={`Author name in ${tLang.toUpperCase()}`}
+                                        style={authorLocked ? { opacity: 0.7, cursor: 'not-allowed', flex: 1 } : { flex: 1 }}
+                                        title={authorLocked ? 'Auto-resolved from Settings → Default Author Names' : undefined}
+                                    />
+                                    {isKnownPair && (
+                                        <button
+                                            className="adm-btn ghost"
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                if (authorLocked) {
+                                                    setUnlockedLangs(prev => ({ ...prev, [tLang]: true }));
+                                                } else {
+                                                    onUpdateTransl('authorTransliterations', tLang, resolved.name);
+                                                    setUnlockedLangs(prev => ({ ...prev, [tLang]: false }));
+                                                }
+                                            }}
+                                            style={{ padding: '6px 8px', minWidth: 'unset', flexShrink: 0 }}
+                                            title={authorLocked ? 'Unlock to edit transliterated author manually' : 'Lock to use default author'}
+                                        >
+                                            {authorLocked ? <FiLock size={14} /> : <FiUnlock size={14} />}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="adm-field">
+                                <label className="adm-label" style={{ paddingLeft: '14px' }}>Text</label>
+                                <RichTextEditor
+                                    content={variant.transliterations?.[tLang] || ''}
+                                    onChange={(html) => onUpdateTransl('transliterations', tLang, html)}
+                                    placeholder="Write transliteration here..."
+                                />
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
             <div className="adm-translit-add">
-                <input id={`add - transl - ${idPrefix} `} className="adm-input" list="lang-options" placeholder="e.g. ml" style={{ width: '80px', padding: '5px 8px' }} maxLength={3} />
+                <input id={`add-transl-${idPrefix}`} className="adm-input" list="lang-options" placeholder="e.g. ml" style={{ width: '80px', padding: '5px 8px' }} maxLength={3} />
                 <button className="adm-btn" onClick={(e) => {
                     e.preventDefault();
-                    const input = document.getElementById(`add - transl - ${idPrefix} `) as HTMLInputElement | null;
+                    const input = document.getElementById(`add-transl-${idPrefix}`) as HTMLInputElement | null;
                     if (input?.value.trim()) {
-                        onUpdateTransl('transliterations', input.value.trim().toLowerCase(), '');
-                        onUpdateTransl('titleTransliterations', input.value.trim().toLowerCase(), '');
+                        const val = input.value.trim().toLowerCase();
+                        onUpdateTransl('transliterations', val, '');
+                        onUpdateTransl('titleTransliterations', val, '');
+                        const resolved = resolveAuthor(variant.lang, val);
+                        onUpdateTransl('authorTransliterations', val, resolved.name);
+                        // Reset unlocked state when adding a new one
+                        setUnlockedLangs(prev => ({ ...prev, [val]: false }));
+                        setIsExpanded(true); // Auto-expand when adding
                         input.value = '';
                     }
                 }}>+ Add</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -543,18 +764,40 @@ export interface VariantCardProps {
 // ─── VARIANT CARD ───
 export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdateTransl, onToggleLang, onRemove, onMove, idPrefix, defaultAuthors }: VariantCardProps) => {
     const authors = defaultAuthors || DEFAULT_AUTHORS;
+    const knownLangs = ['ta', 'ml', 'en'];
+    const isKnownLang = knownLangs.includes(variant.lang);
+    const autoAuthor = authors[variant.lang] || '';
+    // Auto-lock when language is known and the current author matches the default (or is empty)
+    const allDefaults = Object.values(authors);
+    const isAutoFilled = isKnownLang && (!variant.author || allDefaults.includes(variant.author));
+    const [authorUnlocked, setAuthorUnlocked] = useState(false);
+    const authorLocked = isKnownLang && !authorUnlocked && isAutoFilled;
+    const [isExpanded, setIsExpanded] = useState(vIndex === 0);
+
     return (
     <div className="adm-variant">
-        <div className="adm-variant-number">
-            #{vIndex + 1}
+        <div 
+            className={`adm-section-header ${isExpanded ? 'adm-section-header--expanded' : ''} adm-section-header--collapsible`}
+            onClick={() => setIsExpanded(!isExpanded)}
+            style={{ paddingLeft: 0, paddingRight: 0, margin: 0 }}
+        >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Variant #{vIndex + 1} {variant.label ? `- ${variant.label}` : ''}</h3>
+                <div className={`adm-collapse-icon ${isExpanded ? 'open' : ''}`}>
+                    <FiChevronRight size={18} />
+                </div>
+            </div>
+            
+            <div className="adm-variant-controls" onClick={(e) => e.stopPropagation()} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <button className="adm-btn ghost" onClick={(e) => { e.preventDefault(); onMove('up'); }} disabled={vIndex === 0}><FiChevronUp size={14} /> Move Up</button>
+                <button className="adm-btn ghost" onClick={(e) => { e.preventDefault(); onMove('down'); }} disabled={vIndex === totalVariants - 1}><FiChevronDown size={14} /> Move Down</button>
+                <button className="adm-btn danger" onClick={(e) => { e.preventDefault(); onRemove(); }}><FiX size={14} /> Remove</button>
+            </div>
         </div>
-        <div className="adm-variant-controls">
-            <button className="adm-btn ghost" onClick={() => onMove('up')} disabled={vIndex === 0}><FiChevronUp size={14} /> Move Up</button>
-            <button className="adm-btn ghost" onClick={() => onMove('down')} disabled={vIndex === totalVariants - 1}><FiChevronDown size={14} /> Move Down</button>
-            <button className="adm-btn danger" onClick={onRemove}><FiX size={14} /> Remove</button>
-        </div>
-        <div className="adm-form">
-            <div className="adm-row">
+
+        <div className={`adm-collapse-body ${isExpanded ? 'open' : ''}`}>
+            <div className="adm-collapse-body-inner" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <div className="adm-row">
                 <div style={{ maxWidth: '120px' }}>
                     <label className="adm-label" style={{ paddingLeft: '14px' }}>Label</label>
                     <input className="adm-input" list="variant-labels" value={variant.label || ''} onChange={(e) => onUpdate('label', e.target.value)} placeholder="Original" />
@@ -571,17 +814,54 @@ export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdate
                         const lang = e.target.value;
                         onUpdate('lang', lang);
                         // Auto-fill author if empty or if it was a default name
-                        const allDefaults = Object.values(authors);
                         const isDefault = !variant.author || allDefaults.includes(variant.author);
                         if (isDefault && authors[lang]) {
                             onUpdate('author', authors[lang]);
                         }
+                        // Re-lock when language changes
+                        setAuthorUnlocked(false);
                     }} placeholder="ta" />
                 </div>
             </div>
             <div className="adm-field">
-                <label className="adm-label" style={{ paddingLeft: '14px' }}>Author</label>
-                <input className="adm-input" list="author-names" value={variant.author || ''} onChange={(e) => onUpdate('author', e.target.value)} placeholder="Author" />
+                <label className="adm-label" style={{ paddingLeft: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    Author
+                    {isKnownLang && isAutoFilled && (
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>(auto)</span>
+                    )}
+                </label>
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                    <input
+                        className="adm-input"
+                        list={authorLocked ? undefined : 'author-names'}
+                        value={authorLocked ? autoAuthor : (variant.author || '')}
+                        readOnly={authorLocked}
+                        onChange={authorLocked ? undefined : (e) => onUpdate('author', e.target.value)}
+                        placeholder="Author"
+                        style={authorLocked ? { opacity: 0.7, cursor: 'not-allowed', flex: 1 } : { flex: 1 }}
+                        title={authorLocked ? 'Auto-filled from Settings → Default Author Names' : undefined}
+                    />
+                    {isKnownLang && (
+                        <button
+                            className="adm-btn ghost"
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (authorLocked) {
+                                    setAuthorUnlocked(true);
+                                } else {
+                                    // Re-lock: reset author to default
+                                    onUpdate('author', autoAuthor);
+                                    setAuthorUnlocked(false);
+                                }
+                            }}
+                            style={{ padding: '6px 8px', minWidth: 'unset', flexShrink: 0 }}
+                            title={authorLocked ? 'Unlock to edit author manually' : 'Lock to use default author'}
+                        >
+                            {authorLocked ? <FiLock size={14} /> : <FiUnlock size={14} />}
+                        </button>
+                    )}
+                </div>
             </div>
             <div className="adm-field">
                 <label className="adm-label" style={{ paddingLeft: '14px' }}>Text</label>
@@ -591,20 +871,25 @@ export const VariantCard = ({ variant, vIndex, totalVariants, onUpdate, onUpdate
                     placeholder="Write your content here..."
                 />
             </div>
-            <TransliterationEditor variant={variant} onUpdateTransl={onUpdateTransl} onToggleLang={onToggleLang} idPrefix={idPrefix} />
+            <TransliterationEditor variant={variant} onUpdateTransl={onUpdateTransl} onToggleLang={onToggleLang} idPrefix={idPrefix} defaultAuthors={authors} />
+            </div>
         </div>
     </div>
     );
 };
 
 // ─── SHARED DATALISTS (For Combobox autofill) ───
-export const SharedDatalists = () => (
-    <>
-        <datalist id="author-names">
-            {Object.values(DEFAULT_AUTHORS).map(name => (
-                <option key={name} value={name} />
-            ))}
-        </datalist>
+export const SharedDatalists = ({ defaultAuthors }: { defaultAuthors?: Record<string, string> }) => {
+    const authors = defaultAuthors || DEFAULT_AUTHORS;
+    const uniqueNames = Array.from(new Set(Object.values(authors).filter(Boolean)));
+
+    return (
+        <>
+            <datalist id="author-names">
+                {uniqueNames.map(name => (
+                    <option key={name} value={name} />
+                ))}
+            </datalist>
         <datalist id="poem-class">
             <option value="அகம்" />
             <option value="புறம்" />
@@ -623,4 +908,5 @@ export const SharedDatalists = () => (
             <option value="sa" label="Sanskrit" />
         </datalist>
     </>
-);
+    );
+};

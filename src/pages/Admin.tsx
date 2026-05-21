@@ -8,7 +8,7 @@ import { ref, get, set, onValue } from 'firebase/database';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS } from '../components/admin/AdminShared';
+import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS, formatTimestampToLegacy } from '../components/admin/AdminShared';
 import { ProfileEditor } from '../components/admin/ProfileEditor';
 import { AboutEditor } from '../components/admin/AboutEditor';
 import { PoemEditor } from '../components/admin/PoemEditor';
@@ -238,6 +238,31 @@ const CommentsManager = ({ username, profilePic }) => {
     );
 };
 
+// Allowed administrator email addresses
+const ALLOWED_ADMIN_EMAILS = ['jaiprakashpartha@gmail.com', 'jaiprakashvp2006@gmail.com'];
+
+const getSynchronizedItemFields = (field, value) => {
+    const updates = { [field]: value };
+
+    if (field === 'date' || field === 'publish_date') {
+        const cleanVal = typeof value === 'string' ? value.trim() : '';
+        if (cleanVal) {
+            const parsed = new Date(cleanVal);
+            if (!isNaN(parsed.getTime())) {
+                updates.timestamp = parsed.getTime();
+            }
+        }
+        // Keep both date and publish_date in sync
+        if (field === 'date') {
+            updates.publish_date = value;
+        } else {
+            updates.date = value;
+        }
+    }
+
+    return updates;
+};
+
 // ─── MAIN ADMIN COMPONENT ───
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -333,10 +358,18 @@ const Admin = () => {
 
     // ── Auth Handling ──
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                setIsLoggedIn(true);
-                setUsername(user.displayName || user.email?.split('@')[0] || 'Admin');
+                const email = user.email ? user.email.toLowerCase() : '';
+                if (ALLOWED_ADMIN_EMAILS.includes(email)) {
+                    setIsLoggedIn(true);
+                    setUsername(user.displayName || email.split('@')[0] || 'Admin');
+                } else {
+                    await signOut(auth);
+                    setIsLoggedIn(false);
+                    setUsername('');
+                    alert('Access Denied: You are not authorized to access this Admin Panel.');
+                }
             } else {
                 setIsLoggedIn(false);
                 setUsername('');
@@ -354,6 +387,10 @@ const Admin = () => {
 
     // Login handler
     const handleLogin = async (email, password) => {
+        const cleanEmail = email ? email.trim().toLowerCase() : '';
+        if (!ALLOWED_ADMIN_EMAILS.includes(cleanEmail)) {
+            return { success: false, error: 'Access Denied: Unauthorized admin email.' };
+        }
         try {
             await signInWithEmailAndPassword(auth, email, password);
             return { success: true };
@@ -367,7 +404,12 @@ const Admin = () => {
     const handleGoogleLogin = async () => {
         try {
             const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
+            const userCredential = await signInWithPopup(auth, provider);
+            const userEmail = userCredential.user?.email ? userCredential.user.email.toLowerCase() : '';
+            if (!ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
+                await signOut(auth);
+                return { success: false, error: 'Access Denied: Unauthorized admin email.' };
+            }
             return { success: true };
         } catch (err) {
             console.error('Google login error:', err.message);
@@ -402,9 +444,23 @@ const Admin = () => {
         if (/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) return raw;
         return raw.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
     };
+    // Resolve the correct author name for a base-lang → translit-lang pair.
+    // Known pairs are "locked" — the name comes from settings and shouldn't be manually edited.
+    const resolveAuthorForPair = (baseLang: string, tLang: string, authors: Record<string, string>) => {
+        if (baseLang === 'ta' && tLang === 'en') return { name: authors['ta_translit'] || authors['en'] || '', locked: true };
+        if (baseLang === 'ta' && tLang === 'ml') return { name: authors['ml'] || '', locked: true };
+        if (baseLang === 'ml' && tLang === 'en') return { name: authors['ml_translit'] || authors['en'] || '', locked: true };
+        if (baseLang === 'ml' && tLang === 'ta') return { name: authors['ta'] || '', locked: true };
+        if ((baseLang === 'hi' || baseLang === 'sa') && tLang === 'en') return { name: authors['en'] || '', locked: true };
+        return { name: '', locked: false };
+    };
 
     const cleanForStorage = (item, displayOrder) => {
         const clean = JSON.parse(JSON.stringify(item));
+        
+        // No encryption — urai/notes stored as plaintext.
+        // Password is just a viewing gate on the public site.
+
         delete clean.id;
         delete clean.style; delete clean.theme; delete clean.meter; delete clean.slug;
         clean.display_order = displayOrder;
@@ -412,17 +468,30 @@ const Admin = () => {
             clean.tags = clean.tags.split(',').map(t => t.trim()).filter(Boolean);
         }
         if (clean.variants) {
+            const da = dataStore.defaultAuthors || DEFAULT_AUTHORS;
             clean.variants.forEach(v => {
                 if (v.transliterations?._empty) delete v.transliterations._empty;
                 if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                if (v.authorTransliterations?._empty) delete v.authorTransliterations._empty;
                 if (v.text) v.text = textToHtml(v.text);
                 if (v.transliterations) {
                     Object.keys(v.transliterations).forEach(lang => {
                         if (v.transliterations[lang]) v.transliterations[lang] = textToHtml(v.transliterations[lang]);
+                        // Sync locked author transliterations with current settings if not manually customized
+                        const resolved = resolveAuthorForPair(v.lang, lang, da);
+                        if (resolved.locked && v.authorTransliterations) {
+                            const current = v.authorTransliterations[lang] || '';
+                            const allDefaults = Object.values(da);
+                            const isAutoFilled = !current || allDefaults.includes(current);
+                            if (isAutoFilled) {
+                                v.authorTransliterations[lang] = resolved.name;
+                            }
+                        }
                     });
                 }
                 if (v.transliterations && Object.keys(v.transliterations).length === 0) delete v.transliterations;
                 if (v.titleTransliterations && Object.keys(v.titleTransliterations).length === 0) delete v.titleTransliterations;
+                if (v.authorTransliterations && Object.keys(v.authorTransliterations).length === 0) delete v.authorTransliterations;
             });
         }
 
@@ -585,9 +654,11 @@ const Admin = () => {
                                     (Array.isArray(item.variants) ? item.variants : Object.values(item.variants)).forEach(v => {
                                         if (v.transliterations?._empty) delete v.transliterations._empty;
                                         if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+                                        if (v.authorTransliterations?._empty) delete v.authorTransliterations._empty;
                                         // Default missing transliterations to empty objects
                                         if (!v.transliterations) v.transliterations = {};
                                         if (!v.titleTransliterations) v.titleTransliterations = {};
+                                        if (!v.authorTransliterations) v.authorTransliterations = {};
                                     });
                                     // Firebase stores arrays as objects with numeric keys — normalize back
                                     if (!Array.isArray(item.variants)) {
@@ -784,28 +855,35 @@ const Admin = () => {
         const newId = uuidv4();
         let newItem;
         const schema = SCHEMAS[collection];
+        const now = new Date();
+        const legacyDateStr = formatTimestampToLegacy(now);
+        const currentTimestamp = now.getTime();
 
         if (schema?.type === 'simple') {
             // Simple schema (e.g. arts) — flat fields, no variants
-            newItem = { id: newId };
+            newItem = { id: newId, date: legacyDateStr, timestamp: currentTimestamp };
             (schema.fields || []).forEach(f => {
-                newItem[f.key] = f.type === 'datetime-local' ? new Date().toISOString().slice(0, 16) : '';
+                if (f.key !== 'date' && f.key !== 'timestamp') {
+                    newItem[f.key] = '';
+                }
             });
             if (collection.startsWith('art_')) {
                 newItem.category = collection.replace('art_', '');
             }
         } else if (collection === 'quotes' || collection === 'poems') {
             newItem = {
-                id: newId, title: '', date: new Date().toISOString().slice(0, 16),
+                id: newId, title: '', date: legacyDateStr, publish_date: legacyDateStr, timestamp: currentTimestamp,
                 style: '', theme: '', meter: '', dedication: '', classification: '', urai: '', notes: '',
-                variants: [{ label: '', title: '', text: '', author: '', lang: '', transliterations: {}, titleTransliterations: {} }]
+                variants: [{ label: '', title: '', text: '', author: '', lang: '', transliterations: {}, titleTransliterations: {}, authorTransliterations: {} }]
             };
         } else {
             // New unified bilingual schema — uses same variants model as poems
             newItem = {
                 id: newId,
-                publish_date: new Date().toISOString().slice(0, 16),
-                variants: [{ label: '', title: '', text: '', author: '', lang: 'ta', transliterations: {}, titleTransliterations: {} }]
+                date: legacyDateStr,
+                publish_date: legacyDateStr,
+                timestamp: currentTimestamp,
+                variants: [{ label: '', title: '', text: '', author: '', lang: 'ta', transliterations: {}, titleTransliterations: {}, authorTransliterations: {} }]
             };
         }
 
@@ -869,7 +947,8 @@ const Admin = () => {
     const updateItemField = (collection, index, field, value) => {
         setDataStore(prev => {
             const newData = [...prev[collection]];
-            newData[index] = { ...newData[index], [field]: value };
+            const synchronized = getSynchronizedItemFields(field, value);
+            newData[index] = { ...newData[index], ...synchronized };
             return { ...prev, [collection]: newData };
         });
     };
@@ -907,9 +986,17 @@ const Admin = () => {
                 delete newTitleTransl[tLang];
                 v.titleTransliterations = newTitleTransl;
             }
+            if (v.authorTransliterations) {
+                const newAuthorTransl = { ...v.authorTransliterations };
+                delete newAuthorTransl[tLang];
+                v.authorTransliterations = newAuthorTransl;
+            }
         } else {
             v.transliterations = { ...(v.transliterations || {}), [tLang]: '' };
             v.titleTransliterations = { ...(v.titleTransliterations || {}), [tLang]: '' };
+            const da = dataStore.defaultAuthors || DEFAULT_AUTHORS;
+            const resolved = resolveAuthorForPair(v.lang, tLang, da);
+            v.authorTransliterations = { ...(v.authorTransliterations || {}), [tLang]: resolved.name };
         }
 
         newVariants[variantIndex] = v;
@@ -921,7 +1008,7 @@ const Admin = () => {
         const newData = [...dataStore[collection]];
         newData[itemIndex].variants.push({
             label: '', title: '', text: '', author: '', lang: '',
-            transliterations: {}, titleTransliterations: {}
+            transliterations: {}, titleTransliterations: {}, authorTransliterations: {}
         });
         setDataStore(prev => ({ ...prev, [collection]: newData }));
     };
@@ -951,15 +1038,22 @@ const Admin = () => {
     };
 
     const updateGenericItem = (collection, index, field, value) => {
+        const synchronized = getSynchronizedItemFields(field, value);
         const newData = [...dataStore[collection]];
-        newData[index] = { ...newData[index], [field]: value };
+        newData[index] = { ...newData[index], ...synchronized };
         setDataStore(prev => ({ ...prev, [collection]: newData }));
     };
 
     // ── Bulk move/copy between collections ──
     const handleMoveItems = (ids, fromCollection, toCollection) => {
         const sourceItems = dataStore[fromCollection] || [];
-        const moving = sourceItems.filter(i => ids.includes(i.id));
+        const moving = sourceItems.filter(i => ids.includes(i.id)).map(item => {
+            const newItem = { ...item };
+            if (toCollection.startsWith('art_')) {
+                newItem.category = toCollection.replace('art_', '');
+            }
+            return newItem;
+        });
         const remaining = sourceItems.filter(i => !ids.includes(i.id));
 
         setDataStore(prev => ({
@@ -974,10 +1068,16 @@ const Admin = () => {
 
     const handleCopyItems = (ids, fromCollection, toCollection) => {
         const sourceItems = dataStore[fromCollection] || [];
-        const copying = sourceItems.filter(i => ids.includes(i.id)).map(item => ({
-            ...JSON.parse(JSON.stringify(item)),
-            id: uuidv4() // New ID for the copy
-        }));
+        const copying = sourceItems.filter(i => ids.includes(i.id)).map(item => {
+            const newItem = {
+                ...JSON.parse(JSON.stringify(item)),
+                id: uuidv4() // New ID for the copy
+            };
+            if (toCollection.startsWith('art_')) {
+                newItem.category = toCollection.replace('art_', '');
+            }
+            return newItem;
+        });
 
         setDataStore(prev => ({
             ...prev,
@@ -1037,7 +1137,7 @@ const Admin = () => {
 
     return (
         <div className="admin-shell">
-            <SharedDatalists />
+            <SharedDatalists defaultAuthors={dataStore.defaultAuthors || DEFAULT_AUTHORS} />
             {/* Desktop & Mobile Sidebar */}
             <aside className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
                 <div className="admin-sidebar-header">
@@ -1203,8 +1303,10 @@ const Admin = () => {
                         </p>
                         {[
                             { code: 'ta', name: 'தமிழ் (Tamil)' },
-                            { code: 'ml', name: 'മലയാളம் (Malayalam)' },
+                            { code: 'ml', name: 'മലയാളം (Malayalam)' },
                             { code: 'en', name: 'English' },
+                            { code: 'ta_translit', name: 'Tamil Transliteration (Romanized)' },
+                            { code: 'ml_translit', name: 'Malayalam Transliteration (Romanized)' },
                         ].map(({ code, name }) => (
                             <div key={code} className="adm-field" style={{ marginBottom: '16px' }}>
                                 <label className="adm-label">{name}</label>
@@ -1236,6 +1338,7 @@ const Admin = () => {
                         >
                             <FiSave size={16} /> Save Author Defaults
                         </button>
+
                     </div>
                 ) : renderEditor()}
             </div>

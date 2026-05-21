@@ -1,8 +1,16 @@
 // @ts-nocheck
 import React, { useState } from 'react';
-import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiMove } from 'react-icons/fi';
-import { SCHEMAS, renderFieldRow, PinEditor, VariantCard } from './AdminShared';
+import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiMove, FiChevronRight } from 'react-icons/fi';
+import { SCHEMAS, renderFieldRow, FieldInput, PinEditor, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
+import RichTextEditor from './RichTextEditor';
+
+const getCoverImageUrl = (listItem: any) => {
+    if (!listItem) return '';
+    if (listItem.cover_image) return listItem.cover_image;
+    if (listItem.image) return listItem.image;
+    return '';
+};
 
 // Classification colors — preset for known types, auto-generated for custom
 const CLASSIFICATION_COLORS = { 'அகம்': '#e8a0bf', 'புறம்': '#d4af37' };
@@ -38,6 +46,11 @@ export const VariantListEditor = ({
 }) => {
     const [confirmState, setConfirmState] = useState({ open: false, type: '', payload: null });
     const [selected, setSelected] = useState(new Set());
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ core: true, meta: false, variants: true });
+
+    const toggleSection = (key: string) => {
+        setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
+    };
 
     // ── Selection helpers ──
     const toggleSelect = (id, e) => {
@@ -109,8 +122,32 @@ export const VariantListEditor = ({
     const editingIndex = items?.findIndex(item => item.id === editingId);
     const item = editingIndex >= 0 ? items[editingIndex] : null;
 
-    // Available target collections for move/copy
-    const otherCollections = Object.keys(SCHEMAS).filter(c => c !== collection);
+    const writingCollections = ['quotes', 'poems', 'blog', 'articles', 'stories', 'diary'];
+    const artsCollections = [
+        'art_pencil',
+        'art_editing',
+        'art_poster',
+        'art_painting',
+        'art_quotes',
+        'art_poems',
+        'art_illustrations',
+        'art_digital_arts'
+    ];
+
+    const getTargetCollections = (currentColl) => {
+        if (currentColl === 'quotes') return ['poems'];
+        if (currentColl === 'poems') return ['quotes'];
+        if (writingCollections.includes(currentColl)) return [];
+        if (currentColl === 'arts') {
+            return artsCollections;
+        }
+        if (artsCollections.includes(currentColl)) {
+            return artsCollections.filter(c => c !== currentColl);
+        }
+        return [];
+    };
+
+    const targetCollections = getTargetCollections(collection);
 
     return (
         <div className="admin-content-area">
@@ -156,6 +193,23 @@ export const VariantListEditor = ({
                 }
                 .admin-file-row.selected {
                     background: color-mix(in srgb, var(--accent, #088370) 8%, transparent) !important;
+                }
+                .admin-file-row-thumbnail {
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    background: var(--bg-panel, #111);
+                    border: 1px solid var(--border-light, #333);
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .admin-file-row-thumbnail img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
                 }
                 .select-all-hint {
                     display: flex; align-items: center; gap: 10px;
@@ -231,30 +285,34 @@ export const VariantListEditor = ({
                                 <button className="adm-btn ghost small" onClick={clearSelection}>Clear</button>
                             </div>
                             <div className="bulk-toolbar-right">
-                                <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
-                                    if (e.target.value && onMoveItems) {
-                                        onMoveItems([...selected], collection, e.target.value);
-                                        clearSelection();
-                                    }
-                                    e.target.value = '';
-                                }}>
-                                    <option value="" disabled>✂ Move to...</option>
-                                    {otherCollections.map(c => (
-                                        <option key={c} value={c}>{SCHEMAS[c].label}</option>
-                                    ))}
-                                </select>
-                                <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
-                                    if (e.target.value && onCopyItems) {
-                                        onCopyItems([...selected], collection, e.target.value);
-                                        clearSelection();
-                                    }
-                                    e.target.value = '';
-                                }}>
-                                    <option value="" disabled>⎘ Copy to...</option>
-                                    {otherCollections.map(c => (
-                                        <option key={c} value={c}>{SCHEMAS[c].label}</option>
-                                    ))}
-                                </select>
+                                {targetCollections.length > 0 && (
+                                    <>
+                                        <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
+                                            if (e.target.value && onMoveItems) {
+                                                onMoveItems([...selected], collection, e.target.value);
+                                                clearSelection();
+                                            }
+                                            e.target.value = '';
+                                        }}>
+                                            <option value="" disabled>✂ Move to...</option>
+                                            {targetCollections.map(c => (
+                                                <option key={c} value={c}>{SCHEMAS[c].label}</option>
+                                            ))}
+                                        </select>
+                                        <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
+                                            if (e.target.value && onCopyItems) {
+                                                onCopyItems([...selected], collection, e.target.value);
+                                                clearSelection();
+                                            }
+                                            e.target.value = '';
+                                        }}>
+                                            <option value="" disabled>⎘ Copy to...</option>
+                                            {targetCollections.map(c => (
+                                                <option key={c} value={c}>{SCHEMAS[c].label}</option>
+                                            ))}
+                                        </select>
+                                    </>
+                                )}
                                 <button className="adm-btn danger small" onClick={requestBulkDelete}>
                                     <FiTrash2 size={13} /> Delete
                                 </button>
@@ -275,6 +333,12 @@ export const VariantListEditor = ({
                                 )}
                                 {items?.map((listItem, index) => {
                                     const isSelected = selected.has(listItem.id);
+                                    const itemTags = Array.isArray(listItem.tags) 
+                                        ? listItem.tags 
+                                        : (typeof listItem.tags === 'string' 
+                                            ? listItem.tags.split(',').map(t => t.trim()).filter(Boolean) 
+                                            : []);
+                                    const coverUrl = getCoverImageUrl(listItem);
                                     return (
                                         <div
                                             key={listItem.id || index}
@@ -284,6 +348,11 @@ export const VariantListEditor = ({
                                             <div className="admin-file-row-checkbox" onClick={(e) => toggleSelect(listItem.id, e)}>
                                                 <input type="checkbox" checked={isSelected} readOnly />
                                             </div>
+                                            {coverUrl && (
+                                                <div className="admin-file-row-thumbnail">
+                                                    <img src={coverUrl} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                </div>
+                                            )}
                                             <div className="admin-file-row-info">
                                                 <h3>{SCHEMAS[collection].getItemTitle(listItem)}</h3>
                                                 <div className="admin-file-row-meta">
@@ -300,15 +369,21 @@ export const VariantListEditor = ({
                                                             ))}
                                                         </span>
                                                     )}
-                                                    {(listItem.tags || []).slice(0, 2).map((tag, ti) => (
+                                                    {itemTags.slice(0, 2).map((tag, ti) => (
                                                         <span key={ti} className="row-tag-pill">{tag}</span>
                                                     ))}
-                                                    {(listItem.tags || []).length > 2 && (
-                                                        <span className="row-tag-pill" style={{ opacity: 0.5 }}>+{listItem.tags.length - 2}</span>
+                                                    {itemTags.length > 2 && (
+                                                        <span className="row-tag-pill" style={{ opacity: 0.5 }}>+{itemTags.length - 2}</span>
                                                     )}
-                                                    {listItem.date && (
-                                                        <span className="row-date">{new Date(listItem.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
-                                                    )}
+                                                    {(() => {
+                                                        const dateStr = listItem.date || listItem.publish_date;
+                                                        if (!dateStr) return null;
+                                                        const parsed = new Date(dateStr);
+                                                        if (isNaN(parsed.getTime())) {
+                                                            return <span className="row-date">{dateStr}</span>;
+                                                        }
+                                                        return <span className="row-date">{parsed.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>;
+                                                    })()}
                                                 </div>
                                             </div>
                                             <div className="admin-file-row-actions">
@@ -362,89 +437,193 @@ export const VariantListEditor = ({
                         </div>
                     </div>
                     <div className="admin-editor-body">
-                        <div className="adm-form side-by-side">
+                        <div className="adm-form" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-                            {/* LEFT SIDEBAR: Metadata & Settings */}
-                            <div className="adm-form-sidebar">
-                                <div className="adm-section">
-                                    <div className="adm-section-header">
-                                        <span className="adm-section-title">Core Details</span>
-                                    </div>
+                            {/* Core Details */}
+                            <div className="adm-section">
+                                <div className="adm-section-header">
+                                    <span className="adm-section-title">Core Details</span>
+                                </div>
+                                <div className="adm-section-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     {renderFieldRow(SCHEMAS[collection].itemFields, item, collection, editingIndex, updateItemField)}
                                     <PinEditor item={item} onUpdate={(field, value) => updateItemField(collection, editingIndex, field, value)} idPrefix={`${collection}-${editingIndex}`} />
                                 </div>
-
-                                <hr className="adm-divider" style={{ margin: '16px 0' }} />
-
-                                <div className="adm-section">
-                                    <div className="adm-section-header">
-                                        <span className="adm-section-title">Context & Metadata</span>
-                                    </div>
-                                    {SCHEMAS[collection].row2Fields && renderFieldRow(SCHEMAS[collection].row2Fields, item, collection, editingIndex, updateItemField)}
-                                    {SCHEMAS[collection].row3Fields && renderFieldRow(SCHEMAS[collection].row3Fields, item, collection, editingIndex, updateItemField)}
-
-                                    {SCHEMAS[collection].extraFields?.map(f => (
-                                        <div key={f.key} className="adm-field">
-                                            <label className="adm-label">{f.label}</label>
-                                            {f.type === 'textarea' ? (
-                                                <textarea
-                                                    className="adm-input"
-                                                    style={{ minHeight: f.rows ? `${f.rows * 22}px` : '60px' }}
-                                                    value={item[f.key] || ''}
-                                                    onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
-                                                    placeholder={f.placeholder || ''}
-                                                />
-                                            ) : f.type === 'checkbox' ? (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                    <input
-                                                        type="checkbox"
-                                                        id={`extra-${f.key}`}
-                                                        checked={item[f.key] !== false} // Default to true if undefined
-                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
-                                                    />
-                                                    <label htmlFor={`extra-${f.key}`} style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{f.placeholder || 'Enable'}</label>
-                                                </div>
-                                            ) : (
-                                                <input
-                                                    className="adm-input"
-                                                    type={f.type || 'text'}
-                                                    value={item[f.key] || ''}
-                                                    onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
-                                                    placeholder={f.placeholder || ''}
-                                                />
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
 
-                            {/* RIGHT MAIN: Writing Canvas (Variants) */}
-                            <div className="adm-form-main">
-                                <div className="adm-section" style={{ background: 'transparent', border: 'none', padding: 0, boxShadow: 'none' }}>
-                                    <div className="adm-section-header">
-                                        <span className="adm-section-title">Language Variants</span>
-                                        <button className="adm-btn ghost small" onClick={() => addVariant(collection, editingIndex)}>
-                                            <FiPlus size={13} /> Add Variant
-                                        </button>
+                            {/* Context & Metadata */}
+                            <div className="adm-section">
+                                <div className="adm-section-header">
+                                    <span className="adm-section-title">Context &amp; Metadata</span>
+                                </div>
+                                <div className="adm-section-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        {[SCHEMAS[collection].row2Fields, SCHEMAS[collection].row3Fields].filter(Boolean).map((fieldGroup, gi) => {
+                                            const inlineFields = fieldGroup.filter(f => f.type !== 'tags' && f.type !== 'checkbox');
+                                            const fullWidthFields = fieldGroup.filter(f => f.type === 'tags' || f.type === 'checkbox');
+                                            return (
+                                                <React.Fragment key={gi}>
+                                                    {inlineFields.length > 0 && renderFieldRow(inlineFields, item, collection, editingIndex, updateItemField)}
+                                                    {fullWidthFields.map(f => (
+                                                        <div key={f.key} className="adm-field" style={{ marginTop: '8px' }}>
+                                                            <label className="adm-label">{f.label}</label>
+                                                            {f.type === 'checkbox' ? (
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={`row-${f.key}`}
+                                                                        checked={!!item[f.key]}
+                                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
+                                                                    />
+                                                                    <label htmlFor={`row-${f.key}`} style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{f.placeholder || 'Enable'}</label>
+                                                                </div>
+                                                            ) : (
+                                                                <FieldInput field={f} value={item[f.key]} onChange={(val) => updateItemField(collection, editingIndex, f.key, val)} />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </React.Fragment>
+                                            );
+                                        })}
+
+                                        {SCHEMAS[collection].extraFields?.filter(f => !['urai', 'notes', 'writtenFor', 'writtenForPassword'].includes(f.key)).map(f => {
+                                            // Hide password and hint fields if lock toggle is not enabled
+                                            if (!item.isUraiNotesLocked && (f.key === 'uraiNotesPassword' || f.key === 'uraiNotesPasswordHint')) {
+                                                return null;
+                                            }
+                                            return (
+                                            <div key={f.key} className="adm-field">
+                                                <label className="adm-label">{f.label}</label>
+                                                {f.type === 'richtext' ? (
+                                                    <RichTextEditor
+                                                        content={item[f.key] || ''}
+                                                        onChange={(val) => updateItemField(collection, editingIndex, f.key, val)}
+                                                        placeholder={f.placeholder || ''}
+                                                    />
+                                                ) : f.type === 'textarea' ? (
+                                                    <textarea
+                                                        className="adm-input"
+                                                        style={{ minHeight: f.rows ? `${f.rows * 22}px` : '60px' }}
+                                                        value={item[f.key] || ''}
+                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
+                                                        placeholder={f.placeholder || ''}
+                                                    />
+                                                ) : f.type === 'checkbox' ? (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            id={`extra-${f.key}`}
+                                                            checked={item[f.key] !== false}
+                                                            onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
+                                                        />
+                                                        <label htmlFor={`extra-${f.key}`} style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{f.placeholder || 'Enable'}</label>
+                                                    </div>
+                                                ) : (
+                                                    <input
+                                                        className="adm-input"
+                                                        type={f.type || 'text'}
+                                                        value={item[f.key] || ''}
+                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
+                                                        placeholder={f.placeholder || ''}
+                                                    />
+                                                )}
+                                            </div>
+                                            );
+                                        })}
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                                        {item.variants?.map((variant, vIndex) => (
-                                            <VariantCard
-                                                key={vIndex}
-                                                variant={variant}
-                                                vIndex={vIndex}
-                                                totalVariants={item.variants.length}
-                                                onUpdate={(field, value) => updateVariant(collection, editingIndex, vIndex, field, value)}
-                                                onUpdateTransl={(fieldObj, langKey, value) => updateTransliteration(collection, editingIndex, vIndex, fieldObj, langKey, value)}
-                                                onToggleLang={(tLang) => toggleTransliterationLang(collection, editingIndex, vIndex, tLang)}
-                                                onRemove={() => requestRemoveVariant(editingIndex, vIndex)}
-                                                onMove={(direction) => moveVariant(collection, editingIndex, vIndex, direction)}
-                                                idPrefix={`v-${item.id}-${vIndex}`}
-                                                defaultAuthors={defaultAuthors}
+                            </div>
+
+                            {/* Meaning / Urai & Notes Sections */}
+                            {SCHEMAS[collection].extraFields?.filter(f => ['urai', 'notes'].includes(f.key)).map(f => (
+                                <div className="adm-section" key={f.key} style={{ background: 'transparent', border: 'none', padding: 0, boxShadow: 'none' }}>
+                                    <div 
+                                        className={`adm-section-header adm-section-header--collapsible`}
+                                        onClick={() => toggleSection(f.key)}
+                                        style={{ marginBottom: expandedSections[f.key] ? '16px' : '0' }}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <span className="adm-section-title">{f.label}</span>
+                                            <div className={`adm-collapse-icon ${expandedSections[f.key] ? 'open' : ''}`}>
+                                                <FiChevronRight size={16} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`adm-collapse-body ${expandedSections[f.key] ? 'open' : ''}`}>
+                                        <div className="adm-collapse-body-inner">
+                                            <RichTextEditor
+                                                content={item[f.key] || ''}
+                                                onChange={(val) => updateItemField(collection, editingIndex, f.key, val)}
+                                                placeholder={f.placeholder || ''}
                                             />
-                                        ))}
+                                        </div>
                                     </div>
                                 </div>
+                            ))}
+
+                            {/* Easter Egg / Written For Section */}
+                            {SCHEMAS[collection].extraFields?.some(f => f.key === 'writtenFor') && (
+                                <div className="adm-section" style={{ background: 'transparent', border: 'none', padding: 0, boxShadow: 'none' }}>
+                                    <div 
+                                        className={`adm-section-header adm-section-header--collapsible`}
+                                        onClick={() => toggleSection('writtenForGroup')}
+                                        style={{ marginBottom: expandedSections.writtenForGroup ? '16px' : '0' }}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <span className="adm-section-title">Written For (Easter Egg)</span>
+                                            <div className={`adm-collapse-icon ${expandedSections.writtenForGroup ? 'open' : ''}`}>
+                                                <FiChevronRight size={16} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`adm-collapse-body ${expandedSections.writtenForGroup ? 'open' : ''}`}>
+                                        <div className="adm-collapse-body-inner" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                            <div className="adm-field">
+                                                <label className="adm-label">Written For (Name)</label>
+                                                <input
+                                                    className="adm-input"
+                                                    type="text"
+                                                    value={item.writtenFor || ''}
+                                                    onChange={(e) => updateItemField(collection, editingIndex, 'writtenFor', e.target.value)}
+                                                    placeholder="Enter name (e.g. Navil)"
+                                                />
+                                            </div>
+                                            <div className="adm-field">
+                                                <label className="adm-label">Unlock Password</label>
+                                                <input
+                                                    className="adm-input"
+                                                    type="text"
+                                                    value={item.writtenForPassword || ''}
+                                                    onChange={(e) => updateItemField(collection, editingIndex, 'writtenForPassword', e.target.value)}
+                                                    placeholder="Enter password to unlock name"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Language Variants */}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '32px 0 16px 0' }}>
+                                <span className="adm-section-title" style={{ fontSize: '1.1rem' }}>Language Variants</span>
+                                <button className="adm-btn ghost small" onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
+                                    <FiPlus size={13} /> Add Variant
+                                </button>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                {item.variants?.map((variant, vIndex) => (
+                                    <VariantCard
+                                        key={vIndex}
+                                        variant={variant}
+                                        vIndex={vIndex}
+                                        totalVariants={item.variants.length}
+                                        onUpdate={(field, value) => updateVariant(collection, editingIndex, vIndex, field, value)}
+                                        onUpdateTransl={(fieldObj, langKey, value) => updateTransliteration(collection, editingIndex, vIndex, fieldObj, langKey, value)}
+                                        onToggleLang={(tLang) => toggleTransliterationLang(collection, editingIndex, vIndex, tLang)}
+                                        onRemove={() => requestRemoveVariant(editingIndex, vIndex)}
+                                        onMove={(direction) => moveVariant(collection, editingIndex, vIndex, direction)}
+                                        idPrefix={`v-${item.id}-${vIndex}`}
+                                        defaultAuthors={defaultAuthors}
+                                    />
+                                ))}
                             </div>
 
                         </div>

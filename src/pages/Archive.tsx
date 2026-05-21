@@ -16,6 +16,49 @@ import StoryViewer from '../components/StoryViewer';
 import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
 
+const stripHtml = (html) => {
+    if (!html) return '';
+    const clean = html.replace(/<[^>]*>/g, '');
+    return clean
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+};
+
+const formatArtDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+        if (/^[A-Za-z]{3} \d{1,2}, \d{4}( \d{1,2}:\d{2} [ap]m)?$/i.test(dateString.trim())) {
+            return dateString.trim();
+        }
+        const parsed = new Date(dateString);
+        if (!isNaN(parsed.getTime())) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = months[parsed.getMonth()];
+            const day = String(parsed.getDate()).padStart(2, '0');
+            const year = parsed.getFullYear();
+            
+            if (!dateString.includes('T') && !dateString.includes(':')) {
+                return `${month} ${day}, ${year}`;
+            }
+
+            let hours = parsed.getHours();
+            const minutes = String(parsed.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
+        }
+    } catch (e) {
+        // Fallback
+    }
+    return dateString;
+};
+
 const Archive = () => {
     const navigate = useNavigate();
 
@@ -127,9 +170,9 @@ const Archive = () => {
     const openPost = (post) => {
         // Switch logic for Reels vs Standard Posts
         if (post.type === 'video' || (post.image && post.image.endsWith('.mp4')) || activeTab === 'reels') {
-            setSearchParams({ reel: post.id }, { replace: false });
+            setSearchParams({ reel: post.id }, { replace: false, preventScrollReset: true });
         } else {
-            setSearchParams({ post: post.id }, { replace: false });
+            setSearchParams({ post: post.id }, { replace: false, preventScrollReset: true });
         }
     };
 
@@ -139,7 +182,7 @@ const Archive = () => {
             next.delete('post');
             next.delete('reel');
             return next;
-        }, { replace: true });
+        }, { replace: true, preventScrollReset: true });
 
         // Ensure fullscreen is exited if it was active (for Reels too)
         try {
@@ -170,7 +213,7 @@ const Archive = () => {
                 activeTab === 'reels' ? reels : archivedPosts;
         const currentIndex = currentData.findIndex(p => p.id === selectedPost.id);
         if (currentIndex < currentData.length - 1) {
-            setSearchParams({ post: currentData[currentIndex + 1].id }, { replace: true });
+            setSearchParams({ post: currentData[currentIndex + 1].id }, { replace: true, preventScrollReset: true });
             setPostImageIndex(0);
         }
     };
@@ -182,28 +225,28 @@ const Archive = () => {
                 activeTab === 'reels' ? reels : archivedPosts;
         const currentIndex = currentData.findIndex(p => p.id === selectedPost.id);
         if (currentIndex > 0) {
-            setSearchParams({ post: currentData[currentIndex - 1].id }, { replace: true });
+            setSearchParams({ post: currentData[currentIndex - 1].id }, { replace: true, preventScrollReset: true });
             setPostImageIndex(0);
         }
     };
 
     // --- STORY VIEWER LOGIC ---
     const openHighlight = (highlight) => {
-        setSearchParams({ story: highlight.id }, { replace: false });
+        setSearchParams({ story: highlight.id }, { replace: false, preventScrollReset: true });
     };
 
     const closeStory = () => {
         const newParams = new URLSearchParams(searchParams);
         newParams.delete('story');
-        setSearchParams(newParams);
+        setSearchParams(newParams, { preventScrollReset: true });
     };
 
     const switchHighlight = (highlight) => {
-        setSearchParams({ story: highlight.id }, { replace: true });
+        setSearchParams({ story: highlight.id }, { replace: true, preventScrollReset: true });
     };
 
     const switchReel = (reel) => {
-        setSearchParams({ reel: reel.id }, { replace: true });
+        setSearchParams({ reel: reel.id }, { replace: true, preventScrollReset: true });
     };
 
 
@@ -369,23 +412,41 @@ const Archive = () => {
     };
     const TruncatedCaption = ({ username, caption, date }) => {
         const [expanded, setExpanded] = useState(false);
-        const shouldTruncate = caption && caption.length > 80;
+        const plainText = stripHtml(caption || '');
+        const shouldTruncate = plainText.length > 80;
 
         return (
             <div className="feed-caption-container" style={{ padding: '0 16px 16px' }}>
                 <div className={`feed-caption ${expanded ? 'expanded' : ''}`} style={{ fontSize: 14, lineHeight: '1.4' }}>
-                    <strong>{username}</strong> {expanded ? caption : (shouldTruncate ? `${caption.slice(0, 80)}...` : caption)}
-                    {!expanded && shouldTruncate && (
-                        <span
-                            className="caption-more-btn"
-                            onClick={() => setExpanded(true)}
-                            style={{ color: '#8e8e8e', cursor: 'pointer', marginLeft: 4 }}
-                        >
-                            more
-                        </span>
+                    <strong>{username}</strong>{' '}
+                    {expanded ? (
+                        <span dangerouslySetInnerHTML={{ __html: caption }} />
+                    ) : shouldTruncate ? (
+                        <>
+                            <span dangerouslySetInnerHTML={{ __html: plainText.slice(0, 80) + '...' }} />
+                            <button
+                                className="caption-more-btn"
+                                onClick={() => setExpanded(true)}
+                                style={{
+                                    color: '#8e8e8e',
+                                    cursor: 'pointer',
+                                    marginLeft: 4,
+                                    background: 'none',
+                                    border: 'none',
+                                    padding: 0,
+                                    font: 'inherit',
+                                }}
+                            >
+                                more
+                            </button>
+                        </>
+                    ) : (
+                        <span dangerouslySetInnerHTML={{ __html: caption }} />
                     )}
                 </div>
-                <div className="feed-date" style={{ fontSize: 10, color: '#8e8e8e', marginTop: 4, textTransform: 'uppercase' }}>{date}</div>
+                <div className="feed-date" style={{ fontSize: 10, color: '#8e8e8e', marginTop: 4, textTransform: 'uppercase' }}>
+                    {formatArtDate(date)}
+                </div>
             </div>
         );
     };
@@ -1411,10 +1472,10 @@ const Archive = () => {
                         </Link>
                     </div>
                     <div className="profile-stats-row">
-                        <span className="stat-item stat-clickable" onClick={() => setSearchParams({ list: 'followers' })}>
+                        <span className="stat-item stat-clickable" onClick={() => setSearchParams({ list: 'followers' }, { preventScrollReset: true })}>
                             <span className="stat-value">{profileData?.followers || 0}</span> followers
                         </span>
-                        <span className="stat-item stat-clickable" onClick={() => setSearchParams({ list: 'following' })}>
+                        <span className="stat-item stat-clickable" onClick={() => setSearchParams({ list: 'following' }, { preventScrollReset: true })}>
                             <span className="stat-value">{profileData?.following || 0}</span> following
                         </span>
                     </div>
@@ -1656,9 +1717,10 @@ const Archive = () => {
 
                             {/* Mobile Caption (Below Actions) */}
                             <div className="modal-caption mobile-only">
-                                <strong>elvanparthasarathy</strong> {selectedPost.caption}
+                                <strong>elvanparthasarathy</strong>{' '}
+                                <span dangerouslySetInnerHTML={{ __html: selectedPost.caption }} />
                             </div>
-                            <div className="modal-date mobile-only">{selectedPost.date}</div>
+                            <div className="modal-date mobile-only">{formatArtDate(selectedPost.date)}</div>
 
                             {/* Desktop Info (Right Sidebar) */}
                             <div className="modal-info desktop-only-flex">
@@ -1674,10 +1736,8 @@ const Archive = () => {
                                     />
                                 </div>
                                 <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-                                    <div className="modal-caption">
-                                        {selectedPost.caption}
-                                    </div>
-                                    <div className="modal-date">{selectedPost.date}</div>
+                                    <div className="modal-caption" dangerouslySetInnerHTML={{ __html: selectedPost.caption }} />
+                                    <div className="modal-date">{formatArtDate(selectedPost.date)}</div>
                                     
                                     {/* Ad filling the blank space below caption */}
                                     <AdBanner variant="inline" wrapperStyle={{ marginTop: 'auto', paddingTop: '20px' }} />
@@ -1752,7 +1812,7 @@ const Archive = () => {
                 <div className="user-list-overlay" onClick={() => {
                     const newParams = new URLSearchParams(searchParams);
                     newParams.delete('list');
-                    setSearchParams(newParams);
+                    setSearchParams(newParams, { preventScrollReset: true });
                 }}>
                     <div className="user-list-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="user-list-header">
@@ -1762,7 +1822,7 @@ const Archive = () => {
                                     const next = new URLSearchParams(prev);
                                     next.delete('list');
                                     return next;
-                                }, { replace: true });
+                                }, { replace: true, preventScrollReset: true });
                                 setUserListModal(prev => ({ ...prev, open: false }));
                                 setUserSearchQuery('');
                             }} />

@@ -48,8 +48,10 @@ const cleanItem = (data) => {
         data.variants.forEach(v => {
             if (v.transliterations?._empty) delete v.transliterations._empty;
             if (v.titleTransliterations?._empty) delete v.titleTransliterations._empty;
+            if (v.authorTransliterations?._empty) delete v.authorTransliterations._empty;
             if (!v.transliterations) v.transliterations = {};
             if (!v.titleTransliterations) v.titleTransliterations = {};
+            if (!v.authorTransliterations) v.authorTransliterations = {};
         });
     }
     return data;
@@ -77,6 +79,34 @@ const ReadingView = () => {
     const [seriesParts, setSeriesParts] = useState([]);
     const [variantTranslStates, setVariantTranslStates] = useState({}); // { "postId-vIndex": activeLang | null }
     const [activeSection, setActiveSection] = useState(null); // 'urai' | 'notes' | null
+    const [displaySection, setDisplaySection] = useState(null);
+    const [isUnlocked, setIsUnlocked] = useState(false);
+    const [pwdAttempt, setPwdAttempt] = useState('');
+    const [pwdError, setPwdError] = useState(false);
+    const [decryptedUrai, setDecryptedUrai] = useState('');
+    const [decryptedNotes, setDecryptedNotes] = useState('');
+
+    // Locked only when lock toggle is on AND password exists
+    const isLocked = !!post?.isUraiNotesLocked && !!post?.uraiNotesPassword;
+
+    const handleUnlock = (e) => {
+        e.preventDefault();
+        if (pwdAttempt.trim() === post?.uraiNotesPassword) {
+            setIsUnlocked(true);
+            setPwdError(false);
+        } else {
+            setPwdError(true);
+        }
+    };
+
+    useEffect(() => {
+        if (activeSection) {
+            setDisplaySection(activeSection);
+        }
+    }, [activeSection]);
+
+    const displayUrai = isLocked ? (isUnlocked ? post?.urai : null) : post?.urai;
+    const displayNotes = isLocked ? (isUnlocked ? post?.notes : null) : post?.notes;
 
     const { autoThumbnails } = useOutletContext();
 
@@ -423,21 +453,27 @@ const ReadingView = () => {
                     transform: rotate(180deg);
                 }
                 .collapsible-section {
-                    position: relative;
-                    overflow: hidden;
-                    transition: max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                                opacity 0.4s ease,
-                                margin 0.4s ease;
+                    display: grid;
+                    grid-template-rows: 1fr;
+                    transition: grid-template-rows 0.35s cubic-bezier(0.25, 1, 0.5, 1), margin-bottom 0.35s ease;
+                    margin-bottom: 24px;
                 }
                 .collapsible-section.collapsed {
-                    max-height: 0;
-                    opacity: 0;
+                    grid-template-rows: 0fr;
                     margin-bottom: 0;
                 }
-                .collapsible-section:not(.collapsed) {
-                    max-height: 800px; /* Reduced for smoother transition speed */
+                .collapsible-inner {
+                    min-height: 0;
+                    overflow: hidden;
                     opacity: 1;
-                    margin-bottom: 24px;
+                    transition: opacity 0.35s ease, padding 0.35s ease, margin 0.35s ease;
+                }
+                .collapsible-section.collapsed .collapsible-inner {
+                    opacity: 0;
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                    margin-top: 0 !important;
+                    margin-bottom: 0 !important;
                 }
             `}</style>
 
@@ -513,7 +549,7 @@ const ReadingView = () => {
                             const isMulti = variants.length > 1;
 
                             return (
-                                <div key={vIndex} style={{ paddingBottom: isMulti ? '48px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
+                                <div key={vIndex} style={{ paddingBottom: isMulti ? '24px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
                                     {/* Header row with badge + transliteration toggles */}
                                     <div className="variant-header-row">
                                         <div className="variant-badge">
@@ -553,8 +589,8 @@ const ReadingView = () => {
                                     )}
 
                                     {variant.author && (
-                                        <div lang={variant.lang} style={{ fontSize: '1rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '16px' }}>
-                                            — {variant.author}
+                                        <div lang={activeLang || variant.lang} style={{ fontSize: '1rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '16px' }}>
+                                            — {activeLang && variant.authorTransliterations?.[activeLang] ? variant.authorTransliterations[activeLang] : variant.author}
                                         </div>
                                     )}
 
@@ -571,12 +607,12 @@ const ReadingView = () => {
                     </div>
                 ) : (
                     /* Fallback: old content{} model */
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         {Object.keys(contentObj).filter(l => contentObj[l]?.title || contentObj[l]?.body).map((langCode) => {
                             const lContent = contentObj[langCode] || {};
                             const isMulti = Object.keys(contentObj).length > 1;
                             return (
-                                <div key={langCode} style={{ paddingBottom: isMulti ? '48px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
+                                <div key={langCode} style={{ paddingBottom: isMulti ? '24px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
                                     {isMulti && <div className="variant-badge" style={{ marginBottom: '16px' }}>{LANG_LABELS[langCode] || langCode.toUpperCase()}</div>}
                                     {lContent.title && lContent.title !== displayPrimaryTitle && <h1 lang={langCode} style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.2', color: 'var(--text-main)', marginBottom: '16px' }}>{lContent.title}</h1>}
                                     <div lang={langCode} className="rich-content-body" style={{ fontSize: '1.15rem', lineHeight: '1.9', color: 'var(--text-main)', whiteSpace: 'pre-wrap' }}
@@ -595,16 +631,24 @@ const ReadingView = () => {
                 )}
 
                 {/* Urai & Notes section */}
-                {(post.urai || post.notes) && (
+                {(post.urai || post.notes) && !post.is_private && (
                     <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-light)' }}>
                         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: activeSection ? '24px' : '0', transition: 'margin 0.3s ease' }}>
                             {post.urai && (
                                 <button 
                                     className={`expand-pill ${activeSection === 'urai' ? 'active' : ''}`}
-                                    onClick={() => setActiveSection(activeSection === 'urai' ? null : 'urai')}
+                                    onClick={() => {
+                                        setActiveSection(activeSection === 'urai' ? null : 'urai');
+                                        setPwdError(false);
+                                        setPwdAttempt('');
+                                    }}
                                 >
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="6 9 12 15 18 9" />
+                                        {isLocked ? (
+                                            isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
+                                        ) : (
+                                            <polyline points="6 9 12 15 18 9" />
+                                        )}
                                     </svg>
                                     <div className="pill-text-stack">
                                         <span className="pill-ta">விளக்கம்</span>
@@ -615,10 +659,18 @@ const ReadingView = () => {
                             {post.notes && (
                                 <button 
                                     className={`expand-pill ${activeSection === 'notes' ? 'active' : ''}`}
-                                    onClick={() => setActiveSection(activeSection === 'notes' ? null : 'notes')}
+                                    onClick={() => {
+                                        setActiveSection(activeSection === 'notes' ? null : 'notes');
+                                        setPwdError(false);
+                                        setPwdAttempt('');
+                                    }}
                                 >
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="6 9 12 15 18 9" />
+                                        {isLocked ? (
+                                            isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
+                                        ) : (
+                                            <polyline points="6 9 12 15 18 9" />
+                                        )}
                                     </svg>
                                     <div className="pill-text-stack">
                                         <span className="pill-ta">குறிப்புகள்</span>
@@ -628,19 +680,56 @@ const ReadingView = () => {
                             )}
                         </div>
 
-                        {post.urai && (
-                            <div className={`collapsible-section ${activeSection !== 'urai' ? 'collapsed' : ''}`}>
-                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap', padding: '12px 0' }}>
-                                    {post.urai}
+                        {isLocked && !isUnlocked ? (
+                            <div className={`collapsible-section ${!activeSection ? 'collapsed' : ''}`}>
+                                <div className="collapsible-inner">
+                                    <div style={{ textAlign: 'center', padding: '30px 0' }}>
+                                        <form onSubmit={handleUnlock} className="easter-egg-lock" style={{ maxWidth: '300px', margin: '0 auto' }}>
+                                            <div style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>
+                                                This section is locked. Enter password to view.
+                                                {post.uraiNotesPasswordHint && <div style={{ marginTop: '8px', fontStyle: 'italic', fontSize: '0.9rem', color: 'var(--text-main)', opacity: 0.8 }}>Hint: {post.uraiNotesPasswordHint}</div>}
+                                            </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                <input 
+                                                    type="password"
+                                                    value={pwdAttempt}
+                                                    onChange={(e) => { setPwdAttempt(e.target.value); setPwdError(false); }}
+                                                    placeholder="Enter Password"
+                                                    className="pwd-input"
+                                                    style={{ padding: '12px 16px', borderRadius: '12px', border: pwdError ? '1px solid #ff4444' : '1px solid var(--border-light)', background: 'var(--bg-panel)', color: 'var(--text-main)', outline: 'none', width: '100%' }}
+                                                />
+                                                <button type="submit" style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'var(--text-main)', color: 'var(--bg-app)', cursor: 'pointer', fontWeight: 'bold', width: '100%' }}>
+                                                    Unlock
+                                                </button>
+                                            </div>
+                                            {pwdError && <div style={{ color: '#ff4444', fontSize: '0.85rem', marginTop: '12px' }}>Incorrect password.</div>}
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        )}
-                        {post.notes && (
-                            <div className={`collapsible-section ${activeSection !== 'notes' ? 'collapsed' : ''}`}>
-                                <div style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', whiteSpace: 'pre-wrap', padding: '12px 0' }}>
-                                    {post.notes}
-                                </div>
-                            </div>
+                        ) : (
+                            <>
+                                {post.urai && displayUrai && displaySection === 'urai' && (
+                                    <div className={`collapsible-section ${activeSection !== 'urai' ? 'collapsed' : ''}`}>
+                                        <div className="collapsible-inner">
+                                            <div
+                                                style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', padding: '12px 0' }}
+                                                dangerouslySetInnerHTML={{ __html: textToHtml(displayUrai) }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                                {post.notes && displayNotes && displaySection === 'notes' && (
+                                    <div className={`collapsible-section ${activeSection !== 'notes' ? 'collapsed' : ''}`}>
+                                        <div className="collapsible-inner">
+                                            <div
+                                                style={{ fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--text-muted)', padding: '12px 0' }}
+                                                dangerouslySetInnerHTML={{ __html: textToHtml(displayNotes) }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 )}

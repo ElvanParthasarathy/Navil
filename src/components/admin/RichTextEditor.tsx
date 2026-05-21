@@ -4,6 +4,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
+import { getOptimizedImage } from '../../lib/media';
 
 const SubtitleMark = Mark.create({
     name: 'subtitle',
@@ -51,7 +52,10 @@ const MenuBar = ({ editor }) => {
 
     const addImage = () => {
         const url = window.prompt('Enter image URL:');
-        if (url) editor.chain().focus().setImage({ src: url }).run();
+        if (url) {
+            const optimizedUrl = getOptimizedImage(url);
+            editor.chain().focus().setImage({ src: optimizedUrl }).run();
+        }
     };
 
     return (
