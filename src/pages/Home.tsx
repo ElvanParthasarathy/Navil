@@ -477,6 +477,7 @@ const Home = () => {
                     margin: 0 auto;
                     padding: 24px 20px 80px;
                     position: relative;
+                    contain: layout style;
                 }
 
                 /* BACKGROUND GRADIENT DECORATION */
@@ -489,6 +490,9 @@ const Home = () => {
                     overflow: hidden;
                     z-index: -2;
                     pointer-events: none;
+                    will-change: transform;
+                    transform: translateZ(0);
+                    contain: strict;
                 }
 
                 .bg-blob-circle {
@@ -500,6 +504,9 @@ const Home = () => {
                     filter: blur(60px);
                     opacity: 0.4;
                     animation: morphBlob 16s linear infinite alternate;
+                    will-change: transform, border-radius;
+                    transform: translateZ(0);
+                    backface-visibility: hidden;
                 }
 
                 .blob-1 {
@@ -610,6 +617,9 @@ const Home = () => {
                      opacity: 0.2;
                      animation: morphGlow 10s linear infinite alternate;
                      z-index: 1;
+                     will-change: border-radius;
+                     transform: translateZ(0);
+                     backface-visibility: hidden;
                  }
  
                  @keyframes morphGlow {
