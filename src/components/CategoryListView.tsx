@@ -1058,7 +1058,7 @@ const CategoryListView = () => {
 
                 .controls-area {
                     margin-top: 8px;
-                    margin-bottom: 24px;
+                    margin-bottom: 8px;
                     display: flex;
                     flex-direction: row;
                     gap: 12px;
