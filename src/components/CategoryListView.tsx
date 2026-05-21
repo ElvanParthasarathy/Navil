@@ -577,7 +577,7 @@ const CategoryListView = () => {
             </div>
 
             {totalPages > 1 && (
-                <div className="pagination-wrapper" style={{ marginTop: '40px' }}>
+                <div className="pagination-wrapper" style={{ marginTop: '40px', paddingTop: '16px' }}>
                     <div className="pagination-inner">
                         {(() => {
                             const pages: (number | string)[] = [];
