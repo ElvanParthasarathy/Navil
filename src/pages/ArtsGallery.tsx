@@ -742,7 +742,7 @@ const ArtsGallery = () => {
     return (
         <>
             <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl="/arts" />
-            <div className="page-view fadeIn">
+            <div className="arts-gallery-page page-view fadeIn">
                 <Helmet>
                     <title>{meta.titleTa} | {meta.titleEn}</title>
                     <meta name="description" content={meta.descEn} />
@@ -821,6 +821,9 @@ const ArtsGallery = () => {
                 }
                 
                 @media (max-width: 768px) {
+                    .arts-gallery-page {
+                        padding: 10px 16px 100px;
+                    }
                     .arts-grid-item {
                         border-radius: 2px;
                         background: transparent;
