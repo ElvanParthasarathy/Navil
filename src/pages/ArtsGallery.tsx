@@ -742,7 +742,7 @@ const ArtsGallery = () => {
     return (
         <>
             <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl="/arts" />
-            <div className="arts-gallery-page page-view fadeIn">
+            <div className="page-view fadeIn">
                 <Helmet>
                     <title>{meta.titleTa} | {meta.titleEn}</title>
                     <meta name="description" content={meta.descEn} />
@@ -821,9 +821,6 @@ const ArtsGallery = () => {
                 }
                 
                 @media (max-width: 768px) {
-                    .arts-gallery-page {
-                        padding: 10px 16px 100px;
-                    }
                     .arts-grid-item {
                         border-radius: 2px;
                         background: transparent;
@@ -1569,7 +1566,7 @@ const ArtsGallery = () => {
                 }
 
                 @media (max-width: 768px) {
-                    .arts-gallery-page { padding: 20px 0 100px 0; }
+                    .arts-gallery-page { padding: 20px 16px 100px; }
                     .arts-gallery-header { display: none; }
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
