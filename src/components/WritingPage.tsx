@@ -1242,7 +1242,7 @@ const WritingPage = ({
                     .pagination-wrapper {
                         gap: 24px;
                         margin-top: 60px;
-                        padding-top: 32px;
+                        padding: 0;
                         align-items: center;
                         width: 100%;
                     }
