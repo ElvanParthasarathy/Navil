@@ -208,7 +208,7 @@ const Arts = () => {
                 }
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
-                    .writings-page { padding: 0 16px 100px; }
+                    .writings-page { padding: 0 0 100px 0; }
                     .writings-header { padding: 28px 28px 10px; text-align: center; margin-bottom: 24px; }
                     .writings-title { display: none; }
                     .writings-title-sub { display: none; }
