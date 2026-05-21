@@ -327,7 +327,7 @@ const CategoryListView = () => {
             {totalPages > 1 && (
                 <div className={`pagination-collapsible ${isPaginationExpanded ? 'expanded' : ''}`}>
                     <div className="pagination-collapsible-inner">
-                        <div className="pagination-wrapper" style={{ marginTop: '0', paddingTop: '16px', borderTop: 'none', paddingBottom: '16px' }}>
+                        <div className="pagination-wrapper" style={{ marginTop: '0', borderTop: 'none' }}>
                             <div className="pagination-inner">
                                 {(() => {
                                     const pages: (number | string)[] = [];
@@ -667,7 +667,7 @@ const CategoryListView = () => {
                     align-items: flex-start;
                     gap: 16px;
                     margin-top: 32px;
-                    padding-top: 32px;
+                    padding-top: 0;
                     border-top: 1px solid var(--border-light);
                     margin-bottom: 20px;
                 }
@@ -826,7 +826,7 @@ const CategoryListView = () => {
                     justify-content: center;
                     gap: 24px;
                     margin-top: 32px;
-                    padding-top: 32px;
+                    padding-top: 0;
                     border-top: 1px solid var(--border-light);
                 }
                 .page-info {

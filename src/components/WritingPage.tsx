@@ -1082,7 +1082,7 @@ const WritingPage = ({
                     flex-direction: column;
                     align-items: flex-start;
                     gap: 16px;
-                    padding: 32px 0;
+                    padding: 0;
                     margin-top: 32px;
                     border-top: 1px solid var(--border-light);
                 }
@@ -1333,7 +1333,7 @@ const WritingPage = ({
                 {totalPages > 1 && (
                     <div className={`pagination-collapsible ${isPaginationExpanded ? 'expanded' : ''}`}>
                         <div className="pagination-collapsible-inner">
-                            <div className="pagination-wrapper" style={{ marginTop: '0', paddingTop: '16px', borderTop: 'none', paddingBottom: '16px' }}>
+                            <div className="pagination-wrapper" style={{ marginTop: '0', borderTop: 'none' }}>
                                 <div className="pagination-inner">
                                     {(() => {
                                         const pages: (number | string)[] = [];
