@@ -475,10 +475,15 @@ const ReadingView = () => {
                     margin-top: 0 !important;
                     margin-bottom: 0 !important;
                 }
+                @media (max-width: 768px) {
+                    .reader-header-area {
+                        margin-top: 8px;
+                    }
+                }
             `}</style>
 
             {/* Header: Title and Back Button */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '40px', flexWrap: 'wrap' }}>
+            <div className="reader-header-area" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '40px', flexWrap: 'wrap' }}>
                 <h1
                     lang={firstVariantActiveLang || (hasVariants ? variants[0]?.lang : Object.keys(contentObj)[0]) || 'ta'}
                     style={{ fontSize: isStory ? '2.5rem' : '2rem', fontWeight: isStory ? '800' : '700', fontFamily: isStory ? 'serif' : 'inherit', lineHeight: '1.2', color: 'var(--text-main)', margin: 0, letterSpacing: '-0.5px', maxWidth: '80%' }}
