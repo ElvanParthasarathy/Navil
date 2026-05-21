@@ -1413,7 +1413,9 @@ const CategoryListView = () => {
                     .pagination-wrapper {
                         gap: 20px !important;
                         margin-top: 40px !important;
-                        padding: 0 !important;
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        padding-bottom: 0 !important;
                         align-items: center;
                         width: 100%;
                     }
