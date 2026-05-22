@@ -1174,11 +1174,12 @@ const CategoryListView = () => {
                 .pagination-collapsible {
                     display: grid;
                     grid-template-rows: 0fr;
-                    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-                    margin-bottom: 24px;
+                    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1), margin-bottom 0.25s ease;
+                    margin-bottom: 0;
                 }
                 .pagination-collapsible.expanded {
                     grid-template-rows: 1fr;
+                    margin-bottom: 24px;
                 }
                 .pagination-collapsible-inner {
                     overflow: hidden;
@@ -1192,6 +1193,9 @@ const CategoryListView = () => {
                 }
 
                 @media (min-width: 769px) {
+                    .blog-grid-container {
+                        margin-top: 28px;
+                    }
                     .pagination-collapsible {
                         padding-top: 16px;
                     }
