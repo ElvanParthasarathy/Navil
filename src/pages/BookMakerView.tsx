@@ -1130,11 +1130,12 @@ const BookMakerView = () => {
                         }
                         .a4-page {
                             width: 100%; max-width: none;
-                            height: 100vh; max-height: 100vh;
+                            height: 100vh !important; max-height: 100vh !important; min-height: 100vh !important;
                             box-shadow: none !important; border-radius: 0;
                             padding: 2cm; margin: 0;
                             page-break-after: always;
                             break-after: page;
+                            page-break-inside: avoid;
                             overflow: hidden;
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
@@ -1144,6 +1145,8 @@ const BookMakerView = () => {
                         /* Optional: You can restore white cover if needed, but user wants exact preview */
                         .cover-page { 
                             border: none;
+                            height: 100vh !important;
+                            min-height: 100vh !important;
                         }
                     }
                 `}</style>
