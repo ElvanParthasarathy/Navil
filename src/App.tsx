@@ -15,7 +15,6 @@ import Teaching from './pages/Teaching';
 import Arts from './pages/Arts';
 import ArtsGallery from './pages/ArtsGallery';
 import VocoderView from './pages/VocoderView';
-import BookMakerView from './pages/BookMakerView';
 const Archive = React.lazy(() => import('./pages/Archive'));
 import Admin from './pages/Admin';
 import CategoryListView from './components/CategoryListView';

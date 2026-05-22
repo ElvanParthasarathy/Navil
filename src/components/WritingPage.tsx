@@ -329,6 +329,7 @@ const WritingPage = ({
                 (post.variants?.some(v =>
                     (v.text || '').toLowerCase().includes(s) ||
                     (v.title || '').toLowerCase().includes(s) ||
+                    (v.author || '').toLowerCase().includes(s) ||
                     Object.values(v.transliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
                     Object.values(v.titleTransliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
                     Object.values(v.authorTransliterations || {}).some(t => (t || '').toLowerCase().includes(s))

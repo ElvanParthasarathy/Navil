@@ -223,7 +223,15 @@ const CategoryListView = () => {
                 author.includes(s) ||
                 body.includes(s) ||
                 series.includes(s) ||
-                postGenres.some(g => g.toLowerCase().includes(s));
+                postGenres.some(g => g.toLowerCase().includes(s)) ||
+                (post.variants?.some(v =>
+                    (v.text || '').toLowerCase().includes(s) ||
+                    (v.title || '').toLowerCase().includes(s) ||
+                    (v.author || '').toLowerCase().includes(s) ||
+                    Object.values(v.transliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
+                    Object.values(v.titleTransliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
+                    Object.values(v.authorTransliterations || {}).some(t => (t || '').toLowerCase().includes(s))
+                ));
 
             const matchesGenre = !activeGenre || postGenres.includes(activeGenre);
 
