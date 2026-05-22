@@ -228,7 +228,7 @@ const WritingPage = ({
     const [searchTerm, setSearchTerm] = useState(() => sessionStorage.getItem(`elvan_${tableName}_search`) || '');
     const [variantTranslStates, setVariantTranslStates] = useState({});
 
-    const ITEMS_PER_PAGE = 5;
+    const ITEMS_PER_PAGE = (tableName === 'poems' || tableName === 'quotes') ? 6 : 5;
 
     const { setPageTitle } = useOutletContext();
 

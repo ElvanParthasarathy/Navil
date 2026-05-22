@@ -146,7 +146,7 @@ const CategoryListView = () => {
         setCurrentPage(savedPage ? parseInt(savedPage, 10) : 1);
     }, [category]);
 
-    const ITEMS_PER_PAGE = 5;
+    const ITEMS_PER_PAGE = (category === 'poems' || category === 'quotes') ? 6 : 5;
 
     // Subscribe to the shared Firebase cache — no redundant listeners
     useEffect(() => {
