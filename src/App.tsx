@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiSun, FiMoon } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiSun, FiMoon, FiBook } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
@@ -15,6 +15,7 @@ import Teaching from './pages/Teaching';
 import Arts from './pages/Arts';
 import ArtsGallery from './pages/ArtsGallery';
 import VocoderView from './pages/VocoderView';
+import BookMakerView from './pages/BookMakerView';
 const Archive = React.lazy(() => import('./pages/Archive'));
 import Admin from './pages/Admin';
 import CategoryListView from './components/CategoryListView';
@@ -216,6 +217,7 @@ const Layout = () => {
                         <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
                         <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/bookmaker" icon={<FiBook size={22} />} label="நூல் தொகுப்பு" subLabel="book maker" active={location.pathname === '/bookmaker'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
@@ -394,6 +396,7 @@ const router = createBrowserRouter([
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },
+            { path: "bookmaker", element: <BookMakerView /> },
             { path: "writings", element: <Writings /> },
             { path: "teaching", element: <Teaching /> },
             { path: "arts", element: <Arts /> },

@@ -10,7 +10,6 @@ import MobileTopBar from '../components/MobileTopBar';
 
 const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
 
-import { BookMaker } from '../components/BookMaker';
 const Writings = () => {
     const navigate = useNavigate();
     const [counts, setCounts] = useState({});
@@ -206,10 +205,6 @@ const Writings = () => {
                     </div>
                     <div className="cat-footer">நாளேட்டைத் திறக்க <FiArrowRight /></div>
                 </Link>
-            </div>
-
-            <div style={{ marginTop: '32px' }} className="animate-entry">
-                <BookMaker />
             </div>
 
             <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
