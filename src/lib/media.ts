@@ -1,15 +1,18 @@
 /**
  * Media utility for optimizing image delivery.
  * Specifically handles Google Drive links by converting them to high-performance
- * googleusercontent links with support for on-the-fly resizing.
+ * serving endpoints with support for on-the-fly resizing.
  */
 
 const DRIVE_REGEX = /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|lh3\.googleusercontent\.com\/d\/)([a-zA-Z0-9_-]+)/;
 
 /**
  * Transforms a raw image URL into an optimized version.
- * If it's a Google Drive link, it converts it to a high-speed CDN link with optional resizing.
- * If it's any other link (GitHub, External), it returns it as-is.
+ * If it's a Google Drive link, it converts it to a serving URL.
+ * 
+ * Strategy:
+ * - For thumbnails (≤800px): Use drive.google.com/thumbnail — most reliable for small sizes
+ * - For medium/full: Use lh3.googleusercontent.com — supports large sizes
  * 
  * @param url The original image URL
  * @param size 'thumb' (600px), 'medium' (1200px), or 'full' (original)
@@ -21,14 +24,14 @@ export const getOptimizedImage = (url: string, size: 'thumb' | 'medium' | 'full'
     if (match && match[1]) {
         const fileId = match[1];
         
-        // Google's thumbnail API is the most reliable endpoint for serving Drive images.
-        // The /uc and lh3 endpoints both get blocked by security redirects.
-        // sz=w{pixels} controls the output width while preserving aspect ratio.
-        let width = 2000; // full
-        if (size === 'thumb') width = 600;
-        if (size === 'medium') width = 1200;
-
-        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w${width}`;
+        if (size === 'thumb') {
+            // Thumbnail API is reliable for small images (card covers, list views)
+            return `https://drive.google.com/thumbnail?id=${fileId}&sz=w600`;
+        }
+        
+        // For medium and full sizes, use the lh3 CDN endpoint which supports large images
+        const sizeParam = size === 'medium' ? 's1200' : 's0';
+        return `https://lh3.googleusercontent.com/d/${fileId}=${sizeParam}`;
     }
 
     // Passthrough for non-drive links (GitHub, External CDNs, etc.)
