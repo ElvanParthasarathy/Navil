@@ -1129,20 +1129,24 @@ const BookMakerView = () => {
                             align-items: flex-start;
                         }
                         .a4-page {
-                            width: 100%; max-width: none;
-                            height: 100vh !important; max-height: 100vh !important; min-height: 100vh !important;
+                            width: 210mm !important; max-width: none !important;
+                            height: 297mm !important; max-height: 297mm !important; min-height: 297mm !important;
                             box-shadow: none !important; border-radius: 0;
-                            padding: 2cm; margin: 0;
+                            padding: 1.5cm 2cm; margin: 0 auto;
                             page-break-after: always;
                             break-after: page;
                             page-break-inside: avoid;
                             overflow: hidden;
-                        /* Optional: You can restore white cover if needed, but user wants exact preview */
+                        }
                         .cover-page { 
                             border: none;
-                            height: 100vh !important;
-                            min-height: 100vh !important;
+                            height: 297mm !important;
+                            min-height: 297mm !important;
                         }
+                        .a4-content-title { font-size: 2rem; }
+                        .a4-content-body { font-size: 1.4rem; line-height: 2.2; }
+                        .a4-content-quote { font-size: 1.6rem; }
+                        .version-badge { font-size: 0.9rem; }
                     }
                 `}</style>
 
