@@ -639,7 +639,7 @@ const ReadingView = () => {
                 {/* Bottom Cover Image for Poems & Quotes */}
                 {!isMinimal && finalCoverImage && (category === 'poems' || category === 'quotes') && (
                     <div style={{ width: '100%', borderRadius: '24px', overflow: 'hidden', marginTop: '40px', background: 'var(--bg-panel)' }}>
-                        <img src={finalCoverImage} alt={primaryTitle || 'Cover'} style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', display: 'block' }} />
+                        <img src={getOptimizedImage(finalCoverImage, 'medium')} alt={primaryTitle || 'Cover'} style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover', display: 'block' }} />
                     </div>
                 )}
 
