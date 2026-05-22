@@ -217,7 +217,6 @@ const Layout = () => {
                         <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
                         <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/bookmaker" icon={<FiBook size={22} />} label="நூல் தொகுப்பு" subLabel="book maker" active={location.pathname === '/bookmaker'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
