@@ -1344,15 +1344,7 @@ const BookMakerView = () => {
                                     </div>
                                 )}
 
-                                {poemsList.slice(0, 5).map((poem, idx) => renderPoemPreview(poem, idx))}
-
-                                {poemsList.length > 5 && (
-                                    <div className="a4-page page-centered">
-                                        <div className="more-indicator">
-                                            + {poemsList.length - 5} மேலும் பல கவிதைகள்...<br />(All {poemsList.length} poems included in download)
-                                        </div>
-                                    </div>
-                                )}
+                                {poemsList.map((poem, idx) => renderPoemPreview(poem, idx))}
 
                                 {/* ═══ QUOTES SECTION ═══ */}
                                 {quotesList.length > 0 && (
@@ -1363,15 +1355,7 @@ const BookMakerView = () => {
                                     </div>
                                 )}
 
-                                {quotesList.slice(0, 5).map((quote, idx) => renderQuotePreview(quote, idx))}
-
-                                {quotesList.length > 5 && (
-                                    <div className="a4-page page-centered">
-                                        <div className="more-indicator">
-                                            + {quotesList.length - 5} மேலும் பல மொழிகள்...<br />(All {quotesList.length} quotes included in download)
-                                        </div>
-                                    </div>
-                                )}
+                                {quotesList.map((quote, idx) => renderQuotePreview(quote, idx))}
 
                                 {/* ═══ COLOPHON ═══ */}
                                 <div className="a4-page page-centered">
