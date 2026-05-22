@@ -21,9 +21,14 @@ export const getOptimizedImage = (url: string, size: 'thumb' | 'medium' | 'full'
     if (match && match[1]) {
         const fileId = match[1];
         
-        // Note: Google recently restricted the lh3.googleusercontent.com endpoint for drive files
-        // and resizing parameters (=s600) often break. The most reliable method is the classic uc endpoint.
-        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+        // Google's thumbnail API is the most reliable endpoint for serving Drive images.
+        // The /uc and lh3 endpoints both get blocked by security redirects.
+        // sz=w{pixels} controls the output width while preserving aspect ratio.
+        let width = 2000; // full
+        if (size === 'thumb') width = 600;
+        if (size === 'medium') width = 1200;
+
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w${width}`;
     }
 
     // Passthrough for non-drive links (GitHub, External CDNs, etc.)
