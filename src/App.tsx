@@ -15,11 +15,32 @@ import Teaching from './pages/Teaching';
 import Arts from './pages/Arts';
 import ArtsGallery from './pages/ArtsGallery';
 import VocoderView from './pages/VocoderView';
-const Archive = React.lazy(() => import('./pages/Archive'));
 import Admin from './pages/Admin';
 import CategoryListView from './components/CategoryListView';
 import ReadingView from './components/ReadingView';
 import AdBanner from './components/AdBanner';
+import GlobalErrorBoundary from './components/GlobalErrorBoundary';
+
+const lazyWithRetry = (componentImport: () => Promise<any>) =>
+    React.lazy(() =>
+        componentImport().catch((error) => {
+            console.error("Error importing component:", error);
+            const isChunkError = 
+                error.message?.includes("Failed to fetch dynamically imported module") ||
+                error.name === "ChunkLoadError" ||
+                /Failed to fetch/i.test(error.message) ||
+                /Loading chunk/i.test(error.message);
+                
+            if (isChunkError && !sessionStorage.getItem('chunk_retry')) {
+                sessionStorage.setItem('chunk_retry', 'true');
+                window.location.reload();
+                return new Promise(() => {}); // Return a pending promise so the app doesn't render crashed state before reload
+            }
+            throw error;
+        })
+    );
+
+const Archive = lazyWithRetry(() => import('./pages/Archive'));
 
 interface ThemeContextType {
     theme: string;
@@ -393,6 +414,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Layout />,
+        errorElement: <GlobalErrorBoundary />,
         children: [
             { index: true, element: <Home /> },
             { path: "home2", element: <Home2 /> },
@@ -412,7 +434,8 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin",
-        element: <Admin />
+        element: <Admin />,
+        errorElement: <GlobalErrorBoundary />
     }
 ], {
     future: {
@@ -429,6 +452,10 @@ function App() {
     const [autoThumbnails, setAutoThumbnails] = React.useState(() => {
         return localStorage.getItem('autoThumbnails') === 'true';
     });
+
+    React.useEffect(() => {
+        sessionStorage.removeItem('chunk_retry');
+    }, []);
 
     React.useEffect(() => {
         localStorage.setItem('autoThumbnails', String(autoThumbnails));
