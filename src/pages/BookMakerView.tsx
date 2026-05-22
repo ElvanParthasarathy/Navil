@@ -875,6 +875,7 @@ const BookMakerView = () => {
                         width: 100%;
                         max-width: 700px;
                         min-height: 900px;
+                        height: fit-content;
                         box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
                         padding: 60px 50px;
                         display: flex;
@@ -883,6 +884,7 @@ const BookMakerView = () => {
                         font-family: 'Mukta Malar', sans-serif;
                         position: relative;
                         border-radius: 2px;
+                        overflow: visible;
                     }
                     .page-centered {
                         justify-content: center;
