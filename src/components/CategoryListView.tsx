@@ -556,18 +556,6 @@ const CategoryListView = () => {
                             </Link>
                         );
                     })
-                    .reduce((acc, item, idx) => {
-                        acc.push(item);
-                        // Insert a native-looking ad after the 5th item
-                        if (idx === 4) {
-                            acc.push(
-                                <div key="ad-feed" style={{ gridColumn: '1 / -1', padding: '24px 0' }}>
-                                    <AdBanner variant="inline" />
-                                </div>
-                            );
-                        }
-                        return acc;
-                    }, [])
                 ) : (
                     <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
                         <p>No content available yet. Check back soon!</p>
@@ -575,6 +563,13 @@ const CategoryListView = () => {
                     </div>
                 )}
             </div>
+
+            {/* Ad banner outside the grid so it doesn't break column layout */}
+            {!loading && currentPosts.length > 0 && (
+                <div style={{ padding: '24px 0' }}>
+                    <AdBanner variant="inline" />
+                </div>
+            )}
 
             {totalPages > 1 && (
                 <div className="pagination-wrapper" style={{ marginTop: '40px', paddingTop: '16px' }}>
