@@ -122,10 +122,15 @@ const Layout = () => {
             return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/archive' || normalized === '/about';
         };
 
-        if (location.state?.fromQuickLink) {
+        if (navType === 'POP') {
+            // Browser back button always means backward slide
+            if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
+                newDirection = 'none'; // Tab-to-tab via back = instant switch
+            } else {
+                newDirection = 'backward';
+            }
+        } else if (location.state?.fromQuickLink) {
             newDirection = 'forward';
-        } else if (navType === 'POP' && navState.prevState?.fromQuickLink && isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
-            newDirection = 'backward';
         } else if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
             newDirection = 'none';
         } else if (currentDepth < prevDepth) {
