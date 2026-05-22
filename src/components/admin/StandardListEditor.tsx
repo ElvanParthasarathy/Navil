@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
+import { getOptimizedImage } from '../../lib/media';
 
 const getCoverImageUrl = (listItem: any) => {
     if (!listItem) return '';
-    if (listItem.image) return listItem.image;
-    if (listItem.images) {
+    let raw = '';
+    if (listItem.image) raw = listItem.image;
+    else if (listItem.images) {
         if (Array.isArray(listItem.images)) {
-            if (listItem.images.length > 0) return listItem.images[0];
+            if (listItem.images.length > 0) raw = listItem.images[0];
         } else if (typeof listItem.images === 'string') {
             const urls = listItem.images.split('\n').filter(Boolean);
-            if (urls.length > 0) return urls[0];
+            if (urls.length > 0) raw = urls[0];
         }
     }
-    return '';
+    return raw ? getOptimizedImage(raw, 'thumb') : '';
 };
 
 export const StandardListEditor = ({

@@ -4,12 +4,12 @@ import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronD
 import { SCHEMAS, renderFieldRow, FieldInput, PinEditor, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
 import RichTextEditor from './RichTextEditor';
+import { getOptimizedImage } from '../../lib/media';
 
 const getCoverImageUrl = (listItem: any) => {
     if (!listItem) return '';
-    if (listItem.cover_image) return listItem.cover_image;
-    if (listItem.image) return listItem.image;
-    return '';
+    const raw = listItem.cover_image || listItem.image || '';
+    return raw ? getOptimizedImage(raw, 'thumb') : '';
 };
 
 // Classification colors — preset for known types, auto-generated for custom

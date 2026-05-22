@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBookOpen, FiBook, FiSun, FiChevronUp, FiChevronDown, FiChevronRight, FiX, FiClock, FiAnchor, FiImage, FiEdit, FiSliders, FiFeather, FiLock, FiUnlock } from 'react-icons/fi';
 import RichTextEditor from './RichTextEditor';
+import { getOptimizedImage } from '../../lib/media';
 
 // ─── SCHEMAS ───
 
@@ -388,7 +389,7 @@ export const FieldInput = ({ field, value, onChange }) => {
                             width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden',
                             background: 'var(--bg-panel)', flexShrink: 0, border: '1px solid var(--border-light)',
                         }}>
-                            {url && <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
+                            {url && <img src={getOptimizedImage(url, 'thumb')} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
                         </div>
                         {/* URL input */}
                         <input
