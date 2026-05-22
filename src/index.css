@@ -1926,7 +1926,7 @@ body {
 }
 
 /* Mini Like Button */
-.action-heart-pill {
+.mini-like-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1939,20 +1939,20 @@ body {
   transition: all 0.2s ease;
 }
 
-.action-heart-pill:hover {
+.mini-like-btn:hover {
   background: color-mix(in srgb, var(--text-main) 12%, transparent);
 }
 
-.action-heart-pill:active {
+.mini-like-btn:active {
   transform: scale(0.92);
 }
 
-.action-heart-pill.active {
+.mini-like-btn.active {
   color: var(--text-main);
   background: color-mix(in srgb, var(--text-main) 12%, transparent);
 }
 
-.action-heart-pill.active .eng-icon {
+.mini-like-btn.active .eng-icon {
   fill: var(--text-main);
   animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -2567,7 +2567,7 @@ body {
     padding: 0;
 }
 
-.solo-action .action-heart-pill {
+.solo-action .mini-like-btn {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     padding: 8px 16px;

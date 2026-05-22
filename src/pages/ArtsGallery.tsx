@@ -892,13 +892,6 @@ const ArtsGallery = () => {
                     gap: 4px;
                     pointer-events: none;
                 }
-                .engagement-minimal .action-heart-pill {
-                    padding: 6px 12px;
-                    background: rgba(0,0,0,0.4);
-                    backdrop-filter: blur(8px);
-                    border: 1px solid rgba(255,255,255,0.1);
-                    color: white;
-                }
 
                 .arts-lightbox {
                     position: fixed;

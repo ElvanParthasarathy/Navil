@@ -876,7 +876,7 @@ const CategoryListView = () => {
 
                 .blog-cover-wrapper {
                     width: 100%;
-                    aspect-ratio: 16 / 9;
+                    height: 200px;
                     position: relative;
                     overflow: hidden;
                     background: var(--bg-panel);
