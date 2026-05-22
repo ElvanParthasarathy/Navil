@@ -22,13 +22,21 @@ const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാള
 const TRANSL_LABELS = { en: 'Aa', ta: 'த', ml: 'മ', hi: 'हि', te: 'తె', sa: 'सं' };
 const INDIC_LANGS = ['ta', 'ml', 'hi', 'sa', 'te'];
 
+// Fix Google Drive image URLs embedded inside HTML content (from TipTap editor)
+const fixDriveImages = (html: string): string => {
+    const drivePattern = /(src=["'])[^"']*(drive\.google\.com\/(?:file\/d\/|open\?id=)|lh3\.googleusercontent\.com\/d\/)([a-zA-Z0-9_-]+)[^"']*(["'])/gi;
+    return html.replace(drivePattern, (_match, before, _domain, fileId, after) => {
+        return `${before}https://drive.google.com/thumbnail?id=${fileId}&sz=w1200${after}`;
+    });
+};
+
 // Convert text to renderable HTML — handles both plain text and TipTap's br-based HTML
 const textToHtml = (raw) => {
     if (!raw) return '';
     if (!/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) {
-        return raw.split('\n').map(line => 
+        return fixDriveImages(raw.split('\n').map(line => 
             line.trim() ? `<p>${line}</p>` : '<p style="height:1.2em"></p>'
-        ).join('');
+        ).join(''));
     }
     let html = raw.replace(/<p>([\s\S]*?)<\/p>/gi, (match, content) => {
         const lines = content.split(/<br\s*\/?>/gi);
@@ -38,7 +46,7 @@ const textToHtml = (raw) => {
             return `<p>${trimmed}</p>`;
         }).join('');
     });
-    return html;
+    return fixDriveImages(html);
 };
 
 /** Clean up a single post item from raw Firebase data */
