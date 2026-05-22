@@ -916,7 +916,7 @@ const BookMakerView = () => {
                         width: 100%;
                         max-width: 700px;
                         min-height: 900px;
-                        height: fit-content;
+                        height: auto;
                         box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
                         padding: 60px 50px;
                         display: flex;
@@ -1260,18 +1260,19 @@ const BookMakerView = () => {
                         }
                         .a4-page {
                             width: 210mm !important; max-width: none !important;
-                            height: 297mm !important; max-height: 297mm !important; min-height: 297mm !important;
+                            min-height: 297mm !important; height: auto !important;
                             box-shadow: none !important; border-radius: 0;
                             padding: 1.5cm 2cm; margin: 0 auto;
                             page-break-after: always;
                             break-after: page;
-                            page-break-inside: avoid;
-                            overflow: hidden;
+                            page-break-inside: auto; /* Let huge poems safely break across physical sheets */
+                            overflow: visible;
                         }
                         .cover-page { 
                             border: none;
                             height: 297mm !important;
-                            min-height: 297mm !important;
+                            max-height: 297mm !important;
+                            overflow: hidden;
                         }
                         
                         /* Scale up fonts purely for physical print visibility */
