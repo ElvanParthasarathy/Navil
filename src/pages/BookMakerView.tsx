@@ -611,20 +611,23 @@ const BookMakerView = () => {
         }
 
         return chunks.map((chunk, chunkIdx) => (
-            <div key={`poem-${idx}-page-${chunkIdx}`} className="a4-page">
-                {chunk.map((ver, vIdx) => (
-                    <div key={vIdx} className="book-version-block">
-                        {versions.length > 1 && (
-                            <div className="version-badge">
-                                {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
-                            </div>
-                        )}
-                        <div className="a4-content-title">{ver.title}</div>
-                        <div className="a4-content-body">{ver.text}</div>
-                        {ver.author && <div className="a4-author">— {ver.author}</div>}
-                        {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
-                    </div>
-                ))}
+            <div key={`poem-${idx}-page-${chunkIdx}`} className="a4-page numbered-page">
+                {chunk.map((ver, vIdx) => {
+                    const isOriginal = chunkIdx === 0 && vIdx === 0;
+                    return (
+                        <div key={vIdx} className="book-version-block">
+                            {versions.length > 1 && (
+                                <div className="version-badge">
+                                    {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
+                                </div>
+                            )}
+                            <div className={`a4-content-title ${isOriginal ? 'main-title' : 'variant-title'}`}>{ver.title}</div>
+                            <div className={`a4-content-body ${isOriginal ? 'main-body' : 'variant-body'}`}>{ver.text}</div>
+                            {ver.author && <div className={`a4-author ${isOriginal ? 'main-author' : 'variant-author'}`}>— {ver.author}</div>}
+                            {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
+                        </div>
+                    );
+                })}
             </div>
         ));
     };
@@ -639,20 +642,23 @@ const BookMakerView = () => {
         }
 
         return chunks.map((chunk, chunkIdx) => (
-            <div key={`quote-${idx}-page-${chunkIdx}`} className="a4-page">
+            <div key={`quote-${idx}-page-${chunkIdx}`} className="a4-page numbered-page">
                 {chunkIdx === 0 && <div className="quote-number">{idx + 1}</div>}
-                {chunk.map((ver, vIdx) => (
-                    <div key={vIdx} className="book-version-block" style={{ textAlign: 'center' }}>
-                        {versions.length > 1 && (
-                            <div className="version-badge" style={{ textAlign: 'center' }}>
-                                {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
-                            </div>
-                        )}
-                        <div className="a4-content-quote">{ver.text}</div>
-                        {ver.author && <div className="a4-author" style={{ textAlign: 'center' }}>— {ver.author}</div>}
-                        {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
-                    </div>
-                ))}
+                {chunk.map((ver, vIdx) => {
+                    const isOriginal = chunkIdx === 0 && vIdx === 0;
+                    return (
+                        <div key={vIdx} className="book-version-block" style={{ textAlign: 'center' }}>
+                            {versions.length > 1 && (
+                                <div className="version-badge" style={{ textAlign: 'center' }}>
+                                    {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
+                                </div>
+                            )}
+                            <div className={`a4-content-quote ${isOriginal ? 'main-quote' : 'variant-quote'}`}>{ver.text}</div>
+                            {ver.author && <div className={`a4-author ${isOriginal ? 'main-author' : 'variant-author'}`} style={{ textAlign: 'center' }}>— {ver.author}</div>}
+                            {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
+                        </div>
+                    );
+                })}
             </div>
         ));
     };
@@ -881,6 +887,7 @@ const BookMakerView = () => {
                         flex-direction: column;
                         align-items: center;
                         gap: 40px;
+                        counter-reset: book-page-num;
                     }
                     [data-theme='dark'] .bookmaker-canvas {
                         background: color-mix(in srgb, var(--bg-panel) 30%, #0d1117);
@@ -903,6 +910,23 @@ const BookMakerView = () => {
                         border-radius: 2px;
                         overflow: visible;
                     }
+                    
+                    /* Page Numbers */
+                    .a4-page.numbered-page {
+                        counter-increment: book-page-num;
+                        padding-bottom: 80px; /* Room for footer */
+                    }
+                    .a4-page.numbered-page::after {
+                        content: counter(book-page-num);
+                        position: absolute;
+                        bottom: 30px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-family: ${ENGLISH_FONT}, serif;
+                        color: #888;
+                        font-size: 0.9rem;
+                    }
+
                     .page-centered {
                         justify-content: center;
                         align-items: center;
@@ -974,6 +998,74 @@ const BookMakerView = () => {
                     }
 
                     /* Dedication Page */
+                    /* ═══ CONTENT HIERARCHY ═══ */
+                    .book-version-block { margin-bottom: 50px; }
+                    
+                    .version-badge {
+                        font-size: 0.8rem;
+                        color: #777;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        margin-bottom: 12px;
+                        font-family: ${ENGLISH_FONT}, serif;
+                    }
+
+                    /* Original Variant Styles */
+                    .main-title {
+                        font-size: 1.8rem;
+                        font-weight: 800;
+                        margin-bottom: 20px;
+                        line-height: 1.3;
+                        color: #111;
+                    }
+                    .main-body {
+                        font-size: 1.15rem;
+                        line-height: 2.2;
+                        color: #000;
+                        white-space: pre-wrap;
+                        font-weight: 500;
+                    }
+                    .main-quote {
+                        font-size: 1.3rem;
+                        line-height: 2;
+                        font-weight: 600;
+                        font-style: italic;
+                        color: #222;
+                        margin-bottom: 20px;
+                        white-space: pre-wrap;
+                    }
+                    .main-author { font-size: 1rem; color: #555; margin-top: 15px; font-weight: 600; }
+
+                    /* Transliteration/Other Variant Styles */
+                    .variant-title {
+                        font-size: 1.3rem;
+                        font-weight: 600;
+                        margin-bottom: 15px;
+                        line-height: 1.3;
+                        color: #555;
+                    }
+                    .variant-body {
+                        font-size: 0.95rem;
+                        line-height: 1.9;
+                        color: #444;
+                        white-space: pre-wrap;
+                    }
+                    .variant-quote {
+                        font-size: 1.1rem;
+                        line-height: 1.8;
+                        font-style: italic;
+                        color: #555;
+                        margin-bottom: 15px;
+                        white-space: pre-wrap;
+                    }
+                    .variant-author { font-size: 0.9rem; color: #777; margin-top: 10px; }
+
+                    .version-separator {
+                        text-align: center;
+                        color: #ccc;
+                        margin: 40px 0 10px;
+                        letter-spacing: 4px;
+                    }
                     .dedication-page {
                         font-style: italic;
                         color: #555;
@@ -1143,9 +1235,16 @@ const BookMakerView = () => {
                             height: 297mm !important;
                             min-height: 297mm !important;
                         }
-                        .a4-content-title { font-size: 2rem; }
-                        .a4-content-body { font-size: 1.4rem; line-height: 2.2; }
-                        .a4-content-quote { font-size: 1.6rem; }
+                        
+                        /* Scale up fonts purely for physical print visibility */
+                        .main-title { font-size: 2.2rem; }
+                        .main-body { font-size: 1.4rem; line-height: 2.2; }
+                        .main-quote { font-size: 1.6rem; }
+                        
+                        .variant-title { font-size: 1.6rem; }
+                        .variant-body { font-size: 1.1rem; line-height: 2; }
+                        .variant-quote { font-size: 1.3rem; }
+                        
                         .version-badge { font-size: 0.9rem; }
                     }
                 `}</style>
