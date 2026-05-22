@@ -615,16 +615,26 @@ const BookMakerView = () => {
                 {chunk.map((ver, vIdx) => {
                     const isOriginal = chunkIdx === 0 && vIdx === 0;
                     return (
-                        <div key={vIdx} className="book-version-block">
+                        <div key={vIdx} className="book-version-block poem-align-left">
                             {versions.length > 1 && (
                                 <div className="version-badge">
                                     {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
                                 </div>
                             )}
-                            <div className={`a4-content-title ${isOriginal ? 'main-title' : 'variant-title'}`}>{ver.title}</div>
+                            <div className={`a4-content-title ${isOriginal ? 'main-title' : 'variant-title'}`}>
+                                {isOriginal && <span className="serial-number">{idx + 1}. </span>}
+                                {ver.title}
+                            </div>
                             <div className={`a4-content-body ${isOriginal ? 'main-body' : 'variant-body'}`}>{ver.text}</div>
                             {ver.author && <div className={`a4-author ${isOriginal ? 'main-author' : 'variant-author'}`}>— {ver.author}</div>}
+                            
+                            {/* Visual separation between variants */}
                             {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
+                            
+                            {/* Clear end of entire poem separation */}
+                            {chunkIdx === chunks.length - 1 && vIdx === chunk.length - 1 && (
+                                <div className="poem-end-separator">❧</div>
+                            )}
                         </div>
                     );
                 })}
@@ -643,19 +653,26 @@ const BookMakerView = () => {
 
         return chunks.map((chunk, chunkIdx) => (
             <div key={`quote-${idx}-page-${chunkIdx}`} className="a4-page numbered-page">
-                {chunkIdx === 0 && <div className="quote-number">{idx + 1}</div>}
                 {chunk.map((ver, vIdx) => {
                     const isOriginal = chunkIdx === 0 && vIdx === 0;
                     return (
-                        <div key={vIdx} className="book-version-block" style={{ textAlign: 'center' }}>
+                        <div key={vIdx} className="book-version-block poem-align-left">
                             {versions.length > 1 && (
-                                <div className="version-badge" style={{ textAlign: 'center' }}>
+                                <div className="version-badge">
                                     {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
                                 </div>
                             )}
-                            <div className={`a4-content-quote ${isOriginal ? 'main-quote' : 'variant-quote'}`}>{ver.text}</div>
-                            {ver.author && <div className={`a4-author ${isOriginal ? 'main-author' : 'variant-author'}`} style={{ textAlign: 'center' }}>— {ver.author}</div>}
+                            <div className={`a4-content-quote ${isOriginal ? 'main-quote' : 'variant-quote'}`}>
+                                {isOriginal && <span className="serial-number">{idx + 1}. </span>}
+                                {ver.text}
+                            </div>
+                            {ver.author && <div className={`a4-author ${isOriginal ? 'main-author' : 'variant-author'}`}>— {ver.author}</div>}
+                            
                             {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
+                            
+                            {chunkIdx === chunks.length - 1 && vIdx === chunk.length - 1 && (
+                                <div className="poem-end-separator">❧</div>
+                            )}
                         </div>
                     );
                 })}
@@ -999,6 +1016,10 @@ const BookMakerView = () => {
 
                     /* Dedication Page */
                     /* ═══ CONTENT HIERARCHY ═══ */
+                    .poem-align-left {
+                        text-align: left;
+                        width: 100%;
+                    }
                     .book-version-block { margin-bottom: 50px; }
                     
                     .version-badge {
@@ -1008,25 +1029,35 @@ const BookMakerView = () => {
                         letter-spacing: 1px;
                         margin-bottom: 12px;
                         font-family: ${ENGLISH_FONT}, serif;
+                        border-bottom: 1px solid #eee;
+                        padding-bottom: 4px;
+                        display: inline-block;
+                    }
+
+                    .serial-number {
+                        color: #999;
+                        font-family: ${ENGLISH_FONT}, serif;
+                        font-weight: 400;
+                        margin-right: 8px;
                     }
 
                     /* Original Variant Styles */
                     .main-title {
-                        font-size: 1.8rem;
+                        font-size: 2rem;
                         font-weight: 800;
-                        margin-bottom: 20px;
+                        margin-bottom: 24px;
                         line-height: 1.3;
                         color: #111;
                     }
                     .main-body {
-                        font-size: 1.15rem;
+                        font-size: 1.25rem;
                         line-height: 2.2;
                         color: #000;
                         white-space: pre-wrap;
                         font-weight: 500;
                     }
                     .main-quote {
-                        font-size: 1.3rem;
+                        font-size: 1.4rem;
                         line-height: 2;
                         font-weight: 600;
                         font-style: italic;
@@ -1034,7 +1065,7 @@ const BookMakerView = () => {
                         margin-bottom: 20px;
                         white-space: pre-wrap;
                     }
-                    .main-author { font-size: 1rem; color: #555; margin-top: 15px; font-weight: 600; }
+                    .main-author { font-size: 1rem; color: #555; margin-top: 15px; font-weight: 600; text-align: right; }
 
                     /* Transliteration/Other Variant Styles */
                     .variant-title {
@@ -1058,13 +1089,20 @@ const BookMakerView = () => {
                         margin-bottom: 15px;
                         white-space: pre-wrap;
                     }
-                    .variant-author { font-size: 0.9rem; color: #777; margin-top: 10px; }
+                    .variant-author { font-size: 0.9rem; color: #777; margin-top: 10px; text-align: right; }
 
                     .version-separator {
                         text-align: center;
                         color: #ccc;
                         margin: 40px 0 10px;
                         letter-spacing: 4px;
+                    }
+                    
+                    .poem-end-separator {
+                        text-align: center;
+                        color: #aaa;
+                        font-size: 1.5rem;
+                        margin: 60px 0 20px;
                     }
                     .dedication-page {
                         font-style: italic;
