@@ -245,6 +245,28 @@ export const TesterPanelBackup = ({ dataStore, setDataStore, setStatus, setMessa
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                         Clear Mocks
                     </button>
+                    <button className="adm-btn danger" onClick={() => {
+                        let totalCleaned = 0;
+                        const newDataStore = { ...dataStore };
+                        Object.keys(newDataStore).forEach(key => {
+                            newDataStore[key] = newDataStore[key].map(item => {
+                                if (item.cover_image && item.cover_image.includes('picsum.photos')) {
+                                    const newItem = { ...item };
+                                    delete newItem.cover_image;
+                                    totalCleaned++;
+                                    return newItem;
+                                }
+                                return item;
+                            });
+                        });
+                        setDataStore(newDataStore);
+                        setMessage(`Cleaned picsum thumbnails from ${totalCleaned} items. Click Save to commit.`);
+                        setStatus('success');
+                        setTimeout(() => setMessage(''), 5000);
+                    }} style={{ background: '#f57c00', color: 'white', border: 'none' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Clean Picsum DB Thumbs
+                    </button>
                 </div>
                 
                 <div className="adm-field" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '2px solid var(--border-light)' }}>

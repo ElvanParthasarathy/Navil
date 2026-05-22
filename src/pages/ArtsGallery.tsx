@@ -95,7 +95,7 @@ const formatArtDate = (dateString) => {
             const month = months[parsed.getMonth()];
             const day = String(parsed.getDate()).padStart(2, '0');
             const year = parsed.getFullYear();
-            
+
             if (!dateString.includes('T') && !dateString.includes(':')) {
                 return `${month} ${day}, ${year}`;
             }
@@ -105,7 +105,7 @@ const formatArtDate = (dateString) => {
             const ampm = hours >= 12 ? 'pm' : 'am';
             hours = hours % 12;
             hours = hours ? hours : 12;
-            
+
             return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
         }
     } catch (e) {

@@ -126,7 +126,7 @@ const ReadingView = () => {
         }
     }
 
-    const finalCoverImage = post ? (post.cover_image || (autoThumbnails ? `https://picsum.photos/seed/${post.id}/800/400` : null)) : null;
+    const finalCoverImage = post ? (post.cover_image || null) : null;
 
 
 

@@ -453,7 +453,7 @@ const CategoryListView = () => {
                             post.meter
                         ].filter(Boolean);
 
-                        const coverImage = post.cover_image || (autoThumbnails ? `https://picsum.photos/seed/${post.id}/800/400` : null);
+                        const coverImage = post.cover_image || null;
 
                         return (
                             <Link
