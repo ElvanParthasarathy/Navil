@@ -21,15 +21,13 @@ export const getOptimizedImage = (url: string, size: 'thumb' | 'medium' | 'full'
     if (match && match[1]) {
         const fileId = match[1];
         
-        // Define size parameters for Google User Content
-        // s0 = full size
-        // s400 = 400px
-        // s1200 = 1200px
-        let sizeParam = 's0'; 
-        if (size === 'thumb') sizeParam = 's600';
-        if (size === 'medium') sizeParam = 's1200';
+        // Define width parameters for Google Drive Thumbnail API
+        // This endpoint reliably supports third-party embedding for public files
+        let width = '2000'; 
+        if (size === 'thumb') width = '600';
+        if (size === 'medium') width = '1200';
 
-        return `https://lh3.googleusercontent.com/d/${fileId}=${sizeParam}`;
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w${width}`;
     }
 
     // Passthrough for non-drive links (GitHub, External CDNs, etc.)
