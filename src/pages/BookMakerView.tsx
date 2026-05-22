@@ -911,14 +911,14 @@ const BookMakerView = () => {
 
                     /* Cover Page */
                     .cover-page {
-                        background: linear-gradient(160deg, #1a1a2e, #16213e, #0f3460);
-                        color: white;
+                        background: white;
+                        color: #111;
                         min-height: 1000px;
-                        border: none;
+                        border: 1px solid #eaeaea;
                     }
                     .cover-ornament {
                         font-size: 2rem;
-                        color: rgba(255,255,255,0.15);
+                        color: #bbb;
                         letter-spacing: 8px;
                     }
                     .cover-title {
@@ -931,14 +931,14 @@ const BookMakerView = () => {
                         font-size: 1.6rem;
                         font-weight: 400;
                         font-style: italic;
-                        color: rgba(255,255,255,0.6);
+                        color: #666;
                         margin-bottom: 60px;
                         font-family: ${ENGLISH_FONT}, serif;
                     }
                     .cover-line {
                         width: 80px;
                         height: 2px;
-                        background: rgba(255,255,255,0.3);
+                        background: #eee;
                         margin: 0 auto 30px;
                     }
                     .cover-author {
@@ -948,7 +948,7 @@ const BookMakerView = () => {
                     }
                     .cover-author-en {
                         font-size: 1.1rem;
-                        color: rgba(255,255,255,0.5);
+                        color: #777;
                         font-family: ${ENGLISH_FONT}, serif;
                     }
                     .cover-year {
@@ -957,7 +957,7 @@ const BookMakerView = () => {
                         left: 50%;
                         transform: translateX(-50%);
                         font-size: 1rem;
-                        color: rgba(255,255,255,0.3);
+                        color: #aaa;
                         font-family: ${ENGLISH_FONT}, serif;
                     }
 
@@ -1137,11 +1137,6 @@ const BookMakerView = () => {
                             break-after: page;
                             page-break-inside: avoid;
                             overflow: hidden;
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        .more-indicator { display: none; }
-                        
                         /* Optional: You can restore white cover if needed, but user wants exact preview */
                         .cover-page { 
                             border: none;
