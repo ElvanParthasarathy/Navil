@@ -1117,7 +1117,9 @@ const BookMakerView = () => {
                     @media print {
                         @page { size: A4; margin: 0; }
                         body, html, .bookmaker-view { background: white; height: auto; overflow: visible; }
-                        .mobile-top-bar, .bookmaker-toolbar, .bookmaker-settings { display: none !important; }
+                        .sidebar, .mobile-top-bar, .bookmaker-toolbar, .bookmaker-settings { display: none !important; }
+                        .app-shell { display: block !important; }
+                        .main-content { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
                         .bookmaker-body { overflow: visible; display: block; }
                         .bookmaker-canvas { 
                             padding: 0 !important; 
@@ -1134,17 +1136,15 @@ const BookMakerView = () => {
                             page-break-after: always;
                             break-after: page;
                             overflow: hidden;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
                         }
                         .more-indicator { display: none; }
                         
-                        /* Fix colors for print */
+                        /* Optional: You can restore white cover if needed, but user wants exact preview */
                         .cover-page { 
-                            background: white !important; 
-                            color: black !important; 
-                            border: 1px solid #ccc; 
+                            border: none;
                         }
-                        .cover-ornament, .cover-subtitle, .cover-author-en, .cover-year { color: #555 !important; }
-                        .cover-line { background: #333 !important; }
                     }
                 `}</style>
 
