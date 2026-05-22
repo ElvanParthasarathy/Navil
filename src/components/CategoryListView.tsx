@@ -858,6 +858,7 @@ const CategoryListView = () => {
                     grid-template-columns: repeat(3, 1fr);
                     gap: 24px;
                     width: 100%;
+                    margin-top: 20px;
                 }
 
                 .blog-card-item {
