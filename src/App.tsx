@@ -396,7 +396,6 @@ const router = createBrowserRouter([
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },
-            { path: "bookmaker", element: <BookMakerView /> },
             { path: "writings", element: <Writings /> },
             { path: "teaching", element: <Teaching /> },
             { path: "arts", element: <Arts /> },

@@ -20,6 +20,7 @@ import { DiaryEditor } from '../components/admin/DiaryEditor';
 import { ArtEditor } from '../components/admin/ArtEditor';
 import AdminLogin from '../components/admin/AdminLogin';
 import AdminDashboard from '../components/admin/AdminDashboard';
+import BookMakerView from '../components/admin/BookMakerView';
 import { addComment } from '../lib/engagement';
 
 import '../styles/admin.css';
@@ -1126,6 +1127,7 @@ const Admin = () => {
             case 'diary': return <DiaryEditor {...commonProps} />;
             case 'arts': return <ArtEditor {...commonProps} />;
             case 'comments': return <CommentsManager username={username} profilePic={dataStore.profile?.profilePic || dataStore.profile?.avatar} />;
+            case 'bookmaker': return <BookMakerView />;
             default: return null;
         }
     };
@@ -1169,6 +1171,10 @@ const Admin = () => {
                     <div className="nav-group-label">Engagement</div>
                     <button className={`admin-nav-item ${activeTab === 'comments' ? 'active' : ''}`} onClick={() => { setActiveTab('comments'); setEditingId(null); setMobileMenuOpen(false); }}>
                         <div className="nav-icon"><FiMessageCircle size={16} /></div> <span>Comments</span>
+                    </button>
+                    <div className="nav-group-label">Tools</div>
+                    <button className={`admin-nav-item ${activeTab === 'bookmaker' ? 'active' : ''}`} onClick={() => { setActiveTab('bookmaker'); setEditingId(null); setMobileMenuOpen(false); }}>
+                        <div className="nav-icon"><FiFileText size={16} /></div> <span>Book Maker</span>
                     </button>
                     <div className="nav-group-label">System</div>
                     <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => { setActiveTab('settings'); setEditingId(null); setMobileMenuOpen(false); }}>

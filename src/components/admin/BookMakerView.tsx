@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { db } from '../lib/firebaseClient';
+import { db } from '../../lib/firebaseClient';
 import { ref, get } from 'firebase/database';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak,
     AlignmentType, TableOfContents, StyleLevel, BorderStyle,
     Header, Footer, PageNumber, NumberFormat
 } from 'docx';
 import { FiDownload, FiEdit3, FiChevronDown, FiChevronUp, FiPrinter } from 'react-icons/fi';
-import MobileTopBar from '../components/MobileTopBar';
 import { Helmet } from 'react-helmet-async';
 
 const PRIMARY_FONT = "Mukta Malar";
@@ -685,14 +684,14 @@ const BookMakerView = () => {
             <Helmet>
                 <title>நூல் தொகுப்பு | Book Maker</title>
             </Helmet>
-            <MobileTopBar title="நூல் தொகுப்பு" />
 
-            <div className="bookmaker-view page-view fadeIn">
+            <div className="bookmaker-view">
                 <style>{`
                     .bookmaker-view {
                         display: flex;
                         flex-direction: column;
-                        height: 100vh;
+                        flex: 1;
+                        height: 100%;
                         overflow: hidden;
                         background: var(--bg-body);
                     }
@@ -1247,7 +1246,7 @@ const BookMakerView = () => {
                     @media print {
                         @page { size: A4; margin: 0; }
                         body, html, .bookmaker-view { background: white; height: auto; overflow: visible; }
-                        .sidebar, .mobile-top-bar, .bookmaker-toolbar, .bookmaker-settings { display: none !important; }
+                        .sidebar, .admin-sidebar, .admin-mobile-header, .mobile-top-bar, .bookmaker-toolbar, .bookmaker-settings { display: none !important; }
                         .app-shell { display: block !important; }
                         .main-content { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
                         .bookmaker-body { overflow: visible; display: block; }
