@@ -21,15 +21,9 @@ export const getOptimizedImage = (url: string, size: 'thumb' | 'medium' | 'full'
     if (match && match[1]) {
         const fileId = match[1];
         
-        // Define size parameters for Google User Content
-        // s0 = full size
-        // s400 = 400px
-        // s1200 = 1200px
-        let sizeParam = 's0'; 
-        if (size === 'thumb') sizeParam = 's600';
-        if (size === 'medium') sizeParam = 's1200';
-
-        return `https://lh3.googleusercontent.com/d/${fileId}=${sizeParam}`;
+        // Note: Google recently restricted the lh3.googleusercontent.com endpoint for drive files
+        // and resizing parameters (=s600) often break. The most reliable method is the classic uc endpoint.
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
     }
 
     // Passthrough for non-drive links (GitHub, External CDNs, etc.)
