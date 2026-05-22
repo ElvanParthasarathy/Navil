@@ -931,14 +931,14 @@ const BookMakerView = () => {
                     /* Page Numbers */
                     .a4-page.numbered-page {
                         counter-increment: book-page-num;
-                        padding-bottom: 80px; /* Room for footer */
+                        padding-bottom: 40px; 
                     }
                     .a4-page.numbered-page::after {
                         content: counter(book-page-num);
-                        position: absolute;
-                        bottom: 30px;
-                        left: 50%;
-                        transform: translateX(-50%);
+                        display: block;
+                        margin-top: auto;
+                        padding-top: 40px;
+                        text-align: center;
                         font-family: ${ENGLISH_FONT}, serif;
                         color: #888;
                         font-size: 0.9rem;
