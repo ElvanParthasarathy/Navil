@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBook, FiImage, FiClock, FiTrendingUp, FiZap, FiArrowRight, FiDownload, FiUploadCloud, FiSliders, FiFeather, FiAnchor } from 'react-icons/fi';
 import { db } from '../../lib/firebaseClient';
-import { ref, set } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 
 const COLLECTION_META = {
     quotes: { label: 'Quotes', icon: <FiMessageCircle size={20} />, color: '#d4af37' },
@@ -100,16 +100,29 @@ const AdminDashboard = ({ dataStore, username, onNavigate }: {
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
-    const handleDownloadBackup = () => {
-        const dataStr = JSON.stringify(dataStore, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `elvan_database_backup_${new Date().toISOString().slice(0, 10)}.json`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownloadBackup = async () => {
+        try {
+            setIsDownloading(true);
+            const snapshot = await get(ref(db));
+            const rawData = snapshot.val() || {};
+            
+            const dataStr = JSON.stringify(rawData, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `elvan_firebase_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Backup failed:", error);
+            alert("Failed to generate backup: " + error.message);
+        } finally {
+            setIsDownloading(false);
+        }
     };
 
     return (
@@ -124,10 +137,11 @@ const AdminDashboard = ({ dataStore, username, onNavigate }: {
                     <button 
                         className="adm-btn primary" 
                         onClick={handleDownloadBackup}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--accent)', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '500' }}
+                        disabled={isDownloading}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--accent)', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', cursor: isDownloading ? 'wait' : 'pointer', fontWeight: '500', opacity: isDownloading ? 0.7 : 1 }}
                         title="Download a full backup of all database content"
                     >
-                        <FiDownload size={16} /> Export Backup
+                        <FiDownload size={16} /> {isDownloading ? 'Fetching Data...' : 'Export Backup'}
                     </button>
                     <div className="admin-dash-total">
                         <span className="admin-dash-total-num">{totalItems}</span>
