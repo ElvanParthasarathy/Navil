@@ -219,7 +219,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
         return (
             <div className="engagement-minimal">
                 <button 
-                    className={`mini-like-btn ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
+                    className={`action-heart-pill ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
                     onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 >
                     <FiHeart className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
@@ -242,7 +242,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                 
                 <div className={`engagement-actions-mini ${hideComments ? 'solo-action' : ''}`}>
                     <button 
-                        className={`mini-like-btn ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
+                        className={`action-heart-pill ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
                         onClick={handleLike}
                     >
                         <FiHeart className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
