@@ -1184,6 +1184,9 @@ const CategoryListView = () => {
                 }
 
                 @media (min-width: 769px) {
+                    .blog-grid-container {
+                        margin-top: 8px;
+                    }
                     .controls-area {
                         gap: 16px;
                     }
