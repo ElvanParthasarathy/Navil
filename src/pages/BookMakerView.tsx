@@ -124,9 +124,7 @@ const BookMakerView = () => {
 
                 // Original version — clearly label the language
                 versions.push({
-                    label: variants.length > 1
-                        ? `மூலம் — ${langLabel} (Original)`
-                        : `மூலம் — ${langLabel} (Original)`,
+                    label: `${langLabel} (Original)`,
                     title,
                     text,
                     author
@@ -160,7 +158,7 @@ const BookMakerView = () => {
             // Fallback: content-based or direct text
             const text = stripHtml(item.text || '');
             if (text) {
-                versions.push({ label: 'மூலம் (Original)', title: item.title || '', text, author: item.author || '' });
+                versions.push({ label: 'Original', title: item.title || '', text, author: item.author || '' });
             }
         }
 
