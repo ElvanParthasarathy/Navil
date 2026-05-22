@@ -1111,7 +1111,7 @@ const Home = () => {
                                     Welcome. This is Navil—a personal digital archive to express thoughts, share writings, and display creative digital arts.
                                 </p>
                                 <div className="mobile-quick-links">
-                                    <button onClick={() => navigate('/writings')} className="mobile-quick-link-btn">
+                                    <button onClick={() => navigate('/writings', { state: { fromQuickLink: true } })} className="mobile-quick-link-btn">
                                         <div className="btn-icon-wrapper">
                                             <FiFeather size={16} />
                                         </div>
@@ -1120,7 +1120,7 @@ const Home = () => {
                                             <span className="btn-text-en">writings</span>
                                         </div>
                                     </button>
-                                    <button onClick={() => navigate('/arts')} className="mobile-quick-link-btn">
+                                    <button onClick={() => navigate('/arts', { state: { fromQuickLink: true } })} className="mobile-quick-link-btn">
                                         <div className="btn-icon-wrapper">
                                             <FiImage size={16} />
                                         </div>

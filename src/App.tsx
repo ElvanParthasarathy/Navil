@@ -84,10 +84,12 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const navType = useNavigationType();
     const isFirstRender = React.useRef(true);
 
     const [navState, setNavState] = React.useState({
         prevPath: location.pathname,
+        prevState: location.state as any,
         direction: 'none'
     });
 
@@ -119,7 +121,11 @@ const Layout = () => {
             return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/archive' || normalized === '/about';
         };
 
-        if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
+        if (location.state?.fromQuickLink) {
+            newDirection = 'forward';
+        } else if (navType === 'POP' && navState.prevState?.fromQuickLink && isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
+            newDirection = 'backward';
+        } else if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
             newDirection = 'none';
         } else if (currentDepth < prevDepth) {
             newDirection = 'backward';
@@ -138,6 +144,7 @@ const Layout = () => {
         currentDirection = newDirection;
         setNavState({
             prevPath: location.pathname,
+            prevState: location.state,
             direction: newDirection
         });
     }
