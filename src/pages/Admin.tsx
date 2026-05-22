@@ -1289,7 +1289,6 @@ const Admin = () => {
                         dataStore={dataStore}
                         username={username}
                         onNavigate={(tab) => { setActiveTab(tab); setEditingId(null); }}
-                        onMasterSave={handleMigrateToFirebase}
                     />
                 ) : activeTab === 'profile' ? (
                     <ProfileEditor

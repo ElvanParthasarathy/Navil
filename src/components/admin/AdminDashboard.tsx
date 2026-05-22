@@ -28,11 +28,10 @@ interface DashboardItem {
     variants?: any[];
 }
 
-const AdminDashboard = ({ dataStore, username, onNavigate, onMasterSave }: { 
+const AdminDashboard = ({ dataStore, username, onNavigate }: { 
     dataStore: any, 
     username: string, 
-    onNavigate: (tab: string) => void, 
-    onMasterSave: () => void 
+    onNavigate: (tab: string) => void
 }) => {
 
     // Collect all items with dates for "recent" / "new" computation
@@ -122,14 +121,6 @@ const AdminDashboard = ({ dataStore, username, onNavigate, onMasterSave }: {
                     <p className="admin-dash-sub">Here's what's happening with your content.</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-                    <button 
-                        className="adm-btn primary" 
-                        onClick={onMasterSave}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#FFCA28', color: '#333', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: '600' }}
-                        title="Migrate all data to Firebase Firestore"
-                    >
-                        <FiUploadCloud size={16} /> Commit All to Firebase
-                    </button>
                     <button 
                         className="adm-btn primary" 
                         onClick={handleDownloadBackup}
