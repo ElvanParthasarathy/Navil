@@ -13,10 +13,25 @@ import { Helmet } from 'react-helmet-async';
 const PRIMARY_FONT = "Mukta Malar";
 const ENGLISH_FONT = "Georgia";
 
+// Labels for original variant languages
 const LANG_LABELS: Record<string, string> = {
-    ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'हिन्दी',
-    te: 'తెలుగు', kn: 'ಕನ್ನಡ', thanglish: 'Thanglish',
+    ta: 'தமிழ் (Tamil)', en: 'English', ml: 'മലയാളം (Malayalam)', hi: 'हिन्दी (Hindi)',
+    te: 'తెలుగు (Telugu)', kn: 'ಕನ್ನಡ (Kannada)',
 };
+
+// Labels specifically for transliterations — clearly marked
+const TRANSL_LABELS: Record<string, string> = {
+    en: 'Thanglish Transliteration (ஆங்கில எழுத்துப்பெயர்ப்பு)',
+    ta: 'Tamil Transliteration (தமிழ் எழுத்துப்பெயர்ப்பு)',
+    thanglish: 'Thanglish Transliteration',
+    ml: 'Malayalam Transliteration (മലയാള ലിപ്യന്തരണം)',
+    hi: 'Hindi Transliteration (हिन्दी लिप्यंतरण)',
+    te: 'Telugu Transliteration (తెలుగు లిప్యంతరీకరణ)',
+    kn: 'Kannada Transliteration (ಕನ್ನಡ ಲಿಪ್ಯಂತರ)',
+};
+
+// Preferred ordering for transliteration keys
+const TRANSL_ORDER = ['en', 'thanglish', 'ta', 'hi', 'ml', 'te', 'kn'];
 
 // Strip HTML tags and convert <br> or <p> to newlines
 const stripHtml = (html: string) => {
@@ -58,8 +73,8 @@ const BookMakerView = () => {
     // Editable metadata
     const [bookTitle, setBookTitle] = useState('நவில் தொகுப்பு');
     const [bookSubtitle, setBookSubtitle] = useState('Navil Collection');
-    const [authorName, setAuthorName] = useState('எல்வன் நவில்');
-    const [authorNameEn, setAuthorNameEn] = useState('Elvan Navil');
+    const [authorName, setAuthorName] = useState('எல்வன் பார்த்தசாரதி');
+    const [authorNameEn, setAuthorNameEn] = useState('Elvan Parthasarathy');
     const [authorBio, setAuthorBio] = useState(
         'எழுத்தாளர், கவிஞர், மற்றும் படைப்பாளி. தமிழில் கவிதைகளையும், மொழிகளையும் (quotes) எழுதுவதில் ஆர்வம் கொண்டவர்.\n\nA writer, poet, and creator passionate about crafting poetry and quotes in Tamil.'
     );
@@ -107,28 +122,37 @@ const BookMakerView = () => {
                 const text = stripHtml(v.text || '');
                 const author = v.author || item.author || '';
 
-                // Original version
+                // Original version — clearly label the language
                 versions.push({
-                    label: variants.length > 1 ? langLabel : 'Original',
+                    label: variants.length > 1
+                        ? `மூலம் — ${langLabel} (Original)`
+                        : `மூலம் — ${langLabel} (Original)`,
                     title,
                     text,
                     author
                 });
 
-                // Transliterations
+                // Transliterations — sorted in a clear, consistent order
                 if (includeTransliterations) {
                     const translObj = v.transliterations || {};
-                    Object.keys(translObj).forEach(tLang => {
-                        if (translObj[tLang]) {
-                            const tTitle = v.titleTransliterations?.[tLang] || title;
-                            const tAuthor = v.authorTransliterations?.[tLang] || author;
-                            versions.push({
-                                label: LANG_LABELS[tLang] || tLang,
-                                title: tTitle,
-                                text: stripHtml(translObj[tLang]),
-                                author: tAuthor
-                            });
-                        }
+                    const translKeys = Object.keys(translObj).filter(k => translObj[k]);
+
+                    // Sort by preferred order
+                    const sortedKeys = [...translKeys].sort((a, b) => {
+                        const ai = TRANSL_ORDER.indexOf(a);
+                        const bi = TRANSL_ORDER.indexOf(b);
+                        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+                    });
+
+                    sortedKeys.forEach(tLang => {
+                        const tTitle = v.titleTransliterations?.[tLang] || title;
+                        const tAuthor = v.authorTransliterations?.[tLang] || author;
+                        versions.push({
+                            label: TRANSL_LABELS[tLang] || `${tLang} Transliteration`,
+                            title: tTitle,
+                            text: stripHtml(translObj[tLang]),
+                            author: tAuthor
+                        });
                     });
                 }
             });
@@ -136,7 +160,7 @@ const BookMakerView = () => {
             // Fallback: content-based or direct text
             const text = stripHtml(item.text || '');
             if (text) {
-                versions.push({ label: 'Original', title: item.title || '', text, author: item.author || '' });
+                versions.push({ label: 'மூலம் (Original)', title: item.title || '', text, author: item.author || '' });
             }
         }
 
