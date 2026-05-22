@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { db } from '../lib/firebaseClient';
 import { ref, get } from 'firebase/database';
-import {
-    Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak,
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak,
     AlignmentType, TableOfContents, StyleLevel, BorderStyle,
     Header, Footer, PageNumber, NumberFormat
 } from 'docx';
-import { FiDownload, FiEdit3, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiDownload, FiEdit3, FiChevronDown, FiChevronUp, FiPrinter } from 'react-icons/fi';
 import MobileTopBar from '../components/MobileTopBar';
 import { Helmet } from 'react-helmet-async';
 
@@ -604,40 +603,58 @@ const BookMakerView = () => {
     // ---- PREVIEW RENDERING ----
     const renderPoemPreview = (poem: any, idx: number) => {
         const versions = getAllVersions(poem);
-        return (
-            <div key={`poem-${idx}`} className="a4-page">
-                {versions.map((ver, vIdx) => (
+        const MAX_VERSIONS = 2; // Split into multiple pages if more than 2 versions
+        
+        const chunks = [];
+        for (let i = 0; i < versions.length; i += MAX_VERSIONS) {
+            chunks.push(versions.slice(i, i + MAX_VERSIONS));
+        }
+
+        return chunks.map((chunk, chunkIdx) => (
+            <div key={`poem-${idx}-page-${chunkIdx}`} className="a4-page">
+                {chunk.map((ver, vIdx) => (
                     <div key={vIdx} className="book-version-block">
                         {versions.length > 1 && (
-                            <div className="version-badge">{ver.label}</div>
+                            <div className="version-badge">
+                                {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
+                            </div>
                         )}
                         <div className="a4-content-title">{ver.title}</div>
                         <div className="a4-content-body">{ver.text}</div>
                         {ver.author && <div className="a4-author">— {ver.author}</div>}
-                        {vIdx < versions.length - 1 && <div className="version-separator">· · ·</div>}
+                        {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
                     </div>
                 ))}
             </div>
-        );
+        ));
     };
 
     const renderQuotePreview = (quote: any, idx: number) => {
         const versions = getAllVersions(quote);
-        return (
-            <div key={`quote-${idx}`} className="a4-page">
-                <div className="quote-number">{idx + 1}</div>
-                {versions.map((ver, vIdx) => (
+        const MAX_VERSIONS = 3; 
+        
+        const chunks = [];
+        for (let i = 0; i < versions.length; i += MAX_VERSIONS) {
+            chunks.push(versions.slice(i, i + MAX_VERSIONS));
+        }
+
+        return chunks.map((chunk, chunkIdx) => (
+            <div key={`quote-${idx}-page-${chunkIdx}`} className="a4-page">
+                {chunkIdx === 0 && <div className="quote-number">{idx + 1}</div>}
+                {chunk.map((ver, vIdx) => (
                     <div key={vIdx} className="book-version-block" style={{ textAlign: 'center' }}>
                         {versions.length > 1 && (
-                            <div className="version-badge" style={{ textAlign: 'center' }}>{ver.label}</div>
+                            <div className="version-badge" style={{ textAlign: 'center' }}>
+                                {ver.label} {chunkIdx > 0 && vIdx === 0 ? '(தொடர்ச்சி / Contd.)' : ''}
+                            </div>
                         )}
                         <div className="a4-content-quote">{ver.text}</div>
                         {ver.author && <div className="a4-author" style={{ textAlign: 'center' }}>— {ver.author}</div>}
-                        {vIdx < versions.length - 1 && <div className="version-separator">· · ·</div>}
+                        {vIdx < chunk.length - 1 && <div className="version-separator">· · ·</div>}
                     </div>
                 ))}
             </div>
-        );
+        ));
     };
 
     return (
@@ -1089,11 +1106,45 @@ const BookMakerView = () => {
                         .toolbar-actions {
                             justify-content: stretch;
                         }
-                        .toolbar-actions button { flex: 1; justify-content: center; }
+                        .toolbar-actions button { flex: 1; justify-content: center; padding: 10px 8px; font-size: 0.8rem; }
                         .bookmaker-canvas { padding: 20px 8px 100px; }
                         .a4-page { padding: 30px 20px; min-height: 600px; }
                         .cover-title { font-size: 2.2rem; }
                         .cover-subtitle { font-size: 1.2rem; }
+                    }
+
+                    /* ═══ PRINT SPECIFIC STYLES ═══ */
+                    @media print {
+                        @page { size: A4; margin: 0; }
+                        body, html, .bookmaker-view { background: white; height: auto; overflow: visible; }
+                        .mobile-top-bar, .bookmaker-toolbar, .bookmaker-settings { display: none !important; }
+                        .bookmaker-body { overflow: visible; display: block; }
+                        .bookmaker-canvas { 
+                            padding: 0 !important; 
+                            background: white !important; 
+                            gap: 0 !important; 
+                            overflow: visible !important; 
+                            align-items: flex-start;
+                        }
+                        .a4-page {
+                            width: 100%; max-width: none;
+                            height: 100vh; max-height: 100vh;
+                            box-shadow: none !important; border-radius: 0;
+                            padding: 2cm; margin: 0;
+                            page-break-after: always;
+                            break-after: page;
+                            overflow: hidden;
+                        }
+                        .more-indicator { display: none; }
+                        
+                        /* Fix colors for print */
+                        .cover-page { 
+                            background: white !important; 
+                            color: black !important; 
+                            border: 1px solid #ccc; 
+                        }
+                        .cover-ornament, .cover-subtitle, .cover-author-en, .cover-year { color: #555 !important; }
+                        .cover-line { background: #333 !important; }
                     }
                 `}</style>
 
@@ -1106,8 +1157,12 @@ const BookMakerView = () => {
                     <div className="toolbar-actions">
                         <button className="settings-toggle-btn" onClick={() => setSettingsOpen(!settingsOpen)}>
                             <FiEdit3 size={16} />
-                            {settingsOpen ? 'Hide Settings' : 'Edit Book'}
+                            {settingsOpen ? 'Hide' : 'Edit'}
                             {settingsOpen ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />}
+                        </button>
+                        <button className="settings-toggle-btn" onClick={() => window.print()} title="Print or Save as PDF">
+                            <FiPrinter size={16} />
+                            PDF
                         </button>
                         <button
                             className="book-download-btn"
@@ -1115,7 +1170,7 @@ const BookMakerView = () => {
                             disabled={isGenerating || isLoadingPreview}
                         >
                             <FiDownload size={16} />
-                            {isGenerating ? 'தொகுக்கப்படுகிறது...' : 'Download .docx'}
+                            {isGenerating ? 'தொகுக்கப்படுகிறது...' : 'Word (.docx)'}
                         </button>
                     </div>
                 </div>
