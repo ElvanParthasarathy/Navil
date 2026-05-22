@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight } from 'react-icons/fi';
+import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy } from 'react-icons/fi';
 import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
 import { getOptimizedImage } from '../../lib/media';
@@ -39,7 +39,8 @@ export const StandardListEditor = ({
     updateTransliteration,
     toggleTransliterationLang,
     onMoveItems,
-    onCopyItems
+    onCopyItems,
+    onDuplicateItems
 }) => {
     interface ConfirmState {
         open: boolean;
@@ -256,7 +257,7 @@ export const StandardListEditor = ({
                                 <button className="adm-btn ghost small" onClick={clearSelection}>Clear</button>
                             </div>
                             <div className="bulk-toolbar-right">
-                                {targetCollections.length > 0 && (
+                                 {targetCollections.length > 0 && (
                                     <>
                                         <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
                                             if (e.target.value && onMoveItems) {
@@ -284,6 +285,14 @@ export const StandardListEditor = ({
                                         </select>
                                     </>
                                 )}
+                                <button className="adm-btn ghost small" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--text-main)' }} onClick={() => {
+                                    if (onDuplicateItems) {
+                                        onDuplicateItems([...selected]);
+                                        clearSelection();
+                                    }
+                                }}>
+                                    <FiCopy size={13} /> Duplicate
+                                </button>
                                 <button className="adm-btn danger small" onClick={requestBulkDelete}>
                                     <FiTrash2 size={13} /> Delete
                                 </button>
@@ -352,6 +361,9 @@ export const StandardListEditor = ({
                                                 </div>
                                                 <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); setEditingId(listItem.id); }} title="Edit">
                                                     <FiEdit3 size={14} />
+                                                </button>
+                                                <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate">
+                                                    <FiCopy size={14} />
                                                 </button>
                                                 <button className="adm-btn danger" onClick={(e) => requestDelete(e, index)} title="Delete">
                                                     <FiTrash2 size={14} />

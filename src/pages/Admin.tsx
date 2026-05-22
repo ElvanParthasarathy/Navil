@@ -1089,6 +1089,66 @@ const Admin = () => {
         setTimeout(() => setMessage(''), 4000);
     };
 
+    const handleDuplicateItems = (ids, collection) => {
+        if (!ids || ids.length === 0) return;
+
+        const now = new Date();
+        const legacyDateStr = formatTimestampToLegacy(now);
+        const currentTimestamp = now.getTime();
+
+        setDataStore(prev => {
+            const originalItems = prev[collection] || [];
+            const newItems = [];
+
+            originalItems.forEach(item => {
+                newItems.push(item);
+                if (ids.includes(item.id)) {
+                    const clone = JSON.parse(JSON.stringify(item));
+                    clone.id = uuidv4();
+                    clone.timestamp = currentTimestamp;
+
+                    if (clone.date !== undefined) clone.date = legacyDateStr;
+                    if (clone.publish_date !== undefined) clone.publish_date = legacyDateStr;
+
+                    // Append " (Copy)" to top-level title/name
+                    if (clone.title) {
+                        clone.title = `${clone.title} (Copy)`;
+                    }
+                    if (clone.name) {
+                        clone.name = `${clone.name} (Copy)`;
+                    }
+
+                    // Append " (Copy)" to variants and transliterations
+                    if (Array.isArray(clone.variants)) {
+                        clone.variants.forEach(variant => {
+                            if (variant.title) {
+                                variant.title = `${variant.title} (Copy)`;
+                            }
+                            if (variant.titleTransliterations) {
+                                Object.keys(variant.titleTransliterations).forEach(lang => {
+                                    if (variant.titleTransliterations[lang]) {
+                                        variant.titleTransliterations[lang] = `${variant.titleTransliterations[lang]} (Copy)`;
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    newItems.push(clone);
+                }
+            });
+
+            return {
+                ...prev,
+                [collection]: newItems
+            };
+        });
+
+        setMessage(`Duplicated ${ids.length} item${ids.length > 1 ? 's' : ''} locally! Click 'Save' to commit.`);
+        setStatus('success');
+        setTimeout(() => setMessage(''), 4000);
+    };
+
     const renderEditor = () => {
         const commonProps = {
             items: dataStore[activeTab],
@@ -1111,7 +1171,8 @@ const Admin = () => {
             toggleTransliterationLang,
             defaultAuthors: dataStore.defaultAuthors || DEFAULT_AUTHORS,
             onMoveItems: handleMoveItems,
-            onCopyItems: handleCopyItems
+            onCopyItems: handleCopyItems,
+            onDuplicateItems: (ids) => handleDuplicateItems(ids, activeTab)
         };
 
         if (activeTab.startsWith('art_')) {
