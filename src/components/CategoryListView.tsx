@@ -401,11 +401,11 @@ const CategoryListView = () => {
 
 
 
-            <div className="blog-grid-container animate-entry" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', width: '100%' }}>
+            <div className="blog-grid-container animate-entry">
                 {loading ? (
                     Array(6).fill(0).map((_, i) => (
                         <div key={i} className="skeleton-item" style={{ background: 'var(--bg-card)', borderRadius: '16px', overflow: 'hidden' }}>
-                            <div className="skeleton-cover" style={{ height: '200px', background: 'color-mix(in srgb, var(--border-light) 50%, transparent)' }} />
+                            <div className="skeleton-cover" style={{ aspectRatio: '16 / 9', background: 'color-mix(in srgb, var(--border-light) 50%, transparent)' }} />
                             <div style={{ padding: '24px' }}>
                                 <div className="skeleton-meta" style={{ height: '14px', width: '40%', marginBottom: '16px', background: 'var(--border-light)', borderRadius: '4px' }} />
                                 <div className="skeleton-title" style={{ height: '24px', width: '80%', marginBottom: '16px', background: 'var(--border-light)', borderRadius: '6px' }} />
@@ -851,6 +851,13 @@ const CategoryListView = () => {
                 }
                 .page-btn:active:not(:disabled) {
                     transform: scale(0.95);
+                }
+
+                .blog-grid-container {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 24px;
+                    width: 100%;
                 }
 
                 .blog-card-item {
@@ -1409,7 +1416,18 @@ const CategoryListView = () => {
                     word-break: break-word;
                 }
                 
+                @media (max-width: 1024px) {
+                    .blog-grid-container {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 20px;
+                    }
+                }
+
                 @media (max-width: 768px) {
+                    .blog-grid-container {
+                        grid-template-columns: 1fr;
+                        gap: 20px;
+                    }
                     .pagination-wrapper {
                         gap: 20px !important;
                         margin-top: 40px !important;
