@@ -1,8 +1,8 @@
-// @ts-nocheck
-import React, { useState } from 'react';
-import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiMove, FiChevronRight } from 'react-icons/fi';
+import React, { useState, useMemo } from 'react';
+import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiChevronRight, FiSearch } from 'react-icons/fi';
+import { Box, Typography, Button, IconButton, Checkbox, Chip, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment, Tabs, Tab } from '@mui/material';
 import { SCHEMAS, renderFieldRow, FieldInput, PinEditor, VariantCard } from './AdminShared';
-import { ConfirmDialog } from './ConfirmDialog';
+import ConfirmDialog from './ConfirmDialog';
 import RichTextEditor from './RichTextEditor';
 import { getOptimizedImage } from '../../lib/media';
 
@@ -13,8 +13,8 @@ const getCoverImageUrl = (listItem: any) => {
 };
 
 // Classification colors — preset for known types, auto-generated for custom
-const CLASSIFICATION_COLORS = { 'அகம்': '#e8a0bf', 'புறம்': '#d4af37' };
-const getClassColor = (name) => {
+const CLASSIFICATION_COLORS: Record<string, string> = { 'அகம்': '#e8a0bf', 'புறம்': '#d4af37' };
+const getClassColor = (name: string) => {
     if (!name) return '#888';
     if (CLASSIFICATION_COLORS[name]) return CLASSIFICATION_COLORS[name];
     let hash = 0;
@@ -43,18 +43,24 @@ export const VariantListEditor = ({
     defaultAuthors,
     onMoveItems,
     onCopyItems,
-    onDuplicateItems
-}) => {
-    const [confirmState, setConfirmState] = useState({ open: false, type: '', payload: null });
-    const [selected, setSelected] = useState(new Set());
-    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ core: true, meta: false, variants: true });
+    onDuplicateItems,
+    seriesData = []
+}: any) => {
+    const [confirmState, setConfirmState] = useState<{ open: boolean, type: string, payload: any, title?: string, message?: string }>({ open: false, type: '', payload: null });
+    const [selected, setSelected] = useState<Set<string>>(new Set());
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ core: true, meta: false, variants: true, writtenForGroup: false, urai: true, notes: true });
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isListEditMode, setIsListEditMode] = useState(false);
+    const [activeTab, setActiveTab] = useState(0);
+    const itemsPerPage = 10;
 
     const toggleSection = (key: string) => {
         setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
     // ── Selection helpers ──
-    const toggleSelect = (id, e) => {
+    const toggleSelect = (id: string, e: any) => {
         e.stopPropagation();
         setSelected(prev => {
             const next = new Set(prev);
@@ -63,19 +69,19 @@ export const VariantListEditor = ({
         });
     };
 
-    const toggleSelectAll = (e) => {
+    const toggleSelectAll = (e: any) => {
         if (e) e.stopPropagation();
         if (selected.size === items?.length) {
             setSelected(new Set());
         } else {
-            setSelected(new Set(items?.map(i => i.id)));
+            setSelected(new Set(items?.map((i: any) => i.id)));
         }
     };
 
     const clearSelection = () => setSelected(new Set());
 
     // ── Confirm dialogs ──
-    const requestDelete = (e, index) => {
+    const requestDelete = (e: any, index: number) => {
         e.stopPropagation();
         const title = SCHEMAS[collection].getItemTitle(items[index]);
         setConfirmState({
@@ -86,7 +92,7 @@ export const VariantListEditor = ({
         });
     };
 
-    const requestRemoveVariant = (itemIndex, variantIndex) => {
+    const requestRemoveVariant = (itemIndex: number, variantIndex: number) => {
         setConfirmState({
             open: true, type: 'variant',
             title: 'Remove Variant',
@@ -113,14 +119,14 @@ export const VariantListEditor = ({
             removeVariant(collection, confirmState.payload.itemIndex, confirmState.payload.variantIndex);
         } else if (confirmState.type === 'bulk-delete') {
             const ids = confirmState.payload.ids;
-            const indices = ids.map(id => items.findIndex(i => i.id === id)).filter(i => i >= 0).sort((a, b) => b - a);
-            indices.forEach(idx => deleteItem(collection, idx));
+            const indices = ids.map((id: string) => items.findIndex((i: any) => i.id === id)).filter((i: number) => i >= 0).sort((a: number, b: number) => b - a);
+            indices.forEach((idx: number) => deleteItem(collection, idx));
             clearSelection();
         }
         setConfirmState({ open: false, type: '', payload: null });
     };
 
-    const editingIndex = items?.findIndex(item => item.id === editingId);
+    const editingIndex = items?.findIndex((item: any) => item.id === editingId);
     const item = editingIndex >= 0 ? items[editingIndex] : null;
 
     const writingCollections = ['quotes', 'poems', 'blog', 'articles', 'stories', 'diary'];
@@ -135,7 +141,7 @@ export const VariantListEditor = ({
         'art_digital_arts'
     ];
 
-    const getTargetCollections = (currentColl) => {
+    const getTargetCollections = (currentColl: string) => {
         if (currentColl === 'quotes') return ['poems'];
         if (currentColl === 'poems') return ['quotes'];
         if (writingCollections.includes(currentColl)) return [];
@@ -150,499 +156,436 @@ export const VariantListEditor = ({
 
     const targetCollections = getTargetCollections(collection);
 
+    // Derived states
+    const filteredItems = useMemo(() => {
+        if (!items) return [];
+        if (!searchQuery.trim()) return items;
+        const q = searchQuery.toLowerCase();
+        return items.filter((item: any) => {
+            const title = SCHEMAS[collection].getItemTitle(item)?.toLowerCase() || '';
+            const classification = item.classification?.toLowerCase() || '';
+            const tags = Array.isArray(item.tags) ? item.tags.join(' ').toLowerCase() : (typeof item.tags === 'string' ? item.tags.toLowerCase() : '');
+            
+            let match = title.includes(q) || classification.includes(q) || tags.includes(q);
+            
+            if (!match && Array.isArray(item.variants)) {
+                match = item.variants.some((v: any) => {
+                    if (v.title?.toLowerCase().includes(q)) return true;
+                    if (v.label?.toLowerCase().includes(q)) return true;
+                    if (v.content?.toLowerCase().includes(q)) return true;
+                    if (v.transliterations) {
+                        return Object.values(v.transliterations).some((t: any) => 
+                            typeof t === 'string' && t.toLowerCase().includes(q)
+                        );
+                    }
+                    return false;
+                });
+            }
+            return match;
+        });
+    }, [items, searchQuery, collection]);
+
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+    const paginatedItems = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredItems.slice(start, start + itemsPerPage);
+    }, [filteredItems, currentPage, itemsPerPage]);
+
     return (
-        <div className="admin-content-area">
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
             <ConfirmDialog
                 open={confirmState.open}
-                title={confirmState.title}
-                message={confirmState.message}
+                title={confirmState.title || ''}
+                message={confirmState.message || ''}
                 onCancel={() => setConfirmState({ open: false, type: '', payload: null })}
                 onProceed={handleConfirm}
             />
 
-            <style>{`
-                .bulk-toolbar {
-                    display: flex; align-items: center; justify-content: space-between;
-                    padding: 8px 16px; gap: 12px;
-                    background: color-mix(in srgb, var(--accent, #088370) 12%, transparent);
-                    border-bottom: 1px solid color-mix(in srgb, var(--accent, #088370) 25%, transparent);
-                    flex-wrap: wrap;
-                }
-                .bulk-toolbar-left {
-                    display: flex; align-items: center; gap: 10px;
-                }
-                .bulk-toolbar-left input[type="checkbox"] {
-                    width: 16px; height: 16px; accent-color: var(--accent, #088370); cursor: pointer;
-                }
-                .bulk-count {
-                    font-size: 0.85rem; font-weight: 600; color: var(--text-main);
-                }
-                .bulk-toolbar-right {
-                    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-                }
-                .bulk-select {
-                    padding: 5px 10px !important; font-size: 0.8rem !important;
-                    border-radius: 8px !important; min-height: unset !important;
-                    max-width: 140px; cursor: pointer;
-                }
-                .admin-file-row-checkbox {
-                    display: flex; align-items: center; justify-content: center;
-                    padding: 0 4px 0 0; flex-shrink: 0;
-                }
-                .admin-file-row-checkbox input[type="checkbox"] {
-                    width: 16px; height: 16px; accent-color: var(--accent, #088370); cursor: pointer;
-                }
-                .admin-file-row.selected {
-                    background: color-mix(in srgb, var(--accent, #088370) 8%, transparent) !important;
-                }
-                .admin-file-row-thumbnail {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 8px;
-                    overflow: hidden;
-                    background: var(--bg-panel, #111);
-                    border: 1px solid var(--border-light, #333);
-                    flex-shrink: 0;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .admin-file-row-thumbnail img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-                .select-all-hint {
-                    display: flex; align-items: center; gap: 10px;
-                    padding: 6px 16px; font-size: 0.8rem; color: var(--text-muted);
-                    cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
-                }
-                .select-all-hint:hover { opacity: 1; }
-                .select-all-hint input[type="checkbox"] {
-                    width: 14px; height: 14px; accent-color: var(--accent, #088370); cursor: pointer;
-                }
-                .admin-file-row-meta {
-                    display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px;
-                }
-                .row-pin-badge {
-                    font-size: 0.75rem;
-                }
-                .row-class-badge {
-                    display: inline-flex; align-items: center;
-                    font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-                    padding: 2px 8px; border-radius: 99px;
-                    background: color-mix(in srgb, currentColor 15%, transparent);
-                }
-                .row-lang-dots {
-                    display: inline-flex; align-items: center; gap: 3px;
-                }
-                .row-lang-dot {
-                    display: inline-flex; align-items: center; justify-content: center;
-                    width: 20px; height: 20px; border-radius: 50%;
-                    font-size: 0.55rem; font-weight: 700;
-                    background: color-mix(in srgb, var(--text-main, #eee) 8%, transparent);
-                    color: var(--text-muted, #888);
-                }
-                .row-tag-pill {
-                    display: inline-flex; align-items: center;
-                    font-size: 0.65rem; font-weight: 600;
-                    padding: 1px 7px; border-radius: 99px;
-                    background: color-mix(in srgb, var(--accent, #088370) 12%, transparent);
-                    color: var(--text-muted, #aaa);
-                }
-                .row-date {
-                    font-size: 0.7rem; color: var(--text-muted, #666); font-weight: 500;
-                    margin-left: 2px;
-                }
-                @media (max-width: 600px) {
-                    .bulk-toolbar { flex-direction: column; align-items: flex-start; }
-                    .bulk-toolbar-right { width: 100%; }
-                    .bulk-select { max-width: 100%; flex: 1; }
-                    .admin-file-row-meta { gap: 4px; }
-                    .row-class-badge, .row-tag-pill { font-size: 0.6rem; }
-                }
-            `}</style>
-
             {/* Show EITHER the list OR the editor — file explorer pattern */}
             {!item ? (
                 /* ── FILE LIST VIEW ── */
-                <div className="admin-file-list">
-                    <div className="admin-file-list-header">
-                        <h2>{SCHEMAS[collection].label} ({items?.length || 0})</h2>
-                        <div className="admin-file-list-actions">
-                            <button className="adm-btn" onClick={onAddItem}><FiPlus size={16} /> Add New</button>
-                            <button className="adm-btn primary" onClick={onSave}>
-                                {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={16} /> Save</>}
-                            </button>
-                        </div>
-                    </div>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: 1, borderColor: 'divider' }}>
+                        <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary' }}>
+                            {SCHEMAS[collection].label} ({items?.length || 0})
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            {!isListEditMode ? (
+                                <Button variant="outlined" startIcon={<FiEdit3 />} onClick={() => setIsListEditMode(true)}>Edit</Button>
+                            ) : (
+                                <>
+                                    <Button variant="text" onClick={() => { setIsListEditMode(false); clearSelection(); }} sx={{ color: 'text.secondary' }}>Cancel</Button>
+                                    <Button variant="contained" startIcon={<FiPlus />} onClick={onAddItem} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
+                                    <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                                        Save
+                                    </Button>
+                                </>
+                            )}
+                        </Box>
+                    </Box>
+                    <Box sx={{ px: 2, pt: 2 }}>
+                        <TextField
+                            fullWidth
+                            size="small"
+                            placeholder={`Search ${SCHEMAS[collection].label.toLowerCase()}...`}
+                            value={searchQuery}
+                            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                            slotProps={{
+                                input: {
+                                    startAdornment: <InputAdornment position="start"><FiSearch /></InputAdornment>
+                                }
+                            }}
+                            sx={{
+                                '& .MuiOutlinedInput-root': { bgcolor: 'background.paper', borderRadius: 2 }
+                            }}
+                        />
+                    </Box>
 
                     {/* Bulk Action Toolbar — appears when items selected */}
                     {selected.size > 0 && (
-                        <div className="bulk-toolbar">
-                            <div className="bulk-toolbar-left">
-                                <input type="checkbox" checked={selected.size === items?.length} onChange={toggleSelectAll} title="Select All" />
-                                <span className="bulk-count">{selected.size} selected</span>
-                                <button className="adm-btn ghost small" onClick={clearSelection}>Clear</button>
-                            </div>
-                            <div className="bulk-toolbar-right">
+                        <Paper elevation={0} sx={{ p: 2, m: 2, display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'space-between', alignItems: 'center', bgcolor: 'secondary.dark', borderRadius: 4 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Checkbox checked={selected.size === items?.length} onChange={toggleSelectAll} sx={{ color: 'onSecondaryContainer', '&.Mui-checked': { color: 'onSecondaryContainer' } }} />
+                                <Typography sx={{ fontWeight: 600, color: 'onSecondaryContainer' }}>{selected.size} selected</Typography>
+                                <Button size="small" onClick={clearSelection} sx={{ color: 'onSecondaryContainer' }}>Clear</Button>
+                            </Box>
+                            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
                                  {targetCollections.length > 0 && (
                                     <>
-                                        <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
-                                            if (e.target.value && onMoveItems) {
-                                                onMoveItems([...selected], collection, e.target.value);
-                                                clearSelection();
-                                            }
-                                            e.target.value = '';
-                                        }}>
-                                            <option value="" disabled>✂ Move to...</option>
-                                            {targetCollections.map(c => (
-                                                <option key={c} value={c}>{SCHEMAS[c].label}</option>
-                                            ))}
-                                        </select>
-                                        <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
-                                            if (e.target.value && onCopyItems) {
-                                                onCopyItems([...selected], collection, e.target.value);
-                                                clearSelection();
-                                            }
-                                            e.target.value = '';
-                                        }}>
-                                            <option value="" disabled>⎘ Copy to...</option>
-                                            {targetCollections.map(c => (
-                                                <option key={c} value={c}>{SCHEMAS[c].label}</option>
-                                            ))}
-                                        </select>
+                                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                                            <InputLabel>Move to...</InputLabel>
+                                            <Select label="Move to..." value="" onChange={(e) => {
+                                                if (e.target.value && onMoveItems) {
+                                                    onMoveItems([...selected], collection, e.target.value);
+                                                    clearSelection();
+                                                }
+                                            }}>
+                                                {targetCollections.map(c => (
+                                                    <MenuItem key={c} value={c}>{SCHEMAS[c].label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                                            <InputLabel>Copy to...</InputLabel>
+                                            <Select label="Copy to..." value="" onChange={(e) => {
+                                                if (e.target.value && onCopyItems) {
+                                                    onCopyItems([...selected], collection, e.target.value);
+                                                    clearSelection();
+                                                }
+                                            }}>
+                                                {targetCollections.map(c => (
+                                                    <MenuItem key={c} value={c}>{SCHEMAS[c].label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </>
                                 )}
-                                <button className="adm-btn ghost small" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--text-main)' }} onClick={() => {
+                                <Button size="small" startIcon={<FiCopy />} onClick={() => {
                                     if (onDuplicateItems) {
                                         onDuplicateItems([...selected]);
                                         clearSelection();
                                     }
-                                }}>
-                                    <FiCopy size={13} /> Duplicate
-                                </button>
-                                <button className="adm-btn danger small" onClick={requestBulkDelete}>
-                                    <FiTrash2 size={13} /> Delete
-                                </button>
-                            </div>
-                        </div>
+                                }} sx={{ color: 'onSecondaryContainer' }}>Duplicate</Button>
+                                <Button size="small" color="error" startIcon={<FiTrash2 />} onClick={requestBulkDelete}>Delete</Button>
+                            </Box>
+                        </Paper>
                     )}
 
-                    <div className="admin-file-list-scroll">
-                        {items?.length === 0 ? (
-                            <div className="admin-file-empty">No items yet. Click "Add New" to create one.</div>
+                    <Box sx={{ flex: 1, overflowY: 'auto', p: { xs: 2, md: 4 }, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        {filteredItems.length === 0 ? (
+                            <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>No items found.</Box>
                         ) : (
                             <>
-                                {selected.size === 0 && items?.length > 0 && (
-                                    <div className="select-all-hint" onClick={toggleSelectAll}>
-                                        <input type="checkbox" checked={false} readOnly />
-                                        <span>Select all</span>
-                                    </div>
+                                {isListEditMode && selected.size === 0 && items?.length > 0 && (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, opacity: 0.6, cursor: 'pointer', '&:hover': { opacity: 1 }, transition: 'opacity 0.2s' }} onClick={toggleSelectAll}>
+                                        <Checkbox checked={false} readOnly size="small" />
+                                        <Typography variant="body2">Select all</Typography>
+                                    </Box>
                                 )}
-                                {items?.map((listItem, index) => {
+                                {paginatedItems.map((listItem: any, paginatedIndex: number) => {
+                                    const index = items.findIndex((i: any) => i.id === listItem.id); // Get true index for backend mutation if needed
                                     const isSelected = selected.has(listItem.id);
                                     const itemTags = Array.isArray(listItem.tags) 
                                         ? listItem.tags 
                                         : (typeof listItem.tags === 'string' 
-                                            ? listItem.tags.split(',').map(t => t.trim()).filter(Boolean) 
+                                            ? listItem.tags.split(',').map((t: string) => t.trim()).filter(Boolean) 
                                             : []);
                                     const coverUrl = getCoverImageUrl(listItem);
                                     return (
-                                        <div
+                                        <Card
                                             key={listItem.id || index}
-                                            className={`admin-file-row ${isSelected ? 'selected' : ''}`}
-                                            onClick={() => setEditingId(listItem.id)}
+                                            elevation={0}
+                                            sx={{
+                                                display: 'flex', alignItems: 'center', p: 1.5, gap: 2,
+                                                cursor: 'pointer', transition: 'all 0.2s',
+                                                bgcolor: isSelected ? 'primary.dark' : 'background.paper',
+                                                color: isSelected ? 'onPrimaryContainer' : 'text.primary',
+                                                '&:hover': { bgcolor: isSelected ? 'primary.dark' : 'surfaceContainer' },
+                                                flexShrink: 0
+                                            }}
+                                            onClick={() => {
+                                                if (isListEditMode) toggleSelect(listItem.id, null);
+                                                else setEditingId(listItem.id);
+                                            }}
                                         >
-                                            <div className="admin-file-row-checkbox" onClick={(e) => toggleSelect(listItem.id, e)}>
-                                                <input type="checkbox" checked={isSelected} readOnly />
-                                            </div>
-                                            {coverUrl && (
-                                                <div className="admin-file-row-thumbnail">
-                                                    <img src={coverUrl} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                                                </div>
+                                            {isListEditMode && (
+                                                <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }} onClick={(e: any) => { e.stopPropagation(); toggleSelect(listItem.id, e); }}>
+                                                    <Checkbox checked={isSelected} readOnly sx={{ p: 0 }} />
+                                                </Box>
                                             )}
-                                            <div className="admin-file-row-info">
-                                                <h3>{SCHEMAS[collection].getItemTitle(listItem)}</h3>
-                                                <div className="admin-file-row-meta">
-                                                    {listItem.isPinned && <span className="row-pin-badge">✨</span>}
+                                            {coverUrl && (
+                                                <Box sx={{ width: 44, height: 44, borderRadius: 2, overflow: 'hidden', bgcolor: 'action.hover', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <img src={coverUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                </Box>
+                                            )}
+                                            <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                                                <Typography variant="subtitle2" sx={{ fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {SCHEMAS[collection].getItemTitle(listItem)}
+                                                </Typography>
+                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1 }}>
+                                                    {listItem.isPinned && <Typography variant="caption" sx={{ fontSize: '0.75rem' }}>✨</Typography>}
                                                     {listItem.classification && (
-                                                        <span className="row-class-badge" style={{ color: getClassColor(listItem.classification) }}>{listItem.classification}</span>
+                                                        <Chip size="small" label={listItem.classification} sx={{ height: 20, fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, bgcolor: getClassColor(listItem.classification), color: '#fff' }} />
                                                     )}
                                                     {listItem.variants?.length > 0 && (
-                                                        <span className="row-lang-dots">
-                                                            {listItem.variants.map((v, vi) => (
-                                                                <span key={vi} className="row-lang-dot" title={v.lang}>
-                                                                    {{ ta: 'த', ml: 'മ', en: 'Aa', hi: 'हि' }[v.lang] || v.lang}
-                                                                </span>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                            {listItem.variants.map((v: any, vi: number) => (
+                                                                <Box key={vi} sx={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: '50%', fontSize: '0.55rem', fontWeight: 700, bgcolor: 'action.hover', color: 'text.secondary' }} title={v.lang}>
+                                                                    {{ ta: 'த', ml: 'മ', en: 'Aa', hi: 'हि' }[v.lang as string] || v.lang}
+                                                                </Box>
                                                             ))}
-                                                        </span>
+                                                        </Box>
                                                     )}
-                                                    {itemTags.slice(0, 2).map((tag, ti) => (
-                                                        <span key={ti} className="row-tag-pill">{tag}</span>
+                                                    {itemTags.slice(0, 2).map((tag: string, ti: number) => (
+                                                        <Chip key={ti} size="small" label={tag} sx={{ height: 20, fontSize: '0.65rem', fontWeight: 600 }} />
                                                     ))}
                                                     {itemTags.length > 2 && (
-                                                        <span className="row-tag-pill" style={{ opacity: 0.5 }}>+{itemTags.length - 2}</span>
+                                                        <Chip size="small" label={`+${itemTags.length - 2}`} sx={{ height: 20, fontSize: '0.65rem', fontWeight: 600, opacity: 0.7 }} />
                                                     )}
                                                     {(() => {
                                                         const dateStr = listItem.date || listItem.publish_date;
                                                         if (!dateStr) return null;
                                                         const parsed = new Date(dateStr);
                                                         if (isNaN(parsed.getTime())) {
-                                                            return <span className="row-date">{dateStr}</span>;
+                                                            return <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500, ml: 0.5 }}>{dateStr}</Typography>;
                                                         }
-                                                        return <span className="row-date">{parsed.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>;
+                                                        return <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500, ml: 0.5 }}>{parsed.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</Typography>;
                                                     })()}
-                                                </div>
-                                            </div>
-                                            <div className="admin-file-row-actions">
-                                                <div className="admin-move-controls">
-                                                    <button
-                                                        className="adm-btn icon-only"
-                                                        onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }}
-                                                        disabled={index === 0}
-                                                        title="Move Up"
-                                                    >
-                                                        <FiChevronUp size={16} />
-                                                    </button>
-                                                    <button
-                                                        className="adm-btn icon-only"
-                                                        onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }}
-                                                        disabled={index === items.length - 1}
-                                                        title="Move Down"
-                                                    >
-                                                        <FiChevronDown size={16} />
-                                                    </button>
-                                                </div>
-                                                <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); setEditingId(listItem.id); }} title="Edit">
-                                                    <FiEdit3 size={14} />
-                                                </button>
-                                                <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate">
-                                                    <FiCopy size={14} />
-                                                </button>
-                                                <button className="adm-btn danger" onClick={(e) => requestDelete(e, index)} title="Delete">
-                                                    <FiTrash2 size={14} />
-                                                </button>
-                                            </div>
-                                        </div>
+                                                </Box>
+                                            </Box>
+                                            {isListEditMode ? (
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pr: 1 }}>
+                                                    {collection !== 'stories' && (
+                                                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mr: 1 }}>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><FiChevronUp size={16} /></IconButton>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><FiChevronDown size={16} /></IconButton>
+                                                        </Box>
+                                                    )}
+                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><FiCopy size={16} /></IconButton>
+                                                    <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><FiTrash2 size={16} /></IconButton>
+                                                </Box>
+                                            ) : (
+                                                <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, color: 'text.secondary', opacity: 0.5 }}>
+                                                    <FiChevronRight size={20} />
+                                                </Box>
+                                            )}
+                                        </Card>
                                     );
                                 })}
+                                {totalPages > 1 && (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2, pb: 4 }}>
+                                        <Pagination
+                                            count={totalPages}
+                                            page={currentPage}
+                                            onChange={(e, value) => setCurrentPage(value)}
+                                            color="primary"
+                                            size="small"
+                                        />
+                                    </Box>
+                                )}
                             </>
                         )}
-                    </div>
-                </div>
+                    </Box>
+                </Box>
             ) : (
                 /* ── EDITOR VIEW (replaces list) ── */
-                <div className="admin-editor-full">
-                    <div className="admin-editor-toolbar">
-                        <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>
-                            <FiArrowLeft size={16} /> Back
-                        </button>
-                        <h2>Edit {SCHEMAS[collection].label.slice(0, -1)}</h2>
-                        <div className="admin-editor-toolbar-actions">
-                            <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>
-                                Cancel
-                            </button>
-                            <button className="adm-btn primary" onClick={onSave}>
-                                {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={16} /> Save</>}
-                            </button>
-                        </div>
-                    </div>
-                    <div className="admin-editor-body">
-                        <div className="adm-form" style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, overflowY: 'auto', minHeight: 0, padding: '16px 24px 60px 24px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
+                        <Button startIcon={<FiArrowLeft />} onClick={() => handleCloseEditor(editingId)} sx={{ color: 'text.secondary' }}>Back</Button>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Button onClick={() => handleCloseEditor(editingId)}>Cancel</Button>
+                            <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                                {saveStatus === 'loading' ? 'Saving...' : 'Save'}
+                            </Button>
+                        </Box>
+                    </Box>
+                    <Box sx={{ flex: 1, overflowY: 'auto', p: { xs: 2, md: 4 }, pb: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Box sx={{ width: '100%', maxWidth: 1000 }}>
+                            <Box sx={{ mb: 4 }}>
+                                <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)} variant="scrollable" scrollButtons="auto">
+                                    <Tab label={collection === 'stories' ? 'Writing Canvas' : 'Writing Canvas'} value={0} sx={{ fontWeight: 600, fontSize: '1rem' }} />
+                                    {['poems', 'quotes'].includes(collection) && <Tab label="Notes & Urai" value={1} sx={{ fontWeight: 600, fontSize: '1rem' }} />}
+                                    <Tab label="Metadata & Settings" value={2} sx={{ fontWeight: 600, fontSize: '1rem' }} />
+                                </Tabs>
+                            </Box>
+                            
+                            {/* TAB 0: Writing Canvas (Variants) */}
+                            {activeTab === 0 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                    {/* Language Variants */}
+                                    {collection !== 'stories' && (
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <Typography variant="h6" sx={{ fontWeight: 700 }}>Language Variants</Typography>
+                                            <Button variant="contained" startIcon={<FiPlus />} onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
+                                                Add Variant
+                                            </Button>
+                                        </Box>
+                                    )}
 
-                            {/* Core Details */}
-                            <div className="adm-section">
-                                <div className="adm-section-header">
-                                    <span className="adm-section-title">Core Details</span>
-                                </div>
-                                <div className="adm-section-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    {renderFieldRow(SCHEMAS[collection].itemFields, item, collection, editingIndex, updateItemField)}
-                                    <PinEditor item={item} onUpdate={(field, value) => updateItemField(collection, editingIndex, field, value)} idPrefix={`${collection}-${editingIndex}`} />
-                                </div>
-                            </div>
-
-                            {/* Context & Metadata */}
-                            <div className="adm-section">
-                                <div className="adm-section-header">
-                                    <span className="adm-section-title">Context &amp; Metadata</span>
-                                </div>
-                                <div className="adm-section-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                        {[SCHEMAS[collection].row2Fields, SCHEMAS[collection].row3Fields].filter(Boolean).map((fieldGroup, gi) => {
-                                            const inlineFields = fieldGroup.filter(f => f.type !== 'tags' && f.type !== 'checkbox');
-                                            const fullWidthFields = fieldGroup.filter(f => f.type === 'tags' || f.type === 'checkbox');
-                                            return (
-                                                <React.Fragment key={gi}>
-                                                    {inlineFields.length > 0 && renderFieldRow(inlineFields, item, collection, editingIndex, updateItemField)}
-                                                    {fullWidthFields.map(f => (
-                                                        <div key={f.key} className="adm-field" style={{ marginTop: '8px' }}>
-                                                            <label className="adm-label">{f.label}</label>
-                                                            {f.type === 'checkbox' ? (
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        id={`row-${f.key}`}
-                                                                        checked={!!item[f.key]}
-                                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
-                                                                    />
-                                                                    <label htmlFor={`row-${f.key}`} style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{f.placeholder || 'Enable'}</label>
-                                                                </div>
-                                                            ) : (
-                                                                <FieldInput field={f} value={item[f.key]} onChange={(val) => updateItemField(collection, editingIndex, f.key, val)} />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </React.Fragment>
-                                            );
-                                        })}
-
-                                        {SCHEMAS[collection].extraFields?.filter(f => !['urai', 'notes', 'writtenFor', 'writtenForPassword'].includes(f.key)).map(f => {
-                                            // Hide password and hint fields if lock toggle is not enabled
-                                            if (!item.isUraiNotesLocked && (f.key === 'uraiNotesPassword' || f.key === 'uraiNotesPasswordHint')) {
-                                                return null;
-                                            }
-                                            return (
-                                            <div key={f.key} className="adm-field">
-                                                <label className="adm-label">{f.label}</label>
-                                                {f.type === 'richtext' ? (
-                                                    <RichTextEditor
-                                                        content={item[f.key] || ''}
-                                                        onChange={(val) => updateItemField(collection, editingIndex, f.key, val)}
-                                                        placeholder={f.placeholder || ''}
-                                                    />
-                                                ) : f.type === 'textarea' ? (
-                                                    <textarea
-                                                        className="adm-input"
-                                                        style={{ minHeight: f.rows ? `${f.rows * 22}px` : '60px' }}
-                                                        value={item[f.key] || ''}
-                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
-                                                        placeholder={f.placeholder || ''}
-                                                    />
-                                                ) : f.type === 'checkbox' ? (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <input
-                                                            type="checkbox"
-                                                            id={`extra-${f.key}`}
-                                                            checked={item[f.key] !== false}
-                                                            onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
-                                                        />
-                                                        <label htmlFor={`extra-${f.key}`} style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>{f.placeholder || 'Enable'}</label>
-                                                    </div>
-                                                ) : (
-                                                    <input
-                                                        className="adm-input"
-                                                        type={f.type || 'text'}
-                                                        value={item[f.key] || ''}
-                                                        onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
-                                                        placeholder={f.placeholder || ''}
-                                                    />
-                                                )}
-                                            </div>
-                                            );
-                                        })}
-                                    </div>
-                            </div>
-
-                            {/* Meaning / Urai & Notes Sections */}
-                            {SCHEMAS[collection].extraFields?.filter(f => ['urai', 'notes'].includes(f.key)).map(f => (
-                                <div className="adm-section" key={f.key} style={{ background: 'transparent', border: 'none', padding: 0, boxShadow: 'none' }}>
-                                    <div 
-                                        className={`adm-section-header adm-section-header--collapsible`}
-                                        onClick={() => toggleSection(f.key)}
-                                        style={{ marginBottom: expandedSections[f.key] ? '16px' : '0' }}
-                                    >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <span className="adm-section-title">{f.label}</span>
-                                            <div className={`adm-collapse-icon ${expandedSections[f.key] ? 'open' : ''}`}>
-                                                <FiChevronRight size={16} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={`adm-collapse-body ${expandedSections[f.key] ? 'open' : ''}`}>
-                                        <div className="adm-collapse-body-inner">
-                                            <RichTextEditor
-                                                content={item[f.key] || ''}
-                                                onChange={(val) => updateItemField(collection, editingIndex, f.key, val)}
-                                                placeholder={f.placeholder || ''}
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                        {item.variants?.map((variant: any, vIndex: number) => (
+                                            <VariantCard
+                                                key={vIndex}
+                                                collection={collection}
+                                                variant={variant}
+                                                vIndex={vIndex}
+                                                totalVariants={item.variants.length}
+                                                onUpdate={(field: string, value: any) => updateVariant(collection, editingIndex, vIndex, field, value)}
+                                                onUpdateTransl={(fieldObj: any, langKey: string, value: any) => updateTransliteration(collection, editingIndex, vIndex, fieldObj, langKey, value)}
+                                                onToggleLang={(tLang: string) => toggleTransliterationLang(collection, editingIndex, vIndex, tLang)}
+                                                onRemove={() => requestRemoveVariant(editingIndex, vIndex)}
+                                                onMove={(direction: string) => moveVariant(collection, editingIndex, vIndex, direction)}
+                                                idPrefix={`v-${item.id}-${vIndex}`}
+                                                defaultAuthors={defaultAuthors}
                                             />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-
-                            {/* Easter Egg / Written For Section */}
-                            {SCHEMAS[collection].extraFields?.some(f => f.key === 'writtenFor') && (
-                                <div className="adm-section" style={{ background: 'transparent', border: 'none', padding: 0, boxShadow: 'none' }}>
-                                    <div 
-                                        className={`adm-section-header adm-section-header--collapsible`}
-                                        onClick={() => toggleSection('writtenForGroup')}
-                                        style={{ marginBottom: expandedSections.writtenForGroup ? '16px' : '0' }}
-                                    >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <span className="adm-section-title">Written For (Easter Egg)</span>
-                                            <div className={`adm-collapse-icon ${expandedSections.writtenForGroup ? 'open' : ''}`}>
-                                                <FiChevronRight size={16} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={`adm-collapse-body ${expandedSections.writtenForGroup ? 'open' : ''}`}>
-                                        <div className="adm-collapse-body-inner" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                            <div className="adm-field">
-                                                <label className="adm-label">Written For (Name)</label>
-                                                <input
-                                                    className="adm-input"
-                                                    type="text"
-                                                    value={item.writtenFor || ''}
-                                                    onChange={(e) => updateItemField(collection, editingIndex, 'writtenFor', e.target.value)}
-                                                    placeholder="Enter name (e.g. Navil)"
-                                                />
-                                            </div>
-                                            <div className="adm-field">
-                                                <label className="adm-label">Unlock Password</label>
-                                                <input
-                                                    className="adm-input"
-                                                    type="text"
-                                                    value={item.writtenForPassword || ''}
-                                                    onChange={(e) => updateItemField(collection, editingIndex, 'writtenForPassword', e.target.value)}
-                                                    placeholder="Enter password to unlock name"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                        ))}
+                                    </Box>
+                                </Box>
                             )}
 
-                            {/* Language Variants */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '32px 0 16px 0' }}>
-                                <span className="adm-section-title" style={{ fontSize: '1.1rem' }}>Language Variants</span>
-                                <button className="adm-btn ghost small" onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
-                                    <FiPlus size={13} /> Add Variant
-                                </button>
-                            </div>
+                            {/* TAB 1: Notes & Urai */}
+                            {activeTab === 1 && ['poems', 'quotes'].includes(collection) && (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                    {SCHEMAS[collection].extraFields?.filter((f: any) => ['urai', 'notes'].includes(f.key)).map((f: any) => (
+                                        <Box key={f.key}>
+                                            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>{f.label}</Typography>
+                                            <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden', '& .ProseMirror': { minHeight: 400 } }}>
+                                                <RichTextEditor
+                                                    content={item[f.key] || ''}
+                                                    onChange={(val: string) => updateItemField(collection, editingIndex, f.key, val)}
+                                                    placeholder={f.placeholder || ''}
+                                                />
+                                            </Box>
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )}
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                                {item.variants?.map((variant, vIndex) => (
-                                    <VariantCard
-                                        key={vIndex}
-                                        variant={variant}
-                                        vIndex={vIndex}
-                                        totalVariants={item.variants.length}
-                                        onUpdate={(field, value) => updateVariant(collection, editingIndex, vIndex, field, value)}
-                                        onUpdateTransl={(fieldObj, langKey, value) => updateTransliteration(collection, editingIndex, vIndex, fieldObj, langKey, value)}
-                                        onToggleLang={(tLang) => toggleTransliterationLang(collection, editingIndex, vIndex, tLang)}
-                                        onRemove={() => requestRemoveVariant(editingIndex, vIndex)}
-                                        onMove={(direction) => moveVariant(collection, editingIndex, vIndex, direction)}
-                                        idPrefix={`v-${item.id}-${vIndex}`}
-                                        defaultAuthors={defaultAuthors}
-                                    />
-                                ))}
-                            </div>
+                            {/* TAB 2: Metadata & Settings */}
+                            {activeTab === 2 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                {/* Core Details */}
+                        <Paper elevation={0} sx={{ p: 3, bgcolor: 'background.paper' }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 3 }}>Core Details</Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                {renderFieldRow(SCHEMAS[collection].itemFields, item, collection, editingIndex, updateItemField)}
+                                <PinEditor item={item} onUpdate={(field: string, value: any) => updateItemField(collection, editingIndex, field, value)} idPrefix={`${collection}-${editingIndex}`} />
+                            </Box>
+                        </Paper>
 
-                        </div>
-                    </div>
-                </div>
+                        {/* Context & Metadata */}
+                        <Paper elevation={0} sx={{ p: 3, bgcolor: 'background.paper' }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 3 }}>Context &amp; Metadata</Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                {[SCHEMAS[collection].row2Fields, SCHEMAS[collection].row3Fields].filter(Boolean).map((fieldGroup: any, gi: number) => {
+                                    const processedGroup = fieldGroup.map((f: any) => {
+                                        if (collection === 'stories' && f.key === 'series_name') {
+                                            const options = [{ value: '', label: 'Independent / Standalone Story' }];
+                                            seriesData.forEach((s: any) => {
+                                                if (s.title) options.push({ value: s.title, label: s.title });
+                                            });
+                                            return { ...f, type: 'select', options };
+                                        }
+                                        return f;
+                                    });
+
+                                    const inlineFields = processedGroup.filter((f: any) => f.type !== 'tags' && f.type !== 'checkbox');
+                                    const fullWidthFields = processedGroup.filter((f: any) => f.type === 'tags' || f.type === 'checkbox');
+                                    return (
+                                        <React.Fragment key={gi}>
+                                            {inlineFields.length > 0 && renderFieldRow(inlineFields, item, collection, editingIndex, updateItemField)}
+                                            {fullWidthFields.map((f: any) => (
+                                                <Box key={f.key} sx={{ mt: 1 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 1, color: 'text.secondary' }}>{f.label}</Typography>
+                                                    {f.type === 'checkbox' ? (
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                            <Checkbox
+                                                                id={`row-${f.key}`}
+                                                                checked={!!item[f.key]}
+                                                                onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
+                                                            />
+                                                            <Typography component="label" htmlFor={`row-${f.key}`} variant="body2">{f.placeholder || 'Enable'}</Typography>
+                                                        </Box>
+                                                    ) : (
+                                                        <FieldInput field={f} value={item[f.key]} onChange={(val: any) => updateItemField(collection, editingIndex, f.key, val)} />
+                                                    )}
+                                                </Box>
+                                            ))}
+                                        </React.Fragment>
+                                    );
+                                })}
+
+                                {SCHEMAS[collection].extraFields?.filter((f: any) => !['urai', 'notes', 'writtenFor', 'writtenForPassword'].includes(f.key)).map((f: any) => {
+                                    // Hide password and hint fields if lock toggle is not enabled
+                                    if (!item.isUraiNotesLocked && (f.key === 'uraiNotesPassword' || f.key === 'uraiNotesPasswordHint')) {
+                                        return null;
+                                    }
+                                    return (
+                                    <Box key={f.key}>
+                                        <Typography variant="body2" sx={{ fontWeight: 600, mb: 1, color: 'text.secondary' }}>{f.label}</Typography>
+                                        {f.type === 'richtext' ? (
+                                            <RichTextEditor
+                                                content={item[f.key] || ''}
+                                                onChange={(val: string) => updateItemField(collection, editingIndex, f.key, val)}
+                                                placeholder={f.placeholder || ''}
+                                            />
+                                        ) : f.type === 'textarea' ? (
+                                            <TextField
+                                                fullWidth
+                                                multiline
+                                                minRows={f.rows || 3}
+                                                value={item[f.key] || ''}
+                                                onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.value)}
+                                                placeholder={f.placeholder || ''}
+                                            />
+                                        ) : f.type === 'checkbox' ? (
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Checkbox
+                                                    id={`extra-${f.key}`}
+                                                    checked={!!item[f.key]}
+                                                    onChange={(e) => updateItemField(collection, editingIndex, f.key, e.target.checked)}
+                                                />
+                                                <Typography component="label" htmlFor={`extra-${f.key}`} variant="body2">{f.placeholder || 'Enable'}</Typography>
+                                            </Box>
+                                        ) : (
+                                            <FieldInput 
+                                                field={f} 
+                                                value={item[f.key]} 
+                                                onChange={(val: any) => updateItemField(collection, editingIndex, f.key, val)} 
+                                            />
+                                        )}
+                                    </Box>
+                                    );
+                                })}
+                            </Box>
+                        </Paper>
+
+                                </Box>
+                            )}
+                        </Box>
+                    </Box>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };
-

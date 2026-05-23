@@ -131,7 +131,7 @@ const ReadingView = () => {
     const variants = post?.variants || [];
     const contentObj = post?.content || {};
     const hasVariants = variants.length > 0;
-    const primaryTitle = hasVariants ? (variants[0]?.title || post?.title || '') : (contentObj[Object.keys(contentObj)[0]]?.title || post?.title || '');
+    const primaryTitle = (category === 'stories') ? (post?.title || variants[0]?.title || '') : (hasVariants ? (variants[0]?.title || post?.title || '') : (contentObj[Object.keys(contentObj)[0]]?.title || post?.title || ''));
     const firstVariantKey = `${post?.id}-0`;
     const firstVariantActiveLang = variantTranslStates[firstVariantKey] || null;
     let displayPrimaryTitle = primaryTitle;
@@ -569,9 +569,14 @@ const ReadingView = () => {
                             const isMulti = variants.length > 1;
 
                             return (
-                                <div key={vIndex} style={{ paddingBottom: isMulti ? '24px' : '0', borderBottom: isMulti ? '1px solid var(--border-light)' : 'none' }}>
+                                <div key={vIndex} style={{ 
+                                    paddingBottom: isMulti ? '40px' : '0', 
+                                    marginBottom: isMulti ? '40px' : '0',
+                                    borderBottom: isMulti ? '2px dashed var(--border-light)' : 'none' 
+                                }}>
                                     {/* Header row with badge + transliteration toggles */}
-                                    <div className="variant-header-row">
+                                    {!isStory && (
+                                        <div className="variant-header-row">
                                         <div className="variant-badge">
                                             {LANG_LABELS[variant.lang] || variant.lang?.toUpperCase() || `#${vIndex + 1}`}
                                             {variant.label && <span style={{ marginLeft: '4px' }}>({variant.label})</span>}
@@ -591,9 +596,10 @@ const ReadingView = () => {
                                                 <span className="transl-switch-label">{TRANSL_LABELS[tLang] || tLang}</span>
                                             </React.Fragment>
                                         ))}
-                                    </div>
+                                        </div>
+                                    )}
 
-                                    {isMulti && displayTitle && ((variant.title || post?.title) !== primaryTitle) && (
+                                    {(isMulti || isStory) && displayTitle && ((variant.title || post?.title) !== primaryTitle) && (
                                         <h1
                                             lang={activeLang || variant.lang}
                                             style={{
@@ -667,7 +673,7 @@ const ReadingView = () => {
                                         {isLocked ? (
                                             isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
                                         ) : (
-                                            <polyline points="6 9 12 15 18 9" />
+                                            activeSection === 'urai' ? <line x1="5" y1="12" x2="19" y2="12" /> : <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>
                                         )}
                                     </svg>
                                     <div className="pill-text-stack">
@@ -689,7 +695,7 @@ const ReadingView = () => {
                                         {isLocked ? (
                                             isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
                                         ) : (
-                                            <polyline points="6 9 12 15 18 9" />
+                                            activeSection === 'notes' ? <line x1="5" y1="12" x2="19" y2="12" /> : <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>
                                         )}
                                     </svg>
                                     <div className="pill-text-stack">

@@ -115,7 +115,7 @@ const PoemInfoZone = ({ urai, notes, hint, isUraiNotesLocked, password, isPrivat
                     >
                         <span>உரை · Urai</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="6 9 12 15 18 9" />
+                            {activeSection === 'urai' ? <line x1="5" y1="12" x2="19" y2="12" /> : <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>}
                         </svg>
                     </button>
                 )}
@@ -126,11 +126,11 @@ const PoemInfoZone = ({ urai, notes, hint, isUraiNotesLocked, password, isPrivat
                     >
                         <span>Notes</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            {isLocked ? (
-                                isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
-                            ) : (
-                                <polyline points="6 9 12 15 18 9" />
-                            )}
+                                {isLocked ? (
+                                    isUnlocked ? <path d="M7 11V7a5 5 0 0 1 10 0v4 M5 11h14v10H5z" /> : <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
+                                ) : (
+                                    activeSection === 'notes' ? <line x1="5" y1="12" x2="19" y2="12" /> : <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>
+                                )}
                         </svg>
                     </button>
                 )}
@@ -276,7 +276,15 @@ const WritingPage = ({
         const orderA = typeof a.display_order === 'number' ? a.display_order : 999999;
         const orderB = typeof b.display_order === 'number' ? b.display_order : 999999;
         if (orderA !== orderB) return orderA - orderB;
-        return new Date(b.date || 0) - new Date(a.date || 0);
+        if (tableName === 'stories') {
+            const seriesA = a.series_name || '';
+            const seriesB = b.series_name || '';
+            if (seriesA !== seriesB) return seriesA.localeCompare(seriesB);
+            const partA = parseInt(a.series_part) || 0;
+            const partB = parseInt(b.series_part) || 0;
+            return partA - partB; // Ascending order
+        }
+        return new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime();
     });
 
     // Tags to exclude from the filter dropdown (badge classifications, language variants, meta-tags)
@@ -1546,7 +1554,9 @@ const WritingPage = ({
                                         })}
                                     </div>
 
-                                    <PoemInfoZone urai={post.urai} notes={post.notes} hint={post.uraiNotesPasswordHint} isUraiNotesLocked={post.isUraiNotesLocked} password={post.uraiNotesPassword} isPrivate={post.is_private} />
+                                    {['poems', 'quotes'].includes(tableName) && (
+                                        <PoemInfoZone urai={post.urai} notes={post.notes} hint={post.uraiNotesPasswordHint} isUraiNotesLocked={post.isUraiNotesLocked} password={post.uraiNotesPassword} isPrivate={post.is_private} />
+                                    )}
                                 </article>
                             );
                         })

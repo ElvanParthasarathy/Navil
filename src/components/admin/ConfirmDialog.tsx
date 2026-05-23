@@ -1,20 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
-export const ConfirmDialog = ({ open, title, message, onCancel, onProceed }) => {
-    if (!open) return null;
-
-    return ReactDOM.createPortal(
-        <div className="confirm-overlay" onClick={onCancel}>
-            <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
-                <h3>{title || 'Are you sure?'}</h3>
-                <p>{message || 'This action cannot be undone.'}</p>
-                <div className="confirm-actions">
-                    <button className="confirm-pill cancel" onClick={onCancel}>Cancel</button>
-                    <button className="confirm-pill proceed" onClick={onProceed}>Proceed</button>
-                </div>
-            </div>
-        </div>,
-        document.body
+export const ConfirmDialog = ({ open, title, message, onCancel, onProceed }: { open: boolean, title?: string, message?: string, onCancel: () => void, onProceed: () => void }) => {
+    return (
+        <Dialog 
+            open={open} 
+            onClose={onCancel}
+            slotProps={{ paper: {
+                sx: { borderRadius: 4, minWidth: 320 }
+            } }}
+        >
+            <DialogTitle sx={{ fontWeight: 800, pb: 1 }}>{title || 'Are you sure?'}</DialogTitle>
+            <DialogContent>
+                <DialogContentText sx={{ color: 'text.primary', fontWeight: 500 }}>
+                    {message || 'This action cannot be undone.'}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 3, pt: 1 }}>
+                <Button onClick={onCancel} color="inherit" sx={{ borderRadius: 3 }}>
+                    Cancel
+                </Button>
+                <Button onClick={onProceed} variant="contained" color="error" sx={{ borderRadius: 3, boxShadow: 'none' }}>
+                    Proceed
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
+
+export default ConfirmDialog;

@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  /* ═══ M3 Expressive — Dark Surfaces ═══ */
+  --color-surface-0: #0f0d13;
+  --color-surface-dim: #0f0d13;
+  --color-surface-bright: #363438;
+  --color-surface-lowest: #0a080e;
+  --color-surface-low: #1c1a1f;
+  --color-surface-base: #201e23;
+  --color-surface-high: #2a282e;
+  --color-surface-highest: #353339;
+
+  /* ═══ M3 Tonal Colors ═══ */
+  --color-primary: #c9c5ff;
+  --color-primary-container: #2d2b6e;
+  --color-on-primary: #1b1a4e;
+  --color-on-primary-container: #e5deff;
+
+  --color-secondary: #c9c3dc;
+  --color-secondary-container: #3e3852;
+  --color-on-secondary-container: #e5dff9;
+
+  --color-tertiary: #edb8c8;
+  --color-tertiary-container: #5d3545;
+  --color-on-tertiary-container: #ffd9e4;
+
+  /* ═══ Text ═══ */
+  --color-on-surface: #e6e1e6;
+  --color-on-surface-variant: #c9c4cf;
+  --color-outline: #938f99;
+  --color-outline-variant: #49454f;
+
+  /* ═══ Status ═══ */
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-success: #81c995;
+  --color-success-container: #1b5e20;
+  --color-warning: #fdd663;
+
+  /* ═══ Inverse ═══ */
+  --color-inverse-surface: #e6e1e6;
+  --color-inverse-on-surface: #322f35;
+  --color-inverse-primary: #5f5c99;
+
+  /* ═══ Category Colors (for dashboard cards) ═══ */
+  --color-cat-quotes: #d4af37;
+  --color-cat-poems: #7C5CFC;
+  --color-cat-blog: #FF6B6B;
+  --color-cat-articles: #4ECDC4;
+  --color-cat-stories: #96CEB4;
+  --color-cat-diary: #DDA0DD;
+  --color-cat-art: #87CEFA;
+}
+
+/* ═══ Smooth scroll + font rendering ═══ */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══ Selection style ═══ */
+::selection {
+  background-color: rgba(201, 197, 255, 0.3);
+  color: #ffffff;
+}
+
+/* ═══ TipTap RTE overrides (can't be Tailwind since TipTap injects its own DOM) ═══ */
+.tiptap {
+  outline: none;
+  min-height: 200px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 20px;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #e6e1e6;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #938f99;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap h2 { font-size: 1.4rem; font-weight: 600; margin: 20px 0 8px; }
+.tiptap h3 { font-size: 1.2rem; font-weight: 600; margin: 16px 0 6px; }
+.tiptap blockquote {
+  border-left: 3px solid #49454f;
+  padding-left: 16px;
+  margin: 16px 0;
+  color: #c9c4cf;
+  font-style: italic;
+}
+.tiptap pre {
+  background: #353339;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+.tiptap code {
+  background: rgba(201, 197, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+.tiptap img { max-width: 100%; border-radius: 12px; margin: 16px 0; }
+.tiptap ul, .tiptap ol { padding-left: 24px; margin: 12px 0; }
+.tiptap hr { border: none; border-top: 1px solid #49454f; margin: 24px 0; }
+.tiptap span[data-type="subtitle"] {
+  color: #c9c4cf;
+  font-style: italic;
+  opacity: 0.8;
+  font-weight: 400;
+}

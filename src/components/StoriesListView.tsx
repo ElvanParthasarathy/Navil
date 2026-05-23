@@ -40,6 +40,7 @@ const StoriesListView = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [posts, setPosts] = useState(() => getCached('stories') || []);
+    const [seriesList, setSeriesList] = useState(() => getCached('series') || []);
     const [loading, setLoading] = useState(() => !getCached('stories'));
     const [searchTerm, setSearchTerm] = useState(() => sessionStorage.getItem('elvan_stories_search') || '');
     const [activeGenre, setActiveGenre] = useState(() => sessionStorage.getItem('elvan_stories_genre') || '');
@@ -98,12 +99,19 @@ const StoriesListView = () => {
         const cached = getCached('stories');
         if (!cached) setLoading(true);
 
-        const unsubscribe = subscribe('stories', (data) => {
+        const unsubscribeStories = subscribe('stories', (data) => {
             setPosts(data || []);
             setLoading(false);
         });
+        
+        const unsubscribeSeries = subscribe('series', (data) => {
+            setSeriesList(data || []);
+        });
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribeStories();
+            unsubscribeSeries();
+        };
     }, []);
 
     const { autoThumbnails } = useOutletContext() as any;
@@ -246,11 +254,23 @@ const StoriesListView = () => {
                 const latestPublishDate = parts.reduce((latest, current) => {
                     return new Date(current.publish_date) > new Date(latest) ? current.publish_date : latest;
                 }, parts[0].publish_date);
+                
+                // Find matching master series data robustly
+                const normalizedSeriesName = seriesName.trim().toLowerCase();
+                const masterSeries = seriesList.find(s => {
+                    if (!s.title) return false;
+                    const sTitle = s.title.trim().toLowerCase();
+                    return sTitle === normalizedSeriesName || 
+                           (s.id && s.id.trim().toLowerCase() === normalizedSeriesName) ||
+                           sTitle === normalizedSeriesName.replace(/ /g, '-');
+                }) || {};
 
                 resultItems.push({
                     type: 'series' as const,
                     id: `series-${seriesName}`,
-                    seriesName,
+                    seriesName: masterSeries.title || seriesName,
+                    masterCover: masterSeries.coverImage || masterSeries.cover_image || null,
+                    masterDescription: masterSeries.description || null,
                     parts: sortedParts,
                     publishDate: latestPublishDate
                 });
@@ -260,7 +280,7 @@ const StoriesListView = () => {
         resultItems.sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
 
         return resultItems;
-    }, [posts, filteredPosts, searchTerm, activeGenre]);
+    }, [posts, filteredPosts, searchTerm, activeGenre, seriesList]);
 
     const [isPaginationExpanded, setIsPaginationExpanded] = React.useState(false);
     const totalPages = Math.ceil(groupedItems.length / ITEMS_PER_PAGE);
@@ -311,12 +331,13 @@ const StoriesListView = () => {
                         const sd = expandedSeriesData;
                         const sdParts = sd.parts;
                         const sdFirst = sdParts[0];
-                        const sdCover = sdParts.find(p => p.cover_image)?.cover_image || null;
+                        const sdCover = sd.masterCover || sdParts.find(p => p.cover_image)?.cover_image || null;
                         const sdClassification = sdParts.find(p => p.classification)?.classification || null;
                         const sdFirstVariant = sdFirst?.variants?.[0];
-                        const sdExcerpt = sdFirstVariant?.text
+                        const fallbackExcerpt = sdFirstVariant?.text
                             ? sdFirstVariant.text.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').substring(0, 300)
                             : '';
+                        const sdExcerpt = sd.masterDescription || fallbackExcerpt;
                         const sdGenresSet = new Set();
                         sdParts.forEach(p => {
                             [...(p.tags || []), p.style, p.theme, p.meter].filter(Boolean).forEach(g => sdGenresSet.add(g));
@@ -352,11 +373,10 @@ const StoriesListView = () => {
                                             </div>
                                         </div>
                                         <div className="tv-hero-right">
-                                            <span className="tv-show-tagline">📚 நவில் சிறுகதைத் தொடர்</span>
                                             <h1 className="tv-series-title">{sd.seriesName}</h1>
 
                                             <div className="tv-meta-row">
-                                                <span className="tv-ep-count-badge">{sdParts.length} எபிசோடுகள்</span>
+                                                <span className="tv-ep-count-badge">{sdParts.length} அத்தியாயங்கள்</span>
                                                 {sdClassification && (
                                                     <span className={`tv-class-badge ${sdClassification === 'அகம்' ? 'agam' : sdClassification === 'புறம்' ? 'puram' : ''}`}>
                                                         {sdClassification}
@@ -375,15 +395,21 @@ const StoriesListView = () => {
                                                     className="tv-primary-btn"
                                                     state={{ fromQuickLink: true }}
                                                 >
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                                                    வாசிக்கத் தொடங்கு (பகுதி 1)
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginTop: '2px' }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0px', lineHeight: 1.2 }}>
+                                                        <span style={{ fontSize: '1em' }}>வாசிக்கத் தொடங்கு</span>
+                                                        <span style={{ fontSize: '0.7em', opacity: 0.7, fontWeight: 500, letterSpacing: '0.2px' }}>Start reading (Part 1)</span>
+                                                    </div>
                                                 </Link>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="tv-episodes-section">
-                                        <h3 className="tv-section-title">எபிசோடுகள்</h3>
+                                        <div style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '1px solid var(--border-light)', paddingLeft: '24px' }}>
+                                            <h3 className="tv-section-title" style={{ marginBottom: '4px', paddingBottom: 0, borderBottom: 'none' }}>அத்தியாயங்கள்</h3>
+                                            <span style={{ fontSize: '0.95em', opacity: 0.6, fontWeight: 500, letterSpacing: '0.5px', textTransform: 'none' }}>chapters</span>
+                                        </div>
                                         <div className="tv-episodes-grid">
                                             {sdParts.map((part, idx) => {
                                                 const partTitle = part.variants?.[0]?.title || part.title || `Part ${part.series_part}`;
@@ -587,24 +613,26 @@ const StoriesListView = () => {
                                         const parts = item.parts;
                                         const firstPart = parts[0];
                                         const seriesTitle = item.seriesName;
-                                        const coverImage = parts.find(p => p.cover_image)?.cover_image || null;
+                                        const coverImage = item.masterCover || parts.find(p => p.cover_image)?.cover_image || null;
                                         const classification = parts.find(p => p.classification)?.classification || null;
 
-                                        let primaryExcerpt = '';
-                                        const firstHasVariants = firstPart.variants && firstPart.variants.length > 0;
-                                        if (firstHasVariants) {
-                                            const textHtml = firstPart.variants[0]?.text || '';
-                                            primaryExcerpt = textHtml
-                                                .replace(/<[^>]+>/g, '')
-                                                .replace(/&nbsp;/g, ' ')
-                                                .replace(/&amp;/g, '&')
-                                                .replace(/&lt;/g, '<')
-                                                .replace(/&gt;/g, '>')
-                                                .substring(0, 120);
-                                        } else {
-                                            const firstContent = firstPart.content || {};
-                                            const primaryLang = Object.keys(firstContent)[0] || '';
-                                            primaryExcerpt = firstContent[primaryLang]?.excerpt || '';
+                                        let primaryExcerpt = item.masterDescription;
+                                        if (!primaryExcerpt) {
+                                            const firstHasVariants = firstPart.variants && firstPart.variants.length > 0;
+                                            if (firstHasVariants) {
+                                                const textHtml = firstPart.variants[0]?.text || '';
+                                                primaryExcerpt = textHtml
+                                                    .replace(/<[^>]+>/g, '')
+                                                    .replace(/&nbsp;/g, ' ')
+                                                    .replace(/&amp;/g, '&')
+                                                    .replace(/&lt;/g, '<')
+                                                    .replace(/&gt;/g, '>')
+                                                    .substring(0, 120);
+                                            } else {
+                                                const firstContent = firstPart.content || {};
+                                                const primaryLang = Object.keys(firstContent)[0] || '';
+                                                primaryExcerpt = firstContent[primaryLang]?.excerpt || '';
+                                            }
                                         }
 
                                         const genresSet = new Set();
@@ -649,7 +677,7 @@ const StoriesListView = () => {
                                                     <div className="blog-card-content" style={!coverImage && classification ? { paddingTop: '12px' } : {}}>
                                                         <div className="blog-meta-minimal">
                                                             <span className="meta-date" style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>
-                                                                📚 தொடர் ({parts.length} பகுதிகள்)
+                                                                தொடர் ({parts.length} அத்தியாயங்கள்)
                                                             </span>
                                                             {genres.length > 0 && <span className="meta-dot">•</span>}
                                                             {genres.slice(0, 2).map((g, i) => (
@@ -807,7 +835,7 @@ const StoriesListView = () => {
                                     );
                                 })
                             ) : (
-                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
+                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px', minWidth: 0, overflow: 'hidden' }}>
                                     <p>No content available yet. Check back soon!</p>
                                     <AdBanner variant="inline" wrapperStyle={{ padding: '40px 0', marginTop: '20px' }} />
                                 </div>
@@ -1003,19 +1031,22 @@ const StoriesListView = () => {
                         gap: 10px;
                         margin-bottom: 20px;
                     }
+                    .tv-ep-count-badge, .tv-class-badge, .tv-genre-badge {
+                        padding: 6px 16px;
+                        border-radius: 100px;
+                        font-size: 0.82rem;
+                        font-weight: 700;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        line-height: 1;
+                    }
                     .tv-ep-count-badge {
                         background: var(--text-main);
                         color: var(--bg-app);
-                        padding: 4px 14px;
-                        border-radius: 100px;
-                        font-size: 0.8rem;
                         font-weight: 800;
                     }
                     .tv-class-badge, .tv-genre-badge {
-                        padding: 4px 14px;
-                        border-radius: 100px;
-                        font-size: 0.78rem;
-                        font-weight: 700;
                         background: color-mix(in srgb, var(--text-main) 8%, transparent);
                         color: var(--text-muted);
                     }
@@ -1036,23 +1067,23 @@ const StoriesListView = () => {
                     .tv-primary-btn {
                         display: inline-flex;
                         align-items: center;
-                        gap: 10px;
+                        gap: 12px;
                         background: var(--text-main);
                         color: var(--bg-app);
-                        padding: 14px 32px;
-                        border-radius: 12px;
-                        font-size: 0.95rem;
-                        font-weight: 800;
+                        padding: 10px 24px;
+                        border-radius: 50px;
+                        font-size: 0.9rem;
+                        font-weight: 700;
                         text-decoration: none;
-                        box-shadow: 0 4px 20px color-mix(in srgb, var(--text-main) 25%, transparent);
-                        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+                        box-shadow: 0 4px 14px color-mix(in srgb, var(--text-main) 20%, transparent);
+                        transition: all 0.2s ease-out;
                     }
                     .tv-primary-btn:hover {
-                        transform: scale(1.03) translateY(-2px);
-                        box-shadow: 0 8px 30px color-mix(in srgb, var(--text-main) 40%, transparent);
+                        transform: translateY(-1px);
+                        box-shadow: 0 6px 20px color-mix(in srgb, var(--text-main) 30%, transparent);
                     }
                     .tv-primary-btn:active {
-                        transform: scale(0.97);
+                        transform: translateY(1px);
                     }
 
                     /* Sleek TV Episode Section */
@@ -1130,8 +1161,8 @@ const StoriesListView = () => {
                         text-transform: uppercase;
                         background: color-mix(in srgb, var(--text-main) 8%, transparent);
                         color: var(--text-main);
-                        padding: 3px 8px;
-                        border-radius: 4px;
+                        padding: 3px 10px;
+                        border-radius: 50px;
                         letter-spacing: 0.5px;
                     }
                     .tv-ep-date {
@@ -1213,11 +1244,13 @@ const StoriesListView = () => {
                         }
                         .tv-actions {
                             width: 100%;
+                            justify-content: center;
                         }
                         .tv-primary-btn {
-                            width: 100%;
+                            width: auto;
                             justify-content: center;
-                            padding: 16px;
+                            padding: 12px 32px;
+                            font-size: 1rem;
                         }
                         .tv-ep-card-body {
                             padding: 20px;

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy } from 'react-icons/fi';
+import React, { useState, useMemo } from 'react';
+import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy, FiSearch } from 'react-icons/fi';
+import { Box, Typography, Button, IconButton, Checkbox, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment } from '@mui/material';
 import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
 import { getOptimizedImage } from '../../lib/media';
@@ -41,7 +42,7 @@ export const StandardListEditor = ({
     onMoveItems,
     onCopyItems,
     onDuplicateItems
-}) => {
+}: any) => {
     interface ConfirmState {
         open: boolean;
         type: string;
@@ -50,14 +51,18 @@ export const StandardListEditor = ({
         payload: any;
     }
     const [confirmState, setConfirmState] = useState<ConfirmState>({ open: false, type: '', payload: null });
-    const [selected, setSelected] = useState(new Set());
+    const [selected, setSelected] = useState(new Set<string>());
+    const [isListEditMode, setIsListEditMode] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ settings: true, variants: true });
     const toggleSection = (key: string) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
     const schema = SCHEMAS[collection];
     const isBilingual = schema.type === 'bilingual_post';
 
     // ── Selection helpers ──
-    const toggleSelect = (id, e) => {
+    const toggleSelect = (id: string, e: any) => {
         e.stopPropagation();
         setSelected(prev => {
             const next = new Set(prev);
@@ -66,18 +71,18 @@ export const StandardListEditor = ({
         });
     };
 
-    const toggleSelectAll = (e) => {
+    const toggleSelectAll = (e: any) => {
         if (e) e.stopPropagation();
         if (selected.size === items?.length) {
             setSelected(new Set());
         } else {
-            setSelected(new Set(items?.map(i => i.id)));
+            setSelected(new Set(items?.map((i: any) => i.id)));
         }
     };
 
     const clearSelection = () => setSelected(new Set());
 
-    const requestDelete = (e, index) => {
+    const requestDelete = (e: any, index: number) => {
         e.stopPropagation();
         const title = schema.getItemTitle
             ? schema.getItemTitle(items[index])
@@ -91,7 +96,7 @@ export const StandardListEditor = ({
         });
     };
 
-    const requestRemoveVariant = (itemIndex, variantIndex) => {
+    const requestRemoveVariant = (itemIndex: number, variantIndex: number) => {
         setConfirmState({
             open: true, type: 'variant',
             title: 'Remove Variant',
@@ -118,14 +123,14 @@ export const StandardListEditor = ({
             removeVariant(collection, confirmState.payload.itemIndex, confirmState.payload.variantIndex);
         } else if (confirmState.type === 'bulk-delete') {
             const ids = confirmState.payload.ids;
-            const indices = ids.map(id => items.findIndex(i => i.id === id)).filter(i => i >= 0).sort((a, b) => b - a);
-            indices.forEach(idx => deleteItem(collection, idx));
+            const indices = ids.map((id: string) => items.findIndex((i: any) => i.id === id)).filter((i: number) => i >= 0).sort((a: number, b: number) => b - a);
+            indices.forEach((idx: number) => deleteItem(collection, idx));
             clearSelection();
         }
         setConfirmState({ open: false, type: '', payload: null });
     };
 
-    const editingIndex = items?.findIndex(item => item.id === editingId);
+    const editingIndex = items?.findIndex((item: any) => item.id === editingId);
     const item = editingIndex >= 0 ? items[editingIndex] : null;
 
     const artsCollections = [
@@ -139,7 +144,7 @@ export const StandardListEditor = ({
         'art_digital_arts'
     ];
 
-    const getTargetCollections = (currentColl) => {
+    const getTargetCollections = (currentColl: string) => {
         if (currentColl === 'arts') {
             return artsCollections;
         }
@@ -151,347 +156,325 @@ export const StandardListEditor = ({
 
     const targetCollections = getTargetCollections(collection);
 
+    // Derived states
+    const filteredItems = useMemo(() => {
+        if (!items) return [];
+        if (!searchQuery.trim()) return items;
+        const q = searchQuery.toLowerCase();
+        return items.filter((item: any) => {
+            const title = schema.getItemTitle
+                ? schema.getItemTitle(item)?.toLowerCase()
+                : (item.title || item.date || '').toLowerCase();
+            const caption = (item.caption || '').toLowerCase();
+            const classification = item.classification?.toLowerCase() || '';
+            const tags = Array.isArray(item.tags) ? item.tags.join(' ').toLowerCase() : (typeof item.tags === 'string' ? item.tags.toLowerCase() : '');
+            
+            return title.includes(q) || caption.includes(q) || classification.includes(q) || tags.includes(q);
+        });
+    }, [items, searchQuery, schema]);
+
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+    const paginatedItems = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredItems.slice(start, start + itemsPerPage);
+    }, [filteredItems, currentPage, itemsPerPage]);
+
     return (
-        <div className="admin-content-area">
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
             <ConfirmDialog
                 open={confirmState.open}
-                title={confirmState.title}
-                message={confirmState.message}
+                title={confirmState.title || ''}
+                message={confirmState.message || ''}
                 onCancel={() => setConfirmState({ open: false, type: '', payload: null })}
                 onProceed={handleConfirm}
             />
 
-            <style>{`
-                .bulk-toolbar {
-                    display: flex; align-items: center; justify-content: space-between;
-                    padding: 8px 16px; gap: 12px;
-                    background: color-mix(in srgb, var(--accent, #088370) 12%, transparent);
-                    border-bottom: 1px solid color-mix(in srgb, var(--accent, #088370) 25%, transparent);
-                    flex-wrap: wrap;
-                }
-                .bulk-toolbar-left {
-                    display: flex; align-items: center; gap: 10px;
-                }
-                .bulk-toolbar-left input[type="checkbox"] {
-                    width: 16px; height: 16px; accent-color: var(--accent, #088370); cursor: pointer;
-                }
-                .bulk-count {
-                    font-size: 0.85rem; font-weight: 600; color: var(--text-main);
-                }
-                .bulk-toolbar-right {
-                    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-                }
-                .bulk-select {
-                    padding: 5px 10px !important; font-size: 0.8rem !important;
-                    border-radius: 8px !important; min-height: unset !important;
-                    max-width: 140px; cursor: pointer;
-                }
-                .admin-file-row-checkbox {
-                    display: flex; align-items: center; justify-content: center;
-                    padding: 0 4px 0 0; flex-shrink: 0;
-                }
-                .admin-file-row-checkbox input[type="checkbox"] {
-                    width: 16px; height: 16px; accent-color: var(--accent, #088370); cursor: pointer;
-                }
-                .admin-file-row.selected {
-                    background: color-mix(in srgb, var(--accent, #088370) 8%, transparent) !important;
-                }
-                .admin-file-row-thumbnail {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 8px;
-                    overflow: hidden;
-                    background: var(--bg-panel, #111);
-                    border: 1px solid var(--border-light, #333);
-                    flex-shrink: 0;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .admin-file-row-thumbnail img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-                .select-all-hint {
-                    display: flex; align-items: center; gap: 10px;
-                    padding: 6px 16px; font-size: 0.8rem; color: var(--text-muted);
-                    cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
-                }
-                .select-all-hint:hover { opacity: 1; }
-                .select-all-hint input[type="checkbox"] {
-                    width: 14px; height: 14px; accent-color: var(--accent, #088370); cursor: pointer;
-                }
-                .admin-move-controls {
-                    display: inline-flex; align-items: center; gap: 4px; margin-right: 8px;
-                }
-                .admin-move-controls .adm-btn.icon-only {
-                    padding: 4px !important; min-width: unset !important; width: 28px; height: 28px;
-                }
-                @media (max-width: 600px) {
-                    .bulk-toolbar { flex-direction: column; align-items: flex-start; }
-                    .bulk-toolbar-right { width: 100%; }
-                    .bulk-select { max-width: 100%; flex: 1; }
-                }
-            `}</style>
-
             {/* ── FILE LIST VIEW ── */}
             {!item ? (
-                <div className="admin-file-list">
-                    <div className="admin-file-list-header">
-                        <h2>{schema.label} ({items?.length || 0})</h2>
-                        <div className="admin-file-list-actions">
-                            <button className="adm-btn" onClick={onAddItem}><FiPlus size={14} /> Add New</button>
-                            <button className="adm-btn primary" onClick={onSave}>
-                                {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={14} /> Save</>}
-                            </button>
-                        </div>
-                    </div>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: 1, borderColor: 'divider' }}>
+                        <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary' }}>
+                            {schema.label} ({items?.length || 0})
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 2, flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <TextField
+                                size="small"
+                                placeholder="Search items..."
+                                value={searchQuery}
+                                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                                slotProps={{ input: {
+                                    startAdornment: <InputAdornment position="start"><FiSearch size={16} /></InputAdornment>,
+                                }}}
+                                sx={{ maxWidth: 300, bgcolor: 'background.paper', borderRadius: 2 }}
+                            />
+                            {!isListEditMode ? (
+                                <Button variant="outlined" startIcon={<FiEdit3 />} onClick={() => setIsListEditMode(true)}>Edit</Button>
+                            ) : (
+                                <>
+                                    <Button variant="text" onClick={() => { setIsListEditMode(false); clearSelection(); }} sx={{ color: 'text.secondary' }}>Cancel</Button>
+                                    <Button variant="contained" startIcon={<FiPlus />} onClick={onAddItem} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
+                                    <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                                        Save
+                                    </Button>
+                                </>
+                            )}
+                        </Box>
+                    </Box>
 
                     {/* Bulk Action Toolbar — appears when items selected */}
                     {selected.size > 0 && (
-                        <div className="bulk-toolbar">
-                            <div className="bulk-toolbar-left">
-                                <input type="checkbox" checked={selected.size === items?.length} onChange={toggleSelectAll} title="Select All" />
-                                <span className="bulk-count">{selected.size} selected</span>
-                                <button className="adm-btn ghost small" onClick={clearSelection}>Clear</button>
-                            </div>
-                            <div className="bulk-toolbar-right">
+                        <Paper elevation={0} sx={{ p: 2, m: 2, display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'space-between', alignItems: 'center', bgcolor: 'secondary.dark', borderRadius: 4 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Checkbox checked={selected.size === items?.length} onChange={toggleSelectAll} sx={{ color: 'onSecondaryContainer', '&.Mui-checked': { color: 'onSecondaryContainer' } }} />
+                                <Typography sx={{ fontWeight: 600, color: 'onSecondaryContainer' }}>{selected.size} selected</Typography>
+                                <Button size="small" onClick={clearSelection} sx={{ color: 'onSecondaryContainer' }}>Clear</Button>
+                            </Box>
+                            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
                                  {targetCollections.length > 0 && (
                                     <>
-                                        <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
-                                            if (e.target.value && onMoveItems) {
-                                                onMoveItems([...selected], collection, e.target.value);
-                                                clearSelection();
-                                            }
-                                            e.target.value = '';
-                                        }}>
-                                            <option value="" disabled>✂ Move to...</option>
-                                            {targetCollections.map(c => (
-                                                <option key={c} value={c}>{SCHEMAS[c].label}</option>
-                                            ))}
-                                        </select>
-                                        <select className="adm-input bulk-select" defaultValue="" onChange={(e) => {
-                                            if (e.target.value && onCopyItems) {
-                                                onCopyItems([...selected], collection, e.target.value);
-                                                clearSelection();
-                                            }
-                                            e.target.value = '';
-                                        }}>
-                                            <option value="" disabled>⎘ Copy to...</option>
-                                            {targetCollections.map(c => (
-                                                <option key={c} value={c}>{SCHEMAS[c].label}</option>
-                                            ))}
-                                        </select>
+                                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                                            <InputLabel>Move to...</InputLabel>
+                                            <Select label="Move to..." value="" onChange={(e) => {
+                                                if (e.target.value && onMoveItems) {
+                                                    onMoveItems([...selected], collection, e.target.value);
+                                                    clearSelection();
+                                                }
+                                            }}>
+                                                {targetCollections.map(c => (
+                                                    <MenuItem key={c} value={c}>{SCHEMAS[c].label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                                            <InputLabel>Copy to...</InputLabel>
+                                            <Select label="Copy to..." value="" onChange={(e) => {
+                                                if (e.target.value && onCopyItems) {
+                                                    onCopyItems([...selected], collection, e.target.value);
+                                                    clearSelection();
+                                                }
+                                            }}>
+                                                {targetCollections.map(c => (
+                                                    <MenuItem key={c} value={c}>{SCHEMAS[c].label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </>
                                 )}
-                                <button className="adm-btn ghost small" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--text-main)' }} onClick={() => {
+                                <Button size="small" startIcon={<FiCopy />} onClick={() => {
                                     if (onDuplicateItems) {
                                         onDuplicateItems([...selected]);
                                         clearSelection();
                                     }
-                                }}>
-                                    <FiCopy size={13} /> Duplicate
-                                </button>
-                                <button className="adm-btn danger small" onClick={requestBulkDelete}>
-                                    <FiTrash2 size={13} /> Delete
-                                </button>
-                            </div>
-                        </div>
+                                }} sx={{ color: 'onSecondaryContainer' }}>Duplicate</Button>
+                                <Button size="small" color="error" startIcon={<FiTrash2 />} onClick={requestBulkDelete}>Delete</Button>
+                            </Box>
+                        </Paper>
                     )}
 
-                    <div className="admin-file-list-scroll">
+                    <Box sx={{ flex: 1, overflowY: 'auto', p: { xs: 2, md: 4 }, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         {items?.length === 0 ? (
-                            <div className="admin-file-empty">No items yet. Click "Add New" to create one.</div>
+                            <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>No items yet. Click "Add New" to create one.</Box>
                         ) : (
                             <>
-                                {selected.size === 0 && items?.length > 0 && (
-                                    <div className="select-all-hint" onClick={toggleSelectAll}>
-                                        <input type="checkbox" checked={false} readOnly />
-                                        <span>Select all</span>
-                                    </div>
+                                {isListEditMode && selected.size === 0 && paginatedItems?.length > 0 && (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, opacity: 0.6, cursor: 'pointer', '&:hover': { opacity: 1 }, transition: 'opacity 0.2s' }} onClick={toggleSelectAll}>
+                                        <Checkbox checked={false} readOnly size="small" />
+                                        <Typography variant="body2">Select all</Typography>
+                                    </Box>
                                 )}
-                                {items?.map((listItem, index) => {
+                                {paginatedItems?.map((listItem: any, paginatedIndex: number) => {
+                                    const index = items.findIndex((i: any) => i.id === listItem.id);
                                     const isSelected = selected.has(listItem.id);
                                     const title = schema.getItemTitle ? schema.getItemTitle(listItem) : (listItem.title || listItem.date || 'Untitled');
                                     const dateVal = listItem.date || listItem.publish_date;
                                     const dateParsed = dateVal ? new Date(dateVal) : null;
-                                    const formattedDate = dateParsed && !isNaN(dateParsed.getTime()) ? dateParsed.toLocaleDateString() : (dateVal || '');
+                                    const formattedDate = dateParsed && !isNaN(dateParsed.getTime()) ? dateParsed.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : (dateVal || '');
                                     const sub = schema.getItemSubtitle ? schema.getItemSubtitle(listItem) : formattedDate;
                                     const coverUrl = getCoverImageUrl(listItem);
                                     return (
-                                        <div
+                                        <Card
                                             key={listItem.id || index}
-                                            className={`admin-file-row ${isSelected ? 'selected' : ''}`}
-                                            onClick={() => setEditingId(listItem.id)}
+                                            elevation={0}
+                                            sx={{
+                                                display: 'flex', alignItems: 'center', p: 1.5, gap: 2,
+                                                cursor: 'pointer', transition: 'all 0.2s',
+                                                bgcolor: isSelected ? 'primary.dark' : 'background.paper',
+                                                color: isSelected ? 'onPrimaryContainer' : 'text.primary',
+                                                '&:hover': { bgcolor: isSelected ? 'primary.dark' : 'surfaceContainer' },
+                                                flexShrink: 0
+                                            }}
+                                            onClick={() => {
+                                                if (isListEditMode) toggleSelect(listItem.id, null);
+                                                else setEditingId(listItem.id);
+                                            }}
                                         >
-                                            <div className="admin-file-row-checkbox" onClick={(e) => toggleSelect(listItem.id, e)}>
-                                                <input type="checkbox" checked={isSelected} readOnly />
-                                            </div>
-                                            {coverUrl && (
-                                                <div className="admin-file-row-thumbnail">
-                                                    <img src={coverUrl} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                                                </div>
+                                            {isListEditMode && (
+                                                <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }} onClick={(e: any) => { e.stopPropagation(); toggleSelect(listItem.id, e); }}>
+                                                    <Checkbox checked={isSelected} readOnly sx={{ p: 0 }} />
+                                                </Box>
                                             )}
-                                            <div className="admin-file-row-info">
-                                                <h3>{title}</h3>
-                                                <span className="admin-file-row-sub">
+                                            {coverUrl && (
+                                                <Box sx={{ width: 44, height: 44, borderRadius: 2, overflow: 'hidden', bgcolor: 'action.hover', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <img src={coverUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                </Box>
+                                            )}
+                                            <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                                                <Typography variant="subtitle2" sx={{ fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {title}
+                                                </Typography>
+                                                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                                                     {sub}
                                                     {listItem.variants?.length > 0 && ` • ${listItem.variants.length} lang${listItem.variants.length > 1 ? 's' : ''}`}
-                                                </span>
-                                            </div>
-                                            <div className="admin-file-row-actions">
-                                                <div className="admin-move-controls">
-                                                    <button
-                                                        className="adm-btn icon-only"
-                                                        onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }}
-                                                        disabled={index === 0}
-                                                        title="Move Up"
-                                                    >
-                                                        <FiChevronUp size={16} />
-                                                    </button>
-                                                    <button
-                                                        className="adm-btn icon-only"
-                                                        onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }}
-                                                        disabled={index === items.length - 1}
-                                                        title="Move Down"
-                                                    >
-                                                        <FiChevronDown size={16} />
-                                                    </button>
-                                                </div>
-                                                <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); setEditingId(listItem.id); }} title="Edit">
-                                                    <FiEdit3 size={14} />
-                                                </button>
-                                                <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate">
-                                                    <FiCopy size={14} />
-                                                </button>
-                                                <button className="adm-btn danger" onClick={(e) => requestDelete(e, index)} title="Delete">
-                                                    <FiTrash2 size={14} />
-                                                </button>
-                                            </div>
-                                        </div>
+                                                </Typography>
+                                            </Box>
+                                            {isListEditMode ? (
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pr: 1 }}>
+                                                    {collection !== 'stories' && (
+                                                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mr: 1 }}>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><FiChevronUp size={16} /></IconButton>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><FiChevronDown size={16} /></IconButton>
+                                                        </Box>
+                                                    )}
+                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><FiCopy size={16} /></IconButton>
+                                                    <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><FiTrash2 size={16} /></IconButton>
+                                                </Box>
+                                            ) : (
+                                                <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, color: 'text.secondary', opacity: 0.5 }}>
+                                                    <FiChevronRight size={20} />
+                                                </Box>
+                                            )}
+                                        </Card>
                                     );
                                 })}
+                                
+                                {totalPages > 1 && (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, pb: 4 }}>
+                                        <Pagination 
+                                            count={totalPages} 
+                                            page={currentPage} 
+                                            onChange={(_, p) => setCurrentPage(p)} 
+                                            color="primary" 
+                                            size="large" 
+                                        />
+                                    </Box>
+                                )}
                             </>
                         )}
-                    </div>
-                </div>
+                    </Box>
+                </Box>
             ) : (
                 /* ── EDITOR VIEW ── */
-                <div className="admin-editor-full">
-                    <div className="admin-editor-toolbar">
-                        <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>
-                            <FiArrowLeft size={16} /> Back
-                        </button>
-                        <h2>Edit {schema.label.slice(0, -1) || 'Entry'}</h2>
-                        <div className="admin-editor-toolbar-actions">
-                            <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>Cancel</button>
-                            <button className="adm-btn primary" onClick={onSave}>
-                                {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={14} /> Save</>}
-                            </button>
-                        </div>
-                    </div>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
+                        <Button startIcon={<FiArrowLeft />} onClick={() => handleCloseEditor(editingId)} sx={{ color: 'text.secondary' }}>Back</Button>
+                        <Typography variant="h6" sx={{ fontWeight: 700 }}>Edit {schema.label.slice(0, -1) || 'Entry'}</Typography>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Button onClick={() => handleCloseEditor(editingId)}>Cancel</Button>
+                            <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                                {saveStatus === 'loading' ? 'Saving...' : 'Save'}
+                            </Button>
+                        </Box>
+                    </Box>
 
-                    <div className="admin-editor-body">
-                        <div className="adm-form side-by-side">
+                    <Box sx={{ flex: 1, overflowY: 'auto', p: { xs: 2, md: 4 }, pb: 10, display: 'flex', justifyContent: 'center' }}>
+                        <Box sx={{ width: '100%', maxWidth: 1400, display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: 4, alignItems: 'flex-start' }}>
                             {/* LEFT SIDEBAR: Meta Fields */}
-                            <div className="adm-form-sidebar">
-                                <div className="adm-section">
-                                    <div className="adm-section-header adm-section-header--collapsible" onClick={() => toggleSection('settings')}>
-                                        <span className="adm-section-title">Post Settings</span>
-                                        <div className={`adm-collapse-icon ${expandedSections.settings ? 'open' : ''}`}>
-                                            <FiChevronRight size={16} />
-                                        </div>
-                                    </div>
-                                    <div className={`adm-collapse-body ${expandedSections.settings ? 'open' : ''}`}>
-                                        <div className="adm-collapse-body-inner">
-                                            {isBilingual ? (
-                                                <div className="adm-grid" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                                    {schema.metaFields.map(field => (
-                                                        <div key={field.key} className="adm-field">
-                                                            <label className="adm-label">{field.label}</label>
-                                                            <FieldInput
-                                                                field={field}
-                                                                value={item[field.key]}
-                                                                onChange={(val) => updateGenericItem(collection, editingIndex, field.key, val)}
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <div className="adm-grid" style={{ display: 'flex', flexDirection: 'column' }}>
-                                                    {schema.fields?.filter(f => !f.fullWidth).map(field => (
-                                                        <div key={field.key} className="adm-field">
-                                                            <label className="adm-label">{field.label}</label>
-                                                            <FieldInput
-                                                                field={field}
-                                                                value={item[field.key]}
-                                                                onChange={(val) => updateGenericItem(collection, editingIndex, field.key, val)}
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Box sx={{ flex: { lg: '0 0 320px' }, display: 'flex', flexDirection: 'column', gap: 4, position: { lg: 'sticky' }, top: 0 }}>
+                                <Paper elevation={0} sx={{ bgcolor: 'background.paper', overflow: 'hidden' }}>
+                                <Box 
+                                    sx={{ p: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}
+                                    onClick={() => toggleSection('settings')}
+                                >
+                                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Post Settings</Typography>
+                                    <Box sx={{ transform: expandedSections.settings ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>
+                                        <FiChevronRight size={20} />
+                                    </Box>
+                                </Box>
+                                <Collapse in={expandedSections.settings}>
+                                    <Box sx={{ p: 3, pt: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                        {isBilingual ? (
+                                            schema.metaFields.map((field: any) => (
+                                                <Box key={field.key}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 1, color: 'text.secondary' }}>{field.label}</Typography>
+                                                    <FieldInput
+                                                        field={field}
+                                                        value={item[field.key]}
+                                                        onChange={(val: any) => updateGenericItem(collection, editingIndex, field.key, val)}
+                                                    />
+                                                </Box>
+                                            ))
+                                        ) : (
+                                            schema.fields?.filter((f: any) => !f.fullWidth).map((field: any) => (
+                                                <Box key={field.key}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 1, color: 'text.secondary' }}>{field.label}</Typography>
+                                                    <FieldInput
+                                                        field={field}
+                                                        value={item[field.key]}
+                                                        onChange={(val: any) => updateGenericItem(collection, editingIndex, field.key, val)}
+                                                    />
+                                                </Box>
+                                            ))
+                                        )}
+                                    </Box>
+                                </Collapse>
+                            </Paper>
+                        </Box>
 
-                            {/* RIGHT MAIN: Language Variants (same as poem editor) */}
-                            <div className="adm-form-main">
-                                {isBilingual ? (
-                                    <div className="adm-section" style={{ background: 'transparent', border: 'none', padding: 0, boxShadow: 'none' }}>
-                                        <div className="adm-section-header adm-section-header--collapsible" onClick={() => toggleSection('variants')}>
-                                            <span className="adm-section-title">Language Variants</span>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <button className="adm-btn ghost small" onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
-                                                    <FiPlus size={13} /> Add Variant
-                                                </button>
-                                                <div className={`adm-collapse-icon ${expandedSections.variants ? 'open' : ''}`}>
-                                                    <FiChevronRight size={16} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className={`adm-collapse-body ${expandedSections.variants ? 'open' : ''}`}>
-                                            <div className="adm-collapse-body-inner">
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                                                    {item.variants?.map((variant, vIndex) => (
-                                                        <VariantCard
-                                                            key={vIndex}
-                                                            variant={variant}
-                                                            vIndex={vIndex}
-                                                            totalVariants={item.variants.length}
-                                                            onUpdate={(field, value) => updateVariant(collection, editingIndex, vIndex, field, value)}
-                                                            onUpdateTransl={(fieldObj, langKey, value) => updateTransliteration(collection, editingIndex, vIndex, fieldObj, langKey, value)}
-                                                            onToggleLang={(tLang) => toggleTransliterationLang(collection, editingIndex, vIndex, tLang)}
-                                                            onRemove={() => requestRemoveVariant(editingIndex, vIndex)}
-                                                            onMove={(direction) => moveVariant(collection, editingIndex, vIndex, direction)}
-                                                            idPrefix={`v-${item.id}-${vIndex}`}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="adm-section" style={{ borderTop: 'none', paddingTop: 0, marginTop: 0 }}>
-                                        {schema.fields?.filter(f => f.fullWidth).map(field => (
-                                            <div key={field.key} className="adm-field">
-                                                <label className="adm-label">{field.label}</label>
+                        {/* RIGHT MAIN: Language Variants or Full Width Fields */}
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                            {isBilingual ? (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }} onClick={() => toggleSection('variants')}>
+                                            <Typography variant="h6" sx={{ fontWeight: 700 }}>Language Variants</Typography>
+                                            <Box sx={{ transform: expandedSections.variants ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>
+                                                <FiChevronRight size={20} />
+                                            </Box>
+                                        </Box>
+                                        <Button variant="contained" startIcon={<FiPlus />} onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
+                                            Add Variant
+                                        </Button>
+                                    </Box>
+                                    <Collapse in={expandedSections.variants}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
+                                            {item.variants?.map((variant: any, vIndex: number) => (
+                                                <VariantCard
+                                                    key={vIndex}
+                                                    variant={variant}
+                                                    vIndex={vIndex}
+                                                    totalVariants={item.variants.length}
+                                                    onUpdate={(field: string, value: any) => updateVariant(collection, editingIndex, vIndex, field, value)}
+                                                    onUpdateTransl={(fieldObj: any, langKey: string, value: any) => updateTransliteration(collection, editingIndex, vIndex, fieldObj, langKey, value)}
+                                                    onToggleLang={(tLang: string) => toggleTransliterationLang(collection, editingIndex, vIndex, tLang)}
+                                                    onRemove={() => requestRemoveVariant(editingIndex, vIndex)}
+                                                    onMove={(direction: string) => moveVariant(collection, editingIndex, vIndex, direction)}
+                                                    idPrefix={`v-${item.id}-${vIndex}`}
+                                                />
+                                            ))}
+                                        </Box>
+                                    </Collapse>
+                                </Box>
+                            ) : (
+                                <Paper elevation={0} sx={{ p: 3, bgcolor: 'background.paper' }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                        {schema.fields?.filter((f: any) => f.fullWidth).map((field: any) => (
+                                            <Box key={field.key}>
+                                                <Typography variant="body2" sx={{ fontWeight: 600, mb: 1, color: 'text.secondary' }}>{field.label}</Typography>
                                                 <FieldInput
                                                     field={field}
                                                     value={item[field.key]}
-                                                    onChange={(val) => updateGenericItem(collection, editingIndex, field.key, val)}
+                                                    onChange={(val: any) => updateGenericItem(collection, editingIndex, field.key, val)}
                                                 />
-                                            </div>
+                                            </Box>
                                         ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                    </Box>
+                                </Paper>
+                            )}
+                        </Box>
+                    </Box>
+                </Box>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };

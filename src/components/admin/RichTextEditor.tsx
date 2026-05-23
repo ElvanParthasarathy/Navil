@@ -4,16 +4,18 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
 import ImageResize from 'tiptap-extension-resize-image';
+import { Box, IconButton, Divider, Tooltip, Typography, Paper } from '@mui/material';
+import { 
+    FiBold, FiItalic, FiType, FiList, FiImage, FiMinus, FiCode
+} from 'react-icons/fi';
+import { MdFormatListNumbered, MdFormatQuote, MdStrikethroughS } from 'react-icons/md';
 import { getOptimizedImage } from '../../lib/media';
 
 const SubtitleMark = Mark.create({
     name: 'subtitle',
-
     parseHTML() {
         return [
-            {
-                tag: 'span[data-type="subtitle"]',
-            },
+            { tag: 'span[data-type="subtitle"]' },
             {
                 tag: 'span',
                 getAttrs: element => {
@@ -21,34 +23,18 @@ const SubtitleMark = Mark.create({
                     return el.style.color === 'var(--text-muted)' || el.style.color === 'rgb(142, 142, 147)' ? {} : false;
                 }
             }
-        ]
+        ];
     },
-
     renderHTML({ HTMLAttributes }) {
         return ['span', mergeAttributes(HTMLAttributes, { 
             'data-type': 'subtitle',
             style: 'color: var(--text-muted); font-style: italic; opacity: 0.8; font-weight: 400;' 
-        }), 0]
+        }), 0];
     },
 });
 
-const MenuBar = ({ editor }) => {
+const MenuBar = ({ editor }: any) => {
     if (!editor) return null;
-
-    const btnStyle = (isActive) => ({
-        background: isActive ? 'var(--text-main)' : 'transparent',
-        color: isActive ? 'var(--bg-app)' : 'var(--text-muted)',
-        border: 'none',
-        borderRadius: '6px',
-        padding: '6px 10px',
-        cursor: 'pointer',
-        fontSize: '0.85rem',
-        fontWeight: 600,
-        transition: 'all 0.15s ease',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '4px',
-    });
 
     const addImage = () => {
         const url = window.prompt('Enter image URL:');
@@ -58,65 +44,64 @@ const MenuBar = ({ editor }) => {
         }
     };
 
+    const getBtnColor = (isActive: boolean) => isActive ? 'primary' : 'default';
+    const getBtnStyle = (isActive: boolean) => ({
+        bgcolor: isActive ? 'primary.main' : 'transparent',
+        color: isActive ? 'primary.contrastText' : 'text.primary',
+        borderRadius: 2,
+        '&:hover': {
+            bgcolor: isActive ? 'primary.dark' : 'action.hover',
+        }
+    });
+
     return (
-        <div className="rte-toolbar">
-            <button type="button" style={btnStyle(editor.isActive('bold'))} onClick={() => editor.chain().focus().toggleBold().run()} title="Bold">
-                <strong>B</strong>
-            </button>
-            <button type="button" style={btnStyle(editor.isActive('italic'))} onClick={() => editor.chain().focus().toggleItalic().run()} title="Italic">
-                <em>I</em>
-            </button>
-            <button type="button" style={btnStyle(editor.isActive('strike'))} onClick={() => editor.chain().focus().toggleStrike().run()} title="Strikethrough">
-                <s>S</s>
-            </button>
-            <button type="button" style={{ ...btnStyle(editor.isActive('subtitle')), fontStyle: 'italic', fontWeight: 'bold' }} onClick={() => editor.chain().focus().toggleMark('subtitle').run()} title="English Subtitle">
-                English Subtitle
-            </button>
+        <Box sx={{ 
+            display: 'flex', flexWrap: 'wrap', gap: 0.5, p: 1, 
+            borderBottom: '1px solid', borderColor: 'divider', 
+            bgcolor: 'background.default'
+        }}>
+            <Tooltip title="Bold"><IconButton size="small" onClick={() => editor.chain().focus().toggleBold().run()} sx={getBtnStyle(editor.isActive('bold'))}><FiBold size={18} /></IconButton></Tooltip>
+            <Tooltip title="Italic"><IconButton size="small" onClick={() => editor.chain().focus().toggleItalic().run()} sx={getBtnStyle(editor.isActive('italic'))}><FiItalic size={18} /></IconButton></Tooltip>
+            <Tooltip title="Strikethrough"><IconButton size="small" onClick={() => editor.chain().focus().toggleStrike().run()} sx={getBtnStyle(editor.isActive('strike'))}><MdStrikethroughS size={18} /></IconButton></Tooltip>
+            <Tooltip title="English Subtitle">
+                <IconButton size="small" onClick={() => editor.chain().focus().toggleMark('subtitle').run()} sx={getBtnStyle(editor.isActive('subtitle'))}>
+                    <Typography variant="body2" sx={{ fontStyle: 'italic',  fontWeight: 800,  px: 0.5 }}>sub</Typography>
+                </IconButton>
+            </Tooltip>
 
-            <div className="rte-toolbar-divider" />
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            <button type="button" style={btnStyle(editor.isActive('heading', { level: 2 }))} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} title="Heading 2">
-                H2
-            </button>
-            <button type="button" style={btnStyle(editor.isActive('heading', { level: 3 }))} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} title="Heading 3">
-                H3
-            </button>
+            <Tooltip title="Heading 2">
+                <IconButton size="small" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} sx={getBtnStyle(editor.isActive('heading', { level: 2 }))}>
+                    <Typography variant="body2" sx={{ fontWeight: 800,  px: 0.5 }}>H2</Typography>
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Heading 3">
+                <IconButton size="small" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} sx={getBtnStyle(editor.isActive('heading', { level: 3 }))}>
+                    <Typography variant="body2" sx={{ fontWeight: 800,  px: 0.5 }}>H3</Typography>
+                </IconButton>
+            </Tooltip>
 
-            <div className="rte-toolbar-divider" />
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            <button type="button" style={btnStyle(editor.isActive('bulletList'))} onClick={() => editor.chain().focus().toggleBulletList().run()} title="Bullet List">
-                • List
-            </button>
-            <button type="button" style={btnStyle(editor.isActive('orderedList'))} onClick={() => editor.chain().focus().toggleOrderedList().run()} title="Numbered List">
-                1. List
-            </button>
-            <button type="button" style={btnStyle(editor.isActive('blockquote'))} onClick={() => editor.chain().focus().toggleBlockquote().run()} title="Blockquote">
-                ❝
-            </button>
-            <button type="button" style={btnStyle(editor.isActive('codeBlock'))} onClick={() => editor.chain().focus().toggleCodeBlock().run()} title="Code Block">
-                {'</>'}
-            </button>
+            <Tooltip title="Bullet List"><IconButton size="small" onClick={() => editor.chain().focus().toggleBulletList().run()} sx={getBtnStyle(editor.isActive('bulletList'))}><FiList size={18} /></IconButton></Tooltip>
+            <Tooltip title="Numbered List"><IconButton size="small" onClick={() => editor.chain().focus().toggleOrderedList().run()} sx={getBtnStyle(editor.isActive('orderedList'))}><MdFormatListNumbered size={18} /></IconButton></Tooltip>
+            <Tooltip title="Blockquote"><IconButton size="small" onClick={() => editor.chain().focus().toggleBlockquote().run()} sx={getBtnStyle(editor.isActive('blockquote'))}><MdFormatQuote size={18} /></IconButton></Tooltip>
+            <Tooltip title="Code Block"><IconButton size="small" onClick={() => editor.chain().focus().toggleCodeBlock().run()} sx={getBtnStyle(editor.isActive('codeBlock'))}><FiCode size={18} /></IconButton></Tooltip>
 
-            <div className="rte-toolbar-divider" />
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            <button type="button" style={btnStyle(false)} onClick={addImage} title="Insert Image">
-                🖼
-            </button>
-            <button type="button" style={btnStyle(false)} onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Horizontal Rule">
-                ―
-            </button>
-        </div>
+            <Tooltip title="Insert Image"><IconButton size="small" onClick={addImage} sx={getBtnStyle(false)}><FiImage size={18} /></IconButton></Tooltip>
+            <Tooltip title="Horizontal Rule"><IconButton size="small" onClick={() => editor.chain().focus().setHorizontalRule().run()} sx={getBtnStyle(false)}><FiMinus size={18} /></IconButton></Tooltip>
+        </Box>
     );
 };
 
-const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' }) => {
+const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' }: any) => {
 
-    // Convert plain text with newlines to HTML paragraphs for legacy data
-    const formatHTML = (raw) => {
+    const formatHTML = (raw: string) => {
         if (!raw) return '';
-        // If it already contains HTML block/inline tags, assume it's HTML
         if (/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) return raw;
-        // Otherwise, convert newlines to <p> tags
         return raw.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
     };
 
@@ -124,9 +109,8 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
         extensions: [
             StarterKit.configure({
                 heading: { levels: [2, 3] },
-                hardBreak: false, // We add our own below
+                hardBreak: false,
             }),
-            // Enter = line break (<br>), Shift+Enter = new paragraph
             HardBreak.extend({
                 addKeyboardShortcuts() {
                     return {
@@ -148,7 +132,6 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
         },
     });
 
-    // Sync external content changes
     React.useEffect(() => {
         if (editor) {
             const formatted = formatHTML(content);
@@ -156,107 +139,50 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
                 editor.commands.setContent(formatted, { emitUpdate: false });
             }
         }
-    }, [content]);
+    }, [content, editor]);
 
     return (
-        <div className="rte-wrapper">
-            <style>{`
-                .rte-wrapper {
-                    border: 1px solid var(--border-color, #333);
-                    border-radius: 12px;
-                    overflow: hidden;
-                    background: var(--bg-app);
+        <Paper elevation={0} sx={{ 
+            display: 'flex', flexDirection: 'column', 
+            bgcolor: 'background.paper', borderRadius: 0,
+            '& .ProseMirror': {
+                p: 3, outline: 'none', minHeight: 200,
+                color: 'text.primary',
+                fontSize: '0.95rem',
+                lineHeight: 1.7,
+                '& p': { mb: 2 },
+                '& h2': { fontSize: '1.5rem', fontWeight: 800, mt: 3, mb: 1.5 },
+                '& h3': { fontSize: '1.25rem', fontWeight: 700, mt: 2.5, mb: 1 },
+                '& blockquote': {
+                    borderLeft: '4px solid',
+                    borderColor: 'primary.main',
+                    pl: 2,
+                    fontStyle: 'italic',
+                    color: 'text.secondary',
+                    bgcolor: 'background.default',
+                    py: 1,
+                    pr: 2,
+                    borderRadius: '0 8px 8px 0'
+                },
+                '& img': { maxWidth: '100%', height: 'auto', borderRadius: 2 },
+                '& code': { bgcolor: 'action.hover', px: 1, py: 0.5, borderRadius: 1, fontFamily: 'monospace' },
+                '& pre': { bgcolor: 'action.hover', p: 2, borderRadius: 2, overflowX: 'auto', fontFamily: 'monospace' },
+                '& ul, & ol': { pl: 3, mb: 2 },
+                '& li': { mb: 0.5 },
+                '& p.is-editor-empty:first-of-type::before': {
+                    content: 'attr(data-placeholder)',
+                    float: 'left',
+                    color: 'text.disabled',
+                    pointerEvents: 'none',
+                    height: 0,
                 }
-                .rte-toolbar {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 4px;
-                    padding: 8px 12px;
-                    background: color-mix(in srgb, var(--text-main) 4%, transparent);
-                    border-bottom: 1px solid var(--border-color, #333);
-                }
-                .rte-toolbar-divider {
-                    width: 1px;
-                    margin: 4px 6px;
-                    background: var(--border-color, #333);
-                    opacity: 0.4;
-                }
-                .rte-wrapper .tiptap {
-                    padding: 20px 24px;
-                    min-height: 300px;
-                    max-height: 600px;
-                    overflow-y: auto;
-                    font-size: 1.05rem;
-                    line-height: 1.7;
-                    color: var(--text-main);
-                    outline: none;
-                }
-                .rte-wrapper .tiptap p {
-                    margin: 0;
-                }
-                .rte-wrapper .tiptap span[data-type="subtitle"] {
-                    color: var(--text-muted) !important;
-                    font-style: italic !important;
-                    opacity: 0.8 !important;
-                    font-weight: 400 !important;
-                }
-                .rte-wrapper .tiptap p.is-editor-empty:first-child::before {
-                    content: attr(data-placeholder);
-                    color: color-mix(in srgb, var(--text-muted) 40%, transparent);
-                    float: left;
-                    height: 0;
-                    pointer-events: none;
-                }
-                .rte-wrapper .tiptap h2 {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    margin: 24px 0 8px;
-                }
-                .rte-wrapper .tiptap h3 {
-                    font-size: 1.25rem;
-                    font-weight: 600;
-                    margin: 20px 0 6px;
-                }
-                .rte-wrapper .tiptap blockquote {
-                    border-left: 3px solid var(--border-color, #555);
-                    padding-left: 16px;
-                    margin: 16px 0;
-                    color: var(--text-muted);
-                    font-style: italic;
-                }
-                .rte-wrapper .tiptap pre {
-                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
-                    padding: 16px;
-                    border-radius: 8px;
-                    font-family: 'Fira Code', monospace;
-                    font-size: 0.9rem;
-                    overflow-x: auto;
-                }
-                .rte-wrapper .tiptap code {
-                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
-                    padding: 2px 6px;
-                    border-radius: 4px;
-                    font-family: 'Fira Code', monospace;
-                    font-size: 0.9em;
-                }
-                .rte-wrapper .tiptap img {
-                    max-width: 100%;
-                    border-radius: 8px;
-                    margin: 16px 0;
-                }
-                .rte-wrapper .tiptap ul, .rte-wrapper .tiptap ol {
-                    padding-left: 24px;
-                    margin: 12px 0;
-                }
-                .rte-wrapper .tiptap hr {
-                    border: none;
-                    border-top: 1px solid var(--border-color, #333);
-                    margin: 24px 0;
-                }
-            `}</style>
+            }
+        }}>
             <MenuBar editor={editor} />
-            <EditorContent editor={editor} />
-        </div>
+            <Box sx={{ flex: 1, overflowY: 'auto' }}>
+                <EditorContent editor={editor} />
+            </Box>
+        </Paper>
     );
 };
 

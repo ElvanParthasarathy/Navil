@@ -1,9 +1,9 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiEdit2, FiX } from 'react-icons/fi';
+import { FiSave, FiEdit2, FiX, FiArrowUp, FiArrowDown, FiTrash2, FiPlus } from 'react-icons/fi';
 import { db } from '../../lib/firebaseClient';
 import RichTextEditor from './RichTextEditor';
 import { ref, onValue, set } from 'firebase/database';
+import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid, Divider } from '@mui/material';
 
 const getInitialAbout = () => {
     try {
@@ -18,8 +18,8 @@ export const AboutEditor = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [saveStatus, setSaveStatus] = useState('idle');
     const [message, setMessage] = useState('');
+    const [cards, setCards] = useState<any[]>([]);
 
-    // Real-time listener
     useEffect(() => {
         const aboutRef = ref(db, 'config/about_page');
         const unsub = onValue(aboutRef, (snap) => {
@@ -31,26 +31,6 @@ export const AboutEditor = () => {
         });
         return () => unsub();
     }, []);
-
-    const handleSave = async () => {
-        setSaveStatus('loading');
-        try {
-            await set(ref(db, 'config/about_page'), data);
-            setSaveStatus('success');
-            setMessage('About page saved!');
-            setIsEditing(false);
-        } catch (err) {
-            setSaveStatus('error');
-            setMessage('Error: ' + err.message);
-        }
-        setTimeout(() => { setSaveStatus('idle'); setMessage(''); }, 3000);
-    };
-
-    const updateField = (key, val) => {
-        setData(prev => ({ ...prev, [key]: val }));
-    };
-
-    const [cards, setCards] = useState([]);
 
     useEffect(() => {
         if (data) {
@@ -76,16 +56,25 @@ export const AboutEditor = () => {
         }
     }, [data]);
 
-    const getSpanLabel = (index) => {
-        const mod = index % 4;
-        if (mod === 0) return 'Large (Span 7)';
-        if (mod === 1) return 'Small (Span 5)';
-        if (mod === 2) return 'Small (Span 5)';
-        if (mod === 3) return 'Large (Span 7)';
-        return 'Large (Span 7)';
+    const handleSave = async () => {
+        setSaveStatus('loading');
+        try {
+            await set(ref(db, 'config/about_page'), data);
+            setSaveStatus('success');
+            setMessage('About page saved!');
+            setIsEditing(false);
+        } catch (err: any) {
+            setSaveStatus('error');
+            setMessage('Error: ' + err.message);
+        }
+        setTimeout(() => { setSaveStatus('idle'); setMessage(''); }, 3000);
     };
 
-    const getSpanClass = (index) => {
+    const updateField = (key: string, val: string) => {
+        setData(prev => ({ ...prev, [key]: val }));
+    };
+
+    const getSpanClass = (index: number) => {
         const mod = index % 4;
         if (mod === 0) return 'span-7';
         if (mod === 1) return 'span-5';
@@ -94,13 +83,13 @@ export const AboutEditor = () => {
         return 'span-7';
     };
 
-    const updateCardSize = (index, newSize) => {
+    const updateCardSize = (index: number, newSize: string) => {
         const updated = cards.map((c, i) => i === index ? { ...c, size: newSize } : c);
         setCards(updated);
         setData(prev => ({ ...prev, cards: updated }));
     };
 
-    const updateCardContent = (index, newContent) => {
+    const updateCardContent = (index: number, newContent: string) => {
         const updated = cards.map((c, i) => i === index ? { ...c, content: newContent } : c);
         setCards(updated);
         setData(prev => ({ ...prev, cards: updated }));
@@ -113,13 +102,13 @@ export const AboutEditor = () => {
         setData(prev => ({ ...prev, cards: updated }));
     };
 
-    const deleteCard = (index) => {
+    const deleteCard = (index: number) => {
         const updated = cards.filter((_, i) => i !== index);
         setCards(updated);
         setData(prev => ({ ...prev, cards: updated }));
     };
 
-    const moveCard = (index, direction) => {
+    const moveCard = (index: number, direction: 'up' | 'down') => {
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
         if (targetIndex < 0 || targetIndex >= cards.length) return;
         const updated = [...cards];
@@ -132,35 +121,35 @@ export const AboutEditor = () => {
 
     if (!data) {
         return (
-            <div className="admin-content-area" style={{ padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <p style={{ color: 'var(--text-muted)' }}>Loading editor...</p>
-            </div>
+            <Box sx={{ p: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography color="text.secondary">Loading editor...</Typography>
+            </Box>
         );
     }
 
-    // View mode
     if (!isEditing) {
         return (
-            <div className="admin-content-area adm-custom-scroll" style={{ overflowY: 'auto' }}>
-                <div style={{ padding: '32px', maxWidth: '800px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                    <div>
-                        <h2 style={{ margin: 0, color: 'var(--text-main)' }}>About Page</h2>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-                            Manage the content displayed on your About page.
-                        </p>
-                    </div>
-                    <button className="adm-btn primary" onClick={() => setIsEditing(true)}>
-                        <FiEdit2 size={16} /> Edit Content
-                    </button>
-                </div>
+            <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 800, mx: 'auto' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                    <Box>
+                        <Typography variant="h5" sx={{ fontWeight: 800 }}>About Page</Typography>
+                        <Typography variant="body2" color="text.secondary">Manage the content displayed on your About page.</Typography>
+                    </Box>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        onClick={() => setIsEditing(true)}
+                        startIcon={<FiEdit2 size={16} />}
+                        sx={{ fontWeight: 600, borderRadius: 2 }}
+                    >
+                        Edit Content
+                    </Button>
+                </Box>
 
-                {/* Preview Cards */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    
-                    <div style={{ margin: '8px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <Typography variant="subtitle2" color="text.secondary" sx={{ letterSpacing: 1,  textTransform: 'uppercase',  fontWeight: 800 }}>
                         Bento Grid Cards
-                    </div>
+                    </Typography>
                     {cards.map((card, idx) => {
                         const size = card.size || getSpanClass(idx);
                         const sizeLabel = size === 'span-5' ? 'Small (Span 5)' : size === 'span-7' ? 'Large (Span 7)' : 'Full Width (Span 12)';
@@ -168,192 +157,150 @@ export const AboutEditor = () => {
                             <PreviewCard key={idx} label={`Card #${idx + 1} (${sizeLabel})`} value={card.content} isHtml />
                         );
                     })}
-                    
-                    <div style={{ margin: '24px 0 8px', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
+
+                    <Typography variant="subtitle2" color="text.secondary" sx={{ letterSpacing: 1,  textTransform: 'uppercase',  fontWeight: 800,  mt: 3 }}>
                         Contact & Details
-                    </div>
+                    </Typography>
                     <PreviewCard label="Contact Title (Tamil)" value={data.contact_tamil} />
                     <PreviewCard label="Contact Title (English)" value={data.contact_english} />
                     <PreviewCard label="Contact Desc (Tamil)" value={data.contact_desc_tamil} />
                     <PreviewCard label="Contact Desc (English)" value={data.contact_desc_english} />
                     <PreviewCard label="Location" value={data.location} />
                     <PreviewCard label="Portfolio URL" value={data.portfolio_url} />
-                </div>
-            </div>
-        </div>
-    );
+                </Box>
+            </Box>
+        );
     }
 
-    // Edit mode
     return (
-        <div className="admin-content-area adm-custom-scroll" style={{ overflowY: 'auto' }}>
-            <div style={{ padding: '32px', maxWidth: '800px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                <h2 style={{ margin: 0, color: 'var(--text-main)' }}>Edit About Page</h2>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <button className="adm-btn" onClick={() => setIsEditing(false)}>
-                        <FiX size={16} /> Cancel
-                    </button>
-                    <button className="adm-btn primary" onClick={handleSave} disabled={saveStatus === 'loading'}>
-                        <FiSave size={16} /> {saveStatus === 'loading' ? 'Saving...' : 'Save'}
-                    </button>
-                </div>
-            </div>
+        <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 800, mx: 'auto' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                <Typography variant="h5" sx={{ fontWeight: 800 }}>Edit About Page</Typography>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Button 
+                        variant="outlined" 
+                        color="inherit" 
+                        onClick={() => setIsEditing(false)}
+                        startIcon={<FiX size={16} />}
+                        sx={{ fontWeight: 600, borderRadius: 2, borderColor: 'divider' }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        onClick={handleSave} 
+                        disabled={saveStatus === 'loading'}
+                        startIcon={<FiSave size={16} />}
+                        sx={{ fontWeight: 600, borderRadius: 2 }}
+                    >
+                        {saveStatus === 'loading' ? 'Saving...' : 'Save'}
+                    </Button>
+                </Box>
+            </Box>
 
             {message && (
-                <div style={{
-                    padding: '12px 16px', borderRadius: '12px', marginBottom: '24px',
-                    background: saveStatus === 'error' ? '#fee2e2' : '#dcfce7',
-                    color: saveStatus === 'error' ? '#b91c1c' : '#166534',
-                    fontSize: '0.9rem', fontWeight: 600
-                }}>
-                    {message}
-                </div>
+                <Box sx={{ p: 2, borderRadius: 2, mb: 3, bgcolor: saveStatus === 'error' ? 'error.light' : 'success.light', color: saveStatus === 'error' ? 'error.contrastText' : 'success.contrastText' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{message}</Typography>
+                </Box>
             )}
 
             <SectionLabel>Content Cards (Dynamic Bento Grid)</SectionLabel>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '32px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 4 }}>
                 {cards.map((card, idx) => (
-                    <div key={idx} style={{
-                        background: 'var(--bg-panel)', borderRadius: '16px', padding: '24px',
-                        border: '1px solid var(--border-light)', position: 'relative'
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                                <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                                    Card #{idx + 1}
-                                </span>
-                                <select
-                                    className="adm-input"
-                                    style={{ padding: '4px 8px', fontSize: '0.8rem', width: '180px', height: '32px', background: 'var(--bg-app)', border: '1px solid var(--border-light)', borderRadius: '8px', color: 'var(--text-main)' }}
-                                    value={card.size || getSpanClass(idx)}
-                                    onChange={(e) => updateCardSize(idx, e.target.value)}
-                                >
-                                    <option value="span-5">Small (Span 5)</option>
-                                    <option value="span-7">Large (Span 7)</option>
-                                    <option value="span-12">Full Width (Span 12)</option>
-                                </select>
-                            </div>
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                                <button
-                                    type="button"
-                                    className="adm-btn"
-                                    style={{ padding: '4px 8px', fontSize: '0.8rem' }}
-                                    onClick={() => moveCard(idx, 'up')}
-                                    disabled={idx === 0}
-                                >
-                                    ↑ Move Up
-                                </button>
-                                <button
-                                    type="button"
-                                    className="adm-btn"
-                                    style={{ padding: '4px 8px', fontSize: '0.8rem' }}
-                                    onClick={() => moveCard(idx, 'down')}
-                                    disabled={idx === cards.length - 1}
-                                >
-                                    ↓ Move Down
-                                </button>
-                                <button
-                                    type="button"
-                                    className="adm-btn"
-                                    style={{ padding: '4px 8px', fontSize: '0.8rem', background: '#fee2e2', color: '#b91c1c', border: '1px solid #fee2e2' }}
-                                    onClick={() => deleteCard(idx)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                        <RichTextEditor
-                            content={card.content}
-                            onChange={v => updateCardContent(idx, v)}
-                            placeholder={`Write content for Card #${idx + 1}...`}
-                        />
-                    </div>
+                    <Card key={idx} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 3, bgcolor: 'background.paper', position: 'relative' }}>
+                        <CardContent sx={{ p: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'uppercase',  fontWeight: 800 }}>Card #{idx + 1}</Typography>
+                                    <Select
+                                        size="small"
+                                        value={card.size || getSpanClass(idx)}
+                                        onChange={(e) => updateCardSize(idx, e.target.value)}
+                                        sx={{ minWidth: 160, borderRadius: 2 }}
+                                    >
+                                        <MenuItem value="span-5">Small (Span 5)</MenuItem>
+                                        <MenuItem value="span-7">Large (Span 7)</MenuItem>
+                                        <MenuItem value="span-12">Full Width (Span 12)</MenuItem>
+                                    </Select>
+                                </Box>
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                    <IconButton size="small" onClick={() => moveCard(idx, 'up')} disabled={idx === 0}><FiArrowUp /></IconButton>
+                                    <IconButton size="small" onClick={() => moveCard(idx, 'down')} disabled={idx === cards.length - 1}><FiArrowDown /></IconButton>
+                                    <IconButton size="small" color="error" onClick={() => deleteCard(idx)}><FiTrash2 /></IconButton>
+                                </Box>
+                            </Box>
+                            <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
+                                <RichTextEditor
+                                    content={card.content}
+                                    onChange={(v: string) => updateCardContent(idx, v)}
+                                    placeholder={`Write content for Card #${idx + 1}...`}
+                                />
+                            </Box>
+                        </CardContent>
+                    </Card>
                 ))}
                 
-                <button
-                    type="button"
-                    className="adm-btn primary"
-                    style={{ alignSelf: 'flex-start' }}
+                <Button 
+                    variant="outlined" 
+                    startIcon={<FiPlus />} 
                     onClick={addCard}
+                    sx={{ alignSelf: 'flex-start', borderRadius: 2, borderStyle: 'dashed', borderWidth: 2 }}
                 >
-                    + Add New Card
-                </button>
-            </div>
+                    Add New Card
+                </Button>
+            </Box>
 
             <SectionLabel>Contact Section</SectionLabel>
-            <FieldRow>
-                <Field label="Contact Title (Tamil)" value={data.contact_tamil} onChange={v => updateField('contact_tamil', v)} />
-                <Field label="Contact Title (English)" value={data.contact_english} onChange={v => updateField('contact_english', v)} />
-            </FieldRow>
-            <FieldRow>
-                <Field label="Contact Desc (Tamil)" value={data.contact_desc_tamil} onChange={v => updateField('contact_desc_tamil', v)} />
-                <Field label="Contact Desc (English)" value={data.contact_desc_english} onChange={v => updateField('contact_desc_english', v)} />
-            </FieldRow>
+            <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={12} sm={6}>
+                    <TextField fullWidth label="Contact Title (Tamil)" value={data.contact_tamil || ''} onChange={e => updateField('contact_tamil', e.target.value)} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField fullWidth label="Contact Title (English)" value={data.contact_english || ''} onChange={e => updateField('contact_english', e.target.value)} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField fullWidth label="Contact Desc (Tamil)" value={data.contact_desc_tamil || ''} onChange={e => updateField('contact_desc_tamil', e.target.value)} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField fullWidth label="Contact Desc (English)" value={data.contact_desc_english || ''} onChange={e => updateField('contact_desc_english', e.target.value)} />
+                </Grid>
+            </Grid>
 
             <SectionLabel>Other</SectionLabel>
-            <Field label="Location" value={data.location} onChange={v => updateField('location', v)} />
-            <Field label="Portfolio URL" value={data.portfolio_url} onChange={v => updateField('portfolio_url', v)} />
-        </div>
-    </div>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <TextField fullWidth label="Location" value={data.location || ''} onChange={e => updateField('location', e.target.value)} />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField fullWidth label="Portfolio URL" value={data.portfolio_url || ''} onChange={e => updateField('portfolio_url', e.target.value)} />
+                </Grid>
+            </Grid>
+        </Box>
     );
 };
 
 // ── Shared sub-components ──
 
-const SectionLabel = ({ children }) => (
-    <div style={{
-        fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.5px',
-        color: 'var(--text-muted)', marginTop: '32px', marginBottom: '16px', paddingBottom: '8px',
-        borderBottom: '1px solid var(--border-light)'
-    }}>{children}</div>
-);
-
-const FieldRow = ({ children }) => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+    <Typography variant="subtitle2" color="text.secondary" sx={{ letterSpacing: 1.5,  textTransform: 'uppercase',  fontWeight: 800,  mt: 4, mb: 2, pb: 1, borderBottom: '1px solid', borderColor: 'divider' }}>
         {children}
-    </div>
+    </Typography>
 );
 
-const Field = ({ label, value, onChange, multiline, rows = 2, hint }) => (
-    <div className="adm-field" style={{ marginBottom: '16px' }}>
-        <label className="adm-label">{label}</label>
-        {multiline ? (
-            <textarea
-                className="adm-input"
-                value={value || ''}
-                onChange={e => onChange(e.target.value)}
-                rows={rows}
-                style={{ resize: 'vertical', minHeight: '60px' }}
-            />
-        ) : (
-            <input
-                className="adm-input"
-                value={value || ''}
-                onChange={e => onChange(e.target.value)}
-            />
-        )}
-        {hint && <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>{hint}</span>}
-    </div>
-);
-
-const PreviewCard = ({ label, value, isHtml }) => (
-    <div style={{
-        background: 'var(--bg-panel)', borderRadius: '16px', padding: '20px',
-        border: '1px solid var(--border-light)'
-    }}>
-        <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)', marginBottom: '8px' }}>
+const PreviewCard = ({ label, value, isHtml }: { label: string, value: string, isHtml?: boolean }) => (
+    <Card elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 3, bgcolor: 'background.paper', p: 2.5 }}>
+        <Typography variant="caption" color="text.secondary" sx={{ letterSpacing: 1,  textTransform: 'uppercase',  fontWeight: 700,  mb: 1, display: 'block' }}>
             {label}
-        </div>
+        </Typography>
         {isHtml ? (
-            <div style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.6 }}
-                dangerouslySetInnerHTML={{ __html: value || '' }} />
+            <Typography variant="body2" component="div" sx={{ lineHeight: 1.6, '& p': { m: 0 } }} dangerouslySetInnerHTML={{ __html: value || '' }} />
         ) : (
-            <div style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
-                {value || <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Empty</span>}
-            </div>
+            <Typography variant="body2" sx={{ lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                {value || <Box component="span" sx={{ color: 'text.secondary', fontStyle: 'italic' }}>Empty</Box>}
+            </Typography>
         )}
-    </div>
+    </Card>
 );
 
 export default AboutEditor;

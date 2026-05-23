@@ -771,7 +771,7 @@ const CategoryListView = () => {
                         );
                     })
                 ) : (
-                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px' }}>
+                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', background: 'var(--bg-panel)', borderRadius: '20px', minWidth: 0, overflow: 'hidden' }}>
                         <p>No content available yet. Check back soon!</p>
                         <AdBanner variant="inline" wrapperStyle={{ padding: '40px 0', marginTop: '20px' }} />
                     </div>

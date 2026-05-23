@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
-import { AuthLayout, AuthHeader, AuthInput, AuthButton } from './AdminAuthComponents';
+import { Box, Typography, TextField, Button, Paper, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 
-const AdminLogin = ({ onLogin, onGoogleLogin }) => {
+const AdminLogin = ({ onLogin, onGoogleLogin }: any) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [shaking, setShaking] = useState(false);
-
     const [errorMsg, setErrorMsg] = useState('');
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         setErrorMsg('');
         if (loading) return;
 
         if (!username.trim() || !password) {
-            setShaking(true);
-            setTimeout(() => setShaking(false), 500);
             return;
         }
 
@@ -27,86 +23,86 @@ const AdminLogin = ({ onLogin, onGoogleLogin }) => {
 
         if (!result.success) {
             setErrorMsg(result.error || 'Login failed');
-            setShaking(true);
-            setTimeout(() => setShaking(false), 500);
         }
     };
 
     return (
-        <AuthLayout shaking={shaking}>
-            <AuthHeader
-                title="Admin Portal"
-                subtitle="Sign in to manage your content"
-            />
+        <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', p: 2 }}>
+            <Paper elevation={0} sx={{ p: { xs: 4, md: 6 }, width: '100%', maxWidth: 400, borderRadius: 6, border: '1px solid', borderColor: 'divider', bgcolor: 'background.default', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 800, mb: 1, color: 'primary.main' }}>Admin Portal</Typography>
+                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>Sign in to manage your content</Typography>
+                </Box>
 
-            <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-                <AuthInput
-                    label="Email address"
-                    type="text"
-                    placeholder="Enter admin email"
-                    value={username}
-                    onChange={(e) => { setUsername(e.target.value); setErrorMsg(''); }}
-                    autoFocus
-                    autoComplete="username"
-                />
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    <TextField
+                        label="Email address"
+                        type="text"
+                        placeholder="Enter admin email"
+                        value={username}
+                        onChange={(e) => { setUsername(e.target.value); setErrorMsg(''); }}
+                        autoFocus
+                        autoComplete="username"
+                        fullWidth
+                        variant="outlined"
+                    />
 
-                <AuthInput
-                    label="Password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value); setErrorMsg(''); }}
-                    autoComplete="current-password"
-                />
+                    <TextField
+                        label="Password"
+                        type="password"
+                        placeholder="Enter password"
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value); setErrorMsg(''); }}
+                        autoComplete="current-password"
+                        fullWidth
+                        variant="outlined"
+                    />
 
-                {errorMsg && (
-                    <div style={{ 
-                        color: 'var(--auth-danger, #EF5350)', 
-                        fontSize: '13px', 
-                        fontWeight: '600', 
-                        textAlign: 'center', 
-                        marginBottom: '16px',
-                        animation: 'enterFade 0.3s ease-out'
-                    }}>
-                        {errorMsg}
-                    </div>
-                )}
+                    {errorMsg && (
+                        <Typography variant="body2" color="error" sx={{ textAlign: 'center', fontWeight: 600 }}>
+                            {errorMsg}
+                        </Typography>
+                    )}
 
-                <AuthButton
-                    type="submit"
-                    loading={loading}
-                    icon={<FiArrowRight size={18} />}
-                >
-                    Sign In with Email
-                </AuthButton>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        disabled={loading}
+                        endIcon={loading ? <CircularProgress size={16} color="inherit" /> : <FiArrowRight />}
+                        sx={{ py: 1.5, borderRadius: 3, fontWeight: 700, fontSize: '1rem' }}
+                    >
+                        {loading ? 'Signing In...' : 'Sign In with Email'}
+                    </Button>
 
-                <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0', opacity: 0.6 }}>
-                    <div style={{ flex: 1, height: '1px', background: 'currentColor' }} />
-                    <span style={{ padding: '0 10px', fontSize: '12px' }}>OR</span>
-                    <div style={{ flex: 1, height: '1px', background: 'currentColor' }} />
-                </div>
+                    <Box sx={{ display: 'flex', alignItems: 'center', opacity: 0.6 }}>
+                        <Box sx={{ flex: 1, height: '1px', bgcolor: 'currentColor' }} />
+                        <Typography variant="caption" sx={{ px: 2, fontWeight: 700 }}>OR</Typography>
+                        <Box sx={{ flex: 1, height: '1px', bgcolor: 'currentColor' }} />
+                    </Box>
 
-                <AuthButton
-                    type="button"
-                    onClick={async () => {
-                        setErrorMsg('');
-                        if (loading) return;
-                        setLoading(true);
-                        const result = await onGoogleLogin();
-                        setLoading(false);
-                        if (!result.success) {
-                            setErrorMsg(result.error || 'Google login failed');
-                            setShaking(true);
-                            setTimeout(() => setShaking(false), 500);
-                        }
-                    }}
-                    loading={loading}
-                    style={{ background: '#4285F4', color: 'white' }}
-                >
-                    Sign In with Google
-                </AuthButton>
-            </form>
-        </AuthLayout>
+                    <Button
+                        type="button"
+                        fullWidth
+                        variant="outlined"
+                        disabled={loading}
+                        onClick={async () => {
+                            setErrorMsg('');
+                            if (loading) return;
+                            setLoading(true);
+                            const result = await onGoogleLogin();
+                            setLoading(false);
+                            if (!result.success) {
+                                setErrorMsg(result.error || 'Google login failed');
+                            }
+                        }}
+                        sx={{ py: 1.5, borderRadius: 3, fontWeight: 700, borderColor: 'divider', color: 'text.primary', '&:hover': { bgcolor: 'action.hover' } }}
+                    >
+                        Sign In with Google
+                    </Button>
+                </form>
+            </Paper>
+        </Box>
     );
 };
 
