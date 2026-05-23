@@ -239,10 +239,120 @@ const CategoryListView = () => {
         });
     }, [searchTerm, activeGenre, posts]);
 
+    // Group and filter items (handling series cards for stories)
+    const groupedItems = React.useMemo(() => {
+        if (category !== 'stories') {
+            return filteredPosts.map(post => ({
+                type: 'standalone' as const,
+                id: post.id,
+                publishDate: post.publish_date,
+                post
+            }));
+        }
+
+        // Group the full posts array first to keep full series parts intact if any part matches
+        const standalonePosts: any[] = [];
+        const seriesMap = new Map<string, any[]>();
+
+        posts.forEach(post => {
+            const seriesName = post.series_name?.trim();
+            if (!seriesName) {
+                standalonePosts.push(post);
+            } else {
+                if (!seriesMap.has(seriesName)) {
+                    seriesMap.set(seriesName, []);
+                }
+                seriesMap.get(seriesName)!.push(post);
+            }
+        });
+
+        const s = searchTerm.toLowerCase();
+        const activeGenreLower = activeGenre.toLowerCase();
+
+        const matchPost = (post: any) => {
+            const hasVariants = post.variants && post.variants.length > 0;
+            const primaryVariant = hasVariants ? post.variants[0] : null;
+
+            const title = (primaryVariant?.title || post.title || '').toLowerCase();
+            const author = (primaryVariant?.author || '').toLowerCase();
+            const body = (primaryVariant?.text || '').toLowerCase();
+            const series = (post.series_name || '').toLowerCase();
+
+            const postGenres = [
+                ...(Array.isArray(post.tags) ? post.tags : (typeof post.tags === 'string' ? post.tags.split(',') : [])).map(t => t.trim()),
+                post.style,
+                post.theme,
+                post.meter,
+                post.classification
+            ].filter(Boolean);
+
+            const matchesSearch = !s ||
+                title.includes(s) ||
+                author.includes(s) ||
+                body.includes(s) ||
+                series.includes(s) ||
+                postGenres.some(g => g.toLowerCase().includes(s)) ||
+                (post.variants?.some(v =>
+                    (v.text || '').toLowerCase().includes(s) ||
+                    (v.title || '').toLowerCase().includes(s) ||
+                    (v.author || '').toLowerCase().includes(s) ||
+                    Object.values(v.transliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
+                    Object.values(v.titleTransliterations || {}).some(t => (t || '').toLowerCase().includes(s)) ||
+                    Object.values(v.authorTransliterations || {}).some(t => (t || '').toLowerCase().includes(s))
+                ));
+
+            const matchesGenre = !activeGenre || postGenres.some(g => g.toLowerCase() === activeGenreLower);
+
+            return matchesSearch && matchesGenre;
+        };
+
+        const resultItems: any[] = [];
+
+        // Add standalone posts if they match
+        standalonePosts.forEach(post => {
+            if (matchPost(post)) {
+                resultItems.push({
+                    type: 'standalone' as const,
+                    id: post.id,
+                    publishDate: post.publish_date,
+                    post
+                });
+            }
+        });
+
+        // Add series groups if any part matches
+        seriesMap.forEach((parts, seriesName) => {
+            const hasMatchingPart = parts.some(part => matchPost(part));
+            if (hasMatchingPart) {
+                const sortedParts = [...parts].sort((a, b) => {
+                    const partA = parseInt(a.series_part, 10) || 0;
+                    const partB = parseInt(b.series_part, 10) || 0;
+                    return partA - partB;
+                });
+
+                const latestPublishDate = parts.reduce((latest, current) => {
+                    return new Date(current.publish_date) > new Date(latest) ? current.publish_date : latest;
+                }, parts[0].publish_date);
+
+                resultItems.push({
+                    type: 'series' as const,
+                    id: `series-${seriesName}`,
+                    seriesName,
+                    parts: sortedParts,
+                    publishDate: latestPublishDate
+                });
+            }
+        });
+
+        resultItems.sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
+
+        return resultItems;
+    }, [posts, filteredPosts, searchTerm, activeGenre, category]);
+
     // Pagination logic
     const [isPaginationExpanded, setIsPaginationExpanded] = React.useState(false);
-    const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE);
-    const currentPosts = filteredPosts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(groupedItems.length / ITEMS_PER_PAGE);
+    const currentItems = groupedItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
     if (!meta) {
         return (
@@ -424,9 +534,111 @@ const CategoryListView = () => {
                             </div>
                         </div>
                     ))
-                ) : currentPosts.length > 0 ? (
-                    currentPosts.map((post, index) => {
-                        // Support both old content{} model and new variants[] model
+                ) : currentItems.length > 0 ? (
+                    currentItems.map((item, index) => {
+                        if (item.type === 'series') {
+                            const parts = item.parts;
+                            const firstPart = parts[0];
+                            const seriesTitle = item.seriesName;
+                            const coverImage = parts.find(p => p.cover_image)?.cover_image || null;
+                            const classification = parts.find(p => p.classification)?.classification || null;
+
+                            // Excerpt from first part
+                            let primaryExcerpt = '';
+                            let primaryLang = '';
+                            const firstHasVariants = firstPart.variants && firstPart.variants.length > 0;
+                            if (firstHasVariants) {
+                                primaryLang = firstPart.variants[0]?.lang || '';
+                                const textHtml = firstPart.variants[0]?.text || '';
+                                primaryExcerpt = textHtml
+                                    .replace(/<[^>]+>/g, '')
+                                    .replace(/&nbsp;/g, ' ')
+                                    .replace(/&amp;/g, '&')
+                                    .replace(/&lt;/g, '<')
+                                    .replace(/&gt;/g, '>')
+                                    .substring(0, 120);
+                            } else {
+                                const firstContent = firstPart.content || {};
+                                primaryLang = Object.keys(firstContent)[0] || '';
+                                primaryExcerpt = firstContent[primaryLang]?.excerpt || '';
+                            }
+
+                            const genresSet = new Set();
+                            parts.forEach(p => {
+                                const pGenres = [
+                                    ...(p.tags || []),
+                                    p.style,
+                                    p.theme,
+                                    p.meter
+                                ].filter(Boolean);
+                                pGenres.forEach(g => genresSet.add(g));
+                            });
+                            const genres = Array.from(genresSet);
+
+                            return (
+                                <div key={item.id} className="blog-card-item series-card animate-entry">
+                                    {coverImage && (
+                                        <Link to={`/writings/${category}/${firstPart.slug || firstPart.id}`} className="blog-cover-wrapper" style={{ display: 'block' }}>
+                                            <img src={getOptimizedImage(coverImage, 'thumb')} alt={seriesTitle} loading="lazy" />
+                                            {classification && (
+                                                <span className={`blog-classification-badge ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>{classification}</span>
+                                            )}
+                                            <div className="series-hover-play">▶ Start Reading</div>
+                                        </Link>
+                                    )}
+                                    <div className="blog-card-content">
+                                        {!coverImage && classification && (
+                                            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                                                <span className={`blog-classification-badge inline ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>{classification}</span>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="blog-meta-minimal">
+                                            <span className="series-badge">📚 தொடர் ({parts.length} பகுதிகள்)</span>
+                                            {genres.length > 0 && <span className="meta-dot">•</span>}
+                                            {genres.slice(0, 2).map((g, i) => (
+                                                <React.Fragment key={i}>
+                                                    <span>{g}</span>
+                                                    {i < Math.min(genres.length, 2) - 1 && <span className="meta-dot">•</span>}
+                                                </React.Fragment>
+                                            ))}
+                                        </div>
+
+                                        <h2 className="blog-title" style={{ marginBottom: '8px' }}>
+                                            <Link to={`/writings/${category}/${firstPart.slug || firstPart.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                                {seriesTitle}
+                                            </Link>
+                                        </h2>
+
+                                        {primaryExcerpt && (
+                                            <div className="blog-excerpt" style={{ marginBottom: '16px' }}>
+                                                {primaryExcerpt}...
+                                            </div>
+                                        )}
+
+                                        <div className="series-parts-list">
+                                            {parts.map(part => {
+                                                const partTitle = part.variants?.[0]?.title || part.title || `Part ${part.series_part}`;
+                                                return (
+                                                    <Link 
+                                                        to={`/writings/${category}/${part.slug || part.id}`} 
+                                                        key={part.id} 
+                                                        className="series-part-link"
+                                                    >
+                                                        <span className="part-number">பகுதி {part.series_part}</span>
+                                                        <span className="part-title">{partTitle}</span>
+                                                        <span className="arrow-inline">→</span>
+                                                    </Link>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }
+
+                        // Standalone card rendering
+                        const post = item.post;
                         const variants = post.variants || [];
                         const contentObj = post.content || {};
                         const hasVariants = variants.length > 0;
@@ -453,7 +665,6 @@ const CategoryListView = () => {
                             primaryExcerpt = contentObj[primaryLang]?.excerpt || '';
                         }
 
-                        // Generate genres/tags array avoiding empty items
                         const genres = [
                             ...(post.tags || []),
                             post.style,
@@ -525,7 +736,6 @@ const CategoryListView = () => {
                                                 const info = analyzePostVersions(variants);
                                                 if (!info) return null;
                                                 const { variants: vEntries, transliterations: tLangs, translations: trEntries } = info;
-                                                // Build flat tag list
                                                 const tags: { text: string; type: string }[] = [];
                                                 vEntries.forEach(ve => {
                                                     const name = LANG_LABELS[ve.lang] || ve.lang;
@@ -573,7 +783,7 @@ const CategoryListView = () => {
             </div>
 
             {/* Ad banner outside the grid so it doesn't break column layout */}
-            {!loading && currentPosts.length > 0 && (
+            {!loading && currentItems.length > 0 && (
                 <div style={{ padding: '24px 0' }}>
                     <AdBanner variant="inline" />
                 </div>
@@ -1491,6 +1701,91 @@ const CategoryListView = () => {
                     .minimal-search {
                         padding: 0 16px;
                     }
+                }
+
+                /* Series Card styles */
+                .series-card {
+                    border: 1px solid var(--border-light);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                .series-hover-play {
+                    position: absolute;
+                    top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    backdrop-filter: blur(2px);
+                }
+                .blog-cover-wrapper:hover .series-hover-play {
+                    opacity: 1;
+                }
+                .series-badge {
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    background: color-mix(in srgb, var(--text-main) 10%, transparent);
+                    color: var(--text-main);
+                    padding: 3px 8px;
+                    border-radius: 4px;
+                    letter-spacing: 0.5px;
+                }
+                .series-parts-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-top: auto;
+                    border-top: 1px solid color-mix(in srgb, var(--border-light) 40%, transparent);
+                    padding-top: 16px;
+                }
+                .series-part-link {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 8px 12px;
+                    background: color-mix(in srgb, var(--text-main) 3%, transparent);
+                    border: 1px solid color-mix(in srgb, var(--border-light) 30%, transparent);
+                    border-radius: 8px;
+                    text-decoration: none;
+                    color: var(--text-main);
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    transition: all 0.2s ease;
+                }
+                .series-part-link:hover {
+                    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+                    border-color: var(--text-main);
+                    transform: translateX(4px);
+                }
+                .series-part-link .part-number {
+                    font-size: 0.72rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    color: var(--text-muted);
+                    font-weight: 700;
+                }
+                .series-part-link .part-title {
+                    flex: 1;
+                    margin-left: 10px;
+                    text-align: left;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .series-part-link .arrow-inline {
+                    font-size: 0.85rem;
+                    opacity: 0.6;
+                    transition: transform 0.2s ease;
+                    margin-left: 6px;
+                }
+                .series-part-link:hover .arrow-inline {
+                    opacity: 1;
+                    transform: translateX(2px);
                 }
             `}</style>
         </div >
