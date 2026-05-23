@@ -144,14 +144,14 @@ const Layout = () => {
         if (navType === 'POP') {
             // Browser back button always means backward slide
             if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
-                newDirection = 'none'; // Tab-to-tab via back = instant switch
+                newDirection = navState.prevState?.fromQuickLink ? 'backward' : 'none';
             } else {
                 newDirection = 'backward';
             }
         } else if (location.state?.fromQuickLink) {
             newDirection = 'forward';
         } else if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
-            newDirection = 'none';
+            newDirection = navState.prevState?.fromQuickLink ? 'backward' : 'none';
         } else if (currentDepth < prevDepth) {
             newDirection = 'backward';
         } else if (currentDepth > prevDepth) {
