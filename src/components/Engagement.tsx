@@ -5,7 +5,7 @@ import { db } from '../lib/firebaseClient';
 import { addLike, removeLike, addComment, deleteComment, updateComment, subscribeToEngagement } from '../lib/engagement';
 import { auth } from '../lib/firebaseClient';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { ConfirmDialog } from './admin/ConfirmDialog';
+import { ConfirmDialog } from './ConfirmDialog';
 
 interface Comment {
     id: string;

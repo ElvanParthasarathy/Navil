@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { useParams, Link, useNavigate, useOutletContext, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
 import { subscribe, getCachedRaw } from '../lib/firebaseCache';
@@ -8,6 +8,7 @@ import AdBanner from './AdBanner';
 import { getOptimizedImage } from '../lib/media';
 import { Engagement } from './Engagement';
 import MobileTopBar from './MobileTopBar';
+import { FloatingBackButton } from './FloatingBackButton';
 
 const CATEGORY_META = {
     'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts' },
@@ -68,7 +69,15 @@ const cleanItem = (data) => {
 const ReadingView = () => {
     const { category, slug } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const meta = CATEGORY_META[category] || null;
+
+    const transitionDirection = location.state?.transition || null;
+    const animationClass = transitionDirection === 'prev'
+        ? 'slideFromLeft'
+        : transitionDirection === 'next'
+            ? 'slideFromRight'
+            : 'fadeIn';
 
     const [post, setPost] = useState(() => {
         // Try to resolve from cache immediately — no loading spinner needed
@@ -183,13 +192,23 @@ const ReadingView = () => {
         return () => unsubscribe();
     }, [category, slug, meta]);
 
+    useEffect(() => {
+        if (category === 'stories' && post) {
+            if (post.series_name) {
+                sessionStorage.setItem('elvan_stories_expanded_series', `series-${post.series_name}`);
+            } else {
+                sessionStorage.removeItem('elvan_stories_expanded_series');
+            }
+        }
+    }, [category, post]);
+
     if (!meta) return <div className="page-view" style={{ padding: '60px' }}>Content not found</div>;
 
     if (loading) {
         return (
             <>
                 <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
-                <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
+                <div key={slug} className={`page-view ${animationClass}`} style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
                 <style>{`
                     .reader-skeleton-wrapper {
                         max-width: 800px;
@@ -283,7 +302,7 @@ const ReadingView = () => {
         return (
             <>
                 <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
-                <div className="page-view fadeIn" style={{ padding: '60px', textAlign: 'center' }}>
+                <div key={slug} className={`page-view ${animationClass}`} style={{ padding: '60px', textAlign: 'center' }}>
                     <h2>Post Not Found</h2>
                     <button onClick={() => navigate(`/writings/${category}`)} className="adm-btn ghost">Return to {meta.title}</button>
                 </div>
@@ -308,7 +327,7 @@ const ReadingView = () => {
             <Helmet>
                 <title>{displayPrimaryTitle} | {meta.subtitle}</title>
             </Helmet>
-            <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
+            <div key={slug} className={`page-view ${animationClass}`} style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             {/* Transliteration toggle styles (same as WritingPage) */}
             <style>{`
                 .transl-switch {
@@ -494,23 +513,11 @@ const ReadingView = () => {
             <div className="reader-header-area" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '40px', flexWrap: 'wrap' }}>
                 <h1
                     lang={firstVariantActiveLang || (hasVariants ? variants[0]?.lang : Object.keys(contentObj)[0]) || 'ta'}
-                    style={{ fontSize: isStory ? '2.5rem' : '2rem', fontWeight: isStory ? '800' : '700', fontFamily: isStory ? 'serif' : 'inherit', lineHeight: '1.2', color: 'var(--text-main)', margin: 0, letterSpacing: '-0.5px', maxWidth: '80%' }}
+                    style={{ fontSize: '2rem', fontWeight: '700', lineHeight: '1.2', color: 'var(--text-main)', margin: 0, letterSpacing: '-0.5px', maxWidth: '80%' }}
                 >
                     {displayPrimaryTitle}
                 </h1>
-                <Link 
-                    to={`/writings/${category}`} 
-                    className="back-pill desktop-only"
-                    onClick={(e) => {
-                        if (window.history.state && window.history.state.idx > 0) {
-                            e.preventDefault();
-                            navigate(-1);
-                        }
-                    }}
-                >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-                    பின்செல்
-                </Link>
+                <FloatingBackButton to={`/writings/${category}`} />
             </div>
 
             <article className="animate-entry" style={{ maxWidth: '800px' }}>
@@ -749,22 +756,44 @@ const ReadingView = () => {
 
                 {/* Story Series Navigation */}
                 {isStory && (nextPart || prevPart) && (
-                    <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-light)' }}>
-                        <h4 style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--text-muted)' }}>{post.series_name} — Continue Reading</h4>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+                    <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                        <h4 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.5px' }}>
+                            {post.series_name} — Continue Reading
+                        </h4>
+                        <div className="pagination-nav-pill" style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', width: 'auto' }}>
                             {prevPart ? (
-                                <Link to={`/writings/stories/${prevPart.slug || prevPart.id}`} style={{ flex: 1, textDecoration: 'none', background: 'var(--bg-card)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-light)' }}>
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px' }}>← Previous Part ({prevPart.series_part})</div>
-                                    <div style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '1.1rem' }}>{prevPart.title || 'Chapter ' + prevPart.series_part}</div>
+                                <Link
+                                    to={`/writings/stories/${prevPart.slug || prevPart.id}`}
+                                    state={{ transition: 'prev' }}
+                                    className="page-btn prev-btn"
+                                    style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}><polyline points="15 18 9 12 15 6" /></svg>
+                                    பகுதி {prevPart.series_part}
                                 </Link>
-                            ) : <div style={{ flex: 1 }} />}
+                            ) : (
+                                <button className="page-btn prev-btn" disabled>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}><polyline points="15 18 9 12 15 6" /></svg>
+                                    முந்தை
+                                </button>
+                            )}
 
                             {nextPart ? (
-                                <Link to={`/writings/stories/${nextPart.slug || nextPart.id}`} style={{ flex: 1, textAlign: 'right', textDecoration: 'none', background: 'var(--text-main)', color: 'var(--bg-app)', padding: '20px', borderRadius: '16px' }}>
-                                    <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '8px' }}>Next Part ({nextPart.series_part}) →</div>
-                                    <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{nextPart.title || 'Chapter ' + nextPart.series_part}</div>
+                                <Link
+                                    to={`/writings/stories/${nextPart.slug || nextPart.id}`}
+                                    state={{ transition: 'next' }}
+                                    className="page-btn next-btn"
+                                    style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                                >
+                                    பகுதி {nextPart.series_part}
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '6px' }}><polyline points="9 18 15 12 9 6" /></svg>
                                 </Link>
-                            ) : <div style={{ flex: 1 }} />}
+                            ) : (
+                                <button className="page-btn next-btn" disabled>
+                                    அடுத்து
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '6px' }}><polyline points="9 18 15 12 9 6" /></svg>
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}
@@ -789,8 +818,62 @@ const ReadingView = () => {
                 .rich-content-body pre { background: var(--bg-card); padding: 24px; border-radius: 12px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.95rem; margin-bottom: 24px; }
                 .rich-content-body code { background: color-mix(in srgb, var(--text-main) 8%, transparent); padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; }
                 
-                .story-format p { font-family: serif; font-size: 1.25rem; line-height: 2; margin-bottom: 28px; }
-                .story-format blockquote { font-family: serif; }
+                .story-format p { font-size: 1.25rem; line-height: 2; margin-bottom: 28px; }
+                .story-format blockquote { font-style: italic; }
+
+                /* Pagination Pill Buttons */
+                .pagination-nav-pill {
+                    display: flex;
+                    align-items: center;
+                }
+                .page-btn {
+                    background: var(--bg-panel);
+                    color: var(--text-main);
+                    border: none;
+                    padding: 8px 18px;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    border-radius: 100px;
+                    white-space: nowrap;
+                }
+                .page-btn:hover:not(:disabled) {
+                    background: color-mix(in srgb, var(--text-main) 20%, transparent);
+                }
+                .page-btn.prev-btn {
+                    padding-left: 12px;
+                }
+                .page-btn.next-btn {
+                    padding-right: 12px;
+                }
+                .page-btn:disabled {
+                    opacity: 0.3;
+                    cursor: not-allowed;
+                }
+                .page-btn:active:not(:disabled) {
+                    transform: scale(0.95);
+                }
+
+                /* Directional Slide Keyframes & Transitions */
+                @keyframes slideFromRight {
+                    from { opacity: 0; transform: translateX(36px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                .slideFromRight {
+                    animation: slideFromRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+
+                @keyframes slideFromLeft {
+                    from { opacity: 0; transform: translateX(-36px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                .slideFromLeft {
+                    animation: slideFromLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
             `}</style>
         </div>
         </>

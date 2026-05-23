@@ -106,7 +106,7 @@ const CommentsManager = ({ username, profilePic }) => {
     const postsWithEngagement = Object.entries(allComments);
 
     return (
-        <div className="adm-panel animate-entry" style={{ padding: '24px' }}>
+        <div className="adm-panel animate-entry" style={{ padding: '24px', flex: 1, minHeight: 0, overflowY: 'auto' }}>
             <div className="adm-header" style={{ marginBottom: '24px' }}>
                 <h2 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Engagement Manager</h2>
                 <p style={{ color: 'var(--text-muted)' }}>Manage comments and monitor likes across all posts.</p>
@@ -273,6 +273,7 @@ const Admin = () => {
     const [isProfileEditing, setIsProfileEditing] = useState(false);
 
     // Login gate
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
 
@@ -375,6 +376,7 @@ const Admin = () => {
                 setIsLoggedIn(false);
                 setUsername('');
             }
+            setIsAuthChecking(false);
         });
         return () => unsubscribe();
     }, []);
@@ -852,7 +854,7 @@ const Admin = () => {
     };
 
     // ── CRUD helpers (local state only — never saves automatically) ──
-    const addItem = (collection) => {
+    const addItem = (collection, initialData = {}) => {
         const newId = uuidv4();
         let newItem;
         const schema = SCHEMAS[collection];
@@ -887,6 +889,8 @@ const Admin = () => {
                 variants: [{ label: '', title: '', text: '', author: '', lang: 'ta', transliterations: {}, titleTransliterations: {}, authorTransliterations: {} }]
             };
         }
+
+        newItem = { ...newItem, ...initialData };
 
         setDataStore(prev => ({ ...prev, [collection]: [newItem, ...prev[collection]] }));
         setEditingId(newId);
@@ -1156,7 +1160,7 @@ const Admin = () => {
             editingId,
             setEditingId,
             handleCloseEditor,
-            onAddItem: () => addItem(activeTab),
+            onAddItem: (initialData) => addItem(activeTab, initialData),
             onSave: () => handleSaveCollection(activeTab),
             saveStatus: status,
             updateItemField,
@@ -1194,6 +1198,18 @@ const Admin = () => {
     };
 
     // ── RENDER ──
+    if (isAuthChecking) {
+        return (
+            <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ width: '40px', height: '40px', border: '3px solid var(--border-light)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                    <p style={{ margin: 0, fontWeight: 500 }}>Checking session...</p>
+                    <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+                </div>
+            </div>
+        );
+    }
+
     if (!isLoggedIn) {
         return <AdminLogin onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />;
     }

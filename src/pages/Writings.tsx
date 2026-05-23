@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
+import { FloatingBackButton } from '../components/FloatingBackButton';
 import AdBanner from '../components/AdBanner';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
@@ -114,6 +115,7 @@ const Writings = () => {
 
             `}</style>
 
+            <FloatingBackButton to="/" />
             <header className="writings-header animate-entry">
                 <div style={{ flex: 1 }}>
                     <h1 className="writings-title">எழுத்துகள்</h1>
@@ -125,18 +127,6 @@ const Writings = () => {
                         Thoughts, Stories & Observations
                     </p>
                 </div>
-                <Link 
-                    to="/" 
-                    className="back-pill desktop-only"
-                    onClick={(e) => {
-                        if (window.history.state && window.history.state.idx > 0) {
-                            e.preventDefault();
-                            navigate(-1);
-                        }
-                    }}
-                >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                </Link>
             </header>
 
             <div className="category-grid animate-entry">

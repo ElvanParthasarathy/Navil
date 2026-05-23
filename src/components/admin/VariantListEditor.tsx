@@ -449,7 +449,7 @@ export const VariantListEditor = ({
                         </div>
                     </div>
                     <div className="admin-editor-body">
-                        <div className="adm-form" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <div className="adm-form" style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, overflowY: 'auto', minHeight: 0, padding: '16px 24px 60px 24px' }}>
 
                             {/* Core Details */}
                             <div className="adm-section">

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useEditor, EditorContent, Mark, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
+import ImageResize from 'tiptap-extension-resize-image';
 import { getOptimizedImage } from '../../lib/media';
 
 const SubtitleMark = Mark.create({
@@ -138,7 +138,7 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' })
                     };
                 },
             }),
-            Image.configure({ inline: false }),
+            ImageResize.configure({ inline: false }),
             Placeholder.configure({ placeholder }),
             SubtitleMark,
         ],

@@ -190,7 +190,7 @@ const AdminDashboard = ({ dataStore, username, onNavigate }: {
                         ) : recentItems.map((item, i) => {
                             const meta = COLLECTION_META[item._collection] || {};
                             return (
-                                <div key={item.id || i} className="admin-dash-activity-row" onClick={() => onNavigate(item._collection)}>
+                                <div key={item._collection} className="admin-dash-activity-row" onClick={() => onNavigate(item._collection)}>
                                     <div className="admin-dash-activity-dot" style={{ background: meta.color || 'var(--text-muted)' }} />
                                     <div className="admin-dash-activity-info">
                                         <span className="admin-dash-activity-title">{item.title || item.variants?.[0]?.text?.slice(0, 40) || 'Untitled'}</span>
@@ -215,7 +215,7 @@ const AdminDashboard = ({ dataStore, username, onNavigate }: {
                         ) : newItems.slice(0, 8).map((item, i) => {
                             const meta = COLLECTION_META[item._collection] || {};
                             return (
-                                <div key={item.id || i} className="admin-dash-activity-row" onClick={() => onNavigate(item._collection)}>
+                                <div key={item._collection} className="admin-dash-activity-row" onClick={() => onNavigate(item._collection)}>
                                     <div className="admin-dash-activity-dot" style={{ background: meta.color || 'var(--text-muted)' }} />
                                     <div className="admin-dash-activity-info">
                                         <span className="admin-dash-activity-title">{item.title || item.variants?.[0]?.text?.slice(0, 40) || 'Untitled'}</span>

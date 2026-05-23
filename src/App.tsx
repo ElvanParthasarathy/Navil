@@ -15,7 +15,6 @@ import Teaching from './pages/Teaching';
 import Arts from './pages/Arts';
 import ArtsGallery from './pages/ArtsGallery';
 import VocoderView from './pages/VocoderView';
-import Admin from './pages/Admin';
 import CategoryListView from './components/CategoryListView';
 import ReadingView from './components/ReadingView';
 import AdBanner from './components/AdBanner';
@@ -429,13 +428,9 @@ const router = createBrowserRouter([
             { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
             // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary, Poems, Quotes)
             { path: "writings/:category", element: <CategoryListView /> },
+            { path: "writings/:category/series/:seriesId", element: <CategoryListView /> },
             { path: "writings/:category/:slug", element: <ReadingView /> },
         ]
-    },
-    {
-        path: "/admin",
-        element: <Admin />,
-        errorElement: <GlobalErrorBoundary />
     }
 ], {
     future: {

@@ -7,6 +7,9 @@ import AdBanner from './AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { getOptimizedImage } from '../lib/media';
 import MobileTopBar from './MobileTopBar';
+import StoriesListView from './StoriesListView';
+import { ReadingView } from './ReadingView';
+import { FloatingBackButton } from './FloatingBackButton';
 
 const CATEGORY_META = {
     'blog': {
@@ -363,6 +366,10 @@ const CategoryListView = () => {
         );
     }
 
+    if (category === 'stories') {
+        return <StoriesListView />;
+    }
+
     return (
         <>
             <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl="/writings" />
@@ -372,24 +379,13 @@ const CategoryListView = () => {
                 <meta name="description" content={meta.descEn} />
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>
+            <FloatingBackButton to="/writings" />
+
             <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '200px' }}>
                     <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>
                     <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
                 </div>
-
-                <Link 
-                    to="/writings" 
-                    className="back-pill desktop-only"
-                    onClick={(e) => {
-                        if (window.history.state && window.history.state.idx > 0) {
-                            e.preventDefault();
-                            navigate(-1);
-                        }
-                    }}
-                >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                </Link>
             </div>
 
             {/* Filters & Search Sync */}

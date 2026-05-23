@@ -8,9 +8,10 @@ interface MobileTopBarProps {
     title: string;
     showBack?: boolean;
     backUrl?: string;
+    onBack?: () => void;
 }
 
-const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, backUrl }) => {
+const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, backUrl, onBack }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { theme, setTheme } = useTheme();
@@ -38,7 +39,9 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
     }, [isMobileMenuOpen]);
 
     const handleBack = () => {
-        if (window.history.state && window.history.state.idx > 0) {
+        if (onBack) {
+            onBack();
+        } else if (window.history.state && window.history.state.idx > 0) {
             navigate(-1);
         } else if (backUrl) {
             navigate(backUrl);

@@ -1,6 +1,10 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // Adapter to make Vite Request/Response look like Vercel Serverless Function
 const vercelAdapter = async (req, res, handler) => {
   const buffers = [];
@@ -33,6 +37,14 @@ export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...env };
 
   return {
+    build: {
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, 'index.html'),
+          admin: resolve(__dirname, 'admin.html')
+        }
+      }
+    },
     plugins: [
       react(),
       {
@@ -49,6 +61,9 @@ export default defineConfig(({ mode }) => {
                 res.statusCode = 500;
                 res.end(JSON.stringify({ error: 'Internal Local Server Error' }));
               }
+            } else if (req.url === '/admin' || req.url?.startsWith('/admin/')) {
+              req.url = '/admin.html';
+              next();
             } else {
               next();
             }
