@@ -267,9 +267,13 @@ const StoryViewer = ({
 
                         <div className="sv-meta-row">
                             <div className="sv-user">
-                                <img src={profilePic} className="sv-p-pic" alt="" />
+                                {activeHighlight?.cover?.endsWith('.mp4') ? (
+                                    <video src={activeHighlight.cover} className="sv-p-pic" style={{ objectFit: 'cover' }} muted autoPlay loop playsInline />
+                                ) : (
+                                    <img src={activeHighlight?.cover || profilePic} className="sv-p-pic" alt="" />
+                                )}
                                 <div className="sv-p-text">
-                                    <span className="sv-username">{profileData?.username || 'elvanparthasarathy'}</span>
+                                    <span className="sv-username">{activeHighlight?.title || 'Highlight'}</span>
                                     <span className="sv-time">{currentStory?.date}</span>
                                 </div>
                             </div>
