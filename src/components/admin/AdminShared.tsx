@@ -78,7 +78,7 @@ const getArtSchema = (label: string, categoryVal: string, icon: any) => ({
     getItemTitle: (item: any) => {
         if (item.title) return item.title;
         const plain = stripHtml(item.caption || '');
-        return plain.replace(/#\S+/g, '').trim().slice(0, 50) || label || 'Untitled Art';
+        return plain.trim().slice(0, 50) || label || 'Untitled Art';
     },
     getItemSubtitle: (item: any) => {
         const parts = [];

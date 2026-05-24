@@ -80,7 +80,7 @@ const stripHtml = (html) => {
 
 const cleanCaption = (cap) => {
     if (!cap) return '';
-    return cap.replace(/#\S+/g, '').replace(/\n{2,}/g, '\n').trim();
+    return cap.replace(/\n{2,}/g, '\n').trim();
 };
 
 const formatArtDate = (dateString) => {
