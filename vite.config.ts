@@ -63,13 +63,31 @@ export default defineConfig(({ mode }) => {
                 res.statusCode = 500;
                 res.end(JSON.stringify({ error: 'Internal Local Server Error' }));
               }
-            } else if (req.url === '/admin' || req.url?.startsWith('/admin/')) {
-              req.url = '/admin.html';
-              next();
             } else {
               next();
             }
           });
+        }
+      },
+      {
+        name: 'admin-spa-fallback',
+        configureServer(server) {
+          // This must return a function so it runs AFTER Vite's internal middleware
+          return () => {
+            server.middlewares.use(async (req, res, next) => {
+              if (req.url && (req.url === '/admin' || req.url.startsWith('/admin/') || req.url.startsWith('/admin?'))) {
+                const { readFileSync } = await import('fs');
+                const htmlPath = resolve(__dirname, 'admin.html');
+                let html = readFileSync(htmlPath, 'utf-8');
+                html = await server.transformIndexHtml(req.url, html);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'text/html');
+                res.end(html);
+              } else {
+                next();
+              }
+            });
+          };
         }
       }
     ],
