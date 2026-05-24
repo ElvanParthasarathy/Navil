@@ -32,10 +32,7 @@ import { addComment } from '../lib/engagement';
 import '../styles/admin-tailwind.css';
 
 // Import Data (Initial State for non-Supabase data)
-import initialQuotes from '../data/quotes.json';
 import initialProfile from '../data/profile.json';
-import initialPoems from '../data/poems.json';
-
 
 import { remove } from 'firebase/database';
 
@@ -307,9 +304,9 @@ const Admin = () => {
     }, [activeTab, editingId, isProfileEditing]);
 
     const [dataStore, setDataStore] = useState({
-        quotes: initialQuotes,
+        quotes: [],
         profile: initialProfile,
-        poems: initialPoems,
+        poems: [],
         blog: [],
         articles: [],
         stories: [],

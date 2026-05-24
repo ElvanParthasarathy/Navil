@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React from 'react';
 import WritingPage from '../../components/WritingPage';
-import legacyQuotesData from '../../data/quotes.json';
 
 const Quotes = () => (
     <WritingPage
@@ -10,7 +9,6 @@ const Quotes = () => (
         pageSubtitle="என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்."
         pageSubtitleEnglish="My short quotes and personal insights."
         tableName="quotes"
-        legacyData={legacyQuotesData}
     />
 );
 

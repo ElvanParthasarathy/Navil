@@ -11,9 +11,6 @@ import { ref, onValue } from 'firebase/database';
 import { FiArrowRight, FiRotateCw, FiUser, FiInstagram, FiFeather, FiImage, FiCompass, FiInfo } from 'react-icons/fi';
 import { BsBook, BsPen, BsChatQuote, BsPencilSquare, BsNewspaper, BsMoonStars } from 'react-icons/bs';
 
-// Static JSON imports as instant fallbacks for counts & quotes
-import staticPoems from '../data/poems.json';
-import staticQuotes from '../data/quotes.json';
 import staticStories from '../data/stories.json';
 import staticArts from '../data/arts.json';
 
@@ -32,10 +29,9 @@ const getClassColor = (name: string) => {
 };
 
 const Home = () => {
-    // Dynamic counts state initialized with local static fallbacks
     const [counts, setCounts] = useState({
-        poems: staticPoems.length,
-        quotes: staticQuotes.length,
+        poems: 0,
+        quotes: 0,
         blog: 0,
         articles: 0,
         stories: staticStories.length,
@@ -138,12 +134,12 @@ const Home = () => {
     }, []);
 
     // Sources pool (dynamic database list, fallback to static JSON backups)
-    const quotesSource = dbQuotes.length > 0 ? dbQuotes : staticQuotes;
-    const poemsSource = dbPoems.length > 0 ? dbPoems : staticPoems;
+    const quotesSource = dbQuotes;
+    const poemsSource = dbPoems;
 
     // Interactive quote carousel state (stably initialized once from cache or fallback)
     const [currentQuote, setCurrentQuote] = useState<any>(() => {
-        const pool = dbQuotes.length > 0 ? dbQuotes : staticQuotes;
+        const pool = dbQuotes;
         return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
     });
     const [isFading, setIsFading] = useState(false);
@@ -156,8 +152,6 @@ const Home = () => {
             if (!isFromDb) {
                 setCurrentQuote(dbQuotes[Math.floor(Math.random() * dbQuotes.length)]);
             }
-        } else if (staticQuotes.length > 0 && !currentQuote) {
-            setCurrentQuote(staticQuotes[Math.floor(Math.random() * staticQuotes.length)]);
         }
     }, [dbQuotes]);
 
@@ -273,7 +267,7 @@ const Home = () => {
 
     // Interactive poem player state (stably initialized once from cache or fallback)
     const [currentPoem, setCurrentPoem] = useState<any>(() => {
-        const pool = dbPoems.length > 0 ? dbPoems : staticPoems;
+        const pool = dbPoems;
         return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
     });
     const [isPoemFading, setIsPoemFading] = useState(false);
@@ -286,8 +280,6 @@ const Home = () => {
             if (!isFromDb) {
                 setCurrentPoem(dbPoems[Math.floor(Math.random() * dbPoems.length)]);
             }
-        } else if (staticPoems.length > 0 && !currentPoem) {
-            setCurrentPoem(staticPoems[Math.floor(Math.random() * staticPoems.length)]);
         }
     }, [dbPoems]);
 
