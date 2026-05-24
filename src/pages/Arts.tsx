@@ -80,13 +80,13 @@ const CATEGORIES = {
         footerTa: 'ஓவியங்களைக் காண',
         icon: <PencilIcon />,
     },
-    editing: {
-        titleTa: 'தொகுப்புகள்',
-        titleEn: 'Editings',
-        descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் டிஜிட்டல் படைப்புகள்',
-        descEn: 'Photo manipulations and digital creations.',
+    illustrations: {
+        titleTa: 'விளக்கப்படங்கள்',
+        titleEn: 'Illustrations',
+        descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்',
+        descEn: 'Digital illustrations, logos, and vector art.',
         footerTa: 'படைப்புகளைக் காண',
-        icon: <EditingIcon />,
+        icon: <IllustrationIcon />,
     },
     poster: {
         titleTa: 'சுவரொட்டிகள்',
@@ -120,13 +120,13 @@ const CATEGORIES = {
         footerTa: 'மேற்கோள்களைக் காண',
         icon: <QuoteIcon />,
     },
-    illustrations: {
-        titleTa: 'விளக்கப்படங்கள்',
-        titleEn: 'Illustrations',
-        descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்',
-        descEn: 'Digital illustrations, logos, and vector art.',
+    editing: {
+        titleTa: 'தொகுப்புகள்',
+        titleEn: 'Editings',
+        descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் டிஜிட்டல் படைப்புகள்',
+        descEn: 'Photo manipulations and digital creations.',
         footerTa: 'படைப்புகளைக் காண',
-        icon: <IllustrationIcon />,
+        icon: <EditingIcon />,
     },
     digital_arts: {
         titleTa: 'எண்மக்கலைகள்',
