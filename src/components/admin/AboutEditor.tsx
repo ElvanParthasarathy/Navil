@@ -3,7 +3,7 @@ import { FiSave, FiEdit2, FiX, FiArrowUp, FiArrowDown, FiTrash2, FiPlus } from '
 import { db } from '../../lib/firebaseClient';
 import RichTextEditor from './RichTextEditor';
 import { ref, onValue, set } from 'firebase/database';
-import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid, Divider } from '@mui/material';
+import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid2 as Grid, Divider } from '@mui/material';
 
 const getInitialAbout = () => {
     try {
@@ -253,26 +253,26 @@ export const AboutEditor = () => {
 
             <SectionLabel>Contact Section</SectionLabel>
             <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField fullWidth label="Contact Title (Tamil)" value={data.contact_tamil || ''} onChange={e => updateField('contact_tamil', e.target.value)} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField fullWidth label="Contact Title (English)" value={data.contact_english || ''} onChange={e => updateField('contact_english', e.target.value)} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField fullWidth label="Contact Desc (Tamil)" value={data.contact_desc_tamil || ''} onChange={e => updateField('contact_desc_tamil', e.target.value)} />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField fullWidth label="Contact Desc (English)" value={data.contact_desc_english || ''} onChange={e => updateField('contact_desc_english', e.target.value)} />
                 </Grid>
             </Grid>
 
             <SectionLabel>Other</SectionLabel>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <TextField fullWidth label="Location" value={data.location || ''} onChange={e => updateField('location', e.target.value)} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <TextField fullWidth label="Portfolio URL" value={data.portfolio_url || ''} onChange={e => updateField('portfolio_url', e.target.value)} />
                 </Grid>
             </Grid>

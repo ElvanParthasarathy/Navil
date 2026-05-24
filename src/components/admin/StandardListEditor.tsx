@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy, FiSearch } from 'react-icons/fi';
+import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy, FiSearch, FiFolderPlus } from 'react-icons/fi';
 import { Box, Typography, Button, IconButton, Checkbox, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment } from '@mui/material';
 import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -41,7 +41,8 @@ export const StandardListEditor = ({
     toggleTransliterationLang,
     onMoveItems,
     onCopyItems,
-    onDuplicateItems
+    onDuplicateItems,
+    addSeries
 }: any) => {
     interface ConfirmState {
         open: boolean;
