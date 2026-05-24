@@ -245,7 +245,7 @@ const AdminDashboard = ({ dataStore, username, onNavigate }: {
                         <Card sx={{ overflow: 'hidden' }}>
                             <List disablePadding>
                                 {recentItems.length === 0 ? (
-                                    <Box p={6} textAlign="center">
+                                    <Box sx={{ p: 6, textAlign: 'center' }}>
                                         <Typography color="text.secondary" sx={{ fontWeight: 500 }}>No items yet. Start creating!</Typography>
                                     </Box>
                                 ) : recentItems.map((item, i) => {

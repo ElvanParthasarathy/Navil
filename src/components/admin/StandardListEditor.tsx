@@ -212,7 +212,10 @@ export const StandardListEditor = ({
                             ) : (
                                 <>
                                     <Button variant="text" onClick={() => { setIsListEditMode(false); clearSelection(); }} sx={{ color: 'text.secondary' }}>Cancel</Button>
-                                    <Button variant="contained" startIcon={<FiPlus />} onClick={onAddItem} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
+                                    <Button variant="contained" startIcon={<FiPlus />} onClick={() => onAddItem()} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
+                                    {collection === 'stories' && addSeries && (
+                                        <Button variant="outlined" startIcon={<FiFolderPlus />} onClick={() => addSeries()} sx={{ color: 'text.primary', borderColor: 'divider' }}>Add Series</Button>
+                                    )}
                                     <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
                                         Save
                                     </Button>
