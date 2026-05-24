@@ -2,7 +2,6 @@ import React from 'react';
 import { useEditor, EditorContent, Mark, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import HardBreak from '@tiptap/extension-hard-break';
 import ImageResize from 'tiptap-extension-resize-image';
 import { Box, IconButton, Divider, Tooltip, Typography, Paper } from '@mui/material';
 import { 
@@ -109,18 +108,6 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' }:
         extensions: [
             StarterKit.configure({
                 heading: { levels: [2, 3] },
-                hardBreak: false,
-            }),
-            HardBreak.extend({
-                addKeyboardShortcuts() {
-                    return {
-                        'Enter': () => this.editor.commands.setHardBreak(),
-                        'Shift-Enter': () => {
-                            this.editor.commands.splitBlock();
-                            return true;
-                        },
-                    };
-                },
             }),
             ImageResize.configure({ inline: false }),
             Placeholder.configure({ placeholder }),
