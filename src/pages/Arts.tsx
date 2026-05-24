@@ -104,14 +104,6 @@ const CATEGORIES = {
         footerTa: 'ஓவியங்களைக் காண',
         icon: <PaintingIcon />,
     },
-    quotes: {
-        titleTa: 'நவில் மொழிகள்',
-        titleEn: 'Quotes',
-        descTa: 'நவில் மொழிகளின் காட்சி வடிவமைப்புகள்',
-        descEn: 'Visual quote cards and typographic designs.',
-        footerTa: 'மேற்கோள்களைக் காண',
-        icon: <QuoteIcon />,
-    },
     poems: {
         titleTa: 'நவில் மிழிகள்',
         titleEn: 'Poems',
@@ -119,6 +111,14 @@ const CATEGORIES = {
         descEn: 'Visual poem cards and creative typography.',
         footerTa: 'கவிதைகளைக் காண',
         icon: <PoemIcon />,
+    },
+    quotes: {
+        titleTa: 'நவில் மொழிகள்',
+        titleEn: 'Quotes',
+        descTa: 'நவில் மொழிகளின் காட்சி வடிவமைப்புகள்',
+        descEn: 'Visual quote cards and typographic designs.',
+        footerTa: 'மேற்கோள்களைக் காண',
+        icon: <QuoteIcon />,
     },
     illustrations: {
         titleTa: 'விளக்கப்படங்கள்',
