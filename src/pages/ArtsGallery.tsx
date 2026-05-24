@@ -1437,6 +1437,13 @@ const ArtsGallery = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    cursor: pointer;
+                    z-index: 10;
+                    transition: background-color 0.2s ease, transform 0.2s ease;
+                }
+                .arts-lb-sheet-close:hover {
+                    background: rgba(255,255,255,0.25);
+                    transform: scale(1.05);
                 }
                 .arts-lb-sheet-title {
                     font-size: 1.05rem;
