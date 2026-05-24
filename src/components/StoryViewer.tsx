@@ -533,17 +533,22 @@ const StoryViewer = ({
                 .sv-p-text {
                     display: flex;
                     flex-direction: column;
+                    justify-content: center;
+                    gap: 3px;
                 }
 
                 .sv-username {
                     color: #fff;
-                    font-size: 14px;
+                    font-size: 13px;
                     font-weight: 600;
+                    line-height: 1.1;
+                    letter-spacing: 0.3px;
                 }
 
                 .sv-time {
-                    color: rgba(255,255,255,0.6);
+                    color: rgba(255,255,255,0.7);
                     font-size: 11px;
+                    line-height: 1;
                 }
 
                 .sv-actions {
