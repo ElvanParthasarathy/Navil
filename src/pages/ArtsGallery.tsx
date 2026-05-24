@@ -799,15 +799,9 @@ const ArtsGallery = () => {
                 }
 
                 .arts-grid {
-                    display: flex;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
                     gap: 6px;
-                }
-                .arts-grid-column {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 6px;
-                    min-width: 0;
                 }
                 
                 .arts-grid-item {
@@ -818,15 +812,13 @@ const ArtsGallery = () => {
                     border-radius: 8px;
                     transform: translateZ(0); 
                     will-change: transform;
+                    aspect-ratio: 1 / 1 !important;
                 }
                 
                 @media (max-width: 768px) {
                     .arts-grid-item {
                         border-radius: 2px;
                         background: transparent;
-                    }
-                    .arts-grid-item img {
-                        object-fit: cover;
                     }
                 }
                 
@@ -840,9 +832,9 @@ const ArtsGallery = () => {
                 }
                 .arts-grid-item img {
                     width: 100%;
-                    height: auto;
+                    height: 100%;
                     display: block;
-                    object-fit: contain;
+                    object-fit: cover;
                     transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s;
                 }
                 @media (hover: hover) {
@@ -1593,15 +1585,14 @@ const ArtsGallery = () => {
                 .arts-skeleton-grid {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
-                    gap: 8px;
+                    gap: 6px;
                 }
                 .arts-skeleton-item {
                     background: var(--bg-panel);
                     border-radius: 8px;
-                    margin-bottom: 8px;
-                    break-inside: avoid;
-                    overflow: hidden;
                     position: relative;
+                    overflow: hidden;
+                    aspect-ratio: 1 / 1;
                 }
                 .arts-skeleton-item::after {
                     content: '';
@@ -1615,6 +1606,8 @@ const ArtsGallery = () => {
 
                 @media (max-width: 768px) {
                     .arts-gallery-page { padding: 20px 16px 100px; }
+                    .arts-grid { padding: 0 4px; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+                    .arts-skeleton-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; padding: 0 4px; }
                     .arts-gallery-header { display: none; }
                     .arts-gallery-title { font-size: 2.2rem; margin-bottom: 8px; }
                     .arts-gallery-sub { font-size: 0.95rem; }
@@ -1722,8 +1715,8 @@ const ArtsGallery = () => {
 
                     {loading ? (
                         <div className="arts-skeleton-grid animate-entry">
-                            {[200, 280, 180, 240, 200, 260].map((h, i) => (
-                                <div key={i} className="arts-skeleton-item" style={{ paddingBottom: `${h}px` }} />
+                            {[1, 2, 3, 4, 5, 6].map((_, i) => (
+                                <div key={i} className="arts-skeleton-item" />
                             ))}
                         </div>
                     ) : allItems.length === 0 ? (
@@ -1734,25 +1727,14 @@ const ArtsGallery = () => {
                     ) : (
                         <>
                             <div className="arts-grid animate-entry">
-                                {(() => {
-                                    const colCount = isMobile ? 2 : 3;
-                                    const columns = Array.from({ length: colCount }, () => []);
-                                    visibleItems.forEach((item, i) => {
-                                        columns[i % colCount].push(item);
-                                    });
-                                    return columns.map((colItems, colIdx) => (
-                                        <div key={colIdx} className="arts-grid-column">
-                                            {colItems.map((item) => (
-                                                <ArtCard
-                                                    key={item.id}
-                                                    item={item}
-                                                    onOpen={openLightbox}
-                                                    caption={cleanCaption(item.caption)}
-                                                />
-                                            ))}
-                                        </div>
-                                    ));
-                                })()}
+                                {visibleItems.map((item) => (
+                                    <ArtCard
+                                        key={item.id}
+                                        item={item}
+                                        onOpen={openLightbox}
+                                        caption={cleanCaption(item.caption)}
+                                    />
+                                ))}
                             </div>
 
                             {hasMore && (
