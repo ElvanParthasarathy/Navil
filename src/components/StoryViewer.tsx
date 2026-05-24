@@ -23,6 +23,7 @@ const StoryViewer = ({
     const touchStartX = useRef(null);
     const touchStartY = useRef(null);
     const pendingStartIndex = useRef(null); // Track intended start index when switching highlights
+    const imageRef = useRef(null);
 
     const currentStories = activeHighlight?.stories || [];
     const currentIndexSafe = Math.min(currentIndex, currentStories.length > 0 ? currentStories.length - 1 : 0);
@@ -199,6 +200,14 @@ const StoryViewer = ({
         setIsLoaded(true);
     };
 
+    useEffect(() => {
+        if (currentStory && !(currentStory.type === 'video' || currentStory.url?.endsWith('.mp4'))) {
+            if (imageRef.current && imageRef.current.complete) {
+                handleImageLoaded();
+            }
+        }
+    }, [currentStory, currentIndex]);
+
     if (!activeHighlight) return null;
 
     const currentHighlightIdx = highlights.findIndex(h => h.id === activeHighlight.id);
@@ -307,8 +316,10 @@ const StoryViewer = ({
                         ) : (
                             <img
                                 src={currentStory?.url}
+                                ref={imageRef}
                                 alt=""
                                 onLoad={handleImageLoaded}
+                                onError={handleImageLoaded}
                                 onContextMenu={(e) => e.preventDefault()}
                                 style={{ userSelect: 'none', WebkitUserDrag: 'none' }}
                             />
