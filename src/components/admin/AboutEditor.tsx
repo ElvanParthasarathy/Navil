@@ -3,7 +3,7 @@ import { FiSave, FiEdit2, FiX, FiArrowUp, FiArrowDown, FiTrash2, FiPlus } from '
 import { db } from '../../lib/firebaseClient';
 import RichTextEditor from './RichTextEditor';
 import { ref, onValue, set } from 'firebase/database';
-import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid2 as Grid, Divider } from '@mui/material';
+import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid, Divider } from '@mui/material';
 
 const getInitialAbout = () => {
     try {
