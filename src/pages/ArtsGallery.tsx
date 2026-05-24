@@ -163,7 +163,7 @@ const ArtCard = React.memo(({ item, onOpen, caption }) => {
                 </div>
             )}
             <div className="arts-grid-overlay">
-                {caption && <div className="arts-grid-overlay-text" dangerouslySetInnerHTML={{ __html: caption }} />}
+                {caption && <div className="arts-grid-overlay-text">{stripHtml(caption)}</div>}
             </div>
         </div>
     );
