@@ -100,8 +100,13 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' }:
 
     const formatHTML = (raw: string) => {
         if (!raw) return '';
-        if (/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) return raw;
-        return raw.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
+        let html = raw;
+        if (!/<(p|h[1-6]|ul|ol|li|div|pre|blockquote)[> \/]/i.test(html)) {
+            html = html.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
+        }
+        // Fix legacy content that used <br> for paragraph separation
+        html = html.replace(/<br\s*\/?>/gi, '</p><p>');
+        return html;
     };
 
     const editor = useEditor({
