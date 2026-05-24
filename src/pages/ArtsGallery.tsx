@@ -1093,9 +1093,13 @@ const ArtsGallery = () => {
                     }
                     .arts-lb-sidebar .arts-lb-caption {
                         font-size: 1.15rem;
-                        font-weight: 500;
+                        font-weight: 400;
                         line-height: 1.6;
                         color: rgba(255,255,255,0.95);
+                    }
+                    .arts-lb-sidebar .arts-lb-caption strong,
+                    .arts-lb-sidebar .arts-lb-caption b {
+                        font-weight: 600;
                     }
                     .arts-lb-sidebar .arts-lb-date {
                         font-size: 0.85rem;
@@ -1223,10 +1227,14 @@ const ArtsGallery = () => {
                 }
                 .arts-lb-caption {
                     font-size: 1.1rem;
-                    font-weight: 600;
+                    font-weight: 400;
                     line-height: 1.4;
                     color: white;
                     margin: 0;
+                }
+                .arts-lb-caption strong,
+                .arts-lb-caption b {
+                    font-weight: 600;
                 }
                 .arts-lb-view-more {
                     display: inline;
@@ -1447,11 +1455,15 @@ const ArtsGallery = () => {
                 }
                 .arts-lb-sheet-title {
                     font-size: 1.05rem;
-                    font-weight: 500;
+                    font-weight: 400;
                     color: rgba(255,255,255,0.95);
                     margin-bottom: 24px;
                     line-height: 1.6;
                     padding-right: 40px;
+                }
+                .arts-lb-sheet-title strong,
+                .arts-lb-sheet-title b {
+                    font-weight: 600;
                 }
                 .arts-lb-sheet-meta {
                     display: flex;
