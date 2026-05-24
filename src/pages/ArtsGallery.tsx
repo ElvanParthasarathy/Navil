@@ -1390,6 +1390,21 @@ const ArtsGallery = () => {
                     animation: lbSlideUp 0.4s cubic-bezier(0.2, 0, 0, 1);
                     overflow-y: auto;
                     border-top: 1px solid rgba(255,255,255,0.1);
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+                }
+                .arts-lb-caption-sheet::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .arts-lb-caption-sheet::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .arts-lb-caption-sheet::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 10px;
+                }
+                .arts-lb-caption-sheet::-webkit-scrollbar-thumb:hover {
+                    background: rgba(255, 255, 255, 0.3);
                 }
                 @media (min-width: 769px) {
                     .arts-lb-caption-sheet-overlay {
