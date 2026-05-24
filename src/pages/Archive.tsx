@@ -15,7 +15,7 @@ import HighlightBar from '../components/HighlightBar';
 import StoryViewer from '../components/StoryViewer';
 import ReelsViewer from '../components/ReelsViewer';
 import AdBanner from '../components/AdBanner';
-import TempHighlightEditor from '../dev-tools/TempHighlightEditor';
+// import TempHighlightEditor from '../dev-tools/TempHighlightEditor';
 const stripHtml = (html) => {
     if (!html) return '';
     const clean = html.replace(/<[^>]*>/g, '');
@@ -1488,8 +1488,7 @@ const Archive = () => {
                     </div>
                 </div>
             </div>
-
-            <TempHighlightEditor initialHighlights={highlights} />
+            {/* <TempHighlightEditor initialHighlights={highlights} /> */}
 
             {/* --- HIGHLIGHT BAR --- */}
             <HighlightBar
