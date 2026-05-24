@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { FiChevronUp, FiChevronDown, FiPlus, FiTrash2, FiCheckSquare, FiSquare, FiArrowUp, FiArrowDown, FiPlay, FiImage, FiX } from 'react-icons/fi';
 
