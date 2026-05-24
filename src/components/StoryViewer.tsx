@@ -539,7 +539,7 @@ const StoryViewer = ({
 
                 .sv-username {
                     color: #fff;
-                    font-family: 'Mukta Malar', 'Google Sans', 'Inter', sans-serif;
+                    font-family: 'Google Sans', 'Mukta Malar', 'Inter', sans-serif;
                     font-size: 13px;
                     font-weight: 600;
                     line-height: 1.1;
@@ -548,7 +548,7 @@ const StoryViewer = ({
 
                 .sv-time {
                     color: rgba(255,255,255,0.7);
-                    font-family: 'Mukta Malar', 'Google Sans', 'Inter', sans-serif;
+                    font-family: 'Google Sans', 'Mukta Malar', 'Inter', sans-serif;
                     font-size: 11px;
                     line-height: 1;
                 }
