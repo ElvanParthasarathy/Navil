@@ -519,7 +519,7 @@ const StoryViewer = ({
                 .sv-user {
                     display: flex;
                     align-items: center;
-                    gap: 10px;
+                    gap: 14px;
                 }
 
                 .sv-p-pic {
@@ -534,7 +534,7 @@ const StoryViewer = ({
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
-                    gap: 3px;
+                    gap: 5px;
                 }
 
                 .sv-username {
