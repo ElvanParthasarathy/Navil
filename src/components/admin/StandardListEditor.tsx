@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy, FiSearch, FiFolderPlus } from 'react-icons/fi';
+import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy, FiSearch, FiFolderPlus, FiMenu } from 'react-icons/fi';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Box, Typography, Button, IconButton, Checkbox, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment } from '@mui/material';
 import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from './AdminShared';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -20,6 +23,29 @@ const getCoverImageUrl = (listItem: any) => {
     return raw ? getOptimizedImage(raw, 'thumb') : '';
 };
 
+const SortableListItem = ({ id, children }: { id: string, children: React.ReactNode }) => {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+        zIndex: isDragging ? 10 : 1,
+        position: 'relative' as any,
+    };
+    return (
+        <div ref={setNodeRef} style={style}>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1 }}>
+                <Box {...attributes} {...listeners} sx={{ cursor: 'grab', display: 'flex', alignItems: 'center', p: 1, color: 'text.secondary', '&:hover': { color: 'primary.main' } }}>
+                    <FiMenu size={20} />
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                    {children}
+                </Box>
+            </Box>
+        </div>
+    );
+};
+
 export const StandardListEditor = ({
     items,
     collection,
@@ -32,6 +58,7 @@ export const StandardListEditor = ({
     updateGenericItem,
     updateItemField,
     moveItem,
+    reorderItem,
     deleteItem,
     addVariant,
     updateVariant,
@@ -180,6 +207,31 @@ export const StandardListEditor = ({
         return filteredItems.slice(start, start + itemsPerPage);
     }, [filteredItems, currentPage, itemsPerPage]);
 
+    // Dnd-kit sensors
+    const sensors = useSensors(
+        useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    );
+
+    const handleDragEnd = (event: any) => {
+        const { active, over } = event;
+        if (!over) return;
+
+        if (active.id !== over.id) {
+            // Only allow reorder if no search filter is active
+            if (searchQuery.trim() !== '' && filteredItems.length !== items.length) {
+                return;
+            }
+
+            const oldGlobalIndex = items.findIndex((i: any) => i.id === active.id);
+            const newGlobalIndex = items.findIndex((i: any) => i.id === over.id);
+
+            if (oldGlobalIndex !== -1 && newGlobalIndex !== -1 && reorderItem) {
+                reorderItem(collection, oldGlobalIndex, newGlobalIndex);
+            }
+        }
+    };
+
     return (
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
             <ConfirmDialog
@@ -286,70 +338,87 @@ export const StandardListEditor = ({
                                         <Typography variant="body2">Select all</Typography>
                                     </Box>
                                 )}
-                                {paginatedItems?.map((listItem: any, paginatedIndex: number) => {
-                                    const index = items.findIndex((i: any) => i.id === listItem.id);
-                                    const isSelected = selected.has(listItem.id);
-                                    const title = schema.getItemTitle ? schema.getItemTitle(listItem) : (listItem.title || listItem.date || 'Untitled');
-                                    const dateVal = listItem.date || listItem.publish_date;
-                                    const dateParsed = dateVal ? new Date(dateVal) : null;
-                                    const formattedDate = dateParsed && !isNaN(dateParsed.getTime()) ? dateParsed.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : (dateVal || '');
-                                    const sub = schema.getItemSubtitle ? schema.getItemSubtitle(listItem) : formattedDate;
-                                    const coverUrl = getCoverImageUrl(listItem);
-                                    return (
-                                        <Card
-                                            key={listItem.id || index}
-                                            elevation={0}
-                                            sx={{
-                                                display: 'flex', alignItems: 'center', p: 1.5, gap: 2,
-                                                cursor: 'pointer', transition: 'all 0.2s',
-                                                bgcolor: isSelected ? 'primary.dark' : 'background.paper',
-                                                color: isSelected ? 'onPrimaryContainer' : 'text.primary',
-                                                '&:hover': { bgcolor: isSelected ? 'primary.dark' : 'surfaceContainer' },
-                                                flexShrink: 0
-                                            }}
-                                            onClick={() => {
-                                                if (isListEditMode) toggleSelect(listItem.id, null);
-                                                else setEditingId(listItem.id);
-                                            }}
-                                        >
-                                            {isListEditMode && (
-                                                <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }} onClick={(e: any) => { e.stopPropagation(); toggleSelect(listItem.id, e); }}>
-                                                    <Checkbox checked={isSelected} readOnly sx={{ p: 0 }} />
-                                                </Box>
-                                            )}
-                                            {coverUrl && (
-                                                <Box sx={{ width: 44, height: 44, borderRadius: 2, overflow: 'hidden', bgcolor: 'action.hover', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <img src={coverUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                                                </Box>
-                                            )}
-                                            <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                                                <Typography variant="subtitle2" sx={{ fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                    {title}
-                                                </Typography>
-                                                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
-                                                    {sub}
-                                                    {listItem.variants?.length > 0 && ` • ${listItem.variants.length} lang${listItem.variants.length > 1 ? 's' : ''}`}
-                                                </Typography>
-                                            </Box>
-                                            {isListEditMode ? (
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pr: 1 }}>
-                                                    {collection !== 'stories' && (
-                                                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mr: 1 }}>
-                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><FiChevronUp size={16} /></IconButton>
-                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><FiChevronDown size={16} /></IconButton>
+                                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                                    <SortableContext items={paginatedItems.map((i: any) => i.id)} strategy={verticalListSortingStrategy}>
+                                        {paginatedItems?.map((listItem: any, paginatedIndex: number) => {
+                                            const index = items.findIndex((i: any) => i.id === listItem.id);
+                                            const isSelected = selected.has(listItem.id);
+                                            const title = schema.getItemTitle ? schema.getItemTitle(listItem) : (listItem.title || listItem.date || 'Untitled');
+                                            const dateVal = listItem.date || listItem.publish_date;
+                                            const dateParsed = dateVal ? new Date(dateVal) : null;
+                                            const formattedDate = dateParsed && !isNaN(dateParsed.getTime()) ? dateParsed.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : (dateVal || '');
+                                            const sub = schema.getItemSubtitle ? schema.getItemSubtitle(listItem) : formattedDate;
+                                            const coverUrl = getCoverImageUrl(listItem);
+                                            
+                                            // Determine if dragging is allowed (only when no search filter is active and we're not in edit mode with selected items)
+                                            const canDrag = searchQuery.trim() === '';
+                                            
+                                            const cardContent = (
+                                                <Card
+                                                    elevation={0}
+                                                    sx={{
+                                                        display: 'flex', alignItems: 'center', p: 1.5, gap: 2,
+                                                        cursor: 'pointer', transition: 'all 0.2s',
+                                                        bgcolor: isSelected ? 'primary.dark' : 'background.paper',
+                                                        color: isSelected ? 'onPrimaryContainer' : 'text.primary',
+                                                        '&:hover': { bgcolor: isSelected ? 'primary.dark' : 'surfaceContainer' },
+                                                        flexShrink: 0
+                                                    }}
+                                                    onClick={() => {
+                                                        if (isListEditMode) toggleSelect(listItem.id, null);
+                                                        else setEditingId(listItem.id);
+                                                    }}
+                                                >
+                                                    {isListEditMode && (
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }} onClick={(e: any) => { e.stopPropagation(); toggleSelect(listItem.id, e); }}>
+                                                            <Checkbox checked={isSelected} readOnly sx={{ p: 0 }} />
                                                         </Box>
                                                     )}
-                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><FiCopy size={16} /></IconButton>
-                                                    <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><FiTrash2 size={16} /></IconButton>
-                                                </Box>
+                                                    {coverUrl && (
+                                                        <Box sx={{ width: 44, height: 44, borderRadius: 2, overflow: 'hidden', bgcolor: 'action.hover', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <img src={coverUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                        </Box>
+                                                    )}
+                                                    <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                                                        <Typography variant="subtitle2" sx={{ fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                            {title}
+                                                        </Typography>
+                                                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                                                            {sub}
+                                                            {listItem.variants?.length > 0 && ` • ${listItem.variants.length} lang${listItem.variants.length > 1 ? 's' : ''}`}
+                                                        </Typography>
+                                                    </Box>
+                                                    {isListEditMode ? (
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pr: 1 }}>
+                                                            {collection !== 'stories' && (
+                                                                <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mr: 1 }}>
+                                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><FiChevronUp size={16} /></IconButton>
+                                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><FiChevronDown size={16} /></IconButton>
+                                                                </Box>
+                                                            )}
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><FiCopy size={16} /></IconButton>
+                                                            <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><FiTrash2 size={16} /></IconButton>
+                                                        </Box>
+                                                    ) : (
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, color: 'text.secondary', opacity: 0.5 }}>
+                                                            <FiChevronRight size={20} />
+                                                        </Box>
+                                                    )}
+                                                </Card>
+                                            );
+
+                                            return canDrag ? (
+                                                <SortableListItem key={listItem.id} id={listItem.id}>
+                                                    {cardContent}
+                                                </SortableListItem>
                                             ) : (
-                                                <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, color: 'text.secondary', opacity: 0.5 }}>
-                                                    <FiChevronRight size={20} />
+                                                <Box key={listItem.id || index} sx={{ mb: 0 }}>
+                                                    {cardContent}
                                                 </Box>
-                                            )}
-                                        </Card>
-                                    );
-                                })}
+                                            );
+                                        })}
+                                    </SortableContext>
+                                </DndContext>
                                 
                                 {totalPages > 1 && (
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, pb: 4 }}>

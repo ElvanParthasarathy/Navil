@@ -41,8 +41,8 @@ function normalise(dataObj: Record<string, any>): any[] {
     });
 
     rows.sort((a, b) => {
-        const isAPinned = a.is_pinned || a.pin_type === 'permanent';
-        const isBPinned = b.is_pinned || b.pin_type === 'permanent';
+        const isAPinned = a.is_pinned && a.pin_type === 'permanent';
+        const isBPinned = b.is_pinned && b.pin_type === 'permanent';
         if (isAPinned && !isBPinned) return -1;
         if (!isAPinned && isBPinned) return 1;
         if ((a.display_order ?? 0) !== (b.display_order ?? 0))

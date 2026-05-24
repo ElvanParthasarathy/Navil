@@ -592,8 +592,8 @@ const Admin = () => {
                                 return item;
                             });
                             itemsArray.sort((a, b) => {
-                                const isAPinned = a.isPinned || a.is_pinned || a.pinType === 'permanent' || a.pin_type === 'permanent';
-                                const isBPinned = b.isPinned || b.is_pinned || b.pinType === 'permanent' || b.pin_type === 'permanent';
+                                const isAPinned = (a.isPinned || a.is_pinned) && (a.pinType === 'permanent' || a.pin_type === 'permanent');
+                                const isBPinned = (b.isPinned || b.is_pinned) && (b.pinType === 'permanent' || b.pin_type === 'permanent');
                                 if (isAPinned && !isBPinned) return -1;
                                 if (!isAPinned && isBPinned) return 1;
                                 if (a.display_order !== b.display_order) return (a.display_order || 0) - (b.display_order || 0);
@@ -800,6 +800,15 @@ const Admin = () => {
         });
     };
 
+    const reorderItem = (collection, oldIndex, newIndex) => {
+        setDataStore(prev => {
+            const items = [...prev[collection]];
+            const [movedItem] = items.splice(oldIndex, 1);
+            items.splice(newIndex, 0, movedItem);
+            return { ...prev, [collection]: items };
+        });
+    };
+
     const updateItemField = (collection, index, field, value) => {
         setDataStore(prev => {
             const newData = [...prev[collection]];
@@ -999,13 +1008,12 @@ const Admin = () => {
             updateSeriesNameAndChapters,
             renameSeriesForStories,
             seriesData: dataStore['series'] || [], onSave: () => handleSaveCollection(activeTab), saveStatus: status,
-            updateItemField, updateGenericItem, moveItem, deleteItem,
+            updateItemField, moveItem, deleteItem, reorderItem,
             addVariant, updateVariant, removeVariant, moveVariant,
             updateTransliteration, toggleTransliterationLang,
             defaultAuthors: dataStore.defaultAuthors || DEFAULT_AUTHORS,
             onMoveItems: handleMoveItems, onCopyItems: handleCopyItems,
-            onDuplicateItems: (ids) => handleDuplicateItems(ids, activeTab),
-            seriesData: dataStore['series'] || []
+            onDuplicateItems: (ids) => handleDuplicateItems(ids, activeTab)
         };
         if (activeTab.startsWith('art_')) return <ArtEditor {...commonProps} collection={activeTab} />;
         switch (activeTab) {

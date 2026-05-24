@@ -365,15 +365,13 @@ const WritingPage = ({
     // Pinned logic — supports both auto (with expiry) and permanent pins
     const now = new Date();
     const sortedPosts = [...filteredPosts].sort((a, b) => {
-        const isAPinned = a.isPinned && (
-            a.pinType === 'permanent' ||
-            !a.pinExpiresAt ||
-            new Date(a.pinExpiresAt) > now
+        const isAPinned = (a.isPinned || a.is_pinned) && (
+            a.pinType === 'permanent' || a.pin_type === 'permanent' ||
+            ((a.pinType === 'auto' || a.pin_type === 'auto') && new Date(a.pinExpiresAt || a.pin_expires_at).getTime() > Date.now())
         );
-        const isBPinned = b.isPinned && (
-            b.pinType === 'permanent' ||
-            !b.pinExpiresAt ||
-            new Date(b.pinExpiresAt) > now
+        const isBPinned = (b.isPinned || b.is_pinned) && (
+            b.pinType === 'permanent' || b.pin_type === 'permanent' ||
+            ((b.pinType === 'auto' || b.pin_type === 'auto') && new Date(b.pinExpiresAt || b.pin_expires_at).getTime() > Date.now())
         );
 
         if (isAPinned && !isBPinned) return -1;
@@ -946,6 +944,10 @@ const WritingPage = ({
                     margin: 0;
                     line-height: inherit;
                 }
+                .poem-text-content b, .poem-text-content strong {
+                    font-weight: 800;
+                    color: var(--text-main);
+                }
 
                 .poem-attribution {
                     font-family: inherit;
@@ -1442,10 +1444,9 @@ const WritingPage = ({
                         currentPosts.map((post, index) => {
                             const postId = post.id || index;
 
-                            const isCurrentlyPinned = post.isPinned && (
-                                post.pinType === 'permanent' ||
-                                !post.pinExpiresAt ||
-                                new Date(post.pinExpiresAt) > now
+                            const isCurrentlyPinned = (post.isPinned || post.is_pinned) && (
+                                post.pinType === 'permanent' || post.pin_type === 'permanent' ||
+                                ((post.pinType === 'auto' || post.pin_type === 'auto') && new Date(post.pinExpiresAt || post.pin_expires_at).getTime() > Date.now())
                             );
 
                             return (

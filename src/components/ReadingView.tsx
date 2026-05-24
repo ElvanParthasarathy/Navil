@@ -816,6 +816,7 @@ const ReadingView = () => {
                 .rich-content-body h2 { font-size: 1.8rem; margin: 40px 0 16px; font-weight: 700; color: var(--text-main); }
                 .rich-content-body h3 { font-size: 1.4rem; margin: 32px 0 12px; font-weight: 600; color: var(--text-main); }
                 .rich-content-body p { margin: 0; color: var(--text-main); line-height: inherit; }
+                .rich-content-body strong, .rich-content-body b { font-weight: 800; color: var(--text-main); }
                 .rich-content-body blockquote { border-left: 4px solid var(--text-main); padding-left: 24px; margin: 32px 0; font-style: italic; color: var(--text-muted); font-size: 1.25rem; }
                 .rich-content-body img { max-width: 100%; border-radius: 16px; margin: 32px 0; }
                 .rich-content-body ul, .rich-content-body ol { padding-left: 24px; margin-bottom: 24px; }

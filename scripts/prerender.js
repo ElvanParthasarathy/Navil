@@ -97,10 +97,13 @@ async function prerender() {
             const html = await page.content();
             
             // We need to save this HTML to the correct path in dist/
-            let filePath = path.join(DIST_DIR, route);
+            // Decode the URI component so that URL-encoded characters (like Tamil text)
+            // don't blow up the Windows 260-character path limit.
+            const decodedRoute = decodeURIComponent(route);
+            let filePath = path.join(DIST_DIR, decodedRoute);
             
             // If it's the root, save to index.html
-            if (route === '/' || route === '') {
+            if (decodedRoute === '/' || decodedRoute === '') {
                 filePath = path.join(DIST_DIR, 'index.html');
             } else {
                 // If it's a directory route like /about, save as /about/index.html

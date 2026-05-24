@@ -391,6 +391,9 @@ export const PinEditor = ({ item, onUpdate, idPrefix }: any) => (
                                 const d = new Date(); d.setDate(d.getDate() + 7);
                                 onUpdate('pinExpiresAt', d.toISOString());
                             }
+                        } else {
+                            onUpdate('pinType', null);
+                            onUpdate('pinExpiresAt', null);
                         }
                     }} 
                 />

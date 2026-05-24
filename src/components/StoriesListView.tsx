@@ -752,7 +752,7 @@ const StoriesListView = () => {
                                                 {coverImage && (
                                                     <div className="blog-cover-wrapper">
                                                         <img src={getOptimizedImage(coverImage, 'thumb')} alt={primaryTitle} loading="lazy" />
-                                                        {(post.is_pinned || post.pin_type === 'permanent') && (
+                                                        {((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) && (
                                                             <span className="blog-featured-badge">✨ Featured</span>
                                                         )}
                                                         {post.classification && (
@@ -761,9 +761,9 @@ const StoriesListView = () => {
                                                     </div>
                                                 )}
                                                 <div className="blog-card-content">
-                                                    {!coverImage && ((post.is_pinned || post.pin_type === 'permanent') || post.classification) && (
+                                                    {!coverImage && (((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) || post.classification) && (
                                                         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                                                            {(post.is_pinned || post.pin_type === 'permanent') && (
+                                                            {((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) && (
                                                                 <span className="blog-featured-badge inline">✨ Featured</span>
                                                             )}
                                                             {post.classification && (

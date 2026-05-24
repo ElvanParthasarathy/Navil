@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEditor, EditorContent, Mark, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Heading from '@tiptap/extension-heading';
 import Placeholder from '@tiptap/extension-placeholder';
 import ImageResize from 'tiptap-extension-resize-image';
 import { Box, IconButton, Divider, Tooltip, Typography, Paper } from '@mui/material';
@@ -101,19 +102,38 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' }:
     const formatHTML = (raw: string) => {
         if (!raw) return '';
         let html = raw;
-        if (!/<(p|h[1-6]|ul|ol|li|div|pre|blockquote)[> \/]/i.test(html)) {
+        
+        // Convert legacy divs to paragraphs
+        html = html.replace(/<div[^>]*>([\s\S]*?)<\/div>/gi, '<p>$1</p>');
+        
+        if (!/<(p|h[1-6]|ul|ol|li|pre|blockquote)[> \/]/i.test(html)) {
+            html = html.replace(/<br\s*\/?>/gi, '\n');
             html = html.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
+        } else {
+            // Safely convert <br> inside <p> into separate <p> tags
+            html = html.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (match, content) => {
+                const lines = content.split(/<br\s*\/?>/gi);
+                return lines.map((line: string) => {
+                    const trimmed = line.trim();
+                    if (!trimmed) return '<p><br></p>';
+                    return `<p>${trimmed}</p>`;
+                }).join('');
+            });
         }
-        // Fix legacy content that used <br> for paragraph separation
-        html = html.replace(/<br\s*\/?>/gi, '</p><p>');
+        
         return html;
     };
 
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
-                heading: { levels: [2, 3] },
+                heading: false,
             }),
+            Heading.extend({
+                addInputRules() {
+                    return [];
+                }
+            }).configure({ levels: [2, 3] }),
             ImageResize.configure({ inline: false }),
             Placeholder.configure({ placeholder }),
             SubtitleMark,
@@ -143,6 +163,7 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Start writing...' }:
                 fontSize: '0.95rem',
                 lineHeight: 1.7,
                 '& p': { mb: 2 },
+                '& strong, & b': { fontWeight: 800 },
                 '& h2': { fontSize: '1.5rem', fontWeight: 800, mt: 3, mb: 1.5 },
                 '& h3': { fontSize: '1.25rem', fontWeight: 700, mt: 2.5, mb: 1 },
                 '& blockquote': {
