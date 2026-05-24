@@ -1391,6 +1391,20 @@ const ArtsGallery = () => {
                     overflow-y: auto;
                     border-top: 1px solid rgba(255,255,255,0.1);
                 }
+                @media (min-width: 769px) {
+                    .arts-lb-caption-sheet-overlay {
+                        align-items: center;
+                        justify-content: center;
+                        padding: 40px;
+                    }
+                    .arts-lb-caption-sheet {
+                        max-width: 600px;
+                        max-height: 85vh;
+                        border-radius: 24px;
+                        border: 1px solid rgba(255,255,255,0.1);
+                        animation: lbFadeIn 0.3s ease;
+                    }
+                }
                 @keyframes lbSlideUp {
                     from { transform: translateY(100%); }
                     to { transform: translateY(0); }
@@ -1810,7 +1824,26 @@ const ArtsGallery = () => {
 
                                     <div className="arts-lb-sidebar-body">
                                         <div className="arts-lb-meta-header">
-                                            {currentImg.caption && <h2 className="arts-lb-caption" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />}
+                                            {currentImg.caption && (() => {
+                                                const plainText = stripHtml(currentImg.caption);
+                                                return (
+                                                    <h2 className="arts-lb-caption">
+                                                        {plainText.length > 150 ? (
+                                                            <>
+                                                                <span dangerouslySetInnerHTML={{ __html: plainText.slice(0, 150) + '...' }} />
+                                                                <button
+                                                                    className="arts-lb-view-more"
+                                                                    onClick={() => setShowCaptionModal(true)}
+                                                                >
+                                                                    more
+                                                                </button>
+                                                            </>
+                                                        ) : (
+                                                            <span dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
+                                                        )}
+                                                    </h2>
+                                                );
+                                            })()}
 
                                             <div className="arts-lb-meta-row">
                                                 {currentImg.totalInPost > 1 && (
