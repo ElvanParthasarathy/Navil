@@ -221,6 +221,11 @@ const StoryViewer = ({
                 backgroundImage: `url(${activeHighlight.cover})`
             }} />
 
+            {/* Desktop Global Close Button */}
+            <button className="sv-global-close" onClick={onClose} aria-label="Close stories">
+                <FiX size={28} />
+            </button>
+
             <div className="sv-carousel">
                 {/* Previous Card Preview (3D-ish) */}
                 {prevHighlight && (
@@ -411,6 +416,35 @@ const StoryViewer = ({
                 }
                 .sv-btn.close {
                     margin-left: 8px;
+                }
+
+                .sv-global-close {
+                    display: none;
+                }
+
+                @media (min-width: 768px) {
+                    .sv-global-close {
+                        display: flex;
+                        position: absolute;
+                        top: 24px;
+                        right: 24px;
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.1);
+                        border: none;
+                        color: #fff;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        z-index: 6000;
+                        transition: all 0.2s ease;
+                        backdrop-filter: blur(10px);
+                    }
+                    .sv-global-close:hover {
+                        background: rgba(255, 255, 255, 0.25);
+                        transform: scale(1.1);
+                    }
                 }
 
                 .sv-carousel {
