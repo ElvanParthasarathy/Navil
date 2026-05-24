@@ -96,13 +96,13 @@ const CATEGORIES = {
         footerTa: 'வடிவமைப்புகளைக் காண',
         icon: <PosterIcon />,
     },
-    painting: {
-        titleTa: 'ஓவியங்கள்',
-        titleEn: 'Paintings',
-        descTa: 'வண்ணங்களில் வரையப்பட்ட ஓவியங்கள்',
-        descEn: 'Color paintings and mixed media artworks.',
-        footerTa: 'ஓவியங்களைக் காண',
-        icon: <PaintingIcon />,
+    editing: {
+        titleTa: 'தொகுப்புகள்',
+        titleEn: 'Editings',
+        descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் டிஜிட்டல் படைப்புகள்',
+        descEn: 'Photo manipulations and digital creations.',
+        footerTa: 'படைப்புகளைக் காண',
+        icon: <EditingIcon />,
     },
     poems: {
         titleTa: 'நவில் மிழிகள்',
@@ -120,13 +120,13 @@ const CATEGORIES = {
         footerTa: 'மேற்கோள்களைக் காண',
         icon: <QuoteIcon />,
     },
-    editing: {
-        titleTa: 'தொகுப்புகள்',
-        titleEn: 'Editings',
-        descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் டிஜிட்டல் படைப்புகள்',
-        descEn: 'Photo manipulations and digital creations.',
-        footerTa: 'படைப்புகளைக் காண',
-        icon: <EditingIcon />,
+    painting: {
+        titleTa: 'ஓவியங்கள்',
+        titleEn: 'Paintings',
+        descTa: 'வண்ணங்களில் வரையப்பட்ட ஓவியங்கள்',
+        descEn: 'Color paintings and mixed media artworks.',
+        footerTa: 'ஓவியங்களைக் காண',
+        icon: <PaintingIcon />,
     },
     digital_arts: {
         titleTa: 'எண்மக்கலைகள்',
