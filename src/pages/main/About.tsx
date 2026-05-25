@@ -138,6 +138,7 @@ const About = () => {
                     font-size: clamp(1.1rem, 2vw, 1.3rem);
                     color: var(--text-muted);
                     font-weight: 500;
+                    margin: 0;
                 }
 
                 .hero-bio {
