@@ -89,14 +89,9 @@ const ArtsGallery = () => {
 
     const flattenedImages = React.useMemo(() => {
         return allItems.flatMap(item => {
-            let imgs = [];
-            if (Array.isArray(item.images)) {
-                imgs = item.images;
-            } else if (typeof item.images === 'string') {
-                imgs = [item.images];
-            } else if (item.image) {
-                imgs = [item.image];
-            }
+            const imgs = Array.isArray(item.images)
+                ? item.images.filter((img: any) => typeof img === 'string')
+                : (typeof item.images === 'string' ? [item.images] : (item.image ? [item.image] : []));
 
             return imgs.map((img, idx) => ({
                 id: `${item.id}-${idx}`,
@@ -890,34 +885,6 @@ const ArtsGallery = () => {
                                         })()}
                                     </div>
 
-                                    {/* Desktop-only version of caption and pagination */}
-                                    <div className="desktop-only">
-                                        {currentImg.caption && (
-                                            <h2 className="arts-lb-caption" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
-                                        )}
-                                        <div className="arts-lb-meta-row floating">
-                                            {currentImg.totalInPost > 1 && (
-                                                <div className="arts-lb-pagination">
-                                                    {[...Array(currentImg.totalInPost)].map((_, i) => {
-                                                        const postBaseIdx = flattenedImages.findIndex(img => img.postId === currentImg.postId);
-                                                        return (
-                                                            <div
-                                                                key={i}
-                                                                className={`arts-lb-dot ${i === currentImg.subIdx ? 'active' : ''}`}
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    setLightboxGlobalIdx(postBaseIdx + i);
-                                                                }}
-                                                            />
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                            <div className="arts-lb-engagement-pill">
-                                                <Engagement postId={currentImg.postId} category="arts" minimal={true} />
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="arts-lb-footer-row">
@@ -928,18 +895,18 @@ const ArtsGallery = () => {
                             </div>
 
                             <div className="arts-lb-filmstrip" ref={filmstripRef} onClick={(e) => e.stopPropagation()}>
-                                {allItems.map((item) => {
-                                    const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === item.id);
+                                {flattenedImages.filter(fi => fi.subIdx === 0).map((firstImg) => {
+                                    const itemGlobalIdx = flattenedImages.findIndex(fi => fi.postId === firstImg.postId);
                                     const currentPostId = flattenedImages[lightboxGlobalIdx]?.postId;
-                                    const isActive = currentPostId === item.id;
+                                    const isActive = currentPostId === firstImg.postId;
 
                                     return (
                                         <div
-                                            key={item.id}
+                                            key={firstImg.postId}
                                             className={`arts-lb-fs-item ${isActive ? 'active' : ''}`}
                                             onClick={() => setLightboxGlobalIdx(itemGlobalIdx)}
                                         >
-                                            <img src={getOptimizedImage(item.images?.[0] || item.image, 'thumb')} alt="" loading="lazy" decoding="async" draggable={false} onDragStart={preventImageDrag} />
+                                            <img src={getOptimizedImage(firstImg.url, 'thumb')} alt="" loading="lazy" decoding="async" draggable={false} onDragStart={preventImageDrag} />
                                         </div>
                                     );
                                 })}

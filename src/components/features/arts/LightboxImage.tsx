@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { getOptimizedImage } from '../../../lib/media';
 
 const LOADED_IMAGES_CACHE = new Set<string>();
 
@@ -33,7 +34,7 @@ export const LightboxImage = React.memo(({ img, isCurrent, isMobile, isDragging,
             )}
             <img
                 ref={setRefs}
-                src={img.url}
+                src={getOptimizedImage(img.url, 'full')}
                 alt="Artwork"
                 className={`arts-lb-img ${isLoaded ? 'loaded' : ''}`}
                 loading={isCurrent ? "eager" : "lazy"}

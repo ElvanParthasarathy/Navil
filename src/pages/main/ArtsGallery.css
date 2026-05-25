@@ -282,6 +282,7 @@
                         height: 100%;
                         align-items: center;
                         padding: 40px 60px 140px; 
+                        box-sizing: border-box;
                     }
                     .arts-lb-header { 
                         display: flex;
@@ -322,6 +323,7 @@
                         justify-content: space-between;
                         z-index: 50;
                         box-shadow: none;
+                        box-sizing: border-box;
                     }
                     .arts-lb-sidebar-header {
                         padding-bottom: 20px;
