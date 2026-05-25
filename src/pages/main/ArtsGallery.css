@@ -966,6 +966,10 @@
                         font-size: 0.85rem;
                         line-height: 1.3;
                     }
+                    .arts-lb-sheet-title {
+                        font-size: 0.8rem;
+                        line-height: 1.35;
+                    }
                     .arts-lb-nav, .arts-lb-pagination, .arts-lb-close, .arts-lb-fs-item {
                         backdrop-filter: none !important;
                         background: rgba(255,255,255,0.12) !important;
