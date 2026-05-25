@@ -858,10 +858,6 @@ const ArtsGallery = () => {
                                         </div>
                                     )}
 
-                                    <div className="arts-lb-engagement-pill mobile-only">
-                                        <Engagement postId={currentImg.postId} category="arts" minimal={true} />
-                                    </div>
-
                                     <div className="arts-lb-caption-row mobile-only">
                                         {currentImg.caption && (() => {
                                             const plainText = stripHtml(currentImg.caption);
@@ -883,6 +879,9 @@ const ArtsGallery = () => {
                                                 </h2>
                                             );
                                         })()}
+                                        <div className="arts-lb-engagement-pill mobile-only">
+                                            <Engagement postId={currentImg.postId} category="arts" minimal={true} />
+                                        </div>
                                     </div>
 
                                 </div>
