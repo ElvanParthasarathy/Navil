@@ -391,6 +391,9 @@
                         flex: 1;
                         min-height: 0;
                     }
+                    .arts-lb-sidebar .arts-lb-meta-row {
+                        margin-top: auto;
+                    }
                     .arts-lb-caption-scroll {
                         flex: 1;
                         overflow-y: auto;
