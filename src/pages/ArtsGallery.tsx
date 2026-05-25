@@ -362,6 +362,45 @@ const ArtsGallery = () => {
         }
     }, [lightboxGlobalIdx]);
 
+    const goToNextPost = useCallback(() => {
+        if (lightboxGlobalIdx === null) return;
+        const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
+        const nextPostIdx = flattenedImages.findIndex(
+            (img, idx) => idx > lightboxGlobalIdx && img.postId !== currentPostId
+        );
+        if (nextPostIdx !== -1) {
+            setLightboxGlobalIdx(nextPostIdx);
+        }
+    }, [flattenedImages, lightboxGlobalIdx]);
+
+    const goToPrevPost = useCallback(() => {
+        if (lightboxGlobalIdx === null) return;
+        const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
+        let prevPostId = null;
+        for (let i = lightboxGlobalIdx - 1; i >= 0; i--) {
+            if (flattenedImages[i].postId !== currentPostId) {
+                prevPostId = flattenedImages[i].postId;
+                break;
+            }
+        }
+        if (prevPostId) {
+            const firstImgOfPrevPost = flattenedImages.findIndex(img => img.postId === prevPostId);
+            setLightboxGlobalIdx(firstImgOfPrevPost);
+        }
+    }, [flattenedImages, lightboxGlobalIdx]);
+
+    const hasPrevPost = React.useMemo(() => {
+        if (lightboxGlobalIdx === null) return false;
+        const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
+        return flattenedImages.some((img, idx) => idx < lightboxGlobalIdx && img.postId !== currentPostId);
+    }, [flattenedImages, lightboxGlobalIdx]);
+
+    const hasNextPost = React.useMemo(() => {
+        if (lightboxGlobalIdx === null) return false;
+        const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
+        return flattenedImages.some((img, idx) => idx > lightboxGlobalIdx && img.postId !== currentPostId);
+    }, [flattenedImages, lightboxGlobalIdx]);
+
     useEffect(() => {
         if (lightboxGlobalIdx === null) return;
         const handleKey = (e) => {
@@ -1082,11 +1121,13 @@ const ArtsGallery = () => {
                         display: flex;
                         flex-direction: column;
                         gap: 16px;
+                        flex: 1;
+                        min-height: 0;
                     }
                     .arts-lb-sidebar .arts-lb-caption {
-                        font-size: 1.15rem;
+                        font-size: 0.95rem;
                         font-weight: 400;
-                        line-height: 1.6;
+                        line-height: 1.5;
                         color: rgba(255,255,255,0.95);
                     }
                     .arts-lb-sidebar .arts-lb-caption strong,
@@ -1124,11 +1165,34 @@ const ArtsGallery = () => {
                     }
                     .arts-lb-meta-header {
                         display: flex;
-                        flex-direction: column-reverse; 
+                        flex-direction: column; 
                         align-items: flex-start;
                         justify-content: flex-start;
                         gap: 12px;
                         width: 100%;
+                        flex: 1;
+                        min-height: 0;
+                    }
+                    .arts-lb-caption-scroll {
+                        flex: 1;
+                        overflow-y: auto;
+                        width: 100%;
+                        padding-right: 8px;
+                        scrollbar-width: thin;
+                        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+                    }
+                    .arts-lb-caption-scroll::-webkit-scrollbar {
+                        width: 4px;
+                    }
+                    .arts-lb-caption-scroll::-webkit-scrollbar-track {
+                        background: transparent;
+                    }
+                    .arts-lb-caption-scroll::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.2);
+                        border-radius: 4px;
+                    }
+                    .arts-lb-caption-scroll::-webkit-scrollbar-thumb:hover {
+                        background: rgba(255, 255, 255, 0.3);
                     }
                     
                     .arts-lb-slide {
@@ -1192,8 +1256,25 @@ const ArtsGallery = () => {
                     z-index: 10;
                 }
                 .arts-lb-nav:hover { background: white; color: black; }
-                .arts-lb-nav.prev { left: 24px; }
-                .arts-lb-nav.next { right: 24px; }
+                .arts-lb-nav-post {
+                    position: fixed;
+                    width: 48px;
+                    height: 48px;
+                    background: rgba(255,255,255,0.08);
+                    z-index: 200;
+                    top: auto;
+                    bottom: 213px;
+                    transform: translateY(50%);
+                }
+                .arts-lb-nav-post.prev { left: 40px; }
+                .arts-lb-nav-post.next { right: 40px; }
+                
+                .arts-lb-nav-photo {
+                    width: 40px;
+                    height: 40px;
+                }
+                .arts-lb-nav-photo.prev { left: 16px; }
+                .arts-lb-nav-photo.next { right: 16px; }
 
                 .arts-lb-profile {
                     display: flex;
@@ -1778,6 +1859,17 @@ const ArtsGallery = () => {
                             </div>
 
                             <div className="arts-lb-main-container" onClick={(e) => e.stopPropagation()}>
+                                {hasPrevPost && (
+                                    <button className="arts-lb-nav prev arts-lb-nav-post desktop-only" onClick={goToPrevPost}>
+                                        <FiChevronLeft size={26} />
+                                    </button>
+                                )}
+                                {hasNextPost && (
+                                    <button className="arts-lb-nav next arts-lb-nav-post desktop-only" onClick={goToNextPost}>
+                                        <FiChevronRight size={26} />
+                                    </button>
+                                )}
+
                                 <div
                                     className="arts-lb-img-wrapper"
                                     ref={wrapperRef}
@@ -1816,13 +1908,13 @@ const ArtsGallery = () => {
                                         })}
                                     </div>
 
-                                    {lightboxGlobalIdx > 0 && (
-                                        <button className="arts-lb-nav prev desktop-only" onClick={goToPrev}>
+                                    {lightboxGlobalIdx > 0 && flattenedImages[lightboxGlobalIdx].subIdx > 0 && (
+                                        <button className="arts-lb-nav prev arts-lb-nav-photo desktop-only" onClick={goToPrev}>
                                             <FiChevronLeft size={22} />
                                         </button>
                                     )}
-                                    {lightboxGlobalIdx < flattenedImages.length - 1 && (
-                                        <button className="arts-lb-nav next desktop-only" onClick={goToNext}>
+                                    {lightboxGlobalIdx < flattenedImages.length - 1 && flattenedImages[lightboxGlobalIdx].subIdx < flattenedImages[lightboxGlobalIdx].totalInPost - 1 && (
+                                        <button className="arts-lb-nav next arts-lb-nav-photo desktop-only" onClick={goToNext}>
                                             <FiChevronRight size={22} />
                                         </button>
                                     )}
@@ -1840,26 +1932,11 @@ const ArtsGallery = () => {
 
                                     <div className="arts-lb-sidebar-body">
                                         <div className="arts-lb-meta-header">
-                                            {currentImg.caption && (() => {
-                                                const plainText = stripHtml(currentImg.caption);
-                                                return (
-                                                    <h2 className="arts-lb-caption">
-                                                        {plainText.length > 150 ? (
-                                                            <>
-                                                                <span dangerouslySetInnerHTML={{ __html: plainText.slice(0, 150) + '...' }} />
-                                                                <button
-                                                                    className="arts-lb-view-more"
-                                                                    onClick={() => setShowCaptionModal(true)}
-                                                                >
-                                                                    more
-                                                                </button>
-                                                            </>
-                                                        ) : (
-                                                            <span dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
-                                                        )}
-                                                    </h2>
-                                                );
-                                            })()}
+                                            {currentImg.caption && (
+                                                <div className="arts-lb-caption-scroll">
+                                                    <h2 className="arts-lb-caption" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
+                                                </div>
+                                            )}
 
                                             <div className="arts-lb-meta-row">
                                                 {currentImg.totalInPost > 1 && (
