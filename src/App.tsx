@@ -5,20 +5,21 @@ import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
 import profilePic from './assets/instagram/profile.jpg';
-import Home from './pages/Home';
-import Home2 from './pages/Home2';
-import About from './pages/About';
-import Portfolio from './pages/Portfolio';
-import Settings from './pages/Settings';
+import Home from './pages/main/Home';
+// import Home2 from './legacy/Home2';
+import About from './pages/main/About';
+import Portfolio from './pages/main/Portfolio';
+import Settings from './pages/main/Settings';
 import Writings from './pages/Writings';
-import Teaching from './pages/Teaching';
-import Arts from './pages/Arts';
-import ArtsGallery from './pages/ArtsGallery';
-import VocoderView from './pages/VocoderView';
-import CategoryListView from './components/CategoryListView';
-import ReadingView from './components/ReadingView';
-import AdBanner from './components/AdBanner';
-import GlobalErrorBoundary from './components/GlobalErrorBoundary';
+import Teaching from './pages/main/Teaching';
+import Arts from './pages/main/Arts';
+import ArtsGallery from './pages/main/ArtsGallery';
+import VocoderView from './pages/tools/VocoderView';
+import CategoryListView from './components/features/CategoryListView';
+import StoriesListView from './components/features/StoriesListView';
+import ReadingView from './components/features/ReadingView';
+import AdBanner from './components/ui/AdBanner';
+import GlobalErrorBoundary from './components/core/GlobalErrorBoundary';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
     React.lazy(() =>
@@ -39,7 +40,7 @@ const lazyWithRetry = (componentImport: () => Promise<any>) =>
         })
     );
 
-const Archive = lazyWithRetry(() => import('./pages/Archive'));
+const Archive = lazyWithRetry(() => import('./pages/main/Archive'));
 
 interface ThemeContextType {
     theme: string;
@@ -416,7 +417,6 @@ const router = createBrowserRouter([
         errorElement: <GlobalErrorBoundary />,
         children: [
             { index: true, element: <Home /> },
-            { path: "home2", element: <Home2 /> },
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },
@@ -427,6 +427,8 @@ const router = createBrowserRouter([
             { path: "teaching/vocoder", element: <VocoderView /> },
             { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
             // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary, Poems, Quotes)
+            { path: "writings/stories", element: <StoriesListView /> },
+            { path: "writings/stories/series/:seriesId", element: <StoriesListView /> },
             { path: "writings/:category", element: <CategoryListView /> },
             { path: "writings/:category/series/:seriesId", element: <CategoryListView /> },
             { path: "writings/:category/:slug", element: <ReadingView /> },
@@ -539,3 +541,7 @@ function App() {
 }
 
 export default App;
+
+
+
+

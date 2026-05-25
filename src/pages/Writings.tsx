@@ -3,11 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BsChatQuote, BsPencilSquare, BsNewspaper, BsFileText, BsBook, BsPen, BsCloud, BsMoonStars } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
-import { FloatingBackButton } from '../components/FloatingBackButton';
-import AdBanner from '../components/AdBanner';
+import { FloatingBackButton } from '../components/ui/FloatingBackButton';
+import AdBanner from '../components/ui/AdBanner';
 import { db } from '../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
-import MobileTopBar from '../components/MobileTopBar';
+import MobileTopBar from '../components/ui/MobileTopBar';
+import './Writings.css';
 
 const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
 
@@ -50,70 +51,7 @@ const Writings = () => {
                 <title>எழுத்துகள் | Writings</title>
             </Helmet>
             <div className="writings-page page-view fadeIn">
-            <style>{`
-                .writings-page {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 10px 20px 32px;
-                }
-
-                .writings-header {
-                    margin-bottom: 48px;
-                    text-align: left;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    gap: 20px;
-                }
-
-                .writings-title {
-                    font-size: 2.4rem;
-                    font-weight: 800;
-                    letter-spacing: 0;
-                    margin-bottom: 10px;
-                    color: var(--text-main);
-                    line-height: 1.3;
-                }
-
-                .writings-title-sub {
-                    font-size: 1rem;
-                    font-weight: 500;
-                    color: #888888;
-                    margin-bottom: 16px;
-                    letter-spacing: 0.5px;
-                }
-
-                .writings-subtitle {
-                    font-size: 1.1rem;
-                    color: var(--text-muted);
-                    line-height: 1.6;
-                    margin: 0;
-                }
-
-                    .category-grid { gap: 24px; margin-top: 32px; }
-
-                /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
-                @media (max-width: 768px) {
-
-                    .writings-page { padding: 0 0 100px 0; }
-                    .writings-header { padding: 28px 28px 10px; text-align: center; margin-bottom: 24px; }
-                    .writings-title { display: none; }
-                    .writings-title-sub { display: none; }
-                    .writings-subtitle { font-size: 1rem; line-height: 1.5; text-align: center; }
-                    .category-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 20px; margin-top: 24px; }
-                    
-                    .category-card { 
-                        min-height: auto; 
-                        padding: 24px; 
-                    }
-
-                    .cat-footer {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-
-            `}</style>
+            
 
             <FloatingBackButton to="/" />
             <header className="writings-header animate-entry">

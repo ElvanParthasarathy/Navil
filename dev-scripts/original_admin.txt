@@ -14,21 +14,19 @@ import { ref, get, set, onValue } from 'firebase/database';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS, formatTimestampToLegacy } from '../components/admin/shared/AdminShared';
-import { generateSlug, getBestTitle, textToHtml, resolveAuthorForPair, cleanForStorage } from '../components/admin/shared/adminUtils';
-import { ProfileEditor } from '../components/admin/editors/ProfileEditor';
-import { AboutEditor } from '../components/admin/editors/AboutEditor';
-import { PoemEditor } from '../components/admin/editors/PoemEditor';
-import { QuoteEditor } from '../components/admin/editors/QuoteEditor';
-import { BlogEditor } from '../components/admin/editors/BlogEditor';
-import { ArticleEditor } from '../components/admin/editors/ArticleEditor';
-import { StoryEditor } from '../components/admin/editors/StoryEditor';
-import { DiaryEditor } from '../components/admin/editors/DiaryEditor';
-import { ArtEditor } from '../components/admin/editors/ArtEditor';
-import AdminLogin from '../components/admin/dashboard/AdminLogin';
-import CommentsManager from '../components/admin/dashboard/CommentsManager';
-import AdminDashboard from '../components/admin/dashboard/AdminDashboard';
-import BookMakerView from '../components/admin/views/BookMakerView';
+import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS, formatTimestampToLegacy } from '../components/admin/AdminShared';
+import { ProfileEditor } from '../components/admin/ProfileEditor';
+import { AboutEditor } from '../components/admin/AboutEditor';
+import { PoemEditor } from '../components/admin/PoemEditor';
+import { QuoteEditor } from '../components/admin/QuoteEditor';
+import { BlogEditor } from '../components/admin/BlogEditor';
+import { ArticleEditor } from '../components/admin/ArticleEditor';
+import { StoryEditor } from '../components/admin/StoryEditor';
+import { DiaryEditor } from '../components/admin/DiaryEditor';
+import { ArtEditor } from '../components/admin/ArtEditor';
+import AdminLogin from '../components/admin/AdminLogin';
+import AdminDashboard from '../components/admin/AdminDashboard';
+import BookMakerView from '../components/admin/BookMakerView';
 import { addComment } from '../lib/engagement';
 
 import '../styles/admin-tailwind.css';
@@ -37,6 +35,185 @@ import '../styles/admin-tailwind.css';
 import initialProfile from '../data/profile.json';
 
 import { remove } from 'firebase/database';
+
+// ─── COMMENTS MANAGER COMPONENT ───
+const CommentsManager = ({ username, profilePic }) => {
+    const [allComments, setAllComments] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [replyingTo, setReplyingTo] = useState(null);
+    const [replyText, setReplyText] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        const engRef = ref(db, 'engagement');
+        const unsubscribe = onValue(engRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const processed = {};
+                const likes = data.likes || {};
+                const commentsMap = data.comments || {};
+                const allPostIds = new Set([...Object.keys(likes), ...Object.keys(commentsMap)]);
+                allPostIds.forEach(id => {
+                    const postComments = commentsMap[id] ? Object.entries(commentsMap[id]).map(([cId, val]) => ({ ...val, id: cId })) : [];
+                    const likeData = likes[id];
+                    const likeCount = typeof likeData === 'object' ? Object.keys(likeData).length : (likeData || 0);
+                    processed[id] = {
+                        likes: likeCount,
+                        comments: postComments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+                    };
+                });
+                setAllComments(processed);
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    const handleDelete = async (postId, commentId) => {
+        if (window.confirm('Delete this comment permanently?')) {
+            await remove(ref(db, `engagement/comments/${postId}/${commentId}`));
+        }
+    };
+
+    const handleReply = async (postId, parentId, adminName) => {
+        if (!replyText.trim() || isSubmitting) return;
+        setIsSubmitting(true);
+        try {
+            await addComment(postId, {
+                name: 'Author',
+                text: replyText.trim(),
+                userId: auth.currentUser?.uid || 'admin',
+                isAdmin: true,
+                parentId: parentId
+            });
+            setReplyText('');
+            setReplyingTo(null);
+        } catch (err) {
+            console.error("Reply failed:", err);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (loading) return (
+        <Box className="flex items-center justify-center p-16">
+            <CircularProgress size={32} />
+        </Box>
+    );
+
+    const postsWithEngagement = Object.entries(allComments);
+
+    return (
+        <Box sx={{ p: { xs: 3, md: 4, lg: 6 }, overflowY: 'auto', flex: 1 }}>
+            <Typography variant="h4" className="mb-2" sx={{ fontWeight: 700 }}>Engagement</Typography>
+            <Typography variant="body2" color="text.secondary" className="mb-8">
+                Manage comments and monitor likes across all posts.
+            </Typography>
+
+            <Box className="flex flex-col gap-6">
+                {postsWithEngagement.length === 0 ? (
+                    <Box className="text-center py-16 opacity-50">
+                        <Typography>No comments or likes found.</Typography>
+                    </Box>
+                ) : (
+                    postsWithEngagement.map(([postId, data]) => (
+                        <Card key={postId} elevation={0} sx={{ p: 3, borderRadius: 4 }}>
+                            <Box className="flex items-center justify-between mb-4 pb-3" sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary">பதிவு</Typography>
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{postId}</Typography>
+                                </Box>
+                                <Box className="flex items-center gap-1" sx={{ color: 'error.main' }}>
+                                    <MdFavorite size={16} />
+                                    <Typography sx={{ fontWeight: 700 }}>{data.likes}</Typography>
+                                </Box>
+                            </Box>
+
+                            <Box className="flex flex-col gap-4">
+                                {data.comments.filter(c => !c.parentId).map(comment => (
+                                    <Box key={comment.id} className="mb-4">
+                                        <Box className="flex items-start gap-3">
+                                            <Avatar sx={{ width: 32, height: 32, bgcolor: comment.isAdmin ? 'primary.dark' : 'action.selected', fontSize: '0.8rem' }}>
+                                                {comment.isAdmin && profilePic ? (
+                                                    <img src={profilePic} alt="" className="w-full h-full rounded-full object-cover" />
+                                                ) : comment.name[0]}
+                                            </Avatar>
+                                            <Box className="flex-1 min-w-0">
+                                                <Box className="flex items-center gap-2 mb-1">
+                                                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                                        {comment.isAdmin ? 'Author' : comment.name}
+                                                    </Typography>
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        {comment.timestamp ? new Date(comment.timestamp).toLocaleString() : ''}
+                                                    </Typography>
+                                                </Box>
+                                                <Typography variant="body2">{comment.text}</Typography>
+                                                <Box className="flex gap-2 mt-2">
+                                                    <IconButton size="small" onClick={() => setReplyingTo(replyingTo?.commentId === comment.id ? null : { postId, commentId: comment.id })}>
+                                                        <MdComment size={14} />
+                                                    </IconButton>
+                                                    <IconButton size="small" color="error" onClick={() => handleDelete(postId, comment.id)}>
+                                                        <MdDelete size={14} />
+                                                    </IconButton>
+                                                </Box>
+                                            </Box>
+                                        </Box>
+
+                                        {/* Replies */}
+                                        <Box className="ml-10 mt-3 flex flex-col gap-3">
+                                            {data.comments.filter(r => r.parentId === comment.id).map(reply => (
+                                                <Box key={reply.id} className="flex items-start gap-3">
+                                                    <Avatar sx={{ width: 24, height: 24, fontSize: '0.65rem', bgcolor: reply.isAdmin ? 'primary.dark' : 'action.selected' }}>
+                                                        {reply.isAdmin && profilePic ? (
+                                                            <img src={profilePic} alt="" className="w-full h-full rounded-full object-cover" />
+                                                        ) : reply.name[0]}
+                                                    </Avatar>
+                                                    <Box className="flex-1 min-w-0">
+                                                        <Box className="flex items-center gap-2 mb-0.5">
+                                                            <Typography variant="caption" sx={{ fontWeight: 600 }}>{reply.isAdmin ? 'Author' : reply.name}</Typography>
+                                                            <Typography variant="caption" color="text.secondary">{reply.timestamp ? new Date(reply.timestamp).toLocaleString() : ''}</Typography>
+                                                        </Box>
+                                                        <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>{reply.text}</Typography>
+                                                    </Box>
+                                                    <IconButton size="small" color="error" onClick={() => handleDelete(postId, reply.id)} sx={{ opacity: 0.5, '&:hover': { opacity: 1 } }}>
+                                                        <MdDelete size={12} />
+                                                    </IconButton>
+                                                </Box>
+                                            ))}
+                                        </Box>
+
+                                        {/* Reply Input */}
+                                        {replyingTo?.commentId === comment.id && (
+                                            <Box className="ml-10 mt-3" sx={{ p: 2, borderRadius: 3, border: 1, borderColor: 'primary.main', bgcolor: 'background.paper' }}>
+                                                <textarea
+                                                    className="w-full bg-transparent text-(--color-on-surface) outline-none resize-y min-h-[60px] text-sm"
+                                                    value={replyText}
+                                                    onChange={(e) => setReplyText(e.target.value)}
+                                                    placeholder="Write your admin reply..."
+                                                    autoFocus
+                                                />
+                                                <Box className="flex justify-end gap-2 mt-2">
+                                                    <button className="text-xs px-3 py-1.5 rounded-full text-on-surface-variant hover:bg-white/5 transition-colors" onClick={() => setReplyingTo(null)}>Cancel</button>
+                                                    <button
+                                                        className="text-xs px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                                                        onClick={() => handleReply(postId, comment.id, username)}
+                                                        disabled={!replyText.trim() || isSubmitting}
+                                                    >
+                                                        {isSubmitting ? 'Sending...' : 'Reply'}
+                                                    </button>
+                                                </Box>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                ))}
+                            </Box>
+                        </Card>
+                    ))
+                )}
+            </Box>
+        </Box>
+    );
+};
 
 // Allowed administrator email addresses
 const ALLOWED_ADMIN_EMAILS = ['jaiprakashpartha@gmail.com', 'jaiprakashvp2006@gmail.com'];
@@ -249,10 +426,27 @@ const Admin = () => {
         return slug || 'untitled';
     };
 
+    const getBestTitle = (item) => {
+        const firstVariant = item.variants?.[0];
+        const englishVariant = item.variants?.find(v => v.lang === 'en' && v.title);
+        const titleTransl = firstVariant?.titleTransliterations || {};
+        const bestTitleTransl = titleTransl.en || Object.values(titleTransl).filter(v => v && v !== true)[0];
+        return item.title || bestTitleTransl || englishVariant?.title || firstVariant?.title || firstVariant?.text || 'untitled';
+    };
+
     const textToHtml = (raw) => {
         if (!raw) return '';
         if (/<(p|h[1-6]|ul|ol|li|div|pre|blockquote|br)[> \/]/i.test(raw)) return raw;
         return raw.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '<p><br></p>').join('');
+    };
+
+    const resolveAuthorForPair = (baseLang: string, tLang: string, authors: Record<string, string>) => {
+        if (baseLang === 'ta' && tLang === 'en') return { name: authors['ta_translit'] || authors['en'] || '', locked: true };
+        if (baseLang === 'ta' && tLang === 'ml') return { name: authors['ml'] || '', locked: true };
+        if (baseLang === 'ml' && tLang === 'en') return { name: authors['ml_translit'] || authors['en'] || '', locked: true };
+        if (baseLang === 'ml' && tLang === 'ta') return { name: authors['ta'] || '', locked: true };
+        if ((baseLang === 'hi' || baseLang === 'sa') && tLang === 'en') return { name: authors['en'] || '', locked: true };
+        return { name: '', locked: false };
     };
 
     const cleanForStorage = (item, displayOrder) => {
@@ -329,7 +523,7 @@ const Admin = () => {
                         let baseKey = finalKey; let suffix = 1;
                         while (artsUsedKeys.has(finalKey)) { finalKey = `${baseKey}-${suffix}`; suffix++; }
                         artsUsedKeys.add(finalKey);
-                        const row = cleanForStorage(item, index, dataStore.defaultAuthors || DEFAULT_AUTHORS);
+                        const row = cleanForStorage(item, index);
                         row.category = collection.replace('art_', '');
                         artsCollectionData[finalKey] = row;
                         count++;
@@ -468,7 +662,7 @@ const Admin = () => {
                         let finalKey = key; let suffix = 1;
                         while (usedKeys.has(finalKey)) { finalKey = `${key}-${suffix}`; suffix++; }
                         usedKeys.add(finalKey);
-                        const row = cleanForStorage(item, index, dataStore.defaultAuthors || DEFAULT_AUTHORS);
+                        const row = cleanForStorage(item, index);
                         row.category = sub;
                         updateObj[finalKey] = row;
                         updatedItems[index] = { ...item, id: finalKey };
@@ -495,7 +689,7 @@ const Admin = () => {
                     let finalKey = key; let suffix = 1;
                     while (usedKeys.has(finalKey)) { finalKey = `${key}-${suffix}`; suffix++; }
                     usedKeys.add(finalKey);
-                    const row = cleanForStorage(item, index, dataStore.defaultAuthors || DEFAULT_AUTHORS);
+                    const row = cleanForStorage(item, index);
                     updateObj[finalKey] = row;
                     updatedItems[index] = { ...item, id: finalKey };
                 });
@@ -1238,6 +1432,3 @@ const Admin = () => {
 };
 
 export default Admin;
-
-
-
