@@ -259,7 +259,12 @@
                     z-index: 40;
                     pointer-events: none;
                 }
-                .arts-lb-footer-content > * { pointer-events: auto; }
+                .arts-lb-caption,
+                .arts-lb-engagement-pill,
+                .arts-lb-date,
+                .mobile-image-dots {
+                    pointer-events: auto;
+                }
 
                 .arts-lb-footer-row {
                     display: flex;

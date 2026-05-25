@@ -836,7 +836,7 @@ const ArtsGallery = () => {
                             <div
                                 className="arts-lb-footer-content"
                                 onClick={(e) => e.stopPropagation()}
-                                style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
+                                style={{ pointerEvents: isDragging ? 'none' : undefined }}
                             >
                                 <div className="arts-lb-meta-header">
                                     {/* Mobile Image Dots (On top of image) */}
