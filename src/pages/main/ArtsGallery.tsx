@@ -215,7 +215,7 @@ const ArtsGallery = () => {
     }, [lightboxGlobalIdx]);
 
     const goToNextPost = useCallback(() => {
-        if (lightboxGlobalIdx === null) return;
+        if (lightboxGlobalIdx === null || !flattenedImages[lightboxGlobalIdx]) return;
         const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
         const nextPostIdx = flattenedImages.findIndex(
             (img, idx) => idx > lightboxGlobalIdx && img.postId !== currentPostId
@@ -226,7 +226,7 @@ const ArtsGallery = () => {
     }, [flattenedImages, lightboxGlobalIdx]);
 
     const goToPrevPost = useCallback(() => {
-        if (lightboxGlobalIdx === null) return;
+        if (lightboxGlobalIdx === null || !flattenedImages[lightboxGlobalIdx]) return;
         const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
         let prevPostId = null;
         for (let i = lightboxGlobalIdx - 1; i >= 0; i--) {
@@ -242,13 +242,13 @@ const ArtsGallery = () => {
     }, [flattenedImages, lightboxGlobalIdx]);
 
     const hasPrevPost = React.useMemo(() => {
-        if (lightboxGlobalIdx === null) return false;
+        if (lightboxGlobalIdx === null || !flattenedImages[lightboxGlobalIdx]) return false;
         const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
         return flattenedImages.some((img, idx) => idx < lightboxGlobalIdx && img.postId !== currentPostId);
     }, [flattenedImages, lightboxGlobalIdx]);
 
     const hasNextPost = React.useMemo(() => {
-        if (lightboxGlobalIdx === null) return false;
+        if (lightboxGlobalIdx === null || !flattenedImages[lightboxGlobalIdx]) return false;
         const currentPostId = flattenedImages[lightboxGlobalIdx].postId;
         return flattenedImages.some((img, idx) => idx > lightboxGlobalIdx && img.postId !== currentPostId);
     }, [flattenedImages, lightboxGlobalIdx]);
