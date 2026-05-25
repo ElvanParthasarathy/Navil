@@ -461,6 +461,8 @@
                     top: 50%;
                     transform: translateY(-50%);
                     background: rgba(255,255,255,0.12);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
                     border: none;
                     color: white;
                     width: 48px;
