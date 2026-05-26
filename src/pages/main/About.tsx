@@ -408,86 +408,86 @@ const About = () => {
                 }
             `}</style>
 
-            <Link 
-                to="/" 
-                className="back-pill desktop-only"
-                onClick={(e) => {
-                    if (window.history.state && window.history.state.idx > 0) {
-                        e.preventDefault();
-                        navigate(-1);
-                    }
-                }}
-            >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-            </Link>
+                <Link
+                    to="/"
+                    className="back-pill desktop-only"
+                    onClick={(e) => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            e.preventDefault();
+                            navigate(-1);
+                        }
+                    }}
+                >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
+                </Link>
 
-            <section className="about-hero animate-entry">
-                <div className="hero-avatar-wrapper">
-                    <div className="hero-avatar-bg"></div>
-                    <img src={profilePic} alt={profileData.name} className="hero-avatar" />
-                </div>
-                <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
-                <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
-
-
-
-                <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="explore-portfolio-btn-unique">
-                    Explore Portfolio <FiArrowRight />
-                </a>
-            </section>
-
-            <div className="about-grid animate-entry" style={{ animationDelay: '0.1s' }}>
-                {cards.map((card, idx) => (
-                    <div key={idx} className={`about-card ${card.size || getSpanClass(idx)}`}>
-                        <div className="card-text" dangerouslySetInnerHTML={{ __html: card.content }} />
+                <section className="about-hero animate-entry">
+                    <div className="hero-avatar-wrapper">
+                        <div className="hero-avatar-bg"></div>
+                        <img src={profilePic} alt={profileData.name} className="hero-avatar" />
                     </div>
-                ))}
+                    <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
+                    <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
+
+
+
+                    <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="explore-portfolio-btn-unique">
+                        Explore Portfolio <FiArrowRight />
+                    </a>
+                </section>
+
+                <div className="about-grid animate-entry" style={{ animationDelay: '0.1s' }}>
+                    {cards.map((card, idx) => (
+                        <div key={idx} className={`about-card ${card.size || getSpanClass(idx)}`}>
+                            <div className="card-text" dangerouslySetInnerHTML={{ __html: card.content }} />
+                        </div>
+                    ))}
+                </div>
+
+
+                <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
+
+                <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
+                    <div className="contact-info-block">
+                        <div className="contact-header">
+                            <h3 lang="ta">{about.contact_tamil}</h3>
+                            <div className="contact-divider"></div>
+                            <h3>{about.contact_english}</h3>
+                        </div>
+
+                        <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>{about.contact_desc_tamil}</p>
+                        <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>{about.contact_desc_english}</p>
+                    </div>
+
+                    <div className="contact-right-side">
+                        <div className="contact-location">
+                            <FiMapPin size={14} />
+                            <span>{about.location}</span>
+                        </div>
+
+                        <div className="contact-socials">
+                            <a href="tel:+919345128797" className="social-icon-link">
+                                <FiPhone size={20} />
+                            </a>
+                            <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
+                                <FiMail size={20} />
+                            </a>
+                            <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
+                                <FiLinkedin size={20} />
+                            </a>
+                            <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
+                                <FiGithub size={20} />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <footer className="about-footer-text animate-entry" style={{ animationDelay: '0.3s' }}>
+                    <p>Made with passion & curiosity</p>
+                    <p>© 2026 — Elvan Parthasarathy</p>
+                </footer>
+
             </div>
-
-
-            <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
-
-            <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
-                <div className="contact-info-block">
-                    <div className="contact-header">
-                        <h3 lang="ta">{about.contact_tamil}</h3>
-                        <div className="contact-divider"></div>
-                        <h3>{about.contact_english}</h3>
-                    </div>
-
-                    <p lang="ta" style={{ color: '#888888', marginTop: 0, marginBottom: 0 }}>{about.contact_desc_tamil}</p>
-                    <p style={{ fontSize: '0.85rem', color: '#888888', marginTop: '4px', marginBottom: 0 }}>{about.contact_desc_english}</p>
-                </div>
-
-                <div className="contact-right-side">
-                    <div className="contact-location">
-                        <FiMapPin size={14} />
-                        <span>{about.location}</span>
-                    </div>
-
-                    <div className="contact-socials">
-                        <a href="tel:+919345128797" className="social-icon-link">
-                            <FiPhone size={20} />
-                        </a>
-                        <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                            <FiMail size={20} />
-                        </a>
-                        <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                            <FiLinkedin size={20} />
-                        </a>
-                        <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                            <FiGithub size={20} />
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <footer className="about-footer-text animate-entry" style={{ animationDelay: '0.3s' }}>
-                <p>Made with passion & curiosity</p>
-                <p>© 2026 — Elvan Parthasarathy</p>
-            </footer>
-
-        </div>
         </>
     );
 };

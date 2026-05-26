@@ -481,6 +481,19 @@ function App() {
         }
     }, [theme]);
 
+    React.useEffect(() => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        // Broadcast theme change to the Mac OS wrapper
+        if (window.parent) {
+            window.parent.postMessage({ 
+                type: 'IFRAME_THEME_CHANGE', 
+                appId: 'elvan', 
+                isDark: isDark 
+            }, '*');
+        }
+    }, [theme]);
+
     const toggleTheme = () => {
         // Simple toggle for the header button: auto -> light -> dark -> auto
         setTheme(prev => {
