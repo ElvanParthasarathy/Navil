@@ -24,6 +24,37 @@
      crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-5392072917035799">
 
+  <script>
+    // Check if the site is running inside an iframe (like inside your OS)
+    if (window.self !== window.top) {
+      const customScrollbarStyle = document.createElement('style');
+      customScrollbarStyle.innerHTML = `
+        /* Custom CSS Scrollbars for embedded OS mode */
+        ::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+          background-color: rgba(156, 163, 175, 0.5);
+          border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(156, 163, 175, 0.8);
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+          background-color: rgba(100, 116, 139, 0.5);
+        }
+        html.dark ::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(100, 116, 139, 0.8);
+        }
+      `;
+      document.head.appendChild(customScrollbarStyle);
+    }
+  </script>
+
 </head>
 
 <body>
