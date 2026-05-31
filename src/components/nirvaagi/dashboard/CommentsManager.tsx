@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, Typography, CircularProgress, IconButton, Avatar } from '@mui/material';
-import { MdComment, MdDelete } from 'react-icons/md';
+import { MdComment, MdDelete, MdFavorite } from 'react-icons/md';
 import { db, auth } from '../../../lib/firebaseClient';
 import { ref, onValue, remove, set } from 'firebase/database';
 import { addComment } from '../../../lib/engagement';
@@ -43,15 +43,15 @@ export default function CommentsManager({ username, profilePic }: { username: st
         }
     };
 
-    const handleReply = async (postId, parentId, adminName) => {
+    const handleReply = async (postId, parentId, nirvaagiName) => {
         if (!replyText.trim() || isSubmitting) return;
         setIsSubmitting(true);
         try {
             await addComment(postId, {
                 name: 'Author',
                 text: replyText.trim(),
-                userId: auth.currentUser?.uid || 'admin',
-                isAdmin: true,
+                userId: auth.currentUser?.uid || 'nirvaagi',
+                isNirvaagi: true,
                 parentId: parentId
             });
             setReplyText('');
@@ -101,15 +101,15 @@ export default function CommentsManager({ username, profilePic }: { username: st
                                 {data.comments.filter(c => !c.parentId).map(comment => (
                                     <Box key={comment.id} className="mb-4">
                                         <Box className="flex items-start gap-3">
-                                            <Avatar sx={{ width: 32, height: 32, bgcolor: comment.isAdmin ? 'primary.dark' : 'action.selected', fontSize: '0.8rem' }}>
-                                                {comment.isAdmin && profilePic ? (
+                                            <Avatar sx={{ width: 32, height: 32, bgcolor: comment.isNirvaagi ? 'primary.dark' : 'action.selected', fontSize: '0.8rem' }}>
+                                                {comment.isNirvaagi && profilePic ? (
                                                     <img src={profilePic} alt="" className="w-full h-full rounded-full object-cover" />
                                                 ) : comment.name[0]}
                                             </Avatar>
                                             <Box className="flex-1 min-w-0">
                                                 <Box className="flex items-center gap-2 mb-1">
                                                     <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                                        {comment.isAdmin ? 'Author' : comment.name}
+                                                        {comment.isNirvaagi ? 'Author' : comment.name}
                                                     </Typography>
                                                     <Typography variant="caption" color="text.secondary">
                                                         {comment.timestamp ? new Date(comment.timestamp).toLocaleString() : ''}
@@ -131,14 +131,14 @@ export default function CommentsManager({ username, profilePic }: { username: st
                                         <Box className="ml-10 mt-3 flex flex-col gap-3">
                                             {data.comments.filter(r => r.parentId === comment.id).map(reply => (
                                                 <Box key={reply.id} className="flex items-start gap-3">
-                                                    <Avatar sx={{ width: 24, height: 24, fontSize: '0.65rem', bgcolor: reply.isAdmin ? 'primary.dark' : 'action.selected' }}>
-                                                        {reply.isAdmin && profilePic ? (
+                                                    <Avatar sx={{ width: 24, height: 24, fontSize: '0.65rem', bgcolor: reply.isNirvaagi ? 'primary.dark' : 'action.selected' }}>
+                                                        {reply.isNirvaagi && profilePic ? (
                                                             <img src={profilePic} alt="" className="w-full h-full rounded-full object-cover" />
                                                         ) : reply.name[0]}
                                                     </Avatar>
                                                     <Box className="flex-1 min-w-0">
                                                         <Box className="flex items-center gap-2 mb-0.5">
-                                                            <Typography variant="caption" sx={{ fontWeight: 600 }}>{reply.isAdmin ? 'Author' : reply.name}</Typography>
+                                                            <Typography variant="caption" sx={{ fontWeight: 600 }}>{reply.isNirvaagi ? 'Author' : reply.name}</Typography>
                                                             <Typography variant="caption" color="text.secondary">{reply.timestamp ? new Date(reply.timestamp).toLocaleString() : ''}</Typography>
                                                         </Box>
                                                         <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>{reply.text}</Typography>
@@ -157,7 +157,7 @@ export default function CommentsManager({ username, profilePic }: { username: st
                                                     className="w-full bg-transparent text-(--color-on-surface) outline-none resize-y min-h-[60px] text-sm"
                                                     value={replyText}
                                                     onChange={(e) => setReplyText(e.target.value)}
-                                                    placeholder="Write your admin reply..."
+                                                    placeholder="Write your nirvaagi reply..."
                                                     autoFocus
                                                 />
                                                 <Box className="flex justify-end gap-2 mt-2">

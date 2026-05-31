@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { Box, Typography, TextField, Button, Paper, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 
-const AdminLogin = ({ onLogin, onGoogleLogin }: any) => {
+const NirvaagiLogin = ({ onLogin }: any) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const AdminLogin = ({ onLogin, onGoogleLogin }: any) => {
         <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', p: 2 }}>
             <Paper elevation={0} sx={{ p: { xs: 4, md: 6 }, width: '100%', maxWidth: 400, borderRadius: 6, border: '1px solid', borderColor: 'divider', bgcolor: 'background.default', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, mb: 1, color: 'primary.main' }}>Admin Portal</Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 800, mb: 1, color: 'primary.main' }}>Nirvaagi Portal</Typography>
                     <Typography variant="body1" sx={{ color: 'text.secondary' }}>Sign in to manage your content</Typography>
                 </Box>
 
@@ -38,7 +38,7 @@ const AdminLogin = ({ onLogin, onGoogleLogin }: any) => {
                     <TextField
                         label="Email address"
                         type="text"
-                        placeholder="Enter admin email"
+                        placeholder="Enter nirvaagi email"
                         value={username}
                         onChange={(e) => { setUsername(e.target.value); setErrorMsg(''); }}
                         autoFocus
@@ -75,35 +75,10 @@ const AdminLogin = ({ onLogin, onGoogleLogin }: any) => {
                         {loading ? 'Signing In...' : 'Sign In with Email'}
                     </Button>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', opacity: 0.6 }}>
-                        <Box sx={{ flex: 1, height: '1px', bgcolor: 'currentColor' }} />
-                        <Typography variant="caption" sx={{ px: 2, fontWeight: 700 }}>OR</Typography>
-                        <Box sx={{ flex: 1, height: '1px', bgcolor: 'currentColor' }} />
-                    </Box>
-
-                    <Button
-                        type="button"
-                        fullWidth
-                        variant="outlined"
-                        disabled={loading}
-                        onClick={async () => {
-                            setErrorMsg('');
-                            if (loading) return;
-                            setLoading(true);
-                            const result = await onGoogleLogin();
-                            setLoading(false);
-                            if (!result.success) {
-                                setErrorMsg(result.error || 'Google login failed');
-                            }
-                        }}
-                        sx={{ py: 1.5, borderRadius: 3, fontWeight: 700, borderColor: 'divider', color: 'text.primary', '&:hover': { bgcolor: 'action.hover' } }}
-                    >
-                        Sign In with Google
-                    </Button>
                 </form>
             </Paper>
         </Box>
     );
 };
 
-export default AdminLogin;
+export default NirvaagiLogin;

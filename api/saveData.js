@@ -5,10 +5,10 @@ export default async function handler(request, response) {
     }
 
     const { collection, data, password } = request.body;
-    const { GITHUB_TOKEN, ADMIN_PASSWORD } = process.env;
+    const { GITHUB_TOKEN, NIRVAAGI_PASSWORD } = process.env;
 
     // Optional Security Check
-    if (ADMIN_PASSWORD && password !== ADMIN_PASSWORD) {
+    if (NIRVAAGI_PASSWORD && password !== NIRVAAGI_PASSWORD) {
         return response.status(401).json({ error: 'Unauthorized' });
     }
 
@@ -84,7 +84,7 @@ export default async function handler(request, response) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    message: `Update ${collection} via CMS Admin`,
+                    message: `Update ${collection} via CMS Nirvaagi`,
                     content: contentBase64,
                     sha: sha,
                     branch: BRANCH,

@@ -62,7 +62,7 @@ const palette = {
   shadow: '#000000',
 };
 
-const adminTheme = createTheme({
+const nirvaagiTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-theme',
   },
@@ -780,7 +780,7 @@ const adminTheme = createTheme({
   },
 });
 
-export default adminTheme;
+export default nirvaagiTheme;
 
 // ── Export palette for direct access in components ──
 export { palette as m3 };

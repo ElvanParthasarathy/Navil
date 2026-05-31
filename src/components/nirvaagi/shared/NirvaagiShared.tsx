@@ -69,7 +69,7 @@ export const stripHtml = (html: string): string => {
 const getArtSchema = (label: string, categoryVal: string, icon: any) => ({
     label, icon, type: 'simple',
     fields: [
-        { key: 'title', label: 'Admin Title (Only visible to admin)', type: 'text', placeholder: 'e.g. Tree sketch (not shown to users)' },
+        { key: 'title', label: 'Nirvaagi Title (Only visible to nirvaagi)', type: 'text', placeholder: 'e.g. Tree sketch (not shown to users)' },
         { key: 'image', label: 'Cover Image URL', type: 'text', placeholder: 'https://drive.google.com/... or any direct image URL' },
         { key: 'images', label: 'Images', type: 'dynamic_list', fullWidth: true, isImageList: true },
         { key: 'caption', label: 'Caption / Description', type: 'richtext', placeholder: 'About this artwork...', fullWidth: true },
@@ -101,7 +101,7 @@ export const SCHEMAS: Record<string, any> = {
         ],
         row3Fields: [
             { key: 'tags', label: 'Tags / Themes', type: 'tags', placeholder: 'Add a tag (e.g. Philosophy, Love)', suggestions: ['Philosophy', 'Love', 'Hope', 'Nature', 'Life', 'Perspective', 'Strength', 'Longing', 'Admiration', 'Happiness', 'Cosmos', 'Identity', 'Loss', 'Spirituality', 'Journey', 'War'] },
-            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
+            { key: 'is_private', label: 'Private / Draft (only visible to nirvaagi)', type: 'checkbox' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'image_url', placeholder: 'https://...' },
@@ -125,7 +125,7 @@ export const SCHEMAS: Record<string, any> = {
         ],
         row3Fields: [
             { key: 'tags', label: 'Tags / Themes', type: 'tags', placeholder: 'Add a tag', suggestions: ['Philosophy', 'Love', 'Hope', 'Nature', 'Life', 'Perspective', 'Strength', 'Longing', 'Admiration', 'Happiness', 'Cosmos', 'Identity', 'Loss', 'Spirituality', 'Journey', 'War'] },
-            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
+            { key: 'is_private', label: 'Private / Draft (only visible to nirvaagi)', type: 'checkbox' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'image_url', placeholder: 'https://...' },
@@ -149,7 +149,7 @@ export const SCHEMAS: Record<string, any> = {
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'image_url', placeholder: 'https://...' },
-            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
+            { key: 'is_private', label: 'Private / Draft (only visible to nirvaagi)', type: 'checkbox' },
         ],
         getItemTitle: (item: any) => item.title || item.variants?.[0]?.title || 'Untitled Blog Post',
         getItemSubtitle: (item: any) => {
@@ -203,7 +203,7 @@ export const SCHEMAS: Record<string, any> = {
         ],
         row2Fields: [
             { key: 'tags', label: 'Tags', type: 'text', placeholder: 'e.g. Travel, Thoughts' },
-            { key: 'is_private', label: 'Private / Draft (only visible to admin)', type: 'checkbox' },
+            { key: 'is_private', label: 'Private / Draft (only visible to nirvaagi)', type: 'checkbox' },
         ],
         extraFields: [
             { key: 'cover_image', label: 'Cover Image URL', type: 'image_url', placeholder: 'https://...' },

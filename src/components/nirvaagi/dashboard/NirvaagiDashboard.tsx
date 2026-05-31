@@ -40,7 +40,7 @@ const itemVariants: any = {
     show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
 };
 
-const AdminDashboard = ({ dataStore, username, onNavigate }: { 
+const NirvaagiDashboard = ({ dataStore, username, onNavigate }: { 
     dataStore: any, 
     username: string, 
     onNavigate: (tab: string) => void
@@ -320,5 +320,5 @@ const AdminDashboard = ({ dataStore, username, onNavigate }: {
     );
 };
 
-export default AdminDashboard;
+export default NirvaagiDashboard;
 

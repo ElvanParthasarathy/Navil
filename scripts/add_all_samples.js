@@ -28,7 +28,7 @@ const BILINGUAL_BLOGS = [
                 label: 'Translation',
                 title: 'The Future of Technology',
                 text: '<p>It is amazing to imagine how future technologies will change our everyday lives.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -55,7 +55,7 @@ const BILINGUAL_BLOGS = [
                 label: 'Translation',
                 title: 'The Taste of Travel',
                 text: '<p>Traveling to new places brings new light not only to the mind, but also to knowledge.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -82,7 +82,7 @@ const BILINGUAL_BLOGS = [
                 label: 'Translation',
                 title: 'The Language of Art',
                 text: '<p>A painting or a sculpture can easily convey what words cannot express.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -113,7 +113,7 @@ const STORY_OATH_MUKTI = {
             label: 'Translation (English)',
             title: 'Mukti - Chapter 1',
             text: '<p>He began his journey to attain Mukti. He walked alone in the dark forest...</p>',
-            author: 'Admin',
+            author: 'Nirvaagi',
             transliterations: {},
             titleTransliterations: {}
         }
@@ -151,7 +151,7 @@ const ESSAY_SAMPLE = {
             label: 'English Essay',
             title: 'The Meaning of Silence',
             text: '<p>Silence is not the absence of noise, but the presence of stillness. It is in silence that we truly listen.</p>',
-            author: 'Admin',
+            author: 'Nirvaagi',
             transliterations: {},
             titleTransliterations: {}
         }

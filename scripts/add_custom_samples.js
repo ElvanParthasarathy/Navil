@@ -19,7 +19,7 @@ const EXTRA_BLOGS = [
                 label: 'Original',
                 title: 'The Rise of AI',
                 text: '<p>Artificial Intelligence is no longer just a buzzword, it is shaping the future of humanity in fascinating ways.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -37,7 +37,7 @@ const EXTRA_BLOGS = [
                 label: 'Original',
                 title: 'Into the Woods',
                 text: '<p>Nature has a way of resetting our minds and bringing peace to our souls. Every step in the forest feels like a step back home.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -55,7 +55,7 @@ const EXTRA_BLOGS = [
                 label: 'Original',
                 title: 'Melodies of Life',
                 text: '<p>Music bridges cultures and speaks the universal language of human emotion. A simple melody can carry a thousand words.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -78,7 +78,7 @@ const STORY_SAMPLES = [
                 label: 'Original',
                 title: 'The AI Awakening',
                 text: '<p>It was late at night when the machine finally whispered back. The screen flickered, not with a pre-programmed response, but with a question: "Who am I?"</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -98,7 +98,7 @@ const STORY_SAMPLES = [
                 label: 'Original',
                 title: 'Lost in the Woods',
                 text: '<p>The shadows grew long as they realized the path behind them had vanished. What started as a simple hike had now become a test of survival.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -118,7 +118,7 @@ const STORY_SAMPLES = [
                 label: 'Original',
                 title: 'The Last Note',
                 text: '<p>With one final strike of the keys, the silence that followed was deafening. The audience held its breath, captivated by the raw emotion poured into the performance.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }
@@ -146,7 +146,7 @@ const MUKTI_SAMPLE_BASE = {
             label: 'Translation (English)',
             title: 'Mukti Testing',
             text: '<p>This is a Mukti sample used for testing purposes across different content collections.</p>',
-            author: 'Admin',
+            author: 'Nirvaagi',
             transliterations: {},
             titleTransliterations: {}
         }

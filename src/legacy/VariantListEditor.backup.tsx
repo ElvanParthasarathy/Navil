@@ -2,7 +2,7 @@
 // @ts-nocheck
 import React, { useState } from 'react';
 import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiMove } from 'react-icons/fi';
-import { SCHEMAS, renderFieldRow, PinEditor, VariantCard } from '../shared/AdminShared';
+import { SCHEMAS, renderFieldRow, PinEditor, VariantCard } from '../shared/NirvaagiShared';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 
 export const VariantListEditor = ({
@@ -104,7 +104,7 @@ export const VariantListEditor = ({
     const otherCollections = Object.keys(SCHEMAS).filter(c => c !== collection);
 
     return (
-        <div className="admin-content-area">
+        <div className="nirvaagi-content-area">
             <ConfirmDialog
                 open={confirmState.open}
                 title={confirmState.title}
@@ -138,14 +138,14 @@ export const VariantListEditor = ({
                     border-radius: 8px !important; min-height: unset !important;
                     max-width: 140px; cursor: pointer;
                 }
-                .admin-file-row-checkbox {
+                .nirvaagi-file-row-checkbox {
                     display: flex; align-items: center; justify-content: center;
                     padding: 0 4px 0 0; flex-shrink: 0;
                 }
-                .admin-file-row-checkbox input[type="checkbox"] {
+                .nirvaagi-file-row-checkbox input[type="checkbox"] {
                     width: 16px; height: 16px; accent-color: var(--accent, #088370); cursor: pointer;
                 }
-                .admin-file-row.selected {
+                .nirvaagi-file-row.selected {
                     background: color-mix(in srgb, var(--accent, #088370) 8%, transparent) !important;
                 }
                 .select-all-hint {
@@ -167,10 +167,10 @@ export const VariantListEditor = ({
             {/* Show EITHER the list OR the editor — file explorer pattern */}
             {!item ? (
                 /* ── FILE LIST VIEW ── */
-                <div className="admin-file-list">
-                    <div className="admin-file-list-header">
+                <div className="nirvaagi-file-list">
+                    <div className="nirvaagi-file-list-header">
                         <h2>{SCHEMAS[collection].label} ({items?.length || 0})</h2>
-                        <div className="admin-file-list-actions">
+                        <div className="nirvaagi-file-list-actions">
                             <button className="adm-btn" onClick={onAddItem}><FiPlus size={16} /> Add New</button>
                             <button className="adm-btn primary" onClick={onSave}>
                                 {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={16} /> Save</>}
@@ -218,9 +218,9 @@ export const VariantListEditor = ({
                         </div>
                     )}
 
-                    <div className="admin-file-list-scroll">
+                    <div className="nirvaagi-file-list-scroll">
                         {items?.length === 0 ? (
-                            <div className="admin-file-empty">No items yet. Click "Add New" to create one.</div>
+                            <div className="nirvaagi-file-empty">No items yet. Click "Add New" to create one.</div>
                         ) : (
                             <>
                                 {selected.size === 0 && items?.length > 0 && (
@@ -234,21 +234,21 @@ export const VariantListEditor = ({
                                     return (
                                         <div
                                             key={listItem.id || index}
-                                            className={`admin-file-row ${isSelected ? 'selected' : ''}`}
+                                            className={`nirvaagi-file-row ${isSelected ? 'selected' : ''}`}
                                             onClick={() => setEditingId(listItem.id)}
                                         >
-                                            <div className="admin-file-row-checkbox" onClick={(e) => toggleSelect(listItem.id, e)}>
+                                            <div className="nirvaagi-file-row-checkbox" onClick={(e) => toggleSelect(listItem.id, e)}>
                                                 <input type="checkbox" checked={isSelected} readOnly />
                                             </div>
-                                            <div className="admin-file-row-info">
+                                            <div className="nirvaagi-file-row-info">
                                                 <h3>{SCHEMAS[collection].getItemTitle(listItem)}</h3>
-                                                <span className="admin-file-row-sub">
+                                                <span className="nirvaagi-file-row-sub">
                                                     {SCHEMAS[collection].getItemSubtitle(listItem)}
                                                     {listItem.variants?.length > 0 && ` • ${listItem.variants.length} lang${listItem.variants.length > 1 ? 's' : ''}`}
                                                 </span>
                                             </div>
-                                            <div className="admin-file-row-actions">
-                                                <div className="admin-move-controls">
+                                            <div className="nirvaagi-file-row-actions">
+                                                <div className="nirvaagi-move-controls">
                                                     <button
                                                         className="adm-btn icon-only"
                                                         onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }}
@@ -282,13 +282,13 @@ export const VariantListEditor = ({
                 </div>
             ) : (
                 /* ── EDITOR VIEW (replaces list) ── */
-                <div className="admin-editor-full">
-                    <div className="admin-editor-toolbar">
+                <div className="nirvaagi-editor-full">
+                    <div className="nirvaagi-editor-toolbar">
                         <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>
                             <FiArrowLeft size={16} /> Back
                         </button>
                         <h2>Edit {SCHEMAS[collection].label.slice(0, -1)}</h2>
-                        <div className="admin-editor-toolbar-actions">
+                        <div className="nirvaagi-editor-toolbar-actions">
                             <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>
                                 Cancel
                             </button>
@@ -297,7 +297,7 @@ export const VariantListEditor = ({
                             </button>
                         </div>
                     </div>
-                    <div className="admin-editor-body">
+                    <div className="nirvaagi-editor-body">
                         <div className="adm-form side-by-side">
 
                             {/* LEFT SIDEBAR: Metadata & Settings */}

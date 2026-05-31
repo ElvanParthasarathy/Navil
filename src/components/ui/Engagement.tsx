@@ -14,7 +14,7 @@ interface Comment {
     text: string;
     userId: string;
     timestamp: number;
-    isAdmin?: boolean;
+    isNirvaagi?: boolean;
     parentId?: string;
 }
 
@@ -35,7 +35,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
     const [text, setText] = useState('');
     const [replyText, setReplyText] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isNirvaagi, setIsNirvaagi] = useState(false);
     const [identifier, setIdentifier] = useState<string | null>(() => {
         // Try to get existing user ID immediately for faster loading
         try {
@@ -50,7 +50,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
     const [editingText, setEditingText] = useState('');
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-    const [adminProfile, setAdminProfile] = useState<any>(null);
+    const [nirvaagiProfile, setNirvaagiProfile] = useState<any>(null);
 
     // Generate a unique user ID that persists in the browser storage
     const getOrCreateUserId = () => {
@@ -82,17 +82,17 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
 
         initIdentity();
 
-        // Check if Admin is logged in
+        // Check if Nirvaagi is logged in
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-            setIsAdmin(!!user && !user.isAnonymous);
+            setIsNirvaagi(!!user && !user.isAnonymous);
         });
 
-        // Fetch Admin profile for avatars
+        // Fetch Nirvaagi profile for avatars
         const profileRef = ref(db, 'config/profile');
         get(profileRef).then(snap => {
             if (snap.exists()) {
                 const data = snap.val();
-                setAdminProfile({
+                setNirvaagiProfile({
                     ...data,
                     avatar: data.profilePic || data.avatar
                 });
@@ -161,10 +161,10 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
             }
 
             await addComment(postId, {
-                name: (isAdmin && !name.trim()) ? 'Author' : finalName,
+                name: (isNirvaagi && !name.trim()) ? 'Author' : finalName,
                 text: content.trim(),
                 userId: identifier,
-                isAdmin: isAdmin && !name.trim(),
+                isNirvaagi: isNirvaagi && !name.trim(),
                 parentId: parentId
             });
             
@@ -336,15 +336,15 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                     <footer className="comment-footer">
                                         <div className="author-meta">
                                             <div className="author-avatar">
-                                                {comment.isAdmin && adminProfile?.avatar ? (
-                                                    <img src={adminProfile.avatar} alt="Author" className="admin-pfp" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                                {comment.isNirvaagi && nirvaagiProfile?.avatar ? (
+                                                    <img src={nirvaagiProfile.avatar} alt="Author" className="nirvaagi-pfp" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                                                 ) : (
                                                     <div className="guest-avatar">{comment.name[0]}</div>
                                                 )}
                                             </div>
                                             <div className="author-info">
                                                 <p className="author-name">
-                                                    {comment.isAdmin ? 'Author' : comment.name}
+                                                    {comment.isNirvaagi ? 'Author' : comment.name}
                                                 </p>
                                                 <p className="comment-date">
                                                     <time dateTime={new Date(comment.timestamp).toISOString()}>
@@ -362,7 +362,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                     <span className="action-en">reply</span>
                                                 </div>
                                             </button>
-                                             {(identifier === comment.userId && !comment.isAdmin) && (
+                                             {(identifier === comment.userId && !comment.isNirvaagi) && (
                                                  <div className="more-menu-wrapper" onClick={(e) => e.stopPropagation()}>
                                                      <button 
                                                          className="comment-more-btn"
@@ -375,7 +375,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                          </svg>
                                                      </button>
                                                      <div className={`more-dropdown ${activeMenu === comment.id ? 'open' : ''}`}>
-                                                         {!comment.isAdmin && (
+                                                         {!comment.isNirvaagi && (
                                                              <button onClick={() => { 
                                                                  setEditingComment(comment.id); 
                                                                  setEditingText(comment.text);
@@ -442,21 +442,21 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                             <footer className="comment-footer">
                                                 <div className="author-meta">
                                                     <div className="author-avatar mini">
-                                                        {reply.isAdmin && adminProfile?.avatar ? (
-                                                            <img src={adminProfile.avatar} alt="Author" className="admin-pfp" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                                        {reply.isNirvaagi && nirvaagiProfile?.avatar ? (
+                                                            <img src={nirvaagiProfile.avatar} alt="Author" className="nirvaagi-pfp" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                                                         ) : (
                                                             <div className="guest-avatar">{reply.name[0]}</div>
                                                         )}
                                                     </div>
                                                     <div className="author-info">
                                                         <p className="author-name">
-                                                            {reply.isAdmin ? 'Author' : reply.name}
+                                                            {reply.isNirvaagi ? 'Author' : reply.name}
                                                         </p>
                                                         <p className="comment-date">{formatDate(reply.timestamp)}</p>
                                                     </div>
                                                 </div>
                                                 
-                                                {(identifier === reply.userId && !reply.isAdmin) && (
+                                                {(identifier === reply.userId && !reply.isNirvaagi) && (
                                                     <div className="more-menu-wrapper" onClick={(e) => e.stopPropagation()}>
                                                         <button 
                                                             className="comment-more-btn"
@@ -469,7 +469,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                             </svg>
                                                         </button>
                                                         <div className={`more-dropdown ${activeMenu === reply.id ? 'open' : ''}`}>
-                                                            {!reply.isAdmin && (
+                                                            {!reply.isNirvaagi && (
                                                                 <button onClick={() => { 
                                                                     setEditingComment(reply.id); 
                                                                     setEditingText(reply.text);

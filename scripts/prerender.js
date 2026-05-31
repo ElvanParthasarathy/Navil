@@ -81,7 +81,7 @@ async function prerender() {
     });
 
     for (const route of routes) {
-        if (route === '/admin') continue; // Don't prerender admin panel
+        if (route === '/nirvaagi') continue; // Don't prerender nirvaagi panel
 
         const page = await browser.newPage();
         // Set a standard viewport

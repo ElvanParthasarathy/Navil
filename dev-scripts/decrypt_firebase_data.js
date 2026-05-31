@@ -36,7 +36,7 @@ const AUTH_PASSWORD = process.argv[4];
 
 if (!DECRYPT_PASSWORD || !AUTH_EMAIL || !AUTH_PASSWORD) {
     console.error('❌ Usage: node scratch/decrypt_firebase_data.js DECRYPT_PASSWORD AUTH_EMAIL AUTH_PASSWORD');
-    console.error('   Example: node scratch/decrypt_firebase_data.js "navami" "admin@example.com" "mypassword"');
+    console.error('   Example: node scratch/decrypt_firebase_data.js "navami" "nirvaagi@example.com" "mypassword"');
     process.exit(1);
 }
 

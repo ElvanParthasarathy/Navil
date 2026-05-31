@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
-          admin: resolve(__dirname, 'admin.html')
+          nirvaagi: resolve(__dirname, 'nirvaagi.html')
         }
       }
     },
@@ -70,14 +70,14 @@ export default defineConfig(({ mode }) => {
         }
       },
       {
-        name: 'admin-spa-fallback',
+        name: 'nirvaagi-spa-fallback',
         configureServer(server) {
           // This must return a function so it runs AFTER Vite's internal middleware
           return () => {
             server.middlewares.use(async (req, res, next) => {
-              if (req.url && (req.url === '/admin' || req.url.startsWith('/admin/') || req.url.startsWith('/admin?'))) {
+              if (req.url && (req.url === '/nirvaagi' || req.url.startsWith('/nirvaagi/') || req.url.startsWith('/nirvaagi?'))) {
                 const { readFileSync } = await import('fs');
-                const htmlPath = resolve(__dirname, 'admin.html');
+                const htmlPath = resolve(__dirname, 'nirvaagi.html');
                 let html = readFileSync(htmlPath, 'utf-8');
                 html = await server.transformIndexHtml(req.url, html);
                 res.statusCode = 200;

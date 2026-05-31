@@ -4,18 +4,18 @@ import path from 'path';
 const files = [
   'VariantListEditor.tsx',
   'StoryEditor.tsx',
-  'AdminShared.tsx',
+  'NirvaagiShared.tsx',
   'RichTextEditor.tsx',
   'StandardListEditor.tsx',
-  'AdminDashboard.tsx',
+  'NirvaagiDashboard.tsx',
   'AboutEditor.tsx',
   'ProfileEditor.tsx',
-  'AdminLogin.tsx',
-  'AdminApp.tsx',
-  'Admin.tsx'
+  'NirvaagiLogin.tsx',
+  'NirvaagiApp.tsx',
+  'Nirvaagi.tsx'
 ];
 
-const basePath = 'd:/Projects/Navil/src/components/admin';
+const basePath = 'd:/Projects/Navil/src/components/nirvaagi';
 
 files.forEach(file => {
   let p = path.join(basePath, file);

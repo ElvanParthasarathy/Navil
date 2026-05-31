@@ -1,8 +1,8 @@
 {
     "rewrites": [
         {
-            "source": "/admin(.*)",
-            "destination": "/admin.html"
+            "source": "/nirvaagi(.*)",
+            "destination": "/nirvaagi.html"
         },
         {
             "source": "/((?!assets/|.*\\..*).*)",

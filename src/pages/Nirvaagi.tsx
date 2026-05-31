@@ -14,32 +14,32 @@ import { ref, get, set, onValue } from 'firebase/database';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS, formatTimestampToLegacy } from '../components/admin/shared/AdminShared';
-import { generateSlug, getBestTitle, textToHtml, resolveAuthorForPair, cleanForStorage } from '../components/admin/shared/adminUtils';
-import { ProfileEditor } from '../components/admin/editors/ProfileEditor';
-import { AboutEditor } from '../components/admin/editors/AboutEditor';
-import { PoemEditor } from '../components/admin/editors/PoemEditor';
-import { QuoteEditor } from '../components/admin/editors/QuoteEditor';
-import { BlogEditor } from '../components/admin/editors/BlogEditor';
-import { ArticleEditor } from '../components/admin/editors/ArticleEditor';
-import { StoryEditor } from '../components/admin/editors/StoryEditor';
-import { DiaryEditor } from '../components/admin/editors/DiaryEditor';
-import { ArtEditor } from '../components/admin/editors/ArtEditor';
-import AdminLogin from '../components/admin/dashboard/AdminLogin';
-import CommentsManager from '../components/admin/dashboard/CommentsManager';
-import AdminDashboard from '../components/admin/dashboard/AdminDashboard';
-import BookMakerView from '../components/admin/views/BookMakerView';
+import { SCHEMAS, SharedDatalists, DEFAULT_AUTHORS, formatTimestampToLegacy } from '../components/nirvaagi/shared/NirvaagiShared';
+import { generateSlug, getBestTitle, textToHtml, resolveAuthorForPair, cleanForStorage } from '../components/nirvaagi/shared/nirvaagiUtils';
+import { ProfileEditor } from '../components/nirvaagi/editors/ProfileEditor';
+import { AboutEditor } from '../components/nirvaagi/editors/AboutEditor';
+import { PoemEditor } from '../components/nirvaagi/editors/PoemEditor';
+import { QuoteEditor } from '../components/nirvaagi/editors/QuoteEditor';
+import { BlogEditor } from '../components/nirvaagi/editors/BlogEditor';
+import { ArticleEditor } from '../components/nirvaagi/editors/ArticleEditor';
+import { StoryEditor } from '../components/nirvaagi/editors/StoryEditor';
+import { DiaryEditor } from '../components/nirvaagi/editors/DiaryEditor';
+import { ArtEditor } from '../components/nirvaagi/editors/ArtEditor';
+import NirvaagiLogin from '../components/nirvaagi/dashboard/NirvaagiLogin';
+import CommentsManager from '../components/nirvaagi/dashboard/CommentsManager';
+import NirvaagiDashboard from '../components/nirvaagi/dashboard/NirvaagiDashboard';
+import BookMakerView from '../components/nirvaagi/views/BookMakerView';
 import { addComment } from '../lib/engagement';
 
-import '../styles/admin-tailwind.css';
+import '../styles/nirvaagi-tailwind.css';
 
 // Import Data (Initial State for non-Supabase data)
 import initialProfile from '../data/profile.json';
 
 import { remove } from 'firebase/database';
 
-// Allowed administrator email addresses
-const ALLOWED_ADMIN_EMAILS = ['jaiprakashpartha@gmail.com', 'jaiprakashvp2006@gmail.com'];
+// Allowed nirvaagiistrator email addresses
+const ALLOWED_NIRVAAGI_EMAILS = ['jaiprakashpartha@gmail.com', 'jaiprakashvp2006@gmail.com'];
 
 const getSynchronizedItemFields = (field, value) => {
     const updates = { [field]: value };
@@ -87,8 +87,8 @@ const NavSection = ({ label, children, defaultOpen = true, isCollapsed: sidebarC
     );
 };
 
-// ─── MAIN ADMIN COMPONENT ───
-const Admin = () => {
+// ─── MAIN NIRVAAGI COMPONENT ───
+const Nirvaagi = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
@@ -107,7 +107,7 @@ const Admin = () => {
 
     // Sidebar state
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('admin_sidebar_collapsed') === 'true');
+    const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('nirvaagi_sidebar_collapsed') === 'true');
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(null);
     const [autoThumbnails, setAutoThumbnails] = useState(() => localStorage.getItem('autoThumbnails') === 'true');
     
@@ -146,7 +146,7 @@ const Admin = () => {
         defaultAuthors: { ...DEFAULT_AUTHORS },
     });
 
-    // Apply admin theme
+    // Apply nirvaagi theme
     useEffect(() => {
         const root = document.documentElement;
         localStorage.setItem('theme', appThemeMode);
@@ -170,7 +170,7 @@ const Admin = () => {
     const toggleCollapse = () => {
         setIsCollapsed(prev => {
             const next = !prev;
-            localStorage.setItem('admin_sidebar_collapsed', String(next));
+            localStorage.setItem('nirvaagi_sidebar_collapsed', String(next));
             return next;
         });
     };
@@ -187,14 +187,14 @@ const Admin = () => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const email = user.email ? user.email.toLowerCase() : '';
-                if (ALLOWED_ADMIN_EMAILS.includes(email)) {
+                if (ALLOWED_NIRVAAGI_EMAILS.includes(email)) {
                     setIsLoggedIn(true);
-                    setUsername(user.displayName || email.split('@')[0] || 'Admin');
+                    setUsername(user.displayName || email.split('@')[0] || 'Nirvaagi');
                 } else {
                     await signOut(auth);
                     setIsLoggedIn(false);
                     setUsername('');
-                    alert('Access Denied: You are not authorized to access this Admin Panel.');
+                    alert('Access Denied: You are not authorized to access this Nirvaagi Panel.');
                 }
             } else {
                 setIsLoggedIn(false);
@@ -214,8 +214,8 @@ const Admin = () => {
 
     const handleLogin = async (email, password) => {
         const cleanEmail = email ? email.trim().toLowerCase() : '';
-        if (!ALLOWED_ADMIN_EMAILS.includes(cleanEmail)) {
-            return { success: false, error: 'Access Denied: Unauthorized admin email.' };
+        if (!ALLOWED_NIRVAAGI_EMAILS.includes(cleanEmail)) {
+            return { success: false, error: 'Access Denied: Unauthorized nirvaagi email.' };
         }
         try {
             await signInWithEmailAndPassword(auth, email, password);
@@ -230,9 +230,9 @@ const Admin = () => {
             const provider = new GoogleAuthProvider();
             const userCredential = await signInWithPopup(auth, provider);
             const userEmail = userCredential.user?.email ? userCredential.user.email.toLowerCase() : '';
-            if (!ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
+            if (!ALLOWED_NIRVAAGI_EMAILS.includes(userEmail)) {
                 await signOut(auth);
-                return { success: false, error: 'Access Denied: Unauthorized admin email.' };
+                return { success: false, error: 'Access Denied: Unauthorized nirvaagi email.' };
             }
             return { success: true };
         } catch (err) {
@@ -849,7 +849,7 @@ const Admin = () => {
     }
 
     if (!isLoggedIn) {
-        return <AdminLogin onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />;
+        return <NirvaagiLogin onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />;
     }
 
     const drawerWidth = isCollapsed ? 72 : 280;
@@ -902,7 +902,7 @@ const Admin = () => {
             <Box className="flex items-center h-16 shrink-0" sx={{ px: 3, justifyContent: isCollapsed ? 'center' : 'space-between' }}>
                 {!isCollapsed && (
                     <Typography variant="h6" className="select-none" sx={{ letterSpacing: '-0.02em',  fontWeight: 800 }}>
-                        Admin
+                        Nirvaagi
                     </Typography>
                 )}
                 <IconButton onClick={toggleCollapse} size="small" sx={{ color: 'text.secondary' }}>
@@ -984,8 +984,8 @@ const Admin = () => {
                     </Avatar>
                     {!isCollapsed && (
                         <ListItemText
-                            primary={<Typography variant="body2" sx={{ fontWeight: 600 }}>{username || 'Admin'}</Typography>}
-                            secondary={<Typography variant="caption" color="text.secondary">Administrator</Typography>}
+                            primary={<Typography variant="body2" sx={{ fontWeight: 600 }}>{username || 'Nirvaagi'}</Typography>}
+                            secondary={<Typography variant="caption" color="text.secondary">Nirvaagiistrator</Typography>}
                         />
                     )}
                 </ListItemButton>
@@ -1014,8 +1014,8 @@ const Admin = () => {
                             {username ? username.charAt(0).toUpperCase() : 'A'}
                         </Avatar>
                         <Box className="flex-1 min-w-0">
-                            <Typography variant="subtitle2" sx={{ fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{username || 'Administrator'}</Typography>
-                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Admin Account</Typography>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{username || 'Nirvaagiistrator'}</Typography>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Nirvaagi Account</Typography>
                         </Box>
                     </Box>
 
@@ -1123,7 +1123,7 @@ const Admin = () => {
                 {/* Content */}
                 <Box className="flex-1 overflow-y-auto relative">
                     {activeTab === 'dashboard' ? (
-                        <AdminDashboard dataStore={dataStore} username={username} onNavigate={(tab) => { setActiveTab(tab); setEditingId(null); }} />
+                        <NirvaagiDashboard dataStore={dataStore} username={username} onNavigate={(tab) => { setActiveTab(tab); setEditingId(null); }} />
                     ) : activeTab === 'profile' ? (
                         <ProfileEditor
                             profileData={dataStore.profile}
@@ -1237,7 +1237,7 @@ const Admin = () => {
     );
 };
 
-export default Admin;
+export default Nirvaagi;
 
 
 

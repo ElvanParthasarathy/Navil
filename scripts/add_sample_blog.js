@@ -46,7 +46,7 @@ async function main() {
                 label: 'Translation',
                 title: 'The Beauty of Nature',
                 text: '<p>The beauty of the morning sun\'s rays reflecting on dewdrops brings great peace to the mind.</p><p>Nature is always a great friend that can give us rest and comfort.</p>',
-                author: 'Admin',
+                author: 'Nirvaagi',
                 transliterations: {},
                 titleTransliterations: {}
             }

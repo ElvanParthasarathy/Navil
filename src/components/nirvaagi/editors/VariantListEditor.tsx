@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiChevronRight, FiSearch } from 'react-icons/fi';
 import { Box, Typography, Button, IconButton, Checkbox, Chip, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment, Tabs, Tab } from '@mui/material';
-import { SCHEMAS, renderFieldRow, FieldInput, PinEditor, VariantCard } from '../shared/AdminShared';
+import { SCHEMAS, renderFieldRow, FieldInput, PinEditor, VariantCard } from '../shared/NirvaagiShared';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import RichTextEditor from './RichTextEditor';
 import { getOptimizedImage } from '../../../lib/media';

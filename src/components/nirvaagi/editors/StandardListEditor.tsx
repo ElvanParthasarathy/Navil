@@ -4,7 +4,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Box, Typography, Button, IconButton, Checkbox, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment } from '@mui/material';
-import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from '../shared/AdminShared';
+import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from '../shared/NirvaagiShared';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { getOptimizedImage } from '../../../lib/media';
 

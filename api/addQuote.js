@@ -77,7 +77,7 @@ export default async function handler(request, response) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    message: `Add new quote via Admin API: "${text.substring(0, 20)}..."`,
+                    message: `Add new quote via Nirvaagi API: "${text.substring(0, 20)}..."`,
                     content: newContent,
                     sha: sha,
                     branch: BRANCH,

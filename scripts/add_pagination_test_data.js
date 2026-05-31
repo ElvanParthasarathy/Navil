@@ -46,13 +46,13 @@ const generateDummyItems = (count, tableType) => {
                     lang: 'ta',
                     title: `மீச்சிறுDummy ${i}`,
                     text: `<p>இது ஒரு மாதிரி பதிவு எண் ${i}. பிணைப்பு மற்றும் வரிசைப்படுத்தும் முறையை சோதிக்க இது உருவாக்கப்பட்டது.</p>`,
-                    author: 'Admin'
+                    author: 'Nirvaagi'
                 },
                 {
                     lang: 'en',
                     title: `Dummy Item ${i}`,
                     text: `<p>This is a dummy entry number ${i} for testing pagination and layout consistency.</p>`,
-                    author: 'Admin'
+                    author: 'Nirvaagi'
                 }
             ];
         } else {
@@ -66,14 +66,14 @@ const generateDummyItems = (count, tableType) => {
                     lang: 'ta',
                     title: `மாதிரி கட்டுரை ${i}`,
                     text: `<p>இந்த கட்டுரை எண் ${i} பக்கமாக்கல் சோதனையினை மேற்கொள்ள உருவாக்கப்பட்டுள்ளது.</p>`,
-                    author: 'Admin',
+                    author: 'Nirvaagi',
                     excerpt: `இது மாதிரி கட்டுரை ${i} -க்கான ஒரு சிறு குறிப்பு.`
                 },
                 {
                     lang: 'en',
                     title: `Sample Post ${i}`,
                     text: `<p>This is a sample post number ${i} generated specifically to verify that pagination works correctly.</p>`,
-                    author: 'Admin',
+                    author: 'Nirvaagi',
                     excerpt: `A short preview for sample post ${i} to test the card layout.`
                 }
             ];

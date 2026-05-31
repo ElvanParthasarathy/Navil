@@ -8,7 +8,7 @@ import { ref, push, set, onValue, runTransaction, remove, serverTimestamp } from
 
 // Structure:
 // /engagement/likes/{postId} -> count (number)
-// /engagement/comments/{postId}/{commentId} -> { name, text, timestamp, isAdmin }
+// /engagement/comments/{postId}/{commentId} -> { name, text, timestamp, isNirvaagi }
 
 /**
  * Adds a like to a post using the visitor's unique ID.
@@ -40,7 +40,7 @@ export const removeLike = async (postId: string, userId: string) => {
 /**
  * Adds a comment to a post.
  */
-export const addComment = async (postId: string, commentData: { name: string; text: string; userId: string; isAdmin?: boolean; parentId?: string }) => {
+export const addComment = async (postId: string, commentData: { name: string; text: string; userId: string; isNirvaagi?: boolean; parentId?: string }) => {
     const commentsRef = ref(db, `engagement/comments/${postId}`);
     const newCommentRef = push(commentsRef);
     
@@ -60,7 +60,7 @@ export const addComment = async (postId: string, commentData: { name: string; te
 };
 
 /**
- * Deletes a specific comment (Admin only logic should be enforced in DB rules, 
+ * Deletes a specific comment (Nirvaagi only logic should be enforced in DB rules, 
  * but this is the client-side trigger).
  */
 export const deleteComment = async (postId: string, commentId: string) => {
