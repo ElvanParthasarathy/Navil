@@ -129,7 +129,7 @@ export default function Presentation({ externalSlide }) {
           </div>
           <div className="tech-badge" style={{ top: '40px', right: '40px', textAlign: 'right' }}>
             CREATED BY ELVAN PARTHASARATHY
-            <div style={{ fontSize: '0.8rem', letterSpacing: '1px', color: 'var(--accent4)', marginTop: '4px', opacity: 0.8, fontFamily: "'Mukta Malar', sans-serif" }}>
+            <div style={{ fontSize: '0.8rem', letterSpacing: '1px', color: 'var(--accent4)', marginTop: '4px', opacity: 0.8, fontFamily: "'ElvanSans', sans-serif" }}>
               உருவாக்கியவர்: எல்வன் பார்த்தசாரதி
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function Presentation({ externalSlide }) {
               <div style={{ fontSize: '1.4rem', fontWeight: '800', letterSpacing: '3px', textTransform: 'uppercase', color: '#fff' }}>
                 Jaiprakash Parthasarathy
               </div>
-              <div style={{ fontSize: '1.2rem', fontWeight: '500', letterSpacing: '1px', color: 'var(--accent4)', marginTop: '4px', opacity: 0.9, fontFamily: "'Mukta Malar', sans-serif" }}>
+              <div style={{ fontSize: '1.2rem', fontWeight: '500', letterSpacing: '1px', color: 'var(--accent4)', marginTop: '4px', opacity: 0.9, fontFamily: "'ElvanSans', sans-serif" }}>
                 ஜெய்பிரகாஷ் பார்த்தசாரதி
               </div>
             </div>
@@ -805,7 +805,7 @@ export default function Presentation({ externalSlide }) {
               textAlign: 'center'
             }}>
               CREATED BY ELVAN PARTHASARATHY
-              <div style={{ fontSize: '0.95rem', fontWeight: '400', letterSpacing: '1px', color: 'var(--accent4)', marginTop: '6px', opacity: 0.9, fontFamily: "'Mukta Malar', sans-serif" }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: '400', letterSpacing: '1px', color: 'var(--accent4)', marginTop: '6px', opacity: 0.9, fontFamily: "'ElvanSans', sans-serif" }}>
                 உருவாக்கியவர்: எல்வன் பார்த்தசாரதி
               </div>
             </div>

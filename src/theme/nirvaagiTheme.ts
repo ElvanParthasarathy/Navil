@@ -156,7 +156,7 @@ const nirvaagiTheme = createTheme({
   },
 
   typography: {
-    fontFamily: '"Google Sans", "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    fontFamily: '"ElvanSans", "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     h1: { fontWeight: 400, fontSize: '2.25rem', lineHeight: 1.2, letterSpacing: '-0.02em' },
     h2: { fontWeight: 400, fontSize: '1.75rem', lineHeight: 1.3, letterSpacing: '-0.01em' },
     h3: { fontWeight: 500, fontSize: '1.5rem', lineHeight: 1.3 },

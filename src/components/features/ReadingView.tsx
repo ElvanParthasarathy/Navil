@@ -435,7 +435,7 @@ const ReadingView = () => {
                     }
                 }
                 .expand-pill .pill-ta {
-                    font-family: "Mukta Malar", sans-serif;
+                    font-family: "ElvanSans", sans-serif;
                     font-size: 1rem;
                     font-weight: 700;
                     line-height: 1;

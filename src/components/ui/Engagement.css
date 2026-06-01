@@ -23,7 +23,7 @@
 }
 
 .discussion-title .title-ta {
-  font-family: "Mukta Malar", sans-serif;
+  font-family: "ElvanSans", sans-serif;
   font-size: 1.4rem;
   font-weight: 800;
 }
@@ -141,7 +141,7 @@
 }
 
 .ph-ta {
-  font-family: "Mukta Malar", sans-serif;
+  font-family: "ElvanSans", sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-muted);
@@ -220,7 +220,7 @@
 }
 
 .btn-text-ta {
-  font-family: "Mukta Malar", sans-serif;
+  font-family: "ElvanSans", sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--bg-app);
@@ -526,7 +526,7 @@
 }
 
 .action-ta {
-  font-family: "Mukta Malar", sans-serif;
+  font-family: "ElvanSans", sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
 }

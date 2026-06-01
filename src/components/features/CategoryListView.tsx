@@ -957,7 +957,7 @@ const CategoryListView = () => {
                     font-size: 0.85rem;
                     font-weight: 600;
                     color: var(--text-muted);
-                    font-family: "Mukta Malar", sans-serif;
+                    font-family: "ElvanSans", sans-serif;
                 }
 
                 .read-more-wrapper {
@@ -1276,7 +1276,7 @@ const CategoryListView = () => {
                     border: none;
                     color: var(--text-main);
                     border-radius: 0;
-                    font-family: "Mukta Malar", sans-serif;
+                    font-family: "ElvanSans", sans-serif;
                 }
                 .minimal-search input:focus {
                     outline: none;
@@ -1409,7 +1409,7 @@ const CategoryListView = () => {
                         font-size: 0.9rem;
                         font-weight: 600;
                         color: var(--text-muted);
-                        font-family: "Mukta Malar", sans-serif;
+                        font-family: "ElvanSans", sans-serif;
                         appearance: none;
                         background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
                         background-repeat: no-repeat;

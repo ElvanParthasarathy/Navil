@@ -9,7 +9,7 @@ import { FiDownload, FiEdit3, FiChevronDown, FiChevronUp, FiPrinter } from 'reac
 import { Helmet } from 'react-helmet-async';
 import './BookMakerView.css';
 
-const PRIMARY_FONT = "Mukta Malar";
+const PRIMARY_FONT = "ElvanSans";
 const ENGLISH_FONT = "Georgia";
 
 // Labels for original variant languages

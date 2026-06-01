@@ -126,7 +126,7 @@
                         background: var(--bg-body);
                         color: var(--text-main);
                         font-size: 0.9rem;
-                        font-family: 'Mukta Malar', sans-serif;
+                        font-family: 'ElvanSans', sans-serif;
                         resize: vertical;
                         transition: border-color 0.2s;
                     }
@@ -232,7 +232,7 @@
                         display: flex;
                         flex-direction: column;
                         color: #000;
-                        font-family: 'Mukta Malar', sans-serif;
+                        font-family: 'ElvanSans', sans-serif;
                         position: relative;
                         border-radius: 2px;
                         overflow: visible;
