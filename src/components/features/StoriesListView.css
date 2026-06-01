@@ -980,29 +980,9 @@
                         color: var(--text-muted);
                         font-family: "Mukta Malar", sans-serif;
                     }
-                    .back-pill {
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 8px;
-                        font-size: 0.85rem;
-                        font-weight: 600;
-                        color: var(--text-muted);
-                        text-decoration: none;
-                        background: color-mix(in srgb, var(--text-main) 6%, transparent);
-                        border-radius: 100px;
-                        padding: 10px 20px;
-                        flex-shrink: 0;
-                        white-space: nowrap;
-                        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                    }
-                    .back-pill:hover {
-                        background: color-mix(in srgb, var(--text-main) 12%, transparent);
-                        color: var(--text-main);
-                    }
-                    .back-pill:active {
-                        transform: scale(0.95);
-                        background: color-mix(in srgb, var(--text-main) 18%, transparent);
-                    }
+
+
+
 
                     @media (max-width: 768px) {
                         .controls-area {

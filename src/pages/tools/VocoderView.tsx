@@ -73,30 +73,9 @@ const VocoderView = () => {
                     flex-shrink: 0;
                     z-index: 50;
                 }
-                .vocoder-topbar .back-pill {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    font-size: 0.85rem;
-                    font-weight: 600;
-                    color: var(--text-muted);
-                    text-decoration: none;
-                    background: color-mix(in srgb, var(--text-main) 6%, transparent);
-                    border-radius: 100px;
-                    padding: 8px 20px;
-                    flex-shrink: 0;
-                    white-space: nowrap;
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                    justify-self: end;
-                }
-                .vocoder-topbar .back-pill:hover {
-                    background: color-mix(in srgb, var(--text-main) 12%, transparent);
-                    color: var(--text-main);
-                }
-                .vocoder-topbar .back-pill:active {
-                    transform: scale(0.95);
-                    background: color-mix(in srgb, var(--text-main) 18%, transparent);
-                }
+
+
+
                 .vocoder-tab-switcher {
                     display: flex; gap: 4px;
                     background: color-mix(in srgb, var(--text-main) 4%, transparent);
@@ -342,7 +321,7 @@ const VocoderView = () => {
                     }
                     .vocoder-topbar-title { display: none !important; }
                     .vocoder-tab-btn { padding: 6px 12px; font-size: 0.75rem; }
-                    .vocoder-topbar .back-pill { padding: 6px 14px; font-size: 0.8rem; }
+
                 }
             `}</style>
 

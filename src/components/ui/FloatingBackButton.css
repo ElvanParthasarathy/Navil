@@ -1,0 +1,85 @@
+/* --- GLOBAL BACK BUTTON PILL (DESKTOP) --- */
+.back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text-muted);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+    border-radius: 100px;
+    padding: 0 20px;
+    height: 44px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
+}
+
+.back-pill:hover {
+    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+    color: var(--text-main);
+}
+
+.back-pill:active {
+    transform: scale(0.95);
+    background: color-mix(in srgb, var(--text-main) 18%, transparent);
+}
+
+@media (min-width: 1024px) {
+    .back-pill.desktop-only {
+        position: fixed !important;
+        top: 40px !important;
+        right: 40px !important;
+        z-index: 1000 !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+        background: rgba(255, 255, 255, 0.85) !important;
+        color: #121212 !important;
+        border: 1px solid rgba(0, 0, 0, 0.03) !important;
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    .back-pill.desktop-only:hover {
+        background: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18) !important;
+    }
+    .back-pill.desktop-only:active {
+        transform: scale(0.95) !important;
+        background: rgba(240, 240, 240, 0.95) !important;
+    }
+    
+    [data-theme='dark'] .back-pill.desktop-only {
+        background: rgba(20, 20, 22, 0.85) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    }
+    [data-theme='dark'] .back-pill.desktop-only:hover {
+        background: rgba(30, 30, 32, 0.95) !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25) !important;
+    }
+    [data-theme='dark'] .back-pill.desktop-only:active {
+        transform: scale(0.95) !important;
+        background: rgba(15, 15, 17, 0.95) !important;
+    }
+
+    /* EXCLUDE VOCODER VIEW: Keep its back button in its original static topbar layout */
+    .vocoder-topbar .back-pill.desktop-only {
+        position: static !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: color-mix(in srgb, var(--text-main) 6%, transparent) !important;
+        color: var(--text-muted) !important;
+    }
+    .vocoder-topbar .back-pill.desktop-only:hover {
+        background: color-mix(in srgb, var(--text-main) 12%, transparent) !important;
+        color: var(--text-main) !important;
+    }
+    .vocoder-topbar .back-pill.desktop-only:active {
+        transform: scale(0.95) !important;
+        background: color-mix(in srgb, var(--text-main) 18%, transparent) !important;
+    }
+}
