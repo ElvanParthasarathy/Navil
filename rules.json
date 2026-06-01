@@ -1,0 +1,65 @@
+{
+  "rules": {
+    // 1. Root level: Only authenticated admins can fetch the entire database at once
+    ".read": "auth != null",
+    ".write": false,
+
+    // 2. Content tables: Publicly readable (so the website works), admin can write
+    "poems": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "quotes": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "blog": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "articles": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "stories": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "series": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "diary": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "arts": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "config": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+
+    // 3. User engagement rules
+    "engagement": {
+      // Anyone can read engagement data
+      ".read": true,
+      "likes": {
+        "$postId": {
+          "$userId": {
+            ".write": "true"
+          }
+        }
+      },
+      "comments": {
+        "$postId": {
+          "$commentId": {
+            ".write": "auth != null || (!data.exists() && (!newData.hasChild('isAdmin') || newData.child('isAdmin').val() == false)) || (data.exists() && newData.exists() && data.child('userId').val() == newData.child('userId').val() && data.child('isAdmin').val() != true) || (!newData.exists() && data.child('isAdmin').val() != true)"
+          }
+        }
+      }
+    }
+  }
+}
