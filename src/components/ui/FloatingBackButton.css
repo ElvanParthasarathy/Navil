@@ -27,6 +27,12 @@
     background: color-mix(in srgb, var(--text-main) 18%, transparent);
 }
 
+@media (max-width: 1023px) {
+    .back-pill.bp-fixed {
+        display: none !important;
+    }
+}
+
 @media (min-width: 1024px) {
     .back-pill.bp-fixed {
         position: fixed !important;
