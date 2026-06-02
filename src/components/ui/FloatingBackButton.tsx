@@ -8,7 +8,7 @@ interface FloatingBackButtonProps {
     className?: string;
 }
 
-export const FloatingBackButton: React.FC<FloatingBackButtonProps> = ({ to, label = "பின்செல்", className = "back-pill desktop-only" }) => {
+export const FloatingBackButton: React.FC<FloatingBackButtonProps> = ({ to, label = "பின்செல்", className = "back-pill bp-fixed" }) => {
     const navigate = useNavigate();
 
     return (

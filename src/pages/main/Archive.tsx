@@ -624,7 +624,7 @@ const Archive = () => {
             <Helmet>
                 <title>காப்புகள் | Archive</title>
             </Helmet>
-            <div className="page-view page-fade">
+            <div className="page-view page-fade archive-page">
             <style>{`
                 .archive-back-btn {
                     display: inline-flex;
@@ -1311,22 +1311,22 @@ const Archive = () => {
                 .modal-avatar-img { width: 100%; height: 100%; object-fit: cover; }
                 .modal-username { font-weight: 600; font-size: 14px; }
                 
-                /* Visibility Helpers */
-                .mobile-only { display: none !important; }
-                .mobile-only-flex { display: none !important; }
-                .desktop-only { display: none !important; }
-                .desktop-only-flex { display: none !important; }
-                .desktop-only-block { display: none !important; }
+                /* Visibility Helpers — scoped to Archive */
+                .archive-page .mobile-only { display: none !important; }
+                .archive-page .mobile-only-flex { display: none !important; }
+                .archive-page .desktop-only { display: none !important; }
+                .archive-page .desktop-only-flex { display: none !important; }
+                .archive-page .desktop-only-block { display: none !important; }
                 
                 @media (min-width: 769px) {
-                  .desktop-only { display: block !important; }
-                  .desktop-only-flex { display: flex !important; }
-                  .desktop-only-block { display: block !important; }
+                  .archive-page .desktop-only { display: block !important; }
+                  .archive-page .desktop-only-flex { display: flex !important; }
+                  .archive-page .desktop-only-block { display: block !important; }
                 }
                 
                 @media (max-width: 768px) {
-                  .mobile-only { display: block !important; }
-                  .mobile-only-flex { display: flex !important; }
+                  .archive-page .mobile-only { display: block !important; }
+                  .archive-page .mobile-only-flex { display: flex !important; }
                   
                   /* Mobile Profile Layout */
                   .profile-header { flex-direction: column; padding: 16px 16px 0; margin-bottom: 0; display: block; }
@@ -1361,9 +1361,9 @@ const Archive = () => {
                     .post-nav-btn { display: none; }
                     .modal-info { border-left: none; padding: 12px 16px; flex: 1; overflow-y: auto; background: var(--bg-card); }
                     
-                    .mobile-only { display: block !important; }
-                    .mobile-only-flex { display: flex !important; }
-                    .desktop-only { display: none !important; }
+                    .archive-page .mobile-only { display: block !important; }
+                    .archive-page .mobile-only-flex { display: flex !important; }
+                    .archive-page .desktop-only { display: none !important; }
 
                     .modal-header.mobile-only {
                         padding: 12px 16px;

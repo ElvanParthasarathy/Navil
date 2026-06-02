@@ -649,7 +649,7 @@ const ArtsGallery = () => {
                         </div>
                         <Link
                             to="/arts"
-                            className="back-pill desktop-only"
+                            className="back-pill bp-fixed"
                             onClick={(e) => {
                                 if (window.history.state && window.history.state.idx > 0) {
                                     e.preventDefault();

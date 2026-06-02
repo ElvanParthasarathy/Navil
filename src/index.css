@@ -798,6 +798,12 @@ body {
   /* Start hidden for animation */
 }
 
+/* Fixed-position elements must not inherit parent transform (breaks position:fixed) */
+.animate-entry>.back-pill {
+  animation: none !important;
+  opacity: 1 !important;
+}
+
 /* Disable entry transitions on initial page load / refresh */
 .nav-initial .animate-entry>*,
 .nav-initial .home-page {
