@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
 import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
 import '../Writings.css';
+import { PianoKeys, ArrowRight } from '@phosphor-icons/react';
 
 const ToolsView = () => {
     const navigate = useNavigate();
@@ -31,8 +32,17 @@ const ToolsView = () => {
                     </div>
                 </header>
 
-                <div className="category-grid animate-entry" style={{ display: 'flex', justifyContent: 'center', opacity: 0.5, marginTop: '80px', gridTemplateColumns: '1fr' }}>
-                    <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>தற்போது எந்த கருவிகளும் இல்லை. விரைவில் சேர்க்கப்படும்.</p>
+                <div className="category-grid animate-entry">
+                    <Link to="/tools/piano" className="category-card">
+                        <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
+                        <div className="cat-content">
+                            <div className="cat-title">Elvan Piano</div>
+                            <div className="cat-title-sub">Piano Tool</div>
+                            <p className="cat-desc">A fully functional virtual piano synthesizer.</p>
+                            <p className="cat-desc-sub">Play and map keyboard keys to musical notes.</p>
+                        </div>
+                        <div className="cat-footer">Launch Piano <ArrowRight weight="regular" /></div>
+                    </Link>
                 </div>
             </div>
         </>
