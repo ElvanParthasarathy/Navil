@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiEdit2, FiX, FiArrowUp, FiArrowDown, FiTrash2, FiPlus } from 'react-icons/fi';
+
 import { db } from '../../../lib/firebaseClient';
 import RichTextEditor from './RichTextEditor';
 import { ref, onValue, set } from 'firebase/database';
 import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid, Divider } from '@mui/material';
+import { FloppyDisk, Pencil, X, ArrowUp, ArrowDown, Trash, Plus } from '@phosphor-icons/react';
 
 const getInitialAbout = () => {
     try {
@@ -139,7 +140,7 @@ export const AboutEditor = () => {
                         variant="contained" 
                         color="primary" 
                         onClick={() => setIsEditing(true)}
-                        startIcon={<FiEdit2 size={16} />}
+                        startIcon={<Pencil weight="regular" size={16} />}
                         sx={{ fontWeight: 600, borderRadius: 2 }}
                     >
                         Edit Content
@@ -181,7 +182,7 @@ export const AboutEditor = () => {
                         variant="outlined" 
                         color="inherit" 
                         onClick={() => setIsEditing(false)}
-                        startIcon={<FiX size={16} />}
+                        startIcon={<X weight="regular" size={16} />}
                         sx={{ fontWeight: 600, borderRadius: 2, borderColor: 'divider' }}
                     >
                         Cancel
@@ -191,7 +192,7 @@ export const AboutEditor = () => {
                         color="primary" 
                         onClick={handleSave} 
                         disabled={saveStatus === 'loading'}
-                        startIcon={<FiSave size={16} />}
+                        startIcon={<FloppyDisk weight="regular" size={16} />}
                         sx={{ fontWeight: 600, borderRadius: 2 }}
                     >
                         {saveStatus === 'loading' ? 'Saving...' : 'Save'}
@@ -225,9 +226,9 @@ export const AboutEditor = () => {
                                     </Select>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <IconButton size="small" onClick={() => moveCard(idx, 'up')} disabled={idx === 0}><FiArrowUp /></IconButton>
-                                    <IconButton size="small" onClick={() => moveCard(idx, 'down')} disabled={idx === cards.length - 1}><FiArrowDown /></IconButton>
-                                    <IconButton size="small" color="error" onClick={() => deleteCard(idx)}><FiTrash2 /></IconButton>
+                                    <IconButton size="small" onClick={() => moveCard(idx, 'up')} disabled={idx === 0}><ArrowUp weight="regular" /></IconButton>
+                                    <IconButton size="small" onClick={() => moveCard(idx, 'down')} disabled={idx === cards.length - 1}><ArrowDown weight="regular" /></IconButton>
+                                    <IconButton size="small" color="error" onClick={() => deleteCard(idx)}><Trash weight="regular" /></IconButton>
                                 </Box>
                             </Box>
                             <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
@@ -243,7 +244,7 @@ export const AboutEditor = () => {
                 
                 <Button 
                     variant="outlined" 
-                    startIcon={<FiPlus />} 
+                    startIcon={<Plus weight="regular" />} 
                     onClick={addCard}
                     sx={{ alignSelf: 'flex-start', borderRadius: 2, borderStyle: 'dashed', borderWidth: 2 }}
                 >

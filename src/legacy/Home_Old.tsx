@@ -1,11 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight, FiGithub } from 'react-icons/fi';
+
 import profileData from '../../data/profile.json';
 import AdBanner from '../../components/ui/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
+import { Phone, EnvelopeSimple, LinkedinLogo, InstagramLogo, GridFour, PencilSimple, Stack, CaretRight, ArrowRight, GithubLogo } from '@phosphor-icons/react';
 
 const Home = () => {
     return (
@@ -273,7 +274,7 @@ const Home = () => {
                     {/* Tamil Meaning Card */}
                     <div className="category-card" style={{ cursor: 'default' }}>
                         <div className="cat-icon-box" style={{ background: 'color-mix(in srgb, #f09433 15%, var(--bg-panel))', color: '#f09433' }}>
-                            <FiEdit3 />
+                            <PencilSimple weight="regular" />
                         </div>
                         <div className="cat-content">
                             <div className="cat-title" lang="ta">நவில்</div>
@@ -290,7 +291,7 @@ const Home = () => {
                     {/* English Meaning Card */}
                     <div className="category-card" style={{ cursor: 'default' }}>
                         <div className="cat-icon-box" style={{ background: 'color-mix(in srgb, #3b82f6 15%, var(--bg-panel))', color: '#3b82f6' }}>
-                            <FiLayers />
+                            <Stack weight="regular" />
                         </div>
                         <div className="cat-content">
                             <div className="cat-title">Navil</div>

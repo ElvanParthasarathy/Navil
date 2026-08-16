@@ -2,13 +2,14 @@ import './About.css';
 import React, { useState, useEffect } from 'react';
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
-import { FiMapPin, FiPhone, FiMail, FiLinkedin, FiGithub, FiArrowRight } from 'react-icons/fi';
+
 import AdBanner from '../../components/ui/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../../components/ui/MobileTopBar';
 import { db } from '../../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
+import { MapPin, Phone, EnvelopeSimple, LinkedinLogo, GithubLogo, ArrowRight } from '@phosphor-icons/react';
 
 const getInitialAbout = () => {
     try {
@@ -429,10 +430,8 @@ const About = () => {
                     <h1 className="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
                     <h2 className="hero-subtitle">{profileData.name} Parthasarathy</h2>
 
-
-
-                    <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="explore-portfolio-btn-unique">
-                        Explore Portfolio <FiArrowRight />
+<a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" className="explore-portfolio-btn-unique">
+                        Explore Portfolio <ArrowRight weight="regular" />
                     </a>
                 </section>
 
@@ -444,8 +443,7 @@ const About = () => {
                     ))}
                 </div>
 
-
-                <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
+<AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
                 <div className="contact-footer animate-entry" style={{ animationDelay: '0.2s' }}>
                     <div className="contact-info-block">
@@ -461,22 +459,22 @@ const About = () => {
 
                     <div className="contact-right-side">
                         <div className="contact-location">
-                            <FiMapPin size={14} />
+                            <MapPin weight="regular" size={14} />
                             <span>{about.location}</span>
                         </div>
 
                         <div className="contact-socials">
                             <a href="tel:+919345128797" className="social-icon-link">
-                                <FiPhone size={20} />
+                                <Phone weight="regular" size={20} />
                             </a>
                             <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                                <FiMail size={20} />
+                                <EnvelopeSimple weight="regular" size={20} />
                             </a>
                             <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                                <FiLinkedin size={20} />
+                                <LinkedinLogo weight="regular" size={20} />
                             </a>
                             <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                                <FiGithub size={20} />
+                                <GithubLogo weight="regular" size={20} />
                             </a>
                         </div>
                     </div>

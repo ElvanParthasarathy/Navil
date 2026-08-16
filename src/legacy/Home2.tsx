@@ -1,12 +1,13 @@
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiPhone, FiMail, FiLinkedin, FiInstagram, FiGrid, FiEdit3, FiLayers, FiChevronRight, FiArrowRight, FiGithub } from 'react-icons/fi';
+
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
 import AdBanner from '../../components/ui/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
+import { Phone, EnvelopeSimple, LinkedinLogo, InstagramLogo, GridFour, PencilSimple, Stack, CaretRight, ArrowRight, GithubLogo } from '@phosphor-icons/react';
 
 const Home2 = () => {
     return (
@@ -150,8 +151,7 @@ const Home2 = () => {
 
                 /* GRID SECTIONS */
 
-
-                .contact-footer {
+.contact-footer {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -273,10 +273,10 @@ const Home2 = () => {
                         <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noopener noreferrer" className="hero-btn primary">
                             <span className="desktop-text">View Portfolio</span>
                             <span className="mobile-text">Portfolio</span>
-                            <FiArrowRight />
+                            <ArrowRight weight="regular" />
                         </a>
                         <Link to="/archive" className="hero-btn secondary">
-                            <FiInstagram />
+                            <InstagramLogo weight="regular" />
                             <span className="desktop-text">Explore Insta Archive</span>
                             <span className="mobile-text">Insta Archive</span>
                         </Link>
@@ -310,16 +310,16 @@ const Home2 = () => {
                 </div>
                 <div className="contact-socials">
                     <a href="tel:+919345128797" className="social-icon-link">
-                        <FiPhone size={20} />
+                        <Phone weight="regular" size={20} />
                     </a>
                     <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link">
-                        <FiMail size={20} />
+                        <EnvelopeSimple weight="regular" size={20} />
                     </a>
                     <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiLinkedin size={20} />
+                        <LinkedinLogo weight="regular" size={20} />
                     </a>
                     <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" className="social-icon-link">
-                        <FiGithub size={20} />
+                        <GithubLogo weight="regular" size={20} />
                     </a>
                 </div>
             </div>

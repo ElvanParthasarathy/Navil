@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import { 
-    MdComment, MdDraw, MdEditDocument, MdArticle, MdBook, MdWbSunny, 
-    MdExpandLess, MdExpandMore, MdChevronRight, MdClose, MdSchedule, MdAnchor, 
-    MdImage, MdEdit, MdTune, MdHistoryEdu, MdLock, MdLockOpen, MdAdd, MdDelete, MdFormatQuote, MdBrush, MdWallpaper, MdComputer
-} from 'react-icons/md';
-import { FiClock, FiAnchor, FiChevronUp, FiChevronDown, FiX, FiLock, FiUnlock, FiChevronRight, FiImage, FiTrash2, FiPlus, FiCheck } from 'react-icons/fi';
+
 import {
     Box, Typography, TextField, Autocomplete, Chip, IconButton, Button, 
     Select, MenuItem, FormControl, InputLabel, Switch, Collapse, Tooltip, Paper,
@@ -12,6 +7,7 @@ import {
 } from '@mui/material';
 import RichTextEditor from '../editors/RichTextEditor';
 import { getOptimizedImage } from '../../../lib/media';
+import { ChatCircleText, PencilSimple, FileText, Article, Book, Sun, CaretUp, CaretDown, CaretRight, X, Clock, Anchor, Image, SlidersHorizontal, GraduationCap, LockKey, LockKeyOpen, Plus, Trash, Quotes, PaintBrush, Monitor, Check } from '@phosphor-icons/react';
 
 // ─── SCHEMAS ───
 
@@ -91,7 +87,7 @@ const getArtSchema = (label: string, categoryVal: string, icon: any) => ({
 
 export const SCHEMAS: Record<string, any> = {
     quotes: {
-        label: 'Quotes', icon: <MdFormatQuote size={18} />, type: 'variant_based',
+        label: 'Quotes', icon: <Quotes weight="regular" size={18} />, type: 'variant_based',
         itemFields: [
             { key: 'title', label: 'Quote Title', type: 'text', placeholder: 'Enter quote title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
@@ -115,7 +111,7 @@ export const SCHEMAS: Record<string, any> = {
         getItemSubtitle: (item: any) => item.is_private ? '🔒 Private' : '',
     },
     poems: {
-        label: 'Poems', icon: <MdHistoryEdu size={18} />, type: 'variant_based',
+        label: 'Poems', icon: <GraduationCap weight="regular" size={18} />, type: 'variant_based',
         itemFields: [
             { key: 'title', label: 'Poem Title', type: 'text', placeholder: 'Enter poem title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
@@ -139,7 +135,7 @@ export const SCHEMAS: Record<string, any> = {
         getItemSubtitle: (item: any) => item.is_private ? '🔒 Private' : '',
     },
     blog: {
-        label: 'Blog', icon: <MdEditDocument size={18} />, type: 'variant_based',
+        label: 'Blog', icon: <FileText weight="regular" size={18} />, type: 'variant_based',
         itemFields: [
             { key: 'title', label: 'Post Title', type: 'text', placeholder: 'Enter blog title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
@@ -160,7 +156,7 @@ export const SCHEMAS: Record<string, any> = {
         },
     },
     articles: {
-        label: 'Articles', icon: <MdArticle size={18} />, type: 'variant_based',
+        label: 'Articles', icon: <Article weight="regular" size={18} />, type: 'variant_based',
         itemFields: [
             { key: 'title', label: 'Article Title', type: 'text', placeholder: 'Enter article title', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
@@ -175,7 +171,7 @@ export const SCHEMAS: Record<string, any> = {
         getItemSubtitle: (item: any) => item.tags || '',
     },
     stories: {
-        label: 'Stories', icon: <MdBook size={18} />, type: 'variant_based',
+        label: 'Stories', icon: <Book weight="regular" size={18} />, type: 'variant_based',
         itemFields: [
             { key: 'title', label: 'Chapter Title', type: 'text', placeholder: 'Enter chapter title (e.g. The Awakening)', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
@@ -196,7 +192,7 @@ export const SCHEMAS: Record<string, any> = {
         },
     },
     diary: {
-        label: 'Diary', icon: <MdBook size={18} />, type: 'variant_based',
+        label: 'Diary', icon: <Book weight="regular" size={18} />, type: 'variant_based',
         itemFields: [
             { key: 'title', label: 'Entry Title', type: 'text', placeholder: 'Today I...', flex: 2 },
             { key: 'date', label: 'Date', type: 'datetime-local', flex: 1 },
@@ -211,14 +207,14 @@ export const SCHEMAS: Record<string, any> = {
         getItemTitle: (item: any) => item.title || item.variants?.[0]?.title || 'Untitled Entry',
         getItemSubtitle: (item: any) => item.is_private ? '🔒 Private' : '',
     },
-    art_pencil: getArtSchema('Pencil Drawings', 'pencil', <MdEdit size={18} />),
-    art_editing: getArtSchema('Editings', 'editing', <MdTune size={18} />),
-    art_poster: getArtSchema('Posters', 'poster', <MdArticle size={18} />),
-    art_painting: getArtSchema('Paintings', 'painting', <MdBrush size={18} />),
-    art_quotes: getArtSchema('Visual Quotes', 'quotes', <MdFormatQuote size={18} />),
-    art_poems: getArtSchema('Visual Poems', 'poems', <MdHistoryEdu size={18} />),
-    art_illustrations: getArtSchema('Illustrations', 'illustrations', <MdWallpaper size={18} />),
-    art_digital_arts: getArtSchema('Digital Arts', 'digital_arts', <MdComputer size={18} />),
+    art_pencil: getArtSchema('Pencil Drawings', 'pencil', <PencilSimple weight="regular" size={18} />),
+    art_editing: getArtSchema('Editings', 'editing', <SlidersHorizontal weight="regular" size={18} />),
+    art_poster: getArtSchema('Posters', 'poster', <Article weight="regular" size={18} />),
+    art_painting: getArtSchema('Paintings', 'painting', <PaintBrush weight="regular" size={18} />),
+    art_quotes: getArtSchema('Visual Quotes', 'quotes', <Quotes weight="regular" size={18} />),
+    art_poems: getArtSchema('Visual Poems', 'poems', <GraduationCap weight="regular" size={18} />),
+    art_illustrations: getArtSchema('Illustrations', 'illustrations', <Image weight="regular" size={18} />),
+    art_digital_arts: getArtSchema('Digital Arts', 'digital_arts', <Monitor weight="regular" size={18} />),
 };
 
 // ─── TAG INPUT COMPONENT ───
@@ -273,13 +269,13 @@ export const FieldInput = ({ field, value, onChange }: any) => {
                         </Box>
                         <TextField fullWidth value={url} onChange={(e) => updateUrl(i, e.target.value)} placeholder={`Image URL ${i + 1}`} />
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <IconButton size="small" onClick={() => moveUrl(i, -1)} disabled={i === 0} sx={{ p: 0.25 }}><FiChevronUp size={16} /></IconButton>
-                            <IconButton size="small" onClick={() => moveUrl(i, 1)} disabled={i === urls.length - 1} sx={{ p: 0.25 }}><FiChevronDown size={16} /></IconButton>
+                            <IconButton size="small" onClick={() => moveUrl(i, -1)} disabled={i === 0} sx={{ p: 0.25 }}><CaretUp weight="regular" size={16} /></IconButton>
+                            <IconButton size="small" onClick={() => moveUrl(i, 1)} disabled={i === urls.length - 1} sx={{ p: 0.25 }}><CaretDown weight="regular" size={16} /></IconButton>
                         </Box>
-                        <IconButton color="error" onClick={() => removeUrl(i)}><FiTrash2 size={18} /></IconButton>
+                        <IconButton color="error" onClick={() => removeUrl(i)}><Trash weight="regular" size={18} /></IconButton>
                     </Box>
                 ))}
-                <Button variant="outlined" onClick={addUrl} startIcon={<FiPlus />} sx={{ mt: 1, borderStyle: 'dashed' }}>Add Image URL</Button>
+                <Button variant="outlined" onClick={addUrl} startIcon={<Plus weight="regular" />} sx={{ mt: 1, borderStyle: 'dashed' }}>Add Image URL</Button>
             </Box>
         );
     }
@@ -291,7 +287,7 @@ export const FieldInput = ({ field, value, onChange }: any) => {
                     {value ? (
                         <img src={getOptimizedImage(value, 'thumb')} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                     ) : (
-                        <FiImage size={24} color="var(--color-outline)" />
+                        <Image weight="regular" size={24} color="var(--color-outline)" />
                     )}
                 </Box>
                 <TextField fullWidth value={value || ''} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder || ''} />
@@ -418,8 +414,8 @@ export const PinEditor = ({ item, onUpdate, idPrefix }: any) => (
                         }}
                         fullWidth
                     >
-                        <ToggleButton value="auto" sx={{ display: 'flex', gap: 1 }}><FiClock size={16} /> Auto</ToggleButton>
-                        <ToggleButton value="permanent" sx={{ display: 'flex', gap: 1 }}><FiAnchor size={16} /> Permanent</ToggleButton>
+                        <ToggleButton value="auto" sx={{ display: 'flex', gap: 1 }}><Clock weight="regular" size={16} /> Auto</ToggleButton>
+                        <ToggleButton value="permanent" sx={{ display: 'flex', gap: 1 }}><Anchor weight="regular" size={16} /> Permanent</ToggleButton>
                     </ToggleButtonGroup>
                 </Box>
                 {(item.pinType || 'auto') === 'auto' && (
@@ -463,7 +459,7 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: isExpanded ? 2 : 0, cursor: 'pointer' }} onClick={() => setIsExpanded(!isExpanded)}>
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>Transliterations <Chip size="small" label={keys.length} sx={{ ml: 1, fontWeight: 700 }} /></Typography>
                 <IconButton size="small" sx={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                    <FiChevronRight />
+                    <CaretRight weight="regular" />
                 </IconButton>
             </Box>
             
@@ -479,7 +475,7 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
                                     <Typography variant="subtitle2" sx={{ fontWeight: 700,  fontFamily: 'monospace', bgcolor: 'action.hover', px: 1, py: 0.5, borderRadius: 1 }}>
                                         {tLang}
                                     </Typography>
-                                    <Button size="small" color="error" onClick={() => onToggleLang(tLang)} startIcon={<FiX />}>Remove</Button>
+                                    <Button size="small" color="error" onClick={() => onToggleLang(tLang)} startIcon={<X weight="regular" />}>Remove</Button>
                                 </Box>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                     <Box>
@@ -521,7 +517,7 @@ export const TransliterationEditor = ({ variant, onUpdateTransl, onToggleLang, i
                         />
                         <Button 
                             variant="outlined" 
-                            startIcon={<FiPlus />}
+                            startIcon={<Plus weight="regular" />}
                             onClick={() => {
                                 if (newLang.trim()) {
                                     const val = newLang.trim().toLowerCase();
@@ -567,9 +563,9 @@ export const VariantCard = ({ collection, variant, vIndex, totalVariants, onUpda
                         {vIndex === 0 && <Chip label="Primary" size="small" color="primary" sx={{ ml: 1.5, fontWeight: 700 }} />}
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Button size="small" variant="outlined" onClick={() => onMove('up')} disabled={vIndex === 0} startIcon={<FiChevronUp />} sx={{ borderRadius: 3, borderColor: 'divider' }}>Up</Button>
-                        <Button size="small" variant="outlined" onClick={() => onMove('down')} disabled={vIndex === totalVariants - 1} startIcon={<FiChevronDown />} sx={{ borderRadius: 3, borderColor: 'divider' }}>Down</Button>
-                        <Button size="small" variant="contained" color="error" onClick={() => onRemove()} startIcon={<FiX />} sx={{ borderRadius: 3, boxShadow: 'none' }}>Remove</Button>
+                        <Button size="small" variant="outlined" onClick={() => onMove('up')} disabled={vIndex === 0} startIcon={<CaretUp weight="regular" />} sx={{ borderRadius: 3, borderColor: 'divider' }}>Up</Button>
+                        <Button size="small" variant="outlined" onClick={() => onMove('down')} disabled={vIndex === totalVariants - 1} startIcon={<CaretDown weight="regular" />} sx={{ borderRadius: 3, borderColor: 'divider' }}>Down</Button>
+                        <Button size="small" variant="contained" color="error" onClick={() => onRemove()} startIcon={<X weight="regular" />} sx={{ borderRadius: 3, boxShadow: 'none' }}>Remove</Button>
                     </Box>
                 </Box>
             )}

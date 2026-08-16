@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { MdSave, MdAdd, MdPerson, MdClose, MdMenu, MdHome, MdDashboard, MdChevronLeft, MdLogout, MdSettings, MdArticle, MdComputer, MdCloudUpload, MdComment, MdFavorite, MdExpandMore, MdChevronRight, MdMenuOpen, MdDelete } from 'react-icons/md';
+
 import { Link } from 'react-router-dom';
 import {
     Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
@@ -37,6 +37,7 @@ import '../styles/nirvaagi-tailwind.css';
 import initialProfile from '../data/profile.json';
 
 import { remove } from 'firebase/database';
+import { FloppyDisk, Plus, User, X, List as ListIcon, House, SquaresFour, CaretLeft, SignOut, Gear, Article, Monitor, CloudArrowUp, ChatCircleText, Heart, CaretDown, CaretRight, ListDashes, Trash } from '@phosphor-icons/react';
 
 // Allowed nirvaagiistrator email addresses
 const ALLOWED_NIRVAAGI_EMAILS = ['jaiprakashpartha@gmail.com', 'jaiprakashvp2006@gmail.com'];
@@ -78,7 +79,7 @@ const NavSection = ({ label, children, defaultOpen = true, isCollapsed: sidebarC
                         </Typography>
                     }
                 />
-                {open ? <MdExpandMore size={14} style={{ opacity: 0.5 }} /> : <MdChevronRight size={14} style={{ opacity: 0.5 }} />}
+                {open ? <CaretDown weight="regular" size={14} style={{ opacity: 0.5 }} /> : <CaretRight weight="regular" size={14} style={{ opacity: 0.5 }} />}
             </ListItemButton>
             <Collapse in={open} timeout={300}>
                 {children}
@@ -103,9 +104,7 @@ const Nirvaagi = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
 
-
-
-    // Sidebar state
+// Sidebar state
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('nirvaagi_sidebar_collapsed') === 'true');
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(null);
@@ -906,7 +905,7 @@ const Nirvaagi = () => {
                     </Typography>
                 )}
                 <IconButton onClick={toggleCollapse} size="small" sx={{ color: 'text.secondary' }}>
-                    {isCollapsed ? <MdMenu size={18} /> : <MdMenuOpen size={18} />}
+                    {isCollapsed ? <ListIcon weight="regular" size={18} /> : <ListDashes weight="regular" size={18} />}
                 </IconButton>
             </Box>
 
@@ -915,13 +914,13 @@ const Nirvaagi = () => {
             {/* Nav */}
             <List className="flex-1 overflow-y-auto px-2 py-2" sx={{ '&::-webkit-scrollbar': { display: 'none' } }}>
                 {/* Dashboard */}
-                <NavItem item={{ id: 'dashboard', label: 'Dashboard', icon: <MdDashboard size={18} /> }} />
+                <NavItem item={{ id: 'dashboard', label: 'Dashboard', icon: <SquaresFour weight="regular" size={18} /> }} />
 
                 <Box className="h-2" />
 
                 {/* Content */}
-                <NavItem item={{ id: 'profile', label: 'Profile', icon: <MdPerson size={18} /> }} />
-                <NavItem item={{ id: 'about', label: 'About Page', icon: <MdArticle size={18} /> }} />
+                <NavItem item={{ id: 'profile', label: 'Profile', icon: <User weight="regular" size={18} /> }} />
+                <NavItem item={{ id: 'about', label: 'About Page', icon: <Article weight="regular" size={18} /> }} />
 
                 <Box className="h-2" />
 
@@ -943,7 +942,7 @@ const Nirvaagi = () => {
                 {!isCollapsed && (
                     <ListSubheader disableSticky>Engagement</ListSubheader>
                 )}
-                <NavItem item={{ id: 'comments', label: 'Comments', icon: <MdComment size={18} /> }} />
+                <NavItem item={{ id: 'comments', label: 'Comments', icon: <ChatCircleText weight="regular" size={18} /> }} />
 
                 <Box className="h-2" />
 
@@ -951,7 +950,7 @@ const Nirvaagi = () => {
                 {!isCollapsed && (
                     <ListSubheader disableSticky>Tools</ListSubheader>
                 )}
-                <NavItem item={{ id: 'bookmaker', label: 'Book Maker', icon: <MdArticle size={18} /> }} />
+                <NavItem item={{ id: 'bookmaker', label: 'Book Maker', icon: <Article weight="regular" size={18} /> }} />
 
                 <Box className="h-2" />
 
@@ -959,7 +958,7 @@ const Nirvaagi = () => {
                 {!isCollapsed && (
                     <ListSubheader disableSticky>System</ListSubheader>
                 )}
-                <NavItem item={{ id: 'settings', label: 'Settings', icon: <MdSettings size={18} /> }} />
+                <NavItem item={{ id: 'settings', label: 'Settings', icon: <Gear weight="regular" size={18} /> }} />
             </List>
 
             <Divider />
@@ -1043,11 +1042,11 @@ const Nirvaagi = () => {
                     <Divider sx={{ my: 1.5, opacity: 0.5 }} />
 
                     <ListItemButton onClick={() => setIsProfilePopupOpen(null)} component={Link} to="/" sx={{ borderRadius: 3, mx: 0.5, py: 1, mb: 0.5 }}>
-                        <MdHome size={18} style={{ marginRight: 12, opacity: 0.7 }} /> 
+                        <House weight="regular" size={18} style={{ marginRight: 12, opacity: 0.7 }} /> 
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>Go to main site</Typography>
                     </ListItemButton>
                     <ListItemButton onClick={handleSignOut} sx={{ borderRadius: 3, mx: 0.5, py: 1, color: 'error.main' }}>
-                        <MdLogout size={18} style={{ marginRight: 12 }} /> 
+                        <SignOut weight="regular" size={18} style={{ marginRight: 12 }} /> 
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>Sign Out</Typography>
                     </ListItemButton>
                 </Popover>
@@ -1099,7 +1098,7 @@ const Nirvaagi = () => {
                 <AppBar position="static" elevation={0} sx={{ display: { xs: 'flex', md: 'none' } }}>
                     <Toolbar sx={{ minHeight: '56px !important', px: 2 }}>
                         <IconButton edge="start" onClick={() => setMobileMenuOpen(true)} sx={{ mr: 1, color: 'text.primary' }}>
-                            <MdMenu size={20} />
+                            <ListIcon weight="regular" size={20} />
                         </IconButton>
                         <Typography variant="h6" color="text.primary" className="flex-1 text-sm" sx={{ fontWeight: 600 }}>
                             {activeTab === 'dashboard' ? 'Dashboard'
@@ -1114,7 +1113,7 @@ const Nirvaagi = () => {
                                 else if (editingId) setEditingId(null);
                                 else setActiveTab('dashboard');
                             }} sx={{ color: 'text.primary' }}>
-                                <MdChevronLeft size={22} />
+                                <CaretLeft weight="regular" size={22} />
                             </IconButton>
                         )}
                     </Toolbar>
@@ -1138,7 +1137,7 @@ const Nirvaagi = () => {
                         <Box sx={{ p: { xs: 3, md: 4, lg: 6 } }}>
                             <Box sx={{ mb: 6 }}>
                                 <Typography variant="h4" gutterBottom sx={{ fontWeight: 800, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                    <MdSettings size={32} color="var(--mui-palette-primary-main)" />
+                                    <Gear weight="regular" size={32} color="var(--mui-palette-primary-main)" />
                                     System Settings
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
@@ -1148,7 +1147,7 @@ const Nirvaagi = () => {
 
                             <Box sx={{ mb: 4 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-                                    <MdPerson size={24} color="var(--mui-palette-text-secondary)" />
+                                    <User weight="regular" size={24} color="var(--mui-palette-text-secondary)" />
                                     <Typography variant="h6" sx={{ fontWeight: 700 }}>Default Author Names</Typography>
                                 </Box>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
@@ -1197,7 +1196,7 @@ const Nirvaagi = () => {
                                     <Button
                                         variant="contained"
                                         size="large"
-                                        startIcon={<MdSave size={20} />}
+                                        startIcon={<FloppyDisk weight="regular" size={20} />}
                                         onClick={async () => {
                                             try {
                                                 await set(ref(db, 'config/defaultAuthors'), dataStore.defaultAuthors);
@@ -1238,6 +1237,4 @@ const Nirvaagi = () => {
 };
 
 export default Nirvaagi;
-
-
 

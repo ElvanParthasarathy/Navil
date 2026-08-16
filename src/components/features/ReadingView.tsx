@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useOutletContext, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FiCalendar, FiArrowLeft } from 'react-icons/fi';
+
 import { subscribe, getCachedRaw } from '../../lib/firebaseCache';
 import AdBanner from '../ui/AdBanner';
 import { getOptimizedImage } from '../../lib/media';
 import { Engagement } from '../ui/Engagement';
 import MobileTopBar from '../ui/MobileTopBar';
 import { FloatingBackButton } from '../ui/FloatingBackButton';
+import { CalendarBlank, ArrowLeft } from '@phosphor-icons/react';
 
 const CATEGORY_META = {
     'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts' },
@@ -145,17 +146,14 @@ const ReadingView = () => {
 
     const finalCoverImage = post ? (post.cover_image || null) : null;
 
-
-
-    const toggleVariantTransl = (vKey, lang) => {
+const toggleVariantTransl = (vKey, lang) => {
         setVariantTranslStates(prev => ({
             ...prev,
             [vKey]: prev[vKey] === lang ? null : lang
         }));
     };
 
-
-    // Subscribe to the shared cache — reuses existing listener, no duplicate DB calls
+// Subscribe to the shared cache — reuses existing listener, no duplicate DB calls
     useEffect(() => {
         if (!meta) return;
 
@@ -394,9 +392,7 @@ const ReadingView = () => {
                     margin-bottom: 0;
                 }
 
-
-
-                .expand-pill {
+.expand-pill {
                     display: inline-flex;
                     align-items: center;
                     justify-content: flex-start;
@@ -509,7 +505,7 @@ const ReadingView = () => {
 
                 <header style={{ marginBottom: '40px', textAlign: isStory ? 'center' : 'left' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: isStory ? 'center' : 'flex-start', flexWrap: 'wrap', gap: '8px', color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '16px', fontWeight: 500 }}>
-                        <FiCalendar />
+                        <CalendarBlank weight="regular" />
                         {new Date(post.publish_date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                         {post.series_name && <span style={{ color: 'var(--text-main)' }}>• {post.series_name} — Part {post.series_part}</span>}
                         {post.tags?.length > 0 && <span>• {post.tags.join(', ')}</span>}
@@ -788,8 +784,7 @@ const ReadingView = () => {
                 <Engagement postId={post.id} category={category} />
             </article>
 
-
-            <AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
+<AdBanner variant="inline" wrapperStyle={{ margin: '60px 0' }} />
 
             {/* Rich content body styles */}
             <style>{`
@@ -862,5 +857,4 @@ const ReadingView = () => {
 };
 
 export default ReadingView;
-
 

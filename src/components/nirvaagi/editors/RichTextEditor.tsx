@@ -5,11 +5,9 @@ import Heading from '@tiptap/extension-heading';
 import Placeholder from '@tiptap/extension-placeholder';
 import ImageResize from 'tiptap-extension-resize-image';
 import { Box, IconButton, Divider, Tooltip, Typography, Paper } from '@mui/material';
-import { 
-    FiBold, FiItalic, FiType, FiList, FiImage, FiMinus, FiCode
-} from 'react-icons/fi';
-import { MdFormatListNumbered, MdFormatQuote, MdStrikethroughS } from 'react-icons/md';
+
 import { getOptimizedImage } from '../../../lib/media';
+import { TextB, TextItalic, TextT, List, Image, Minus, Code, ListNumbers, Quotes, TextStrikethrough } from '@phosphor-icons/react';
 
 const SubtitleMark = Mark.create({
     name: 'subtitle',
@@ -60,9 +58,9 @@ const MenuBar = ({ editor }: any) => {
             borderBottom: '1px solid', borderColor: 'divider', 
             bgcolor: 'background.default'
         }}>
-            <Tooltip title="Bold"><IconButton size="small" onClick={() => editor.chain().focus().toggleBold().run()} sx={getBtnStyle(editor.isActive('bold'))}><FiBold size={18} /></IconButton></Tooltip>
-            <Tooltip title="Italic"><IconButton size="small" onClick={() => editor.chain().focus().toggleItalic().run()} sx={getBtnStyle(editor.isActive('italic'))}><FiItalic size={18} /></IconButton></Tooltip>
-            <Tooltip title="Strikethrough"><IconButton size="small" onClick={() => editor.chain().focus().toggleStrike().run()} sx={getBtnStyle(editor.isActive('strike'))}><MdStrikethroughS size={18} /></IconButton></Tooltip>
+            <Tooltip title="Bold"><IconButton size="small" onClick={() => editor.chain().focus().toggleBold().run()} sx={getBtnStyle(editor.isActive('bold'))}><TextB weight="regular" size={18} /></IconButton></Tooltip>
+            <Tooltip title="Italic"><IconButton size="small" onClick={() => editor.chain().focus().toggleItalic().run()} sx={getBtnStyle(editor.isActive('italic'))}><TextItalic weight="regular" size={18} /></IconButton></Tooltip>
+            <Tooltip title="Strikethrough"><IconButton size="small" onClick={() => editor.chain().focus().toggleStrike().run()} sx={getBtnStyle(editor.isActive('strike'))}><TextStrikethrough weight="regular" size={18} /></IconButton></Tooltip>
             <Tooltip title="English Subtitle">
                 <IconButton size="small" onClick={() => editor.chain().focus().toggleMark('subtitle').run()} sx={getBtnStyle(editor.isActive('subtitle'))}>
                     <Typography variant="body2" sx={{ fontStyle: 'italic',  fontWeight: 800,  px: 0.5 }}>sub</Typography>
@@ -84,15 +82,15 @@ const MenuBar = ({ editor }: any) => {
 
             <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            <Tooltip title="Bullet List"><IconButton size="small" onClick={() => editor.chain().focus().toggleBulletList().run()} sx={getBtnStyle(editor.isActive('bulletList'))}><FiList size={18} /></IconButton></Tooltip>
-            <Tooltip title="Numbered List"><IconButton size="small" onClick={() => editor.chain().focus().toggleOrderedList().run()} sx={getBtnStyle(editor.isActive('orderedList'))}><MdFormatListNumbered size={18} /></IconButton></Tooltip>
-            <Tooltip title="Blockquote"><IconButton size="small" onClick={() => editor.chain().focus().toggleBlockquote().run()} sx={getBtnStyle(editor.isActive('blockquote'))}><MdFormatQuote size={18} /></IconButton></Tooltip>
-            <Tooltip title="Code Block"><IconButton size="small" onClick={() => editor.chain().focus().toggleCodeBlock().run()} sx={getBtnStyle(editor.isActive('codeBlock'))}><FiCode size={18} /></IconButton></Tooltip>
+            <Tooltip title="Bullet List"><IconButton size="small" onClick={() => editor.chain().focus().toggleBulletList().run()} sx={getBtnStyle(editor.isActive('bulletList'))}><List weight="regular" size={18} /></IconButton></Tooltip>
+            <Tooltip title="Numbered List"><IconButton size="small" onClick={() => editor.chain().focus().toggleOrderedList().run()} sx={getBtnStyle(editor.isActive('orderedList'))}><ListNumbers weight="regular" size={18} /></IconButton></Tooltip>
+            <Tooltip title="Blockquote"><IconButton size="small" onClick={() => editor.chain().focus().toggleBlockquote().run()} sx={getBtnStyle(editor.isActive('blockquote'))}><Quotes weight="regular" size={18} /></IconButton></Tooltip>
+            <Tooltip title="Code Block"><IconButton size="small" onClick={() => editor.chain().focus().toggleCodeBlock().run()} sx={getBtnStyle(editor.isActive('codeBlock'))}><Code weight="regular" size={18} /></IconButton></Tooltip>
 
             <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            <Tooltip title="Insert Image"><IconButton size="small" onClick={addImage} sx={getBtnStyle(false)}><FiImage size={18} /></IconButton></Tooltip>
-            <Tooltip title="Horizontal Rule"><IconButton size="small" onClick={() => editor.chain().focus().setHorizontalRule().run()} sx={getBtnStyle(false)}><FiMinus size={18} /></IconButton></Tooltip>
+            <Tooltip title="Insert Image"><IconButton size="small" onClick={addImage} sx={getBtnStyle(false)}><Image weight="regular" size={18} /></IconButton></Tooltip>
+            <Tooltip title="Horizontal Rule"><IconButton size="small" onClick={() => editor.chain().focus().setHorizontalRule().run()} sx={getBtnStyle(false)}><Minus weight="regular" size={18} /></IconButton></Tooltip>
         </Box>
     );
 };

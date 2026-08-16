@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useOutletContext, useNavigate, useSearchParams } from 'react-router-dom';
-import { FiCalendar } from 'react-icons/fi';
+
 import { subscribe, getCached } from '../../lib/firebaseCache';
 import AdBanner from '../ui/AdBanner';
 import { Helmet } from 'react-helmet-async';
@@ -10,6 +10,7 @@ import MobileTopBar from '../ui/MobileTopBar';
 import StoriesListView from './StoriesListView';
 import { ReadingView } from './ReadingView';
 import { FloatingBackButton } from '../ui/FloatingBackButton';
+import { CalendarBlank } from '@phosphor-icons/react';
 
 const CATEGORY_META = {
     'blog': {
@@ -513,9 +514,7 @@ const CategoryListView = () => {
                 </div>
             )}
 
-
-
-            <div className="blog-grid-container animate-entry">
+<div className="blog-grid-container animate-entry">
                 {loading ? (
                     Array(6).fill(0).map((_, i) => (
                         <div key={i} className="skeleton-item" style={{ background: 'var(--bg-card)', borderRadius: '16px', overflow: 'hidden' }}>
@@ -1756,10 +1755,4 @@ const CategoryListView = () => {
 };
 
 export default CategoryListView;
-
-
-
-
-
-
 

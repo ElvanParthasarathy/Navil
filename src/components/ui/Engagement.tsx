@@ -1,12 +1,13 @@
 import './Engagement.css';
 import React, { useState, useEffect, useRef } from 'react';
-import { FiHeart, FiMessageCircle, FiSend, FiUser, FiTrash2, FiEdit2, FiCheck, FiX } from 'react-icons/fi';
+
 import { ref, get } from 'firebase/database';
 import { db } from '../../lib/firebaseClient';
 import { addLike, removeLike, addComment, deleteComment, updateComment, subscribeToEngagement } from '../../lib/engagement';
 import { auth } from '../../lib/firebaseClient';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { ConfirmDialog } from './ConfirmDialog';
+import { Heart, ChatCircle, PaperPlaneRight, User, Trash, Pencil, Check, X } from '@phosphor-icons/react';
 
 interface Comment {
     id: string;
@@ -223,7 +224,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                     className={`mini-like-btn ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
                     onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 >
-                    <FiHeart className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
+                    <Heart weight="regular" className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
                     <span className="mini-count">{likes}</span>
                 </button>
             </div>
@@ -246,7 +247,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                         className={`mini-like-btn ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
                         onClick={handleLike}
                     >
-                        <FiHeart className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
+                        <Heart weight="regular" className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
                         <span className="mini-count">{likes}</span>
                     </button>
                 </div>
@@ -259,7 +260,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                     <form className="discussion-form-flat" onSubmit={handleSubmitComment}>
                         <div className="flat-input-group-container">
                         <div className="flat-input-group">
-                            <FiUser className="flat-icon" />
+                            <User weight="regular" className="flat-icon" />
                             <div className="bilingual-input-wrapper">
                                 <input 
                                     type="text" 
@@ -307,7 +308,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                         if (el) el.style.height = 'auto';
                                     }}
                                 >
-                                    <FiX className="btn-icon-mini" />
+                                    <X weight="regular" className="btn-icon-mini" />
                                     <div className="btn-text-stack">
                                         <span className="action-ta">ரத்து</span>
                                         <span className="action-en">cancel</span>
@@ -319,7 +320,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                 className={`flat-submit-btn ${!text.trim() || isSubmitting ? 'disabled' : ''}`}
                                 disabled={!text.trim() || isSubmitting}
                             >
-                                <FiSend className="btn-icon-mini" />
+                                <PaperPlaneRight weight="regular" className="btn-icon-mini" />
                                 <div className="btn-text-stack">
                                     <span className="action-ta">தூதிடு</span>
                                     <span className="action-en">send</span>
@@ -356,7 +357,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                         
                                         <div className="comment-actions">
                                             <button className="comment-reply-btn" onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}>
-                                                <FiMessageCircle className="reply-icon" />
+                                                <ChatCircle weight="regular" className="reply-icon" />
                                                 <div className="action-text-stack">
                                                     <span className="action-ta">பதில்</span>
                                                     <span className="action-en">reply</span>
@@ -381,7 +382,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                                  setEditingText(comment.text);
                                                                  setActiveMenu(null); 
                                                              }}>
-                                                                 <FiEdit2 /> 
+                                                                 <Pencil weight="regular" /> 
                                                                  <div className="action-text-stack">
                                                                      <span className="action-ta">திருத்து</span>
                                                                      <span className="action-en">edit</span>
@@ -389,7 +390,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                              </button>
                                                          )}
                                                          <button className="delete-opt" onClick={() => { handleDelete(comment.id); setActiveMenu(null); }}>
-                                                             <FiTrash2 /> 
+                                                             <Trash weight="regular" /> 
                                                              <div className="action-text-stack">
                                                                  <span className="action-ta">நீக்கு</span>
                                                                  <span className="action-en">delete</span>
@@ -415,14 +416,14 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                             </div>
                                             <div className="flat-form-footer">
                                                 <button className="flat-cancel-btn" onClick={() => setEditingComment(null)}>
-                                                    <FiX className="btn-icon-mini" />
+                                                    <X weight="regular" className="btn-icon-mini" />
                                                     <div className="btn-text-stack">
                                                         <span className="action-ta">ரத்து</span>
                                                         <span className="action-en">cancel</span>
                                                     </div>
                                                 </button>
                                                 <button className="flat-submit-btn" onClick={() => handleSaveEdit(comment.id)}>
-                                                    <FiCheck className="btn-icon-mini" />
+                                                    <Check weight="regular" className="btn-icon-mini" />
                                                     <div className="btn-text-stack">
                                                         <span className="action-ta">சேமி</span>
                                                         <span className="action-en">save</span>
@@ -475,7 +476,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                                     setEditingText(reply.text);
                                                                     setActiveMenu(null); 
                                                                 }}>
-                                                                    <FiEdit2 />
+                                                                    <Pencil weight="regular" />
                                                                     <div className="action-text-stack">
                                                                         <span className="action-ta">திருத்து</span>
                                                                         <span className="action-en">edit</span>
@@ -483,7 +484,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                                 </button>
                                                             )}
                                                             <button className="delete-opt" onClick={() => handleDelete(reply.id)}>
-                                                                <FiTrash2 />
+                                                                <Trash weight="regular" />
                                                                 <div className="action-text-stack">
                                                                     <span className="action-ta">நீக்கு</span>
                                                                     <span className="action-en">delete</span>
@@ -508,14 +509,14 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                       </div>
                                                       <div className="flat-form-footer">
                                                           <button className="flat-cancel-btn" onClick={() => setEditingComment(null)}>
-                                                              <FiX className="btn-icon-mini" />
+                                                              <X weight="regular" className="btn-icon-mini" />
                                                               <div className="btn-text-stack">
                                                                   <span className="action-ta">ரத்து</span>
                                                                   <span className="action-en">cancel</span>
                                                               </div>
                                                           </button>
                                                           <button className="flat-submit-btn" onClick={() => handleSaveEdit(reply.id)}>
-                                                              <FiCheck className="btn-icon-mini" />
+                                                              <Check weight="regular" className="btn-icon-mini" />
                                                               <div className="btn-text-stack">
                                                                   <span className="action-ta">சேமி</span>
                                                                   <span className="action-en">save</span>
@@ -552,7 +553,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                          </div>
                                          <div className="flat-form-footer">
                                              <button className="flat-cancel-btn" onClick={() => setReplyingTo(null)}>
-                                                 <FiX className="btn-icon-mini" />
+                                                 <X weight="regular" className="btn-icon-mini" />
                                                  <div className="btn-text-stack">
                                                      <span className="action-ta">ரத்து</span>
                                                      <span className="action-en">cancel</span>
@@ -562,7 +563,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                                                  className="flat-submit-btn"
                                                  onClick={(e) => handleSubmitComment(e, comment.id)}
                                              >
-                                                 <FiSend className="btn-icon-mini" />
+                                                 <PaperPlaneRight weight="regular" className="btn-icon-mini" />
                                                  <div className="btn-text-stack">
                                                      <span className="action-ta">பதில்</span>
                                                      <span className="action-en">reply</span>

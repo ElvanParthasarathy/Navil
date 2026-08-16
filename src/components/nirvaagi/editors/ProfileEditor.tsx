@@ -1,6 +1,7 @@
 import React from 'react';
-import { FiEdit3, FiX, FiCheck } from 'react-icons/fi';
+
 import { Box, Typography, Button, Card, CardContent, TextField, Avatar, Grid, Divider } from '@mui/material';
+import { PencilSimple, X, Check } from '@phosphor-icons/react';
 
 export const ProfileEditor = ({
     profileData,
@@ -19,7 +20,7 @@ export const ProfileEditor = ({
                             variant="contained" 
                             color="primary" 
                             onClick={() => setIsProfileEditing(true)}
-                            startIcon={<FiEdit3 size={16} />}
+                            startIcon={<PencilSimple weight="regular" size={16} />}
                             sx={{ fontWeight: 600, borderRadius: 2 }}
                         >
                             Edit Profile
@@ -30,7 +31,7 @@ export const ProfileEditor = ({
                                 variant="outlined" 
                                 color="inherit" 
                                 onClick={() => setIsProfileEditing(false)}
-                                startIcon={<FiX size={16} />}
+                                startIcon={<X weight="regular" size={16} />}
                                 sx={{ fontWeight: 600, borderRadius: 2, borderColor: 'divider' }}
                             >
                                 Cancel
@@ -39,7 +40,7 @@ export const ProfileEditor = ({
                                 variant="contained" 
                                 color="primary" 
                                 onClick={onSave}
-                                startIcon={<FiCheck size={16} />}
+                                startIcon={<Check weight="regular" size={16} />}
                                 sx={{ fontWeight: 600, borderRadius: 2 }}
                             >
                                 Save Profile

@@ -1,9 +1,10 @@
 // @ts-nocheck
 import React from 'react';
-import { FiSettings, FiMoon, FiSun, FiMonitor } from 'react-icons/fi';
+
 import { useOutletContext, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
+import { Gear, Moon, Sun, Monitor } from '@phosphor-icons/react';
 
 const Settings = () => {
     const navigate = useNavigate();
@@ -198,21 +199,21 @@ const Settings = () => {
                             className={`theme-option ${theme === 'light' ? 'active' : ''}`}
                             onClick={() => setTheme('light')}
                         >
-                            <FiSun size={18} /> Light
+                            <Sun weight="regular" size={18} /> Light
                         </button>
 
                         <button
                             className={`theme-option ${theme === 'auto' ? 'active' : ''}`}
                             onClick={() => setTheme('auto')}
                         >
-                            <FiMonitor size={18} /> Auto
+                            <Monitor weight="regular" size={18} /> Auto
                         </button>
 
                         <button
                             className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
                             onClick={() => setTheme('dark')}
                         >
-                            <FiMoon size={18} /> Dark
+                            <Moon weight="regular" size={18} /> Dark
                         </button>
                     </div>
                     <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -223,7 +224,7 @@ const Settings = () => {
             </div>
 
             <div className="coming-soon-container animate-entry" style={{ animationDelay: '0.2s' }}>
-                <div className="cs-icon"><FiSettings /></div>
+                <div className="cs-icon"><Gear weight="regular" /></div>
                 <h3 style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '8px' }}>More Coming Soon</h3>
                 <p style={{ fontSize: '0.95rem' }}>
                     Profile customization and extra configuration options are being built.

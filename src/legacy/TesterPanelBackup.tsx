@@ -2,7 +2,7 @@
 // @ts-nocheck
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FiUploadCloud, FiTrash2 } from 'react-icons/fi';
+import { CloudArrowUp, Trash } from '@phosphor-icons/react';
 
 // ─── TESTER PANEL COMPONENT ───
 export const TesterPanelBackup = ({ dataStore, setDataStore, setStatus, setMessage, autoThumbnails, setAutoThumbnails, onMasterSave }) => {
@@ -305,7 +305,7 @@ export const TesterPanelBackup = ({ dataStore, setDataStore, setStatus, setMessa
                         onClick={onMasterSave}
                         style={{ width: '100%', marginTop: '8px', background: '#FFCA28', color: '#333' }}
                     >
-                        <FiUploadCloud size={16} /> Save All (Commit to Live)
+                        <CloudArrowUp weight="regular" size={16} /> Save All (Commit to Live)
                     </button>
                 </div>
                 

@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiUser, FiMonitor, FiSun, FiMoon, FiBook, FiTool } from 'react-icons/fi';
-import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
+
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
 import profilePic from './assets/instagram/profile.jpg';
@@ -21,6 +20,7 @@ import StoriesListView from './components/features/StoriesListView';
 import ReadingView from './components/features/ReadingView';
 import AdBanner from './components/ui/AdBanner';
 import GlobalErrorBoundary from './components/core/GlobalErrorBoundary';
+import { House, PencilSimple, Gear, User, Monitor, Sun, Moon, Book, Wrench, ListDashes, List, Palette } from '@phosphor-icons/react';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
     React.lazy(() =>
@@ -40,8 +40,6 @@ const lazyWithRetry = (componentImport: () => Promise<any>) =>
             throw error;
         })
     );
-
-
 
 interface ThemeContextType {
     theme: string;
@@ -101,7 +99,6 @@ const ProfileImage = ({ src, alt, className }: ProfileImageProps) => {
         </div>
     );
 };
-
 
 const Layout = () => {
     const location = useLocation();
@@ -209,8 +206,7 @@ const Layout = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isSettingsOpen]);
 
-
-    const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
     const mainLevelPaths = ['/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching', '/tools'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
@@ -233,18 +229,17 @@ const Layout = () => {
                             onClick={handleSidebarToggle}
                             title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                         >
-                            {isSidebarCollapsed ? <RiMenuUnfoldLine size={20} /> : <RiMenuFoldLine size={20} />}
+                            {isSidebarCollapsed ? <List weight="regular" size={20} /> : <ListDashes weight="regular" size={20} />}
                         </button>
                     </div>
                     <div className="sidebar-nav">
-                        <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/arts" icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/tools" icon={<FiTool size={22} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
+                        <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/writings" icon={<PencilSimple weight={location.pathname.startsWith('/writings') ? "fill" : "regular"} size={22} />} label="எழுத்துகள்" subLabel="writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/arts" icon={<Palette weight={location.pathname.startsWith('/arts') ? "fill" : "regular"} size={22} />} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/tools" icon={<Wrench weight={location.pathname.startsWith('/tools') ? "fill" : "regular"} size={22} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/teaching" icon={<Monitor weight={location.pathname.startsWith('/teaching') ? "fill" : "regular"} size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
-
-                        <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
+                        <NavLink to="/about" icon={<User weight={location.pathname === '/about' ? "fill" : "regular"} size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
                             icon={
@@ -261,9 +256,8 @@ const Layout = () => {
                         />
                         
                     </div>
-                    
 
-                </div>
+</div>
 
                 <div className="sidebar-bottom" ref={settingsZoneRef}>
                     <div className="settings-profile-container">
@@ -284,9 +278,9 @@ const Layout = () => {
                                         <span className="settings-name">{profileData?.fullName || 'Elvan Parthasarathy'}</span>
                                     </div>
                                     {theme === 'light' ? (
-                                        <FiSun size={16} className="settings-theme-icon" />
+                                        <Sun weight="regular" size={16} className="settings-theme-icon" />
                                     ) : theme === 'dark' ? (
-                                        <FiMoon size={16} className="settings-theme-icon" />
+                                        <Moon weight="regular" size={16} className="settings-theme-icon" />
                                     ) : (
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="settings-theme-icon" style={{ width: 16, height: 16 }}>
                                             <circle cx="12" cy="12" r="10" />
@@ -361,8 +355,8 @@ const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', col
                             className="nav-badge desktop-only" 
                             style={{ 
                                 fontSize: '0.6rem', 
-                                background: active ? 'var(--accent-text)' : 'color-mix(in srgb, var(--text-main) 15%, transparent)', 
-                                color: active ? 'var(--accent-color)' : 'var(--text-main)', 
+                                background: active ? 'var(--text-main)' : 'color-mix(in srgb, var(--text-main) 15%, transparent)', 
+                                color: active ? 'var(--bg-app)' : 'var(--text-main)', 
                                 padding: '2px 6px', 
                                 borderRadius: '100px', 
                                 marginLeft: '8px', 
@@ -381,8 +375,6 @@ const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', col
         )}
     </Link>
 );
-
-
 
 const router = createBrowserRouter([
     {
@@ -529,7 +521,4 @@ function App() {
 }
 
 export default App;
-
-
-
 

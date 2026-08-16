@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, Typography, CircularProgress, IconButton, Avatar } from '@mui/material';
-import { MdComment, MdDelete, MdFavorite } from 'react-icons/md';
+
 import { db, auth } from '../../../lib/firebaseClient';
 import { ref, onValue, remove, set } from 'firebase/database';
 import { addComment } from '../../../lib/engagement';
+import { ChatCircleText, Trash, Heart } from '@phosphor-icons/react';
 
 export default function CommentsManager({ username, profilePic }: { username: string, profilePic: string }) {
     const [allComments, setAllComments] = useState({});
@@ -92,7 +93,7 @@ export default function CommentsManager({ username, profilePic }: { username: st
                                     <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{postId}</Typography>
                                 </Box>
                                 <Box className="flex items-center gap-1" sx={{ color: 'error.main' }}>
-                                    <MdFavorite size={16} />
+                                    <Heart weight="regular" size={16} />
                                     <Typography sx={{ fontWeight: 700 }}>{data.likes}</Typography>
                                 </Box>
                             </Box>
@@ -118,10 +119,10 @@ export default function CommentsManager({ username, profilePic }: { username: st
                                                 <Typography variant="body2">{comment.text}</Typography>
                                                 <Box className="flex gap-2 mt-2">
                                                     <IconButton size="small" onClick={() => setReplyingTo(replyingTo?.commentId === comment.id ? null : { postId, commentId: comment.id })}>
-                                                        <MdComment size={14} />
+                                                        <ChatCircleText weight="regular" size={14} />
                                                     </IconButton>
                                                     <IconButton size="small" color="error" onClick={() => handleDelete(postId, comment.id)}>
-                                                        <MdDelete size={14} />
+                                                        <Trash weight="regular" size={14} />
                                                     </IconButton>
                                                 </Box>
                                             </Box>
@@ -144,7 +145,7 @@ export default function CommentsManager({ username, profilePic }: { username: st
                                                         <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>{reply.text}</Typography>
                                                     </Box>
                                                     <IconButton size="small" color="error" onClick={() => handleDelete(postId, reply.id)} sx={{ opacity: 0.5, '&:hover': { opacity: 1 } }}>
-                                                        <MdDelete size={12} />
+                                                        <Trash weight="regular" size={12} />
                                                     </IconButton>
                                                 </Box>
                                             ))}

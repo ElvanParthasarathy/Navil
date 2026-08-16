@@ -1,8 +1,9 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FiMonitor } from 'react-icons/fi';
+
 import { useTheme } from '../../App';
+import { Monitor } from '@phosphor-icons/react';
 
 interface MobileTopBarProps {
     title: string;
@@ -110,7 +111,7 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                                     {/* MAIN MENU */}
                                     <div className="menu-view">
                                         <Link to="/teaching" onClick={() => setIsMobileMenuOpen(false)} className="menu-item">
-                                            <FiMonitor className="menu-icon" />
+                                            <Monitor weight="regular" className="menu-icon" />
                                             Teaching
                                         </Link>
                                         <button onClick={() => setMobileMenuView('appearance')} className="menu-item space-between">

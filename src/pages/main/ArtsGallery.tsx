@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../../components/ui/MobileTopBar';
-import { FiHeart, FiMessageCircle, FiX, FiChevronLeft, FiChevronRight, FiMaximize2, FiExternalLink } from 'react-icons/fi';
+
 import { getOptimizedImage } from '../../lib/media';
 import { Helmet } from 'react-helmet-async';
 import { db } from '../../lib/firebaseClient';
@@ -15,6 +15,7 @@ import { Engagement } from '../../components/ui/Engagement';
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
 import './ArtsGallery.css';
+import { Heart, ChatCircle, X, CaretLeft, CaretRight, ArrowsOutSimple, ArrowSquareOut } from '@phosphor-icons/react';
 
 const CATEGORY_META = {
     pencil: {
@@ -69,14 +70,6 @@ const CATEGORY_META = {
 
 const ITEMS_PER_PAGE = 8;
 const PAGINATION_INCREMENT = 12;
-
-
-
-
-
-
-
-
 
 const ArtsGallery = () => {
     const { category } = useParams();
@@ -639,9 +632,7 @@ const ArtsGallery = () => {
                     <meta name="description" content={meta.descEn} />
                 </Helmet>
 
-                
-
-                <div className="arts-gallery-page">
+<div className="arts-gallery-page">
                     <header className="arts-gallery-header animate-entry">
                         <div style={{ flex: 1, minWidth: '200px' }}>
                             <h1 className="arts-gallery-title">{meta.titleTa}</h1>
@@ -714,7 +705,7 @@ const ArtsGallery = () => {
                                 style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                             >
                                 <button className="arts-lb-close" onClick={closeLightbox} aria-label="Close">
-                                    <FiX size={18} />
+                                    <X weight="regular" size={18} />
                                 </button>
 
                                 <div className="arts-lb-profile">
@@ -728,12 +719,12 @@ const ArtsGallery = () => {
                             <div className="arts-lb-main-container" onClick={(e) => e.stopPropagation()}>
                                 {hasPrevPost && (
                                     <button className="arts-lb-nav prev arts-lb-nav-post desktop-only" onClick={goToPrevPost}>
-                                        <FiChevronLeft size={26} />
+                                        <CaretLeft weight="regular" size={26} />
                                     </button>
                                 )}
                                 {hasNextPost && (
                                     <button className="arts-lb-nav next arts-lb-nav-post desktop-only" onClick={goToNextPost}>
-                                        <FiChevronRight size={26} />
+                                        <CaretRight weight="regular" size={26} />
                                     </button>
                                 )}
 
@@ -777,12 +768,12 @@ const ArtsGallery = () => {
 
                                     {lightboxGlobalIdx > 0 && flattenedImages[lightboxGlobalIdx].subIdx > 0 && (
                                         <button className="arts-lb-nav prev arts-lb-nav-photo desktop-only" onClick={goToPrev}>
-                                            <FiChevronLeft size={22} />
+                                            <CaretLeft weight="regular" size={22} />
                                         </button>
                                     )}
                                     {lightboxGlobalIdx < flattenedImages.length - 1 && flattenedImages[lightboxGlobalIdx].subIdx < flattenedImages[lightboxGlobalIdx].totalInPost - 1 && (
                                         <button className="arts-lb-nav next arts-lb-nav-photo desktop-only" onClick={goToNext}>
-                                            <FiChevronRight size={22} />
+                                            <CaretRight weight="regular" size={22} />
                                         </button>
                                     )}
                                 </div>
@@ -921,7 +912,7 @@ const ArtsGallery = () => {
                                 >
                                     <div className="arts-lb-caption-sheet" onClick={e => e.stopPropagation()}>
                                         <button className="arts-lb-sheet-close" onClick={() => setShowCaptionModal(false)}>
-                                            <FiX size={18} />
+                                            <X weight="regular" size={18} />
                                         </button>
                                         <div className="arts-lb-sheet-title" dangerouslySetInnerHTML={{ __html: currentImg.caption }} />
                                         <div className="arts-lb-sheet-meta">

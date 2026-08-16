@@ -1,9 +1,10 @@
 // @ts-nocheck
 // @ts-nocheck
 import React, { useState } from 'react';
-import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiMove } from 'react-icons/fi';
+
 import { SCHEMAS, renderFieldRow, PinEditor, VariantCard } from '../shared/NirvaagiShared';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
+import { PencilSimple, Trash, Plus, ArrowLeft, FloppyDisk, CaretUp, CaretDown, Copy, ArrowsOutCardinal } from '@phosphor-icons/react';
 
 export const VariantListEditor = ({
     items,
@@ -171,9 +172,9 @@ export const VariantListEditor = ({
                     <div className="nirvaagi-file-list-header">
                         <h2>{SCHEMAS[collection].label} ({items?.length || 0})</h2>
                         <div className="nirvaagi-file-list-actions">
-                            <button className="adm-btn" onClick={onAddItem}><FiPlus size={16} /> Add New</button>
+                            <button className="adm-btn" onClick={onAddItem}><Plus weight="regular" size={16} /> Add New</button>
                             <button className="adm-btn primary" onClick={onSave}>
-                                {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={16} /> Save</>}
+                                {saveStatus === 'loading' ? 'Saving...' : <><FloppyDisk weight="regular" size={16} /> Save</>}
                             </button>
                         </div>
                     </div>
@@ -212,7 +213,7 @@ export const VariantListEditor = ({
                                     ))}
                                 </select>
                                 <button className="adm-btn danger small" onClick={requestBulkDelete}>
-                                    <FiTrash2 size={13} /> Delete
+                                    <Trash weight="regular" size={13} /> Delete
                                 </button>
                             </div>
                         </div>
@@ -255,7 +256,7 @@ export const VariantListEditor = ({
                                                         disabled={index === 0}
                                                         title="Move Up"
                                                     >
-                                                        <FiChevronUp size={16} />
+                                                        <CaretUp weight="regular" size={16} />
                                                     </button>
                                                     <button
                                                         className="adm-btn icon-only"
@@ -263,14 +264,14 @@ export const VariantListEditor = ({
                                                         disabled={index === items.length - 1}
                                                         title="Move Down"
                                                     >
-                                                        <FiChevronDown size={16} />
+                                                        <CaretDown weight="regular" size={16} />
                                                     </button>
                                                 </div>
                                                 <button className="adm-btn icon-only" onClick={(e) => { e.stopPropagation(); setEditingId(listItem.id); }} title="Edit">
-                                                    <FiEdit3 size={14} />
+                                                    <PencilSimple weight="regular" size={14} />
                                                 </button>
                                                 <button className="adm-btn danger" onClick={(e) => requestDelete(e, index)} title="Delete">
-                                                    <FiTrash2 size={14} />
+                                                    <Trash weight="regular" size={14} />
                                                 </button>
                                             </div>
                                         </div>
@@ -285,7 +286,7 @@ export const VariantListEditor = ({
                 <div className="nirvaagi-editor-full">
                     <div className="nirvaagi-editor-toolbar">
                         <button className="adm-btn ghost" onClick={() => handleCloseEditor(editingId)}>
-                            <FiArrowLeft size={16} /> Back
+                            <ArrowLeft weight="regular" size={16} /> Back
                         </button>
                         <h2>Edit {SCHEMAS[collection].label.slice(0, -1)}</h2>
                         <div className="nirvaagi-editor-toolbar-actions">
@@ -293,7 +294,7 @@ export const VariantListEditor = ({
                                 Cancel
                             </button>
                             <button className="adm-btn primary" onClick={onSave}>
-                                {saveStatus === 'loading' ? 'Saving...' : <><FiSave size={16} /> Save</>}
+                                {saveStatus === 'loading' ? 'Saving...' : <><FloppyDisk weight="regular" size={16} /> Save</>}
                             </button>
                         </div>
                     </div>
@@ -340,7 +341,7 @@ export const VariantListEditor = ({
                                     <div className="adm-section-header">
                                         <span className="adm-section-title">Language Variants</span>
                                         <button className="adm-btn ghost small" onClick={() => addVariant(collection, editingIndex)}>
-                                            <FiPlus size={13} /> Add Variant
+                                            <Plus weight="regular" size={13} /> Add Variant
                                         </button>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

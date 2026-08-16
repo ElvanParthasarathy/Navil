@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FiBox } from 'react-icons/fi';
+
 import MobileTopBar from '../../components/ui/MobileTopBar';
+import { Package } from '@phosphor-icons/react';
 
 const Portfolio = () => {
     const navigate = useNavigate();
@@ -101,7 +102,7 @@ const Portfolio = () => {
             {/* WORK IN PROGRESS CONTAINER */}
             <div className="coming-soon-container">
                 {/* The icon now has the animation applied */}
-                <div className="cs-icon"><FiBox /></div>
+                <div className="cs-icon"><Package weight="regular" /></div>
                 <div className="cs-title">Building Something Cool</div>
                 <p className="cs-text">
                     I am currently documenting my projects and case studies.<br />

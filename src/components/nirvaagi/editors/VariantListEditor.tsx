@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { FiEdit3, FiTrash2, FiPlus, FiArrowLeft, FiSave, FiChevronUp, FiChevronDown, FiCopy, FiChevronRight, FiSearch } from 'react-icons/fi';
+
 import { Box, Typography, Button, IconButton, Checkbox, Chip, Paper, Card, MenuItem, Select, FormControl, InputLabel, Collapse, TextField, Pagination, InputAdornment, Tabs, Tab } from '@mui/material';
 import { SCHEMAS, renderFieldRow, FieldInput, PinEditor, VariantCard } from '../shared/NirvaagiShared';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import RichTextEditor from './RichTextEditor';
 import { getOptimizedImage } from '../../../lib/media';
+import { PencilSimple, Trash, Plus, ArrowLeft, FloppyDisk, CaretUp, CaretDown, Copy, CaretRight, MagnifyingGlass } from '@phosphor-icons/react';
 
 const getCoverImageUrl = (listItem: any) => {
     if (!listItem) return '';
@@ -211,12 +212,12 @@ export const VariantListEditor = ({
                         </Typography>
                         <Box sx={{ display: 'flex', gap: 2 }}>
                             {!isListEditMode ? (
-                                <Button variant="outlined" startIcon={<FiEdit3 />} onClick={() => setIsListEditMode(true)}>Edit</Button>
+                                <Button variant="outlined" startIcon={<PencilSimple weight="regular" />} onClick={() => setIsListEditMode(true)}>Edit</Button>
                             ) : (
                                 <>
                                     <Button variant="text" onClick={() => { setIsListEditMode(false); clearSelection(); }} sx={{ color: 'text.secondary' }}>Cancel</Button>
-                                    <Button variant="contained" startIcon={<FiPlus />} onClick={() => onAddItem()} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
-                                    <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                                    <Button variant="contained" startIcon={<Plus weight="regular" />} onClick={() => onAddItem()} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
+                                    <Button variant="contained" startIcon={<FloppyDisk weight="regular" />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
                                         Save
                                     </Button>
                                 </>
@@ -232,7 +233,7 @@ export const VariantListEditor = ({
                             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                             slotProps={{
                                 input: {
-                                    startAdornment: <InputAdornment position="start"><FiSearch /></InputAdornment>
+                                    startAdornment: <InputAdornment position="start"><MagnifyingGlass weight="regular" /></InputAdornment>
                                 }
                             }}
                             sx={{
@@ -280,13 +281,13 @@ export const VariantListEditor = ({
                                         </FormControl>
                                     </>
                                 )}
-                                <Button size="small" startIcon={<FiCopy />} onClick={() => {
+                                <Button size="small" startIcon={<Copy weight="regular" />} onClick={() => {
                                     if (onDuplicateItems) {
                                         onDuplicateItems([...selected]);
                                         clearSelection();
                                     }
                                 }} sx={{ color: 'onSecondaryContainer' }}>Duplicate</Button>
-                                <Button size="small" color="error" startIcon={<FiTrash2 />} onClick={requestBulkDelete}>Delete</Button>
+                                <Button size="small" color="error" startIcon={<Trash weight="regular" />} onClick={requestBulkDelete}>Delete</Button>
                             </Box>
                         </Paper>
                     )}
@@ -377,16 +378,16 @@ export const VariantListEditor = ({
                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pr: 1 }}>
                                                     {collection !== 'stories' && (
                                                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mr: 1 }}>
-                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><FiChevronUp size={16} /></IconButton>
-                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><FiChevronDown size={16} /></IconButton>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><CaretUp weight="regular" size={16} /></IconButton>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><CaretDown weight="regular" size={16} /></IconButton>
                                                         </Box>
                                                     )}
-                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><FiCopy size={16} /></IconButton>
-                                                    <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><FiTrash2 size={16} /></IconButton>
+                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><Copy weight="regular" size={16} /></IconButton>
+                                                    <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><Trash weight="regular" size={16} /></IconButton>
                                                 </Box>
                                             ) : (
                                                 <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, color: 'text.secondary', opacity: 0.5 }}>
-                                                    <FiChevronRight size={20} />
+                                                    <CaretRight weight="regular" size={20} />
                                                 </Box>
                                             )}
                                         </Card>
@@ -411,10 +412,10 @@ export const VariantListEditor = ({
                 /* ── EDITOR VIEW (replaces list) ── */
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                     <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
-                        <Button startIcon={<FiArrowLeft />} onClick={() => handleCloseEditor(editingId)} sx={{ color: 'text.secondary' }}>Back</Button>
+                        <Button startIcon={<ArrowLeft weight="regular" />} onClick={() => handleCloseEditor(editingId)} sx={{ color: 'text.secondary' }}>Back</Button>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <Button onClick={() => handleCloseEditor(editingId)}>Cancel</Button>
-                            <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                            <Button variant="contained" startIcon={<FloppyDisk weight="regular" />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
                                 {saveStatus === 'loading' ? 'Saving...' : 'Save'}
                             </Button>
                         </Box>
@@ -436,7 +437,7 @@ export const VariantListEditor = ({
                                     {collection !== 'stories' && (
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Typography variant="h6" sx={{ fontWeight: 700 }}>Language Variants</Typography>
-                                            <Button variant="contained" startIcon={<FiPlus />} onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
+                                            <Button variant="contained" startIcon={<Plus weight="regular" />} onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
                                                 Add Variant
                                             </Button>
                                         </Box>

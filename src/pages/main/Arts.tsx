@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
 import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
-import { FiArrowRight } from 'react-icons/fi';
+
 import { db } from '../../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
+import { ArrowRight } from '@phosphor-icons/react';
 
 // Icons as inline SVGs for the category cards
 const PencilIcon = () => (
@@ -276,7 +277,7 @@ const Arts = () => {
                             <p className="cat-desc">{cat.descTa}</p>
                             <p className="cat-desc-sub">{cat.descEn}</p>
                         </div>
-                        <div className="cat-footer">{cat.footerTa} <FiArrowRight /></div>
+                        <div className="cat-footer">{cat.footerTa} <ArrowRight weight="regular" /></div>
                     </Link>
                 ))}
             </div>

@@ -10,11 +10,10 @@ import { db } from '../../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
 
 // Import icons
-import { FiArrowRight, FiRotateCw, FiUser, FiInstagram, FiFeather, FiImage, FiCompass, FiInfo } from 'react-icons/fi';
-import { BsBook, BsPen, BsChatQuote, BsPencilSquare, BsNewspaper, BsMoonStars } from 'react-icons/bs';
 
 import staticStories from '../../data/stories.json';
 import staticArts from '../../data/arts.json';
+import { ArrowRight, ArrowClockwise, User, InstagramLogo, Feather, Image, Compass, Info, BookOpen, Pen, ChatCircleText, PencilSimpleLine, Newspaper, MoonStars } from '@phosphor-icons/react';
 
 const CLASSIFICATION_COLORS: Record<string, string> = {
     'அகம்': '#e8a0bf',   // pink
@@ -465,9 +464,8 @@ const Home = () => {
             </Helmet>
             <MobileTopBar title="நவில்" />
             <div className="home-page page-view fadeIn">
-                
 
-                {/* ANIMATED ABSTRACT GRADIENT BACKGROUND */}
+{/* ANIMATED ABSTRACT GRADIENT BACKGROUND */}
                 <div className="home-bg-blobs">
                     <div className="bg-blob-circle blob-1"></div>
                     <div className="bg-blob-circle blob-2"></div>
@@ -499,7 +497,7 @@ const Home = () => {
                                 <div className="mobile-quick-links">
                                     <button onClick={() => navigate('/writings', { state: { fromQuickLink: true } })} className="mobile-quick-link-btn">
                                         <div className="btn-icon-wrapper">
-                                            <FiFeather size={16} />
+                                            <Feather weight="regular" size={16} />
                                         </div>
                                         <div className="btn-text-group">
                                             <span className="btn-text-ta" lang="ta">எழுத்துகள்</span>
@@ -508,7 +506,7 @@ const Home = () => {
                                     </button>
                                     <button onClick={() => navigate('/arts', { state: { fromQuickLink: true } })} className="mobile-quick-link-btn">
                                         <div className="btn-icon-wrapper">
-                                            <FiImage size={16} />
+                                            <Image weight="regular" size={16} />
                                         </div>
                                         <div className="btn-text-group">
                                             <span className="btn-text-ta" lang="ta">படைப்புகள்</span>
@@ -543,8 +541,7 @@ const Home = () => {
                         </div>
                     </header>
 
-
-                    {/* 4. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
+{/* 4. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handlePoemCardClick}>
                         <div className="quote-header-row">
                             <span className="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
@@ -554,7 +551,7 @@ const Home = () => {
                                 title="Read another poem"
                                 aria-label="Read another poem"
                             >
-                                <FiRotateCw size={18} className={isPoemRotating ? 'rotate-icon' : ''} />
+                                <ArrowClockwise weight="regular" size={18} className={isPoemRotating ? 'rotate-icon' : ''} />
                             </button>
                         </div>
 
@@ -575,7 +572,7 @@ const Home = () => {
 
                             <div className="player-read-more-container">
                                 <span className="player-read-more-btn">
-                                    Click here to read more <FiArrowRight size={14} className="arrow" />
+                                    Click here to read more <ArrowRight weight="regular" size={14} className="arrow" />
                                 </span>
                                 {poemDetails.classification && (
                                     <span className="classification-badge" style={{ color: getClassColor(poemDetails.classification) }}>
@@ -599,7 +596,7 @@ const Home = () => {
                                 title="Read another reflection"
                                 aria-label="Read another reflection"
                             >
-                                <FiRotateCw size={18} className={isRotating ? 'rotate-icon' : ''} />
+                                <ArrowClockwise weight="regular" size={18} className={isRotating ? 'rotate-icon' : ''} />
                             </button>
                         </div>
 
@@ -619,7 +616,7 @@ const Home = () => {
 
                             <div className="player-read-more-container">
                                 <span className="player-read-more-btn">
-                                    Click here to read more <FiArrowRight size={14} className="arrow" />
+                                    Click here to read more <ArrowRight weight="regular" size={14} className="arrow" />
                                 </span>
                                 {quoteTexts.classification && (
                                     <span className="classification-badge" style={{ color: getClassColor(quoteTexts.classification) }}>

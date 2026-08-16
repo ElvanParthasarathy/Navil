@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FiEdit3, FiTrash2, FiArrowLeft, FiPlus, FiSave, FiChevronUp, FiChevronDown, FiChevronRight, FiCopy, FiSearch, FiFolderPlus, FiMenu } from 'react-icons/fi';
+
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -7,6 +7,7 @@ import { Box, Typography, Button, IconButton, Checkbox, Paper, Card, MenuItem, S
 import { SCHEMAS, renderFieldRow, FieldInput, VariantCard } from '../shared/NirvaagiShared';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { getOptimizedImage } from '../../../lib/media';
+import { PencilSimple, Trash, ArrowLeft, Plus, FloppyDisk, CaretUp, CaretDown, CaretRight, Copy, MagnifyingGlass, FolderPlus, List } from '@phosphor-icons/react';
 
 const getCoverImageUrl = (listItem: any) => {
     if (!listItem) return '';
@@ -36,7 +37,7 @@ const SortableListItem = ({ id, children }: { id: string, children: React.ReactN
         <div ref={setNodeRef} style={style}>
             <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 1 }}>
                 <Box {...attributes} {...listeners} sx={{ cursor: 'grab', display: 'flex', alignItems: 'center', p: 1, color: 'text.secondary', '&:hover': { color: 'primary.main' } }}>
-                    <FiMenu size={20} />
+                    <List weight="regular" size={20} />
                 </Box>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                     {children}
@@ -256,20 +257,20 @@ export const StandardListEditor = ({
                                 value={searchQuery}
                                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                                 slotProps={{ input: {
-                                    startAdornment: <InputAdornment position="start"><FiSearch size={16} /></InputAdornment>,
+                                    startAdornment: <InputAdornment position="start"><MagnifyingGlass weight="regular" size={16} /></InputAdornment>,
                                 }}}
                                 sx={{ maxWidth: 300, bgcolor: 'background.paper', borderRadius: 2 }}
                             />
                             {!isListEditMode ? (
-                                <Button variant="outlined" startIcon={<FiEdit3 />} onClick={() => setIsListEditMode(true)}>Edit</Button>
+                                <Button variant="outlined" startIcon={<PencilSimple weight="regular" />} onClick={() => setIsListEditMode(true)}>Edit</Button>
                             ) : (
                                 <>
                                     <Button variant="text" onClick={() => { setIsListEditMode(false); clearSelection(); }} sx={{ color: 'text.secondary' }}>Cancel</Button>
-                                    <Button variant="contained" startIcon={<FiPlus />} onClick={() => onAddItem()} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
+                                    <Button variant="contained" startIcon={<Plus weight="regular" />} onClick={() => onAddItem()} color="secondary" sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>Add New</Button>
                                     {collection === 'stories' && addSeries && (
-                                        <Button variant="outlined" startIcon={<FiFolderPlus />} onClick={() => addSeries()} sx={{ color: 'text.primary', borderColor: 'divider' }}>Add Series</Button>
+                                        <Button variant="outlined" startIcon={<FolderPlus weight="regular" />} onClick={() => addSeries()} sx={{ color: 'text.primary', borderColor: 'divider' }}>Add Series</Button>
                                     )}
-                                    <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                                    <Button variant="contained" startIcon={<FloppyDisk weight="regular" />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
                                         Save
                                     </Button>
                                 </>
@@ -316,13 +317,13 @@ export const StandardListEditor = ({
                                         </FormControl>
                                     </>
                                 )}
-                                <Button size="small" startIcon={<FiCopy />} onClick={() => {
+                                <Button size="small" startIcon={<Copy weight="regular" />} onClick={() => {
                                     if (onDuplicateItems) {
                                         onDuplicateItems([...selected]);
                                         clearSelection();
                                     }
                                 }} sx={{ color: 'onSecondaryContainer' }}>Duplicate</Button>
-                                <Button size="small" color="error" startIcon={<FiTrash2 />} onClick={requestBulkDelete}>Delete</Button>
+                                <Button size="small" color="error" startIcon={<Trash weight="regular" />} onClick={requestBulkDelete}>Delete</Button>
                             </Box>
                         </Paper>
                     )}
@@ -392,16 +393,16 @@ export const StandardListEditor = ({
                                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pr: 1 }}>
                                                             {collection !== 'stories' && (
                                                                 <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mr: 1 }}>
-                                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><FiChevronUp size={16} /></IconButton>
-                                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><FiChevronDown size={16} /></IconButton>
+                                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'up'); }} disabled={index === 0} title="Move Up"><CaretUp weight="regular" size={16} /></IconButton>
+                                                                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); moveItem(collection, index, 'down'); }} disabled={index === items.length - 1} title="Move Down"><CaretDown weight="regular" size={16} /></IconButton>
                                                                 </Box>
                                                             )}
-                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><FiCopy size={16} /></IconButton>
-                                                            <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><FiTrash2 size={16} /></IconButton>
+                                                            <IconButton size="small" onClick={(e) => { e.stopPropagation(); if (onDuplicateItems) onDuplicateItems([listItem.id]); }} title="Duplicate"><Copy weight="regular" size={16} /></IconButton>
+                                                            <IconButton size="small" color="error" onClick={(e) => requestDelete(e, index)} title="Delete"><Trash weight="regular" size={16} /></IconButton>
                                                         </Box>
                                                     ) : (
                                                         <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, color: 'text.secondary', opacity: 0.5 }}>
-                                                            <FiChevronRight size={20} />
+                                                            <CaretRight weight="regular" size={20} />
                                                         </Box>
                                                     )}
                                                 </Card>
@@ -439,11 +440,11 @@ export const StandardListEditor = ({
                 /* ── EDITOR VIEW ── */
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                     <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
-                        <Button startIcon={<FiArrowLeft />} onClick={() => handleCloseEditor(editingId)} sx={{ color: 'text.secondary' }}>Back</Button>
+                        <Button startIcon={<ArrowLeft weight="regular" />} onClick={() => handleCloseEditor(editingId)} sx={{ color: 'text.secondary' }}>Back</Button>
                         <Typography variant="h6" sx={{ fontWeight: 700 }}>Edit {schema.label.slice(0, -1) || 'Entry'}</Typography>
                         <Box sx={{ display: 'flex', gap: 2 }}>
                             <Button onClick={() => handleCloseEditor(editingId)}>Cancel</Button>
-                            <Button variant="contained" startIcon={<FiSave />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
+                            <Button variant="contained" startIcon={<FloppyDisk weight="regular" />} onClick={onSave} disabled={saveStatus === 'loading'} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
                                 {saveStatus === 'loading' ? 'Saving...' : 'Save'}
                             </Button>
                         </Box>
@@ -460,7 +461,7 @@ export const StandardListEditor = ({
                                 >
                                     <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Post Settings</Typography>
                                     <Box sx={{ transform: expandedSections.settings ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>
-                                        <FiChevronRight size={20} />
+                                        <CaretRight weight="regular" size={20} />
                                     </Box>
                                 </Box>
                                 <Collapse in={expandedSections.settings}>
@@ -501,10 +502,10 @@ export const StandardListEditor = ({
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }} onClick={() => toggleSection('variants')}>
                                             <Typography variant="h6" sx={{ fontWeight: 700 }}>Language Variants</Typography>
                                             <Box sx={{ transform: expandedSections.variants ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>
-                                                <FiChevronRight size={20} />
+                                                <CaretRight weight="regular" size={20} />
                                             </Box>
                                         </Box>
-                                        <Button variant="contained" startIcon={<FiPlus />} onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
+                                        <Button variant="contained" startIcon={<Plus weight="regular" />} onClick={(e) => { e.stopPropagation(); addVariant(collection, editingIndex); }}>
                                             Add Variant
                                         </Button>
                                     </Box>

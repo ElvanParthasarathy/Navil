@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState } from 'react';
-import { FiChevronUp, FiChevronDown, FiPlus, FiTrash2, FiCheckSquare, FiSquare, FiArrowUp, FiArrowDown, FiPlay, FiImage, FiX } from 'react-icons/fi';
+import { CaretUp, CaretDown, Plus, Trash, CheckSquare, Square, ArrowUp, ArrowDown, Play, Image, X } from '@phosphor-icons/react';
 
 interface Story {
     id: string;
@@ -253,7 +253,7 @@ const TempHighlightEditor: React.FC<Props> = ({ initialHighlights }) => {
                     )}
 
                     <button onClick={createHighlight} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#3e3852', color: '#e6e1e6', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
-                        <FiPlus /> New Highlight
+                        <Plus weight="regular" /> New Highlight
                     </button>
                     <button onClick={generateJSON} style={{ background: '#c9c5ff', color: '#1b1a4e', padding: '8px 16px', borderRadius: '8px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                         Generate Final JSON
@@ -296,25 +296,25 @@ const TempHighlightEditor: React.FC<Props> = ({ initialHighlights }) => {
                             />
                             <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                                 <button onClick={() => sortStories(hIndex, 'asc')} title="Sort Date Ascending" style={{ padding: '6px', background: '#3e3852', color: '#e6e1e6', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}>
-                                    <FiArrowUp /> ASC
+                                    <ArrowUp weight="regular" /> ASC
                                 </button>
                                 <button onClick={() => sortStories(hIndex, 'desc')} title="Sort Date Descending" style={{ padding: '6px', background: '#3e3852', color: '#e6e1e6', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}>
-                                    <FiArrowDown /> DESC
+                                    <ArrowDown weight="regular" /> DESC
                                 </button>
                                 <div style={{ width: '1px', height: '20px', background: '#49454f', margin: '0 4px' }}></div>
                                 <button onClick={() => selectAllInHighlight(hIndex)} style={{ padding: '6px 10px', background: '#3e3852', color: '#e6e1e6', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    {allSelected ? <FiCheckSquare color="#c9c5ff" /> : someSelected ? <FiSquare fill="#49454f" /> : <FiSquare />} 
+                                    {allSelected ? <CheckSquare weight="regular" color="#c9c5ff" /> : someSelected ? <Square weight="regular" fill="#49454f" /> : <Square weight="regular" />} 
                                     Select All
                                 </button>
                                 <div style={{ width: '1px', height: '20px', background: '#49454f', margin: '0 4px' }}></div>
                                 <button onClick={() => moveHighlightUp(hIndex)} disabled={hIndex === 0} style={{ padding: '8px', background: hIndex === 0 ? 'transparent' : '#3e3852', color: '#e6e1e6', border: 'none', borderRadius: '6px', cursor: hIndex === 0 ? 'not-allowed' : 'pointer', opacity: hIndex === 0 ? 0.3 : 1 }}>
-                                    <FiChevronUp />
+                                    <CaretUp weight="regular" />
                                 </button>
                                 <button onClick={() => moveHighlightDown(hIndex)} disabled={hIndex === highlights.length - 1} style={{ padding: '8px', background: hIndex === highlights.length - 1 ? 'transparent' : '#3e3852', color: '#e6e1e6', border: 'none', borderRadius: '6px', cursor: hIndex === highlights.length - 1 ? 'not-allowed' : 'pointer', opacity: hIndex === highlights.length - 1 ? 0.3 : 1 }}>
-                                    <FiChevronDown />
+                                    <CaretDown weight="regular" />
                                 </button>
                                 <button onClick={() => deleteHighlight(hIndex)} style={{ padding: '8px', background: '#93000a', color: '#ffb4ab', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-                                    <FiTrash2 />
+                                    <Trash weight="regular" />
                                 </button>
                             </div>
                         </div>
@@ -354,13 +354,13 @@ const TempHighlightEditor: React.FC<Props> = ({ initialHighlights }) => {
                                                     <img src={story.url} alt="story" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                 )}
                                                 <div style={{ position: 'absolute', top: 6, right: 6, background: 'rgba(0,0,0,0.5)', borderRadius: '4px', padding: '2px', cursor: 'pointer' }} onClick={(e) => { e.stopPropagation(); toggleSelect(story.id); }}>
-                                                    {isSelected ? <FiCheckSquare color="#c9c5ff" size={16} /> : <FiSquare color="#e6e1e6" size={16} />}
+                                                    {isSelected ? <CheckSquare weight="regular" color="#c9c5ff" size={16} /> : <Square weight="regular" color="#e6e1e6" size={16} />}
                                                 </div>
                                                 <button 
                                                     onClick={(e) => { e.stopPropagation(); setPreviewStory(story); }}
                                                     style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', opacity: 0.8 }}
                                                 >
-                                                    {story.url.endsWith('.mp4') ? <FiPlay size={18} style={{ marginLeft: '2px' }} /> : <FiImage size={18} />}
+                                                    {story.url.endsWith('.mp4') ? <Play weight="regular" size={18} style={{ marginLeft: '2px' }} /> : <Image weight="regular" size={18} />}
                                                 </button>
                                             </div>
                                             <select 
@@ -395,7 +395,7 @@ const TempHighlightEditor: React.FC<Props> = ({ initialHighlights }) => {
             {previewStory && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setPreviewStory(null)}>
                     <button style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '10px' }} onClick={() => setPreviewStory(null)}>
-                        <FiX size={32} />
+                        <X weight="regular" size={32} />
                     </button>
                     <div style={{ maxWidth: '90%', maxHeight: '90vh', background: '#000', borderRadius: '8px', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
                         {previewStory.url.endsWith('.mp4') ? (

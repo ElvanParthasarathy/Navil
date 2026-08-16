@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
-import { FiMessageCircle, FiPenTool, FiEdit3, FiFileText, FiBook, FiImage, FiClock, FiTrendingUp, FiZap, FiArrowRight, FiDownload, FiUploadCloud, FiSliders, FiFeather, FiAnchor } from 'react-icons/fi';
+
 import { db } from '../../../lib/firebaseClient';
 import { ref, get } from 'firebase/database';
 import { Box, Typography, Button, Card, CardContent, Grid, List, ListItem, ListItemButton, Avatar, Chip, CircularProgress, Divider } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChatCircle, PenNib, PencilSimple, FileText, Book, Image, Clock, TrendUp, Lightning, ArrowRight, DownloadSimple, CloudArrowUp, SlidersHorizontal, Feather, Anchor } from '@phosphor-icons/react';
 
 const COLLECTION_META = {
-    quotes: { label: 'Quotes', icon: <FiMessageCircle size={20} />, color: 'var(--color-cat-quotes)' },
-    poems: { label: 'Poems', icon: <FiPenTool size={20} />, color: 'var(--color-cat-poems)' },
-    blog: { label: 'Blog', icon: <FiEdit3 size={20} />, color: 'var(--color-cat-blog)' },
-    articles: { label: 'Articles', icon: <FiFileText size={20} />, color: 'var(--color-cat-articles)' },
-    stories: { label: 'Stories', icon: <FiBook size={20} />, color: 'var(--color-cat-stories)' },
-    diary: { label: 'Diary', icon: <FiBook size={20} />, color: 'var(--color-cat-diary)' },
-    art_pencil: { label: 'Pencil', icon: <FiEdit3 size={20} />, color: 'var(--color-cat-art)' },
-    art_editing: { label: 'Editings', icon: <FiSliders size={20} />, color: 'var(--color-cat-art)' },
-    art_poster: { label: 'Posters', icon: <FiFileText size={20} />, color: 'var(--color-cat-art)' },
-    art_painting: { label: 'Paintings', icon: <FiFeather size={20} />, color: 'var(--color-cat-art)' },
-    art_quotes: { label: 'Art Quotes', icon: <FiMessageCircle size={20} />, color: 'var(--color-cat-art)' },
-    art_poems: { label: 'Art Poems', icon: <FiPenTool size={20} />, color: 'var(--color-cat-art)' },
-    art_illustrations: { label: 'Illustrations', icon: <FiAnchor size={20} />, color: 'var(--color-cat-art)' },
-    art_digital_arts: { label: 'Digital Arts', icon: <FiImage size={20} />, color: 'var(--color-cat-art)' },
+    quotes: { label: 'Quotes', icon: <ChatCircle weight="regular" size={20} />, color: 'var(--color-cat-quotes)' },
+    poems: { label: 'Poems', icon: <PenNib weight="regular" size={20} />, color: 'var(--color-cat-poems)' },
+    blog: { label: 'Blog', icon: <PencilSimple weight="regular" size={20} />, color: 'var(--color-cat-blog)' },
+    articles: { label: 'Articles', icon: <FileText weight="regular" size={20} />, color: 'var(--color-cat-articles)' },
+    stories: { label: 'Stories', icon: <Book weight="regular" size={20} />, color: 'var(--color-cat-stories)' },
+    diary: { label: 'Diary', icon: <Book weight="regular" size={20} />, color: 'var(--color-cat-diary)' },
+    art_pencil: { label: 'Pencil', icon: <PencilSimple weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_editing: { label: 'Editings', icon: <SlidersHorizontal weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_poster: { label: 'Posters', icon: <FileText weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_painting: { label: 'Paintings', icon: <Feather weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_quotes: { label: 'Art Quotes', icon: <ChatCircle weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_poems: { label: 'Art Poems', icon: <PenNib weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_illustrations: { label: 'Illustrations', icon: <Anchor weight="regular" size={20} />, color: 'var(--color-cat-art)' },
+    art_digital_arts: { label: 'Digital Arts', icon: <Image weight="regular" size={20} />, color: 'var(--color-cat-art)' },
 };
 
 interface DashboardItem {
@@ -153,7 +154,7 @@ const NirvaagiDashboard = ({ dataStore, username, onNavigate }: {
                             color="primary"
                             onClick={handleDownloadBackup}
                             disabled={isDownloading}
-                            startIcon={isDownloading ? <CircularProgress size={18} color="inherit" /> : <FiDownload size={18} />}
+                            startIcon={isDownloading ? <CircularProgress size={18} color="inherit" /> : <DownloadSimple weight="regular" size={18} />}
                             sx={{ height: 56, px: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                         >
                             {isDownloading ? 'Fetching...' : 'Backup Data'}
@@ -194,7 +195,7 @@ const NirvaagiDashboard = ({ dataStore, username, onNavigate }: {
             {/* Stats Grid */}
             <motion.div variants={itemVariants}>
                 <Typography variant="h6" sx={{ fontWeight: 700,  mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <FiTrendingUp size={20} color="var(--color-primary)" />
+                    <TrendUp weight="regular" size={20} color="var(--color-primary)" />
                     Content Overview
                 </Typography>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)', lg: 'repeat(7, 1fr)' }, gap: 2.5, mb: 6 }}>
@@ -239,7 +240,7 @@ const NirvaagiDashboard = ({ dataStore, username, onNavigate }: {
                 <Grid {...{ xs: 12, md: 6 } as any}>
                     <motion.div variants={itemVariants}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3, px: 1 }}>
-                            <FiClock size={20} color="var(--color-text-muted)" />
+                            <Clock weight="regular" size={20} color="var(--color-text-muted)" />
                             <Typography variant="h6" sx={{ fontWeight: 700 }}>Recently Updated</Typography>
                         </Box>
                         <Card sx={{ overflow: 'hidden' }}>
@@ -263,7 +264,7 @@ const NirvaagiDashboard = ({ dataStore, username, onNavigate }: {
                                                             {meta.label} &middot; {formatDate(item.date)}
                                                         </Typography>
                                                     </Box>
-                                                    <FiArrowRight size={16} color="var(--color-outline)" style={{ opacity: 0.5 }} />
+                                                    <ArrowRight weight="regular" size={16} color="var(--color-outline)" style={{ opacity: 0.5 }} />
                                                 </ListItemButton>
                                             </ListItem>
                                             {i < recentItems.length - 1 && <Divider component="li" />}
@@ -279,7 +280,7 @@ const NirvaagiDashboard = ({ dataStore, username, onNavigate }: {
                 <Grid {...{ xs: 12, md: 6 } as any}>
                     <motion.div variants={itemVariants}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3, px: 1 }}>
-                            <FiZap size={20} color="var(--color-warning)" />
+                            <Lightning weight="regular" size={20} color="var(--color-warning)" />
                             <Typography variant="h6" sx={{ fontWeight: 700 }}>Activity <Typography component="span" color="text.secondary" variant="body2" sx={{ fontWeight: 500 }}>(Last 7 days)</Typography></Typography>
                             {newItems.length > 0 && <Chip label={`${newItems.length} new`} size="small" color="primary" sx={{ ml: 'auto', fontWeight: 700, borderRadius: 2 }} />}
                         </Box>
@@ -304,7 +305,7 @@ const NirvaagiDashboard = ({ dataStore, username, onNavigate }: {
                                                             {meta.label} &middot; {formatDate(item.date)}
                                                         </Typography>
                                                     </Box>
-                                                    <FiArrowRight size={16} color="var(--color-outline)" style={{ opacity: 0.5 }} />
+                                                    <ArrowRight weight="regular" size={16} color="var(--color-outline)" style={{ opacity: 0.5 }} />
                                                 </ListItemButton>
                                             </ListItem>
                                             {i < newItems.length - 1 && <Divider component="li" />}

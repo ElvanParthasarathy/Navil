@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { VariantListEditor } from './VariantListEditor';
-import { FiFolder, FiArrowLeft, FiPlus, FiEdit3, FiImage } from 'react-icons/fi';
+
 import { Box, Typography, Button, IconButton, Grid, Paper, TextField } from '@mui/material';
+import { Folder, ArrowLeft, Plus, PencilSimple, Image } from '@phosphor-icons/react';
 
 export const StoryEditor = (props: any) => {
     const { items, editingId, seriesData = [], addSeries, updateGenericItem, updateSeriesNameAndChapters, renameSeriesForStories, onSave, saveStatus } = props;
@@ -100,7 +101,7 @@ export const StoryEditor = (props: any) => {
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: 'background.default' }}>
                 <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
-                    <Button startIcon={<FiArrowLeft />} onClick={() => setEditingSeries(null)} sx={{ color: 'text.secondary' }}>Back</Button>
+                    <Button startIcon={<ArrowLeft weight="regular" />} onClick={() => setEditingSeries(null)} sx={{ color: 'text.secondary' }}>Back</Button>
                     <Typography variant="h6" sx={{ fontWeight: 700 }}>Edit Master Series</Typography>
                     <Box sx={{ display: 'flex', gap: 2 }}>
                         <Button onClick={() => setEditingSeries(null)}>Cancel</Button>
@@ -148,7 +149,7 @@ export const StoryEditor = (props: any) => {
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
                 <Box sx={{ p: 2, px: 3, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0, bgcolor: 'background.default' }}>
-                    <Button variant="outlined" onClick={() => setCurrentFolder(null)} startIcon={<FiArrowLeft />} sx={{ borderRadius: 3 }}>
+                    <Button variant="outlined" onClick={() => setCurrentFolder(null)} startIcon={<ArrowLeft weight="regular" />} sx={{ borderRadius: 3 }}>
                         Back to Folders
                     </Button>
                     <Typography variant="h6" sx={{ fontWeight: 800 }}>{currentFolder}</Typography>
@@ -169,10 +170,10 @@ export const StoryEditor = (props: any) => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>Story Folders</Typography>
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Button variant="contained" color="secondary" onClick={() => setEditingSeries({ id: 'new', title: '', coverImage: '', description: '' })} startIcon={<FiFolder />} sx={{ borderRadius: 3, boxShadow: 'none' }}>
+                    <Button variant="contained" color="secondary" onClick={() => setEditingSeries({ id: 'new', title: '', coverImage: '', description: '' })} startIcon={<Folder weight="regular" />} sx={{ borderRadius: 3, boxShadow: 'none' }}>
                         New Master Series
                     </Button>
-                    <Button variant="contained" color="primary" onClick={() => props.onAddItem('stories')} startIcon={<FiPlus />} sx={{ borderRadius: 3, boxShadow: 'none' }}>
+                    <Button variant="contained" color="primary" onClick={() => props.onAddItem('stories')} startIcon={<Plus weight="regular" />} sx={{ borderRadius: 3, boxShadow: 'none' }}>
                         New Chapter
                     </Button>
                 </Box>
@@ -217,7 +218,7 @@ export const StoryEditor = (props: any) => {
                                     size="small"
                                     title="Edit Master Series"
                                 >
-                                    <FiEdit3 size={16} />
+                                    <PencilSimple weight="regular" size={16} />
                                 </IconButton>
 
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -233,7 +234,7 @@ export const StoryEditor = (props: any) => {
                                         {folder.coverImage ? (
                                             <img src={folder.coverImage} alt={folder.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         ) : (
-                                            <FiFolder size={32} />
+                                            <Folder weight="regular" size={32} />
                                         )}
                                     </Box>
                                     <Box sx={{ flex: 1, minWidth: 0 }}>

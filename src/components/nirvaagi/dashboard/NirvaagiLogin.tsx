@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { FiArrowRight } from 'react-icons/fi';
+
 import { Box, Typography, TextField, Button, Paper, InputAdornment, IconButton, CircularProgress } from '@mui/material';
+import { ArrowRight } from '@phosphor-icons/react';
 
 const NirvaagiLogin = ({ onLogin }: any) => {
     const [username, setUsername] = useState('');
@@ -69,7 +70,7 @@ const NirvaagiLogin = ({ onLogin }: any) => {
                         variant="contained"
                         fullWidth
                         disabled={loading}
-                        endIcon={loading ? <CircularProgress size={16} color="inherit" /> : <FiArrowRight />}
+                        endIcon={loading ? <CircularProgress size={16} color="inherit" /> : <ArrowRight weight="regular" />}
                         sx={{ py: 1.5, borderRadius: 3, fontWeight: 700, fontSize: '1rem' }}
                     >
                         {loading ? 'Signing In...' : 'Sign In with Email'}

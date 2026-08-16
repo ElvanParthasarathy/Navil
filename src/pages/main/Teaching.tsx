@@ -1,10 +1,10 @@
 import React from 'react';
-import { BsDisplay } from 'react-icons/bs';
-import { FiArrowRight } from 'react-icons/fi';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import AdBanner from '../../components/ui/AdBanner';
 import MobileTopBar from '../../components/ui/MobileTopBar';
+import { Monitor, ArrowRight } from '@phosphor-icons/react';
 
 const Teaching = () => {
     const navigate = useNavigate();
@@ -72,14 +72,14 @@ const Teaching = () => {
 
             <div className="category-grid animate-entry">
                 <Link to="/teaching/vocoder" className="category-card">
-                    <div className="cat-icon-box"><BsDisplay /></div>
+                    <div className="cat-icon-box"><Monitor weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">Vocoder</div>
                         <div className="cat-title-sub">Interactive Presentation</div>
                         <p className="cat-desc">எனது படைப்பு மற்றும் தொழில் நுட்ப விளக்கக்காட்சி.</p>
                         <p className="cat-desc-sub">Modern presentation for Vocoder engine concepts.</p>
                     </div>
-                    <div className="cat-footer">விளக்கக்காட்சியைக் காண <FiArrowRight /></div>
+                    <div className="cat-footer">விளக்கக்காட்சியைக் காண <ArrowRight weight="regular" /></div>
                 </Link>
             </div>
 

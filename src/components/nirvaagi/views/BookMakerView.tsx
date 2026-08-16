@@ -5,9 +5,10 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak,
     AlignmentType, TableOfContents, StyleLevel, BorderStyle,
     Header, Footer, PageNumber, NumberFormat
 } from 'docx';
-import { FiDownload, FiEdit3, FiChevronDown, FiChevronUp, FiPrinter } from 'react-icons/fi';
+
 import { Helmet } from 'react-helmet-async';
 import './BookMakerView.css';
+import { DownloadSimple, PencilSimple, CaretDown, CaretUp, Printer } from '@phosphor-icons/react';
 
 const PRIMARY_FONT = "ElvanSans";
 const ENGLISH_FONT = "Georgia";
@@ -687,9 +688,8 @@ const BookMakerView = () => {
             </Helmet>
 
             <div className="bookmaker-view">
-                
 
-                {/* ═══ TOOLBAR ═══ */}
+{/* ═══ TOOLBAR ═══ */}
                 <div className="bookmaker-toolbar">
                     <div>
                         <h1>நூல் தொகுப்பு</h1>
@@ -697,12 +697,12 @@ const BookMakerView = () => {
                     </div>
                     <div className="toolbar-actions">
                         <button className="settings-toggle-btn" onClick={() => setSettingsOpen(!settingsOpen)}>
-                            <FiEdit3 size={16} />
+                            <PencilSimple weight="regular" size={16} />
                             {settingsOpen ? 'Hide' : 'Edit'}
-                            {settingsOpen ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />}
+                            {settingsOpen ? <CaretUp weight="regular" size={14} /> : <CaretDown weight="regular" size={14} />}
                         </button>
                         <button className="settings-toggle-btn" onClick={() => window.print()} title="Print or Save as PDF">
-                            <FiPrinter size={16} />
+                            <Printer weight="regular" size={16} />
                             PDF
                         </button>
                         <button
@@ -710,7 +710,7 @@ const BookMakerView = () => {
                             onClick={generateBook}
                             disabled={isGenerating || isLoadingPreview}
                         >
-                            <FiDownload size={16} />
+                            <DownloadSimple weight="regular" size={16} />
                             {isGenerating ? 'தொகுக்கப்படுகிறது...' : 'Word (.docx)'}
                         </button>
                     </div>
