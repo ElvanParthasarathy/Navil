@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiInstagram, FiUser, FiMonitor, FiSun, FiMoon, FiBook } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiUser, FiMonitor, FiSun, FiMoon, FiBook } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
@@ -40,7 +40,7 @@ const lazyWithRetry = (componentImport: () => Promise<any>) =>
         })
     );
 
-const Archive = lazyWithRetry(() => import('./pages/main/Archive'));
+
 
 interface ThemeContextType {
     theme: string;
@@ -123,7 +123,7 @@ const Layout = () => {
         if (normalized === '/') return 0;
         if (normalized.startsWith('/writings')) return 1;
         if (normalized.startsWith('/arts')) return 2;
-        if (normalized.startsWith('/archive')) return 3;
+
         if (normalized.startsWith('/teaching')) return 4;
         if (normalized.startsWith('/about')) return 5;
         return 99;
@@ -139,7 +139,7 @@ const Layout = () => {
 
         const isBottomTab = (path: string) => {
             const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
-            return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/archive' || normalized === '/about';
+            return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/about';
         };
 
         if (navType === 'POP') {
@@ -210,7 +210,7 @@ const Layout = () => {
 
 
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const mainLevelPaths = ['/writings', '/arts', '/archive', '/about', '/portfolio', '/settings', '/teaching'];
+    const mainLevelPaths = ['/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
     return (
@@ -241,7 +241,7 @@ const Layout = () => {
                         <NavLink to="/arts" icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
-                        <NavLink to="/archive" icon={<FiInstagram size={22} />} label="காப்புகள்" subLabel="archive" active={location.pathname === '/archive'} collapsed={isSidebarCollapsed} />
+
                         <NavLink to="/about" icon={<FiUser size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
@@ -358,57 +358,7 @@ const NavLink = ({ to, icon, label, subLabel, active, className = '', collapsed 
     </Link>
 );
 
-const ArchiveSkeleton = () => (
-    <div className="page-view" style={{ maxWidth: 935, margin: '0 auto', padding: '24px 20px' }}>
-        <style>{`
-            @keyframes skeletonShimmer {
-                0% { background-position: -400px 0; }
-                100% { background-position: 400px 0; }
-            }
-            .skel {
-                background: linear-gradient(90deg, var(--bg-panel) 25%, color-mix(in srgb, var(--text-main) 6%, var(--bg-panel)) 50%, var(--bg-panel) 75%);
-                background-size: 800px 100%;
-                animation: skeletonShimmer 1.5s ease-in-out infinite;
-                border-radius: 8px;
-            }
-        `}</style>
-        {/* Profile header */}
-        <div style={{ display: 'flex', gap: 30, alignItems: 'center', marginBottom: 36 }}>
-            <div className="skel" style={{ width: 150, height: 150, borderRadius: '50%', flexShrink: 0 }} />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 14 }}>
-                <div className="skel" style={{ width: '45%', height: 28 }} />
-                <div style={{ display: 'flex', gap: 30 }}>
-                    <div className="skel" style={{ width: 70, height: 18 }} />
-                    <div className="skel" style={{ width: 70, height: 18 }} />
-                    <div className="skel" style={{ width: 70, height: 18 }} />
-                </div>
-                <div className="skel" style={{ width: '60%', height: 16 }} />
-                <div className="skel" style={{ width: '40%', height: 16 }} />
-            </div>
-        </div>
-        {/* Highlights */}
-        <div style={{ display: 'flex', gap: 15, marginBottom: 30, overflowX: 'hidden' }}>
-            {[...Array(7)].map((_, i) => (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                    <div className="skel" style={{ width: 66, height: 66, borderRadius: '50%' }} />
-                    <div className="skel" style={{ width: 48, height: 10 }} />
-                </div>
-            ))}
-        </div>
-        {/* Tabs */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 50, borderTop: '1px solid var(--border-color)', padding: '16px 0', marginBottom: 10 }}>
-            {[60, 50, 55, 65].map((w, i) => (
-                <div key={i} className="skel" style={{ width: w, height: 14 }} />
-            ))}
-        </div>
-        {/* Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
-            {[...Array(9)].map((_, i) => (
-                <div key={i} className="skel" style={{ width: '100%', paddingTop: '100%', borderRadius: 2 }} />
-            ))}
-        </div>
-    </div>
-);
+
 
 const router = createBrowserRouter([
     {
@@ -425,7 +375,7 @@ const router = createBrowserRouter([
             { path: "arts", element: <Arts /> },
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
-            { path: "archive", element: <Suspense fallback={<ArchiveSkeleton />}><Archive /></Suspense> },
+
             // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary, Poems, Quotes)
             { path: "writings/stories", element: <StoriesListView /> },
             { path: "writings/stories/series/:seriesId", element: <StoriesListView /> },
