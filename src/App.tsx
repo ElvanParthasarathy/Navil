@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
-import { FiHome, FiEdit3, FiSettings, FiUser, FiMonitor, FiSun, FiMoon, FiBook } from 'react-icons/fi';
+import { FiHome, FiEdit3, FiSettings, FiUser, FiMonitor, FiSun, FiMoon, FiBook, FiTool } from 'react-icons/fi';
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri';
 import { Analytics } from '@vercel/analytics/react';
 import profileData from './data/profile.json';
@@ -14,6 +14,7 @@ import Writings from './pages/Writings';
 import Teaching from './pages/main/Teaching';
 import Arts from './pages/main/Arts';
 import ArtsGallery from './pages/main/ArtsGallery';
+import ToolsView from './pages/main/ToolsView';
 import VocoderView from './pages/tools/VocoderView';
 import CategoryListView from './components/features/CategoryListView';
 import StoriesListView from './components/features/StoriesListView';
@@ -210,7 +211,7 @@ const Layout = () => {
 
 
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const mainLevelPaths = ['/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching'];
+    const mainLevelPaths = ['/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching', '/tools'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
     return (
@@ -239,6 +240,7 @@ const Layout = () => {
                         <NavLink to="/" icon={<FiHome size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
                         <NavLink to="/writings" icon={<FiEdit3 size={22} />} label="எழுத்துகள்" subLabel="writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/arts" icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/tools" icon={<FiTool size={22} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/teaching" icon={<FiMonitor size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
 
@@ -341,17 +343,39 @@ interface NavLinkProps {
     icon: React.ReactNode;
     label: string;
     subLabel?: string;
+    badge?: string;
     active: boolean;
     className?: string;
     collapsed: boolean;
 }
 
-const NavLink = ({ to, icon, label, subLabel, active, className = '', collapsed }: NavLinkProps) => (
+const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', collapsed }: NavLinkProps) => (
     <Link to={to} className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} title={collapsed ? label : ''}>
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
         {!collapsed && (
             <div className="nav-text-container">
-                <span className="label">{label}</span>
+                <span className="label" style={{ display: 'flex', alignItems: 'center' }}>
+                    {label}
+                    {badge && (
+                        <span 
+                            className="nav-badge desktop-only" 
+                            style={{ 
+                                fontSize: '0.6rem', 
+                                background: active ? 'var(--accent-text)' : 'color-mix(in srgb, var(--text-main) 15%, transparent)', 
+                                color: active ? 'var(--accent-color)' : 'var(--text-main)', 
+                                padding: '2px 6px', 
+                                borderRadius: '100px', 
+                                marginLeft: '8px', 
+                                fontWeight: 700, 
+                                letterSpacing: '0.5px',
+                                display: 'inline-block',
+                                lineHeight: 1
+                            }}
+                        >
+                            {badge}
+                        </span>
+                    )}
+                </span>
                 {subLabel && <span className="sub-label desktop-only">{subLabel}</span>}
             </div>
         )}
@@ -373,6 +397,7 @@ const router = createBrowserRouter([
             { path: "writings", element: <Writings /> },
             { path: "teaching", element: <Teaching /> },
             { path: "arts", element: <Arts /> },
+            { path: "tools", element: <ToolsView /> },
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
 

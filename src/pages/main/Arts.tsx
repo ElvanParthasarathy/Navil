@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
+import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
 import { FiArrowRight } from 'react-icons/fi';
 import { db } from '../../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
@@ -168,6 +169,9 @@ const Arts = () => {
                 <title>படைப்புகள் | Arts</title>
             </Helmet>
             <div className="writings-page arts-hub-page page-view fadeIn">
+            
+            <FloatingBackButton to="/" />
+            
             <style>{`
                 .writings-page {
                     max-width: 1200px;
@@ -255,18 +259,6 @@ const Arts = () => {
                         Drawings, Designs & Digital Creations
                     </p>
                 </div>
-                <Link 
-                    to="/" 
-                    className="back-pill bp-fixed"
-                    onClick={(e) => {
-                        if (window.history.state && window.history.state.idx > 0) {
-                            e.preventDefault();
-                            navigate(-1);
-                        }
-                    }}
-                >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                </Link>
             </header>
 
             <div className="category-grid animate-entry">
