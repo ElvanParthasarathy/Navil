@@ -84,6 +84,7 @@ const CONSONANTS: Record<string, string> = {
 const COMPOUND_CONSONANTS: Record<string, string> = {
   'ng':  'ங்',
   'nj':  'ஞ்',
+  'ny':  'ஞ்',     // Navil: ny → ஞ் (ஞ sound)
   'sh':  'ஷ்',
   'ch':  'ச்',     // Navil: ch → ச்
   'th':  'த்',     // Navil: th → த்
