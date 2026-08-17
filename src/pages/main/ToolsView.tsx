@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
 import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
 import '../Writings.css';
-import { PianoKeys, ArrowRight } from '@phosphor-icons/react';
+import { PianoKeys, ArrowRight, Translate } from '@phosphor-icons/react';
 
 const ToolsView = () => {
     const navigate = useNavigate();
@@ -42,6 +42,16 @@ const ToolsView = () => {
                             <p className="cat-desc-sub">Play and map keyboard keys to musical notes.</p>
                         </div>
                         <div className="cat-footer">Launch Piano <ArrowRight weight="regular" /></div>
+                    </Link>
+                    <Link to="/tools/transliterator" className="category-card">
+                        <div className="cat-icon-box"><Translate weight="regular" /></div>
+                        <div className="cat-content">
+                            <div className="cat-title">Navil Transliterator</div>
+                            <div className="cat-title-sub">Transliterator Engine</div>
+                            <p className="cat-desc">A fully offline phonetic transliteration engine.</p>
+                            <p className="cat-desc-sub">Convert Tanglish to Tamil instantly without internet.</p>
+                        </div>
+                        <div className="cat-footer">Launch Transliterator <ArrowRight weight="regular" /></div>
                     </Link>
                 </div>
             </div>

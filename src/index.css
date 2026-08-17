@@ -910,10 +910,17 @@ body {
   box-shadow: none;
 }
 
+/* Static Cards (e.g. layout panels that shouldn't act like buttons) */
+.category-card.static-card:active {
+  transform: none !important;
+  background: var(--bg-card) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+}
 
-
-
-
+[data-theme='dark'] .category-card.static-card:active {
+  background: linear-gradient(145deg, #141414, color-mix(in srgb, #141414, transparent 35%)) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
 
 
 

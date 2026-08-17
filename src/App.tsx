@@ -15,6 +15,7 @@ import Arts from './pages/main/Arts';
 import ArtsGallery from './pages/main/ArtsGallery';
 import ToolsView from './pages/main/ToolsView';
 import PianoTool from './pages/tools/piano/PianoTool';
+import TransliteratorTool from './pages/tools/transliterator/TransliteratorTool';
 import VocoderView from './pages/tools/VocoderView';
 import CategoryListView from './components/features/CategoryListView';
 import StoriesListView from './components/features/StoriesListView';
@@ -392,6 +393,7 @@ const router = createBrowserRouter([
             { path: "arts", element: <Arts /> },
             { path: "tools", element: <ToolsView /> },
             { path: "tools/piano", element: <PianoTool /> },
+            { path: "tools/transliterator", element: <TransliteratorTool /> },
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
 
