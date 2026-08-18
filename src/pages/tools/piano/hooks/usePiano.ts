@@ -3,12 +3,12 @@ import * as Tone from 'tone';
 import { BASE_KEYBOARD, LAYOUTS, buildMapFromLayout, NoteInfo } from '../constants';
 
 export const SYNTH_PRESETS = [
-  { id: '001', name: 'Grand Piano (SAMPLED)' },
-  { id: '002', name: 'DX7 E.Piano (FM)' },
-  { id: '003', name: 'Tonewheel Organ' },
-  { id: '004', name: 'Lush Analog Pad' },
-  { id: '005', name: 'CS-80 Brass' },
-  { id: '006', name: 'Moog Lead' }
+  { id: '001', name: 'பியானோ' },
+  { id: '002', name: 'இ-பியானோ' },
+  { id: '003', name: 'ஆர்கன்' },
+  { id: '004', name: 'மெல்லிசை' },
+  { id: '005', name: 'பிராஸ்' },
+  { id: '006', name: 'லீட்' }
 ];
 
 export type KeyLayoutMode = 'REALISTIC' | 'FL_STUDIO' | 'LOGIC' | 'ABLETON' | 'CUSTOM';
@@ -119,6 +119,7 @@ export function usePiano() {
             setIsLoading(false);
           }
         }).connect(eqRef.current!);
+        sampler.volume.value = 12; // Boost quiet Salamander piano samples
         if(reverbRef.current) reverbRef.current.wet.value = 0.35;
         activeInstrumentRef.current = sampler;
         
