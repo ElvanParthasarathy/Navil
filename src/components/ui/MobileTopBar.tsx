@@ -10,9 +10,10 @@ interface MobileTopBarProps {
     showBack?: boolean;
     backUrl?: string;
     onBack?: () => void;
+    isBeta?: boolean;
 }
 
-const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, backUrl, onBack }) => {
+const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, backUrl, onBack, isBeta }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { theme, setTheme } = useTheme();
@@ -76,11 +77,17 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                     </div>
                 ) : title.includes('|') ? (
                     <>
-                        <div className="brand-main">{title.split('|')[0]}</div>
+                        <div className="brand-main">
+                            {title.split('|')[0]}
+                            {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#333', color: '#fff', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', fontWeight: 'bold', letterSpacing: '0.5px' }}>BETA</span>}
+                        </div>
                         <div className="brand-sub">{title.split('|')[1].toLowerCase()}</div>
                     </>
                 ) : (
-                    title
+                    <>
+                        {title}
+                        {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#333', color: '#fff', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', fontWeight: 'bold', letterSpacing: '0.5px' }}>BETA</span>}
+                    </>
                 )}
             </div>
 

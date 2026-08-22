@@ -11,7 +11,7 @@ const ToolsView = () => {
 
     return (
         <>
-            <MobileTopBar title="கருவிகள்|tools" />
+            <MobileTopBar title="கருவிகள்|tools" isBeta={true} />
             <Helmet>
                 <title>கருவிகள் | Tools</title>
             </Helmet>
