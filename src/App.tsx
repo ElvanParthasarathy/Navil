@@ -124,7 +124,7 @@ const Layout = () => {
         if (normalized === '/') return 0;
         if (normalized.startsWith('/writings')) return 1;
         if (normalized.startsWith('/arts')) return 2;
-
+        if (normalized.startsWith('/tools')) return 3;
         if (normalized.startsWith('/teaching')) return 4;
         if (normalized.startsWith('/about')) return 5;
         return 99;
@@ -140,7 +140,7 @@ const Layout = () => {
 
         const isBottomTab = (path: string) => {
             const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
-            return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/about';
+            return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/tools' || normalized === '/about';
         };
 
         if (navType === 'POP') {
