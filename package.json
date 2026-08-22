@@ -34,6 +34,7 @@
     "firebase": "^12.13.0",
     "framer-motion": "^12.38.0",
     "glob": "^13.0.0",
+    "html2canvas": "^1.4.1",
     "imagekit": "^6.0.0",
     "lucide-react": "^0.576.0",
     "puppeteer": "^24.43.1",

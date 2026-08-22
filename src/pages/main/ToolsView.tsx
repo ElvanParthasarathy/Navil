@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../components/ui/MobileTopBar';
 import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
 import '../Writings.css';
-import { PianoKeys, ArrowRight, Translate } from '@phosphor-icons/react';
+import { PianoKeys, ArrowRight, Translate, Scroll } from '@phosphor-icons/react';
 
 const ToolsView = () => {
     const navigate = useNavigate();
@@ -22,13 +22,9 @@ const ToolsView = () => {
                 <header className="writings-header animate-entry">
                     <div style={{ flex: 1 }}>
                         <h1 className="writings-title">கருவிகள்</h1>
-                        <div className="writings-title-sub">Tools & Utilities</div>
-                        <p className="writings-subtitle">
-                            பயன்பாட்டுக்கு தேவையான சிறு மென்பொருள்கள்
-                        </p>
-                        <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                            Small applications and utilities for daily usage.
-                        </p>
+                        <div className="writings-title-sub">tools</div>
+                        <p className="writings-subtitle">A collection of custom-built tools and experiments.</p>
+                        <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>Apps for music, language, and productivity.</p>
                     </div>
                 </header>
 
@@ -52,6 +48,16 @@ const ToolsView = () => {
                             <p className="cat-desc-sub">Convert Tanglish to Tamil instantly without internet.</p>
                         </div>
                         <div className="cat-footer">Launch Transliterator <ArrowRight weight="regular" /></div>
+                    </Link>
+                    <Link to="/tools/arichuvadi" className="category-card">
+                        <div className="cat-icon-box"><Scroll weight="regular" /></div>
+                        <div className="cat-content">
+                            <div className="cat-title">நவில் அரிச்சுவடி</div>
+                            <div className="cat-title-sub">Arichuvadi Engine</div>
+                            <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
+                            <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu scripts.</p>
+                        </div>
+                        <div className="cat-footer">Launch Arichuvadi <ArrowRight weight="regular" /></div>
                     </Link>
                 </div>
             </div>
