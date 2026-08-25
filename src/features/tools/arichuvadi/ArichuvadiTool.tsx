@@ -12,7 +12,7 @@ import { ArichuvadiDownloads } from './components/ArichuvadiDownloads';
 import { ArichuvadiImage } from './components/ArichuvadiImage';
 import { ArichuvadiAbout } from './components/ArichuvadiAbout';
 import { PencilSimple, GridFour, Brain, PuzzlePiece, Swatches, BookOpen, DownloadSimple, Info, Image as ImageIcon, ArrowLeft, ArrowRight } from '@phosphor-icons/react';
-import '../../Writings.css';
+import '../../writings/writings.css';
 import './arichuvadi.css';
 
 type ViewMode = 'home' | 'editor' | 'learn' | 'practice' | 'match' | 'memorize' | 'books' | 'image' | 'downloads' | 'about';

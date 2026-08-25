@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-import { FloatingBackButton } from '../components/ui/FloatingBackButton';
-import AdBanner from '../components/ui/AdBanner';
-import { db } from '../lib/firebaseClient';
+import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
+import AdBanner from '../../components/ui/AdBanner';
+import { db } from '../../lib/firebaseClient';
 import { ref, onValue } from 'firebase/database';
-import MobileTopBar from '../components/ui/MobileTopBar';
-import './Writings.css';
+import MobileTopBar from '../../components/ui/MobileTopBar';
+import './writings.css';
 import { ChatCircleText, PencilSimpleLine, Newspaper, FileText, BookOpen, Pen, Cloud, MoonStars, ArrowRight } from '@phosphor-icons/react';
 
 const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];

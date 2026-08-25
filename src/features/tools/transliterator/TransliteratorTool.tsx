@@ -16,7 +16,7 @@ import {
 import { transliterate, TransliterationMode } from "./utils/transliterate";
 import { englishToTamil } from "./utils/englishToTamil";
 import { navilToTamil } from "./utils/navilToTamil";
-import '../../Writings.css';
+import '../../writings/writings.css';
 import './transliterator.css';
 
 export default function TransliteratorTool() {

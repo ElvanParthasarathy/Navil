@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useOutletContext, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-import { subscribe, getCachedRaw } from '../../lib/firebaseCache';
-import AdBanner from '../ui/AdBanner';
-import { getOptimizedImage } from '../../lib/media';
-import { Engagement } from '../ui/Engagement';
-import MobileTopBar from '../ui/MobileTopBar';
-import { FloatingBackButton } from '../ui/FloatingBackButton';
+import { subscribe, getCachedRaw } from '../../../lib/firebaseCache';
+import AdBanner from '../../../components/ui/AdBanner';
+import { getOptimizedImage } from '../../../lib/media';
+import { Engagement } from '../../../components/ui/Engagement';
+import MobileTopBar from '../../../components/ui/MobileTopBar';
+import { FloatingBackButton } from '../../../components/ui/FloatingBackButton';
 import { CalendarBlank, ArrowLeft } from '@phosphor-icons/react';
 
 const CATEGORY_META = {

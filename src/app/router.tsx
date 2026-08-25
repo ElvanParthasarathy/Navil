@@ -3,23 +3,23 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
 import GlobalErrorBoundary from '../components/core/GlobalErrorBoundary';
 
-// Page imports
-import Home from '../pages/main/Home';
-import About from '../pages/main/About';
-import Portfolio from '../pages/main/Portfolio';
-import Settings from '../pages/main/Settings';
-import Writings from '../pages/Writings';
-import Teaching from '../pages/main/Teaching';
-import Arts from '../pages/main/Arts';
-import ArtsGallery from '../pages/main/ArtsGallery';
-import ToolsView from '../pages/main/ToolsView';
-import PianoTool from '../pages/tools/piano/PianoTool';
-import TransliteratorTool from '../pages/tools/transliterator/TransliteratorTool';
-import ArichuvadiTool from '../pages/tools/arichuvadi/ArichuvadiTool';
-import VocoderView from '../pages/tools/VocoderView';
-import CategoryListView from '../components/features/CategoryListView';
-import StoriesListView from '../components/features/StoriesListView';
-import ReadingView from '../components/features/ReadingView';
+// Feature page imports
+import Home from '../features/home/HomePage';
+import About from '../features/about/AboutPage';
+import Portfolio from '../features/about/Portfolio';
+import Settings from '../features/about/Settings';
+import Writings from '../features/writings/WritingsPage';
+import Teaching from '../features/teaching/TeachingPage';
+import Arts from '../features/arts/ArtsPage';
+import ArtsGallery from '../features/arts/ArtsGallery';
+import ToolsView from '../features/tools/ToolsPage';
+import PianoTool from '../features/tools/piano/PianoTool';
+import TransliteratorTool from '../features/tools/transliterator/TransliteratorTool';
+import ArichuvadiTool from '../features/tools/arichuvadi/ArichuvadiTool';
+import VocoderView from '../features/tools/vocoder/VocoderView';
+import CategoryListView from '../features/writings/views/CategoryListView';
+import StoriesListView from '../features/writings/views/StoriesListView';
+import ReadingView from '../features/writings/views/ReadingView';
 
 export const router = createBrowserRouter([
     {

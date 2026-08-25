@@ -1,4 +1,4 @@
-import './About.css';
+import './about.css';
 import React, { useState, useEffect } from 'react';
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
