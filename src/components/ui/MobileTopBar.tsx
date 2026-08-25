@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-import { useTheme } from '../../App';
+import { useTheme } from '../../hooks/useTheme';
 import { Monitor } from '@phosphor-icons/react';
 
 interface MobileTopBarProps {
