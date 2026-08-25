@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams, useOutletContext, useParams } from 'react-router-dom';
-import { subscribe, getCached } from '../../../lib/firebaseCache';
-import AdBanner from '../../../components/ui/AdBanner';
+import { subscribe, getCached } from '../../../lib/firebase/cache';
+import AdBanner from '../../../components/media/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { getOptimizedImage } from '../../../lib/media';
-import MobileTopBar from '../../../components/ui/MobileTopBar';
-import { FloatingBackButton } from '../../../components/ui/FloatingBackButton';
+import MobileTopBar from '../../../components/layout/MobileTopBar';
+import { FloatingBackButton } from '../../../components/layout/FloatingBackButton';
 
 const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
 

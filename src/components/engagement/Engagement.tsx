@@ -2,11 +2,11 @@ import './Engagement.css';
 import React, { useState, useEffect, useRef } from 'react';
 
 import { ref, get } from 'firebase/database';
-import { db } from '../../lib/firebaseClient';
+import { db } from '../../lib/firebase/client';
 import { addLike, removeLike, addComment, deleteComment, updateComment, subscribeToEngagement } from '../../lib/engagement';
-import { auth } from '../../lib/firebaseClient';
+import { auth } from '../../lib/firebase/client';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { ConfirmDialog } from './ConfirmDialog';
+import { ConfirmDialog } from '../feedback/ConfirmDialog';
 import { Heart, ChatCircle, PaperPlaneRight, User, Trash, Pencil, Check, X } from '@phosphor-icons/react';
 
 interface Comment {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import MobileTopBar from '../../../components/ui/MobileTopBar';
-import { FloatingBackButton } from '../../../components/ui/FloatingBackButton';
+import MobileTopBar from '../../../components/layout/MobileTopBar';
+import { FloatingBackButton } from '../../../components/layout/FloatingBackButton';
 import { ArichuvadiEditor } from './components/ArichuvadiEditor';
 import { ArichuvadiLearn } from './components/ArichuvadiLearn';
 import { ArichuvadiPractice } from './components/ArichuvadiPractice';

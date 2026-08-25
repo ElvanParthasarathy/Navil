@@ -1,4 +1,4 @@
-import { db } from './firebaseClient';
+import { db } from './firebase/client';
 import { ref, push, set, onValue, runTransaction, remove, serverTimestamp } from 'firebase/database';
 
 /**

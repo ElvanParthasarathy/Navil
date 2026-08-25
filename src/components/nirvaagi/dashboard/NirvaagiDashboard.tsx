@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { db } from '../../../lib/firebaseClient';
+import { db } from '../../../lib/firebase/client';
 import { ref, get } from 'firebase/database';
 import { Box, Typography, Button, Card, CardContent, Grid, List, ListItem, ListItemButton, Avatar, Chip, CircularProgress, Divider } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -8,7 +8,7 @@
  * the database.  When the last subscriber for a category unsubscribes the
  * listener is torn down to avoid leaking connections.
  */
-import { db } from './firebaseClient';
+import { db } from './client';
 import { ref, onValue } from 'firebase/database';
 
 type Callback = (data: any[] | null) => void;

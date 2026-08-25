@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { HeroSection } from '../../components/features/home/HeroSection';
-import MobileTopBar from '../../components/ui/MobileTopBar';
+import MobileTopBar from '../../components/layout/MobileTopBar';
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
-import { db } from '../../lib/firebaseClient';
+import { db } from '../../lib/firebase/client';
 import { ref, onValue } from 'firebase/database';
 
 // Import icons

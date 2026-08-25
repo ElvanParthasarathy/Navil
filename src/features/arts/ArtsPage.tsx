@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import MobileTopBar from '../../components/ui/MobileTopBar';
-import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
+import MobileTopBar from '../../components/layout/MobileTopBar';
+import { FloatingBackButton } from '../../components/layout/FloatingBackButton';
 
-import { db } from '../../lib/firebaseClient';
+import { db } from '../../lib/firebase/client';
 import { ref, onValue } from 'firebase/database';
 import { ArrowRight } from '@phosphor-icons/react';
 

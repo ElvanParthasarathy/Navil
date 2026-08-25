@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
 
-import AdBanner from '../../components/ui/AdBanner';
+import AdBanner from '../../components/media/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
-import MobileTopBar from '../../components/ui/MobileTopBar';
-import { db } from '../../lib/firebaseClient';
+import MobileTopBar from '../../components/layout/MobileTopBar';
+import { db } from '../../lib/firebase/client';
 import { ref, onValue } from 'firebase/database';
 import { MapPin, Phone, EnvelopeSimple, LinkedinLogo, GithubLogo, ArrowRight } from '@phosphor-icons/react';
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { db } from '../../../lib/firebaseClient';
+import { db } from '../../../lib/firebase/client';
 import { ref, get } from 'firebase/database';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak,
     AlignmentType, TableOfContents, StyleLevel, BorderStyle,

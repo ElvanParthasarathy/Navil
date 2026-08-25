@@ -9,7 +9,7 @@ import {
     ListSubheader, Breadcrumbs, Snackbar, Alert, Tooltip, Fab,
     Card, TextField, Button
 } from '@mui/material';
-import { db, auth } from '../lib/firebaseClient';
+import { db, auth } from '../lib/firebase/client';
 import { ref, get, set, onValue } from 'firebase/database';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';

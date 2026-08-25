@@ -2,16 +2,16 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import MobileTopBar from '../../components/ui/MobileTopBar';
+import MobileTopBar from '../../components/layout/MobileTopBar';
 
 import { getOptimizedImage } from '../../lib/media';
 import { Helmet } from 'react-helmet-async';
-import { db } from '../../lib/firebaseClient';
+import { db } from '../../lib/firebase/client';
 import { ref, onValue } from 'firebase/database';
 import { stripHtml, cleanCaption, formatArtDate } from './components/artsUtils';
 import { ArtCard } from './components/ArtCard';
 import { LightboxImage } from './components/LightboxImage';
-import { Engagement } from '../../components/ui/Engagement';
+import { Engagement } from '../../components/engagement/Engagement';
 import profileData from '../../data/profile.json';
 import profilePic from '../../assets/instagram/profile.jpg';
 import './ArtsGallery.css';

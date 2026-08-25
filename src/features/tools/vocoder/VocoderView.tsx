@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import MobileTopBar from '../../../components/ui/MobileTopBar';
+import MobileTopBar from '../../../components/layout/MobileTopBar';
 import Presentation from './components/Presentation';
 import Interactive from './components/Interactive';
 import './components/vocoder-global.css';

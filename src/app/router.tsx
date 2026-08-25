@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
-import GlobalErrorBoundary from '../components/core/GlobalErrorBoundary';
+import GlobalErrorBoundary from '../components/feedback/GlobalErrorBoundary';
 
 // Feature page imports
 import Home from '../features/home/HomePage';

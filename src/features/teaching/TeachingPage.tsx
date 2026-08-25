@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import AdBanner from '../../components/ui/AdBanner';
-import MobileTopBar from '../../components/ui/MobileTopBar';
+import AdBanner from '../../components/media/AdBanner';
+import MobileTopBar from '../../components/layout/MobileTopBar';
 import { Monitor, ArrowRight } from '@phosphor-icons/react';
 
 const Teaching = () => {

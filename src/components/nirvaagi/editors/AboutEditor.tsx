@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { db } from '../../../lib/firebaseClient';
+import { db } from '../../../lib/firebase/client';
 import RichTextEditor from './RichTextEditor';
 import { ref, onValue, set } from 'firebase/database';
 import { Box, Typography, Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Grid, Divider } from '@mui/material';

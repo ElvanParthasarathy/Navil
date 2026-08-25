@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useOutletContext, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { subscribe, getCached } from '../../../lib/firebaseCache';
-import AdBanner from '../../../components/ui/AdBanner';
+import { subscribe, getCached } from '../../../lib/firebase/cache';
+import AdBanner from '../../../components/media/AdBanner';
 import { Helmet } from 'react-helmet-async';
 import { getOptimizedImage } from '../../../lib/media';
-import MobileTopBar from '../../../components/ui/MobileTopBar';
+import MobileTopBar from '../../../components/layout/MobileTopBar';
 import StoriesListView from './StoriesListView';
 import { ReadingView } from './ReadingView';
-import { FloatingBackButton } from '../../../components/ui/FloatingBackButton';
+import { FloatingBackButton } from '../../../components/layout/FloatingBackButton';
 import { CalendarBlank } from '@phosphor-icons/react';
 
 const CATEGORY_META = {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, Typography, CircularProgress, IconButton, Avatar } from '@mui/material';
 
-import { db, auth } from '../../../lib/firebaseClient';
+import { db, auth } from '../../../lib/firebase/client';
 import { ref, onValue, remove, set } from 'firebase/database';
 import { addComment } from '../../../lib/engagement';
 import { ChatCircleText, Trash, Heart } from '@phosphor-icons/react';

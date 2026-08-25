@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-import MobileTopBar from '../../components/ui/MobileTopBar';
+import MobileTopBar from '../../components/layout/MobileTopBar';
 import { Package } from '@phosphor-icons/react';
 
 const Portfolio = () => {

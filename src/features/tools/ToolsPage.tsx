@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import MobileTopBar from '../../components/ui/MobileTopBar';
-import { FloatingBackButton } from '../../components/ui/FloatingBackButton';
+import MobileTopBar from '../../components/layout/MobileTopBar';
+import { FloatingBackButton } from '../../components/layout/FloatingBackButton';
 import '../writings/writings.css';
 import { PianoKeys, ArrowRight, Translate, Scroll } from '@phosphor-icons/react';
 
