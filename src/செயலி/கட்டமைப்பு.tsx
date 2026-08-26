@@ -1,11 +1,11 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigationType } from 'react-router-dom';
 import { useTheme } from '../கொக்கிகள்/கருப்பொருள்';
-import { useSettings } from '../கொக்கிகள்/அமைப்புகள்_கொக்கி';
-import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுயவிவர_படம்';
-import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்_இணைப்பு';
-import profileData from '../தரவு/profile.json';
-import profilePic from '../வளங்கள்/instagram/profile.jpg';
+import { useSettings } from '../கொக்கிகள்/அமைப்புகள்கொக்கி';
+import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுயவிவரபடம்';
+import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்இணைப்பு';
+import profileData from '../தரவு/தன்னுரு.json';
+import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
 import { House, PencilSimple, User, Monitor, Sun, Moon, Wrench, ListDashes, List, Palette } from '@phosphor-icons/react';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>

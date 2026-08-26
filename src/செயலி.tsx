@@ -2,12 +2,12 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { ThemeContext } from './கொக்கிகள்/கருப்பொருள்';
-import { SettingsContext } from './கொக்கிகள்/அமைப்புகள்_கொக்கி';
+import { SettingsContext } from './கொக்கிகள்/அமைப்புகள்கொக்கி';
 import { router } from './செயலி/வழித்தடம்';
 
 // Re-export hooks for backward compatibility
 export { useTheme } from './கொக்கிகள்/கருப்பொருள்';
-export { useSettings } from './கொக்கிகள்/அமைப்புகள்_கொக்கி';
+export { useSettings } from './கொக்கிகள்/அமைப்புகள்கொக்கி';
 
 function App() {
     const [theme, setTheme] = React.useState(() => {
@@ -19,7 +19,7 @@ function App() {
     });
 
     React.useEffect(() => {
-        sessionStorage.removeItem('chunk_retry');
+        sessionStorage.removeItem('chunkretry');
     }, []);
 
     React.useEffect(() => {
@@ -55,7 +55,7 @@ function App() {
         // Broadcast theme change to the Mac OS wrapper
         if (window.parent) {
             window.parent.postMessage({ 
-                type: 'IFRAME_THEME_CHANGE', 
+                type: 'IFRAMETHEMECHANGE', 
                 appId: 'elvan', 
                 isDark: isDark 
             }, '*');

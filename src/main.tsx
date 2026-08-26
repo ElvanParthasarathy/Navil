@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './செயலி'
-import './வடிவமைப்பு/முகப்பு_எண்.css'
+import './வடிவமைப்பு/முகப்புஎண்.css'
 import { HelmetProvider } from 'react-helmet-async'
 
 if ('serviceWorker' in navigator) {

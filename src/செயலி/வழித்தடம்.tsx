@@ -1,25 +1,25 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from './கட்டமைப்பு';
-import GlobalErrorBoundary from '../கூறுகள்/பின்னூட்டம்/பிழை_தடுப்பு';
+import GlobalErrorBoundary from '../கூறுகள்/பின்னூட்டம்/பிழைதடுப்பு';
 
 // Feature page imports
-import Home from '../சிறப்புக் கூறுகள்/முகப்பு/முகப்பு_பக்கம்';
-import About from '../சிறப்புக் கூறுகள்/பற்றி/பற்றி_பக்கம்';
-import Portfolio from '../சிறப்புக் கூறுகள்/பற்றி/தொகுப்பு';
-import Settings from '../சிறப்புக் கூறுகள்/பற்றி/அமைப்புகள்_பக்கம்';
-import Writings from '../சிறப்புக் கூறுகள்/படைப்புகள்/படைப்புகள்_பக்கம்';
-import Teaching from '../சிறப்புக் கூறுகள்/பயிற்றுவிப்பு/பயிற்றுவிப்பு_பக்கம்';
-import Arts from '../சிறப்புக் கூறுகள்/கலைகள்/கலைகள்_பக்கம்';
-import ArtsGallery from '../சிறப்புக் கூறுகள்/கலைகள்/கலைக்கூடம்';
-import ToolsView from '../சிறப்புக் கூறுகள்/கருவிகள்/கருவிகள்_பக்கம்';
-import PianoTool from '../சிறப்புக் கூறுகள்/கருவிகள்/கின்னரப்பெட்டி/கின்னரப்பெட்டி_கருவி';
-import TransliteratorTool from '../சிறப்புக் கூறுகள்/கருவிகள்/மொழிமாற்றி/மொழிமாற்றி_கருவி';
-import ArichuvadiTool from '../சிறப்புக் கூறுகள்/கருவிகள்/அரிச்சுவடி/அரிச்சுவடி_கருவி';
-import VocoderView from '../சிறப்புக் கூறுகள்/கருவிகள்/குரல்மாற்றி/குரல்மாற்றி_பார்வை';
-import CategoryListView from '../சிறப்புக் கூறுகள்/படைப்புகள்/பார்வைகள்/வகை_பட்டியல்';
-import StoriesListView from '../சிறப்புக் கூறுகள்/படைப்புகள்/பார்வைகள்/கதைகள்_பட்டியல்';
-import ReadingView from '../சிறப்புக் கூறுகள்/படைப்புகள்/பார்வைகள்/வாசிப்பு_பார்வை';
+import Home from '../சிறப்புக்கூறுகள்/முகப்பு/முகப்புபக்கம்';
+import About from '../சிறப்புக்கூறுகள்/பற்றி/பற்றிபக்கம்';
+import Portfolio from '../சிறப்புக்கூறுகள்/பற்றி/தொகுப்பு';
+import Settings from '../சிறப்புக்கூறுகள்/பற்றி/அமைப்புகள்பக்கம்';
+import Writings from '../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்பக்கம்';
+import Teaching from '../சிறப்புக்கூறுகள்/பயிற்றுவிப்பு/பயிற்றுவிப்புபக்கம்';
+import Arts from '../சிறப்புக்கூறுகள்/கலைகள்/கலைகள்பக்கம்';
+import ArtsGallery from '../சிறப்புக்கூறுகள்/கலைகள்/கலைக்கூடம்';
+import ToolsView from '../சிறப்புக்கூறுகள்/கருவிகள்/கருவிகள்பக்கம்';
+import PianoTool from '../சிறப்புக்கூறுகள்/கருவிகள்/கின்னரப்பெட்டி/கின்னரப்பெட்டிகருவி';
+import TransliteratorTool from '../சிறப்புக்கூறுகள்/கருவிகள்/மொழிமாற்றி/மொழிமாற்றிகருவி';
+import ArichuvadiTool from '../சிறப்புக்கூறுகள்/கருவிகள்/அரிச்சுவடி/அரிச்சுவடிகருவி';
+import VocoderView from '../சிறப்புக்கூறுகள்/கருவிகள்/குரல்மாற்றி/குரல்மாற்றிபார்வை';
+import CategoryListView from '../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வகைபட்டியல்';
+import StoriesListView from '../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/கதைகள்பட்டியல்';
+import ReadingView from '../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வாசிப்புபார்வை';
 
 export const router = createBrowserRouter([
     {
