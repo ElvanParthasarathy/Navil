@@ -1,0 +1,15 @@
+main.tsx
+nirvaagi-main.tsx
+NirvaagiApp.tsx
+pages
+theme
+vite-env.d.ts
+கூறுகள்
+கொக்கிகள்
+சிறப்புக் கூறுகள்
+செயலி
+செயலி.tsx
+தரவு
+நூலகம்
+வடிவமைப்பு
+வளங்கள்

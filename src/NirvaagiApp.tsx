@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import Nirvaagi from './pages/Nirvaagi';
+import Nirvaagi from './pages/கையாளுநர்';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import nirvaagiTheme from './theme/nirvaagiTheme';
-import './styles/nirvaagi-tailwind.css'; // M3 Expressive Tailwind tokens
+import './வடிவமைப்பு/nirvaagi-tailwind.css'; // M3 Expressive Tailwind tokens
 
 function NirvaagiApp() {
   return (
