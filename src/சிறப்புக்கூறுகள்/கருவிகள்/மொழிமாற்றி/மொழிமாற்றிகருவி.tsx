@@ -13,7 +13,7 @@ import {
   Faders,
   ArrowsLeftRight
 } from "@phosphor-icons/react";
-import { transliterate, TransliterationMode } from "./பயன்பாடுகள்/மொழிமாற்றம்";
+import { transliterate, TransliterationMode, capitalizeWords } from "./பயன்பாடுகள்/மொழிமாற்றம்";
 import { englishToTamil } from "./பயன்பாடுகள்/ஆங்கிலம்முதல்தமிழ்";
 import { navilToTamil } from "./பயன்பாடுகள்/நவில்முதல்தமிழ்";
 import '../../படைப்புகள்/படைப்புகள்.css';
@@ -35,7 +35,7 @@ export default function TransliteratorTool() {
     }
     
     if (direction === 'ta-en') {
-      setOutput(transliterate(input, mode));
+      setOutput(capitalizeWords(transliterate(input, mode)));
     } else {
       if (enTaMode === 'anjal') {
         setOutput(englishToTamil(input));
@@ -168,7 +168,7 @@ export default function TransliteratorTool() {
                       className="translit-mode-select"
                     >
                       <option value="anjal">Anjal Layout</option>
-                      <option value="navil">Navil Mode</option>
+                      <option value="navil">Navil Mode (Beta)</option>
                     </select>
                   </div>
                 )}

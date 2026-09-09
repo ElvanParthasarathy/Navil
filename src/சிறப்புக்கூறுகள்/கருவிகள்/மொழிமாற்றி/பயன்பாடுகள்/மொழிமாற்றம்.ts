@@ -1,6 +1,15 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
+ * 
+ * Tolkappiyam Phonetic Transliteration Engine
+ * (Elvan Navil Engine - Extended++)
+ * 
+ * Grounded in classical Tamil grammar:
+ * - தொல்காப்பியம் எழுத்ததிகாரம் (நூன்மரபு, புள்ளிமயங்கியல், பிறப்பியல்)
+ * - தொல்காப்பியம் சொல்லதிகாரம் (எச்சவியல் - நூற்பா 410, 412, 416, 420)
+ * - யாப்பிலக்கணம் (அசை பிரித்தல் - Onset, Nucleus, Coda)
+ * - துணைவினை & கூட்டுச்சொல் எல்லை முறைமை (Auxiliary Verb & Morpheme-Initial Stop Rule)
  */
 
 // --- Constants ---
@@ -38,7 +47,8 @@ export const VOWEL_SIGNS: Record<string, string> = {
   "ௌ": "au"
 };
 
-// Hard: word-start, geminate
+// Hard: word-start, geminate, after Vallina Mei (ற், ட்)
+// Authentic initial ச is "ch" (Chennai, Chidambaram, chiriya, chey)
 export const HARD: Record<string, string> = { 
   "க": "k", 
   "ச": "ch", 
@@ -48,7 +58,7 @@ export const HARD: Record<string, string> = {
   "ற": "r" 
 };
 
-// Soft: between vowels / middle of word
+// Soft: between vowels / middle of word / after semivowels
 export const SOFT: Record<string, string> = { 
   "க": "g", 
   "ச": "s", 
@@ -61,9 +71,9 @@ export const SOFT: Record<string, string> = {
 // Geminated (doubled)
 export const DOUBLED: Record<string, string> = {
   "க": "kk",
-  "ச": "cch",
+  "ச": "ch",
   "ட": "tt",
-  "த": "tth",
+  "த": "th",
   "ப": "pp",
   "ற": "tr"
 };
@@ -78,7 +88,7 @@ export const NASAL_SOUND: Record<string, string> = {
   "ன": "n" 
 };
 
-// Voiced stops (after its nasal)
+// Voiced stops (after homorganic nasal)
 export const VOICED_STOP: Record<string, string> = { 
   "க": "g", 
   "ச": "j", 
@@ -86,6 +96,16 @@ export const VOICED_STOP: Record<string, string> = {
   "த": "dh", 
   "ப": "b", 
   "ற": "dr" 
+};
+
+// Homorganic pairs (இணை எழுத்துகள்)
+export const INAI_EZHUTHUGAL: Record<string, string> = {
+  "ங": "க",
+  "ஞ": "ச",
+  "ண": "ட",
+  "ந": "த",
+  "ம": "ப",
+  "ன": "ற"
 };
 
 export const OTHER: Record<string, string> = {
@@ -97,14 +117,168 @@ export const GRANTHA = new Set(["ஜ", "ஷ", "ஸ", "ஹ", "ஶ"]);
 
 // After these (even with pulli / virama), the next stop softens
 export const SEMIVOWELS = new Set(["ய", "ர", "ல", "வ", "ழ", "ள"]);
+export const VALLINA_MEI = new Set(["ட்", "ற்", "க்", "ச்", "த்", "ப்"]);
+
+// --- Grammatical Root & Morpheme Classification ---
+
+export function isVoicedNbWord(word: string): boolean {
+  // 1. Time words with -பு (must be munbu / pinbu, not munpakkam or pinpaattu)
+  if (/^(?:முன்ப|பின்ப)/.test(word) && !/^(?:முன்பக்க|பின்பக்க|பின்பாட்டு|முன்பகுதி|பின்பகுதி|முன்பல்|பின்பல்|முன்பார்வை|பின்பார்வை)/.test(word)) return true;
+  if (word.includes("முன்ப") || word.includes("பின்ப")) {
+    if (!word.includes("முன்பக்க") && !word.includes("பின்பக்க") && !word.includes("பின்பாட்டு") && !word.includes("முன்பகுதி") && !word.includes("பின்பகுதி") && !word.includes("முன்பல்") && !word.includes("பின்பல்") && !word.includes("முன்பார்வை") && !word.includes("பின்பார்வை")) return true;
+  }
+
+  // 2. Noun roots (anbu, panbu, nanban, inbam, thunbam, enbu)
+  if (word.includes("அன்ப")) return true;
+  if (word.includes("பண்ப")) return true;
+  if (word.includes("நண்பன்") || word.includes("நண்பர்") || word.includes("நண்பா")) return true;
+  if (word.includes("இன்ப")) return true;
+  if (word.includes("துன்ப")) return true;
+  if (word.includes("என்பு") || word.includes("என்பி")) return true;
+  if (word.includes("மன்பதை") || word.includes("தென்படு")) return true;
+
+  // 3. Verbs with future tense -ப- (unbaan, kaanbaan, thinbaan, poonbaan)
+  if (word.includes("உண்ப") || word.includes("காண்ப") || word.includes("திண்ப") || word.includes("பூண்ப")) return true;
+
+  // 4. Verb: enbaan, enbaar, enbadhu (to say)
+  if (/^என்(?:ப|பா|பு|பே)/.test(word) || word.includes("என்பா") || word.includes("என்பது")) {
+    if (!word.startsWith("என்பை") && !word.startsWith("என்பொருள்")) return true;
+  }
+
+  return false;
+}
+
+/**
+ * Checks if a stop consonant at position j is the onset of an auxiliary verb (துணைவினை)
+ * or a compound word head (வருமொழி முதனிலை), which preserves its initial unvoiced stop.
+ * (e.g. நிலைபெற்றுள்ள -> nilaipetrulla, நடைபெறும் -> nadaiperum, தொன்றுதொட்டு -> thondruthottu)
+ */
+export function isMorphemeInitialStop(chars: string[], j: number, wordStr: string, startIdx: number = 0): boolean {
+  const c = chars[j];
+  const remaining = chars.slice(j).join("");
+  const prefix = chars.slice(startIdx, j).join("");
+
+  // 1. Numerical Prefixes (எண்ணடை முன்னொட்டுகள்: ஒரு, இரு, அறு)
+  // Stops after numerical prefixes carry junctural fortis/onset (iruperum, orupozhudhum, irupakkam)
+  // Exception: the tens suffix -பது (as in இருபது -> irubadhu)
+  if (prefix === "இரு" || prefix === "ஒரு" || prefix === "அறு" || 
+      prefix.endsWith("இரு") || prefix.endsWith("ஒரு") || prefix.endsWith("அறு")) {
+    if (c === "ப" && remaining.startsWith("பது")) {
+      return false; // இருபது -> irubadhu
+    }
+    return true;
+  }
+
+  // 2. Auxiliary Verbs & Compound Heads starting with 'க'
+  if (c === "க") {
+    // கூட particle (அவள்கூட, நான்கூட -> kooda)
+    if (/^கூட/.test(remaining)) return true;
+  }
+
+  // 3. Auxiliary Verbs & Compound Heads starting with 'ப'
+  if (c === "ப") {
+    // பெறு stem (பெற்ற, பெற்று, பெற, பெறும், பெறு...)
+    if (/^பெ(?:ற்ற|ற்று|ற|று)/.test(remaining)) return true;
+    // படு stem (பட்ட, பட்டு, பட, படும், படு...)
+    if (/^ப(?:ட்ட|ட்டு|ட|டு)/.test(remaining)) return true;
+    // பிடி stem (பிடித்த, பிடித்து, பிடி...)
+    if (/^பிடி/.test(remaining)) return true;
+    // பார் stem (பார்த்த, பார்த்து, பார்வை, பார்...)
+    if (/^பார்/.test(remaining)) return true;
+    // போடு stem (போட்ட, போட்டு, போடு...)
+    if (/^போ(?:ட்ட|ட்டு|ட|டு)/.test(remaining)) return true;
+    // உவம உருபு (போல், போல, போன்ற, போன்று)
+    if (/^போ(?:ல|ல்|ன்ற|ன்று)/.test(remaining)) return true;
+    // Compound noun heads (பொருள், புகழ், படை, பகுதி, பக்கம், பாட்டு, பால், பாண்டம்)
+    if (/^(?:பொரு|புக|படை|பகுதி|பக்கம்|பாட்டு|பால்|பாண்ட)/.test(remaining)) return true;
+  }
+
+  // 2. Auxiliary / Idiomatic Juncture starting with 'த' (e.g. தொட்டு in தொன்றுதொட்டு)
+  if (c === "த") {
+    if (/^தொ(?:ட்ட|ட்டு|ட|டு)/.test(remaining)) return true;
+  }
+
+  return false;
+}
+
+// --- Syllable Splitter (அசை பிரித்தல்) ---
+
+export interface Syllable {
+  onset: string;
+  nucleus: string;
+  coda: string;
+  raw: string;
+}
+
+export function splitSyllables(word: string): Syllable[] {
+  const chars = Array.from(word);
+  const syllables: Syllable[] = [];
+  let i = 0;
+
+  while (i < chars.length) {
+    let onset = "";
+    let nucleus = "";
+    let coda = "";
+    let raw = "";
+
+    if (VOWELS_BASE[chars[i]]) {
+      nucleus = chars[i];
+      raw += chars[i];
+      i++;
+    } else if (isConsonant(chars[i])) {
+      onset = chars[i];
+      raw += chars[i];
+      i++;
+
+      if (chars[i] === VIRAMA) {
+        coda = onset;
+        onset = "";
+        raw += chars[i];
+        i++;
+        syllables.push({ onset: "", nucleus: "", coda, raw });
+        continue;
+      }
+
+      if (isVowelSign(chars[i])) {
+        nucleus = chars[i];
+        raw += chars[i];
+        i++;
+      } else {
+        nucleus = "அ";
+      }
+    } else {
+      raw += chars[i];
+      i++;
+      syllables.push({ onset: "", nucleus: "", coda: "", raw });
+      continue;
+    }
+
+    if (isConsonant(chars[i]) && chars[i + 1] === VIRAMA) {
+      coda = chars[i];
+      raw += chars[i] + chars[i + 1];
+      i += 2;
+    }
+
+    syllables.push({ onset, nucleus, coda, raw });
+  }
+
+  return syllables;
+}
 
 // --- Helpers ---
 
-export function processFinalVowel(vowel: string, isStart: boolean, isEnd: boolean, mode: TransliterationMode, isBase: boolean = false): string {
+export type TransliterationMode = "mode1" | "mode2" | "simplified" | "extended++";
+
+export function processFinalVowel(
+  vowel: string, 
+  isStart: boolean, 
+  isEnd: boolean, 
+  mode: TransliterationMode = "extended++",
+  isBase: boolean = false
+): string {
   if (!vowel) return "";
   
   if (mode === "simplified") {
-      // We removed 'aa' -> 'a' at start to prevent ஆசை (aasai) and அசை (asai) from being confused.
       if (vowel === "aa" && isEnd) return "a";
       if (vowel === "oa" && isStart && isEnd) return "oh";
       if (vowel === "oa" && isStart) return "o";
@@ -114,7 +288,6 @@ export function processFinalVowel(vowel: string, isStart: boolean, isEnd: boolea
   }
   
   if (mode === "extended++") {
-      // Keep exact phonetics everywhere, no stripping of 'a' from 'aa' or 'oa'.
       return vowel;
   }
   
@@ -147,18 +320,14 @@ export function isPunct(ch: string | undefined): boolean {
   return ch !== undefined && /[.,!?;:)\]}\-—"']/.test(ch);
 }
 
-function isWordEnd(chars: string[], index: number): boolean {
-  const nextChar = chars[index + 1];
-  return isSpace(nextChar) || isPunct(nextChar) || nextChar === undefined;
-}
-
-function isWordStart(chars: string[], index: number): boolean {
-  const prevChar = chars[index - 1];
-  return isSpace(prevChar) || isPunct(prevChar) || prevChar === undefined;
-}
-
-// Nasal + stop fusion
-export function getFusion(nasal: string, stop: string, stopHasVirama: boolean = false, vowelChar: string = "", isGrantha: boolean = false, wordStr: string = ""): string {
+export function getFusion(
+  nasal: string, 
+  stop: string, 
+  stopHasVirama: boolean = false, 
+  vowelChar: string = "", 
+  isGrantha: boolean = false, 
+  wordStr: string = ""
+): string {
   if (stopHasVirama) {
     if (nasal === "ஞ" && stop === "ச") return "nch";
     if (nasal === "ன" && stop === "ற") return "ntr"; 
@@ -167,16 +336,11 @@ export function getFusion(nasal: string, stop: string, stopHasVirama: boolean = 
     return (NASAL_SOUND[nasal] || "n") + (HARD[stop] || stop);
   }
 
-  // Grantha words usually keep stops hard
   if (isGrantha) {
-    // Normal homorganic softens might still happen in some names, 
-    // but the exclusion rule usually implies preserving Sanskrit phonetics.
-    // However, common nasal-stop fusions like 'nj' or 'nd' often persist as expected.
-    // To strictly follow "disable softening middle letters", we prefer HARD.
     return (NASAL_SOUND[nasal] || "n") + (HARD[stop] || stop);
   }
   
-  // Homorganic pairs soften
+  // 1. Homorganic pairs voice (இணை எழுத்துகள்: ங்க, ஞ்ச, ண்ட, ந்த, ம்ப, ன்ற)
   if (nasal === "ங" && stop === "க") return "ng";
   if (nasal === "ஞ" && stop === "ச") return "nj";
   if (nasal === "ண" && stop === "ட") return "nd";
@@ -185,54 +349,73 @@ export function getFusion(nasal: string, stop: string, stopHasVirama: boolean = 
   if (nasal === "ன" && stop === "ற") return "ndr"; 
   if (nasal === "ந" && stop === "ற") return "ndr";
   
-  // Smart Heuristic for ன்/ண் + ப (anbu vs menporul)
+  // 2. Non-Homorganic ன்/ண் + ப
   if ((nasal === "ன" || nasal === "ண") && stop === "ப") {
-    // Detect known compound components that strictly preserve the hard 'p' (Noun + Noun phonetics)
-    const hardCompoundSuffixes = ["பகுதி", "புறம்", "பொருள்", "பால்", "பார்வை", "பாண்டம்", "பகிர்"];
-    const hasHardSuffix = hardCompoundSuffixes.some(suffix => wordStr.includes(suffix));
-    
-    if (hasHardSuffix) {
-        return (NASAL_SOUND[nasal] || "n") + "p"; // Keep hard
+    if (isVoicedNbWord(wordStr)) {
+      return (NASAL_SOUND[nasal] || "n") + "b";
     }
-
-    // "o", "oa", "au", "ai" typically begin compound distinct words like `porul` (menporul), `pai`
-    if (["o", "oa", "au", "ai"].includes(vowelChar)) {
-        return (NASAL_SOUND[nasal] || "n") + "p"; // Keep hard
-    }
-    // "u", "a", "aa", "i", "e", "ae" typically are bound suffixes or single roots like அன்பு (bu), நண்பன் (ba), பண்பாடு (baa), அன்பே (bae)
-    return (NASAL_SOUND[nasal] || "n") + "b"; // Soften
+    return (NASAL_SOUND[nasal] || "n") + "p";
   }
 
-  // Mismatched pairs stay HARD (e.g. ன்க -> nk)
+  // Emphatic suffix -தான் / -தானே after ன் (அவன்தான், நான்தான், இவன்தான் -> ndhaan)
+  if (nasal === "ன" && stop === "த") {
+    if (wordStr.endsWith("தான்") || wordStr.endsWith("தானே") || wordStr.includes("தான்") || wordStr.includes("தானே")) {
+      return (NASAL_SOUND[nasal] || "n") + "dh";
+    }
+  }
+
+  // 3. Plural suffix -கள் after ண்/ன் (கண்கள் -> kangal, பெண்கள் -> pengal, எண்கள் -> engal)
+  if ((nasal === "ண" || nasal === "ன") && stop === "க") {
+    const isPluralSuffix = wordStr.endsWith("கள்") || wordStr.includes("கள");
+    if (isPluralSuffix) {
+      return (NASAL_SOUND[nasal] || "n") + "g";
+    }
+  }
+
   return (NASAL_SOUND[nasal] || "n") + (HARD[stop] || stop);
 }
 
-// --- Core Logic ---
-
-export type TransliterationMode = "mode1" | "mode2" | "simplified" | "extended++";
-
-export function transliterate(text: string, mode: TransliterationMode = "mode1"): string {
+export function sanitizeRedundantVallinaMei(text: string): string {
   if (!text) return "";
-  
   const chars = Array.from(text);
+  const sanitized: string[] = [];
+
+  for (let i = 0; i < chars.length; i++) {
+    sanitized.push(chars[i]);
+
+    if (i >= 1 && chars[i] === VIRAMA && (chars[i - 1] === "ற" || chars[i - 1] === "ட")) {
+      const nextChar = chars[i + 1];
+      const nextNext = chars[i + 2];
+      if (nextChar && nextNext === VIRAMA && isStop(nextChar)) {
+        i += 2;
+      }
+    }
+  }
+
+  return sanitized.join("");
+}
+
+// --- Main Transliteration Function ---
+
+export function transliterate(text: string, mode: TransliterationMode = "extended++"): string {
+  if (!text) return "";
+
+  const cleanText = sanitizeRedundantVallinaMei(text);
+  const chars = Array.from(cleanText);
   let out = "";
   let i = 0;
-  let inWord = false;
-  let wordBuffer: { char: string, type: 'vowel' | 'consonant' | 'other' }[] = [];
 
-  // Helper to process a "word" unit
-  const processWord = (startIdx: number, endIdx: number) => {
+  const processWord = (startIdx: number, endIdx: number): string => {
     let wordOut = "";
     let prevWasVowel = false;
     const wordStr = chars.slice(startIdx, endIdx + 1).join("");
 
-    // Grantha Exclusion Rule check
     let isGranthaWord = false;
     for (let k = startIdx; k <= endIdx; k++) {
-        if (GRANTHA.has(chars[k])) {
-            isGranthaWord = true;
-            break;
-        }
+      if (GRANTHA.has(chars[k])) {
+        isGranthaWord = true;
+        break;
+      }
     }
 
     for (let j = startIdx; j <= endIdx; j++) {
@@ -243,11 +426,10 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
 
       const n1 = chars[j + 1], n2 = chars[j + 2], n3 = chars[j + 3];
 
-      // Standalone/Alone Vowels
+      // Independent Vowels
       if (VOWELS_BASE[c]) {
         let val = VOWELS_BASE[c];
         val = processFinalVowel(val, isStart, isEnd || isStandalone, mode, true);
-        
         wordOut += val;
         prevWasVowel = true;
         continue;
@@ -257,11 +439,8 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
 
       // Special handling for Aaytham (ஃ)
       if (c === "ஃ") {
-          wordOut += "h";
-          // We intentionally do not change prevWasVowel here. 
-          // Aaytham always follows a short vowel, so keeping prevWasVowel = true
-          // correctly softens the following stop consonant (e.g., எஃகு -> ehgu).
-          continue;
+        wordOut += "h";
+        continue;
       }
 
       // Pattern 1: Nasal + virama + stop
@@ -270,10 +449,9 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
         const vowel = isVowelSign(n3) ? VOWEL_SIGNS[n3] : (n3 === VIRAMA ? "" : "a");
         const fusion = getFusion(c, n2, stopHasVirama, vowel, isGranthaWord, wordStr);
         
-        let skip = isVowelSign(n3) ? 4 : (n3 === VIRAMA ? 4 : 3);
-        
-        let isFinalChar = (j + skip - 1 >= endIdx);
-        let finalVowel = processFinalVowel(vowel, isStart, isFinalChar, mode, false);
+        const skip = isVowelSign(n3) ? 4 : (n3 === VIRAMA ? 4 : 3);
+        const isFinalChar = (j + skip - 1 >= endIdx);
+        const finalVowel = processFinalVowel(vowel, isStart, isFinalChar, mode, false);
 
         wordOut += fusion + finalVowel;
         j += skip - 1;
@@ -286,26 +464,23 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
         let baseSound = HARD[c] || NASAL_SOUND[c] || OTHER[c] || c;
         let gem = DOUBLED[c] || (baseSound + baseSound);
         
-        // Mode overrides for Geminate ச and த
-        if (mode === "mode2") {
-            if (c === "ச") gem = "chch";
-            if (c === "த") gem = "thth";
+        if (mode === "mode1") {
+          if (c === "ச") gem = "ccha";
+          if (c === "த") gem = "ttha";
+        } else if (mode === "mode2") {
+          if (c === "ச") gem = "chch";
+          if (c === "த") gem = "thth";
         } else if (mode === "simplified" || mode === "extended++") {
-            if (c === "ச") gem = "ch";
-            if (c === "த") gem = "th";
+          if (c === "ச") gem = "ch";
+          if (c === "த") gem = "th";
         }
 
-        // 'ய' geminate mapping
-        if (c === "ய") {
-            gem = "iy";
-        }
+        if (c === "ய") gem = "iy";
 
         const vowel = isVowelSign(n3) ? VOWEL_SIGNS[n3] : (n3 === VIRAMA ? "" : "a");
-        
-        let skip = isVowelSign(n3) ? 4 : (n3 === VIRAMA ? 4 : 3);
-
-        let isFinalChar = (j + skip - 1 >= endIdx);
-        let finalVowel = processFinalVowel(vowel, isStart, isFinalChar, mode, false);
+        const skip = isVowelSign(n3) ? 4 : (n3 === VIRAMA ? 4 : 3);
+        const isFinalChar = (j + skip - 1 >= endIdx);
+        const finalVowel = processFinalVowel(vowel, isStart, isFinalChar, mode, false);
 
         wordOut += gem + finalVowel;
         j += skip - 1;
@@ -313,38 +488,43 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
         continue;
       }
 
-      // Pattern 3: Regular Consonant
+      // Pattern 3: Regular Consonants & Stops
       if (isConsonant(c)) {
         let sound = "";
-        if (isStop(c)) {
-            const prevChar = j > startIdx ? chars[j - 1] : undefined;
-            const prevPrevChar = j > startIdx + 1 ? chars[j - 2] : undefined;
-            
-            const afterSemivowelPulli = (prevChar === VIRAMA && prevPrevChar && SEMIVOWELS.has(prevPrevChar));
-            const afterSemivowelDirect = (prevChar && SEMIVOWELS.has(prevChar) && !isVowelSign(prevChar) && prevChar !== VIRAMA);
-            
-            const isSoft = (!isStart) && n1 !== VIRAMA && (prevWasVowel || afterSemivowelPulli || afterSemivowelDirect);
-            
-            sound = (isSoft && !isGranthaWord) ? SOFT[c] : HARD[c];
-        } else {
-            sound = NASAL_SOUND[c] || OTHER[c] || c;
-        }
 
-        // Special check for doubled 'ny' -> nnya (user said nnyu, likely meant nnya)
-        if (c === "ஞ" && isStart && n1 === VIRAMA && n2 === "ஞ") {
-             // Handled by geminate pattern
+        if (isStop(c)) {
+          const prevChar = j > startIdx ? chars[j - 1] : undefined;
+          const prevPrevChar = j > startIdx + 1 ? chars[j - 2] : undefined;
+          
+          const afterVallinaMei = (prevChar === VIRAMA && prevPrevChar && (prevPrevChar === "ற" || prevPrevChar === "ட"));
+          const afterSemivowelPulli = (prevChar === VIRAMA && prevPrevChar && SEMIVOWELS.has(prevPrevChar));
+          const afterSemivowelDirect = (prevChar && SEMIVOWELS.has(prevChar) && !isVowelSign(prevChar) && prevChar !== VIRAMA);
+          
+          // Tolkappiyam Morpheme-Initial Stop check (துணைவினைகள் & வருமொழி முதனிலை)
+          const isMorphemeInitial = isMorphemeInitialStop(chars, j, wordStr, startIdx);
+
+          if (afterVallinaMei) {
+            sound = HARD[c]; // Strictly HARD after ற் and ட்
+          } else if (isStart || isMorphemeInitial) {
+            sound = HARD[c]; // Strictly HARD at word-start or auxiliary/compound boundary
+          } else if (n1 === VIRAMA) {
+            sound = HARD[c];
+          } else if ((prevWasVowel || afterSemivowelPulli || afterSemivowelDirect) && !isGranthaWord) {
+            sound = SOFT[c];
+          } else {
+            sound = HARD[c];
+          }
+        } else {
+          sound = NASAL_SOUND[c] || OTHER[c] || c;
         }
 
         const vowel = isVowelSign(n1) ? VOWEL_SIGNS[n1] : (n1 === VIRAMA ? "" : "a");
-        let skip = isVowelSign(n1) ? 2 : (n1 === VIRAMA ? 2 : 1);
-        
-        // Vowel ending modifications
-        let isFinalChar = (j + skip - 1 >= endIdx);
-        let finalVowel = processFinalVowel(vowel, isStart, isFinalChar, mode, false);
+        const skip = isVowelSign(n1) ? 2 : (n1 === VIRAMA ? 2 : 1);
+        const isFinalChar = (j + skip - 1 >= endIdx);
+        const finalVowel = processFinalVowel(vowel, isStart, isFinalChar, mode, false);
 
-        // ய் -> i (e.g., naay -> naai, thaay -> thaai, poy -> poi, paayndhadhu -> paaindhadhu)
         if (c === "ய" && n1 === VIRAMA) {
-            sound = "i";
+          sound = "i";
         }
 
         wordOut += sound + finalVowel;
@@ -355,6 +535,7 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
 
       wordOut += c;
     }
+
     return wordOut;
   };
 
@@ -373,3 +554,124 @@ export function transliterate(text: string, mode: TransliterationMode = "mode1")
 
   return out;
 }
+
+/**
+ * Capitalizes the first alphabetical character of a string, preserving any leading quotes/brackets.
+ */
+export function capitalizeFirstLetter(text: string): string {
+  if (!text) return '';
+  return text.replace(/^([\s"'“”‘’(«\[]*)([a-z])/i, (_m, prefix, letter) => prefix + letter.toUpperCase());
+}
+
+/**
+ * Standard English/Latin sentence-case capitalizer (வாக்கியத் தொடக்கப் பேரெழுத்து).
+ * Capitalizes:
+ * 1. The first letter of the text.
+ * 2. The first letter after sentence-ending punctuation (., ?, !) followed by whitespace.
+ * 3. The first letter after newlines / paragraph breaks.
+ * 4. Preserves any leading punctuation or quotation marks.
+ */
+export function capitalizeSentences(text: string): string {
+  if (!text) return '';
+  return text.replace(
+    /(^|[.?!]\s+|\r?\n\s*)([\s"'“”‘’(«\[]*)([a-z])/gi,
+    (_match, boundary, punct, letter) => boundary + punct + letter.toUpperCase()
+  );
+}
+
+/**
+ * Capitalizes HTML rich-text in standard sentence-case, keeping all HTML tags intact.
+ */
+export function capitalizeSentencesHtml(html: string): string {
+  if (!html) return '';
+  let isSentenceStart = true;
+
+  return html.replace(/(<[^>]+>)|([^<]+)/g, (_match, tag, text) => {
+    if (tag) {
+      if (/<(?:br|\/p|div|\/div|h[1-6]|\/h[1-6]|li|\/li)\b/i.test(tag)) {
+        isSentenceStart = true;
+      }
+      return tag;
+    }
+
+    let result = '';
+    let i = 0;
+    while (i < text.length) {
+      if (isSentenceStart && /[a-zA-Z]/.test(text[i])) {
+        result += text[i].toUpperCase();
+        isSentenceStart = false;
+        i++;
+      } else {
+        result += text[i];
+        if (/[.?!]/.test(text[i])) {
+          isSentenceStart = true;
+        } else if (/\n/.test(text[i])) {
+          isSentenceStart = true;
+        }
+        i++;
+      }
+    }
+    return result;
+  });
+}
+
+/**
+ * Applies Latin poetic line-initial capitalization to HTML/plain-text poem content.
+ * Capitalizes the first letter of each verse line (after newlines, <br>, </p>, etc.)
+ */
+export function capitalizePoemHtml(html: string): string {
+  if (!html) return '';
+  let isLineStart = true;
+
+  return html.replace(/(<[^>]+>)|([^<]+)/g, (_match, tag, text) => {
+    if (tag) {
+      if (/<(?:br|\/p|div|\/div|h[1-6]|\/h[1-6]|li|\/li)\b/i.test(tag)) {
+        isLineStart = true;
+      }
+      return tag;
+    }
+
+    let result = '';
+    const parts = text.split(/(\r?\n)/);
+    for (const part of parts) {
+      if (part === '\n' || part === '\r\n') {
+        result += part;
+        isLineStart = true;
+      } else {
+        if (isLineStart && /[a-zA-Z]/.test(part)) {
+          const replaced = part.replace(/^([\s"'“”‘’(«\[]*)([a-z])/i, (_m, prefix, letter) => {
+            return prefix + letter.toUpperCase();
+          });
+          isLineStart = false;
+          result += replaced;
+        } else {
+          result += part;
+        }
+      }
+    }
+    return result;
+  });
+}
+
+/**
+ * Capitalizes every word in the text (Title Case / சொல் தொடக்கப் பேரெழுத்து).
+ * Facilitates Romanized Tamil visual word segmentation for optimal readability.
+ */
+export function capitalizeWords(text: string): string {
+  if (!text) return '';
+  return text.replace(/\b([a-z])/g, c => c.toUpperCase());
+}
+
+/**
+ * Capitalizes every word in HTML text while preserving HTML tags.
+ */
+export function capitalizeWordsHtml(html: string): string {
+  if (!html) return '';
+  return html.replace(/(<[^>]+>)|([^<]+)/g, (_match, tag, text) => {
+    if (tag) return tag;
+    return capitalizeWords(text);
+  });
+}
+
+export default transliterate;
+

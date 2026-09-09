@@ -10,6 +10,19 @@ import { Engagement } from '../../../கூறுகள்/தொடர்பு
 import MobileTopBar from '../../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 import { CalendarBlank, ArrowLeft } from '@phosphor-icons/react';
+import { transliterate, capitalizeFirstLetter, capitalizeSentencesHtml, capitalizePoemHtml, capitalizeWords, capitalizeWordsHtml } from '../../கருவிகள்/மொழிமாற்றி/பயன்பாடுகள்/மொழிமாற்றம்';
+
+// Transliterate only text nodes inside HTML, preserving all tags intact.
+// Applies word capitalization for optimal Romanized Tamil readability.
+const transliterateHtml = (html: string, isPoem: boolean = false): string => {
+    if (!html) return '';
+    const transliterated = html.replace(/(<[^>]+>)|([^<]+)/g, (_match, tag, text) => {
+        if (tag) return tag;
+        return transliterate(text);
+    });
+
+    return capitalizeWordsHtml(transliterated);
+};
 
 const CATEGORY_META = {
     'blog': { title: 'வலைப்பதிவுகள்', subtitle: 'Blog Posts' },
@@ -137,7 +150,9 @@ const ReadingView = () => {
     const firstVariantActiveLang = variantTranslStates[firstVariantKey] || null;
     let displayPrimaryTitle = primaryTitle;
     if (hasVariants && firstVariantActiveLang) {
-        if (variants[0]?.titleTransliterations?.[firstVariantActiveLang]) {
+        if (firstVariantActiveLang === 'navil') {
+            displayPrimaryTitle = capitalizeWords(transliterate(primaryTitle || ''));
+        } else if (variants[0]?.titleTransliterations?.[firstVariantActiveLang]) {
             displayPrimaryTitle = variants[0].titleTransliterations[firstVariantActiveLang];
         } else if (post?.titleTransliterations?.[firstVariantActiveLang]) {
             displayPrimaryTitle = post.titleTransliterations[firstVariantActiveLang];
@@ -530,7 +545,9 @@ const toggleVariantTransl = (vKey, lang) => {
 
                             // Determine displayed content
                             let displayTitle = variant.title || post?.title;
-                            if (activeLang) {
+                            if (activeLang === 'navil') {
+                                displayTitle = capitalizeWords(transliterate(displayTitle || ''));
+                            } else if (activeLang) {
                                 if (variant.titleTransliterations?.[activeLang]) {
                                     displayTitle = variant.titleTransliterations[activeLang];
                                 } else if (post?.titleTransliterations?.[activeLang]) {
@@ -538,7 +555,9 @@ const toggleVariantTransl = (vKey, lang) => {
                                 }
                             }
                             let displayText = variant.text;
-                            if (activeLang && translObj[activeLang]) {
+                            if (activeLang === 'navil') {
+                                displayText = transliterateHtml(displayText || '', category === 'poems');
+                            } else if (activeLang && translObj[activeLang]) {
                                 displayText = translObj[activeLang];
                             }
 
@@ -572,6 +591,40 @@ const toggleVariantTransl = (vKey, lang) => {
                                                 <span className="transl-switch-label">{TRANSL_LABELS[tLang] || tLang}</span>
                                             </React.Fragment>
                                         ))}
+
+                                        {/* Live Navil Transliteration Switch for Tamil in Poems & Quotes */}
+                                        {['poems', 'quotes'].includes(category) && variant.lang === 'ta' && (
+                                            <React.Fragment key="navil">
+                                                <label className="transl-switch" title="Live Navil Transliteration (Beta)">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={activeLang === 'navil'}
+                                                        onChange={() => toggleVariantTransl(vKey, 'navil')}
+                                                    />
+                                                    <span className="transl-slider" />
+                                                </label>
+                                                <span 
+                                                    className="transl-switch-label" 
+                                                    title="Live Navil Transliteration (Beta)"
+                                                    style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                                                >
+                                                    Navil
+                                                    <span style={{
+                                                        fontSize: '0.55rem',
+                                                        fontWeight: 700,
+                                                        letterSpacing: '0.5px',
+                                                        padding: '1px 4px',
+                                                        borderRadius: '4px',
+                                                        background: activeLang === 'navil' ? 'var(--text-main)' : 'color-mix(in srgb, var(--text-main) 12%, transparent)',
+                                                        color: activeLang === 'navil' ? 'var(--bg-app)' : 'var(--text-muted)',
+                                                        lineHeight: 1.1,
+                                                        textTransform: 'uppercase'
+                                                    }}>
+                                                        BETA
+                                                    </span>
+                                                </span>
+                                            </React.Fragment>
+                                        )}
                                         </div>
                                     )}
 
@@ -592,7 +645,7 @@ const toggleVariantTransl = (vKey, lang) => {
 
                                     {variant.author && (
                                         <div lang={activeLang || variant.lang} style={{ fontSize: '1rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '16px' }}>
-                                            — {activeLang && variant.authorTransliterations?.[activeLang] ? variant.authorTransliterations[activeLang] : variant.author}
+                                            — {activeLang === 'navil' ? (category === 'poems' ? transliterate(variant.author).replace(/\b([a-z])/gi, c => c.toUpperCase()) : capitalizeFirstLetter(transliterate(variant.author))) : (activeLang && variant.authorTransliterations?.[activeLang] ? variant.authorTransliterations[activeLang] : variant.author)}
                                         </div>
                                     )}
 
