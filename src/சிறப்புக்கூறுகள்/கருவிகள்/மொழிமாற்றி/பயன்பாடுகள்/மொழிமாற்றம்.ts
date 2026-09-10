@@ -134,15 +134,20 @@ export function isVoicedNbWord(word: string): boolean {
   if (word.includes("நண்பன்") || word.includes("நண்பர்") || word.includes("நண்பா")) return true;
   if (word.includes("இன்ப")) return true;
   if (word.includes("துன்ப")) return true;
-  if (word.includes("என்பு") || word.includes("என்பி")) return true;
+  if ((word.includes("என்பு") || word.includes("என்பி")) && !word.includes("என்பின்")) return true;
   if (word.includes("மன்பதை") || word.includes("தென்படு")) return true;
 
-  // 3. Verbs with future tense -ப- (unbaan, kaanbaan, thinbaan, poonbaan)
+  // 3. Numbers with -பது (enbadhu, onbadhu, pathonbadhu, enbaan, onbaan)
+  if (word.includes("எண்பத") || word.includes("ஒன்பத") || word.includes("தொன்பத") || word.includes("எண்பா") || word.includes("ஒன்பா")) return true;
+
+  // 4. Verbs with future tense -ப- (unbaan, kaanbaan, thinbaan, poonbaan)
   if (word.includes("உண்ப") || word.includes("காண்ப") || word.includes("திண்ப") || word.includes("பூண்ப")) return true;
 
-  // 4. Verb: enbaan, enbaar, enbadhu (to say)
-  if (/^என்(?:ப|பா|பு|பே)/.test(word) || word.includes("என்பா") || word.includes("என்பது")) {
-    if (!word.startsWith("என்பை") && !word.startsWith("என்பொருள்")) return true;
+  // 5. Verb: enbaan, enbaar, enbadhu (to say) vs noun என் (my: enpakkam, enpadi, enpoal)
+  if (word.includes("என்பத") || word.includes("என்பா") || word.includes("என்பர்") || word.includes("என்பன")) {
+    if (!word.includes("என்பார்வை") && !word.includes("என்பாடம்") && !word.includes("என்பாடு") && !word.includes("என்பொருள்")) {
+      return true;
+    }
   }
 
   return false;
@@ -191,11 +196,6 @@ export function isMorphemeInitialStop(chars: string[], j: number, wordStr: strin
     if (/^போ(?:ல|ல்|ன்ற|ன்று)/.test(remaining)) return true;
     // Compound noun heads (பொருள், புகழ், படை, பகுதி, பக்கம், பாட்டு, பால், பாண்டம்)
     if (/^(?:பொரு|புக|படை|பகுதி|பக்கம்|பாட்டு|பால்|பாண்ட)/.test(remaining)) return true;
-  }
-
-  // 2. Auxiliary / Idiomatic Juncture starting with 'த' (e.g. தொட்டு in தொன்றுதொட்டு)
-  if (c === "த") {
-    if (/^தொ(?:ட்ட|ட்டு|ட|டு)/.test(remaining)) return true;
   }
 
   return false;
