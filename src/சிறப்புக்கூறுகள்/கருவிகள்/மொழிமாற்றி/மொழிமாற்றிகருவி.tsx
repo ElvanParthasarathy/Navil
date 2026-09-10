@@ -270,15 +270,22 @@ export default function TransliteratorTool() {
                   )
                 ) : (
                   <div className="translit-rules-grid">
-                    <RuleItem label="Vowels (ஆ/ஓ)" desc="End variants: Ah, oh" />
-                    <RuleItem label="Stops (க/ச/ட)" desc="Softens in middle: ga, sa, da" />
-                    <RuleItem label="Stops (த/ப/ற)" desc="Softens: dha, ba, ra" />
-                    <RuleItem label="Geminate" desc="Hard Doubled: kka, ccha, ppa" />
-                    <RuleItem label="Nasal Fusions" desc="anbu(b), nandri(ndr)" />
-                    <RuleItem label="Grantha Rule" desc="ஜ/ஷ words: No softening" />
-                    <RuleItem label="Special: ற" desc="vetri(tr), kaatru(tr)" />
+                    <RuleItem label="1. ஆய்த எழுத்து (தொல். 38)" desc="ஃ பின் வல்லினம் கடினமாகும்: எஃகு (Ehku), அஃது (Ahthu), அஃறிணை (Ahtrinai), கஃசு (Kahchu)" />
+                    <RuleItem label="2. வல்லின மெய் (ட், ற்)" desc="கடின வல்லினம் மட்டும்: முயற்சி (Muyarchi), பொற்காசு (Porkaasu), வெட்கம் (Vetkam), நட்பு (Natpu)" />
+                    <RuleItem label="3. இணை எழுத்துகள்" desc="மெல்லினம்+வல்லினம் இயல்பாக மெலியும்: தங்கம் (ng), பஞ்சு (nj), வண்டு (nd), பந்து (ndh), கன்று (ndr)" />
+                    <RuleItem label="4. வேற்று மெல்லின மயக்கம்" desc="இணை அல்லாத மெல்லினம் கடினமாகும்: நான்கு (Naanku), கண்காணி (Kankaani), கண்பார்வை (p), மண்பானை (p)" />
+                    <RuleItem label="5. பகாப்பதம் vs தொகை" desc="வேர்ச்சொல் மெலியும்: அன்பு (b), முன்பு (b); தொகைச்சொல் கடினம்: முன்பக்கம் (p), பின்பக்கம் (p), என்பக்கம் (p)" />
+                    <RuleItem label="6. எண்கள் (-பது ஈறு)" desc="பத்து எண் ஈறு மெலியும்: எண்பது (Enbadhu), ஒன்பது (Onbadhu), பத்தொன்பது (Pathonbadhu), இருபது (b)" />
+                    <RuleItem label="7. உயிர் இடை மெலிதல்" desc="உயிர் நடுவே வல்லினம் மெலியும்: அகம் (g), படம் (d), மதம் (dh), இருபது (b), தொன்றுதொட்டு (Thondrudhottu)" />
+                    <RuleItem label="8. இடையின மெலிதல்" desc="ய், ர், ல், ழ் பின் வல்லினம் மெலியும்: பல்கலை (Palgalai), வாழ்க (Vaazhga), இயல்பு (b), மார்பு (b)" />
+                    <RuleItem label="9. பன்மை விகுதி (-கள்)" desc="மெல்லினம்/இடையினம் பின் gal (கண்கள், கால்கள்); வல்லின ஒற்றுப் பின் kal (கற்கள், நாட்கள்)" />
+                    <RuleItem label="10. வருமொழி முதனிலை" desc="வருமொழி முதல் வல்லினம் நிலைக்கும்: மறுபிறவி (Marupiravi), நிலைபெற்றுள்ள (p), கண்டுபிடி (p)" />
+                    <RuleItem label="11. இடைச்சொற்கள்" desc="கூட (kooda), தான் (avandhaan), போல் (thooralpoal), போது (வந்தபோது - vandhaboadhu)" />
+                    <RuleItem label="12. சொல் முதன்மை 'ச'" desc="சொல் தொடக்கத்தில் தூய 'ch' ஒலிப்பு: சென்னை (Chennai), சரி (Chari), சாப்பாடு (Chaappaadu)" />
+                    <RuleItem label="13. மிகை ஒற்று நீக்கம்" desc="ற், ட் பின் மிகை வல்லொற்று நீக்கப்படும்: பொற்க்காசு → Porkaasu, முயற்ச்சி → Muyarchi" />
+                    <RuleItem label="14. ரோமன் பேரெழுத்தாக்கம்" desc="வாசிப்புத் தெளிவிற்காக அனைத்துச் சொற்களின் முதல் எழுத்தும் பேரெழுத்தாக (Title Case) அமையும்" />
                     <div className="translit-rules-note">
-                      * Note: This engine runs completely offline inside your browser. No data leaves your device.
+                      * தொல்காப்பிய எழுத்ததிகாரம் & சொல்லதிகாரத்தின் அக்மார்க் ஒலியியல் விதிகளை அடிப்படையாகக் கொண்ட தூய தமிழ் ஒலிபெயர்ப்பு எஞ்சின். Runs 100% offline inside your browser.
                     </div>
                   </div>
                 )}
