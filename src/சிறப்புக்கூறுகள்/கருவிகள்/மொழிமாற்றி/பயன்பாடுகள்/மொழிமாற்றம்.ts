@@ -184,6 +184,8 @@ export function isMorphemeInitialStop(chars: string[], j: number, wordStr: strin
   if (c === "ப") {
     // பெறு stem (பெற்ற, பெற்று, பெற, பெறும், பெறு...)
     if (/^பெ(?:ற்ற|ற்று|ற|று)/.test(remaining)) return true;
+    // பிற stem (பிறவி, பிறப்பு, பிறந்த...)
+    if (/^பிற/.test(remaining)) return true;
     // படு stem (பட்ட, பட்டு, பட, படும், படு...)
     if (/^ப(?:ட்ட|ட்டு|ட|டு)/.test(remaining)) return true;
     // பிடி stem (பிடித்த, பிடித்து, பிடி...)
@@ -496,6 +498,7 @@ export function transliterate(text: string, mode: TransliterationMode = "extende
           const prevChar = j > startIdx ? chars[j - 1] : undefined;
           const prevPrevChar = j > startIdx + 1 ? chars[j - 2] : undefined;
           
+          const afterAaydham = (prevChar === "ஃ");
           const afterVallinaMei = (prevChar === VIRAMA && prevPrevChar && (prevPrevChar === "ற" || prevPrevChar === "ட"));
           const afterSemivowelPulli = (prevChar === VIRAMA && prevPrevChar && SEMIVOWELS.has(prevPrevChar));
           const afterSemivowelDirect = (prevChar && SEMIVOWELS.has(prevChar) && !isVowelSign(prevChar) && prevChar !== VIRAMA);
@@ -503,7 +506,9 @@ export function transliterate(text: string, mode: TransliterationMode = "extende
           // Tolkappiyam Morpheme-Initial Stop check (துணைவினைகள் & வருமொழி முதனிலை)
           const isMorphemeInitial = isMorphemeInitialStop(chars, j, wordStr, startIdx);
 
-          if (afterVallinaMei) {
+          if (afterAaydham) {
+            sound = (c === "ற") ? "tr" : HARD[c]; // Strictly HARD after ஃ (Tolkappiyam Sutra 38)
+          } else if (afterVallinaMei) {
             sound = HARD[c]; // Strictly HARD after ற் and ட்
           } else if (isStart || isMorphemeInitial) {
             sound = HARD[c]; // Strictly HARD at word-start or auxiliary/compound boundary
