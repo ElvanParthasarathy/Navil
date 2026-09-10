@@ -382,9 +382,19 @@ export function getFusion(
   return (NASAL_SOUND[nasal] || "n") + (HARD[stop] || stop);
 }
 
+export function normalizeTamilUnicode(text: string): string {
+  if (!text) return "";
+  return text.normalize("NFC")
+    .replace(/\u0BC6\u0BBE/g, "\u0BCA")  // ெ + ா -> ொ
+    .replace(/\u0BC7\u0BBE/g, "\u0BCB")  // ே + ா -> ோ
+    .replace(/\u0BC6\u0BD7/g, "\u0BCC")  // ெ + ௗ -> ௌ
+    .replace(/\u0B92\u0BD7/g, "\u0B94"); // ஒ + ௗ -> ஔ
+}
+
 export function sanitizeRedundantVallinaMei(text: string): string {
   if (!text) return "";
-  const chars = Array.from(text);
+  const normalized = normalizeTamilUnicode(text);
+  const chars = Array.from(normalized);
   const sanitized: string[] = [];
 
   for (let i = 0; i < chars.length; i++) {
