@@ -350,6 +350,11 @@ export function getFusion(
   if (nasal === "ம" && stop === "ப") return "mb";
   if (nasal === "ன" && stop === "ற") return "ndr"; 
   if (nasal === "ந" && stop === "ற") return "ndr";
+
+  // Single 'ச' after non-homorganic nasals (e.g. ன், ம், ண்) voices/fricativizes to 's' (மின்சாரம் -> minsaaram, அம்சம் -> amsam)
+  if (stop === "ச") {
+    return (NASAL_SOUND[nasal] || "n") + "s";
+  }
   
   // 2. Non-Homorganic ன்/ண் + ப
   if ((nasal === "ன" || nasal === "ண") && stop === "ப") {
