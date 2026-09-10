@@ -62,9 +62,9 @@ export default function TransliteratorTool() {
 
   return (
     <>
-      <MobileTopBar title="உருமாற்றி|transliterator" />
+      <MobileTopBar title="தொல்காப்பியம்|transliterator" />
       <Helmet>
-        <title>Navil Transliterator | Elvan Navil</title>
+        <title>Tolkappiyam Tamil Transliterator | Elvan Navil</title>
       </Helmet>
       <FloatingBackButton to="/tools" />
       <style>{`
@@ -77,10 +77,24 @@ export default function TransliteratorTool() {
       {/* Header matching Writings page */}
       <header className="writings-header animate-entry" style={{ marginBottom: '32px' }}>
           <div style={{ flex: 1 }}>
-              <h1 className="writings-title">Navil Transliterator</h1>
-              <div className="writings-title-sub">Phonetic Engine</div>
-              <p className="writings-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                A fully offline phonetic transliteration engine.
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '4px 12px',
+                background: 'rgba(56, 189, 248, 0.12)',
+                color: 'var(--accent, #38bdf8)',
+                border: '1px solid rgba(56, 189, 248, 0.25)',
+                borderRadius: '9999px',
+                fontSize: '12px',
+                fontWeight: 600,
+                marginBottom: '10px'
+              }}>
+                தொல்காப்பியம் ஒலியியல் முறைமை
+              </div>
+              <h1 className="writings-title">Tolkappiyam Tamil Transliterator</h1>
+              <div className="writings-title-sub">Authentic Phonetic Engine</div>
+              <p className="writings-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '6px' }}>
+                Authentic English Phonetics based on Tolkappiyam Ezhuthathikaram &amp; Sollathikaram.
                 <button 
                   onClick={() => setDirection(d => d === 'ta-en' ? 'en-ta' : 'ta-en')}
                   className="translit-direction-btn"

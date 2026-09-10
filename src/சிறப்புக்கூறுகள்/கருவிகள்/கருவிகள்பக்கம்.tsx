@@ -42,10 +42,10 @@ const ToolsView = () => {
                     <Link to="/tools/transliterator" className="category-card">
                         <div className="cat-icon-box"><Translate weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">Navil Transliterator</div>
-                            <div className="cat-title-sub">Transliterator Engine</div>
-                            <p className="cat-desc">A fully offline phonetic transliteration engine.</p>
-                            <p className="cat-desc-sub">Convert Tanglish to Tamil instantly without internet.</p>
+                            <div className="cat-title">Tolkappiyam Tamil Transliterator</div>
+                            <div className="cat-title-sub">தொல்காப்பியம் ஒலியியல் முறைமை</div>
+                            <p className="cat-desc">Authentic English Phonetics based on Tolkappiyam.</p>
+                            <p className="cat-desc-sub">Based on Tolkappiyam Ezhuthathikaram & Sollathikaram.</p>
                         </div>
                         <div className="cat-footer">Launch Transliterator <ArrowRight weight="regular" /></div>
                     </Link>
