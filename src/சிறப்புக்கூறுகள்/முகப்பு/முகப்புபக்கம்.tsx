@@ -2,10 +2,8 @@ import './முகப்பு.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { HeroSection } from '../../components/features/home/HeroSection';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
-import profileData from '../../தரவு/தன்னுரு.json';
-import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
+import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 import { db } from '../../நூலகம்/ஃபயர்பேஸ்/வாடிக்கையாளர்';
 import { ref, onValue } from 'firebase/database';
 
@@ -13,7 +11,7 @@ import { ref, onValue } from 'firebase/database';
 
 import staticStories from '../../தரவு/கதைகள்.json';
 import staticArts from '../../தரவு/கலைகள்.json';
-import { ArrowRight, ArrowClockwise, User, InstagramLogo, Feather, Image, Compass, Info, BookOpen, Pen, ChatCircleText, PencilSimpleLine, Newspaper, MoonStars } from '@phosphor-icons/react';
+import { ArrowRight, ArrowClockwise, User, InstagramLogo, Feather, Image, Compass, Info, BookOpen, Pen, ChatCircleText, PencilSimpleLine, Newspaper, MoonStars, Palette } from '@phosphor-icons/react';
 
 const CLASSIFICATION_COLORS: Record<string, string> = {
     'அகம்': '#e8a0bf',   // pink
@@ -447,27 +445,45 @@ const Home = () => {
 
     const handleQuoteCardClick = () => {
         if (quoteTexts.id) {
-            navigate(`/writings/quotes/${quoteTexts.id}`);
+            navigate(isNavilgal ? `/navilgal/writings/quotes/${quoteTexts.id}` : `/writings/quotes/${quoteTexts.id}`);
         }
     };
 
     const handlePoemCardClick = () => {
         if (poemDetails.id) {
-            navigate(`/writings/poems/${poemDetails.id}`);
+            navigate(isNavilgal ? `/navilgal/writings/poems/${poemDetails.id}` : `/writings/poems/${poemDetails.id}`);
         }
     };
 
     return (
         <>
             <Helmet>
-                <title>{isNavilgal ? 'எல்வனின் நவில்கள் | Elvanin Navilgal' : 'எல்வன் நவில் | Elvan Navil'}</title>
+                <title>{isNavilgal ? 'நவில்கள் | Navilgal' : 'எல்வன் நவில் | Elvan Navil'}</title>
                 <meta name="description" content="Welcome to the digital home of Elvan Parthasarathy. A creative sanctuary for poetry, thoughts, writings, and artistic expressions." />
                 <link rel="canonical" href="https://elvannavil.vercel.app/" />
             </Helmet>
-            <MobileTopBar title={isNavilgal ? "எல்வனின் நவில்கள்|elvanin navilgal" : "எல்வன் நவில்"} />
+            <MobileTopBar title={isNavilgal ? "நவில்கள்|navilgal" : "எல்வன் நவில்"} showBack={isNavilgal} backUrl="/" />
             <div className="home-page page-view fadeIn">
 
-{/* ANIMATED ABSTRACT GRADIENT BACKGROUND */}
+                {isNavilgal && (
+                    <>
+                        <FloatingBackButton to="/" />
+                        <header className="writings-header animate-entry" style={{ marginBottom: '32px' }}>
+                            <div style={{ flex: 1 }}>
+                                <h1 className="writings-title" lang="ta">நவில்கள்</h1>
+                                <div className="writings-title-sub">Navilgal</div>
+                                <p className="writings-subtitle" lang="ta">
+                                    சிந்தனைகள், கதைகள், கலைகள் & இலக்கியப் பெட்டகம்
+                                </p>
+                                <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                                    Literature, Visual Arts & Creative Expressions
+                                </p>
+                            </div>
+                        </header>
+                    </>
+                )}
+
+                {/* ANIMATED ABSTRACT GRADIENT BACKGROUND */}
                 <div className="home-bg-blobs">
                     <div className="bg-blob-circle blob-1"></div>
                     <div className="bg-blob-circle blob-2"></div>
@@ -476,72 +492,98 @@ const Home = () => {
                 {/* THE BENTO GRID */}
                 <div className="bento-grid">
 
-                    {/* 1. HERO & BRAND DESCRIPTION (span-12) */}
-                    <header className="span-12" style={{ cursor: 'default' }}>
-                        <div className="hero-layout">
-                            <div className="hero-avatar-area">
-                                <div className="hero-avatar-bg-glow"></div>
-                                <img
-                                    src={profilePic}
-                                    alt={profileData.fullName}
-                                    className="hero-avatar-image"
-                                />
-                            </div>
-                            <div className="hero-identity">
-                                <h1 className="hero-intro-text" lang="ta">{isNavilgal ? 'எல்வனின் நவில்கள்' : 'எல்வன் நவில்'}</h1>
-                                <h2 className="hero-subtitle">{isNavilgal ? 'Elvanin Navilgal' : 'Elvan Navil'}</h2>
-                                <p style={{ fontSize: '1.05rem', lineHeight: '1.6', color: 'var(--text-muted)', maxWidth: '650px', marginBottom: '12px' }} lang="ta">
-                                    நல்வரவு. இது நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் வெளி.
-                                </p>
-                                <p style={{ fontSize: '0.95rem', lineHeight: '1.6', color: 'var(--text-muted)', maxWidth: '650px' }}>
-                                    Welcome. This is Navil—a personal digital archive to express thoughts, share writings, and display creative digital arts.
-                                </p>
-                                <div className="mobile-quick-links">
-                                    <button onClick={() => navigate('/writings', { state: { fromQuickLink: true } })} className="mobile-quick-link-btn">
-                                        <div className="btn-icon-wrapper">
-                                            <Feather weight="regular" size={16} />
-                                        </div>
-                                        <div className="btn-text-group">
-                                            <span className="btn-text-ta" lang="ta">எழுத்துகள்</span>
-                                            <span className="btn-text-en">writings</span>
-                                        </div>
-                                    </button>
-                                    <button onClick={() => navigate('/arts', { state: { fromQuickLink: true } })} className="mobile-quick-link-btn">
-                                        <div className="btn-icon-wrapper">
-                                            <Image weight="regular" size={16} />
-                                        </div>
-                                        <div className="btn-text-group">
-                                            <span className="btn-text-ta" lang="ta">படைப்புகள்</span>
-                                            <span className="btn-text-en">arts</span>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* DICTIONARY DEFINITION LAYOUT */}
-                        <div className="dictionary-container">
-                            <div className="dict-card">
-                                <div className="dict-word-header">
-                                    <span className="dict-word" lang="ta">நவில்</span>
-                                    <span className="dict-meta">வினைச்சொல்</span>
-                                </div>
-                                <p className="dict-definition" lang="ta">
-                                    தமிழ் வேர்ச்சொல் "நவிலுதல்" — உரைத்தல், பேசுதல், பாடுதல், அல்லது வார்த்தைகள் வழி எண்ணங்களை வெளிப்படுத்துதல்.
-                                </p>
+                    {/* 1. WRITINGS BOX (span-6) */}
+                    <section 
+                        className="bento-card span-6 archive-entry-card clickable-card"
+                        onClick={() => navigate('/navilgal/writings', { state: { fromQuickLink: true } })}
+                    >
+                        <div>
+                            <div className="archive-entry-meta">
+                                <span className="archive-entry-pill">இலக்கியப் பெட்டகம்</span>
+                                <span className="archive-entry-pill sub">Writings</span>
                             </div>
 
-                            <div className="dict-card">
-                                <div className="dict-word-header">
-                                    <span className="dict-word">Navil</span>
-                                    <span className="dict-meta">/nʌvɪl/ • verb</span>
+                            <div className="archive-entry-header">
+                                <div className="archive-entry-icon-box">
+                                    <Feather weight="regular" size={24} />
                                 </div>
-                                <p className="dict-definition">
-                                    Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
-                                </p>
+                                <div>
+                                    <h2 className="archive-entry-title" lang="ta">எழுத்துகள்</h2>
+                                    <p className="archive-entry-subtitle">Writings & Literature</p>
+                                </div>
                             </div>
+
+                            <p className="archive-entry-desc" lang="ta">
+                                கவிதைகள், பொன்மொழிகள், சிறுகதைகள், கட்டுரைகள், சிந்தனைகள் மற்றும் நாளேடுகள் அடங்கிய இலக்கியப் பெட்டகம்.
+                            </p>
+                            <p className="archive-entry-desc-en">
+                                Poetry, quotes, short stories, articles, thoughts, and personal reflections.
+                            </p>
                         </div>
-                    </header>
+
+                        <div className="archive-entry-action">
+                            <span>எழுத்துகளை வாசிக்க • Explore Writings</span>
+                            <ArrowRight weight="bold" size={15} />
+                        </div>
+                    </section>
+
+                    {/* 2. ARTS BOX (span-6) */}
+                    <section 
+                        className="bento-card span-6 archive-entry-card clickable-card"
+                        onClick={() => navigate('/navilgal/arts', { state: { fromQuickLink: true } })}
+                    >
+                        <div>
+                            <div className="archive-entry-meta">
+                                <span className="archive-entry-pill">கலைக் கூடம்</span>
+                                <span className="archive-entry-pill sub">Visual Arts</span>
+                            </div>
+
+                            <div className="archive-entry-header">
+                                <div className="archive-entry-icon-box">
+                                    <Palette weight="regular" size={24} />
+                                </div>
+                                <div>
+                                    <h2 className="archive-entry-title" lang="ta">படைப்புகள்</h2>
+                                    <p className="archive-entry-subtitle">Arts & Gallery</p>
+                                </div>
+                            </div>
+
+                            <p className="archive-entry-desc" lang="ta">
+                                கரிக்கோல் ஓவியங்கள், சுவரொட்டி வடிவமைப்புகள், வண்ண ஓவியங்கள் மற்றும் எண்மக் கலைப்படைப்புகள்.
+                            </p>
+                            <p className="archive-entry-desc-en">
+                                Pencil sketches, posters, traditional paintings, and digital artwork.
+                            </p>
+                        </div>
+
+                        <div className="archive-entry-action">
+                            <span>படைப்புகளைக் காண • Explore Arts</span>
+                            <ArrowRight weight="bold" size={15} />
+                        </div>
+                    </section>
+
+                    {/* 3. DICTIONARY DEFINITION LAYOUT (span-12) */}
+                    <div className="span-12 dictionary-container" style={{ margin: '8px 0 0' }}>
+                        <div className="dict-card">
+                            <div className="dict-word-header">
+                                <span className="dict-word" lang="ta">நவில்</span>
+                                <span className="dict-meta">வினைச்சொல்</span>
+                            </div>
+                            <p className="dict-definition" lang="ta">
+                                தமிழ் வேர்ச்சொல் "நவிலுதல்" — உரைத்தல், பேசுதல், பாடுதல், அல்லது வார்த்தைகள் வழி எண்ணங்களை வெளிப்படுத்துதல்.
+                            </p>
+                        </div>
+
+                        <div className="dict-card">
+                            <div className="dict-word-header">
+                                <span className="dict-word">Navil</span>
+                                <span className="dict-meta">/nʌvɪl/ • verb</span>
+                            </div>
+                            <p className="dict-definition">
+                                Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
+                            </p>
+                        </div>
+                    </div>
 
 {/* 4. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handlePoemCardClick}>

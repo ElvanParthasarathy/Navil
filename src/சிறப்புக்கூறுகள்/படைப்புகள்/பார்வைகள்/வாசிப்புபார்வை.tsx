@@ -84,6 +84,13 @@ const ReadingView = () => {
     const { category, slug } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/ezhuthugal')
+        ? '/navilgal/ezhuthugal'
+        : location.pathname.startsWith('/navilgal/ezhutgal')
+        ? '/navilgal/ezhutgal'
+        : location.pathname.startsWith('/navilgal/writings')
+        ? '/navilgal/writings'
+        : '/writings';
     const meta = CATEGORY_META[category] || null;
 
     const transitionDirection = location.state?.transition || null;
@@ -220,7 +227,7 @@ const toggleVariantTransl = (vKey, lang) => {
     if (loading) {
         return (
             <>
-                <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+                <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl={`${parentPath}/${category}`} />
                 <div key={slug} className={`page-view ${animationClass}`} style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
                 <style>{`
                     .reader-skeleton-wrapper {
@@ -299,12 +306,17 @@ const toggleVariantTransl = (vKey, lang) => {
                         <div className="reader-pulse skel-line full"></div>
                         <div className="reader-pulse skel-line medium"></div>
                     </div>
-
-                    <div className="skel-paragraph">
-                        <div className="reader-pulse skel-line full"></div>
-                        <div className="reader-pulse skel-line long"></div>
-                        <div className="reader-pulse skel-line short"></div>
-                    </div>
+                    {/* Title Skeleton */}
+                    <div className="reader-pulse" style={{ height: '38px', width: '65%', borderRadius: '8px', marginBottom: '20px' }} />
+                    {/* Meta Row Skeleton */}
+                    <div className="reader-pulse" style={{ height: '18px', width: '35%', borderRadius: '4px', marginBottom: '40px' }} />
+                    {/* Text Body Lines */}
+                    <div className="reader-pulse" style={{ height: '16px', width: '100%', borderRadius: '4px', marginBottom: '16px' }} />
+                    <div className="reader-pulse" style={{ height: '16px', width: '92%', borderRadius: '4px', marginBottom: '16px' }} />
+                    <div className="reader-pulse" style={{ height: '16px', width: '96%', borderRadius: '4px', marginBottom: '16px' }} />
+                    <div className="reader-pulse" style={{ height: '16px', width: '84%', borderRadius: '4px', marginBottom: '28px' }} />
+                    <div className="reader-pulse" style={{ height: '16px', width: '98%', borderRadius: '4px', marginBottom: '16px' }} />
+                    <div className="reader-pulse" style={{ height: '16px', width: '75%', borderRadius: '4px', marginBottom: '16px' }} />
                 </div>
             </div>
             </>
@@ -314,10 +326,10 @@ const toggleVariantTransl = (vKey, lang) => {
     if (!post) {
         return (
             <>
-                <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+                <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`${parentPath}/${category}`} />
                 <div key={slug} className={`page-view ${animationClass}`} style={{ padding: '60px', textAlign: 'center' }}>
                     <h2>Post Not Found</h2>
-                    <button onClick={() => navigate(`/writings/${category}`)} className="adm-btn ghost">Return to {meta.title}</button>
+                    <button onClick={() => navigate(`${parentPath}/${category}`)} className="adm-btn ghost">Return to {meta.title}</button>
                 </div>
             </>
         );
@@ -336,7 +348,7 @@ const toggleVariantTransl = (vKey, lang) => {
 
     return (
         <>
-            <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`/writings/${category}`} />
+            <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`${parentPath}/${category}`} />
             <Helmet>
                 <title>{displayPrimaryTitle} | {meta.subtitle}</title>
             </Helmet>
@@ -508,7 +520,7 @@ const toggleVariantTransl = (vKey, lang) => {
                 >
                     {displayPrimaryTitle}
                 </h1>
-                <FloatingBackButton to={`/writings/${category}`} />
+                <FloatingBackButton to={`${parentPath}/${category}`} />
             </div>
 
             <article className="animate-entry" style={{ maxWidth: '800px' }}>
@@ -798,7 +810,7 @@ const toggleVariantTransl = (vKey, lang) => {
                         <div className="pagination-nav-pill" style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center', width: 'auto' }}>
                             {prevPart ? (
                                 <Link
-                                    to={`/writings/stories/${prevPart.slug || prevPart.id}`}
+                                    to={`${parentPath}/stories/${prevPart.slug || prevPart.id}`}
                                     state={{ transition: 'prev' }}
                                     className="page-btn prev-btn"
                                     style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
@@ -815,7 +827,7 @@ const toggleVariantTransl = (vKey, lang) => {
 
                             {nextPart ? (
                                 <Link
-                                    to={`/writings/stories/${nextPart.slug || nextPart.id}`}
+                                    to={`${parentPath}/stories/${nextPart.slug || nextPart.id}`}
                                     state={{ transition: 'next' }}
                                     className="page-btn next-btn"
                                     style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}

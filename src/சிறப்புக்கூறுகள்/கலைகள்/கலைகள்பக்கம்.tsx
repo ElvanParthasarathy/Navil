@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
@@ -142,6 +142,12 @@ const CATEGORIES = {
 
 const Arts = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const basePath = location.pathname.startsWith('/navilgal/padaippugal') 
+        ? '/navilgal/padaippugal' 
+        : location.pathname.startsWith('/navilgal/arts') 
+        ? '/navilgal/arts' 
+        : '/arts';
     const [categoryCounts, setCategoryCounts] = useState({});
 
     // Fetch counts from Firebase
@@ -165,7 +171,7 @@ const Arts = () => {
 
     return (
         <>
-            <MobileTopBar title="படைப்புகள்|arts" />
+            <MobileTopBar title="படைப்புகள்|arts" showBack={true} backUrl="/navilgal" />
             <Helmet>
                 <title>படைப்புகள் | Arts</title>
             </Helmet>
@@ -264,7 +270,7 @@ const Arts = () => {
 
             <div className="category-grid animate-entry">
                 {Object.entries(CATEGORIES).map(([key, cat]) => (
-                    <Link to={`/arts/${key}`} className="category-card" key={key}>
+                    <Link to={`${basePath}/${key}`} className="category-card" key={key}>
                         <div className="cat-icon-box">{cat.icon}</div>
                         <div className="cat-content">
                             <div className="cat-title">

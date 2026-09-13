@@ -1,8 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 export const SeriesDetailView = ({ expandedSeriesData, clearSeriesView }: any) => {
+    const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/ezhuthugal')
+        ? '/navilgal/ezhuthugal'
+        : location.pathname.startsWith('/navilgal/ezhutgal')
+        ? '/navilgal/ezhutgal'
+        : location.pathname.startsWith('/navilgal/writings')
+        ? '/navilgal/writings'
+        : '/writings';
     const sd = expandedSeriesData;
     const sdParts = sd.parts;
     const sdFirst = sdParts[0];
@@ -74,7 +82,7 @@ export const SeriesDetailView = ({ expandedSeriesData, clearSeriesView }: any) =
 
                         <div className="tv-actions">
                             <Link 
-                                to={`/writings/stories/${sdFirst.slug || sdFirst.id}`}
+                                to={`${parentPath}/stories/${sdFirst.slug || sdFirst.id}`}
                                 state={{ fromQuickLink: true }}
                                 className="tv-primary-btn"
                             >
@@ -107,7 +115,7 @@ export const SeriesDetailView = ({ expandedSeriesData, clearSeriesView }: any) =
                             return (
                                 <Link
                                     key={part.id}
-                                    to={`/writings/stories/${part.slug || part.id}`}
+                                    to={`${parentPath}/stories/${part.slug || part.id}`}
                                     className="tv-ep-card"
                                     state={{ fromQuickLink: true }}
                                 >

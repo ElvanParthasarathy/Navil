@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useOutletContext, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, Link, useOutletContext, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 
 import { subscribe, getCached } from '../../../நூலகம்/ஃபயர்பேஸ்/தேக்ககம்';
 import AdBanner from '../../../கூறுகள்/ஊடகம்/விளம்பரம்';
@@ -81,6 +81,14 @@ const analyzePostVersions = (variants: any[]) => {
 const CategoryListView = () => {
     const { category } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/ezhutgal')
+        ? '/navilgal/ezhutgal'
+        : location.pathname.startsWith('/navilgal/ezhuthugal')
+        ? '/navilgal/ezhuthugal'
+        : location.pathname.startsWith('/navilgal/writings')
+        ? '/navilgal/writings'
+        : '/writings';
     const meta = CATEGORY_META[category] || null;
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -362,7 +370,7 @@ const CategoryListView = () => {
         return (
             <div className="page-view fadeIn" style={{ padding: '40px 24px', textAlign: 'center' }}>
                 <h2>Category Not Found</h2>
-                <Link to="/writings" style={{ color: 'var(--text-muted)' }}>Return to Writings</Link>
+                <Link to={parentPath} style={{ color: 'var(--text-muted)' }}>Return to Writings</Link>
             </div>
         );
     }
@@ -373,14 +381,14 @@ const CategoryListView = () => {
 
     return (
         <>
-            <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl="/writings" />
+            <MobileTopBar title={`${meta.title}|${meta.subtitle || ''}`} showBack={true} backUrl={parentPath} />
             <div className="page-view fadeIn" style={{ maxWidth: '1200px', margin: '0 auto', padding: '10px 20px 100px' }}>
             <Helmet>
                 <title>{meta.title} | {meta.subtitle}</title>
                 <meta name="description" content={meta.descEn} />
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>
-            <FloatingBackButton to="/writings" />
+            <FloatingBackButton to={parentPath} />
 
             <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '200px' }}>
@@ -567,7 +575,7 @@ const CategoryListView = () => {
                             return (
                                 <div key={item.id} className="blog-card-item series-card animate-entry">
                                     {coverImage && (
-                                        <Link to={`/writings/${category}/${firstPart.slug || firstPart.id}`} className="blog-cover-wrapper" style={{ display: 'block' }}>
+                                        <Link to={`${parentPath}/${category}/${firstPart.slug || firstPart.id}`} className="blog-cover-wrapper" style={{ display: 'block' }}>
                                             <img src={getOptimizedImage(coverImage, 'thumb')} alt={seriesTitle} loading="lazy" />
                                             {classification && (
                                                 <span className={`blog-classification-badge ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>{classification}</span>
@@ -594,7 +602,7 @@ const CategoryListView = () => {
                                         </div>
 
                                         <h2 className="blog-title" style={{ marginBottom: '8px' }}>
-                                            <Link to={`/writings/${category}/${firstPart.slug || firstPart.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <Link to={`${parentPath}/${category}/${firstPart.slug || firstPart.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                                 {seriesTitle}
                                             </Link>
                                         </h2>
@@ -610,7 +618,7 @@ const CategoryListView = () => {
                                                 const partTitle = part.variants?.[0]?.title || part.title || `Part ${part.series_part}`;
                                                 return (
                                                     <Link 
-                                                        to={`/writings/${category}/${part.slug || part.id}`} 
+                                                        to={`${parentPath}/${category}/${part.slug || part.id}`} 
                                                         key={part.id} 
                                                         className="series-part-link"
                                                     >
@@ -659,7 +667,7 @@ const CategoryListView = () => {
 
                         return (
                             <Link
-                                to={`/writings/${category}/${post.slug || post.id}`}
+                                to={`${parentPath}/${category}/${post.slug || post.id}`}
                                 key={post.id}
                                 style={{ textDecoration: 'none', color: 'inherit' }}
                                 className="blog-link-card"

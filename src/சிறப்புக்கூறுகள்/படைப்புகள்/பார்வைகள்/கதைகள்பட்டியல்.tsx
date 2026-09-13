@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams, useOutletContext, useParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams, useOutletContext, useParams, useLocation } from 'react-router-dom';
 import { subscribe, getCached } from '../../../நூலகம்/ஃபயர்பேஸ்/தேக்ககம்';
 import AdBanner from '../../../கூறுகள்/ஊடகம்/விளம்பரம்';
 import { Helmet } from 'react-helmet-async';
@@ -18,10 +18,8 @@ const analyzePostVersions = (variants: any[]) => {
     const translationEntries: { lang: string }[] = [];
 
     variants.forEach(v => {
-        const lang = v.lang || '';
-        if (v.label === 'Translation') {
-            translationEntries.push({ lang });
-        } else {
+        const lang = v.lang || 'ta';
+        if (!variantEntries.some(e => e.lang === lang)) {
             variantEntries.push({ lang, label: v.label || 'Original' });
         }
         const translits = v.transliterations || {};
@@ -37,6 +35,15 @@ const analyzePostVersions = (variants: any[]) => {
 
 const StoriesListView = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/ezhuthugal')
+        ? '/navilgal/ezhuthugal'
+        : location.pathname.startsWith('/navilgal/ezhutgal')
+        ? '/navilgal/ezhutgal'
+        : location.pathname.startsWith('/navilgal/writings')
+        ? '/navilgal/writings'
+        : '/writings';
+    const storiesBase = `${parentPath}/stories`;
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [posts, setPosts] = useState(() => getCached('stories') || []);
@@ -296,13 +303,13 @@ const StoriesListView = () => {
     React.useEffect(() => {
         if (!seriesId) return;
         const handleKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') navigate('/writings/stories');
+            if (e.key === 'Escape') navigate(storiesBase);
         };
         window.addEventListener('keydown', handleKey);
         return () => {
             window.removeEventListener('keydown', handleKey);
         };
-    }, [seriesId, navigate]);
+    }, [seriesId, navigate, storiesBase]);
 
     const isDedicatedSeriesView = !!(seriesId && expandedSeriesData && expandedSeriesData.type === 'series');
 
@@ -312,13 +319,13 @@ const StoriesListView = () => {
                 <MobileTopBar 
                     title={expandedSeriesData.seriesName} 
                     showBack={true} 
-                    onBack={() => navigate('/writings/stories')} 
+                    onBack={() => navigate(storiesBase)} 
                 />
             ) : (
                 <MobileTopBar 
                     title="சிறுகதைகள்|short stories" 
                     showBack={true} 
-                    backUrl="/writings" 
+                    backUrl={parentPath} 
                 />
             )}
             <div 
@@ -357,7 +364,7 @@ const StoriesListView = () => {
                                     <div className="tv-hero-bg-overlay" />
                                 </div>
 
-                                <FloatingBackButton to="/writings/stories" />
+                                <FloatingBackButton to={storiesBase} />
 
                                 <div className="tv-container">
                                     <div className="tv-hero-section">
@@ -391,7 +398,7 @@ const StoriesListView = () => {
 
                                             <div className="tv-actions">
                                                 <Link
-                                                    to={`/writings/stories/${sdFirst.slug || sdFirst.id}`}
+                                                    to={`${storiesBase}/${sdFirst.slug || sdFirst.id}`}
                                                     className="tv-primary-btn"
                                                     state={{ fromQuickLink: true }}
                                                 >
@@ -424,7 +431,7 @@ const StoriesListView = () => {
                                                 return (
                                                     <Link
                                                         key={part.id}
-                                                        to={`/writings/stories/${part.slug || part.id}`}
+                                                        to={`${storiesBase}/${part.slug || part.id}`}
                                                         className="tv-ep-card"
                                                         state={{ fromQuickLink: true }}
                                                     >
@@ -458,7 +465,7 @@ const StoriesListView = () => {
                             <link rel="canonical" href="https://elvanparthasarathy.vercel.app/writings/stories" />
                         </Helmet>
                         
-                        <FloatingBackButton to="/writings" />
+                        <FloatingBackButton to={parentPath} />
 
                         <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
                             <div style={{ flex: 1, minWidth: '200px' }}>
@@ -640,14 +647,14 @@ const StoriesListView = () => {
                                                 key={item.id}
                                                 className="blog-link-card"
                                                 onClick={() => {
-                                                    navigate(`/writings/stories/series/${item.seriesName}`);
+                                                    navigate(`${storiesBase}/series/${item.seriesName}`);
                                                     window.scrollTo(0, 0);
                                                 }}
                                                 role="button"
                                                 tabIndex={0}
                                                 onKeyDown={(e) => {
                                                     if (e.key === 'Enter') {
-                                                        navigate(`/writings/stories/series/${item.seriesName}`);
+                                                        navigate(`${storiesBase}/series/${item.seriesName}`);
                                                         window.scrollTo(0, 0);
                                                     }
                                                 }}
@@ -731,7 +738,7 @@ const StoriesListView = () => {
 
                                     return (
                                         <Link
-                                            to={`/writings/stories/${post.slug || post.id}`}
+                                            to={`${storiesBase}/${post.slug || post.id}`}
                                             key={post.id}
                                             style={{ textDecoration: 'none', color: 'inherit' }}
                                             className="blog-link-card"

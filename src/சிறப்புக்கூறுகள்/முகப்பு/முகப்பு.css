@@ -1016,3 +1016,128 @@
         grid-column: span 12 !important;
     }
 }
+
+/* ARCHIVE ENTRY BOXES (WRITINGS & ARTS ON NAVILGAL) */
+.archive-entry-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+    min-height: 250px;
+    padding: 32px;
+}
+
+.archive-entry-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--text-main) 20%, var(--border-light));
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='dark'] .archive-entry-card:hover {
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.archive-entry-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.archive-entry-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--text-main) 7%, transparent);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.archive-entry-pill.sub {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.archive-entry-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.archive-entry-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--text-main) 8%, var(--bg-card));
+    border: 1px solid var(--border-light);
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.archive-entry-card:hover .archive-entry-icon-box {
+    background: var(--text-main);
+    color: var(--bg-card);
+}
+
+.archive-entry-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-main);
+    line-height: 1.25;
+}
+
+.archive-entry-subtitle {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin: 2px 0 0;
+}
+
+.archive-entry-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    opacity: 0.9;
+    margin: 0 0 4px;
+}
+
+.archive-entry-desc-en {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 0 0 16px;
+}
+
+.archive-entry-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid color-mix(in srgb, var(--border-light) 60%, transparent);
+    transition: all 0.2s ease;
+}
+
+.archive-entry-card:hover .archive-entry-action {
+    opacity: 1;
+    gap: 12px;
+}
+
+

@@ -43,7 +43,35 @@ export const router = createBrowserRouter([
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
 
-            // Unified Categories (Blog, Articles, Essays, Stories, Thoughts, Diary, Poems, Quotes)
+            // Navilgal Literary Archive - ezhutgal / ezhuthugal / writings
+            { path: "navilgal/ezhutgal", element: <Writings /> },
+            { path: "navilgal/ezhutgal/stories", element: <StoriesListView /> },
+            { path: "navilgal/ezhutgal/stories/series/:seriesId", element: <StoriesListView /> },
+            { path: "navilgal/ezhutgal/:category", element: <CategoryListView /> },
+            { path: "navilgal/ezhutgal/:category/series/:seriesId", element: <CategoryListView /> },
+            { path: "navilgal/ezhutgal/:category/:slug", element: <ReadingView /> },
+
+            { path: "navilgal/ezhuthugal", element: <Writings /> },
+            { path: "navilgal/ezhuthugal/stories", element: <StoriesListView /> },
+            { path: "navilgal/ezhuthugal/stories/series/:seriesId", element: <StoriesListView /> },
+            { path: "navilgal/ezhuthugal/:category", element: <CategoryListView /> },
+            { path: "navilgal/ezhuthugal/:category/series/:seriesId", element: <CategoryListView /> },
+            { path: "navilgal/ezhuthugal/:category/:slug", element: <ReadingView /> },
+
+            { path: "navilgal/writings", element: <Writings /> },
+            { path: "navilgal/writings/stories", element: <StoriesListView /> },
+            { path: "navilgal/writings/stories/series/:seriesId", element: <StoriesListView /> },
+            { path: "navilgal/writings/:category", element: <CategoryListView /> },
+            { path: "navilgal/writings/:category/series/:seriesId", element: <CategoryListView /> },
+            { path: "navilgal/writings/:category/:slug", element: <ReadingView /> },
+
+            // Navilgal Arts Gallery - padaippugal / arts
+            { path: "navilgal/padaippugal", element: <Arts /> },
+            { path: "navilgal/padaippugal/:category", element: <ArtsGallery /> },
+            { path: "navilgal/arts", element: <Arts /> },
+            { path: "navilgal/arts/:category", element: <ArtsGallery /> },
+
+            // Unified Categories (Legacy direct paths)
             { path: "writings/stories", element: <StoriesListView /> },
             { path: "writings/stories/series/:seriesId", element: <StoriesListView /> },
             { path: "writings/:category", element: <CategoryListView /> },

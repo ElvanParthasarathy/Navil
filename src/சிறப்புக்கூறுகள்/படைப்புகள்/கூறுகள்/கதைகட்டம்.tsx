@@ -1,8 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 
 export const StoryGrid = ({ posts, onSeriesClick }: any) => {
+    const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/ezhuthugal')
+        ? '/navilgal/ezhuthugal'
+        : location.pathname.startsWith('/navilgal/ezhutgal')
+        ? '/navilgal/ezhutgal'
+        : location.pathname.startsWith('/navilgal/writings')
+        ? '/navilgal/writings'
+        : '/writings';
     return (
         <div className="blog-grid-container stories-netflix-grid">
             {posts.map((post: any) => {
@@ -77,7 +85,7 @@ export const StoryGrid = ({ posts, onSeriesClick }: any) => {
 
                 return (
                     <Link
-                        to={`/writings/stories/${post.slug || post.id}`}
+                        to={`${parentPath}/stories/${post.slug || post.id}`}
                         key={post.id}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                         className="blog-link-card"

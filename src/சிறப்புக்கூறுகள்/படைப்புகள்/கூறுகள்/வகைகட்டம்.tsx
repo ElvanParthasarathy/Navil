@@ -1,8 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 
 export const CategoryGrid = ({ posts, category }: any) => {
+    const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/ezhuthugal')
+        ? '/navilgal/ezhuthugal'
+        : location.pathname.startsWith('/navilgal/ezhutgal')
+        ? '/navilgal/ezhutgal'
+        : location.pathname.startsWith('/navilgal/writings')
+        ? '/navilgal/writings'
+        : '/writings';
     return (
         <div className="blog-grid-container" style={posts.length > 0 && posts[0].type === 'series_master' ? { gridTemplateColumns: 'repeat(2, 1fr)', gap: '28px' } : {}}>
             {posts.map((item: any) => {
@@ -29,7 +37,7 @@ export const CategoryGrid = ({ posts, category }: any) => {
                     return (
                         <div key={item.id} className="blog-card-item series-card animate-entry">
                             {coverImage && (
-                                <Link to={`/writings/${category}/${firstPart.slug || firstPart.id}`} className="blog-cover-wrapper" style={{ display: 'block' }}>
+                                <Link to={`${parentPath}/${category}/${firstPart.slug || firstPart.id}`} className="blog-cover-wrapper" style={{ display: 'block' }}>
                                     <img src={getOptimizedImage(coverImage, 'thumb')} alt={seriesTitle} loading="lazy" />
                                     {classification && (
                                         <span className={`blog-classification-badge ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>{classification}</span>
@@ -55,7 +63,7 @@ export const CategoryGrid = ({ posts, category }: any) => {
                                     ))}
                                 </div>
                                 <h2 className="blog-title" style={{ marginTop: '8px' }}>{seriesTitle}</h2>
-                                <Link to={`/writings/${category}/${firstPart.slug || firstPart.id}`} className="tv-primary-btn" style={{ marginTop: '16px', padding: '10px 16px', fontSize: '0.9rem' }}>
+                                <Link to={`${parentPath}/${category}/${firstPart.slug || firstPart.id}`} className="tv-primary-btn" style={{ marginTop: '16px', padding: '10px 16px', fontSize: '0.9rem' }}>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                                     வாசிக்கத் தொடங்கு
                                 </Link>
@@ -81,7 +89,7 @@ export const CategoryGrid = ({ posts, category }: any) => {
 
                 return (
                     <Link
-                        to={`/writings/${category}/${post.slug || post.id}`}
+                        to={`${parentPath}/${category}/${post.slug || post.id}`}
                         key={post.id}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                         className="blog-link-card"

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 
 import { getOptimizedImage } from '../../நூலகம்/ஊடகம்';
@@ -74,6 +74,12 @@ const PAGINATION_INCREMENT = 12;
 const ArtsGallery = () => {
     const { category } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const parentPath = location.pathname.startsWith('/navilgal/padaippugal')
+        ? '/navilgal/padaippugal'
+        : location.pathname.startsWith('/navilgal/arts')
+        ? '/navilgal/arts'
+        : '/arts';
     const meta = CATEGORY_META[category];
 
     const [allItems, setAllItems] = useState([]);
@@ -618,14 +624,14 @@ const ArtsGallery = () => {
         return (
             <div className="page-view fadeIn" style={{ padding: '40px 24px', textAlign: 'center' }}>
                 <h2>Category Not Found</h2>
-                <Link to="/arts" style={{ color: 'var(--text-muted)' }}>Return to Arts</Link>
+                <Link to={parentPath} style={{ color: 'var(--text-muted)' }}>Return to Arts</Link>
             </div>
         );
     }
 
     return (
         <>
-            <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl="/arts" />
+            <MobileTopBar title={`${meta?.titleTa}|${meta?.titleEn || ''}`} showBack={true} backUrl={parentPath} />
             <div className="page-view fadeIn">
                 <Helmet>
                     <title>{meta.titleTa} | {meta.titleEn}</title>
@@ -639,7 +645,7 @@ const ArtsGallery = () => {
                             <div className="arts-gallery-sub">{meta.titleEn}</div>
                         </div>
                         <Link
-                            to="/arts"
+                            to={parentPath}
                             className="back-pill bp-fixed"
                             onClick={(e) => {
                                 if (window.history.state && window.history.state.idx > 0) {

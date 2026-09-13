@@ -63,7 +63,17 @@ const Layout = () => {
 
         const isBottomTab = (path: string) => {
             const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
-            return normalized === '/' || normalized === '/navilgal' || normalized === '/writings' || normalized === '/arts' || normalized === '/tools' || normalized === '/about';
+            return normalized === '/' || 
+                   normalized === '/navilgal' || 
+                   normalized === '/navilgal/writings' || 
+                   normalized === '/navilgal/ezhuthugal' || 
+                   normalized === '/navilgal/ezhutgal' || 
+                   normalized === '/navilgal/arts' || 
+                   normalized === '/navilgal/padaippugal' || 
+                   normalized === '/writings' || 
+                   normalized === '/arts' || 
+                   normalized === '/tools' || 
+                   normalized === '/about';
         };
 
         if (navType === 'POP') {
@@ -133,7 +143,21 @@ const Layout = () => {
     }, [isSettingsOpen]);
 
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const mainLevelPaths = ['/navilgal', '/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching', '/tools'];
+    const mainLevelPaths = [
+        '/navilgal', 
+        '/navilgal/writings', 
+        '/navilgal/ezhuthugal', 
+        '/navilgal/ezhutgal', 
+        '/navilgal/arts', 
+        '/navilgal/padaippugal', 
+        '/writings', 
+        '/arts', 
+        '/about', 
+        '/portfolio', 
+        '/settings', 
+        '/teaching', 
+        '/tools'
+    ];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
     return (

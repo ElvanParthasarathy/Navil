@@ -1,8 +1,10 @@
-﻿import './முகப்பு.css';
+import './முகப்பு.css';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
+import profileData from '../../தரவு/தன்னுரு.json';
+import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
 import { 
     DownloadSimple, 
     GithubLogo, 
@@ -43,17 +45,22 @@ export default function CompanyHome() {
                     {/* 1. STUDIO HERO HEADER */}
                     <header className="span-12 company-hero-card" style={{ cursor: 'default' }}>
                         <div className="company-hero-layout">
-                            <div className="company-emblem">
-                                <span>ந</span>
+                            <div className="hero-avatar-area">
+                                <div className="hero-avatar-bg-glow"></div>
+                                <img
+                                    src={profilePic}
+                                    alt={profileData?.fullName || "Elvan Parthasarathy"}
+                                    className="hero-avatar-image"
+                                />
                             </div>
                             <div className="company-hero-text">
                                 <h1 className="company-hero-title" lang="ta">எல்வன் நவில்</h1>
                                 <h2 className="company-hero-subtitle">Elvan Navil</h2>
                                 <p className="company-hero-desc-ta" lang="ta">
-                                    எண்ணங்கள், எழுத்துகள், எண்மப் படைப்புகள் — தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் இருமொழி இலக்கிய அரங்கம்.
+                                    நல்வரவு. இது எல்வன் நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் வெளி.
                                 </p>
                                 <p className="company-hero-desc-en">
-                                    An independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
+                                    Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
                                 </p>
                                 <div className="company-quick-actions">
                                     <a href="#flagship-nammil" className="company-pill-btn primary">

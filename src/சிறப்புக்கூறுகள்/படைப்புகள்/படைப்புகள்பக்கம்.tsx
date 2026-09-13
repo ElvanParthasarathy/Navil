@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
@@ -14,6 +14,14 @@ const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'
 
 const Writings = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const basePath = location.pathname.startsWith('/navilgal/ezhutgal') 
+        ? '/navilgal/ezhutgal' 
+        : location.pathname.startsWith('/navilgal/ezhuthugal') 
+        ? '/navilgal/ezhuthugal' 
+        : location.pathname.startsWith('/navilgal/writings') 
+        ? '/navilgal/writings' 
+        : '/writings';
     const [counts, setCounts] = useState({});
 
     useEffect(() => {
@@ -46,7 +54,7 @@ const Writings = () => {
 
     return (
         <>
-            <MobileTopBar title="எழுத்துகள்|writings" />
+            <MobileTopBar title="எழுத்துகள்|writings" showBack={true} backUrl="/navilgal" />
             <Helmet>
                 <title>எழுத்துகள் | Writings</title>
             </Helmet>
@@ -67,7 +75,7 @@ const Writings = () => {
             </header>
 
             <div className="category-grid animate-entry">
-                <Link to="/writings/poems" className="category-card">
+                <Link to={`${basePath}/poems`} className="category-card">
                     <div className="cat-icon-box"><Pen weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">நவில் மிழிகள்<CountBadge category="poems" /></div>
@@ -78,7 +86,7 @@ const Writings = () => {
                     <div className="cat-footer">நவில் மிழிகளை வாசிக்க <ArrowRight weight="regular" /></div>
                 </Link>
 
-                <Link to="/writings/quotes" className="category-card">
+                <Link to={`${basePath}/quotes`} className="category-card">
                     <div className="cat-icon-box"><ChatCircleText weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">நவில் மொழிகள்<CountBadge category="quotes" /></div>
@@ -89,7 +97,7 @@ const Writings = () => {
                     <div className="cat-footer">நவில் மொழிகளைப் பார்க்க <ArrowRight weight="regular" /></div>
                 </Link>
 
-                <Link to="/writings/blog" className="category-card">
+                <Link to={`${basePath}/blog`} className="category-card">
                     <div className="cat-icon-box"><PencilSimpleLine weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">வலைப்பதிவுகள்<CountBadge category="blog" /></div>
@@ -100,7 +108,7 @@ const Writings = () => {
                     <div className="cat-footer">பகிர்வுகளை வாசிக்க <ArrowRight weight="regular" /></div>
                 </Link>
 
-                <Link to="/writings/articles" className="category-card">
+                <Link to={`${basePath}/articles`} className="category-card">
                     <div className="cat-icon-box"><Newspaper weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">கட்டுரைகள்<CountBadge category="articles" /></div>
@@ -111,7 +119,7 @@ const Writings = () => {
                     <div className="cat-footer">கட்டுரைகளைப் படிக்க <ArrowRight weight="regular" /></div>
                 </Link>
 
-                <Link to="/writings/stories" className="category-card">
+                <Link to={`${basePath}/stories`} className="category-card">
                     <div className="cat-icon-box"><BookOpen weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">சிறுகதைகள்<CountBadge category="stories" /></div>
@@ -122,7 +130,7 @@ const Writings = () => {
                     <div className="cat-footer">சிறுகதைகளை வாசிக்க <ArrowRight weight="regular" /></div>
                 </Link>
 
-                <Link to="/writings/diary" className="category-card">
+                <Link to={`${basePath}/diary`} className="category-card">
                     <div className="cat-icon-box"><MoonStars weight="regular" /></div>
                     <div className="cat-content">
                         <div className="cat-title">நாளேடு<CountBadge category="diary" /></div>
