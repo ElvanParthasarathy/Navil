@@ -4,6 +4,7 @@ import Layout from './கட்டமைப்பு';
 import GlobalErrorBoundary from '../கூறுகள்/பின்னூட்டம்/பிழைதடுப்பு';
 
 // Feature page imports
+import CompanyHome from '../சிறப்புக்கூறுகள்/முகப்பு/நிறுவனமுகப்பு';
 import Home from '../சிறப்புக்கூறுகள்/முகப்பு/முகப்புபக்கம்';
 import About from '../சிறப்புக்கூறுகள்/பற்றி/பற்றிபக்கம்';
 import Portfolio from '../சிறப்புக்கூறுகள்/பற்றி/தொகுப்பு';
@@ -27,7 +28,7 @@ export const router = createBrowserRouter([
         element: <Layout />,
         errorElement: <GlobalErrorBoundary />,
         children: [
-            { index: true, element: <Home /> },
+            { index: true, element: <CompanyHome /> },
             { path: "navilgal", element: <Home /> },
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },
