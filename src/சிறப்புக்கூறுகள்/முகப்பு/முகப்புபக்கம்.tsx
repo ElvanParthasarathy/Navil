@@ -1,6 +1,6 @@
 import './முகப்பு.css';
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { HeroSection } from '../../components/features/home/HeroSection';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
@@ -41,6 +41,8 @@ const Home = () => {
     });
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const isNavilgal = location.pathname.startsWith('/navilgal');
 
     // Live Database Lists (Quotes & Poems) initialized synchronously from localStorage
     const [dbQuotes, setDbQuotes] = useState<any[]>(() => {
@@ -458,11 +460,11 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title>நவில் | Navil</title>
+                <title>{isNavilgal ? 'எல்வனின் நவில்கள் | Elvanin Navilgal' : 'எல்வன் நவில் | Elvan Navil'}</title>
                 <meta name="description" content="Welcome to the digital home of Elvan Parthasarathy. A creative sanctuary for poetry, thoughts, writings, and artistic expressions." />
-                <link rel="canonical" href="https://elvanparthasarathy.vercel.app/" />
+                <link rel="canonical" href="https://elvannavil.vercel.app/" />
             </Helmet>
-            <MobileTopBar title="நவில்" />
+            <MobileTopBar title={isNavilgal ? "எல்வனின் நவில்கள்|elvanin navilgal" : "எல்வன் நவில்"} />
             <div className="home-page page-view fadeIn">
 
 {/* ANIMATED ABSTRACT GRADIENT BACKGROUND */}

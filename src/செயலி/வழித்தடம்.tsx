@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
         errorElement: <GlobalErrorBoundary />,
         children: [
             { index: true, element: <Home /> },
+            { path: "navilgal", element: <Home /> },
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },
             { path: "settings", element: <Settings /> },

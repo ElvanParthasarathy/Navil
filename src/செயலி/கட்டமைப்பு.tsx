@@ -6,7 +6,7 @@ import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுய
 import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்இணைப்பு';
 import profileData from '../தரவு/தன்னுரு.json';
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
-import { House, PencilSimple, User, Monitor, Sun, Moon, Wrench, ListDashes, List, Palette } from '@phosphor-icons/react';
+import { House, PencilSimple, User, Monitor, Sun, Moon, Wrench, ListDashes, List, Palette, BookOpen } from '@phosphor-icons/react';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
     React.lazy(() =>
@@ -46,11 +46,12 @@ const Layout = () => {
     const getTabIndex = (path: string) => {
         const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
         if (normalized === '/') return 0;
-        if (normalized.startsWith('/writings')) return 1;
-        if (normalized.startsWith('/arts')) return 2;
-        if (normalized.startsWith('/tools')) return 3;
-        if (normalized.startsWith('/teaching')) return 4;
-        if (normalized.startsWith('/about')) return 5;
+        if (normalized.startsWith('/navilgal')) return 1;
+        if (normalized.startsWith('/writings')) return 2;
+        if (normalized.startsWith('/arts')) return 3;
+        if (normalized.startsWith('/tools')) return 4;
+        if (normalized.startsWith('/teaching')) return 5;
+        if (normalized.startsWith('/about')) return 6;
         return 99;
     };
 
@@ -64,7 +65,7 @@ const Layout = () => {
 
         const isBottomTab = (path: string) => {
             const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
-            return normalized === '/' || normalized === '/writings' || normalized === '/arts' || normalized === '/tools' || normalized === '/about';
+            return normalized === '/' || normalized === '/navilgal' || normalized === '/writings' || normalized === '/arts' || normalized === '/tools' || normalized === '/about';
         };
 
         if (navType === 'POP') {
@@ -134,7 +135,7 @@ const Layout = () => {
     }, [isSettingsOpen]);
 
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const mainLevelPaths = ['/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching', '/tools'];
+    const mainLevelPaths = ['/navilgal', '/writings', '/arts', '/about', '/portfolio', '/settings', '/teaching', '/tools'];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
     return (
@@ -147,8 +148,8 @@ const Layout = () => {
                     <div className="sidebar-header">
                         {!isSidebarCollapsed && (
                             <div className="brand" lang="ta">
-                                நவில்
-                                <span className="brand-subtitle">Navil</span>
+                                எல்வன் நவில்
+                                <span className="brand-subtitle">Elvan Navil</span>
                             </div>
                         )}
                         <button
@@ -161,6 +162,7 @@ const Layout = () => {
                     </div>
                     <div className="sidebar-nav">
                         <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/navilgal" icon={<BookOpen weight={location.pathname.startsWith('/navilgal') ? "fill" : "regular"} size={22} />} label="நவில்கள்" subLabel="navilgal" active={location.pathname.startsWith('/navilgal')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/writings" icon={<PencilSimple weight={location.pathname.startsWith('/writings') ? "fill" : "regular"} size={22} />} label="எழுத்துகள்" subLabel="writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/arts" icon={<Palette weight={location.pathname.startsWith('/arts') ? "fill" : "regular"} size={22} />} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/tools" icon={<Wrench weight={location.pathname.startsWith('/tools') ? "fill" : "regular"} size={22} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />

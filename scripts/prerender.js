@@ -75,10 +75,17 @@ async function prerender() {
     const routes = await getRoutesToPrerender();
     console.log(`Found ${routes.length} routes to prerender.`);
 
-    const browser = await puppeteer.launch({
-        headless: "new",
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    let browser;
+    try {
+        browser = await puppeteer.launch({
+            headless: "new",
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+    } catch (e) {
+        console.warn('Prerender notice: Chrome not installed locally for Puppeteer. Skipping prerender step.');
+        server.close();
+        return;
+    }
 
     for (const route of routes) {
         if (route === '/nirvaagi') continue; // Don't prerender nirvaagi panel
