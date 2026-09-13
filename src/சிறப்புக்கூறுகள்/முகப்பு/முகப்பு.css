@@ -124,7 +124,64 @@
                 }
 
                 .mobile-quick-links {
-                    display: none;
+                    display: flex;
+                    gap: 14px;
+                    margin-top: 24px;
+                    align-items: center;
+                    width: fit-content;
+                }
+
+                .mobile-quick-link-btn {
+                    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+                    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+                    color: var(--text-main);
+                    padding: 9px 18px 9px 10px;
+                    border-radius: 100px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+                    text-align: left;
+                }
+
+                .mobile-quick-link-btn:hover {
+                    transform: translateY(-2px);
+                    border-color: var(--accent, #6366f1);
+                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+                }
+
+                .mobile-quick-link-btn .btn-icon-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 50%;
+                    background: color-mix(in srgb, var(--text-main) 10%, transparent);
+                    color: var(--text-main);
+                    flex-shrink: 0;
+                }
+
+                .mobile-quick-link-btn .btn-text-group {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 2px;
+                    line-height: 1.2;
+                }
+
+                .mobile-quick-link-btn .btn-text-ta {
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    color: var(--text-main);
+                }
+
+                .mobile-quick-link-btn .btn-text-en {
+                    font-size: 0.75rem;
+                    font-weight: 500;
+                    color: var(--text-muted);
                 }
 
                 .hero-avatar-area {

@@ -52,7 +52,7 @@ const Writings = () => {
             </Helmet>
             <div className="writings-page page-view fadeIn">
 
-<FloatingBackButton to="/" />
+<FloatingBackButton to="/navilgal" />
             <header className="writings-header animate-entry">
                 <div style={{ flex: 1 }}>
                     <h1 className="writings-title">எழுத்துகள்</h1>

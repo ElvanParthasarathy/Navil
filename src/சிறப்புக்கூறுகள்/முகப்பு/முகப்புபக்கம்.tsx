@@ -488,8 +488,8 @@ const Home = () => {
                                 />
                             </div>
                             <div className="hero-identity">
-                                <h1 className="hero-intro-text" lang="ta">எல்வன் நவில்</h1>
-                                <h2 className="hero-subtitle">Elvan Navil</h2>
+                                <h1 className="hero-intro-text" lang="ta">{isNavilgal ? 'எல்வனின் நவில்கள்' : 'எல்வன் நவில்'}</h1>
+                                <h2 className="hero-subtitle">{isNavilgal ? 'Elvanin Navilgal' : 'Elvan Navil'}</h2>
                                 <p style={{ fontSize: '1.05rem', lineHeight: '1.6', color: 'var(--text-muted)', maxWidth: '650px', marginBottom: '12px' }} lang="ta">
                                     நல்வரவு. இது நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் வெளி.
                                 </p>

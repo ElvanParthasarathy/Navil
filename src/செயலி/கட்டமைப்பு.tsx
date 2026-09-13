@@ -6,7 +6,7 @@ import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுய
 import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்இணைப்பு';
 import profileData from '../தரவு/தன்னுரு.json';
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
-import { House, PencilSimple, User, Monitor, Sun, Moon, Wrench, ListDashes, List, Palette, BookOpen } from '@phosphor-icons/react';
+import { House, User, Monitor, Sun, Moon, Wrench, ListDashes, List, BookOpen } from '@phosphor-icons/react';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
     React.lazy(() =>
@@ -46,12 +46,10 @@ const Layout = () => {
     const getTabIndex = (path: string) => {
         const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
         if (normalized === '/') return 0;
-        if (normalized.startsWith('/navilgal')) return 1;
-        if (normalized.startsWith('/writings')) return 2;
-        if (normalized.startsWith('/arts')) return 3;
-        if (normalized.startsWith('/tools')) return 4;
-        if (normalized.startsWith('/teaching')) return 5;
-        if (normalized.startsWith('/about')) return 6;
+        if (normalized.startsWith('/navilgal') || normalized.startsWith('/writings') || normalized.startsWith('/arts')) return 1;
+        if (normalized.startsWith('/tools')) return 2;
+        if (normalized.startsWith('/teaching')) return 3;
+        if (normalized.startsWith('/about')) return 4;
         return 99;
     };
 
@@ -162,9 +160,14 @@ const Layout = () => {
                     </div>
                     <div className="sidebar-nav">
                         <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/navilgal" icon={<BookOpen weight={location.pathname.startsWith('/navilgal') ? "fill" : "regular"} size={22} />} label="நவில்கள்" subLabel="navilgal" active={location.pathname.startsWith('/navilgal')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/writings" icon={<PencilSimple weight={location.pathname.startsWith('/writings') ? "fill" : "regular"} size={22} />} label="எழுத்துகள்" subLabel="writings" active={location.pathname.startsWith('/writings')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/arts" icon={<Palette weight={location.pathname.startsWith('/arts') ? "fill" : "regular"} size={22} />} label="படைப்புகள்" subLabel="arts" active={location.pathname.startsWith('/arts')} collapsed={isSidebarCollapsed} />
+                        <NavLink 
+                            to="/navilgal" 
+                            icon={<BookOpen weight={(location.pathname.startsWith('/navilgal') || location.pathname.startsWith('/writings') || location.pathname.startsWith('/arts')) ? "fill" : "regular"} size={22} />} 
+                            label="நவில்கள்" 
+                            subLabel="navilgal" 
+                            active={location.pathname.startsWith('/navilgal') || location.pathname.startsWith('/writings') || location.pathname.startsWith('/arts')} 
+                            collapsed={isSidebarCollapsed} 
+                        />
                         <NavLink to="/tools" icon={<Wrench weight={location.pathname.startsWith('/tools') ? "fill" : "regular"} size={22} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
                         <NavLink to="/teaching" icon={<Monitor weight={location.pathname.startsWith('/teaching') ? "fill" : "regular"} size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 

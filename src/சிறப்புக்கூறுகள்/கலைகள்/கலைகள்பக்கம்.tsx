@@ -171,7 +171,7 @@ const Arts = () => {
             </Helmet>
             <div className="writings-page arts-hub-page page-view fadeIn">
             
-            <FloatingBackButton to="/" />
+            <FloatingBackButton to="/navilgal" />
             
             <style>{`
                 .writings-page {
