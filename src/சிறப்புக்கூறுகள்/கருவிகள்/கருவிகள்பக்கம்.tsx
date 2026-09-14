@@ -48,7 +48,7 @@ const ToolsView = () => {
                     </div>
                 </header>
 
-                <div className="category-grid animate-entry">
+                <div className="category-grid tools-category-grid animate-entry">
                     <Link to="/tools/piano" className="category-card desktop-only">
                         <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
                         <div className="cat-content">
