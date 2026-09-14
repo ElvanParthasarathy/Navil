@@ -288,6 +288,29 @@ export default function CompanyHome() {
                             <ArrowRight weight="bold" size={18} />
                         </div>
                     </section>
+
+                    {/* 6. DICTIONARY DEFINITION LAYOUT (span-12) */}
+                    <div className="span-12 dictionary-container" style={{ margin: '8px 0 0' }}>
+                        <div className="dict-card">
+                            <div className="dict-word-header">
+                                <span className="dict-word" lang="ta">நவில்</span>
+                                <span className="dict-meta">வினைச்சொல்</span>
+                            </div>
+                            <p className="dict-definition" lang="ta">
+                                தமிழ் வேர்ச்சொல் "நவிலுதல்" — உரைத்தல், பேசுதல், பாடுதல், அல்லது வார்த்தைகள் வழி எண்ணங்களை வெளிப்படுத்துதல்.
+                            </p>
+                        </div>
+
+                        <div className="dict-card">
+                            <div className="dict-word-header">
+                                <span className="dict-word">Navil</span>
+                                <span className="dict-meta">/nʌvɪl/ • verb</span>
+                            </div>
+                            <p className="dict-definition">
+                                Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

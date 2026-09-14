@@ -495,11 +495,6 @@ const Home = () => {
                         onClick={() => navigate('/navilgal/writings', { state: { fromQuickLink: true } })}
                     >
                         <div>
-                            <div className="archive-entry-meta">
-                                <span className="archive-entry-pill">இலக்கியப் பெட்டகம்</span>
-                                <span className="archive-entry-pill sub">Writings</span>
-                            </div>
-
                             <div className="archive-entry-header">
                                 <div className="archive-entry-icon-box">
                                     <Feather weight="regular" size={24} />
@@ -530,11 +525,6 @@ const Home = () => {
                         onClick={() => navigate('/navilgal/arts', { state: { fromQuickLink: true } })}
                     >
                         <div>
-                            <div className="archive-entry-meta">
-                                <span className="archive-entry-pill">கலைக் கூடம்</span>
-                                <span className="archive-entry-pill sub">Visual Arts</span>
-                            </div>
-
                             <div className="archive-entry-header">
                                 <div className="archive-entry-icon-box">
                                     <Palette weight="regular" size={24} />
@@ -559,30 +549,7 @@ const Home = () => {
                         </div>
                     </section>
 
-                    {/* 3. DICTIONARY DEFINITION LAYOUT (span-12) */}
-                    <div className="span-12 dictionary-container" style={{ margin: '8px 0 0' }}>
-                        <div className="dict-card">
-                            <div className="dict-word-header">
-                                <span className="dict-word" lang="ta">நவில்</span>
-                                <span className="dict-meta">வினைச்சொல்</span>
-                            </div>
-                            <p className="dict-definition" lang="ta">
-                                தமிழ் வேர்ச்சொல் "நவிலுதல்" — உரைத்தல், பேசுதல், பாடுதல், அல்லது வார்த்தைகள் வழி எண்ணங்களை வெளிப்படுத்துதல்.
-                            </p>
-                        </div>
-
-                        <div className="dict-card">
-                            <div className="dict-word-header">
-                                <span className="dict-word">Navil</span>
-                                <span className="dict-meta">/nʌvɪl/ • verb</span>
-                            </div>
-                            <p className="dict-definition">
-                                Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
-                            </p>
-                        </div>
-                    </div>
-
-{/* 4. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
+                    {/* 3. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handlePoemCardClick}>
                         <div className="quote-header-row">
                             <span className="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
