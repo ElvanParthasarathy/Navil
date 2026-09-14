@@ -22,10 +22,6 @@ export default function CompanyHome() {
                 <header className="home-brand-header animate-entry">
                     <h1 className="home-brand-title" lang="ta">
                         எல்வன் நவில்
-                        <span className="reconstruction-badge">
-                            <Wrench weight="regular" size={13} />
-                            <span>வலைத்தளம் மறுசீரமைப்பில் உள்ளது • Under Reconstruction</span>
-                        </span>
                     </h1>
                     <div className="home-brand-title-sub">Elvan Navil</div>
                     <p className="home-brand-subtitle" lang="ta">
@@ -55,6 +51,35 @@ export default function CompanyHome() {
                         </div>
                         <p className="dict-definition">
                             Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
+                        </p>
+                    </div>
+                </div>
+
+                {/* 3. RECONSTRUCTION CARDS (DUAL TAMIL & ENGLISH WITH SYMBOL) */}
+                <div className="dictionary-container reconstruction-container animate-entry">
+                    <div className="dict-card reconstruction-card">
+                        <div className="dict-word-header">
+                            <span className="dict-word reconstruction-word" lang="ta">
+                                <Wrench size={20} weight="regular" className="reconstruction-symbol" />
+                                வலைத்தளம் மறுசீரமைப்பில் உள்ளது
+                            </span>
+                            <span className="dict-meta">அறிவிப்பு</span>
+                        </div>
+                        <p className="dict-definition" lang="ta">
+                            தளத்தின் பக்கங்களும் படைப்புகளும் புதிய வடிவமைப்புடன் மறுசீரமைக்கப்பட்டு வருகின்றன. புதிய அம்சங்கள் மற்றும் தொகுப்புகள் விரைவில் இணைக்கப்படும்.
+                        </p>
+                    </div>
+
+                    <div className="dict-card reconstruction-card">
+                        <div className="dict-word-header">
+                            <span className="dict-word reconstruction-word">
+                                <Wrench size={20} weight="regular" className="reconstruction-symbol" />
+                                Under Reconstruction
+                            </span>
+                            <span className="dict-meta">Notice</span>
+                        </div>
+                        <p className="dict-definition">
+                            The studio platform is currently undergoing active redesign and structural curation. Refined experiences and new releases will be available soon.
                         </p>
                     </div>
                 </div>
