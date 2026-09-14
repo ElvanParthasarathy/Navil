@@ -129,15 +129,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <div className="sidebar-bottom" ref={settingsZoneRef}>
                 <div className="settings-profile-container">
-                    <Tooltip
-                        title={profileData?.fullName || 'Profile & Settings'}
-                        placement="right"
-                        arrow
-                        enterDelay={200}
-                        leaveDelay={0}
-                        disableHoverListener={!isSidebarCollapsed}
-                    >
-                        <ButtonBase
+                    <ButtonBase
                             component="div"
                             className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''} ${isSidebarCollapsed ? 'collapsed-trigger' : ''}`}
                             onClick={() => {
@@ -169,7 +161,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 </>
                             )}
                         </ButtonBase>
-                    </Tooltip>
 
                     {isSettingsOpen && (
                         <div className={`settings-popup ${isSidebarCollapsed ? 'side-popup' : ''}`}>
