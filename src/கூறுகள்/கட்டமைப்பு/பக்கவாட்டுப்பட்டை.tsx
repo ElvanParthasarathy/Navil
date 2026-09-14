@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '../../கொக்கிகள்/கருப்பொருள்';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, Tooltip } from '@mui/material';
 import { ProfileImage } from '../ஊடகம்/சுயவிவரபடம்';
 import { NavLink } from './வழிசெலுத்தல்இணைப்பு';
 import profileData from '../../தரவு/தன்னுரு.json';
@@ -48,15 +48,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             எல்வன் நவில்
                         </div>
                     )}
-                    <ButtonBase
-                        component="button"
-                        className="sidebar-toggle-btn"
-                        onClick={onToggleSidebar}
+                    <Tooltip
                         title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-                        disableFocusRipple
+                        placement={isSidebarCollapsed ? "right" : "bottom"}
+                        arrow
+                        enterDelay={300}
+                        leaveDelay={0}
                     >
-                        <SidebarSimple weight="regular" size={19} />
-                    </ButtonBase>
+                        <ButtonBase
+                            component="button"
+                            className="sidebar-toggle-btn"
+                            onClick={onToggleSidebar}
+                            disableFocusRipple
+                        >
+                            <SidebarSimple weight="regular" size={19} />
+                        </ButtonBase>
+                    </Tooltip>
                 </div>
                 <div className="sidebar-nav">
                     <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={21} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
@@ -91,38 +98,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <div className="sidebar-bottom" ref={settingsZoneRef}>
                 <div className="settings-profile-container">
-                    <ButtonBase
-                        component="div"
-                        className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''} ${isSidebarCollapsed ? 'collapsed-trigger' : ''}`}
-                        onClick={() => {
-                            setIsSettingsOpen(!isSettingsOpen);
-                        }}
-                        disableFocusRipple
+                    <Tooltip
+                        title={profileData?.fullName || 'Profile & Settings'}
+                        placement="right"
+                        arrow
+                        enterDelay={200}
+                        leaveDelay={0}
+                        disableHoverListener={!isSidebarCollapsed}
                     >
-                        <ProfileImage
-                            src={profilePic}
-                            alt="Profile"
-                            className="settings-avatar"
-                        />
-                        {!isSidebarCollapsed && (
-                            <>
-                                <div className="settings-text">
-                                    <span className="settings-name">{profileData?.fullName || 'Elvan Parthasarathy'}</span>
-                                    <span className="settings-brand-tag">Elvan Navil</span>
-                                </div>
-                                {theme === 'light' ? (
-                                    <Sun weight="regular" size={16} className="settings-theme-icon" />
-                                ) : theme === 'dark' ? (
-                                    <Moon weight="regular" size={16} className="settings-theme-icon" />
-                                ) : (
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="settings-theme-icon" style={{ width: 16, height: 16 }}>
-                                        <circle cx="12" cy="12" r="10" />
-                                        <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
-                                    </svg>
-                                )}
-                            </>
-                        )}
-                    </ButtonBase>
+                        <ButtonBase
+                            component="div"
+                            className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''} ${isSidebarCollapsed ? 'collapsed-trigger' : ''}`}
+                            onClick={() => {
+                                setIsSettingsOpen(!isSettingsOpen);
+                            }}
+                            disableFocusRipple
+                        >
+                            <ProfileImage
+                                src={profilePic}
+                                alt="Profile"
+                                className="settings-avatar"
+                            />
+                            {!isSidebarCollapsed && (
+                                <>
+                                    <div className="settings-text">
+                                        <span className="settings-name">{profileData?.fullName || 'Elvan Parthasarathy'}</span>
+                                        <span className="settings-brand-tag">Elvan Navil</span>
+                                    </div>
+                                    {theme === 'light' ? (
+                                        <Sun weight="regular" size={16} className="settings-theme-icon" />
+                                    ) : theme === 'dark' ? (
+                                        <Moon weight="regular" size={16} className="settings-theme-icon" />
+                                    ) : (
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="settings-theme-icon" style={{ width: 16, height: 16 }}>
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
+                                        </svg>
+                                    )}
+                                </>
+                            )}
+                        </ButtonBase>
+                    </Tooltip>
 
                     {isSettingsOpen && (
                         <div className={`settings-popup ${isSidebarCollapsed ? 'side-popup' : ''}`}>
@@ -133,15 +149,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                         className="slider-thumb"
                                         style={{ transform: `translateX(${theme === 'light' ? '0%' : theme === 'auto' ? '100%' : '200%'})` }}
                                     />
-                                    <div className={`slider-option ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')} title="Light">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
-                                    </div>
-                                    <div className={`slider-option ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')} title="Auto">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" /></svg>
-                                    </div>
-                                    <div className={`slider-option ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')} title="Dark">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-                                    </div>
+                                    <Tooltip title="Light" placement="top" arrow enterDelay={200} leaveDelay={0}>
+                                        <div className={`slider-option ${theme === 'light' ? 'active' : ''}`} onClick={() => setTheme('light')}>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+                                        </div>
+                                    </Tooltip>
+                                    <Tooltip title="Auto" placement="top" arrow enterDelay={200} leaveDelay={0}>
+                                        <div className={`slider-option ${theme === 'auto' ? 'active' : ''}`} onClick={() => setTheme('auto')}>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" /></svg>
+                                        </div>
+                                    </Tooltip>
+                                    <Tooltip title="Dark" placement="top" arrow enterDelay={200} leaveDelay={0}>
+                                        <div className={`slider-option ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme('dark')}>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                                        </div>
+                                    </Tooltip>
                                 </div>
                             </div>
                         </div>

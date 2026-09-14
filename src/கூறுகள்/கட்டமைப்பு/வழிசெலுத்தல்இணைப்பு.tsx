@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, Tooltip } from '@mui/material';
 
 interface NavLinkProps {
     to: string;
@@ -13,14 +13,14 @@ interface NavLinkProps {
     collapsed: boolean;
 }
 
-export const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', collapsed }: NavLinkProps) => (
-    <ButtonBase 
-        component={Link}
-        to={to} 
-        className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} 
-        title={collapsed ? label : ''}
-        disableFocusRipple
-    >
+export const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', collapsed }: NavLinkProps) => {
+    const navItemContent = (
+        <ButtonBase 
+            component={Link}
+            to={to} 
+            className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} 
+            disableFocusRipple
+        >
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
         {!collapsed && (
             <div className="nav-text-container">
@@ -50,4 +50,21 @@ export const NavLink = ({ to, icon, label, subLabel, badge, active, className = 
             </div>
         )}
     </ButtonBase>
-);
+    );
+
+    if (collapsed) {
+        return (
+            <Tooltip 
+                title={subLabel ? `${label} (${subLabel})` : label} 
+                placement="right" 
+                arrow 
+                enterDelay={200}
+                leaveDelay={0}
+            >
+                {navItemContent}
+            </Tooltip>
+        );
+    }
+
+    return navItemContent;
+};
