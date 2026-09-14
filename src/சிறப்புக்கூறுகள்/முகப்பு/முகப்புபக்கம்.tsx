@@ -499,19 +499,19 @@ const Home = () => {
                         </div>
                         <div className="cat-content">
                             <div className="cat-title" lang="ta">
-                                நவில் எழுத்துகள்
+                                எழுத்துகள்
                                 {totalWritings > 0 && <span className="cat-count-badge">{totalWritings}</span>}
                             </div>
-                            <div className="cat-title-sub">Navil Writings</div>
+                            <div className="cat-title-sub">Writings & Literature</div>
                             <p className="cat-desc" lang="ta">
-                                கவிதைகள், கதைகள், கட்டுரைகள் & இலக்கியப் பதிவுகள்.
+                                நவில் மிழிகள், நவில் மொழிகள், சிறுகதைகள், கட்டுரைகள் & நாளேடு.
                             </p>
                             <p className="cat-desc-sub">
-                                Poetry, stories, articles & literary reflections.
+                                Navil poems, quotes, short stories, articles & personal diary.
                             </p>
                         </div>
                         <div className="cat-footer">
-                            நவில் எழுத்துகளை வாசிக்க <ArrowRight weight="regular" />
+                            எழுத்துகளை வாசிக்க <ArrowRight weight="regular" />
                         </div>
                     </Link>
 
@@ -522,19 +522,19 @@ const Home = () => {
                         </div>
                         <div className="cat-content">
                             <div className="cat-title" lang="ta">
-                                நவில் படைப்புகள்
+                                படைப்புகள்
                                 {totalArts > 0 && <span className="cat-count-badge">{totalArts}</span>}
                             </div>
-                            <div className="cat-title-sub">Navil Arts</div>
+                            <div className="cat-title-sub">Arts & Gallery</div>
                             <p className="cat-desc" lang="ta">
-                                ஓவியங்கள், சுவரொட்டிகள் & எண்மக் கலைப்படைப்புகள்.
+                                கரிக்கோல் ஓவியங்கள், சுவரொட்டிகள், ஓவியங்கள் & எண்மக்கலைகள்.
                             </p>
                             <p className="cat-desc-sub">
-                                Drawings, posters & digital art creations.
+                                Pencil drawings, posters, paintings & digital art creations.
                             </p>
                         </div>
                         <div className="cat-footer">
-                            நவில் படைப்புகளைக் காண <ArrowRight weight="regular" />
+                            படைப்புகளைக் காண <ArrowRight weight="regular" />
                         </div>
                     </Link>
 
