@@ -898,8 +898,10 @@ body:has(.ms-store-page) .main-content,
     overflow: hidden;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     cursor: grab;
+    user-select: none;
+    touch-action: none;
 }
 
 .nammil-lb-img-wrapper:active {
@@ -910,18 +912,19 @@ body:has(.ms-store-page) .main-content,
     position: absolute;
     inset: 0;
     display: flex;
-    width: 300%;
+    width: 100%;
     height: 100%;
-    overflow: hidden;
     will-change: transform;
-    transform: translate3d(-33.333%, 0, 0);
+    transform: translate3d(0%, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
 }
 
 .nammil-lb-slide {
-    flex: 0 0 33.333%;
-    width: 33.333%;
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -929,10 +932,7 @@ body:has(.ms-store-page) .main-content,
     padding: 10px 16px;
     box-sizing: border-box;
     position: relative;
-}
-
-.nammil-lb-slide.spacer {
-    pointer-events: none;
+    user-select: none;
 }
 
 .nammil-lb-img {
@@ -945,6 +945,8 @@ body:has(.ms-store-page) .main-content,
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
     user-select: none;
     pointer-events: none;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .nammil-lb-nav {

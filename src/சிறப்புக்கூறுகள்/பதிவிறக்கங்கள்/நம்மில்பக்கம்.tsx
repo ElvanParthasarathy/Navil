@@ -1,6 +1,6 @@
 import './பதிவிறக்கங்கள்.css';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal, flushSync } from 'react-dom';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
@@ -83,7 +83,6 @@ const slides = [
 
 export default function NammilPage() {
     const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
-    const [slideOverride, setSlideOverride] = useState<{ offset: 1 | -1; index: number } | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const filmstripRef = useRef<HTMLDivElement>(null);
@@ -179,6 +178,12 @@ export default function NammilPage() {
     const openLightbox = useCallback((idx: number) => {
         setLightboxIdx(idx);
         window.history.pushState({ lightboxOpen: true }, '');
+        requestAnimationFrame(() => {
+            if (containerRef.current) {
+                containerRef.current.style.transition = 'none';
+                containerRef.current.style.transform = `translate3d(-${idx * 100}%, 0, 0)`;
+            }
+        });
     }, []);
 
     const handleSlideClick = (idx: number) => {
@@ -186,84 +191,40 @@ export default function NammilPage() {
         openLightbox(idx);
     };
 
-    const slideContainer = useCallback((direction: 1 | -1 | 0) => {
-        if (!containerRef.current || isTransitioning.current) return;
+    const navigateTo = useCallback((targetIdx: number, animated = true) => {
+        if (targetIdx < 0 || targetIdx >= slides.length) return;
+        setLightboxIdx(targetIdx);
 
-        isTransitioning.current = true;
-        const container = containerRef.current;
-        container.style.transition = 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1)';
-
-        if (direction === 1) {
-            container.style.transform = 'translate3d(-66.666%, 0, 0)';
-            setTimeout(() => {
-                setLightboxIdx(prev => (prev !== null && prev < slides.length - 1 ? prev + 1 : prev));
-            }, 380);
-        } else if (direction === -1) {
-            container.style.transform = 'translate3d(0%, 0, 0)';
-            setTimeout(() => {
-                setLightboxIdx(prev => (prev !== null && prev > 0 ? prev - 1 : prev));
-            }, 380);
-        } else {
-            container.style.transform = 'translate3d(-33.333%, 0, 0)';
-            setTimeout(() => {
-                if (containerRef.current) {
-                    containerRef.current.style.transition = 'none';
-                }
+        if (containerRef.current) {
+            if (animated) {
+                isTransitioning.current = true;
+                containerRef.current.style.transition = 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1)';
+                containerRef.current.style.transform = `translate3d(-${targetIdx * 100}%, 0, 0)`;
+                setTimeout(() => {
+                    isTransitioning.current = false;
+                }, 380);
+            } else {
+                containerRef.current.style.transition = 'none';
+                containerRef.current.style.transform = `translate3d(-${targetIdx * 100}%, 0, 0)`;
                 isTransitioning.current = false;
-            }, 380);
+            }
         }
     }, []);
 
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.style.transition = 'none';
-            containerRef.current.style.transform = 'translate3d(-33.333%, 0, 0)';
-        }
-        isTransitioning.current = false;
-        containerDragX.current = 0;
-        setSlideOverride(null);
-    }, [lightboxIdx]);
-
     const goToNext = useCallback(() => {
-        if (lightboxIdx === null || lightboxIdx >= slides.length - 1) return;
-        slideContainer(1);
-    }, [lightboxIdx, slideContainer]);
+        if (lightboxIdx === null || lightboxIdx >= slides.length - 1 || isTransitioning.current) return;
+        navigateTo(lightboxIdx + 1, true);
+    }, [lightboxIdx, navigateTo]);
 
     const goToPrev = useCallback(() => {
-        if (lightboxIdx === null || lightboxIdx <= 0) return;
-        slideContainer(-1);
-    }, [lightboxIdx, slideContainer]);
+        if (lightboxIdx === null || lightboxIdx <= 0 || isTransitioning.current) return;
+        navigateTo(lightboxIdx - 1, true);
+    }, [lightboxIdx, navigateTo]);
 
     const jumpToSlide = useCallback((idx: number) => {
-        if (isTransitioning.current || lightboxIdx === null || lightboxIdx === idx) return;
-
-        if (idx === lightboxIdx + 1) {
-            goToNext();
-            return;
-        }
-        if (idx === lightboxIdx - 1) {
-            goToPrev();
-            return;
-        }
-
-        const direction: 1 | -1 = idx > lightboxIdx ? 1 : -1;
-        flushSync(() => {
-            setSlideOverride({ offset: direction, index: idx });
-        });
-
-        requestAnimationFrame(() => {
-            if (!containerRef.current) return;
-            isTransitioning.current = true;
-            const container = containerRef.current;
-            container.style.transition = 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1)';
-            container.style.transform = direction === 1 ? 'translate3d(-66.666%, 0, 0)' : 'translate3d(0%, 0, 0)';
-
-            setTimeout(() => {
-                setLightboxIdx(idx);
-                setSlideOverride(null);
-            }, 380);
-        });
-    }, [lightboxIdx, goToNext, goToPrev]);
+        if (lightboxIdx === null || lightboxIdx === idx || isTransitioning.current) return;
+        navigateTo(idx, true);
+    }, [lightboxIdx, navigateTo]);
 
     // Popstate, keyboard, body scroll lock
     useEffect(() => {
@@ -317,7 +278,7 @@ export default function NammilPage() {
         };
 
         const handleTouchMove = (e: TouchEvent) => {
-            if (!isDraggingSlide.current || isTransitioning.current) return;
+            if (!isDraggingSlide.current || lightboxIdx === null) return;
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
             const dx = currentX - touchStartX.current;
@@ -328,41 +289,38 @@ export default function NammilPage() {
 
                 let finalDx = dx;
                 if ((dx > 0 && lightboxIdx === 0) || (dx < 0 && lightboxIdx === slides.length - 1)) {
-                    finalDx = dx * 0.35;
+                    finalDx = dx * 0.3;
                 }
 
                 containerDragX.current = finalDx;
                 if (containerRef.current) {
-                    containerRef.current.style.transform = `translate3d(calc(-33.333% + ${finalDx}px), 0, 0)`;
+                    containerRef.current.style.transform = `translate3d(calc(-${lightboxIdx * 100}% + ${finalDx}px), 0, 0)`;
                 }
             }
         };
 
         const handleTouchEnd = () => {
-            if (!isDraggingSlide.current) return;
+            if (!isDraggingSlide.current || lightboxIdx === null) return;
             isDraggingSlide.current = false;
 
-            if (containerRef.current && !isTransitioning.current) {
-                const dx = containerDragX.current;
-                if (Math.abs(dx) < 5) {
-                    containerDragX.current = 0;
-                    return;
-                }
-                const dt = Date.now() - touchStartTime.current;
-                const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
-                const swipeThreshold = width * 0.15;
-                const isFlick = dt < 350 && Math.abs(dx) > 25;
-                const direction = dx > 0 ? -1 : 1;
+            const dx = containerDragX.current;
+            containerDragX.current = 0;
 
-                const hasNext = lightboxIdx !== null && lightboxIdx < slides.length - 1;
-                const hasPrev = lightboxIdx !== null && lightboxIdx > 0;
+            if (Math.abs(dx) < 5) return;
 
-                if (direction === 1 && hasNext && (Math.abs(dx) > swipeThreshold || isFlick)) {
-                    slideContainer(1);
-                } else if (direction === -1 && hasPrev && (Math.abs(dx) > swipeThreshold || isFlick)) {
-                    slideContainer(-1);
-                } else {
-                    slideContainer(0);
+            const dt = Date.now() - touchStartTime.current;
+            const width = wrapperRef.current?.clientWidth || window.innerWidth;
+            const swipeThreshold = width * 0.15;
+            const isFlick = dt < 350 && Math.abs(dx) > 30;
+
+            if (dx < 0 && lightboxIdx < slides.length - 1 && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                navigateTo(lightboxIdx + 1, true);
+            } else if (dx > 0 && lightboxIdx > 0 && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                navigateTo(lightboxIdx - 1, true);
+            } else {
+                if (containerRef.current) {
+                    containerRef.current.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)';
+                    containerRef.current.style.transform = `translate3d(-${lightboxIdx * 100}%, 0, 0)`;
                 }
             }
         };
@@ -376,11 +334,11 @@ export default function NammilPage() {
             wrapper.removeEventListener('touchmove', handleTouchMove);
             wrapper.removeEventListener('touchend', handleTouchEnd);
         };
-    }, [lightboxIdx, slideContainer]);
+    }, [lightboxIdx, navigateTo]);
 
     // Desktop mouse drag
     const handlePointerDown = (e: React.MouseEvent) => {
-        if (e.button !== 0 || isTransitioning.current) return;
+        if (e.button !== 0 || isTransitioning.current || lightboxIdx === null) return;
         touchStartX.current = e.clientX;
         touchStartTime.current = Date.now();
         containerDragX.current = 0;
@@ -391,43 +349,41 @@ export default function NammilPage() {
     };
 
     const handlePointerMove = (e: React.MouseEvent) => {
-        if (!isDraggingSlide.current || isTransitioning.current) return;
+        if (!isDraggingSlide.current || lightboxIdx === null) return;
         e.preventDefault();
         const dx = e.clientX - touchStartX.current;
         let finalDx = dx;
         if ((dx > 0 && lightboxIdx === 0) || (dx < 0 && lightboxIdx === slides.length - 1)) {
-            finalDx = dx * 0.35;
+            finalDx = dx * 0.3;
         }
         containerDragX.current = finalDx;
         if (containerRef.current) {
-            containerRef.current.style.transform = `translate3d(calc(-33.333% + ${finalDx}px), 0, 0)`;
+            containerRef.current.style.transform = `translate3d(calc(-${lightboxIdx * 100}% + ${finalDx}px), 0, 0)`;
         }
     };
 
     const handlePointerEnd = () => {
-        if (!isDraggingSlide.current) return;
+        if (!isDraggingSlide.current || lightboxIdx === null) return;
         isDraggingSlide.current = false;
-        if (containerRef.current && !isTransitioning.current) {
-            const dx = containerDragX.current;
-            if (Math.abs(dx) < 5) {
-                containerDragX.current = 0;
-                return;
-            }
-            const dt = Date.now() - touchStartTime.current;
-            const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
-            const swipeThreshold = width * 0.15;
-            const isFlick = dt < 350 && Math.abs(dx) > 25;
-            const direction = dx > 0 ? -1 : 1;
 
-            const hasNext = lightboxIdx !== null && lightboxIdx < slides.length - 1;
-            const hasPrev = lightboxIdx !== null && lightboxIdx > 0;
+        const dx = containerDragX.current;
+        containerDragX.current = 0;
 
-            if (direction === 1 && hasNext && (Math.abs(dx) > swipeThreshold || isFlick)) {
-                slideContainer(1);
-            } else if (direction === -1 && hasPrev && (Math.abs(dx) > swipeThreshold || isFlick)) {
-                slideContainer(-1);
-            } else {
-                slideContainer(0);
+        if (Math.abs(dx) < 5) return;
+
+        const dt = Date.now() - touchStartTime.current;
+        const width = wrapperRef.current?.clientWidth || window.innerWidth;
+        const swipeThreshold = width * 0.15;
+        const isFlick = dt < 350 && Math.abs(dx) > 30;
+
+        if (dx < 0 && lightboxIdx < slides.length - 1 && (Math.abs(dx) > swipeThreshold || isFlick)) {
+            navigateTo(lightboxIdx + 1, true);
+        } else if (dx > 0 && lightboxIdx > 0 && (Math.abs(dx) > swipeThreshold || isFlick)) {
+            navigateTo(lightboxIdx - 1, true);
+        } else {
+            if (containerRef.current) {
+                containerRef.current.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)';
+                containerRef.current.style.transform = `translate3d(-${lightboxIdx * 100}%, 0, 0)`;
             }
         }
     };
@@ -861,32 +817,21 @@ export default function NammilPage() {
                             <div
                                 className="nammil-lb-img-container"
                                 ref={containerRef}
-                                style={{ transform: 'translate3d(-33.333%, 0, 0)' }}
+                                style={{ transform: `translate3d(-${(lightboxIdx || 0) * 100}%, 0, 0)` }}
                             >
-                                {[-1, 0, 1].map(offset => {
-                                    let i = lightboxIdx + offset;
-                                    if (slideOverride && slideOverride.offset === offset) {
-                                        i = slideOverride.index;
-                                    }
-                                    if (i < 0 || i >= slides.length) {
-                                        return <div key={`spacer-${offset}`} className="nammil-lb-slide spacer" />;
-                                    }
-
-                                    const slide = slides[i];
-
-                                    return (
-                                        <div key={`slide-${offset}-${i}`} className="nammil-lb-slide">
-                                            <img
-                                                src={slide.src}
-                                                alt={slide.titleEn}
-                                                className="nammil-lb-img"
-                                                loading="eager"
-                                                draggable={false}
-                                                onDragStart={(e) => e.preventDefault()}
-                                            />
-                                        </div>
-                                    );
-                                })}
+                                {slides.map((slide, idx) => (
+                                    <div key={idx} className="nammil-lb-slide">
+                                        <img
+                                            src={slide.src}
+                                            alt={slide.titleEn}
+                                            className="nammil-lb-img"
+                                            loading="eager"
+                                            decoding="async"
+                                            draggable={false}
+                                            onDragStart={(e) => e.preventDefault()}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
