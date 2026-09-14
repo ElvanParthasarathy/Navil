@@ -467,8 +467,11 @@ export default function NammilPage() {
                                 download
                                 title="Download Nammil (.exe ~114MB)"
                             >
-                                <DownloadSimple weight="bold" size={18} />
-                                <span>Download</span>
+                                <DownloadSimple weight="bold" size={20} />
+                                <div className="ms-btn-text">
+                                    <span className="ms-btn-label">பதிவிறக்கு</span>
+                                    <span className="ms-btn-sublabel">Download</span>
+                                </div>
                             </a>
                             <a 
                                 href="https://github.com/ElvanParthasarathy/Nammil" 
@@ -477,8 +480,11 @@ export default function NammilPage() {
                                 className="ms-btn-secondary ms-btn-github"
                                 title="View Source on GitHub"
                             >
-                                <GithubLogo weight="bold" size={18} />
-                                <span>GitHub</span>
+                                <GithubLogo weight="bold" size={20} />
+                                <div className="ms-btn-text">
+                                    <span className="ms-btn-label">கிட்ஹப்</span>
+                                    <span className="ms-btn-sublabel">GitHub</span>
+                                </div>
                             </a>
                         </div>
                     </header>
@@ -488,7 +494,7 @@ export default function NammilPage() {
                         {/* SCREENSHOTS SECTION (MICROSOFT STORE HORIZONTAL SCROLLER) */}
                         <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
                             <div className="ms-section-header-link" onClick={() => openLightbox(0)}>
-                                <h2 className="ms-section-title">திரைப்படங்கள் • Screenshots</h2>
+                                <h2 className="ms-section-title">திரைப்பிடிப்பு • Screenshots</h2>
                                 <CaretRight size={18} weight="bold" className="ms-section-chevron" />
                             </div>
 

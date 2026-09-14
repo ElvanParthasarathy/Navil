@@ -393,12 +393,12 @@ body:has(.ms-store-page) .main-content,
     color: #111827;
     font-weight: 600;
     font-size: 0.95rem;
-    padding: 11px 26px;
+    padding: 8px 24px;
     border-radius: 9999px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     box-shadow: none;
     border: none;
     cursor: pointer;
@@ -436,12 +436,12 @@ body:has(.ms-store-page) .main-content,
     color: var(--text-main);
     font-weight: 600;
     font-size: 0.95rem;
-    padding: 11px 22px;
+    padding: 8px 22px;
     border-radius: 9999px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     border: none;
     box-shadow: none;
     transition: background-color 0.15s ease, transform 0.15s ease;
@@ -457,6 +457,30 @@ body:has(.ms-store-page) .main-content,
 
 .ms-btn-secondary:active {
     transform: translateY(0);
+}
+
+.ms-btn-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.1;
+    justify-content: center;
+}
+
+.ms-btn-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.2px;
+}
+
+.ms-btn-sublabel {
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1;
+    opacity: 0.72;
+    margin-top: 1px;
+    letter-spacing: 0.3px;
 }
 
 /* 2. STORE BODY */
