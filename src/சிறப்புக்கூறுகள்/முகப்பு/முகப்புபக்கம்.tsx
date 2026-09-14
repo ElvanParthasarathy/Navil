@@ -456,6 +456,9 @@ const Home = () => {
         }
     };
 
+    const totalWritings = (counts.poems || 0) + (counts.quotes || 0) + (counts.blog || 0) + (counts.articles || 0) + (counts.stories || 0) + (counts.diary || 0);
+    const totalArts = counts.arts || 0;
+
     return (
         <>
             <Helmet>
@@ -495,18 +498,20 @@ const Home = () => {
                             <Feather weight="regular" />
                         </div>
                         <div className="cat-content">
-                            <div className="cat-title" lang="ta">எழுத்துகள்</div>
-                            <div className="cat-title-sub">Writings & Literature</div>
+                            <div className="cat-title" lang="ta">
+                                நவில் எழுத்துகள்
+                                {totalWritings > 0 && <span className="cat-count-badge">{totalWritings}</span>}
+                            </div>
+                            <div className="cat-title-sub">Navil Writings</div>
                             <p className="cat-desc" lang="ta">
-                                கவிதைகள், பொன்மொழிகள், சிறுகதைகள், கட்டுரைகள், சிந்தனைகள் மற்றும் நாளேடுகள் அடங்கிய இலக்கியப் பெட்டகம்.
+                                கவிதைகள், கதைகள், கட்டுரைகள் & இலக்கியப் பதிவுகள்.
                             </p>
                             <p className="cat-desc-sub">
-                                Poetry, quotes, short stories, articles, thoughts, and personal reflections.
+                                Poetry, stories, articles & literary reflections.
                             </p>
                         </div>
                         <div className="cat-footer">
-                            <span>எழுத்துகளை வாசிக்க</span>
-                            <ArrowRight weight="regular" />
+                            நவில் எழுத்துகளை வாசிக்க <ArrowRight weight="regular" />
                         </div>
                     </Link>
 
@@ -516,18 +521,20 @@ const Home = () => {
                             <Palette weight="regular" />
                         </div>
                         <div className="cat-content">
-                            <div className="cat-title" lang="ta">படைப்புகள்</div>
-                            <div className="cat-title-sub">Arts & Gallery</div>
+                            <div className="cat-title" lang="ta">
+                                நவில் படைப்புகள்
+                                {totalArts > 0 && <span className="cat-count-badge">{totalArts}</span>}
+                            </div>
+                            <div className="cat-title-sub">Navil Arts</div>
                             <p className="cat-desc" lang="ta">
-                                கரிக்கோல் ஓவியங்கள், சுவரொட்டி வடிவமைப்புகள், வண்ண ஓவியங்கள் மற்றும் எண்மக் கலைப்படைப்புகள்.
+                                ஓவியங்கள், சுவரொட்டிகள் & எண்மக் கலைப்படைப்புகள்.
                             </p>
                             <p className="cat-desc-sub">
-                                Pencil sketches, posters, traditional paintings, and digital artwork.
+                                Drawings, posters & digital art creations.
                             </p>
                         </div>
                         <div className="cat-footer">
-                            <span>படைப்புகளைக் காண</span>
-                            <ArrowRight weight="regular" />
+                            நவில் படைப்புகளைக் காண <ArrowRight weight="regular" />
                         </div>
                     </Link>
 
