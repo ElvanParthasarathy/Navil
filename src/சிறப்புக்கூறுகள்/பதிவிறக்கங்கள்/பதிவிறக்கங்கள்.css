@@ -907,13 +907,19 @@ body:has(.ms-store-page) .main-content,
     }
 }
 
+@media (max-width: 768px) {
+    .ms-store-container {
+        padding-top: 84px;
+    }
+}
+
 @media (max-width: 640px) {
     .ms-store-page {
         padding: 0 0 60px;
     }
 
     .ms-store-container {
-        padding: 28px 16px 0;
+        padding: 84px 16px 0;
     }
 
     .ms-hero-card {
@@ -932,12 +938,18 @@ body:has(.ms-store-page) .main-content,
     }
 
     .ms-app-title {
-        flex-direction: column;
-        gap: 2px;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
     }
 
     .ms-title-main {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
+    }
+
+    .ms-title-sub {
+        font-size: 1.05rem;
     }
 
     .ms-action-row {
