@@ -18,7 +18,18 @@ import {
     Star,
     Desktop,
     Sparkle,
-    ShareNetwork
+    ShareNetwork,
+    Package,
+    ArrowsClockwise,
+    CalendarBlank,
+    BookmarkSimple,
+    HardDrive,
+    Globe,
+    Buildings,
+    FileText,
+    Flag,
+    Code,
+    Info
 } from '@phosphor-icons/react';
 
 const slides = [
@@ -69,45 +80,6 @@ const slides = [
         titleEn: 'Nammil • Brand Identity',
         descTa: 'தமிழ், ஆங்கிலம், மலையாள மொழிகளில் எல்வன் நவிலின் அதிகாரப்பூர்வ முத்திரை.',
         descEn: 'Official identity marks for Nammil across Tamil, English, and Malayalam typography.'
-    }
-];
-
-const discoverMoreApps = [
-    {
-        name: 'நவில் (Navil) • Desktop Suite',
-        tag: 'Free',
-        category: 'Native Workspace',
-        to: '/downloads',
-        iconBg: '#00a884',
-        iconText: 'ந',
-        external: false
-    },
-    {
-        name: 'ஒலிபெயர்ப்பி (Transliterator)',
-        tag: 'Web App',
-        category: 'Tamil Phonetic Tool',
-        to: '/tools/transliterator',
-        iconBg: 'linear-gradient(135deg, #e1306c, #833ab4)',
-        iconText: 'ஒ',
-        external: false
-    },
-    {
-        name: 'அரிச்சுவடி (Arichuvadi)',
-        tag: 'Web App',
-        category: 'Alphabet & Linguistics',
-        to: '/tools/arichuvadi',
-        iconBg: '#0084ff',
-        iconText: 'அ',
-        external: false
-    },
-    {
-        name: 'Nammil Source & Releases',
-        tag: 'v1.2.9',
-        category: 'GitHub Repository',
-        to: 'https://github.com/ElvanParthasarathy/Nammil',
-        iconBg: '#24292e',
-        iconText: '⚡',
-        external: true
     }
 ];
 
@@ -283,11 +255,9 @@ export default function NammilPage() {
                         </div>
                     </header>
 
-                    {/* 2. STORE BODY: 2-COLUMN SPLIT */}
+                    {/* 2. STORE BODY */}
                     <div className="ms-store-body">
-                        {/* LEFT MAIN COLUMN: SCREENSHOTS + DESCRIPTION + FEATURES */}
-                        <div className="ms-main-col">
-                            {/* SCREENSHOTS CAROUSEL */}
+                        {/* SCREENSHOTS CAROUSEL */}
                             <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
                                 <div className="ms-section-header-link" onClick={() => setIsFullscreen(true)}>
                                     <h2 className="ms-section-title">Screenshots</h2>
@@ -447,91 +417,157 @@ export default function NammilPage() {
                                     </div>
                                 </div>
                             </section>
-                        </div>
 
-                        {/* RIGHT SIDEBAR COLUMN: DISCOVER MORE + DETAILS */}
-                        <aside className="ms-sidebar-col">
-                            {/* DISCOVER MORE SECTION (EXACTLY AS IN MICROSOFT STORE) */}
-                            <div className="ms-sidebar-card">
-                                <div className="ms-sidebar-header">
-                                    <h2 className="ms-sidebar-title">Discover more</h2>
-                                    <CaretRight size={16} weight="bold" className="ms-section-chevron" />
-                                </div>
+                            {/* ADDITIONAL INFORMATION SECTION (EXACTLY AS IN MICROSOFT STORE) */}
+                            <section className="ms-additional-info-section">
+                                <h2 className="ms-info-main-title">Additional information</h2>
+                                <div className="ms-info-grid">
+                                    {/* ROW 1 */}
+                                    <div className="ms-info-cell">
+                                        <Package size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Published by</div>
+                                            <div className="ms-cell-val">Elvan Parthasarathy</div>
+                                        </div>
+                                    </div>
 
-                                <div className="ms-discover-list">
-                                    {discoverMoreApps.map((app, idx) => (
-                                        app.external ? (
-                                            <a 
-                                                key={idx} 
-                                                href={app.to} 
-                                                target="_blank" 
-                                                rel="noreferrer" 
-                                                className="ms-discover-item"
-                                            >
-                                                <div className="ms-discover-icon" style={{ background: app.iconBg }}>
-                                                    {app.iconText}
-                                                </div>
-                                                <div className="ms-discover-info">
-                                                    <div className="ms-discover-name">{app.name}</div>
-                                                    <div className="ms-discover-cat">{app.category}</div>
-                                                </div>
-                                                <div className="ms-discover-badge">
-                                                    {app.tag}
-                                                </div>
-                                            </a>
-                                        ) : (
-                                            <Link 
-                                                key={idx} 
-                                                to={app.to} 
-                                                className="ms-discover-item"
-                                            >
-                                                <div className="ms-discover-icon" style={{ background: app.iconBg }}>
-                                                    {app.iconText}
-                                                </div>
-                                                <div className="ms-discover-info">
-                                                    <div className="ms-discover-name">{app.name}</div>
-                                                    <div className="ms-discover-cat">{app.category}</div>
-                                                </div>
-                                                <div className="ms-discover-badge">
-                                                    {app.tag}
-                                                </div>
-                                            </Link>
-                                        )
-                                    ))}
-                                </div>
-                            </div>
+                                    <div className="ms-info-cell">
+                                        <ArrowsClockwise size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Last updated date</div>
+                                            <div className="ms-cell-val">9/15/2026</div>
+                                        </div>
+                                    </div>
 
-                            {/* ADDITIONAL INFORMATION PANEL */}
-                            <div className="ms-sidebar-card ms-info-card">
-                                <h3 className="ms-info-title">Additional information</h3>
-                                <div className="ms-info-list">
-                                    <div className="ms-info-row">
-                                        <span className="ms-info-label">Published by</span>
-                                        <span className="ms-info-val">Elvan Parthasarathy</span>
+                                    <div className="ms-info-cell">
+                                        <CalendarBlank size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Release date</div>
+                                            <div className="ms-cell-val">9/1/2026</div>
+                                        </div>
                                     </div>
-                                    <div className="ms-info-row">
-                                        <span className="ms-info-label">Release date</span>
-                                        <span className="ms-info-val">2026</span>
+
+                                    {/* ROW 2 */}
+                                    <div className="ms-info-cell">
+                                        <BookmarkSimple size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Category</div>
+                                            <div className="ms-cell-val">Social & Productivity</div>
+                                        </div>
                                     </div>
-                                    <div className="ms-info-row">
-                                        <span className="ms-info-label">Architecture</span>
-                                        <span className="ms-info-val">x64 (Windows 10/11)</span>
+
+                                    <div className="ms-info-cell">
+                                        <HardDrive size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Approximate size</div>
+                                            <div className="ms-cell-val">114.2 MB</div>
+                                        </div>
                                     </div>
-                                    <div className="ms-info-row">
-                                        <span className="ms-info-label">Approximate size</span>
-                                        <span className="ms-info-val">114.2 MB</span>
+
+                                    <div className="ms-info-cell">
+                                        <DownloadSimple size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Installation</div>
+                                            <div className="ms-cell-val">
+                                                Get this app on Windows 10 and 11 devices (64-bit). Offline NSIS installer.
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="ms-info-row">
-                                        <span className="ms-info-label">Category</span>
-                                        <span className="ms-info-val">Social & Productivity</span>
+
+                                    {/* ROW 3 */}
+                                    <div className="ms-info-cell">
+                                        <ShieldCheck size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">This app can</div>
+                                            <ul className="ms-cell-list">
+                                                <li>Runs 100% locally on your PC</li>
+                                                <li>Uses isolated session partitions</li>
+                                                <li>Zero telemetry, zero cloud logging</li>
+                                                <li>Access your Internet connection</li>
+                                                <li>Permissions info</li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div className="ms-info-row">
-                                        <span className="ms-info-label">License</span>
-                                        <span className="ms-info-val">MIT Open Source</span>
+
+                                    <div className="ms-info-cell">
+                                        <Globe size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Supported languages</div>
+                                            <ul className="ms-cell-list">
+                                                <li>English</li>
+                                                <li>தமிழ் (Tamil)</li>
+                                                <li>മലയാളം (Malayalam)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div className="ms-info-cell">
+                                        <Buildings size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Publisher Info</div>
+                                            <ul className="ms-cell-list">
+                                                <li>
+                                                    <a href="https://github.com/ElvanParthasarathy/Nammil" target="_blank" rel="noreferrer">
+                                                        Nammil GitHub support
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <Link to="/about">Elvan Navil website</Link>
+                                                </li>
+                                                <li>
+                                                    <Link to="/portfolio">Contact information</Link>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    {/* ROW 4 */}
+                                    <div className="ms-info-cell">
+                                        <FileText size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Additional terms</div>
+                                            <ul className="ms-cell-list">
+                                                <li>Nammil privacy policy</li>
+                                                <li>Terms of transaction / MIT License</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div className="ms-info-cell">
+                                        <Flag size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Report this product</div>
+                                            <ul className="ms-cell-list">
+                                                <li>
+                                                    <a href="https://github.com/ElvanParthasarathy/Nammil/issues" target="_blank" rel="noreferrer">
+                                                        Report this product for bugs
+                                                    </a>
+                                                </li>
+                                                <li>Report security vulnerability</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div className="ms-info-cell">
+                                        <Code size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Installed version</div>
+                                            <div className="ms-cell-val">1.2.9</div>
+                                        </div>
+                                    </div>
+
+                                    {/* ROW 5: LEGAL DISCLAIMERS */}
+                                    <div className="ms-info-cell ms-cell-disclaimer">
+                                        <Info size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Legal disclaimers</div>
+                                            <div className="ms-cell-val">
+                                                This software is an independent open-source application crafted by Elvan Parthasarathy under MIT License and is not affiliated with, endorsed by, or sponsored by WhatsApp Inc. or Meta Platforms, Inc.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </aside>
+                            </section>
                     </div>
                 </div>
 
