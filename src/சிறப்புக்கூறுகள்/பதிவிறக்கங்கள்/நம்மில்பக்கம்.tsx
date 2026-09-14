@@ -712,7 +712,9 @@ export default function NammilPage() {
                                                     <Link to="/about">Elvan Navil website</Link>
                                                 </li>
                                                 <li>
-                                                    <Link to="/portfolio">Contact information</Link>
+                                                    <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noreferrer">
+                                                        Contact information
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -759,9 +761,14 @@ export default function NammilPage() {
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Designed & Developed by</div>
                                             <div className="ms-cell-val">
-                                                <Link to="/portfolio" style={{ color: 'inherit', textDecoration: 'underline' }}>
+                                                <a 
+                                                    href="https://jaiprakashpartha.vercel.app" 
+                                                    target="_blank" 
+                                                    rel="noreferrer"
+                                                    style={{ color: 'inherit', textDecoration: 'underline' }}
+                                                >
                                                     Elvan Parthasarathy
-                                                </Link>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
