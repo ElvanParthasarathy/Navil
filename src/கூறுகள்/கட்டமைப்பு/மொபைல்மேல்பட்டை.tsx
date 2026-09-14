@@ -71,28 +71,32 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
             
             <div className="brand">
                 {title === 'நவில்' || title === 'நவில்|navil' || title === 'எல்வன்' || title === 'எல்வன்|elvan' || title === 'எல்வன் நவில்' || title === 'எல்வன் நவில்|elvan navil' ? (
-                    <div className="brand-bilingual" lang="ta">
-                        எல்வன் நவில்
-                        <span className="brand-subtitle">Elvan Navil</span>
-                    </div>
+                    <>
+                        <div className="brand-main" lang="ta">
+                            எல்வன் நவில்
+                        </div>
+                        <div className="brand-sub">Elvan Navil</div>
+                    </>
                 ) : title === 'எல்வனின் நவில்கள்' ? (
-                    <div className="brand-bilingual" lang="ta">
-                        எல்வனின் நவில்கள்
-                        <span className="brand-subtitle">Elvanin Navilgal</span>
-                    </div>
+                    <>
+                        <div className="brand-main" lang="ta">
+                            எல்வனின் நவில்கள்
+                        </div>
+                        <div className="brand-sub">Elvanin Navilgal</div>
+                    </>
                 ) : title.includes('|') ? (
                     <>
                         <div className="brand-main">
                             {title.split('|')[0]}
                             {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#333', color: '#fff', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', fontWeight: 'bold', letterSpacing: '0.5px' }}>BETA</span>}
                         </div>
-                        <div className="brand-sub">{title.split('|')[1].toLowerCase()}</div>
+                        <div className="brand-sub">{title.split('|')[1]}</div>
                     </>
                 ) : (
-                    <>
+                    <div className="brand-main">
                         {title}
                         {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#333', color: '#fff', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', fontWeight: 'bold', letterSpacing: '0.5px' }}>BETA</span>}
-                    </>
+                    </div>
                 )}
             </div>
 
