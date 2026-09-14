@@ -792,9 +792,8 @@ export default function NammilPage() {
             {lightboxIdx !== null && typeof document !== 'undefined' && createPortal(
                 <div className="nammil-lightbox" onClick={closeLightbox}>
                     <div className="nammil-lb-header" onClick={(e) => e.stopPropagation()}>
-                        <div className="nammil-lb-title-group">
-                            <span className="nammil-lb-title">{slides[lightboxIdx].titleTa}</span>
-                            <span className="nammil-lb-counter">{lightboxIdx + 1} / {slides.length}</span>
+                        <div className="nammil-lb-counter">
+                            {lightboxIdx + 1} / {slides.length}
                         </div>
                         <button className="nammil-lb-close" onClick={closeLightbox} aria-label="Close">
                             <X weight="bold" size={20} />
