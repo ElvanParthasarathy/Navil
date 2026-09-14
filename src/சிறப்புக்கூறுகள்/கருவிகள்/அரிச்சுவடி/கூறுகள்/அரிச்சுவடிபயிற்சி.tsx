@@ -104,7 +104,7 @@ export function ArichuvadiPractice() {
 
   return (
     <div className="animate-entry">
-      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center' }}>
+      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'flex-start' }}>
         <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>
           <select
@@ -201,7 +201,7 @@ export function ArichuvadiPractice() {
         })}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '32px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '16px', marginTop: '32px', flexWrap: 'wrap' }}>
         <button className="arichuvadi-btn" onClick={generateQuiz}>
           <ArrowsClockwise weight="bold" /> புதியவை (Reset)
         </button>
@@ -214,7 +214,7 @@ export function ArichuvadiPractice() {
       </div>
 
       {hasVerified && Object.keys(results).length > 0 && (
-        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '1.2rem', fontWeight: 'bold' }}>
+        <div style={{ textAlign: 'left', marginTop: '24px', fontSize: '1.2rem', fontWeight: 'bold' }}>
           மதிப்பெண்: <span style={{ color: score === count ? '#4CAF50' : 'var(--text-main)' }}>{score} / {count}</span>
         </div>
       )}

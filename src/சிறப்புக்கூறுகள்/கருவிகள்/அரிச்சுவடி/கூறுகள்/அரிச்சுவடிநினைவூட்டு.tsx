@@ -104,7 +104,7 @@ export function ArichuvadiMemorize() {
 
   return (
     <div className="animate-entry">
-      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center' }}>
+      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'flex-start' }}>
         <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>
           <select className="arichuvadi-select" value={script} onChange={(e) => setScript(e.target.value as ScriptType)}>
@@ -127,7 +127,7 @@ export function ArichuvadiMemorize() {
         </button>
       </div>
 
-      <div className="arichuvadi-flashcard-grid" style={{ maxWidth: '800px', margin: '0 auto', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))' }}>
+      <div className="arichuvadi-flashcard-grid" style={{ maxWidth: '800px', margin: '0', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))' }}>
         {cards.map((card, idx) => {
           const isMatched = matchedPairIds.includes(card.pairId);
           const isFlipped = flippedIndices.includes(idx) || isMatched;
@@ -178,7 +178,7 @@ export function ArichuvadiMemorize() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.8 }} 
           animate={{ opacity: 1, scale: 1 }}
-          style={{ textAlign: 'center', marginTop: '32px', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50' }}
+          style={{ textAlign: 'left', marginTop: '32px', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50' }}
         >
           அற்புதம்! சிறந்த நினைவாற்றல். (Excellent Memory!)
         </motion.div>

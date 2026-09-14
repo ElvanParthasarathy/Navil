@@ -91,7 +91,7 @@ export function ArichuvadiMatch() {
 
   return (
     <div className="animate-entry">
-      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center' }}>
+      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'flex-start' }}>
         <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>
           <select className="arichuvadi-select" value={script} onChange={(e) => setScript(e.target.value as ScriptType)}>
@@ -117,7 +117,7 @@ export function ArichuvadiMatch() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
         {/* Deck 1 */}
         <div>
-          <h4 style={{ textAlign: 'center', marginBottom: '16px', color: 'var(--text-muted)' }}>தொகுதி 1</h4>
+          <h4 style={{ textAlign: 'left', marginBottom: '16px', color: 'var(--text-muted)' }}>தொகுதி 1</h4>
           <div className="arichuvadi-flashcard-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))' }}>
             {deck1.map((item) => {
               const isMatched = matchedPairs.includes(item.id);
@@ -148,7 +148,7 @@ export function ArichuvadiMatch() {
 
         {/* Deck 2 */}
         <div>
-          <h4 style={{ textAlign: 'center', marginBottom: '16px', color: 'var(--text-muted)' }}>தொகுதி 2</h4>
+          <h4 style={{ textAlign: 'left', marginBottom: '16px', color: 'var(--text-muted)' }}>தொகுதி 2</h4>
           <div className="arichuvadi-flashcard-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))' }}>
             {deck2.map((item) => {
               const isMatched = matchedPairs.includes(item.id);
@@ -182,7 +182,7 @@ export function ArichuvadiMatch() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.8 }} 
           animate={{ opacity: 1, scale: 1 }}
-          style={{ textAlign: 'center', marginTop: '32px', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50' }}
+          style={{ textAlign: 'left', marginTop: '32px', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50' }}
         >
           வாழ்த்துகள்! அனைத்தும் பொருந்திவிட்டன. (Congratulations!)
         </motion.div>

@@ -70,7 +70,7 @@ export function ArichuvadiLearn() {
 
   return (
     <div className="animate-entry">
-      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center', gap: '16px' }}>
+      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'flex-start', gap: '16px' }}>
         <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>
           <select

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DownloadSimple, Book, Cards, TextAUnderline, X } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 

@@ -14,7 +14,8 @@ import {
   Eye,
   Books,
   Scroll,
-  Play
+  Play,
+  ListDashes
 } from '@phosphor-icons/react';
 
 type ScriptType = 'brahmi' | 'vatteluttu' | 'tamil';
@@ -198,7 +199,7 @@ export function ArichuvadiBooks() {
       {!selectedBook && (
         <div className="arichuvadi-catalog-view animate-entry">
           {/* Single clean header matching Writings Stories */}
-          <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: '200px' }}>
               <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '8px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 நூல்கள்
