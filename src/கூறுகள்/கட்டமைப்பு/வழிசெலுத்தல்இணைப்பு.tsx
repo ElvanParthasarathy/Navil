@@ -23,16 +23,16 @@ export const NavLink = ({ to, icon, label, subLabel, badge, active, className = 
                         <span 
                             className="nav-badge desktop-only" 
                             style={{ 
-                                fontSize: '0.6rem', 
+                                fontSize: '0.52rem', 
                                 background: active ? 'var(--text-main)' : 'color-mix(in srgb, var(--text-main) 15%, transparent)', 
                                 color: active ? 'var(--bg-app)' : 'var(--text-main)', 
-                                padding: '2px 6px', 
+                                padding: '1px 5px', 
                                 borderRadius: '100px', 
-                                marginLeft: '8px', 
-                                fontWeight: 700, 
-                                letterSpacing: '0.5px',
+                                marginLeft: '6px', 
+                                fontWeight: 600, 
+                                letterSpacing: '0.4px',
                                 display: 'inline-block',
-                                lineHeight: 1
+                                lineHeight: 1.1
                             }}
                         >
                             {badge}
