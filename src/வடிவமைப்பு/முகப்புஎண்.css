@@ -221,6 +221,15 @@ body {
   /* EXPLICITLY ALLOW OVERFLOW FOR THE TOGGLE */
   will-change: width, transform;
   transform: translateZ(0);
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+.sidebar * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .sidebar.collapsed {
@@ -353,7 +362,9 @@ body {
   display: none;
 }
 
-.mobile-only-nav-item {
+.mobile-only-nav-item,
+.nav-item.mobile-only-nav-item,
+.nav-item.MuiButtonBase-root.mobile-only-nav-item {
   display: none !important;
 }
 
@@ -1601,11 +1612,15 @@ body {
     margin: 0 !important;
   }
 
-  .mobile-only-nav-item {
+  .mobile-only-nav-item,
+  .nav-item.mobile-only-nav-item,
+  .nav-item.MuiButtonBase-root.mobile-only-nav-item {
     display: flex !important;
   }
 
-  .desktop-only {
+  .desktop-only,
+  .nav-item.desktop-only,
+  .nav-item.MuiButtonBase-root.desktop-only {
     display: none !important;
   }
 
@@ -1695,6 +1710,8 @@ body {
 
   /* Hide Desktop Elements */
   .desktop-only,
+  .nav-item.desktop-only,
+  .nav-item.MuiButtonBase-root.desktop-only,
   .sidebar-bottom,
   .sidebar-header,
   .sidebar-top .brand,
