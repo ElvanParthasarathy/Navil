@@ -321,8 +321,8 @@ body {
 }
 
 .sidebar.collapsed .sidebar-toggle-btn {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   margin: 0 auto;
 }
 
@@ -452,8 +452,8 @@ body {
 
 .sidebar.collapsed .sidebar-toggle-btn,
 .sidebar.collapsed .sidebar-toggle-btn.MuiButtonBase-root {
-  width: 44px !important;
-  height: 44px !important;
+  width: 36px !important;
+  height: 36px !important;
   margin: 0 auto !important;
   border-radius: 50% !important;
 }
