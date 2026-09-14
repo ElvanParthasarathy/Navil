@@ -1,6 +1,6 @@
 import './பதிவிறக்கங்கள்.css';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
@@ -83,8 +83,10 @@ const slides = [
 
 export default function NammilPage() {
     const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+    const [slideOverride, setSlideOverride] = useState<{ offset: 1 | -1; index: number } | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const filmstripRef = useRef<HTMLDivElement>(null);
     const isTransitioning = useRef(false);
     const containerDragX = useRef(0);
     const touchStartX = useRef(0);
@@ -100,6 +102,31 @@ export default function NammilPage() {
     const startX = useRef(0);
     const scrollLeftStart = useRef(0);
     const hasMoved = useRef(false);
+
+    // Preload all lightbox slides on open
+    useEffect(() => {
+        if (lightboxIdx !== null) {
+            slides.forEach(s => {
+                const img = new Image();
+                img.src = s.src;
+            });
+        }
+    }, [lightboxIdx]);
+
+    // Keep filmstrip active thumbnail centered smoothly
+    useEffect(() => {
+        if (filmstripRef.current && lightboxIdx !== null) {
+            const activeEl = filmstripRef.current.querySelector<HTMLElement>('.nammil-lb-fs-item.active');
+            if (activeEl) {
+                const container = filmstripRef.current;
+                const scrollPos = activeEl.offsetLeft - (container.clientWidth / 2) + (activeEl.clientWidth / 2);
+                container.scrollTo({
+                    left: scrollPos,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [lightboxIdx]);
 
     const checkScrollButtons = () => {
         if (!scrollerRef.current) return;
@@ -164,18 +191,18 @@ export default function NammilPage() {
 
         isTransitioning.current = true;
         const container = containerRef.current;
-        container.style.transition = 'transform 0.16s cubic-bezier(0.2, 0, 0, 1)';
+        container.style.transition = 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1)';
 
         if (direction === 1) {
             container.style.transform = 'translate3d(-66.666%, 0, 0)';
             setTimeout(() => {
                 setLightboxIdx(prev => (prev !== null && prev < slides.length - 1 ? prev + 1 : prev));
-            }, 160);
+            }, 380);
         } else if (direction === -1) {
             container.style.transform = 'translate3d(0%, 0, 0)';
             setTimeout(() => {
                 setLightboxIdx(prev => (prev !== null && prev > 0 ? prev - 1 : prev));
-            }, 160);
+            }, 380);
         } else {
             container.style.transform = 'translate3d(-33.333%, 0, 0)';
             setTimeout(() => {
@@ -183,7 +210,7 @@ export default function NammilPage() {
                     containerRef.current.style.transition = 'none';
                 }
                 isTransitioning.current = false;
-            }, 160);
+            }, 380);
         }
     }, []);
 
@@ -194,6 +221,7 @@ export default function NammilPage() {
         }
         isTransitioning.current = false;
         containerDragX.current = 0;
+        setSlideOverride(null);
     }, [lightboxIdx]);
 
     const goToNext = useCallback(() => {
@@ -207,9 +235,35 @@ export default function NammilPage() {
     }, [lightboxIdx, slideContainer]);
 
     const jumpToSlide = useCallback((idx: number) => {
-        if (isTransitioning.current) return;
-        setLightboxIdx(idx);
-    }, []);
+        if (isTransitioning.current || lightboxIdx === null || lightboxIdx === idx) return;
+
+        if (idx === lightboxIdx + 1) {
+            goToNext();
+            return;
+        }
+        if (idx === lightboxIdx - 1) {
+            goToPrev();
+            return;
+        }
+
+        const direction: 1 | -1 = idx > lightboxIdx ? 1 : -1;
+        flushSync(() => {
+            setSlideOverride({ offset: direction, index: idx });
+        });
+
+        requestAnimationFrame(() => {
+            if (!containerRef.current) return;
+            isTransitioning.current = true;
+            const container = containerRef.current;
+            container.style.transition = 'transform 0.38s cubic-bezier(0.25, 1, 0.5, 1)';
+            container.style.transform = direction === 1 ? 'translate3d(-66.666%, 0, 0)' : 'translate3d(0%, 0, 0)';
+
+            setTimeout(() => {
+                setLightboxIdx(idx);
+                setSlideOverride(null);
+            }, 380);
+        });
+    }, [lightboxIdx, goToNext, goToPrev]);
 
     // Popstate, keyboard, body scroll lock
     useEffect(() => {
@@ -290,10 +344,14 @@ export default function NammilPage() {
 
             if (containerRef.current && !isTransitioning.current) {
                 const dx = containerDragX.current;
+                if (Math.abs(dx) < 5) {
+                    containerDragX.current = 0;
+                    return;
+                }
                 const dt = Date.now() - touchStartTime.current;
                 const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
                 const swipeThreshold = width * 0.15;
-                const isFlick = dt < 300 && Math.abs(dx) > 25;
+                const isFlick = dt < 350 && Math.abs(dx) > 25;
                 const direction = dx > 0 ? -1 : 1;
 
                 const hasNext = lightboxIdx !== null && lightboxIdx < slides.length - 1;
@@ -351,10 +409,14 @@ export default function NammilPage() {
         isDraggingSlide.current = false;
         if (containerRef.current && !isTransitioning.current) {
             const dx = containerDragX.current;
+            if (Math.abs(dx) < 5) {
+                containerDragX.current = 0;
+                return;
+            }
             const dt = Date.now() - touchStartTime.current;
             const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
             const swipeThreshold = width * 0.15;
-            const isFlick = dt < 300 && Math.abs(dx) > 25;
+            const isFlick = dt < 350 && Math.abs(dx) > 25;
             const direction = dx > 0 ? -1 : 1;
 
             const hasNext = lightboxIdx !== null && lightboxIdx < slides.length - 1;
@@ -802,21 +864,23 @@ export default function NammilPage() {
                                 style={{ transform: 'translate3d(-33.333%, 0, 0)' }}
                             >
                                 {[-1, 0, 1].map(offset => {
-                                    const i = lightboxIdx + offset;
+                                    let i = lightboxIdx + offset;
+                                    if (slideOverride && slideOverride.offset === offset) {
+                                        i = slideOverride.index;
+                                    }
                                     if (i < 0 || i >= slides.length) {
                                         return <div key={`spacer-${offset}`} className="nammil-lb-slide spacer" />;
                                     }
 
                                     const slide = slides[i];
-                                    const isCurrent = offset === 0;
 
                                     return (
-                                        <div key={`slide-${i}`} className="nammil-lb-slide">
+                                        <div key={`slide-${offset}-${i}`} className="nammil-lb-slide">
                                             <img
                                                 src={slide.src}
                                                 alt={slide.titleEn}
                                                 className="nammil-lb-img"
-                                                loading={isCurrent ? "eager" : "lazy"}
+                                                loading="eager"
                                                 draggable={false}
                                                 onDragStart={(e) => e.preventDefault()}
                                             />
@@ -827,7 +891,7 @@ export default function NammilPage() {
                         </div>
                     </div>
 
-                    <div className="nammil-lb-filmstrip" onClick={(e) => e.stopPropagation()}>
+                    <div className="nammil-lb-filmstrip" ref={filmstripRef} onClick={(e) => e.stopPropagation()}>
                         {slides.map((s, idx) => {
                             const isActive = lightboxIdx === idx;
                             return (

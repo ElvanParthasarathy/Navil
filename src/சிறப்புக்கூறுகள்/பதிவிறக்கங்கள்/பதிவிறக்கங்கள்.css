@@ -915,6 +915,8 @@ body:has(.ms-store-page) .main-content,
     overflow: hidden;
     will-change: transform;
     transform: translate3d(-33.333%, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .nammil-lb-slide {
@@ -943,7 +945,6 @@ body:has(.ms-store-page) .main-content,
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
     user-select: none;
     pointer-events: none;
-    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
 }
 
 .nammil-lb-nav {
