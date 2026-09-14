@@ -487,67 +487,49 @@ const Home = () => {
                 </div>
 
                 {/* THE BENTO GRID */}
-                <div className="bento-grid">
+                <div className="bento-grid animate-entry">
 
-                    {/* 1. WRITINGS BOX (span-6) */}
-                    <section 
-                        className="bento-card span-6 archive-entry-card clickable-card"
-                        onClick={() => navigate('/navilgal/writings', { state: { fromQuickLink: true } })}
-                    >
-                        <div>
-                            <div className="archive-entry-header">
-                                <div className="archive-entry-icon-box">
-                                    <Feather weight="regular" size={24} />
-                                </div>
-                                <div>
-                                    <h2 className="archive-entry-title" lang="ta">எழுத்துகள்</h2>
-                                    <p className="archive-entry-subtitle">Writings & Literature</p>
-                                </div>
-                            </div>
-
-                            <p className="archive-entry-desc" lang="ta">
+                    {/* 1. WRITINGS CARD (span-6) */}
+                    <Link to="/navilgal/writings" className="category-card span-6">
+                        <div className="cat-icon-box">
+                            <Feather weight="regular" />
+                        </div>
+                        <div className="cat-content">
+                            <div className="cat-title" lang="ta">எழுத்துகள்</div>
+                            <div className="cat-title-sub">Writings & Literature</div>
+                            <p className="cat-desc" lang="ta">
                                 கவிதைகள், பொன்மொழிகள், சிறுகதைகள், கட்டுரைகள், சிந்தனைகள் மற்றும் நாளேடுகள் அடங்கிய இலக்கியப் பெட்டகம்.
                             </p>
-                            <p className="archive-entry-desc-en">
+                            <p className="cat-desc-sub">
                                 Poetry, quotes, short stories, articles, thoughts, and personal reflections.
                             </p>
                         </div>
-
-                        <div className="archive-entry-action">
-                            <span>எழுத்துகளை வாசிக்க • Explore Writings</span>
-                            <ArrowRight weight="bold" size={15} />
+                        <div className="cat-footer">
+                            <span>எழுத்துகளை வாசிக்க</span>
+                            <ArrowRight weight="regular" />
                         </div>
-                    </section>
+                    </Link>
 
-                    {/* 2. ARTS BOX (span-6) */}
-                    <section 
-                        className="bento-card span-6 archive-entry-card clickable-card"
-                        onClick={() => navigate('/navilgal/arts', { state: { fromQuickLink: true } })}
-                    >
-                        <div>
-                            <div className="archive-entry-header">
-                                <div className="archive-entry-icon-box">
-                                    <Palette weight="regular" size={24} />
-                                </div>
-                                <div>
-                                    <h2 className="archive-entry-title" lang="ta">படைப்புகள்</h2>
-                                    <p className="archive-entry-subtitle">Arts & Gallery</p>
-                                </div>
-                            </div>
-
-                            <p className="archive-entry-desc" lang="ta">
+                    {/* 2. ARTS CARD (span-6) */}
+                    <Link to="/navilgal/arts" className="category-card span-6">
+                        <div className="cat-icon-box">
+                            <Palette weight="regular" />
+                        </div>
+                        <div className="cat-content">
+                            <div className="cat-title" lang="ta">படைப்புகள்</div>
+                            <div className="cat-title-sub">Arts & Gallery</div>
+                            <p className="cat-desc" lang="ta">
                                 கரிக்கோல் ஓவியங்கள், சுவரொட்டி வடிவமைப்புகள், வண்ண ஓவியங்கள் மற்றும் எண்மக் கலைப்படைப்புகள்.
                             </p>
-                            <p className="archive-entry-desc-en">
+                            <p className="cat-desc-sub">
                                 Pencil sketches, posters, traditional paintings, and digital artwork.
                             </p>
                         </div>
-
-                        <div className="archive-entry-action">
-                            <span>படைப்புகளைக் காண • Explore Arts</span>
-                            <ArrowRight weight="bold" size={15} />
+                        <div className="cat-footer">
+                            <span>படைப்புகளைக் காண</span>
+                            <ArrowRight weight="regular" />
                         </div>
-                    </section>
+                    </Link>
 
                     {/* 3. DYNAMIC INTERACTIVE POEM PLAYER (span-6) */}
                     <section className="bento-card span-6 quote-bento clickable-card" onClick={handlePoemCardClick}>

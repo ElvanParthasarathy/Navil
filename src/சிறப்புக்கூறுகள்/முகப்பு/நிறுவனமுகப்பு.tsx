@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import profileData from '../../தரவு/தன்னுரு.json';
-import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
+import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import { 
     DownloadSimple, 
     GithubLogo, 

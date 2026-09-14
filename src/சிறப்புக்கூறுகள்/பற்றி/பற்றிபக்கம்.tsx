@@ -1,7 +1,7 @@
 import './பற்றி.css';
 import React, { useState, useEffect } from 'react';
 import profileData from '../../தரவு/தன்னுரு.json';
-import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
+import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 
 import AdBanner from '../../கூறுகள்/ஊடகம்/விளம்பரம்';
 import { Helmet } from 'react-helmet-async';

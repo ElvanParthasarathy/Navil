@@ -5,7 +5,7 @@ import { useSettings } from '../கொக்கிகள்/அமைப்ப�
 import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுயவிவரபடம்';
 import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்இணைப்பு';
 import profileData from '../தரவு/தன்னுரு.json';
-import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
+import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import { House, User, Monitor, Sun, Moon, Wrench, ListDashes, List, BookOpen } from '@phosphor-icons/react';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
@@ -40,7 +40,14 @@ const Layout = () => {
     });
 
     const getPathDepth = (path: string) => {
-        return path.split('/').filter(Boolean).length;
+        const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
+        if (normalized === '/') return 0;
+        if (normalized === '/navilgal') return 1;
+        if (normalized === '/writings' || normalized === '/arts' || normalized === '/ezhuthugal' || normalized === '/padaippugal') return 2;
+        if (normalized.startsWith('/writings/') || normalized.startsWith('/arts/')) {
+            return normalized.split('/').filter(Boolean).length + 1;
+        }
+        return normalized.split('/').filter(Boolean).length;
     };
 
     const getTabIndex = (path: string) => {
@@ -65,28 +72,20 @@ const Layout = () => {
             const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
             return normalized === '/' || 
                    normalized === '/navilgal' || 
-                   normalized === '/navilgal/writings' || 
-                   normalized === '/navilgal/ezhuthugal' || 
-                   normalized === '/navilgal/ezhutgal' || 
-                   normalized === '/navilgal/arts' || 
-                   normalized === '/navilgal/padaippugal' || 
-                   normalized === '/writings' || 
-                   normalized === '/arts' || 
                    normalized === '/tools' || 
+                   normalized === '/teaching' || 
                    normalized === '/about';
         };
 
         if (navType === 'POP') {
-            // Browser back button always means backward slide
+            // Browser back button or FloatingBackButton always slides backward unless switching between root tabs
             if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
-                newDirection = navState.prevState?.fromQuickLink ? 'backward' : 'none';
+                newDirection = 'none';
             } else {
                 newDirection = 'backward';
             }
-        } else if (location.state?.fromQuickLink) {
-            newDirection = 'forward';
         } else if (isBottomTab(location.pathname) && isBottomTab(navState.prevPath)) {
-            newDirection = navState.prevState?.fromQuickLink ? 'backward' : 'none';
+            newDirection = 'none';
         } else if (currentDepth < prevDepth) {
             newDirection = 'backward';
         } else if (currentDepth > prevDepth) {

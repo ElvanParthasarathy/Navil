@@ -13,7 +13,7 @@ import { ArtCard } from './கூறுகள்/கலைஅட்டை';
 import { LightboxImage } from './கூறுகள்/ஒளிப்பெட்டிபடம்';
 import { Engagement } from '../../கூறுகள்/தொடர்பு/தொடர்புகூறு';
 import profileData from '../../தரவு/தன்னுரு.json';
-import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.jpg';
+import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import './கலைக்கூடம்.css';
 import { Heart, ChatCircle, X, CaretLeft, CaretRight, ArrowsOutSimple, ArrowSquareOut } from '@phosphor-icons/react';
 
