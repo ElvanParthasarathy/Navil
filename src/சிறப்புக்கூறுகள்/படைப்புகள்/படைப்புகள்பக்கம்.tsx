@@ -68,7 +68,7 @@ const Writings = () => {
                     <p className="writings-subtitle">
                         சிந்தனைகள், கதைகள் & பட்டறிவுகள்
                     </p>
-                    <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                    <p className="writings-subtitle writings-subtitle-en">
                         Thoughts, Stories & Observations
                     </p>
                 </div>

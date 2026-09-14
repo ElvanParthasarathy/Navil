@@ -40,10 +40,10 @@ const ToolsView = () => {
                         </h1>
                         <div className="writings-title-sub">Tools</div>
                         <p className="writings-subtitle">
-                            இசை, மொழி மற்றும் பயன்பாடுகளுக்கான பிரத்யேகக் கருவிகள்.
+                            இசை, மொழி & பயன்பாடுகள்
                         </p>
-                        <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                            A collection of custom-built tools, engines, and experiments.
+                        <p className="writings-subtitle writings-subtitle-en">
+                            Music, Language & Productivity
                         </p>
                     </div>
                 </header>
@@ -55,7 +55,7 @@ const ToolsView = () => {
                             <div className="cat-title">எல்வன் கின்னரப்பெட்டி</div>
                             <div className="cat-title-sub">Elvan Piano</div>
                             <p className="cat-desc">மெய்நிகர் பியானோ மற்றும் இசையமைப்புக் கருவி.</p>
-                            <p className="cat-desc-sub">A fully functional virtual piano synthesizer with keyboard mapping.</p>
+                            <p className="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
                         </div>
                         <div className="cat-footer">பியானோவைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
@@ -64,8 +64,8 @@ const ToolsView = () => {
                         <div className="cat-content">
                             <div className="cat-title">தொல்காப்பிய மொழிமாற்றி</div>
                             <div className="cat-title-sub">Tolkappiyam Transliterator</div>
-                            <p className="cat-desc">தொல்காப்பிய இலக்கண நெறிப்படியான ஒலிபெயர்ப்பு முறைமை.</p>
-                            <p className="cat-desc-sub">Authentic English phonetics based on Tolkappiyam.</p>
+                            <p className="cat-desc">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
+                            <p className="cat-desc-sub">Phonetic English-to-Tamil typing engine.</p>
                         </div>
                         <div className="cat-footer">மொழிமாற்றியைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
@@ -74,8 +74,8 @@ const ToolsView = () => {
                         <div className="cat-content">
                             <div className="cat-title">நவில் அரிச்சுவடி</div>
                             <div className="cat-title-sub">Arichuvadi Engine</div>
-                            <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி — தமிழி மற்றும் வட்டெழுத்து.</p>
-                            <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu scripts.</p>
+                            <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
+                            <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
                         </div>
                         <div className="cat-footer">அரிச்சுவடியைத் திறக்க <ArrowRight weight="regular" /></div>
                     </Link>
