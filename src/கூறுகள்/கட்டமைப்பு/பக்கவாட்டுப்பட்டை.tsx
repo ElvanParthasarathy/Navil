@@ -53,7 +53,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         className="sidebar-toggle-btn"
                         onClick={onToggleSidebar}
                         title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-                        focusRipple
+                        disableFocusRipple
                     >
                         <SidebarSimple weight="regular" size={19} />
                     </ButtonBase>
@@ -97,7 +97,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         onClick={() => {
                             setIsSettingsOpen(!isSettingsOpen);
                         }}
-                        focusRipple
+                        disableFocusRipple
                     >
                         <ProfileImage
                             src={profilePic}

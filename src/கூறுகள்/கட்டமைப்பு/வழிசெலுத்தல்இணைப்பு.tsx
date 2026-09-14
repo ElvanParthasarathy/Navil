@@ -19,7 +19,7 @@ export const NavLink = ({ to, icon, label, subLabel, badge, active, className = 
         to={to} 
         className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} 
         title={collapsed ? label : ''}
-        focusRipple
+        disableFocusRipple
     >
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
         {!collapsed && (
