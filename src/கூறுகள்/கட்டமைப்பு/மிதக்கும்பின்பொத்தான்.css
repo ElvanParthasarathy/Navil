@@ -14,6 +14,9 @@
     height: 44px;
     flex-shrink: 0;
     white-space: nowrap;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
 }
 

@@ -124,11 +124,11 @@ export function Piano() {
                    value={layoutMode}
                    onChange={(e) => setLayoutMode(e.target.value as KeyLayoutMode)}
                  >
-                   <option value="REALISTIC" className="text-black">மெய்யான (இரட்டை)</option>
-                   <option value="FL_STUDIO" className="text-black">FL ஸ்டுடியோ</option>
-                   <option value="LOGIC" className="text-black">லாஜிக் / கேரேஜ்பேண்ட்</option>
-                   <option value="ABLETON" className="text-black">அபிள்டன் லைவ்</option>
-                   <option value="CUSTOM" className="text-black">தனிப்பயன்...</option>
+                   <option value="REALISTIC">மெய்யான (இரட்டை)</option>
+                   <option value="FL_STUDIO">FL ஸ்டுடியோ</option>
+                   <option value="LOGIC">லாஜிக் / கேரேஜ்பேண்ட்</option>
+                   <option value="ABLETON">அபிள்டன் லைவ்</option>
+                   <option value="CUSTOM">தனிப்பயன்...</option>
                  </select>
                  {layoutMode === 'CUSTOM' && (
                     <button 

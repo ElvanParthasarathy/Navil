@@ -49,35 +49,44 @@ const ToolsView = () => {
                 </header>
 
                 <div className="category-grid tools-category-grid animate-entry">
-                    <Link to="/tools/piano" className="category-card desktop-only">
-                        <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
-                        <div className="cat-content">
-                            <div className="cat-title">கின்னரப்பெட்டி</div>
-                            <div className="cat-title-sub">Navil Piano</div>
-                            <p className="cat-desc">மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.</p>
-                            <p className="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
-                        </div>
-                        <div className="cat-footer">கின்னரப்பெட்டியைத் தொடங்க <ArrowRight weight="regular" /></div>
-                    </Link>
                     <Link to="/tools/transliterator" className="category-card">
                         <div className="cat-icon-box"><Translate weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">நவில் மொழிமாற்றி</div>
+                            <div className="cat-title">
+                                நவில் மொழிமாற்றி
+                                <span className="cat-beta-badge">BETA</span>
+                            </div>
                             <div className="cat-title-sub">Navil Transliterator</div>
                             <p className="cat-desc">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
-                            <p className="cat-desc-sub">Phonetic English-to-Tamil typing engine.</p>
+                            <p className="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
                         </div>
                         <div className="cat-footer">மொழிமாற்றியைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
                     <Link to="/tools/arichuvadi" className="category-card">
                         <div className="cat-icon-box"><Scroll weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">நவில் அரிச்சுவடி</div>
+                            <div className="cat-title">
+                                நவில் அரிச்சுவடி
+                                <span className="cat-beta-badge">BETA</span>
+                            </div>
                             <div className="cat-title-sub">Navil Arichuvadi</div>
                             <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
                             <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
                         </div>
                         <div className="cat-footer">அரிச்சுவடியைத் திறக்க <ArrowRight weight="regular" /></div>
+                    </Link>
+                    <Link to="/tools/piano" className="category-card desktop-only">
+                        <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
+                        <div className="cat-content">
+                            <div className="cat-title">
+                                கின்னரப்பெட்டி
+                                <span className="cat-beta-badge">BETA</span>
+                            </div>
+                            <div className="cat-title-sub">Navil Piano</div>
+                            <p className="cat-desc">மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.</p>
+                            <p className="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
+                        </div>
+                        <div className="cat-footer">கின்னரப்பெட்டியைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
                     <Link to="/teaching" className="category-card">
                         <div className="cat-icon-box"><Monitor weight="regular" /></div>

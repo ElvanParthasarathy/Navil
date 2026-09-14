@@ -43,12 +43,12 @@ export function ArichuvadiLearn() {
         <motion.div
           className={`arichuvadi-flashcard ${isFlipMode ? 'flip-mode' : ''}`}
           animate={{ rotateY: isFlipMode && isFlipped ? 180 : 0 }}
-          transition={{ duration: 0.4, type: 'spring', stiffness: 200, damping: 20 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
           whileHover={!isFlipMode ? { scale: 1.05 } : {}}
           whileTap={!isFlipMode ? { scale: 0.95 } : {}}
         >
           {/* Front of card */}
-          <div className="flashcard-face flashcard-front" style={{ opacity: isFlipMode && isFlipped ? 0 : 1 }}>
+          <div className="flashcard-face flashcard-front">
             <div className={isFlipMode ? "flashcard-center-tamil" : "flashcard-tamil"}>
               {tamil}
             </div>
@@ -59,7 +59,7 @@ export function ArichuvadiLearn() {
 
           {/* Back of card */}
           {isFlipMode && (
-            <div className="flashcard-face flashcard-back" style={{ opacity: isFlipMode && isFlipped ? 1 : 0, transform: 'rotateY(180deg)' }}>
+            <div className="flashcard-face flashcard-back">
               <div className={`flashcard-ancient ${getFontClass()}`}>{ancientText}</div>
             </div>
           )}
@@ -69,12 +69,12 @@ export function ArichuvadiLearn() {
   };
 
   return (
-    <div className="animate-entry" style={{ marginTop: '30px' }}>
-      <div className="jinavani-controls" style={{ marginBottom: '20px', justifyContent: 'center', gap: '24px' }}>
-        <div className="jinavani-select-wrap">
+    <div className="animate-entry">
+      <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center', gap: '16px' }}>
+        <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>
           <select
-            className="jinavani-select"
+            className="arichuvadi-select"
             value={script}
             onChange={(e) => {
               setScript(e.target.value as ScriptType);
@@ -86,24 +86,18 @@ export function ArichuvadiLearn() {
           </select>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>திருப்பு அட்டை (Flipcards)</label>
-          <button 
-            onClick={() => {
-              setIsFlipMode(!isFlipMode);
-              setFlippedCards({});
-            }}
-            style={{
-              width: '40px', height: '22px', borderRadius: '12px',
-              background: isFlipMode ? 'var(--text-main)' : 'var(--border-color)',
-              border: 'none', position: 'relative', cursor: 'pointer', transition: '0.3s'
-            }}
-          >
-            <div style={{
-              width: '18px', height: '18px', borderRadius: '50%', background: 'var(--bg-main)',
-              position: 'absolute', top: '2px', left: isFlipMode ? '20px' : '2px', transition: '0.3s'
-            }}/>
-          </button>
+        <div 
+          className={`arichuvadi-select-wrap arichuvadi-toggle-pill ${isFlipMode ? 'active' : ''}`}
+          onClick={() => {
+            setIsFlipMode(!isFlipMode);
+            setFlippedCards({});
+          }}
+          title="திருப்பு அட்டை (Flipcards)"
+        >
+          <label style={{ cursor: 'pointer' }}>திருப்பு அட்டை:</label>
+          <div className={`arichuvadi-switch ${isFlipMode ? 'on' : ''}`}>
+            <div className="arichuvadi-switch-knob" />
+          </div>
         </div>
       </div>
 

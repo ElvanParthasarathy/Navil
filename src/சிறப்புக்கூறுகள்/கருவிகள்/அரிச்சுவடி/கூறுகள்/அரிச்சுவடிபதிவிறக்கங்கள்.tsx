@@ -5,8 +5,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 export function ArichuvadiDownloads() {
   const [selectedPdf, setSelectedPdf] = useState<{ name: string, file: string } | null>(null);
 
+  // Hide floating back button ("பின்செல்") when full-screen PDF view is active
+  useEffect(() => {
+    if (selectedPdf) {
+      document.body.classList.add('hide-floating-back');
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setSelectedPdf(null);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.classList.remove('hide-floating-back');
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.classList.remove('hide-floating-back');
+    }
+  }, [selectedPdf]);
+
   const handleItemClick = (e: React.MouseEvent, item: { name: string, file: string, desc: string }) => {
-    // If it's a PDF, intercept and open in the internal viewer
+    // If it's a PDF, intercept and open in the full-screen internal viewer
     if (item.file.endsWith('.pdf')) {
       e.preventDefault();
       setSelectedPdf(item);
@@ -26,11 +45,10 @@ export function ArichuvadiDownloads() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => handleItemClick(e, item)}
-            className="arichuvadi-flashcard"
+            className="category-card"
             style={{ 
               display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
-              padding: '16px', textDecoration: 'none', color: 'inherit',
-              background: 'var(--bg-panel)', border: '1px solid var(--border-color)',
+              padding: '20px', textDecoration: 'none', color: 'inherit',
               minHeight: 'auto'
             }}
           >
@@ -46,53 +64,49 @@ export function ArichuvadiDownloads() {
   );
 
   return (
-    <div className="animate-entry" style={{ marginTop: '30px', padding: '0 16px', position: 'relative' }}>
+    <div className="animate-entry" style={{ padding: '0 16px', position: 'relative' }}>
       
-      {/* PDF Viewer Modal */}
-      <AnimatePresence>
-        {selectedPdf && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            style={{
-              position: 'fixed', top: '10vh', left: '10vw', right: '10vw', bottom: '10vh',
-              background: 'var(--bg-main)', border: '1px solid var(--border-color)',
-              borderRadius: '12px', zIndex: 100, boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
-              display: 'flex', flexDirection: 'column', overflow: 'hidden'
-            }}
-          >
-            <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-panel)' }}>
-              <div style={{ fontWeight: 'bold' }}>{selectedPdf.name}</div>
-              <button 
-                onClick={() => setSelectedPdf(null)}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', padding: '4px' }}
-              >
-                <X size={24} weight="bold" />
-              </button>
-            </div>
-            <iframe 
-              src={`/downloads/${selectedPdf.file}`} 
-              style={{ width: '100%', height: '100%', border: 'none' }} 
-              title={selectedPdf.name}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      {/* Dimmed Background Overlay */}
+      {/* Full-Screen PDF Viewer */}
       <AnimatePresence>
         {selectedPdf && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedPdf(null)}
-            style={{
-              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-              background: 'rgba(0,0,0,0.5)', zIndex: 99
-            }}
-          />
+            className="arichuvadi-fullscreen-pdf-overlay"
+          >
+            <div className="arichuvadi-pdf-topbar">
+              <div className="arichuvadi-pdf-title-wrap">
+                <Book weight="duotone" size={22} />
+                <span className="arichuvadi-pdf-title">{selectedPdf.name}</span>
+              </div>
+              <div className="arichuvadi-pdf-actions">
+                <a
+                  href={`/downloads/${selectedPdf.file}`}
+                  download
+                  className="arichuvadi-pill-btn active"
+                  style={{ textDecoration: 'none', padding: '6px 14px', fontSize: '0.82rem' }}
+                >
+                  <DownloadSimple size={15} weight="bold" />
+                  <span>Download PDF</span>
+                </a>
+                <button 
+                  onClick={() => setSelectedPdf(null)}
+                  className="arichuvadi-pdf-close-btn"
+                  title="மூடுக (Close - Esc)"
+                >
+                  <X size={24} weight="bold" />
+                </button>
+              </div>
+            </div>
+            <div className="arichuvadi-pdf-body">
+              <iframe 
+                src={`/downloads/${selectedPdf.file}`} 
+                className="arichuvadi-pdf-frame"
+                title={selectedPdf.name}
+              />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 

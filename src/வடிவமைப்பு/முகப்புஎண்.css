@@ -162,9 +162,43 @@ html {
   --link-color: var(--text-main);
 }
 
-/* Password input eye icon — adapt to current theme */
+/* Global native controls color-scheme adapt to current theme */
+:root,
+html[data-theme='light'],
+[data-theme='light'] {
+  color-scheme: light;
+}
+
+html[data-theme='dark'],
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
 .pwd-input { color-scheme: light; }
 [data-theme='dark'] .pwd-input { color-scheme: dark; }
+
+/* Global Native Form & Dropdown Theming */
+select {
+  color-scheme: light dark;
+}
+
+[data-theme='dark'] select {
+  color-scheme: dark;
+}
+
+[data-theme='dark'] select option {
+  background-color: #1a1a1c !important;
+  color: #f3f3f3 !important;
+}
+
+[data-theme='light'] select {
+  color-scheme: light;
+}
+
+[data-theme='light'] select option {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
 
 body {
   font-family: "ElvanSans", sans-serif;

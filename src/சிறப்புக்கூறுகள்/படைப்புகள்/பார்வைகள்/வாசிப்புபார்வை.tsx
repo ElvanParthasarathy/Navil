@@ -530,8 +530,8 @@ const toggleVariantTransl = (vKey, lang) => {
                     </div>
                 )}
 
-                <header style={{ marginBottom: '40px', textAlign: isStory ? 'center' : 'left' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: isStory ? 'center' : 'flex-start', flexWrap: 'wrap', gap: '8px', color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '16px', fontWeight: 500 }}>
+                <header style={{ marginBottom: '40px', textAlign: 'left' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: '8px', color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '16px', fontWeight: 500 }}>
                         <CalendarBlank weight="regular" />
                         {new Date(post.publish_date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                         {post.series_name && <span style={{ color: 'var(--text-main)' }}>• {post.series_name} — Part {post.series_part}</span>}

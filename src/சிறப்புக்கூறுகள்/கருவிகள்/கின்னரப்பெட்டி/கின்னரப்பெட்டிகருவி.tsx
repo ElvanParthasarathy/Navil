@@ -9,7 +9,7 @@ import './கின்னரப்பெட்டி.css';
 export default function PianoTool() {
   return (
     <>
-      <MobileTopBar title="கின்னரப்பெட்டி|navil piano" backUrl="/tools" />
+      <MobileTopBar title="கின்னரப்பெட்டி|navil piano" backUrl="/tools" isBeta={true} />
       <Helmet>
           <title>கின்னரப்பெட்டி | Navil Piano</title>
       </Helmet>
@@ -19,7 +19,23 @@ export default function PianoTool() {
         
         <header className="writings-header animate-entry">
             <div style={{ flex: 1 }}>
-                <h1 className="writings-title">கின்னரப்பெட்டி</h1>
+                <h1 className="writings-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    கின்னரப்பெட்டி
+                    <span 
+                        style={{ 
+                            fontSize: '0.75rem', 
+                            background: 'color-mix(in srgb, var(--text-main) 12%, transparent)', 
+                            color: 'var(--text-main)', 
+                            padding: '3px 9px', 
+                            borderRadius: '100px', 
+                            fontWeight: 700, 
+                            letterSpacing: '0.5px',
+                            lineHeight: 1
+                        }}
+                    >
+                        BETA
+                    </span>
+                </h1>
                 <div className="writings-title-sub">Navil Piano</div>
                 <p className="writings-subtitle">
                   மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.

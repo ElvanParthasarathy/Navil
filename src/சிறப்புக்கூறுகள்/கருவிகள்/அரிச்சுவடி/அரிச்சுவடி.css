@@ -1,33 +1,43 @@
 /* arichuvadi Ancient Script Fonts */
 @font-face {
   font-family: "Adinatha Tamil Brahmi";
-  src: url('/fonts/Adinatha-Tamil-Brahmi.otf') format('opentype');
+  src: url('/fonts/AdinathaTamilBrahmi2.otf') format('opentype'),
+       url('/fonts/Adinatha-Tamil-Brahmi.otf') format('opentype'),
+       url('/fonts/Adinatha-Tamil-Brahmi.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "e-Brahmi T";
   src: url('/fonts/e-Brahmi-T.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "e-Velvi";
   src: url('/fonts/e-Velvi.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 
 /* Output rendering */
 .arichuvadi-output-brahmi {
-  font-family: "Adinatha Tamil Brahmi", serif;
+  font-family: "Adinatha Tamil Brahmi", "e-Brahmi T", "Noto Sans Brahmi", "Segoe UI Historic", serif;
   font-size: 130%;
   line-height: 2em;
   word-break: break-word;
+  font-weight: normal !important;
 }
 
 .arichuvadi-output-ebrahmi {
-  font-family: "e-Brahmi T", serif;
+  font-family: "e-Brahmi T", "Adinatha Tamil Brahmi", serif;
   font-size: 217%;
   line-height: 1.4em;
   word-break: break-word;
+  font-weight: normal !important;
 }
 
 .arichuvadi-output-vatteluttu {
@@ -35,6 +45,7 @@
   font-size: 193%;
   line-height: 1.5em;
   word-break: break-word;
+  font-weight: normal !important;
 }
 
 /* Editor panels */
@@ -129,20 +140,48 @@
 }
 
 .arichuvadi-select-wrap {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
+  gap: 8px;
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  border: none;
+  outline: none;
   border-radius: 100px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  box-shadow: none;
+}
+
+.arichuvadi-select-wrap:hover {
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+}
+
+.arichuvadi-select-wrap:active,
+.arichuvadi-select-wrap:has(select:active) {
+  background: color-mix(in srgb, var(--text-main) 18%, transparent);
+}
+
+[data-theme='dark'] .arichuvadi-select-wrap {
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  box-shadow: none;
+}
+
+[data-theme='dark'] .arichuvadi-select-wrap:hover {
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+}
+
+.arichuvadi-select-wrap[style*="column"] {
+  border-radius: 14px;
+  padding: 12px 16px;
 }
 
 .arichuvadi-select-wrap label {
   font-weight: 600;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   white-space: nowrap;
 }
 
@@ -152,29 +191,92 @@
   outline: none;
   color: var(--text-main);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   cursor: pointer;
   font-family: "ElvanSans", sans-serif;
+  color-scheme: light dark;
+}
+
+[data-theme='dark'] .arichuvadi-select {
+  color-scheme: dark;
+}
+
+[data-theme='dark'] .arichuvadi-select option {
+  background-color: #1a1a1c;
+  color: #f3f3f3;
+}
+
+[data-theme='light'] .arichuvadi-select {
+  color-scheme: light;
+}
+
+[data-theme='light'] .arichuvadi-select option {
+  background-color: #ffffff;
+  color: #111111;
+}
+
+/* Pill Toggle Switch */
+.arichuvadi-toggle-pill {
+  cursor: pointer;
+  user-select: none;
+}
+
+.arichuvadi-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 100px;
+  background: color-mix(in srgb, var(--text-main) 20%, transparent);
+  position: relative;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.arichuvadi-switch.on {
+  background: var(--text-main);
+}
+
+.arichuvadi-switch-knob {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+}
+
+[data-theme='dark'] .arichuvadi-switch-knob {
+  background: #181818;
+}
+
+.arichuvadi-switch.on .arichuvadi-switch-knob {
+  transform: translateX(16px);
+  background: var(--bg-panel);
 }
 
 .arichuvadi-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  border: none;
   border-radius: 100px;
-  padding: 6px 14px;
-  font-size: 0.8rem;
+  padding: 8px 18px;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-main);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
   font-family: "ElvanSans", sans-serif;
 }
 
 .arichuvadi-btn:hover {
-  background: var(--nav-hover);
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+}
+
+.arichuvadi-btn:active {
+  background: color-mix(in srgb, var(--text-main) 18%, transparent);
 }
 
 .arichuvadi-btn:disabled {
@@ -182,35 +284,60 @@
   cursor: not-allowed;
 }
 
+.arichuvadi-btn.arichuvadi-btn-primary {
+  background: var(--text-main);
+  color: var(--bg-panel);
+  font-weight: 700;
+}
+
+.arichuvadi-btn.arichuvadi-btn-primary:hover {
+  background: var(--text-main);
+  opacity: 0.9;
+}
+
+.arichuvadi-btn.arichuvadi-btn-primary:active {
+  background: var(--text-main);
+  opacity: 0.8;
+}
+
 .arichuvadi-btn.copied {
-  background: #4CAF50;
-  color: white;
-  border-color: #4CAF50;
+  background: #dcfce7;
+  color: #16a34a;
+  border: none;
+}
+
+[data-theme='dark'] .arichuvadi-btn.copied {
+  background: rgba(22, 163, 74, 0.2);
+  color: #4ade80;
 }
 
 .arichuvadi-zoom-controls {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   margin-left: auto;
 }
 
 .arichuvadi-zoom-btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  border: none;
   border-radius: 50%;
   color: var(--text-main);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s ease;
   font-family: "ElvanSans", sans-serif;
 }
 
 .arichuvadi-zoom-btn:hover {
-  background: var(--nav-hover);
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+}
+
+.arichuvadi-zoom-btn:active {
+  background: color-mix(in srgb, var(--text-main) 18%, transparent);
 }
 
 /* Responsive */
@@ -244,15 +371,20 @@
 }
 
 .arichuvadi-flashcard {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  background: var(--bg-card);
+  border: none;
+  border-radius: 16px;
   position: relative;
   min-height: 120px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
   transform-style: preserve-3d;
   width: 100%;
   height: 100%;
+}
+
+[data-theme='dark'] .arichuvadi-flashcard {
+  background: linear-gradient(145deg, #141414, color-mix(in srgb, #141414, transparent 35%));
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .arichuvadi-flashcard.flip-mode {
@@ -266,12 +398,20 @@
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 12px;
-  transition: opacity 0.3s;
+}
+
+.flashcard-front {
+  transform: rotateY(0deg);
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
 }
 
 .flashcard-tamil {
@@ -372,3 +512,990 @@
     gap: 12px;
   }
 }
+
+/* ==========================================================================
+   ARICHUVADI BOOKS (நூல்கள்) - EPISODIC CHAPTERS & READER STYLES
+   ========================================================================== */
+
+.arichuvadi-books-container {
+  width: 100%;
+  position: relative;
+}
+
+/* Topbar with Pill Selectors */
+.arichuvadi-books-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.arichuvadi-topbar-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Pill Button Groups */
+.arichuvadi-pill-group {
+  display: inline-flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  padding: 4px;
+  border-radius: 100px;
+  gap: 4px;
+}
+
+.arichuvadi-pill-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 7px 18px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.arichuvadi-pill-btn:hover {
+  color: var(--text-main);
+}
+
+.arichuvadi-pill-btn.active {
+  background: var(--text-main);
+  color: var(--bg-panel);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+}
+
+/* Font and View Controls */
+.arichuvadi-font-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.arichuvadi-icon-pill-btn {
+  border: none;
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.arichuvadi-icon-pill-btn:hover {
+  background: color-mix(in srgb, var(--text-main) 14%, transparent);
+}
+
+.arichuvadi-icon-pill-btn.active {
+  background: var(--text-main);
+  color: var(--bg-panel);
+}
+
+/* Loading state */
+.arichuvadi-loading-card {
+  padding: 80px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.arichuvadi-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid color-mix(in srgb, var(--text-main) 15%, transparent);
+  border-top-color: var(--text-main);
+  border-radius: 50%;
+  animation: arichuvadi-spin 0.8s linear infinite;
+}
+
+@keyframes arichuvadi-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   ARICHUVADI PDF FULL-SCREEN VIEWER & BACK BUTTON HIDE
+   ========================================================================== */
+
+body.hide-floating-back .floating-back-btn,
+body.hide-floating-back .mobile-topbar-wrapper {
+  display: none !important;
+}
+
+.arichuvadi-fullscreen-pdf-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-app);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.arichuvadi-pdf-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-light);
+  gap: 16px;
+  z-index: 2;
+}
+
+.arichuvadi-pdf-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arichuvadi-pdf-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.arichuvadi-pdf-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.arichuvadi-pdf-close-btn:hover {
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+}
+
+.arichuvadi-pdf-body {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background: #2b2b2b;
+}
+
+.arichuvadi-pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ==========================================================================
+   ARICHUVADI ABOUT PAGE - SITS IN PAGE + HYBRID CARDS
+   ========================================================================== */
+
+.arichuvadi-about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px 16px 80px;
+}
+
+.arichuvadi-about-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.arichuvadi-about-icon-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--text-main) 8%, transparent);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.arichuvadi-about-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.arichuvadi-about-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.arichuvadi-about-prose {
+  font-size: 1.08rem;
+  line-height: 1.9;
+  color: var(--text-main);
+  margin-bottom: 40px;
+}
+
+.arichuvadi-about-prose p {
+  margin-bottom: 16px;
+}
+
+.arichuvadi-about-hybrid-card {
+  background: color-mix(in srgb, var(--text-main) 4%, var(--bg-panel));
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  padding: 28px 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme='dark'] .arichuvadi-about-hybrid-card {
+  background: linear-gradient(145deg, #18181a, #131315);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.arichuvadi-hybrid-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.arichuvadi-hybrid-icon {
+  color: var(--text-main);
+}
+
+.arichuvadi-hybrid-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 2px;
+}
+
+.arichuvadi-hybrid-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.arichuvadi-hybrid-desc {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+
+.arichuvadi-hybrid-badges-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  .arichuvadi-hybrid-badges-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.arichuvadi-hybrid-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: color-mix(in srgb, var(--text-main) 6%, transparent);
+  border-radius: 16px;
+}
+
+.hybrid-badge-icon {
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+
+.hybrid-badge-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hybrid-badge-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.hybrid-badge-val {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.arichuvadi-hybrid-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.arichuvadi-hybrid-legal-note {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.6;
+  opacity: 0.75;
+  border-top: 1px dashed color-mix(in srgb, var(--border-light) 60%, transparent);
+  padding-top: 16px;
+}
+
+/* ==========================================================================
+   ARICHUVADI BOOKS (நூல்கள்) - EPISODIC & STORIES FORMAT STYLES
+   ========================================================================== */
+
+.arichuvadi-books-container {
+  width: 100%;
+  position: relative;
+}
+
+/* Topbar with Pill Selectors */
+.arichuvadi-books-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.arichuvadi-topbar-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Pill Button Groups */
+.arichuvadi-pill-group {
+  display: inline-flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  padding: 4px;
+  border-radius: 100px;
+  gap: 4px;
+}
+
+.arichuvadi-pill-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 7px 18px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.arichuvadi-pill-btn:hover {
+  color: var(--text-main);
+}
+
+.arichuvadi-pill-btn.active {
+  background: var(--text-main);
+  color: var(--bg-panel);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+}
+
+/* Font and View Controls */
+.arichuvadi-font-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.arichuvadi-icon-pill-btn {
+  border: none;
+  background: color-mix(in srgb, var(--text-main) 7%, transparent);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.arichuvadi-icon-pill-btn:hover {
+  background: color-mix(in srgb, var(--text-main) 14%, transparent);
+}
+
+.arichuvadi-icon-pill-btn.active {
+  background: var(--text-main);
+  color: var(--bg-panel);
+}
+
+/* TV Hero Cover & Book Artwork */
+.arichuvadi-book-cover-wrapper {
+  width: 220px;
+  aspect-ratio: 2 / 3;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1b1b24, #121217);
+  border: 1px solid color-mix(in srgb, var(--border-light) 60%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme='light'] .arichuvadi-book-cover-wrapper {
+  background: linear-gradient(135deg, #2a2c39, #1c1d27);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.arichuvadi-cover-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px;
+  gap: 10px;
+  color: #fff;
+}
+
+.arichuvadi-cover-emblem {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 4px;
+}
+
+.arichuvadi-cover-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.arichuvadi-cover-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.arichuvadi-cover-author {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+/* Explicit TV Meta & Hero styles for Arichuvadi */
+.tv-meta-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tv-badge {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.tv-badge.premium {
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+  color: var(--text-main);
+}
+
+.tv-badge.status {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.tv-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tv-ep-count-badge, .tv-class-badge, .tv-genre-badge {
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.tv-ep-count-badge {
+  background: var(--text-main);
+  color: var(--bg-app);
+  font-weight: 800;
+}
+
+.tv-class-badge, .tv-genre-badge {
+  background: color-mix(in srgb, var(--text-main) 8%, transparent);
+  color: var(--text-muted);
+}
+
+.tv-class-badge.puram {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+}
+
+.tv-synopsis {
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin: 0 0 28px;
+  max-width: 680px;
+}
+
+.tv-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.tv-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--text-main);
+  color: var(--bg-app);
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--text-main) 20%, transparent);
+  transition: all 0.2s ease-out;
+}
+
+.tv-primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--text-main) 30%, transparent);
+}
+
+.tv-primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* Episodes Header & Search */
+.arichuvadi-episodes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.arichuvadi-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--text-main) 6%, transparent);
+  border-radius: 100px;
+  padding: 6px 14px;
+  min-width: 240px;
+  color: var(--text-muted);
+}
+
+.arichuvadi-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  width: 100%;
+}
+
+.arichuvadi-search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.arichuvadi-search-clear {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+/* Section Filter Pills */
+.arichuvadi-section-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.arichuvadi-section-tab {
+  border: none;
+  background: color-mix(in srgb, var(--text-main) 6%, transparent);
+  color: var(--text-muted);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.arichuvadi-section-tab:hover {
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+  color: var(--text-main);
+}
+
+.arichuvadi-section-tab.active {
+  background: var(--text-main);
+  color: var(--bg-panel);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.arichuvadi-item-count-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--text-main) 6%, transparent);
+  color: var(--text-muted);
+  padding: 3px 9px;
+  border-radius: 50px;
+}
+
+.arichuvadi-tamil-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: -6px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.arichuvadi-no-results {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   AUTHENTIC STORY READER FORMAT (Inside Chapter with Author)
+   ========================================================================== */
+
+.arichuvadi-story-reader-view {
+  width: 100%;
+  padding-bottom: 80px;
+}
+
+.arichuvadi-story-body {
+  width: 100%;
+}
+
+.story-verse-stanza {
+  margin-bottom: 36px;
+  padding-bottom: 28px;
+  border-bottom: 1px dashed color-mix(in srgb, var(--border-light) 50%, transparent);
+  position: relative;
+}
+
+.story-verse-stanza:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.story-verse-marker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.story-verse-num-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--text-main) 6%, transparent);
+  padding: 2px 10px;
+  border-radius: 50px;
+}
+
+.story-verse-copy-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.story-verse-copy-btn:hover {
+  background: color-mix(in srgb, var(--text-main) 8%, transparent);
+  color: var(--text-main);
+}
+
+.story-verse-copy-btn.copied {
+  color: #16a34a;
+}
+
+[data-theme='dark'] .story-verse-copy-btn.copied {
+  color: #4ade80;
+}
+
+.story-verse-lines {
+  font-family: inherit;
+}
+
+.story-verse-line {
+  margin-bottom: 4px;
+}
+
+.story-parallel-box {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed color-mix(in srgb, var(--border-light) 40%, transparent);
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.story-parallel-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.story-parallel-line {
+  margin-bottom: 2px;
+}
+
+/* Responsive Mobile Adjustments */
+@media (max-width: 768px) {
+  .arichuvadi-books-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .arichuvadi-pill-group {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .arichuvadi-pill-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 7px 10px;
+    font-size: 0.8rem;
+  }
+
+  .arichuvadi-topbar-right {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .arichuvadi-episodes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .arichuvadi-search-wrap {
+    width: 100%;
+  }
+
+  .arichuvadi-book-cover-wrapper {
+    width: 170px;
+  }
+
+  .story-verse-stanza {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+  }
+}
+
+/* Transliteration toggle switches matching Writings page */
+.transl-switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.transl-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.transl-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--text-main) 15%, transparent);
+  border-radius: 20px;
+  transition: background 0.25s ease;
+}
+
+.transl-slider::before {
+  content: '';
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--bg-app);
+  border-radius: 50%;
+  transition: transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1), background 0.25s ease;
+}
+
+.transl-switch input:checked + .transl-slider {
+  background: var(--text-main);
+}
+
+.transl-switch input:checked + .transl-slider::before {
+  transform: translateX(16px);
+  background: var(--bg-app);
+}
+
+.transl-switch-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  user-select: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.transl-switch-label:hover {
+  color: var(--text-main);
+}
+
+.variant-header-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  padding: 8px 16px;
+  background: color-mix(in srgb, var(--text-main) 4%, transparent);
+  border-radius: 100px;
+  border: 1px solid color-mix(in srgb, var(--border-light) 40%, transparent);
+}
+
+.variant-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* TV Series Back Button */
+.tv-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--text-main) 6%, transparent);
+  color: var(--text-main);
+  border: 1px solid color-mix(in srgb, var(--border-light) 60%, transparent);
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.tv-back-btn:hover {
+  background: color-mix(in srgb, var(--text-main) 12%, transparent);
+  transform: translateX(-3px);
+}
+
+
+

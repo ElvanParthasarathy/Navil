@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
@@ -11,7 +12,7 @@ import { ArichuvadiBooks } from './கூறுகள்/அரிச்சு�
 import { ArichuvadiDownloads } from './கூறுகள்/அரிச்சுவடிபதிவிறக்கங்கள்';
 import { ArichuvadiImage } from './கூறுகள்/அரிச்சுவடிபடம்';
 import { ArichuvadiAbout } from './கூறுகள்/அரிச்சுவடிபற்றி';
-import { PencilSimple, GridFour, Brain, PuzzlePiece, Swatches, BookOpen, DownloadSimple, Info, Image as ImageIcon, ArrowLeft, ArrowRight } from '@phosphor-icons/react';
+import { PencilSimple, GridFour, Brain, PuzzlePiece, Swatches, BookOpen, DownloadSimple, Info, Image as ImageIcon, ArrowRight } from '@phosphor-icons/react';
 import '../../படைப்புகள்/படைப்புகள்.css';
 import './அரிச்சுவடி.css';
 
@@ -30,64 +31,85 @@ const features: { key: ViewMode; icon: React.ReactNode; title: string; titleSub:
 ];
 
 export default function ArichuvadiTool() {
-  const [viewMode, setViewMode] = useState<ViewMode>('home');
+  const { feature } = useParams<{ feature?: string }>();
+  const activeFeature = features.find(f => f.key === feature);
+  const viewMode: ViewMode = activeFeature ? activeFeature.key : 'home';
 
-  const activeFeature = features.find(f => f.key === viewMode);
+  // Ensure scroll is at the top when entering a sub-view, while preserving home grid scroll when returning
+  useEffect(() => {
+    if (viewMode !== 'home') {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  }, [viewMode]);
 
   return (
     <>
       <MobileTopBar 
         title={viewMode === 'home' ? 'நவில் அரிச்சுவடி|navil arichuvadi' : `${activeFeature?.title || 'அரிச்சுவடி'}|${activeFeature?.titleSub || 'arichuvadi'}`}
-        onBack={viewMode !== 'home' ? () => setViewMode('home') : undefined}
-        backUrl="/tools"
+        backUrl={viewMode === 'home' ? '/tools' : '/tools/arichuvadi'}
+        isBeta={true}
       />
       <Helmet>
-          <title>{activeFeature ? `${activeFeature.title} | நவில் அரிச்சுவடி` : 'நவில் அரிச்சுவடி | Navil Arichuvadi'}</title>
+        <title>{viewMode !== 'home' && activeFeature ? `${activeFeature.title} | நவில் அரிச்சுவடி` : 'நவில் அரிச்சுவடி | Navil Arichuvadi'}</title>
       </Helmet>
 
       <div className="writings-page page-view fadeIn">
-        {viewMode === 'home' ? (
-          <FloatingBackButton to="/tools" />
-        ) : (
-          <button 
-            className="back-pill bp-fixed"
-            onClick={() => setViewMode('home')}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            <span>அரிச்சுவடி</span>
-          </button>
+        <FloatingBackButton to={viewMode === 'home' ? '/tools' : '/tools/arichuvadi'} />
+
+        {viewMode !== 'books' && (
+          <header className="writings-header animate-entry">
+            <div style={{ flex: 1 }}>
+              <h1 className="writings-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {viewMode === 'home' ? 'நவில் அரிச்சுவடி' : activeFeature?.title}
+                <span 
+                  style={{ 
+                    fontSize: '0.75rem', 
+                    background: 'color-mix(in srgb, var(--text-main) 12%, transparent)', 
+                    color: 'var(--text-main)', 
+                    padding: '3px 9px', 
+                    borderRadius: '100px', 
+                    fontWeight: 700, 
+                    letterSpacing: '0.5px',
+                    lineHeight: 1
+                  }}
+                >
+                  BETA
+                </span>
+              </h1>
+              <div className="writings-title-sub">
+                {viewMode === 'home' ? 'Navil Arichuvadi' : activeFeature?.titleSub}
+              </div>
+              <p className="writings-subtitle">
+                {viewMode === 'home' 
+                  ? 'பண்டைய தமிழ் எழுத்து வடிவமாற்றி — தமிழி & வட்டெழுத்து.' 
+                  : activeFeature?.desc}
+              </p>
+              <p className="writings-subtitle writings-subtitle-en">
+                {viewMode === 'home' 
+                  ? 'Ancient Tamil Script Converter — Thamizhi & Vatteluttu' 
+                  : activeFeature?.descSub}
+              </p>
+            </div>
+          </header>
         )}
 
         {viewMode === 'home' ? (
-          <>
-            <header className="writings-header animate-entry">
-                <div style={{ flex: 1 }}>
-                    <h1 className="writings-title">நவில் அரிச்சுவடி</h1>
-                    <div className="writings-title-sub">Navil Arichuvadi</div>
-                    <p className="writings-subtitle">பண்டைய தமிழ் எழுத்து வடிவமாற்றி — தமிழி &amp; வட்டெழுத்து.</p>
-                    <p className="writings-subtitle writings-subtitle-en">
-                      Ancient Tamil Script Converter — Thamizhi &amp; Vatteluttu
-                    </p>
+          <div className="category-grid animate-entry">
+            {features.map(f => (
+              <Link key={f.key} to={`/tools/arichuvadi/${f.key}`} className="category-card">
+                <div className="cat-icon-box">{f.icon}</div>
+                <div className="cat-content">
+                  <div className="cat-title">{f.title}</div>
+                  <div className="cat-title-sub">{f.titleSub}</div>
+                  <p className="cat-desc">{f.desc}</p>
+                  <p className="cat-desc-sub">{f.descSub}</p>
                 </div>
-            </header>
-
-            <div className="category-grid animate-entry">
-              {features.map(f => (
-                <div key={f.key} className="category-card" onClick={() => setViewMode(f.key)} style={{ cursor: 'pointer' }}>
-                  <div className="cat-icon-box">{f.icon}</div>
-                  <div className="cat-content">
-                    <div className="cat-title">{f.title}</div>
-                    <div className="cat-title-sub">{f.titleSub}</div>
-                    <p className="cat-desc">{f.desc}</p>
-                    <p className="cat-desc-sub">{f.descSub}</p>
-                  </div>
-                  <div className="cat-footer">திற <ArrowRight weight="regular" /></div>
-                </div>
-              ))}
-            </div>
-          </>
+                <div className="cat-footer">திற <ArrowRight weight="regular" /></div>
+              </Link>
+            ))}
+          </div>
         ) : (
           <div className="arichuvadi-subview-container animate-entry">
             {viewMode === 'editor' && <ArichuvadiEditor />}

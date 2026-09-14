@@ -103,7 +103,7 @@ export function ArichuvadiMemorize() {
   };
 
   return (
-    <div className="animate-entry" style={{ marginTop: '30px' }}>
+    <div className="animate-entry">
       <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center' }}>
         <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>

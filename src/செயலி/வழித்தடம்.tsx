@@ -41,6 +41,7 @@ export const router = createBrowserRouter([
             { path: "tools/piano", element: <PianoTool /> },
             { path: "tools/transliterator", element: <TransliteratorTool /> },
             { path: "tools/arichuvadi", element: <ArichuvadiTool /> },
+            { path: "tools/arichuvadi/:feature", element: <ArichuvadiTool /> },
             { path: "tools/vocoder", element: <VocoderView /> },
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },

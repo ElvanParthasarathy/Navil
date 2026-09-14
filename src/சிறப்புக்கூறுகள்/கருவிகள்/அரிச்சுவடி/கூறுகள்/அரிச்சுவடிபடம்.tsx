@@ -155,9 +155,9 @@ export function ArichuvadiImage() {
   };
 
   return (
-    <div className="animate-entry" style={{ marginTop: '30px', padding: '0 16px', maxWidth: '1000px', margin: '30px auto' }}>
+    <div className="animate-entry" style={{ padding: '0 16px', maxWidth: '1000px', margin: '0 auto' }}>
       
-      <div style={{ background: 'var(--bg-panel)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
+      <div className="category-card static-card" style={{ cursor: 'default', margin: '0 0 24px 0' }}>
         <h3 style={{ marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <ImageIcon weight="fill" color="var(--text-main)" /> பட உரை (Image Overlay)
         </h3>
@@ -220,7 +220,7 @@ export function ArichuvadiImage() {
         </div>
       </div>
 
-      <div style={{ width: '100%', overflowX: 'auto', border: '1px solid var(--border-color)', borderRadius: '16px', background: 'var(--bg-panel)' }}>
+      <div className="category-card static-card" style={{ cursor: 'default', margin: 0, width: '100%', overflowX: 'auto', padding: '16px' }}>
         <canvas 
           ref={canvasRef}
           onMouseDown={handleMouseDown}

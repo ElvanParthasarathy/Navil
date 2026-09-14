@@ -103,7 +103,7 @@ export function ArichuvadiPractice() {
   const score = Object.values(results).filter(Boolean).length;
 
   return (
-    <div className="animate-entry" style={{ marginTop: '30px' }}>
+    <div className="animate-entry">
       <div className="arichuvadi-controls" style={{ marginBottom: '24px', justifyContent: 'center' }}>
         <div className="arichuvadi-select-wrap">
           <label>எழுத்து:</label>
@@ -131,21 +131,15 @@ export function ArichuvadiPractice() {
           </select>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px' }}>
-          <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>தெரிவுகள் (Multiple Choice)</label>
-          <button 
-            onClick={() => setShowMultipleChoice(!showMultipleChoice)}
-            style={{
-              width: '40px', height: '22px', borderRadius: '12px',
-              background: showMultipleChoice ? 'var(--text-main)' : 'var(--border-color)',
-              border: 'none', position: 'relative', cursor: 'pointer', transition: '0.3s'
-            }}
-          >
-            <div style={{
-              width: '18px', height: '18px', borderRadius: '50%', background: 'var(--bg-main)',
-              position: 'absolute', top: '2px', left: showMultipleChoice ? '20px' : '2px', transition: '0.3s'
-            }}/>
-          </button>
+        <div 
+          className={`arichuvadi-select-wrap arichuvadi-toggle-pill ${showMultipleChoice ? 'active' : ''}`}
+          onClick={() => setShowMultipleChoice(!showMultipleChoice)}
+          title="தெரிவுகள் (Multiple Choice)"
+        >
+          <label style={{ cursor: 'pointer' }}>தெரிவுகள்:</label>
+          <div className={`arichuvadi-switch ${showMultipleChoice ? 'on' : ''}`}>
+            <div className="arichuvadi-switch-knob" />
+          </div>
         </div>
       </div>
 
@@ -214,7 +208,7 @@ export function ArichuvadiPractice() {
         <button className="arichuvadi-btn" onClick={handleShowAnswers}>
           விடைகள் (Show Answers)
         </button>
-        <button className="arichuvadi-btn copied" onClick={handleVerify}>
+        <button className="arichuvadi-btn arichuvadi-btn-primary" onClick={handleVerify}>
           <CheckCircle weight="bold" /> சரிபார் (Verify)
         </button>
       </div>
