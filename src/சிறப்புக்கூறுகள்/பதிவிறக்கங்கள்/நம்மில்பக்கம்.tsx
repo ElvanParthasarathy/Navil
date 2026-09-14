@@ -169,7 +169,7 @@ export default function NammilPage() {
             </Helmet>
 
             <MobileTopBar title="நம்மில்" />
-            <FloatingBackButton to="/downloads" label="பதிவிறக்கங்கள்" />
+            <FloatingBackButton to="/downloads" />
 
             {/* Ensure .main-content outer layout padding is removed so brand glow is truly edge-to-edge */}
             <style>{`
