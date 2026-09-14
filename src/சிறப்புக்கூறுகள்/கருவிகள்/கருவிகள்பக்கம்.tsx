@@ -38,9 +38,13 @@ const ToolsView = () => {
                                 BETA
                             </span>
                         </h1>
-                        <div className="writings-title-sub">tools</div>
-                        <p className="writings-subtitle">A collection of custom-built tools and experiments.</p>
-                        <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>Apps for music, language, and productivity.</p>
+                        <div className="writings-title-sub">Tools</div>
+                        <p className="writings-subtitle">
+                            இசை, மொழி மற்றும் பயன்பாடுகளுக்கான பிரத்யேகக் கருவிகள்.
+                        </p>
+                        <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                            A collection of custom-built tools, engines, and experiments.
+                        </p>
                     </div>
                 </header>
 
@@ -48,32 +52,32 @@ const ToolsView = () => {
                     <Link to="/tools/piano" className="category-card">
                         <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">Elvan Piano</div>
-                            <div className="cat-title-sub">Piano Tool</div>
-                            <p className="cat-desc">A fully functional virtual piano synthesizer.</p>
-                            <p className="cat-desc-sub">Play and map keyboard keys to musical notes.</p>
+                            <div className="cat-title">எல்வன் கின்னரப்பெட்டி</div>
+                            <div className="cat-title-sub">Elvan Piano</div>
+                            <p className="cat-desc">மெய்நிகர் பியானோ மற்றும் இசையமைப்புக் கருவி.</p>
+                            <p className="cat-desc-sub">A fully functional virtual piano synthesizer with keyboard mapping.</p>
                         </div>
-                        <div className="cat-footer">Launch Piano <ArrowRight weight="regular" /></div>
+                        <div className="cat-footer">பியானோவைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
                     <Link to="/tools/transliterator" className="category-card">
                         <div className="cat-icon-box"><Translate weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">Tolkappiyam Tamil Transliterator</div>
-                            <div className="cat-title-sub">தொல்காப்பியம் ஒலியியல் முறைமை</div>
-                            <p className="cat-desc">Authentic English Phonetics based on Tolkappiyam.</p>
-                            <p className="cat-desc-sub">Based on Tolkappiyam Ezhuthathikaram & Sollathikaram.</p>
+                            <div className="cat-title">தொல்காப்பிய மொழிமாற்றி</div>
+                            <div className="cat-title-sub">Tolkappiyam Transliterator</div>
+                            <p className="cat-desc">தொல்காப்பிய இலக்கண நெறிப்படியான ஒலிபெயர்ப்பு முறைமை.</p>
+                            <p className="cat-desc-sub">Authentic English phonetics based on Tolkappiyam.</p>
                         </div>
-                        <div className="cat-footer">Launch Transliterator <ArrowRight weight="regular" /></div>
+                        <div className="cat-footer">மொழிமாற்றியைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
                     <Link to="/tools/arichuvadi" className="category-card">
                         <div className="cat-icon-box"><Scroll weight="regular" /></div>
                         <div className="cat-content">
                             <div className="cat-title">நவில் அரிச்சுவடி</div>
                             <div className="cat-title-sub">Arichuvadi Engine</div>
-                            <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
+                            <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி — தமிழி மற்றும் வட்டெழுத்து.</p>
                             <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu scripts.</p>
                         </div>
-                        <div className="cat-footer">Launch Arichuvadi <ArrowRight weight="regular" /></div>
+                        <div className="cat-footer">அரிச்சுவடியைத் திறக்க <ArrowRight weight="regular" /></div>
                     </Link>
                 </div>
             </div>

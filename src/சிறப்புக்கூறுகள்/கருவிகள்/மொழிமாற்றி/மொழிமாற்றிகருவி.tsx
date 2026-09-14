@@ -64,7 +64,7 @@ export default function TransliteratorTool() {
     <>
       <MobileTopBar title="தொல்காப்பியம்|transliterator" />
       <Helmet>
-        <title>Tolkappiyam Tamil Transliterator | Elvan Navil</title>
+        <title>தொல்காப்பிய மொழிமாற்றி | Tolkappiyam Transliterator</title>
       </Helmet>
       <FloatingBackButton to="/tools" />
       <style>{`
@@ -77,23 +77,12 @@ export default function TransliteratorTool() {
       {/* Header matching Writings page */}
       <header className="writings-header animate-entry" style={{ marginBottom: '32px' }}>
           <div style={{ flex: 1 }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '4px 12px',
-                background: 'rgba(56, 189, 248, 0.12)',
-                color: 'var(--accent, #38bdf8)',
-                border: '1px solid rgba(56, 189, 248, 0.25)',
-                borderRadius: '9999px',
-                fontSize: '12px',
-                fontWeight: 600,
-                marginBottom: '10px'
-              }}>
-                தொல்காப்பியம் ஒலியியல் முறைமை
-              </div>
-              <h1 className="writings-title">Tolkappiyam Tamil Transliterator</h1>
-              <div className="writings-title-sub">Authentic Phonetic Engine</div>
-              <p className="writings-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '6px' }}>
+              <h1 className="writings-title">தொல்காப்பிய மொழிமாற்றி</h1>
+              <div className="writings-title-sub">Tolkappiyam Tamil Transliterator</div>
+              <p className="writings-subtitle">
+                தொல்காப்பிய இலக்கண நெறிப்படியான மெய்யொலி மாற்றி முறைமை.
+              </p>
+              <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 Authentic English Phonetics based on Tolkappiyam Ezhuthathikaram &amp; Sollathikaram.
                 <button 
                   onClick={() => setDirection(d => d === 'ta-en' ? 'en-ta' : 'ta-en')}

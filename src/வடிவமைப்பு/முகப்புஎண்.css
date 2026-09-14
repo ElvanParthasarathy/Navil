@@ -1320,7 +1320,7 @@ body {
     font-size: 13px;
     font-weight: 500;
     color: var(--text-muted);
-    text-transform: none;
+    text-transform: capitalize;
     letter-spacing: 0;
     opacity: 0.7;
     line-height: 1;

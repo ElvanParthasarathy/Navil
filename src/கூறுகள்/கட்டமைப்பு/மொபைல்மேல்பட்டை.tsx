@@ -88,14 +88,14 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                     <>
                         <div className="brand-main">
                             {title.split('|')[0]}
-                            {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#333', color: '#fff', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', fontWeight: 'bold', letterSpacing: '0.5px' }}>BETA</span>}
+                            {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: 'color-mix(in srgb, var(--text-main) 14%, transparent)', color: 'var(--text-main)', padding: '2px 7px', borderRadius: '100px', verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.5px' }}>BETA</span>}
                         </div>
                         <div className="brand-sub">{title.split('|')[1]}</div>
                     </>
                 ) : (
                     <div className="brand-main">
                         {title}
-                        {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: '#333', color: '#fff', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', fontWeight: 'bold', letterSpacing: '0.5px' }}>BETA</span>}
+                        {isBeta && <span style={{ marginLeft: '8px', fontSize: '0.65rem', background: 'color-mix(in srgb, var(--text-main) 14%, transparent)', color: 'var(--text-main)', padding: '2px 7px', borderRadius: '100px', verticalAlign: 'middle', fontWeight: 700, letterSpacing: '0.5px' }}>BETA</span>}
                     </div>
                 )}
             </div>

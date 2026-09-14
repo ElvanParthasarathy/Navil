@@ -9,9 +9,9 @@ import './கின்னரப்பெட்டி.css';
 export default function PianoTool() {
   return (
     <>
-      <MobileTopBar title="பியானோ|piano" />
+      <MobileTopBar title="கின்னரப்பெட்டி|piano" />
       <Helmet>
-          <title>Elvan Piano | Tools</title>
+          <title>எல்வன் கின்னரப்பெட்டி | Elvan Piano</title>
       </Helmet>
       
       <div className="writings-page page-view fadeIn">
@@ -19,13 +19,13 @@ export default function PianoTool() {
         
         <header className="writings-header animate-entry">
             <div style={{ flex: 1 }}>
-                <h1 className="writings-title">Elvan Piano</h1>
-                <div className="writings-title-sub">Synthesizer Tool</div>
+                <h1 className="writings-title">எல்வன் கின்னரப்பெட்டி</h1>
+                <div className="writings-title-sub">Elvan Piano</div>
                 <p className="writings-subtitle">
-                  A fully functional virtual piano synthesizer.
+                  மெய்நிகர் பியானோ மற்றும் இசையமைப்புக் கருவி.
                 </p>
                 <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                  Play and map keyboard keys to musical notes.
+                  A fully functional virtual piano synthesizer with keyboard mapping.
                 </p>
             </div>
         </header>
