@@ -38,7 +38,7 @@ const Layout = () => {
     const getPathDepth = (path: string) => {
         const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
         if (normalized === '/') return 0;
-        if (normalized === '/navilgal') return 1;
+        if (normalized === '/navilgal' || normalized === '/downloads') return 1;
         if (normalized === '/writings' || normalized === '/arts' || normalized === '/ezhuthugal' || normalized === '/padaippugal') return 2;
         if (normalized.startsWith('/writings/') || normalized.startsWith('/arts/')) {
             return normalized.split('/').filter(Boolean).length + 1;
@@ -51,7 +51,8 @@ const Layout = () => {
         if (normalized === '/') return 0;
         if (normalized.startsWith('/navilgal') || normalized.startsWith('/writings') || normalized.startsWith('/arts')) return 1;
         if (normalized.startsWith('/tools') || normalized.startsWith('/teaching')) return 2;
-        if (normalized.startsWith('/about')) return 3;
+        if (normalized.startsWith('/downloads')) return 3;
+        if (normalized.startsWith('/about')) return 4;
         return 99;
     };
 
@@ -68,6 +69,7 @@ const Layout = () => {
             return normalized === '/' || 
                    normalized === '/navilgal' || 
                    normalized === '/tools' || 
+                   normalized === '/downloads' ||
                    normalized === '/about';
         };
 
@@ -133,7 +135,8 @@ const Layout = () => {
         '/about', 
         '/portfolio', 
         '/settings', 
-        '/tools'
+        '/tools',
+        '/downloads'
     ];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 

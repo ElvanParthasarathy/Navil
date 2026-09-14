@@ -5,31 +5,36 @@ import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import profileData from '../../தரவு/தன்னுரு.json';
 import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
+import staticStories from '../../தரவு/கதைகள்.json';
+import staticArts from '../../தரவு/கலைகள்.json';
 import { 
     DownloadSimple, 
-    GithubLogo, 
     ArrowRight, 
-    CheckCircle, 
-    TextAa, 
-    PianoKeys, 
-    Translate, 
     BookOpen, 
     Sparkle, 
-    ShieldCheck, 
-    ArrowsClockwise, 
-    Users, 
-    FolderSimple, 
-    BellSimpleRinging 
+    TextAa, 
+    Feather, 
+    ChatCircleText, 
+    Scroll, 
+    Palette, 
+    Compass
 } from '@phosphor-icons/react';
 
 export default function CompanyHome() {
     const navigate = useNavigate();
 
+    // High quality covers from data
+    const storyCover = staticStories?.[0]?.cover || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/stories/01_%E0%AE%9C%E0%AF%86%E0%AE%AF%E0%AF%8D_/001_470201373_18014247662659667_7928533396878174755_n_17858287635052256.jpg";
+    const artCover = staticArts?.[0]?.image || "https://cdn.jsdelivr.net/gh/ElvanParthasarathy/Elvanmedia@main/assets/instagram/elvan.jp/posts/202503/486661112_17917995261074513_4323922563204709560_n_17946532850955870.webp";
+
     return (
         <>
             <Helmet>
                 <title>எல்வன் நவில் | Elvan Navil</title>
-                <meta name="description" content="Elvan Navil is an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature." />
+                <meta 
+                    name="description" 
+                    content="Elvan Navil is an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature." 
+                />
                 <link rel="canonical" href="https://elvannavil.vercel.app/" />
             </Helmet>
             <MobileTopBar title="எல்வன் நவில்" />
@@ -57,23 +62,23 @@ export default function CompanyHome() {
                                 <h1 className="company-hero-title" lang="ta">எல்வன் நவில்</h1>
                                 <h2 className="company-hero-subtitle">Elvan Navil</h2>
                                 <p className="company-hero-desc-ta" lang="ta">
-                                    நல்வரவு. இது எல்வன் நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் வெளி.
+                                    நல்வரவு. இது எல்வன் நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் படைப்பரங்கு.
                                 </p>
                                 <p className="company-hero-desc-en">
                                     Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
                                 </p>
                                 <div className="company-quick-actions">
-                                    <a href="#flagship-nammil" className="company-pill-btn primary">
-                                        <DownloadSimple weight="bold" size={16} />
-                                        <span>நம்மில் (Nammil)</span>
-                                    </a>
-                                    <button onClick={() => navigate('/navilgal')} className="company-pill-btn">
-                                        <BookOpen weight="regular" size={16} />
+                                    <button onClick={() => navigate('/navilgal')} className="company-pill-btn primary">
+                                        <BookOpen weight="bold" size={16} />
                                         <span lang="ta">நவில்கள் (Archive)</span>
                                     </button>
                                     <button onClick={() => navigate('/tools')} className="company-pill-btn">
                                         <Sparkle weight="regular" size={16} />
                                         <span lang="ta">கருவிகள் (Tools)</span>
+                                    </button>
+                                    <button onClick={() => navigate('/downloads')} className="company-pill-btn">
+                                        <DownloadSimple weight="regular" size={16} />
+                                        <span lang="ta">பதிவிறக்கங்கள் (Downloads)</span>
                                     </button>
                                     <button onClick={() => navigate('/about')} className="company-pill-btn">
                                         <span>பற்றி (About)</span>
@@ -83,214 +88,8 @@ export default function CompanyHome() {
                         </div>
                     </header>
 
-                    {/* 2. FLAGSHIP DESKTOP APP: NAMMIL (span-7) */}
-                    <section id="flagship-nammil" className="bento-card span-7 product-card">
-                        <div>
-                            <div className="product-badge-row">
-                                <span className="badge-tag green">FLAGSHIP DESKTOP APP</span>
-                                <span className="badge-tag blue">v1.2.8</span>
-                                <span className="badge-tag neutral">Windows 10 / 11</span>
-                                <span className="badge-tag neutral">MIT License</span>
-                            </div>
-
-                            <div className="product-header-row">
-                                <div className="product-icon-box" style={{ background: '#128c7e' }}>
-                                    <img src="/nammil_icon.png" alt="Nammil App Icon" className="product-icon-img" onError={(e: any) => { e.target.style.display = 'none'; }} />
-                                </div>
-                                <div>
-                                    <h3 className="product-title" lang="ta">நம்மில் (Nammil)</h3>
-                                    <p className="product-subtitle">Sleek, Privacy-Focused Multi-Account WhatsApp Companion</p>
-                                </div>
-                            </div>
-
-                            <p className="product-desc" lang="ta">
-                                அதிகாரப்பூர்வ வாட்ஸ்அப் ஒரு கணக்கை மட்டுமே அனுமதிக்கும் தடையை உடைத்து, 5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கவும், பதிவிறக்கங்களைத் தானாக ஒழுங்கமைக்கவும் உருவாக்கப்பட்ட நேர்த்தியான கணினிச் செயலி.
-                            </p>
-
-                            <div className="feature-bullets">
-                                <div className="feature-bullet-item">
-                                    <Users weight="bold" size={18} className="feature-bullet-icon" />
-                                    <span><strong>5 Isolated Sessions</strong> with zero credential collision</span>
-                                </div>
-                                <div className="feature-bullet-item">
-                                    <FolderSimple weight="bold" size={18} className="feature-bullet-icon" />
-                                    <span><strong>Automated Organizer</strong> sorting media by format</span>
-                                </div>
-                                <div className="feature-bullet-item">
-                                    <BellSimpleRinging weight="bold" size={18} className="feature-bullet-icon" />
-                                    <span><strong>Native Windows Chimes</strong> with unread counters</span>
-                                </div>
-                                <div className="feature-bullet-item">
-                                    <ShieldCheck weight="bold" size={18} className="feature-bullet-icon" />
-                                    <span><strong>100% Local Privacy</strong> with zero remote telemetry</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="product-action-row">
-                            <a 
-                                href="https://github.com/ElvanParthasarathy/Nammil/releases/download/v1.2.8/Nammil-Setup.exe" 
-                                className="company-pill-btn primary"
-                                download
-                            >
-                                <DownloadSimple weight="bold" size={18} />
-                                <span>Download Nammil (.exe ~114MB)</span>
-                            </a>
-                            <a 
-                                href="https://github.com/ElvanParthasarathy/Nammil" 
-                                target="_blank" 
-                                rel="noreferrer" 
-                                className="company-pill-btn"
-                            >
-                                <GithubLogo weight="regular" size={18} />
-                                <span>GitHub Repository</span>
-                            </a>
-                        </div>
-                    </section>
-
-                    {/* 3. BESPOKE TYPOGRAPHY: ELVAN SANS (span-5) */}
-                    <section className="bento-card span-5 product-card">
-                        <div>
-                            <div className="product-badge-row">
-                                <span className="badge-tag purple">BESPOKE TYPEFACE</span>
-                                <span className="badge-tag neutral">16 Styles</span>
-                                <span className="badge-tag neutral">OFL 1.1</span>
-                            </div>
-
-                            <div className="product-header-row">
-                                <div className="product-icon-box" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)' }}>
-                                    <TextAa weight="bold" size={32} color="#ffffff" />
-                                </div>
-                                <div>
-                                    <h3 className="product-title" lang="ta">எல்வன் சான்ஸ்</h3>
-                                    <p className="product-subtitle">Elvan Sans Font Family</p>
-                                </div>
-                            </div>
-
-                            <p className="product-desc" lang="ta">
-                                தமிழ் எழுத்துகளின் தனித்துவ அழகியலையும் லத்தீன் எழுத்துகளின் நவீன வடிவ அமைப்பையும் ஒன்றிணைத்து எல்வன் பார்த்தசாரதியால் உருவாக்கப்பட்ட உயர்தர அச்சுரு.
-                            </p>
-
-                            <div className="font-specimen-box">
-                                <div className="font-sample-ta" lang="ta">
-                                    அகர முதல எழுத்தெல்லாம் ஆதி பகவன் முதற்றே உலகு.
-                                </div>
-                                <div className="font-sample-en">
-                                    Harmonious weight-matched typography across English & Tamil.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="product-action-row">
-                            <a 
-                                href="https://github.com/ElvanParthasarathy" 
-                                target="_blank" 
-                                rel="noreferrer" 
-                                className="company-pill-btn"
-                            >
-                                <span>Explore Typeface</span>
-                                <ArrowRight weight="bold" size={16} />
-                            </a>
-                        </div>
-                    </section>
-
-                    {/* 4. WEB TOOLS & ENGINES (span-6) */}
-                    <section className="bento-card span-6">
-                        <div>
-                            <div className="product-badge-row">
-                                <span className="badge-tag neutral">WEB TOOLS & ENGINES</span>
-                                <span className="badge-tag green">Interactive</span>
-                            </div>
-
-                            <h3 className="product-title" style={{ fontSize: '1.4rem' }} lang="ta">
-                                நவில் கருவிகள் & இயங்குதளங்கள்
-                            </h3>
-                            <p className="product-subtitle" style={{ marginBottom: '14px' }}>
-                                Native web applications and phonetic linguistic engines
-                            </p>
-
-                            <div className="tools-compact-list">
-                                <Link to="/tools/transliterator" className="tool-compact-row">
-                                    <div className="tool-row-left">
-                                        <div className="tool-row-icon">
-                                            <Translate weight="bold" size={20} />
-                                        </div>
-                                        <div>
-                                            <h4 className="tool-row-title" lang="ta">நவில் மொழிமாற்றி</h4>
-                                            <p className="tool-row-desc">Phonetic English-to-Tamil typing based on Tolkappiyam</p>
-                                        </div>
-                                    </div>
-                                    <ArrowRight weight="bold" size={16} />
-                                </Link>
-
-                                <Link to="/tools/piano" className="tool-compact-row">
-                                    <div className="tool-row-left">
-                                        <div className="tool-row-icon">
-                                            <PianoKeys weight="bold" size={20} />
-                                        </div>
-                                        <div>
-                                            <h4 className="tool-row-title" lang="ta">நவில் பியானோ</h4>
-                                            <p className="tool-row-desc">Interactive virtual piano synthesizer with keyboard mapping</p>
-                                        </div>
-                                    </div>
-                                    <ArrowRight weight="bold" size={16} />
-                                </Link>
-
-                                <Link to="/tools/arichuvadi" className="tool-compact-row">
-                                    <div className="tool-row-left">
-                                        <div className="tool-row-icon">
-                                            <BookOpen weight="bold" size={20} />
-                                        </div>
-                                        <div>
-                                            <h4 className="tool-row-title" lang="ta">நவில் அரிச்சுவடி</h4>
-                                            <p className="tool-row-desc">Convert modern Tamil into ancient Thamizhi and Vatteluttu</p>
-                                        </div>
-                                    </div>
-                                    <ArrowRight weight="bold" size={16} />
-                                </Link>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* 5. GATEWAY TO NAVILGAL ARCHIVE (span-6) */}
-                    <section 
-                        className="bento-card span-6 navilgal-gateway-card"
-                        onClick={() => navigate('/navilgal')}
-                    >
-                        <div>
-                            <div className="product-badge-row">
-                                <span className="badge-tag purple">LITERARY & ART ARCHIVE</span>
-                                <span className="badge-tag neutral">Cultural Realm</span>
-                            </div>
-
-                            <h3 className="product-title" style={{ fontSize: '1.5rem', color: 'var(--text-main)' }} lang="ta">
-                                எல்வனின் நவில்கள்
-                            </h3>
-                            <p className="product-subtitle" style={{ color: 'var(--text-muted)' }}>
-                                Elvanin Navilgal — The Literary & Artistic Archive
-                            </p>
-
-                            <p className="product-desc" style={{ marginTop: '12px' }} lang="ta">
-                                சிந்தனைகளை உரைக்க, உணர்வுகளைப் பகிர, ஓவியங்களையும் கவிதைகளையும் காட்சிப்படுத்தும் தனித்துவ இலக்கியச் சோலை.
-                            </p>
-
-                            <div className="navilgal-pills">
-                                <span className="navilgal-pill" lang="ta">✨ நவில் மிழிகள் (Poems)</span>
-                                <span className="navilgal-pill" lang="ta">💬 நவில் மொழிகள் (Quotes)</span>
-                                <span className="navilgal-pill" lang="ta">📖 சிறுகதைகள் (Stories)</span>
-                                <span className="navilgal-pill" lang="ta">🎨 கரிக்கோல் ஓவியங்கள் (Arts)</span>
-                                <span className="navilgal-pill" lang="ta">📝 நாளேடு (Diary)</span>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', gap: '8px', color: '#6366f1', fontWeight: 700, fontSize: '0.95rem' }}>
-                            <span>நவில்களில் நுழைக • Enter Archive</span>
-                            <ArrowRight weight="bold" size={18} />
-                        </div>
-                    </section>
-
-                    {/* 6. DICTIONARY DEFINITION LAYOUT (span-12) */}
-                    <div className="span-12 dictionary-container" style={{ margin: '8px 0 0' }}>
+                    {/* 2. DICTIONARY DEFINITION LAYOUT */}
+                    <div className="span-12 dictionary-container" style={{ margin: '0 0 8px' }}>
                         <div className="dict-card">
                             <div className="dict-word-header">
                                 <span className="dict-word" lang="ta">நவில்</span>
@@ -311,6 +110,238 @@ export default function CompanyHome() {
                             </p>
                         </div>
                     </div>
+
+                    {/* 3. NETFLIX-STYLE DIRECT ACCESS CARDS */}
+                    <div className="span-12">
+                        <div className="home-section-header">
+                            <div className="home-section-badge">
+                                <Compass weight="bold" size={14} />
+                                <span>படைப்புகள் • CREATIVE ARCHIVE</span>
+                            </div>
+                            <h2 className="home-section-title" lang="ta">நவில் படைப்புகள் — நேரடி அணுகல்</h2>
+                            <p className="home-section-desc">
+                                Direct access to poetry, insights, narrative fiction, art gallery, and classical texts.
+                            </p>
+                        </div>
+
+                        <div className="home-netflix-grid">
+                            {/* Card 1: Poems */}
+                            <Link to="/navilgal/ezhuthugal/poems" className="home-netflix-card">
+                                <div 
+                                    className="home-netflix-bg" 
+                                    style={{ 
+                                        background: 'radial-gradient(circle at 70% 30%, #4338ca 0%, #1e1b4b 60%, #09090b 100%)' 
+                                    }} 
+                                />
+                                <div className="home-netflix-overlay" />
+                                <div className="home-netflix-badge">
+                                    <Feather weight="bold" size={13} />
+                                    <span>நவில் மிழிகள் • POETRY</span>
+                                </div>
+                                <div className="home-netflix-content">
+                                    <h3 className="home-netflix-title" lang="ta">கவிதைகள் & நவில் மிழிகள்</h3>
+                                    <div className="home-netflix-subtitle">Lyrical Tamil Verses & Emotional Expressions</div>
+                                    <p className="home-netflix-desc" lang="ta">
+                                        என் உணர்வுகளையும் அழகியலையும் பேசும் ஓசைநயமிக்க கவிதை வரிகள் மற்றும் இதயத்துடிப்புகள்.
+                                    </p>
+                                    <div className="home-netflix-cta">
+                                        <span>கவிதைகளை வாசிக்க</span>
+                                        <ArrowRight weight="bold" size={15} />
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {/* Card 2: Quotes */}
+                            <Link to="/navilgal/ezhuthugal/quotes" className="home-netflix-card">
+                                <div 
+                                    className="home-netflix-bg" 
+                                    style={{ 
+                                        background: 'radial-gradient(circle at 30% 30%, #065f46 0%, #022c22 60%, #09090b 100%)' 
+                                    }} 
+                                />
+                                <div className="home-netflix-overlay" />
+                                <div className="home-netflix-badge">
+                                    <ChatCircleText weight="bold" size={13} />
+                                    <span>நவில் மொழிகள் • QUOTES</span>
+                                </div>
+                                <div className="home-netflix-content">
+                                    <h3 className="home-netflix-title" lang="ta">சிந்தனைகள் & நவில் மொழிகள்</h3>
+                                    <div className="home-netflix-subtitle">Aphorisms, Philosophy & Personal Insights</div>
+                                    <p className="home-netflix-desc" lang="ta">
+                                        என் பட்டறிவில் உதித்த ஆழ்ந்த சிந்தனைத் துளிகளும் வாழ்வியல் தத்துவங்களும்.
+                                    </p>
+                                    <div className="home-netflix-cta">
+                                        <span>மொழிகளைப் பார்க்க</span>
+                                        <ArrowRight weight="bold" size={15} />
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {/* Card 3: Stories */}
+                            <Link to="/navilgal/ezhuthugal/stories" className="home-netflix-card">
+                                <img 
+                                    src={storyCover} 
+                                    alt="Stories Cover" 
+                                    className="home-netflix-bg" 
+                                    loading="lazy" 
+                                />
+                                <div className="home-netflix-overlay" />
+                                <div className="home-netflix-badge">
+                                    <BookOpen weight="bold" size={13} />
+                                    <span>சிறுகதைகள் • STORIES</span>
+                                </div>
+                                <div className="home-netflix-content">
+                                    <h3 className="home-netflix-title" lang="ta">சிறுகதைகள் & தொடர் கதைகள்</h3>
+                                    <div className="home-netflix-subtitle">Immersive Fiction & Narrative Chronicles</div>
+                                    <p className="home-netflix-desc" lang="ta">
+                                        கற்பனையும் வாழ்வும் பின்னிப் பிணைந்த நெகிழ்ச்சியான மனிதக் கதைகள் மற்றும் தொடர்கள்.
+                                    </p>
+                                    <div className="home-netflix-cta">
+                                        <span>கதைகளில் மூழ்குக</span>
+                                        <ArrowRight weight="bold" size={15} />
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {/* Card 4: Arts & Sketches */}
+                            <Link to="/navilgal/arts" className="home-netflix-card">
+                                <img 
+                                    src={artCover} 
+                                    alt="Art Gallery Cover" 
+                                    className="home-netflix-bg" 
+                                    loading="lazy" 
+                                />
+                                <div className="home-netflix-overlay" />
+                                <div className="home-netflix-badge">
+                                    <Palette weight="bold" size={13} />
+                                    <span>கலைக்கூடம் • ART GALLERY</span>
+                                </div>
+                                <div className="home-netflix-content">
+                                    <h3 className="home-netflix-title" lang="ta">கலைக்கூடம் & வரைபடங்கள்</h3>
+                                    <div className="home-netflix-subtitle">Posters, Sketches & Digital Artworks</div>
+                                    <p className="home-netflix-desc" lang="ta">
+                                        கரிக்கோல் ஓவியங்கள், சுவரொட்டிகள் மற்றும் எண்ம வரைகலைகளின் பிரத்யேகக் காட்சி.
+                                    </p>
+                                    <div className="home-netflix-cta">
+                                        <span>கலைக்கூடத்தைக் காண்க</span>
+                                        <ArrowRight weight="bold" size={15} />
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {/* Card 5: Classical Texts (Tolkappiyam & Thirukkural) */}
+                            <Link to="/tools/arichuvadi/books" className="home-netflix-card">
+                                <div 
+                                    className="home-netflix-bg" 
+                                    style={{ 
+                                        background: 'radial-gradient(circle at 50% 30%, #78350f 0%, #451a03 60%, #09090b 100%)' 
+                                    }} 
+                                />
+                                <div className="home-netflix-overlay" />
+                                <div className="home-netflix-badge">
+                                    <Scroll weight="bold" size={13} />
+                                    <span>செவ்வியல் • CLASSICAL BOOKS</span>
+                                </div>
+                                <div className="home-netflix-content">
+                                    <h3 className="home-netflix-title" lang="ta">தொல்காப்பியம் & திருக்குறள்</h3>
+                                    <div className="home-netflix-subtitle">Ancient Literature in Modern, Brahmi & Vatteluttu</div>
+                                    <p className="home-netflix-desc" lang="ta">
+                                        தமிழின் உன்னத செவ்வியல் நூல்களை நவீன உரைநடை, ஆதித் தமிழி மற்றும் வட்டெழுத்தில் வாசிக்கும் தளம்.
+                                    </p>
+                                    <div className="home-netflix-cta">
+                                        <span>செவ்வியல் நூல்கள்</span>
+                                        <ArrowRight weight="bold" size={15} />
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* 4. STUDIO INNOVATIONS: TYPOGRAPHY & SOFTWARE HIGHLIGHT */}
+                    <section className="bento-card span-6 studio-teaser-card">
+                        <div>
+                            <div className="product-badge-row">
+                                <span className="badge-tag purple">BESPOKE TYPEFACE</span>
+                                <span className="badge-tag neutral">16 Styles</span>
+                                <span className="badge-tag neutral">OFL 1.1</span>
+                            </div>
+
+                            <div className="product-header-row">
+                                <div className="product-icon-box" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)' }}>
+                                    <TextAa weight="bold" size={32} color="#ffffff" />
+                                </div>
+                                <div>
+                                    <h3 className="product-title" lang="ta">எல்வன் சான்ஸ்</h3>
+                                    <p className="product-subtitle">Elvan Sans Font Family</p>
+                                </div>
+                            </div>
+
+                            <p className="product-desc" lang="ta">
+                                தமிழ் எழுத்துகளின் தனித்துவ அழகியலையும் லத்தீன் எழுத்துகளின் நவீன வடிவ அமைப்பையும் ஒன்றிணைத்து உருவாக்கப்பட்ட உயர்தர அச்சுரு.
+                            </p>
+
+                            <div className="font-specimen-box">
+                                <div className="font-sample-ta" lang="ta">
+                                    அகர முதல எழுத்தெல்லாம் ஆதி பகவன் முதற்றே உலகு.
+                                </div>
+                                <div className="font-sample-en">
+                                    Harmonious weight-matched typography across English & Tamil.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="product-action-row">
+                            <Link to="/downloads#elvan-sans" className="company-pill-btn">
+                                <span>அச்சுருவை பதிவிறக்குக (Get Font)</span>
+                                <ArrowRight weight="bold" size={16} />
+                            </Link>
+                        </div>
+                    </section>
+
+                    <section className="bento-card span-6 studio-teaser-card">
+                        <div>
+                            <div className="product-badge-row">
+                                <span className="badge-tag green">FLAGSHIP SOFTWARE</span>
+                                <span className="badge-tag blue">v1.2.8</span>
+                                <span className="badge-tag neutral">Windows 10 / 11</span>
+                            </div>
+
+                            <div className="product-header-row">
+                                <div className="product-icon-box" style={{ background: '#128c7e' }}>
+                                    <img 
+                                        src="/nammil_icon.png" 
+                                        alt="Nammil Icon" 
+                                        className="product-icon-img"
+                                        onError={(e: any) => { e.target.style.display = 'none'; }} 
+                                    />
+                                </div>
+                                <div>
+                                    <h3 className="product-title" lang="ta">நம்மில் (Nammil)</h3>
+                                    <p className="product-subtitle">Multi-Account WhatsApp Companion for Windows</p>
+                                </div>
+                            </div>
+
+                            <p className="product-desc" lang="ta">
+                                5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கவும், பதிவிறக்கங்களைத் தானாக ஒழுங்கமைக்கவும் உருவாக்கப்பட்ட தனியுரிமைக் கணினிச் செயலி.
+                            </p>
+
+                            <div className="font-specimen-box" style={{ padding: '14px 18px' }}>
+                                <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
+                                    ✓ 5 Isolated Sessions & Zero Telemetry
+                                </div>
+                                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                                    Automated media sorter with native Windows chimes.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="product-action-row">
+                            <Link to="/downloads#nammil" className="company-pill-btn primary">
+                                <DownloadSimple weight="bold" size={16} />
+                                <span>நம்மில் பதிவிறக்கம் (Downloads Hub)</span>
+                            </Link>
+                        </div>
+                    </section>
                 </div>
             </div>
         </>

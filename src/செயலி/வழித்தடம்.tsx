@@ -21,6 +21,7 @@ import VocoderView from '../சிறப்புக்கூறுகள்/க
 import CategoryListView from '../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வகைபட்டியல்';
 import StoriesListView from '../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/கதைகள்பட்டியல்';
 import ReadingView from '../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வாசிப்புபார்வை';
+import DownloadsPage from '../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்பக்கம்';
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
         errorElement: <GlobalErrorBoundary />,
         children: [
             { index: true, element: <CompanyHome /> },
+            { path: "downloads", element: <DownloadsPage /> },
             { path: "navilgal", element: <Home /> },
             { path: "about", element: <About /> },
             { path: "portfolio", element: <Portfolio /> },

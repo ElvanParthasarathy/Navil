@@ -6,7 +6,7 @@ import { ProfileImage } from '../ஊடகம்/சுயவிவரபடம�
 import { NavLink } from './வழிசெலுத்தல்இணைப்பு';
 import profileData from '../../தரவு/தன்னுரு.json';
 import profilePic from '../../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
-import { House, User, Monitor, Sun, Moon, Wrench, SidebarSimple, BookOpen } from '@phosphor-icons/react';
+import { House, User, Monitor, Sun, Moon, Wrench, SidebarSimple, BookOpen, DownloadSimple } from '@phosphor-icons/react';
 
 interface SidebarProps {
     isSidebarCollapsed: boolean;
@@ -107,6 +107,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         collapsed={isSidebarCollapsed} 
                     />
                     <NavLink to="/tools" icon={<Wrench weight={(location.pathname.startsWith('/tools') || location.pathname.startsWith('/teaching')) ? "fill" : "regular"} size={21} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools') || location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} />
+                    <NavLink 
+                        to="/downloads" 
+                        icon={<DownloadSimple weight={location.pathname.startsWith('/downloads') ? "fill" : "regular"} size={21} />} 
+                        label="பதிவிறக்கங்கள்" 
+                        subLabel="downloads" 
+                        active={location.pathname.startsWith('/downloads')} 
+                        collapsed={isSidebarCollapsed} 
+                    />
 
                     <NavLink to="/about" icon={<User weight={location.pathname === '/about' ? "fill" : "regular"} size={21} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                     <NavLink
