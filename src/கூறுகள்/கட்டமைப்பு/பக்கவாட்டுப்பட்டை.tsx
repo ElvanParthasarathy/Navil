@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '../../கொக்கிகள்/கருப்பொருள்';
+import { useRipple } from '../../கொக்கிகள்/சிற்றலைக்கொக்கி';
 import { ProfileImage } from '../ஊடகம்/சுயவிவரபடம்';
 import { NavLink } from './வழிசெலுத்தல்இணைப்பு';
 import profileData from '../../தரவு/தன்னுரு.json';
@@ -22,6 +23,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const { theme, setTheme } = useTheme();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef<HTMLDivElement>(null);
+    const toggleRipple = useRipple();
+    const settingsRipple = useRipple();
 
     // Close popup on click outside
     React.useEffect(() => {
@@ -50,9 +53,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         className="sidebar-toggle-btn"
                         onClick={onToggleSidebar}
+                        onPointerDown={toggleRipple.createRipple}
                         title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                     >
                         <SidebarSimple weight="regular" size={19} />
+                        {toggleRipple.renderRipples()}
                     </button>
                 </div>
                 <div className="sidebar-nav">
@@ -93,6 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         onClick={() => {
                             setIsSettingsOpen(!isSettingsOpen);
                         }}
+                        onPointerDown={settingsRipple.createRipple}
                     >
                         <ProfileImage
                             src={profilePic}
@@ -117,6 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 )}
                             </>
                         )}
+                        {settingsRipple.renderRipples()}
                     </div>
 
                     {isSettingsOpen && (

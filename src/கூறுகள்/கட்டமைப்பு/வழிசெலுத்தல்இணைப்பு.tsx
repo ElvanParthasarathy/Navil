@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useRipple } from '../../கொக்கிகள்/சிற்றலைக்கொக்கி';
 
 interface NavLinkProps {
     to: string;
@@ -12,8 +13,16 @@ interface NavLinkProps {
     collapsed: boolean;
 }
 
-export const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', collapsed }: NavLinkProps) => (
-    <Link to={to} className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} title={collapsed ? label : ''}>
+export const NavLink = ({ to, icon, label, subLabel, badge, active, className = '', collapsed }: NavLinkProps) => {
+    const { createRipple, renderRipples } = useRipple();
+
+    return (
+        <Link 
+            to={to} 
+            className={`nav-item ${active ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${className}`.trim()} 
+            title={collapsed ? label : ''}
+            onPointerDown={createRipple}
+        >
         <span className="nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>
         {!collapsed && (
             <div className="nav-text-container">
@@ -42,5 +51,7 @@ export const NavLink = ({ to, icon, label, subLabel, badge, active, className = 
                 {subLabel && <span className="sub-label desktop-only">{subLabel}</span>}
             </div>
         )}
+        {renderRipples()}
     </Link>
-);
+    );
+};
