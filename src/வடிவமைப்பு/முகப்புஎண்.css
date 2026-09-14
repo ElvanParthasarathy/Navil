@@ -474,11 +474,6 @@ body {
   opacity: 0.18;
 }
 
-.nav-item.active .MuiTouchRipple-child {
-  background-color: var(--accent-text, #000);
-  opacity: 0.15;
-}
-
 .nav-item > *:not(.MuiTouchRipple-root) {
   position: relative;
   z-index: 1;
