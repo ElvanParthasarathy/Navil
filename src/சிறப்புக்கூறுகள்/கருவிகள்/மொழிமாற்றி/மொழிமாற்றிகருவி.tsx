@@ -62,9 +62,9 @@ export default function TransliteratorTool() {
 
   return (
     <>
-      <MobileTopBar title="தொல்காப்பியம்|transliterator" />
+      <MobileTopBar title="நவில் மொழிமாற்றி|navil transliterator" backUrl="/tools" />
       <Helmet>
-        <title>தொல்காப்பிய மொழிமாற்றி | Tolkappiyam Transliterator</title>
+        <title>நவில் மொழிமாற்றி | Navil Transliterator</title>
       </Helmet>
       <FloatingBackButton to="/tools" />
       <style>{`
@@ -75,15 +75,15 @@ export default function TransliteratorTool() {
     <div className="writings-page page-view fadeIn">
       
       {/* Header matching Writings page */}
-      <header className="writings-header animate-entry" style={{ marginBottom: '32px' }}>
+      <header className="writings-header animate-entry">
           <div style={{ flex: 1 }}>
-              <h1 className="writings-title">தொல்காப்பிய மொழிமாற்றி</h1>
-              <div className="writings-title-sub">Tolkappiyam Tamil Transliterator</div>
+              <h1 className="writings-title">நவில் மொழிமாற்றி</h1>
+              <div className="writings-title-sub">Navil Transliterator</div>
               <p className="writings-subtitle">
-                தொல்காப்பிய இலக்கண நெறிப்படியான மெய்யொலி மாற்றி முறைமை.
+                தொல்காப்பிய இலக்கண நெறிப்படியான மெய்யொலி மாற்றி.
               </p>
-              <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                Authentic English Phonetics based on Tolkappiyam Ezhuthathikaram &amp; Sollathikaram.
+              <p className="writings-subtitle writings-subtitle-en" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                Phonetic English-to-Tamil typing based on Tolkappiyam.
                 <button 
                   onClick={() => setDirection(d => d === 'ta-en' ? 'en-ta' : 'ta-en')}
                   className="translit-direction-btn"

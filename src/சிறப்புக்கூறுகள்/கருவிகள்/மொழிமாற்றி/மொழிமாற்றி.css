@@ -168,6 +168,13 @@
   gap: 24px;
 }
 
+@media (max-width: 768px) {
+  .translit-grid {
+    padding: 0 16px 40px;
+    gap: 16px;
+  }
+}
+
 @media (min-width: 1024px) {
   .translit-grid {
     grid-template-columns: 1fr 1fr;

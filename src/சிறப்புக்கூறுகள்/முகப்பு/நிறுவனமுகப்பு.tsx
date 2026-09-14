@@ -216,7 +216,7 @@ export default function CompanyHome() {
                                             <Translate weight="bold" size={20} />
                                         </div>
                                         <div>
-                                            <h4 className="tool-row-title" lang="ta">தொல்காப்பிய மொழிமாற்றி</h4>
+                                            <h4 className="tool-row-title" lang="ta">நவில் மொழிமாற்றி</h4>
                                             <p className="tool-row-desc">Phonetic English-to-Tamil typing based on Tolkappiyam</p>
                                         </div>
                                     </div>
@@ -229,7 +229,7 @@ export default function CompanyHome() {
                                             <PianoKeys weight="bold" size={20} />
                                         </div>
                                         <div>
-                                            <h4 className="tool-row-title" lang="ta">எல்வன் கின்னரப்பெட்டி</h4>
+                                            <h4 className="tool-row-title" lang="ta">நவில் பியானோ</h4>
                                             <p className="tool-row-desc">Interactive virtual piano synthesizer with keyboard mapping</p>
                                         </div>
                                     </div>

@@ -36,7 +36,11 @@ export default function ArichuvadiTool() {
 
   return (
     <>
-      <MobileTopBar title="அரிச்சுவடி|arichuvadi" />
+      <MobileTopBar 
+        title={viewMode === 'home' ? 'நவில் அரிச்சுவடி|navil arichuvadi' : `${activeFeature?.title || 'அரிச்சுவடி'}|${activeFeature?.titleSub || 'arichuvadi'}`}
+        onBack={viewMode !== 'home' ? () => setViewMode('home') : undefined}
+        backUrl="/tools"
+      />
       <Helmet>
           <title>{activeFeature ? `${activeFeature.title} | நவில் அரிச்சுவடி` : 'நவில் அரிச்சுவடி | Navil Arichuvadi'}</title>
       </Helmet>
@@ -62,9 +66,9 @@ export default function ArichuvadiTool() {
                 <div style={{ flex: 1 }}>
                     <h1 className="writings-title">நவில் அரிச்சுவடி</h1>
                     <div className="writings-title-sub">Navil Arichuvadi</div>
-                    <p className="writings-subtitle">பண்டைய தமிழ் எழுத்து வடிவமாற்றி — தமிழி மற்றும் வட்டெழுத்து.</p>
-                    <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                      Convert modern Tamil into ancient Thamizhi and Vatteluttu scripts.
+                    <p className="writings-subtitle">பண்டைய தமிழ் எழுத்து வடிவமாற்றி — தமிழி &amp; வட்டெழுத்து.</p>
+                    <p className="writings-subtitle writings-subtitle-en">
+                      Ancient Tamil Script Converter — Thamizhi &amp; Vatteluttu
                     </p>
                 </div>
             </header>
@@ -85,7 +89,7 @@ export default function ArichuvadiTool() {
             </div>
           </>
         ) : (
-          <>
+          <div className="arichuvadi-subview-container animate-entry">
             {viewMode === 'editor' && <ArichuvadiEditor />}
             {viewMode === 'learn' && <ArichuvadiLearn />}
             {viewMode === 'practice' && <ArichuvadiPractice />}
@@ -95,7 +99,7 @@ export default function ArichuvadiTool() {
             {viewMode === 'image' && <ArichuvadiImage />}
             {viewMode === 'downloads' && <ArichuvadiDownloads />}
             {viewMode === 'about' && <ArichuvadiAbout />}
-          </>
+          </div>
         )}
       </div>
     </>

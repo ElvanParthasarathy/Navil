@@ -344,3 +344,31 @@
   background: var(--border-color);
   opacity: 0.6;
 }
+
+/* Responsive Mobile Layout for Arichuvadi */
+@media (max-width: 768px) {
+  .arichuvadi-subview-container {
+    padding: 0 16px 40px;
+  }
+
+  .arichuvadi-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .arichuvadi-controls {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .arichuvadi-select-wrap {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+
+  .arichuvadi-books-grid,
+  .arichuvadi-match-grid,
+  .arichuvadi-memory-grid {
+    gap: 12px;
+  }
+}

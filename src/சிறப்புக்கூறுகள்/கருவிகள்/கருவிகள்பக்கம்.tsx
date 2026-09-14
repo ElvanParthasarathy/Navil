@@ -52,8 +52,11 @@ const ToolsView = () => {
                     <Link to="/tools/piano" className="category-card">
                         <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">எல்வன் கின்னரப்பெட்டி</div>
-                            <div className="cat-title-sub">Elvan Piano</div>
+                            <div className="cat-title">
+                                நவில் பியானோ
+                                <span className="cat-count-badge" style={{ fontSize: '0.65rem', padding: '2px 8px', borderRadius: '100px', marginLeft: '8px' }}>கணினி மட்டும்</span>
+                            </div>
+                            <div className="cat-title-sub">Navil Piano • Desktop Only</div>
                             <p className="cat-desc">மெய்நிகர் பியானோ மற்றும் இசையமைப்புக் கருவி.</p>
                             <p className="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
                         </div>
@@ -62,8 +65,8 @@ const ToolsView = () => {
                     <Link to="/tools/transliterator" className="category-card">
                         <div className="cat-icon-box"><Translate weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">தொல்காப்பிய மொழிமாற்றி</div>
-                            <div className="cat-title-sub">Tolkappiyam Transliterator</div>
+                            <div className="cat-title">நவில் மொழிமாற்றி</div>
+                            <div className="cat-title-sub">Navil Transliterator</div>
                             <p className="cat-desc">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
                             <p className="cat-desc-sub">Phonetic English-to-Tamil typing engine.</p>
                         </div>
@@ -73,7 +76,7 @@ const ToolsView = () => {
                         <div className="cat-icon-box"><Scroll weight="regular" /></div>
                         <div className="cat-content">
                             <div className="cat-title">நவில் அரிச்சுவடி</div>
-                            <div className="cat-title-sub">Arichuvadi Engine</div>
+                            <div className="cat-title-sub">Navil Arichuvadi</div>
                             <p className="cat-desc">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
                             <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
                         </div>
