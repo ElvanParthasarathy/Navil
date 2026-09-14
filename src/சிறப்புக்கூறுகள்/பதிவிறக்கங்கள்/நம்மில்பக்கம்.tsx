@@ -58,7 +58,7 @@ export default function NammilPage() {
                         <div className="nammil-header-meta">
                             <div className="nammil-badge-row">
                                 <span className="badge-tag">DESKTOP APP</span>
-                                <span className="badge-tag">v1.2.8</span>
+                                <span className="badge-tag">v1.2.9</span>
                                 <span className="badge-tag">Windows 10 / 11 (64-bit)</span>
                                 <span className="badge-tag">MIT License</span>
                             </div>
@@ -78,7 +78,7 @@ export default function NammilPage() {
 
                     <div className="nammil-action-row">
                         <a 
-                            href="https://github.com/ElvanParthasarathy/Nammil/releases/download/v1.2.8/Nammil-Setup.exe" 
+                            href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe" 
                             className="dl-btn primary"
                             download
                         >
@@ -334,7 +334,7 @@ export default function NammilPage() {
                     <div className="nammil-specs-grid">
                         <div className="spec-item">
                             <span className="spec-label">Version</span>
-                            <span className="spec-value">1.2.8</span>
+                            <span className="spec-value">1.2.9</span>
                         </div>
                         <div className="spec-item">
                             <span className="spec-label">Platform</span>
