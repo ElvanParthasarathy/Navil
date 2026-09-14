@@ -178,23 +178,23 @@ const Layout = () => {
                             onClick={handleSidebarToggle}
                             title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                         >
-                            {isSidebarCollapsed ? <List weight="regular" size={17} /> : <ListDashes weight="regular" size={17} />}
+                            {isSidebarCollapsed ? <List weight="regular" size={20} /> : <ListDashes weight="regular" size={20} />}
                         </button>
                     </div>
                     <div className="sidebar-nav">
-                        <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={18} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={22} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
                         <NavLink 
                             to="/navilgal" 
-                            icon={<BookOpen weight={(location.pathname.startsWith('/navilgal') || location.pathname.startsWith('/writings') || location.pathname.startsWith('/arts')) ? "fill" : "regular"} size={18} />} 
+                            icon={<BookOpen weight={(location.pathname.startsWith('/navilgal') || location.pathname.startsWith('/writings') || location.pathname.startsWith('/arts')) ? "fill" : "regular"} size={22} />} 
                             label="நவில்கள்" 
                             subLabel="navilgal" 
                             active={location.pathname.startsWith('/navilgal') || location.pathname.startsWith('/writings') || location.pathname.startsWith('/arts')} 
                             collapsed={isSidebarCollapsed} 
                         />
-                        <NavLink to="/tools" icon={<Wrench weight={location.pathname.startsWith('/tools') ? "fill" : "regular"} size={18} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
-                        <NavLink to="/teaching" icon={<Monitor weight={location.pathname.startsWith('/teaching') ? "fill" : "regular"} size={18} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
+                        <NavLink to="/tools" icon={<Wrench weight={location.pathname.startsWith('/tools') ? "fill" : "regular"} size={22} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
+                        <NavLink to="/teaching" icon={<Monitor weight={location.pathname.startsWith('/teaching') ? "fill" : "regular"} size={22} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
 
-                        <NavLink to="/about" icon={<User weight={location.pathname === '/about' ? "fill" : "regular"} size={18} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
+                        <NavLink to="/about" icon={<User weight={location.pathname === '/about' ? "fill" : "regular"} size={22} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                         <NavLink
                             to="/about"
                             icon={
@@ -276,8 +276,8 @@ const Layout = () => {
             <main className={`main-content ${!isMainLevel ? 'no-bottom-nav' : ''} ${!isMainLevel ? 'mobile-full-width' : ''}`} style={{ 
                 flexGrow: 1, 
                 minHeight: '100vh', 
-                width: isSidebarCollapsed ? 'calc(100% - 60px)' : 'calc(100% - var(--sidebar-width))', 
-                marginLeft: isSidebarCollapsed ? '60px' : 'var(--sidebar-width)' 
+                width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', 
+                marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' 
             }}>
                 <ScrollRestoration />
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, autoThumbnails }} />
