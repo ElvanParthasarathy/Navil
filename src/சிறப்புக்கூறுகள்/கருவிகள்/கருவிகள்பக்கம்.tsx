@@ -21,7 +21,23 @@ const ToolsView = () => {
                 
                 <header className="writings-header animate-entry">
                     <div style={{ flex: 1 }}>
-                        <h1 className="writings-title">கருவிகள்</h1>
+                        <h1 className="writings-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            கருவிகள்
+                            <span 
+                                style={{ 
+                                    fontSize: '0.75rem', 
+                                    background: 'color-mix(in srgb, var(--text-main) 12%, transparent)', 
+                                    color: 'var(--text-main)', 
+                                    padding: '3px 9px', 
+                                    borderRadius: '100px', 
+                                    fontWeight: 700, 
+                                    letterSpacing: '0.5px',
+                                    lineHeight: 1
+                                }}
+                            >
+                                BETA
+                            </span>
+                        </h1>
                         <div className="writings-title-sub">tools</div>
                         <p className="writings-subtitle">A collection of custom-built tools and experiments.</p>
                         <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>Apps for music, language, and productivity.</p>

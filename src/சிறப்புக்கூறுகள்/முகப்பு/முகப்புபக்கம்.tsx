@@ -472,8 +472,8 @@ const Home = () => {
                 <FloatingBackButton to="/" />
                 <header className="writings-header animate-entry">
                     <div style={{ flex: 1 }}>
-                        <h1 className="writings-title" lang="ta">நவில்கள்</h1>
-                        <div className="writings-title-sub">Navilgal</div>
+                        <h1 className="writings-title" lang="ta">எல்வனின் நவில்கள்</h1>
+                        <div className="writings-title-sub">Elvanin Navilgal</div>
                         <p className="writings-subtitle" lang="ta">
                             சிந்தனைகள், கதைகள், கலைகள் & இலக்கியப் பெட்டகம்
                         </p>
