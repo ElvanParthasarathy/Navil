@@ -14,7 +14,7 @@ import {
     CaretRight,
     ArrowsOutSimple,
     X,
-    Star,
+    GithubLogo,
     Sparkle,
     Package,
     ArrowsClockwise,
@@ -199,31 +199,11 @@ export default function NammilPage() {
                         <div className="ms-hero-meta">
                             <h1 className="ms-app-title">
                                 <span className="ms-title-main" lang="ta">நம்மில்</span>
-                                <span className="ms-title-sub">WhatsApp Companion</span>
+                                <span className="ms-title-sub">Nammil</span>
                             </h1>
 
                             <div className="ms-developer-link">
                                 <span className="ms-dev-item">Published by <Link to="/about">Elvan Navil</Link></span>
-                                <span className="ms-meta-divider">•</span>
-                                <span className="ms-dev-item">Designed by <Link to="/portfolio">Elvan Parthasarathy</Link></span>
-                            </div>
-
-                            {/* RATINGS & CATEGORY ROW */}
-                            <div className="ms-rating-row">
-                                <div className="ms-stars-group">
-                                    <span className="ms-rating-score">5.0</span>
-                                    <div className="ms-stars-icons" aria-label="5 out of 5 stars">
-                                        <Star weight="fill" size={14} className="star-filled" />
-                                        <Star weight="fill" size={14} className="star-filled" />
-                                        <Star weight="fill" size={14} className="star-filled" />
-                                        <Star weight="fill" size={14} className="star-filled" />
-                                        <Star weight="fill" size={14} className="star-filled" />
-                                    </div>
-                                </div>
-                                <span className="ms-meta-divider">•</span>
-                                <span className="ms-ratings-count">128 ratings</span>
-                                <span className="ms-meta-divider">•</span>
-                                <span className="ms-category-tag">Social & Productivity</span>
                             </div>
 
                             {/* SHORT TEASER DESCRIPTION */}
@@ -243,6 +223,16 @@ export default function NammilPage() {
                                 >
                                     <DownloadSimple weight="bold" size={18} />
                                     <span>Download (.exe ~114MB)</span>
+                                </a>
+                                <a 
+                                    href="https://github.com/ElvanParthasarathy/Nammil" 
+                                    target="_blank" 
+                                    rel="noreferrer"
+                                    className="ms-btn-secondary ms-btn-github"
+                                    title="View Source on GitHub"
+                                >
+                                    <GithubLogo weight="bold" size={18} />
+                                    <span>GitHub</span>
                                 </a>
                             </div>
                         </div>
