@@ -370,51 +370,99 @@ body {
 /* =========================================
    MUI TOUCH RIPPLE STYLING FOR SIDEBAR
 ========================================= */
+.nav-item,
 .nav-item.MuiButtonBase-root {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  text-align: left;
-  font-family: inherit;
-  color: inherit;
-  box-sizing: border-box;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  color: inherit !important;
+  padding: 8.5px 16px !important;
+  border-radius: 99px !important;
+  gap: 11px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  user-select: none !important;
+
+  /* PERFORMANCE FIX: Specific transitions only */
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  transform-origin: center;
+  will-change: transform, background;
 }
 
+.nav-item.collapsed,
 .nav-item.MuiButtonBase-root.collapsed {
-  justify-content: center;
+  padding: 10.5px !important;
+  justify-content: center !important;
 }
 
+.sidebar-toggle-btn,
 .sidebar-toggle-btn.MuiButtonBase-root {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  padding: 0;
-  font-family: inherit;
+  position: relative !important;
+  overflow: hidden !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 99px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: var(--text-muted) !important;
+  padding: 0 !important;
+  font-family: inherit !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  flex-shrink: 0 !important;
 }
 
+.sidebar.collapsed .sidebar-toggle-btn,
+.sidebar.collapsed .sidebar-toggle-btn.MuiButtonBase-root {
+  width: 44px !important;
+  height: 44px !important;
+  margin: 0 auto !important;
+}
+
+.settings-trigger,
 .settings-trigger.MuiButtonBase-root {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  text-align: left;
-  font-family: inherit;
-  color: inherit;
-  box-sizing: border-box;
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  color: inherit !important;
+  padding: 8px 12px !important;
+  background: transparent;
+  border: none !important;
+  border-radius: 99px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease, transform 0.1s ease;
+  user-select: none !important;
+  box-sizing: border-box !important;
 }
 
+.settings-trigger.collapsed-trigger,
 .settings-trigger.MuiButtonBase-root.collapsed-trigger {
-  justify-content: center;
+  padding: 8px !important;
+  justify-content: center !important;
 }
 
 /* Ensure MUI TouchRipple clips strictly to the 99px pill border-radius */
 .nav-item .MuiTouchRipple-root,
 .sidebar-toggle-btn .MuiTouchRipple-root,
 .settings-trigger .MuiTouchRipple-root {
-  border-radius: inherit;
-  overflow: hidden;
+  border-radius: 99px !important;
+  overflow: hidden !important;
   color: var(--text-main);
   pointer-events: none;
 }
@@ -431,35 +479,9 @@ body {
   opacity: 0.15;
 }
 
-.nav-item {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  padding: 8.5px 16px;
-  border-radius: 99px;
-  gap: 11px;
-  text-decoration: none;
-  cursor: pointer;
-  user-select: none;
-
-  /* PERFORMANCE FIX: Specific transitions only */
-  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-  transform-origin: center;
-  will-change: transform, background;
-  /* Hint to browser */
-}
-
 .nav-item > *:not(.MuiTouchRipple-root) {
   position: relative;
   z-index: 1;
-}
-
-.nav-item.collapsed {
-  padding: 10.5px;
-  justify-content: center;
 }
 
 
