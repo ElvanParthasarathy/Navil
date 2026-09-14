@@ -7,7 +7,7 @@
 export type SpellingMode = 'early' | 'middle' | 'late';
 
 export const vowelsT = ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'];
-export const vowelsB = ['𑀅', '𑀆', '𑀇', '𑀈', '𑀉', '𑀊', '𑀏𑁆', '𑀏', '𑀐', '𑀑𑁆', '𑀑', '𑀒', '𑀂'];
+export const vowelsB = ['𑀅', '𑀆', '𑀇', '𑀈', '𑀉', '𑀊', '𑀏', '𑀏', '𑀐', '𑀑', '𑀑', '𑀒', '𑀂'];
 
 export const consonantsT = [
   'த⁴', 'க', 'ங', 'ச', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ன',
@@ -21,7 +21,7 @@ export const consonantsB = [
 ];
 
 export const vowelSignsT = ['ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே', 'ை', 'ொ', 'ோ', 'ௌ', '்'];
-export const vowelSignsB = ['𑀸', '𑀺', '𑀻', '𑀼', '𑀽', '𑁂𑁆', '𑁂', '𑁃', '𑁄𑁆', '𑁄', '𑁅', '𑁆'];
+export const vowelSignsB = ['𑀸', '𑀺', '𑀻', '𑀼', '𑀽', '𑁂', '𑁂', '𑁃', '𑁄', '𑁄', '𑁅', '𑁆'];
 
 export function convertToBrahmi(text: string, spelling: SpellingMode = 'late'): string {
   let result = text;

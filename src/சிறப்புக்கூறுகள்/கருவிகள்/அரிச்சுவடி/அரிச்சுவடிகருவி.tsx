@@ -56,7 +56,9 @@ export default function ArichuvadiTool() {
       </Helmet>
 
       <div className="writings-page page-view fadeIn">
-        <FloatingBackButton to={viewMode === 'home' ? '/tools' : '/tools/arichuvadi'} />
+        {viewMode !== 'books' && (
+          <FloatingBackButton to={viewMode === 'home' ? '/tools' : '/tools/arichuvadi'} />
+        )}
 
         {viewMode !== 'books' && (
           <header className="writings-header animate-entry">

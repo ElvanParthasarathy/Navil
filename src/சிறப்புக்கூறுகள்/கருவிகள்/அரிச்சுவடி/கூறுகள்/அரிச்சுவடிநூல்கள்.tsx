@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { convertToBrahmi } from '../இயந்திரம்/தமிழிவரைபடங்கள்';
 import { convertToVatteluttu } from '../இயந்திரம்/வட்டெழுத்துவரைபடங்கள்';
 import '../../../படைப்புகள்/பார்வைகள்/கதைகள்பட்டியல்.css';
+import { FloatingBackButton } from '../../../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 import { 
   BookOpen, 
   ArrowRight, 
@@ -198,6 +199,8 @@ export function ArichuvadiBooks() {
           ========================================================================= */}
       {!selectedBook && (
         <div className="arichuvadi-catalog-view animate-entry">
+          <FloatingBackButton to="/tools/arichuvadi" />
+
           {/* Single clean header matching Writings Stories */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: '200px' }}>
@@ -406,17 +409,7 @@ export function ArichuvadiBooks() {
           ========================================================================= */}
       {selectedBook && !selectedChapterId && (
         <div className="arichuvadi-directory-view animate-entry">
-          {/* Back to Books Catalog */}
-          <div style={{ marginBottom: '28px' }}>
-            <button 
-              type="button"
-              onClick={handleReturnToCatalog}
-              className="tv-back-btn"
-            >
-              <ArrowLeft size={18} weight="bold" />
-              <span>நூல்கள் பட்டியல்</span>
-            </button>
-          </div>
+          <FloatingBackButton onClick={handleReturnToCatalog} label="நூல்கள் பட்டியல்" />
 
           {/* Loading state */}
           {loading && (
@@ -637,18 +630,10 @@ export function ArichuvadiBooks() {
       {/* VIEW B: CHAPTER READER VIEW (Matching Stories ReadingView with Author) */}
       {!loading && currentChapter && (
         <div className="arichuvadi-story-reader-view animate-entry">
-          {/* Reader Topbar: Back button & Controls */}
-          {/* Reader Topbar: Back button & Font Zoom Controls */}
-          <div className="reader-header-area" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '32px', flexWrap: 'wrap' }}>
-            <button 
-              type="button"
-              onClick={returnToDirectory}
-              className="tv-back-btn"
-            >
-              <ArrowLeft size={18} weight="bold" />
-              <span>{chaptersLabelPlural} பட்டியல்</span>
-            </button>
+          <FloatingBackButton onClick={returnToDirectory} label={`${chaptersLabelPlural} பட்டியல்`} />
 
+          {/* Reader Topbar: Font Zoom Controls */}
+          <div className="reader-header-area" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px', marginBottom: '24px' }}>
             <div className="arichuvadi-font-controls">
               <button 
                 type="button"
@@ -684,7 +669,7 @@ export function ArichuvadiBooks() {
                 style={{ 
                   fontSize: script === 'tamil' ? '2.5rem' : '2.1rem', 
                   fontWeight: script === 'tamil' ? 800 : 'normal', 
-                  fontFamily: script === 'tamil' ? 'serif' : 'inherit', 
+                  fontFamily: script === 'tamil' ? 'serif' : undefined, 
                   lineHeight: '1.4', 
                   color: 'var(--text-main)', 
                   marginBottom: '12px',
@@ -801,7 +786,7 @@ export function ArichuvadiBooks() {
 
                     <div className={`story-verse-lines ${getFontClass()}`} style={script !== 'tamil' ? { fontWeight: 'normal' } : {}}>
                       {cleanLines.map((line, lIdx) => (
-                        <div key={lIdx} className="story-verse-line">
+                        <div key={lIdx} className={`story-verse-line ${getFontClass()}`}>
                           {convertText(line)}
                         </div>
                       ))}

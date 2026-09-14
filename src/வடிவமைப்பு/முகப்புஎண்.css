@@ -228,8 +228,8 @@ body {
 @media (min-width: 769px) {
   .mobile-only { display: none !important; }
 }
-[lang="ta"],
-[lang="ta"] * {
+[lang="ta"]:not(.arichuvadi-output-vatteluttu):not(.arichuvadi-output-brahmi):not(.arichuvadi-output-ebrahmi),
+[lang="ta"] *:not(.arichuvadi-output-vatteluttu):not(.arichuvadi-output-brahmi):not(.arichuvadi-output-ebrahmi):not([class*="arichuvadi-output"]):not(.story-verse-line):not(.story-verse-lines) {
   font-family: "ElvanSans", sans-serif !important;
 }
 
