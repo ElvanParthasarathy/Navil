@@ -661,8 +661,15 @@ body:has(.ms-store-page) .main-content,
     margin: 0 0 14px;
 }
 
-.ms-desc-body p:last-child {
+.ms-desc-body p:last-child,
+.ms-desc-block p:last-child {
     margin-bottom: 0;
+}
+
+.ms-desc-divider {
+    height: 1px;
+    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    margin: 20px 0;
 }
 
 .ms-desc-body strong {
@@ -695,13 +702,18 @@ body:has(.ms-store-page) .main-content,
 .ms-feature-icon-box {
     width: 40px;
     height: 40px;
-    border-radius: 10px;
-    background: color-mix(in srgb, #00a884 15%, transparent);
-    color: #00a884;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.ms-feature-item:hover .ms-feature-icon-box {
+    background: color-mix(in srgb, var(--text-main) 12%, transparent);
 }
 
 .ms-feature-heading {

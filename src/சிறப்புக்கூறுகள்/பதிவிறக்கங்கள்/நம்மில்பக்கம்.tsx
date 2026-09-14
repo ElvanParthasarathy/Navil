@@ -549,15 +549,29 @@ export default function NammilPage() {
                             <section className="ms-section ms-desc-section">
                                 <h2 className="ms-section-title">Description</h2>
                                 <div className="ms-desc-body">
-                                    <p lang="ta">
-                                        வாட்ஸ்அப் கணினிக்கான அதிகாரப்பூர்வ செயலி ஒரே நேரத்தில் ஒரு கணக்கை மட்டுமே அனுமதிக்கிறது. வணிகம், அலுவலகப் பணி, குடும்பம் மற்றும் தனிப்பட்ட உரையாடல்களுக்கு வெவ்வேறு கணக்குகளைப் பயன்படுத்துவோர் அடிக்கடி வெளியேறி உள்நுழையவோ அல்லது பிரவுசர்களில் மாற்றி மாற்றி இயக்கவோ வேண்டியுள்ளது.
-                                    </p>
-                                    <p lang="ta">
-                                        <strong>நம்மில் (Nammil)</strong> இக்குறைபாட்டை முழுமையாகக் களைய உருவாக்கப்பட்டது. நவீன எலக்ட்ரான் தொழில்நுட்பத்தில் இயங்கும் இச்செயலி, 5 கணக்குகள் வரை ஒரே மேடையில் தனித்தனி சாளரங்களாகப் பிரித்து பாதுகாப்பாக இயக்குகிறது.
-                                    </p>
-                                    <p>
-                                        Nammil breaks the single-account barrier of official desktop WhatsApp. With separate cookie silos, native Windows notification chimes, and automatic file classification, it offers the cleanest multi-session messaging environment for Windows.
-                                    </p>
+                                    <div className="ms-desc-block ms-desc-ta" lang="ta">
+                                        <p>
+                                            வாட்ஸ்அப் கணினிக்கான அதிகாரப்பூர்வ செயலி ஒரே நேரத்தில் ஒரு கணக்கை மட்டுமே அனுமதிக்கிறது. வணிகம், அலுவலகப் பணி, குடும்பம் மற்றும் தனிப்பட்ட தேவைகளுக்கு வெவ்வேறு கணக்குகளைப் பயன்படுத்துவோர், அடிக்கடி வெளியேறி உள்நுழையவோ அல்லது இணைய உலாவிகளில் தனித்தனி தாவல்களை மாற்றி மாற்றி இயக்கவோ வேண்டியுள்ளது.
+                                        </p>
+                                        <p>
+                                            <strong>நம்மில் (Nammil)</strong> இக்குறைபாட்டை முழுமையாகக் களைய உருவாக்கப்பட்டது. நவீன எலக்ட்ரான் தொழில்நுட்பத்தில் இயங்கும் இச்செயலி, 5 கணக்குகள் வரை ஒரே மேடையில் தனித்தனி சாளரங்களாகப் பிரித்து பாதுகாப்பாகவும் எந்தவித முரண்பாடும் இன்றியும் இயக்குகிறது.
+                                        </p>
+                                        <p>
+                                            தனித்தனி குக்கீ சேமிப்பகங்கள், விண்டோஸின் நேரலை அறிவிப்பு ஒலிகள், பதிவிறக்கங்களைத் தானாக வகைப்படுத்தும் கோப்பு வரிசையாக்கம் மற்றும் 100% உள்ளூர் தனியுரிமையுடன் விண்டோஸிற்கான நேர்த்தியான வாட்ஸ்அப் அனுபவத்தை நம்மில் வழங்குகிறது.
+                                        </p>
+                                    </div>
+                                    <div className="ms-desc-divider" />
+                                    <div className="ms-desc-block ms-desc-en" lang="en">
+                                        <p>
+                                            The official WhatsApp desktop application allows only one active account at a time. Users managing separate accounts for business, workplace communication, family, and personal conversations are often forced to repeatedly log in and out, or juggle multiple browser tabs.
+                                        </p>
+                                        <p>
+                                            <strong>Nammil</strong> was built to completely eliminate this limitation. Powered by modern Electron technology, it lets you safely run up to 5 WhatsApp accounts simultaneously in separate, isolated windows under a unified workspace without credential collisions.
+                                        </p>
+                                        <p>
+                                            With isolated cookie silos, real-time native Windows notification chimes, automated media sorting into dedicated folders, and 100% local privacy with zero telemetry, Nammil delivers the cleanest multi-session WhatsApp experience for Windows.
+                                        </p>
+                                    </div>
                                 </div>
                             </section>
 
