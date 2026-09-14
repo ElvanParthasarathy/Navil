@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '../../கொக்கிகள்/கருப்பொருள்';
-import { useRipple } from '../../கொக்கிகள்/சிற்றலைக்கொக்கி';
+import { ButtonBase } from '@mui/material';
 import { ProfileImage } from '../ஊடகம்/சுயவிவரபடம்';
 import { NavLink } from './வழிசெலுத்தல்இணைப்பு';
 import profileData from '../../தரவு/தன்னுரு.json';
@@ -23,8 +23,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const { theme, setTheme } = useTheme();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
     const settingsZoneRef = React.useRef<HTMLDivElement>(null);
-    const toggleRipple = useRipple();
-    const settingsRipple = useRipple();
 
     // Close popup on click outside
     React.useEffect(() => {
@@ -50,15 +48,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             எல்வன் நவில்
                         </div>
                     )}
-                    <button
+                    <ButtonBase
+                        component="button"
                         className="sidebar-toggle-btn"
                         onClick={onToggleSidebar}
-                        onPointerDown={toggleRipple.createRipple}
                         title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                        focusRipple
                     >
                         <SidebarSimple weight="regular" size={19} />
-                        {toggleRipple.renderRipples()}
-                    </button>
+                    </ButtonBase>
                 </div>
                 <div className="sidebar-nav">
                     <NavLink to="/" icon={<House weight={location.pathname === '/' ? "fill" : "regular"} size={21} />} label="முகப்பு" subLabel="home" active={location.pathname === '/'} collapsed={isSidebarCollapsed} />
@@ -93,12 +91,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <div className="sidebar-bottom" ref={settingsZoneRef}>
                 <div className="settings-profile-container">
-                    <div
+                    <ButtonBase
+                        component="div"
                         className={`settings-trigger ${isSettingsOpen ? 'active-trigger' : ''} ${isSidebarCollapsed ? 'collapsed-trigger' : ''}`}
                         onClick={() => {
                             setIsSettingsOpen(!isSettingsOpen);
                         }}
-                        onPointerDown={settingsRipple.createRipple}
+                        focusRipple
                     >
                         <ProfileImage
                             src={profilePic}
@@ -123,8 +122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 )}
                             </>
                         )}
-                        {settingsRipple.renderRipples()}
-                    </div>
+                    </ButtonBase>
 
                     {isSettingsOpen && (
                         <div className={`settings-popup ${isSidebarCollapsed ? 'side-popup' : ''}`}>

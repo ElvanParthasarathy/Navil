@@ -288,7 +288,7 @@ body {
   flex-shrink: 0;
 }
 
-.sidebar-toggle-btn > *:not(.ripple-container) {
+.sidebar-toggle-btn > *:not(.MuiTouchRipple-root) {
   position: relative;
   z-index: 1;
 }
@@ -367,37 +367,68 @@ body {
   border-radius: 50%;
 }
 
-/* Sidebar Android / Material Ripple Wave */
-.ripple-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+/* =========================================
+   MUI TOUCH RIPPLE STYLING FOR SIDEBAR
+========================================= */
+.nav-item.MuiButtonBase-root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.nav-item.MuiButtonBase-root.collapsed {
+  justify-content: center;
+}
+
+.sidebar-toggle-btn.MuiButtonBase-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0;
+  font-family: inherit;
+}
+
+.settings-trigger.MuiButtonBase-root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.settings-trigger.MuiButtonBase-root.collapsed-trigger {
+  justify-content: center;
+}
+
+/* Ensure MUI TouchRipple clips strictly to the 99px pill border-radius */
+.nav-item .MuiTouchRipple-root,
+.sidebar-toggle-btn .MuiTouchRipple-root,
+.settings-trigger .MuiTouchRipple-root {
   border-radius: inherit;
   overflow: hidden;
+  color: var(--text-main);
   pointer-events: none;
-  z-index: 0;
 }
 
-.ripple-wave {
-  position: absolute;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--text-main) 18%, transparent);
-  transform: scale(0);
-  pointer-events: none;
-  animation: sidebarRippleAnimation 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+.nav-item .MuiTouchRipple-child,
+.sidebar-toggle-btn .MuiTouchRipple-child,
+.settings-trigger .MuiTouchRipple-child {
+  background-color: var(--text-main);
+  opacity: 0.18;
 }
 
-@keyframes sidebarRippleAnimation {
-  0% {
-    transform: scale(0);
-    opacity: 0.35;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
+.nav-item.active .MuiTouchRipple-child {
+  background-color: var(--accent-text, #000);
+  opacity: 0.15;
 }
 
 .nav-item {
@@ -421,7 +452,7 @@ body {
   /* Hint to browser */
 }
 
-.nav-item > *:not(.ripple-container) {
+.nav-item > *:not(.MuiTouchRipple-root) {
   position: relative;
   z-index: 1;
 }
@@ -542,7 +573,7 @@ body {
   box-sizing: border-box;
 }
 
-.settings-trigger > *:not(.ripple-container) {
+.settings-trigger > *:not(.MuiTouchRipple-root) {
   position: relative;
   z-index: 1;
 }
