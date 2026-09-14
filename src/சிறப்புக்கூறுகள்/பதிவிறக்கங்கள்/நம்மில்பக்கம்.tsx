@@ -1,5 +1,6 @@
 import './பதிவிறக்கங்கள்.css';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
@@ -13,7 +14,11 @@ import {
     CaretLeft,
     CaretRight,
     ArrowsOutSimple,
-    X
+    X,
+    Star,
+    Desktop,
+    Sparkle,
+    ShareNetwork
 } from '@phosphor-icons/react';
 
 const slides = [
@@ -67,6 +72,45 @@ const slides = [
     }
 ];
 
+const discoverMoreApps = [
+    {
+        name: 'நவில் (Navil) • Desktop Suite',
+        tag: 'Free',
+        category: 'Native Workspace',
+        to: '/downloads',
+        iconBg: '#00a884',
+        iconText: 'ந',
+        external: false
+    },
+    {
+        name: 'ஒலிபெயர்ப்பி (Transliterator)',
+        tag: 'Web App',
+        category: 'Tamil Phonetic Tool',
+        to: '/tools/transliterator',
+        iconBg: 'linear-gradient(135deg, #e1306c, #833ab4)',
+        iconText: 'ஒ',
+        external: false
+    },
+    {
+        name: 'அரிச்சுவடி (Arichuvadi)',
+        tag: 'Web App',
+        category: 'Alphabet & Linguistics',
+        to: '/tools/arichuvadi',
+        iconBg: '#0084ff',
+        iconText: 'அ',
+        external: false
+    },
+    {
+        name: 'Nammil Source & Releases',
+        tag: 'v1.2.9',
+        category: 'GitHub Repository',
+        to: 'https://github.com/ElvanParthasarathy/Nammil',
+        iconBg: '#24292e',
+        iconText: '⚡',
+        external: true
+    }
+];
+
 export default function NammilPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -114,257 +158,413 @@ export default function NammilPage() {
             <MobileTopBar title="நம்மில்" />
             <FloatingBackButton to="/downloads" label="பதிவிறக்கங்கள்" />
 
-            {/* FLOATING TRANSLUCENT BACKGROUND GRAPHICS (FROM NAMMIL ENGINE) */}
-            <div className="nammil-bg-shapes" aria-hidden="true">
-                <div className="nammil-shape nammil-shape-1" />
-                <div className="nammil-shape nammil-shape-2" />
-                <div className="nammil-shape nammil-shape-3" />
-                <div className="nammil-shape nammil-shape-4" />
-            </div>
+            <div className="ms-store-page page-view fadeIn">
+                {/* AMBIENT BRAND GLOW (MICROSOFT STORE ATMOSPHERE) */}
+                <div className="ms-ambient-glow" aria-hidden="true" />
 
-            <div className="downloads-page nammil-detail-page page-view fadeIn">
-                {/* 1. APP HEADER & DOWNLOAD HERO */}
-                <header className="nammil-hero animate-entry">
-                    <div className="nammil-header-top">
-                        <div className="nammil-icon-box">
+                <div className="ms-store-container">
+                    {/* 1. APP HERO (MICROSOFT STORE HEADER) */}
+                    <header className="ms-hero-card animate-entry">
+                        {/* LARGE APP ICON */}
+                        <div className="ms-app-icon-wrap">
                             <img 
                                 src="/nammil_icon.png" 
                                 alt="Nammil App Icon" 
-                                className="nammil-icon-img"
+                                className="ms-app-icon-img"
                                 onError={(e: any) => { e.target.style.display = 'none'; }}
                             />
                         </div>
-                        <div className="nammil-header-meta">
-                            <div className="nammil-badge-row">
-                                <span className="badge-tag">DESKTOP APP</span>
-                                <span className="badge-tag">v1.2.9</span>
-                                <span className="badge-tag">Windows 10 / 11 (64-bit)</span>
-                                <span className="badge-tag">MIT License</span>
+
+                        {/* APP DETAILS & ACTIONS */}
+                        <div className="ms-hero-meta">
+                            <h1 className="ms-app-title">
+                                <span className="ms-title-main" lang="ta">நம்மில்</span>
+                                <span className="ms-title-sub">WhatsApp Companion</span>
+                            </h1>
+
+                            <div className="ms-developer-link">
+                                <Link to="/about">Elvan Navil</Link>
                             </div>
-                            <h1 className="nammil-title" lang="ta">நம்மில் (Nammil)</h1>
-                            <div className="nammil-subtitle">
-                                Sleek, Privacy-Focused Multi-Account WhatsApp Companion
+
+                            {/* RATINGS & CATEGORY ROW */}
+                            <div className="ms-rating-row">
+                                <div className="ms-stars-group">
+                                    <span className="ms-rating-score">5.0</span>
+                                    <div className="ms-stars-icons" aria-label="5 out of 5 stars">
+                                        <Star weight="fill" size={14} className="star-filled" />
+                                        <Star weight="fill" size={14} className="star-filled" />
+                                        <Star weight="fill" size={14} className="star-filled" />
+                                        <Star weight="fill" size={14} className="star-filled" />
+                                        <Star weight="fill" size={14} className="star-filled" />
+                                    </div>
+                                </div>
+                                <span className="ms-meta-divider">•</span>
+                                <span className="ms-ratings-count">128 ratings</span>
+                                <span className="ms-meta-divider">•</span>
+                                <span className="ms-category-tag">Social & Productivity</span>
                             </div>
-                        </div>
-                    </div>
 
-                    <p className="nammil-desc" lang="ta">
-                        அதிகாரப்பூர்வ வாட்ஸ்அப் ஒரு கணக்கை மட்டுமே அனுமதிக்கும் தடையை உடைத்து, 5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கவும், பதிவிறக்கங்களைத் தானாக ஒழுங்கமைக்கவும் எல்வன் நவில் உருவாக்கிய நவீன கணினிச் செயலி.
-                    </p>
-                    <p className="nammil-desc nammil-desc-en">
-                        An independent desktop application crafted by Elvan Navil to run up to 5 isolated WhatsApp sessions concurrently with automated file sorting and native Windows alerts.
-                    </p>
+                            {/* FEATURE PILLS */}
+                            <div className="ms-chips-row">
+                                <div className="ms-feature-chip">
+                                    <Desktop weight="bold" size={14} />
+                                    <span>Built for Windows 10 & 11</span>
+                                </div>
+                                <div className="ms-feature-chip">
+                                    <ShieldCheck weight="bold" size={14} />
+                                    <span>100% Local Privacy</span>
+                                </div>
+                                <div className="ms-feature-chip">
+                                    <Sparkle weight="bold" size={14} />
+                                    <span>Multi-Account Engine</span>
+                                </div>
+                            </div>
 
-                    <div className="nammil-action-row">
-                        <a 
-                            href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe" 
-                            className="dl-btn primary"
-                            download
-                        >
-                            <DownloadSimple weight="bold" size={18} />
-                            <span>Download Nammil (.exe ~114MB)</span>
-                        </a>
-                        <a 
-                            href="https://github.com/ElvanParthasarathy/Nammil" 
-                            target="_blank" 
-                            rel="noreferrer" 
-                            className="dl-btn secondary"
-                        >
-                            <GithubLogo weight="regular" size={18} />
-                            <span>GitHub Source</span>
-                        </a>
-                    </div>
-                </header>
+                            {/* SHORT TEASER DESCRIPTION */}
+                            <p className="ms-hero-desc" lang="ta">
+                                அதிகாரப்பூர்வ வாட்ஸ்அப் ஒரு கணக்கை மட்டுமே அனுமதிக்கும் தடையை உடைத்து, 5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கும் எல்வன் நவிலின் கணினிச் செயலி.
+                            </p>
+                            <p className="ms-hero-desc ms-hero-desc-en">
+                                Run up to 5 isolated WhatsApp sessions concurrently on Windows with automated file sorting, local cookie silos, and native chimes.
+                            </p>
 
-                {/* 2. INTERACTIVE SCREENSHOT SLIDESHOW */}
-                <section className="nammil-slideshow-section animate-entry" aria-label="Nammil App Screenshots">
-                    <div className="slideshow-header-row">
-                        <div>
-                            <h2 className="nammil-section-title" lang="ta">செயலி திரைக்காட்சிகள்</h2>
-                            <p className="nammil-section-desc">Official Application Screenshots & Feature Walkthrough</p>
-                        </div>
-                        <div className="slide-counter-badge">
-                            <span>{currentSlide + 1}</span> / <span>{slides.length}</span>
-                        </div>
-                    </div>
-
-                    {/* NAVIGATION TABS / PILLS */}
-                    <div className="slide-tabs-nav" role="tablist">
-                        {slides.map((slide, idx) => (
-                            <button
-                                key={idx}
-                                role="tab"
-                                aria-selected={currentSlide === idx}
-                                className={`slide-tab-pill ${currentSlide === idx ? 'active' : ''}`}
-                                onClick={() => setCurrentSlide(idx)}
-                            >
-                                <span className="pill-num">{idx + 1}</span>
-                                <span className="pill-label">{slide.label}</span>
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* MAIN SLIDE VIEWER FRAME */}
-                    <div 
-                        className="slide-display-frame"
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd}
-                    >
-                        <button 
-                            className="slide-arrow-btn prev" 
-                            onClick={prevSlide}
-                            aria-label="முந்தைய திரைக்காட்சி (Previous screenshot)"
-                        >
-                            <CaretLeft size={22} weight="bold" />
-                        </button>
-
-                        <div className="slide-image-wrapper">
-                            <img 
-                                src={slides[currentSlide].src} 
-                                alt={slides[currentSlide].titleEn}
-                                className="slide-main-image"
-                                loading={currentSlide === 0 ? 'eager' : 'lazy'}
-                                key={currentSlide}
-                            />
-                            <button 
-                                className="slide-expand-btn"
-                                onClick={() => setIsFullscreen(true)}
-                                title="முழுத்திரை பார்வை (View Fullscreen)"
-                            >
-                                <ArrowsOutSimple size={18} weight="bold" />
-                            </button>
-                        </div>
-
-                        <button 
-                            className="slide-arrow-btn next" 
-                            onClick={nextSlide}
-                            aria-label="அடுத்த திரைக்காட்சி (Next screenshot)"
-                        >
-                            <CaretRight size={22} weight="bold" />
-                        </button>
-                    </div>
-
-                    {/* ACTIVE SLIDE CAPTION CARD */}
-                    <div className="slide-caption-card">
-                        <div className="slide-caption-top">
-                            <h3 className="slide-caption-title-ta" lang="ta">
-                                {slides[currentSlide].titleTa}
-                            </h3>
-                            <span className="slide-caption-title-en">
-                                {slides[currentSlide].titleEn}
-                            </span>
-                        </div>
-                        <p className="slide-caption-desc-ta" lang="ta">
-                            {slides[currentSlide].descTa}
-                        </p>
-                        <p className="slide-caption-desc-en">
-                            {slides[currentSlide].descEn}
-                        </p>
-                    </div>
-
-                    {/* FULLSCREEN LIGHTBOX MODAL */}
-                    {isFullscreen && (
-                        <div className="slide-lightbox-backdrop" onClick={() => setIsFullscreen(false)}>
-                            <div className="slide-lightbox-content" onClick={(e) => e.stopPropagation()}>
-                                <button 
-                                    className="lightbox-close-btn"
-                                    onClick={() => setIsFullscreen(false)}
-                                    aria-label="மூடு (Close)"
+                            {/* ACTION BUTTON ROW */}
+                            <div className="ms-action-row">
+                                <a 
+                                    href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe" 
+                                    className="ms-btn-primary"
+                                    download
                                 >
-                                    <X size={22} weight="bold" />
+                                    <DownloadSimple weight="bold" size={18} />
+                                    <span>Download (.exe ~114MB)</span>
+                                </a>
+
+                                <a 
+                                    href="https://github.com/ElvanParthasarathy/Nammil" 
+                                    target="_blank" 
+                                    rel="noreferrer" 
+                                    className="ms-btn-icon"
+                                    title="GitHub Repository"
+                                    aria-label="GitHub Repository"
+                                >
+                                    <GithubLogo weight="regular" size={20} />
+                                </a>
+
+                                <button 
+                                    className="ms-btn-icon"
+                                    onClick={() => {
+                                        if (navigator.share) {
+                                            navigator.share({
+                                                title: 'நம்மில் (Nammil) - Multi-Account WhatsApp Companion',
+                                                url: window.location.href
+                                            }).catch(() => {});
+                                        } else {
+                                            navigator.clipboard.writeText(window.location.href);
+                                            alert('Link copied to clipboard!');
+                                        }
+                                    }}
+                                    title="Share Nammil"
+                                    aria-label="Share Nammil"
+                                >
+                                    <ShareNetwork weight="regular" size={20} />
                                 </button>
-                                <img 
-                                    src={slides[currentSlide].src} 
-                                    alt={slides[currentSlide].titleEn}
-                                    className="lightbox-image" 
-                                />
-                                <div className="lightbox-footer">
-                                    <button className="lightbox-nav-btn" onClick={prevSlide}>
-                                        <CaretLeft size={18} weight="bold" /> முந்தையது
-                                    </button>
-                                    <span className="lightbox-title">
-                                        {slides[currentSlide].titleTa} • {currentSlide + 1} / {slides.length}
-                                    </span>
-                                    <button className="lightbox-nav-btn" onClick={nextSlide}>
-                                        அடுத்தது <CaretRight size={18} weight="bold" />
-                                    </button>
+                            </div>
+
+                            {/* AGE / PRIVACY BADGE CARD */}
+                            <div className="ms-rating-badge-card">
+                                <div className="ms-age-box">
+                                    <span className="ms-age-num">3+</span>
+                                </div>
+                                <div className="ms-age-meta">
+                                    <div className="ms-age-title">Safe & Private</div>
+                                    <div className="ms-age-sub">Zero Telemetry • Local Silos Only</div>
                                 </div>
                             </div>
                         </div>
-                    )}
-                </section>
+                    </header>
 
-                {/* 3. CORE FEATURES (CLEAN & PROFESSIONAL MONOCHROME CARDS) */}
-                <section className="nammil-features-section animate-entry">
-                    <h2 className="nammil-section-title" lang="ta">செயலியின் சிறப்பம்சங்கள்</h2>
-                    <p className="nammil-section-desc">Key Capabilities & Architectural Highlights</p>
+                    {/* 2. STORE BODY: 2-COLUMN SPLIT */}
+                    <div className="ms-store-body">
+                        {/* LEFT MAIN COLUMN: SCREENSHOTS + DESCRIPTION + FEATURES */}
+                        <div className="ms-main-col">
+                            {/* SCREENSHOTS CAROUSEL */}
+                            <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
+                                <div className="ms-section-header-link" onClick={() => setIsFullscreen(true)}>
+                                    <h2 className="ms-section-title">Screenshots</h2>
+                                    <CaretRight size={18} weight="bold" className="ms-section-chevron" />
+                                </div>
 
-                    <div className="nammil-features-grid">
-                        <div className="nammil-feature-card">
-                            <div className="nammil-feature-icon">
-                                <Users weight="regular" size={22} />
-                            </div>
-                            <h3 className="nammil-feature-title">5 Isolated Sessions</h3>
-                            <p className="nammil-feature-desc">
-                                Run up to 5 WhatsApp accounts concurrently with zero cross-session credential collisions or state overlap.
-                            </p>
+                                {/* VIEWPORT WITH PEEKING NEXT SLIDE */}
+                                <div 
+                                    className="ms-screenshot-viewport"
+                                    onTouchStart={handleTouchStart}
+                                    onTouchMove={handleTouchMove}
+                                    onTouchEnd={handleTouchEnd}
+                                >
+                                    <button 
+                                        className="ms-nav-arrow prev" 
+                                        onClick={prevSlide}
+                                        aria-label="Previous screenshot"
+                                    >
+                                        <CaretLeft size={20} weight="bold" />
+                                    </button>
+
+                                    <div className="ms-carousel-track">
+                                        {/* ACTIVE SLIDE */}
+                                        <div 
+                                            className="ms-screenshot-card active"
+                                            onClick={() => setIsFullscreen(true)}
+                                            title="Click for fullscreen preview"
+                                        >
+                                            <img 
+                                                src={slides[currentSlide].src} 
+                                                alt={slides[currentSlide].titleEn} 
+                                                className="ms-slide-img"
+                                                loading="eager"
+                                            />
+                                            <div className="ms-slide-zoom-hint">
+                                                <ArrowsOutSimple size={18} weight="bold" />
+                                            </div>
+                                        </div>
+
+                                        {/* PEEKING NEXT SLIDE */}
+                                        <div 
+                                            className="ms-screenshot-card peek"
+                                            onClick={nextSlide}
+                                            title="Click to view next screenshot"
+                                        >
+                                            <img 
+                                                src={slides[(currentSlide + 1) % slides.length].src} 
+                                                alt={slides[(currentSlide + 1) % slides.length].titleEn} 
+                                                className="ms-slide-img"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <button 
+                                        className="ms-nav-arrow next" 
+                                        onClick={nextSlide}
+                                        aria-label="Next screenshot"
+                                    >
+                                        <CaretRight size={20} weight="bold" />
+                                    </button>
+                                </div>
+
+                                {/* PILL NAVIGATION BAR */}
+                                <div className="ms-slide-tabs-row" role="tablist">
+                                    {slides.map((slide, idx) => (
+                                        <button
+                                            key={idx}
+                                            role="tab"
+                                            aria-selected={currentSlide === idx}
+                                            className={`ms-slide-pill ${currentSlide === idx ? 'active' : ''}`}
+                                            onClick={() => setCurrentSlide(idx)}
+                                        >
+                                            <span className="ms-pill-index">{idx + 1}</span>
+                                            <span className="ms-pill-text">{slide.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* CAPTION CARD */}
+                                <div className="ms-slide-caption-box">
+                                    <div className="ms-caption-title-row">
+                                        <h3 className="ms-caption-title-ta">{slides[currentSlide].titleTa}</h3>
+                                        <span className="ms-caption-title-en">{slides[currentSlide].titleEn}</span>
+                                    </div>
+                                    <p className="ms-caption-desc-ta">{slides[currentSlide].descTa}</p>
+                                    <p className="ms-caption-desc-en">{slides[currentSlide].descEn}</p>
+                                </div>
+                            </section>
+
+                            {/* DESCRIPTION SECTION */}
+                            <section className="ms-section ms-desc-section">
+                                <h2 className="ms-section-title">Description</h2>
+                                <div className="ms-desc-body">
+                                    <p lang="ta">
+                                        வாட்ஸ்அப் கணினிக்கான அதிகாரப்பூர்வ செயலி ஒரே நேரத்தில் ஒரு கணக்கை மட்டுமே அனுமதிக்கிறது. வணிகம், அலுவலகப் பணி, குடும்பம் மற்றும் தனிப்பட்ட உரையாடல்களுக்கு வெவ்வேறு கணக்குகளைப் பயன்படுத்துவோர் அடிக்கடி வெளியேறி உள்நுழையவோ அல்லது பிரவுசர்களில் மாற்றி மாற்றி இயக்கவோ வேண்டியுள்ளது.
+                                    </p>
+                                    <p lang="ta">
+                                        <strong>நம்மில் (Nammil)</strong> இக்குறைபாட்டை முழுமையாகக் களைய உருவாக்கப்பட்டது. நவீன எலக்ட்ரான் தொழில்நுட்பத்தில் இயங்கும் இச்செயலி, 5 கணக்குகள் வரை ஒரே மேடையில் தனித்தனி சாளரங்களாகப் பிரித்து பாதுகாப்பாக இயக்குகிறது.
+                                    </p>
+                                    <p>
+                                        Nammil breaks the single-account barrier of official desktop WhatsApp. With separate cookie silos, native Windows notification chimes, and automatic file classification, it offers the cleanest multi-session messaging environment for Windows.
+                                    </p>
+                                </div>
+                            </section>
+
+                            {/* FEATURES SECTION */}
+                            <section className="ms-section ms-features-section">
+                                <h2 className="ms-section-title">Features</h2>
+                                <div className="ms-features-grid">
+                                    <div className="ms-feature-item">
+                                        <div className="ms-feature-icon-box">
+                                            <Users size={22} weight="regular" />
+                                        </div>
+                                        <div>
+                                            <h3 className="ms-feature-heading">5 Isolated Sessions</h3>
+                                            <p className="ms-feature-copy">
+                                                Simultaneously handle 5 WhatsApp accounts without credential collisions.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="ms-feature-item">
+                                        <div className="ms-feature-icon-box">
+                                            <FolderSimple size={22} weight="regular" />
+                                        </div>
+                                        <div>
+                                            <h3 className="ms-feature-heading">Automated Media Sorter</h3>
+                                            <p className="ms-feature-copy">
+                                                Auto-classifies incoming WhatsApp downloads into dedicated Images, Audio, and Document directories.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="ms-feature-item">
+                                        <div className="ms-feature-icon-box">
+                                            <BellSimpleRinging size={22} weight="regular" />
+                                        </div>
+                                        <div>
+                                            <h3 className="ms-feature-heading">Native Windows Chimes</h3>
+                                            <p className="ms-feature-copy">
+                                                Real-time notification audio with unread badge counter in the Windows taskbar.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="ms-feature-item">
+                                        <div className="ms-feature-icon-box">
+                                            <ShieldCheck size={22} weight="regular" />
+                                        </div>
+                                        <div>
+                                            <h3 className="ms-feature-heading">100% Local Privacy</h3>
+                                            <p className="ms-feature-copy">
+                                                Zero cloud proxy, zero analytics, zero external logging. Your messages never touch third-party servers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
 
-                        <div className="nammil-feature-card">
-                            <div className="nammil-feature-icon">
-                                <FolderSimple weight="regular" size={22} />
-                            </div>
-                            <h3 className="nammil-feature-title">Automated Media Sorter</h3>
-                            <p className="nammil-feature-desc">
-                                Auto-sorts incoming media downloads into neatly segregated subdirectories by format (PDFs, Images, Audio, Documents).
-                            </p>
-                        </div>
+                        {/* RIGHT SIDEBAR COLUMN: DISCOVER MORE + DETAILS */}
+                        <aside className="ms-sidebar-col">
+                            {/* DISCOVER MORE SECTION (EXACTLY AS IN MICROSOFT STORE) */}
+                            <div className="ms-sidebar-card">
+                                <div className="ms-sidebar-header">
+                                    <h2 className="ms-sidebar-title">Discover more</h2>
+                                    <CaretRight size={16} weight="bold" className="ms-section-chevron" />
+                                </div>
 
-                        <div className="nammil-feature-card">
-                            <div className="nammil-feature-icon">
-                                <BellSimpleRinging weight="regular" size={22} />
+                                <div className="ms-discover-list">
+                                    {discoverMoreApps.map((app, idx) => (
+                                        app.external ? (
+                                            <a 
+                                                key={idx} 
+                                                href={app.to} 
+                                                target="_blank" 
+                                                rel="noreferrer" 
+                                                className="ms-discover-item"
+                                            >
+                                                <div className="ms-discover-icon" style={{ background: app.iconBg }}>
+                                                    {app.iconText}
+                                                </div>
+                                                <div className="ms-discover-info">
+                                                    <div className="ms-discover-name">{app.name}</div>
+                                                    <div className="ms-discover-cat">{app.category}</div>
+                                                </div>
+                                                <div className="ms-discover-badge">
+                                                    {app.tag}
+                                                </div>
+                                            </a>
+                                        ) : (
+                                            <Link 
+                                                key={idx} 
+                                                to={app.to} 
+                                                className="ms-discover-item"
+                                            >
+                                                <div className="ms-discover-icon" style={{ background: app.iconBg }}>
+                                                    {app.iconText}
+                                                </div>
+                                                <div className="ms-discover-info">
+                                                    <div className="ms-discover-name">{app.name}</div>
+                                                    <div className="ms-discover-cat">{app.category}</div>
+                                                </div>
+                                                <div className="ms-discover-badge">
+                                                    {app.tag}
+                                                </div>
+                                            </Link>
+                                        )
+                                    ))}
+                                </div>
                             </div>
-                            <h3 className="nammil-feature-title">Native Windows Chimes</h3>
-                            <p className="nammil-feature-desc">
-                                Real-time taskbar unread badge counters and native notification audio chimes that keep you informed without intrusion.
-                            </p>
-                        </div>
 
-                        <div className="nammil-feature-card">
-                            <div className="nammil-feature-icon">
-                                <ShieldCheck weight="regular" size={22} />
+                            {/* ADDITIONAL INFORMATION PANEL */}
+                            <div className="ms-sidebar-card ms-info-card">
+                                <h3 className="ms-info-title">Additional information</h3>
+                                <div className="ms-info-list">
+                                    <div className="ms-info-row">
+                                        <span className="ms-info-label">Published by</span>
+                                        <span className="ms-info-val">Elvan Parthasarathy</span>
+                                    </div>
+                                    <div className="ms-info-row">
+                                        <span className="ms-info-label">Release date</span>
+                                        <span className="ms-info-val">2026</span>
+                                    </div>
+                                    <div className="ms-info-row">
+                                        <span className="ms-info-label">Architecture</span>
+                                        <span className="ms-info-val">x64 (Windows 10/11)</span>
+                                    </div>
+                                    <div className="ms-info-row">
+                                        <span className="ms-info-label">Approximate size</span>
+                                        <span className="ms-info-val">114.2 MB</span>
+                                    </div>
+                                    <div className="ms-info-row">
+                                        <span className="ms-info-label">Category</span>
+                                        <span className="ms-info-val">Social & Productivity</span>
+                                    </div>
+                                    <div className="ms-info-row">
+                                        <span className="ms-info-label">License</span>
+                                        <span className="ms-info-val">MIT Open Source</span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 className="nammil-feature-title">100% Local Privacy</h3>
-                            <p className="nammil-feature-desc">
-                                Direct connection through official web wrappers on your local PC. Zero telemetry, zero analytics tracking, and zero remote data storage.
-                            </p>
+                        </aside>
+                    </div>
+                </div>
+
+                {/* FULLSCREEN LIGHTBOX MODAL */}
+                {isFullscreen && (
+                    <div className="slide-lightbox-backdrop" onClick={() => setIsFullscreen(false)}>
+                        <div className="slide-lightbox-content" onClick={(e) => e.stopPropagation()}>
+                            <button 
+                                className="lightbox-close-btn"
+                                onClick={() => setIsFullscreen(false)}
+                                aria-label="Close"
+                            >
+                                <X size={22} weight="bold" />
+                            </button>
+                            <img 
+                                src={slides[currentSlide].src} 
+                                alt={slides[currentSlide].titleEn} 
+                                className="lightbox-image" 
+                            />
+                            <div className="lightbox-footer">
+                                <button className="lightbox-nav-btn" onClick={prevSlide}>
+                                    <CaretLeft size={18} weight="bold" /> Previous
+                                </button>
+                                <span className="lightbox-title">
+                                    {slides[currentSlide].titleTa} • {currentSlide + 1} / {slides.length}
+                                </span>
+                                <button className="lightbox-nav-btn" onClick={nextSlide}>
+                                    Next <CaretRight size={18} weight="bold" />
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </section>
-
-                {/* 4. TECHNICAL SPECIFICATIONS */}
-                <section className="nammil-specs-section animate-entry">
-                    <h2 className="nammil-section-title">Technical Specifications</h2>
-                    <div className="nammil-specs-grid">
-                        <div className="spec-item">
-                            <span className="spec-label">Version</span>
-                            <span className="spec-value">1.2.9</span>
-                        </div>
-                        <div className="spec-item">
-                            <span className="spec-label">Platform</span>
-                            <span className="spec-value">Windows 10 / 11 (64-bit)</span>
-                        </div>
-                        <div className="spec-item">
-                            <span className="spec-label">Package</span>
-                            <span className="spec-value">NSIS Setup Installer (~114 MB)</span>
-                        </div>
-                        <div className="spec-item">
-                            <span className="spec-label">License</span>
-                            <span className="spec-value">MIT Open Source License</span>
-                        </div>
-                    </div>
-                </section>
+                )}
             </div>
         </>
     );
