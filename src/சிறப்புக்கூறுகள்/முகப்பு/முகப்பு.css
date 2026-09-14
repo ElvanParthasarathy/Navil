@@ -602,10 +602,19 @@
 .span-8 { grid-column: span 8; }
 .span-4 { grid-column: span 4; }
 
+.company-home-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .company-hero-card {
     background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
     border-radius: 28px;
-    padding: 40px;
+    padding: 44px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
@@ -616,33 +625,12 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.company-hero-layout {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-}
-
-.company-emblem {
-    width: 96px;
-    height: 96px;
-    border-radius: 26px;
-    background: linear-gradient(135deg, #10b981, #059669);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    box-shadow: 0 12px 28px rgba(16, 185, 129, 0.3);
-    flex-shrink: 0;
-    font-size: 2.8rem;
-    font-weight: 800;
-}
-
 .company-hero-text {
     flex: 1;
 }
 
 .company-hero-title {
-    font-size: 2.5rem;
+    font-size: clamp(2.4rem, 5vw, 3.2rem);
     font-weight: 800;
     line-height: 1.15;
     margin: 0;
