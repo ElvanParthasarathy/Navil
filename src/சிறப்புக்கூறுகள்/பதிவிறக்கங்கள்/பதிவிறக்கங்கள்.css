@@ -500,12 +500,13 @@ body:has(.ms-store-page) .main-content,
     gap: 6px;
     cursor: pointer;
     margin-bottom: 16px;
+    padding-left: 20px;
     transition: color 0.15s ease;
 }
 
 .ms-section-header-link:hover .ms-section-title,
 .ms-section-header-link:hover .ms-section-chevron {
-    color: #00a884;
+    color: var(--text-main);
 }
 
 .ms-section-title {
@@ -514,6 +515,11 @@ body:has(.ms-store-page) .main-content,
     color: var(--text-main);
     margin: 0;
     letter-spacing: -0.01em;
+}
+
+.ms-section > .ms-section-title {
+    padding-left: 20px;
+    margin-bottom: 16px;
 }
 
 .ms-section-chevron {
@@ -563,7 +569,7 @@ body:has(.ms-store-page) .main-content,
     scroll-snap-align: start;
     scroll-snap-stop: always;
     position: relative;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
     aspect-ratio: 16 / 9;
     background: #0b141a;
@@ -1185,6 +1191,11 @@ body:has(.ms-store-page) .main-content,
 
     .ms-store-container {
         padding: 84px 16px 0;
+    }
+
+    .ms-section-header-link,
+    .ms-section > .ms-section-title {
+        padding-left: 12px;
     }
 
     .ms-hero-card {
