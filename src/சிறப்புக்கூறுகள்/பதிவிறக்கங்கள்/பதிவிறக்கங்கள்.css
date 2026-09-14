@@ -573,30 +573,35 @@ body:has(.ms-store-page) .main-content,
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(11, 20, 26, 0.78);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: none;
+    outline: none;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
 }
 
 .ms-scroll-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: none;
+    outline: none;
     color: #ffffff;
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 255, 255, 0.18);
 }
 
 .ms-scroll-nav-btn:active {
-    transform: translateY(-50%) scale(0.96);
+    transform: translateY(-50%) scale(0.95);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .ms-scroll-nav-btn.prev {
@@ -867,8 +872,10 @@ body:has(.ms-store-page) .main-content,
     gap: 6px;
     padding: 8px 18px;
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: none;
     color: #ffffff;
     font-size: 0.85rem;
     font-weight: 600;
@@ -877,8 +884,8 @@ body:has(.ms-store-page) .main-content,
 }
 
 .lightbox-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
     box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
 }
 
