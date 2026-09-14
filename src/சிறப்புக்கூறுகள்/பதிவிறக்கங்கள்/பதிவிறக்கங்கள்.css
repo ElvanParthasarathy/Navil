@@ -854,7 +854,8 @@ body:has(.ms-store-page) .main-content,
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: none;
+    outline: none;
     letter-spacing: 0.5px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
@@ -964,20 +965,22 @@ body:has(.ms-store-page) .main-content,
     background: rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: none;
+    outline: none;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 60;
-    transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .nammil-lb-nav:hover {
     background: rgba(255, 255, 255, 0.24);
-    border-color: rgba(255, 255, 255, 0.22);
+    border: none;
+    outline: none;
     color: #ffffff;
     transform: translateY(-50%) scale(1.08);
     box-shadow: 0 10px 36px rgba(0, 0, 0, 0.5);
