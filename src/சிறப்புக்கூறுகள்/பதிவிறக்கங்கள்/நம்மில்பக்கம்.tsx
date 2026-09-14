@@ -1,5 +1,6 @@
 import './பதிவிறக்கங்கள்.css';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
@@ -81,8 +82,16 @@ const slides = [
 ];
 
 export default function NammilPage() {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const isTransitioning = useRef(false);
+    const containerDragX = useRef(0);
+    const touchStartX = useRef(0);
+    const touchStartY = useRef(0);
+    const touchStartTime = useRef(0);
+    const isDraggingSlide = useRef(false);
+
     const scrollerRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
@@ -132,30 +141,240 @@ export default function NammilPage() {
         isDragging.current = false;
     };
 
+    const closeLightbox = useCallback(() => {
+        if (window.history.state?.lightboxOpen) {
+            window.history.back();
+        } else {
+            setLightboxIdx(null);
+        }
+    }, []);
+
+    const openLightbox = useCallback((idx: number) => {
+        setLightboxIdx(idx);
+        window.history.pushState({ lightboxOpen: true }, '');
+    }, []);
+
     const handleSlideClick = (idx: number) => {
         if (hasMoved.current) return;
-        setCurrentSlide(idx);
-        setIsFullscreen(true);
+        openLightbox(idx);
     };
 
-    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    const slideContainer = useCallback((direction: 1 | -1 | 0) => {
+        if (!containerRef.current || isTransitioning.current) return;
+
+        isTransitioning.current = true;
+        const container = containerRef.current;
+        container.style.transition = 'transform 0.16s cubic-bezier(0.2, 0, 0, 1)';
+
+        if (direction === 1) {
+            container.style.transform = 'translate3d(-66.666%, 0, 0)';
+            setTimeout(() => {
+                setLightboxIdx(prev => (prev !== null && prev < slides.length - 1 ? prev + 1 : prev));
+            }, 160);
+        } else if (direction === -1) {
+            container.style.transform = 'translate3d(0%, 0, 0)';
+            setTimeout(() => {
+                setLightboxIdx(prev => (prev !== null && prev > 0 ? prev - 1 : prev));
+            }, 160);
+        } else {
+            container.style.transform = 'translate3d(-33.333%, 0, 0)';
+            setTimeout(() => {
+                if (containerRef.current) {
+                    containerRef.current.style.transition = 'none';
+                }
+                isTransitioning.current = false;
+            }, 160);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.style.transition = 'none';
+            containerRef.current.style.transform = 'translate3d(-33.333%, 0, 0)';
+        }
+        isTransitioning.current = false;
+        containerDragX.current = 0;
+    }, [lightboxIdx]);
+
+    const goToNext = useCallback(() => {
+        if (lightboxIdx === null || lightboxIdx >= slides.length - 1) return;
+        slideContainer(1);
+    }, [lightboxIdx, slideContainer]);
+
+    const goToPrev = useCallback(() => {
+        if (lightboxIdx === null || lightboxIdx <= 0) return;
+        slideContainer(-1);
+    }, [lightboxIdx, slideContainer]);
+
+    const jumpToSlide = useCallback((idx: number) => {
+        if (isTransitioning.current) return;
+        setLightboxIdx(idx);
+    }, []);
+
+    // Popstate, keyboard, body scroll lock
+    useEffect(() => {
+        const handlePopState = (e: PopStateEvent) => {
+            if (e.state?.lightboxOpen !== true) {
+                setLightboxIdx(null);
+            }
+        };
+        window.addEventListener('popstate', handlePopState);
+
+        if (lightboxIdx !== null) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+        } else {
+            document.body.style.overflow = '';
+            document.body.style.touchAction = '';
+        }
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (lightboxIdx === null) return;
+            if (e.key === 'ArrowRight') goToNext();
+            if (e.key === 'ArrowLeft') goToPrev();
+            if (e.key === 'Escape') closeLightbox();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+            window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
+            document.body.style.touchAction = '';
+        };
+    }, [lightboxIdx, goToNext, goToPrev, closeLightbox]);
+
+    // Touch & swipe handling on wrapperRef
+    useEffect(() => {
+        const wrapper = wrapperRef.current;
+        if (!wrapper || lightboxIdx === null) return;
+
+        const handleTouchStart = (e: TouchEvent) => {
+            if (e.touches.length === 1) {
+                touchStartX.current = e.touches[0].clientX;
+                touchStartY.current = e.touches[0].clientY;
+                touchStartTime.current = Date.now();
+                containerDragX.current = 0;
+                isDraggingSlide.current = true;
+                if (containerRef.current) {
+                    containerRef.current.style.transition = 'none';
+                }
+            }
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!isDraggingSlide.current || isTransitioning.current) return;
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const dx = currentX - touchStartX.current;
+            const dy = currentY - touchStartY.current;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (e.cancelable) e.preventDefault();
+
+                let finalDx = dx;
+                if ((dx > 0 && lightboxIdx === 0) || (dx < 0 && lightboxIdx === slides.length - 1)) {
+                    finalDx = dx * 0.35;
+                }
+
+                containerDragX.current = finalDx;
+                if (containerRef.current) {
+                    containerRef.current.style.transform = `translate3d(calc(-33.333% + ${finalDx}px), 0, 0)`;
+                }
+            }
+        };
+
+        const handleTouchEnd = () => {
+            if (!isDraggingSlide.current) return;
+            isDraggingSlide.current = false;
+
+            if (containerRef.current && !isTransitioning.current) {
+                const dx = containerDragX.current;
+                const dt = Date.now() - touchStartTime.current;
+                const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
+                const swipeThreshold = width * 0.15;
+                const isFlick = dt < 300 && Math.abs(dx) > 25;
+                const direction = dx > 0 ? -1 : 1;
+
+                const hasNext = lightboxIdx !== null && lightboxIdx < slides.length - 1;
+                const hasPrev = lightboxIdx !== null && lightboxIdx > 0;
+
+                if (direction === 1 && hasNext && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                    slideContainer(1);
+                } else if (direction === -1 && hasPrev && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                    slideContainer(-1);
+                } else {
+                    slideContainer(0);
+                }
+            }
+        };
+
+        wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+        wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+        wrapper.addEventListener('touchend', handleTouchEnd);
+
+        return () => {
+            wrapper.removeEventListener('touchstart', handleTouchStart);
+            wrapper.removeEventListener('touchmove', handleTouchMove);
+            wrapper.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, [lightboxIdx, slideContainer]);
+
+    // Desktop mouse drag
+    const handlePointerDown = (e: React.MouseEvent) => {
+        if (e.button !== 0 || isTransitioning.current) return;
+        touchStartX.current = e.clientX;
+        touchStartTime.current = Date.now();
+        containerDragX.current = 0;
+        isDraggingSlide.current = true;
+        if (containerRef.current) {
+            containerRef.current.style.transition = 'none';
+        }
+    };
+
+    const handlePointerMove = (e: React.MouseEvent) => {
+        if (!isDraggingSlide.current || isTransitioning.current) return;
+        e.preventDefault();
+        const dx = e.clientX - touchStartX.current;
+        let finalDx = dx;
+        if ((dx > 0 && lightboxIdx === 0) || (dx < 0 && lightboxIdx === slides.length - 1)) {
+            finalDx = dx * 0.35;
+        }
+        containerDragX.current = finalDx;
+        if (containerRef.current) {
+            containerRef.current.style.transform = `translate3d(calc(-33.333% + ${finalDx}px), 0, 0)`;
+        }
+    };
+
+    const handlePointerEnd = () => {
+        if (!isDraggingSlide.current) return;
+        isDraggingSlide.current = false;
+        if (containerRef.current && !isTransitioning.current) {
+            const dx = containerDragX.current;
+            const dt = Date.now() - touchStartTime.current;
+            const width = (containerRef.current.clientWidth / 3) || window.innerWidth;
+            const swipeThreshold = width * 0.15;
+            const isFlick = dt < 300 && Math.abs(dx) > 25;
+            const direction = dx > 0 ? -1 : 1;
+
+            const hasNext = lightboxIdx !== null && lightboxIdx < slides.length - 1;
+            const hasPrev = lightboxIdx !== null && lightboxIdx > 0;
+
+            if (direction === 1 && hasNext && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                slideContainer(1);
+            } else if (direction === -1 && hasPrev && (Math.abs(dx) > swipeThreshold || isFlick)) {
+                slideContainer(-1);
+            } else {
+                slideContainer(0);
+            }
+        }
+    };
 
     useEffect(() => {
         checkScrollButtons();
         const handleResize = () => checkScrollButtons();
         window.addEventListener('resize', handleResize);
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-            if (e.key === 'Escape') setIsFullscreen(false);
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('keydown', handleKeyDown);
-        };
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
@@ -250,7 +469,7 @@ export default function NammilPage() {
                     <div className="ms-store-body">
                         {/* SCREENSHOTS SECTION (MICROSOFT STORE HORIZONTAL SCROLLER) */}
                         <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
-                            <div className="ms-section-header-link" onClick={() => setIsFullscreen(true)}>
+                            <div className="ms-section-header-link" onClick={() => openLightbox(0)}>
                                 <h2 className="ms-section-title">Screenshots</h2>
                                 <CaretRight size={18} weight="bold" className="ms-section-chevron" />
                             </div>
@@ -544,36 +763,88 @@ export default function NammilPage() {
                     </div>
                 </div>
 
-                {/* FULLSCREEN LIGHTBOX MODAL */}
-                {isFullscreen && (
-                    <div className="slide-lightbox-backdrop" onClick={() => setIsFullscreen(false)}>
-                        <div className="slide-lightbox-content" onClick={(e) => e.stopPropagation()}>
-                            <button 
-                                className="lightbox-close-btn"
-                                onClick={() => setIsFullscreen(false)}
-                                aria-label="Close"
-                            >
-                                <X size={22} weight="bold" />
+            {/* OPTIMIZED FULLSCREEN LIGHTBOX WITH CENTERED IMAGE & BOTTOM FILMSTRIP */}
+            {lightboxIdx !== null && typeof document !== 'undefined' && createPortal(
+                <div className="nammil-lightbox" onClick={closeLightbox}>
+                    <div className="nammil-lb-header" onClick={(e) => e.stopPropagation()}>
+                        <div className="nammil-lb-title-group">
+                            <span className="nammil-lb-title">{slides[lightboxIdx].titleTa}</span>
+                            <span className="nammil-lb-counter">{lightboxIdx + 1} / {slides.length}</span>
+                        </div>
+                        <button className="nammil-lb-close" onClick={closeLightbox} aria-label="Close">
+                            <X weight="bold" size={20} />
+                        </button>
+                    </div>
+
+                    <div className="nammil-lb-main-container" onClick={(e) => e.stopPropagation()}>
+                        {lightboxIdx > 0 && (
+                            <button className="nammil-lb-nav prev" onClick={goToPrev} aria-label="Previous screenshot">
+                                <CaretLeft weight="bold" size={24} />
                             </button>
-                            <img 
-                                src={slides[currentSlide].src} 
-                                alt={slides[currentSlide].titleEn} 
-                                className="lightbox-image" 
-                            />
-                            <div className="lightbox-footer">
-                                <button className="lightbox-nav-btn" onClick={prevSlide}>
-                                    <CaretLeft size={18} weight="bold" /> Previous
-                                </button>
-                                <span className="lightbox-title">
-                                    {slides[currentSlide].titleTa} • {currentSlide + 1} / {slides.length}
-                                </span>
-                                <button className="lightbox-nav-btn" onClick={nextSlide}>
-                                    Next <CaretRight size={18} weight="bold" />
-                                </button>
+                        )}
+                        {lightboxIdx < slides.length - 1 && (
+                            <button className="nammil-lb-nav next" onClick={goToNext} aria-label="Next screenshot">
+                                <CaretRight weight="bold" size={24} />
+                            </button>
+                        )}
+
+                        <div
+                            className="nammil-lb-img-wrapper"
+                            ref={wrapperRef}
+                            onMouseDown={handlePointerDown}
+                            onMouseMove={handlePointerMove}
+                            onMouseUp={handlePointerEnd}
+                            onMouseLeave={handlePointerEnd}
+                        >
+                            <div
+                                className="nammil-lb-img-container"
+                                ref={containerRef}
+                                style={{ transform: 'translate3d(-33.333%, 0, 0)' }}
+                            >
+                                {[-1, 0, 1].map(offset => {
+                                    const i = lightboxIdx + offset;
+                                    if (i < 0 || i >= slides.length) {
+                                        return <div key={`spacer-${offset}`} className="nammil-lb-slide spacer" />;
+                                    }
+
+                                    const slide = slides[i];
+                                    const isCurrent = offset === 0;
+
+                                    return (
+                                        <div key={`slide-${i}`} className="nammil-lb-slide">
+                                            <img
+                                                src={slide.src}
+                                                alt={slide.titleEn}
+                                                className="nammil-lb-img"
+                                                loading={isCurrent ? "eager" : "lazy"}
+                                                draggable={false}
+                                                onDragStart={(e) => e.preventDefault()}
+                                            />
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
-                )}
+
+                    <div className="nammil-lb-filmstrip" onClick={(e) => e.stopPropagation()}>
+                        {slides.map((s, idx) => {
+                            const isActive = lightboxIdx === idx;
+                            return (
+                                <div
+                                    key={idx}
+                                    className={`nammil-lb-fs-item ${isActive ? 'active' : ''}`}
+                                    onClick={() => jumpToSlide(idx)}
+                                    title={s.titleTa}
+                                >
+                                    <img src={s.src} alt={s.titleEn} draggable={false} />
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>,
+                document.body
+            )}
             </div>
         </>
     );
