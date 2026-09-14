@@ -245,28 +245,38 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 16px;
   flex: 1;
   min-height: 0;
 }
 
 .brand {
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  padding-left: 18px;
+  padding-left: 20px;
   white-space: nowrap;
   overflow: hidden;
   display: flex;
-  align-items: baseline;
-  gap: 6px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  line-height: 1.15;
 }
 
 .brand-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
-  opacity: 0.8;
+  opacity: 0.75;
   letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.15;
 }
 
 .sidebar-header {
@@ -278,8 +288,8 @@ body {
 }
 
 .sidebar-toggle-btn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: none;
   border-radius: 99px;
@@ -331,14 +341,14 @@ body {
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 11px;
   width: auto;
   flex: 0 1 auto;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
-  padding: 10px 15px 20px 15px; /* horizontal bleed zone for shadows/scaling */
-  margin: -10px -15px 0 -15px; /* offset bleed zone */
+  padding: 8px 14px 18px 14px; /* horizontal bleed zone for shadows/scaling */
+  margin: -8px -14px 0 -14px; /* offset bleed zone */
 }
 
 .sidebar-nav::-webkit-scrollbar {
@@ -362,9 +372,9 @@ body {
 .nav-item {
   display: flex;
   align-items: center;
-  padding: 10px 18px;
+  padding: 8.5px 16px;
   border-radius: 99px;
-  gap: 12px;
+  gap: 11px;
   text-decoration: none;
   cursor: pointer;
   user-select: none;
@@ -379,7 +389,7 @@ body {
 }
 
 .nav-item.collapsed {
-  padding: 12px;
+  padding: 10.5px;
   justify-content: center;
 }
 
@@ -397,10 +407,8 @@ body {
 }
 
 .nav-icon {
-  width: 22px;
-  /* Reduced from 24px */
-  height: 22px;
-  /* Reduced from 24px */
+  width: 21px;
+  height: 21px;
   color: var(--text-main);
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
@@ -421,26 +429,21 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  /* INCREASED: Adds breathing room between Tamil and English */
+  gap: 3px;
 }
 
 .label {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 600;
   color: var(--text-main);
   transition: color 0.2s ease, font-weight 0.2s ease;
   line-height: 1;
-  /* Keep this tight so the gap does the work */
   margin-bottom: 0px;
-  /* Remove margin if you had it, let gap handle it */
 }
 
 .sub-label {
   font-size: 11px;
-  /* REDUCED: Makes it clearly a secondary subtitle */
   font-weight: 500;
-  /* Keeps it readable at a smaller size */
   text-transform: none;
   color: #888888;
   line-height: 1;
