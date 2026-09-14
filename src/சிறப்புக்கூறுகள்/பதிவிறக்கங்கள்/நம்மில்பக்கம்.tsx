@@ -215,10 +215,10 @@ export default function NammilPage() {
                         {/* BELOW LOGO: TEASER DESCRIPTION (FULL-WIDTH, ALIGNED TO LEFT EDGE) */}
                         <div className="ms-hero-desc-wrap">
                             <p className="ms-hero-desc" lang="ta">
-                                அதிகாரப்பூர்வ வாட்ஸ்அப் ஒரு கணக்கை மட்டுமே அனுமதிக்கும் தடையை உடைத்து, 5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கும் எல்வன் நவிலின் கணினிச் செயலி.
+                                நம்மில் என்பது கணினியில் பல வாட்ஸ்அப் கணக்குகளை ஒரே நேரத்தில் எளிதாகவும் பாதுகாப்பாகவும் இயக்க உதவும் எல்வன் நவிலின் அதிகாரப்பூர்வமற்ற வாட்ஸ்அப் டெஸ்க்டாப் செயலி.
                             </p>
                             <p className="ms-hero-desc ms-hero-desc-en">
-                                Run up to 5 isolated WhatsApp sessions concurrently on Windows with automated file sorting, local cookie silos, and native chimes.
+                                Nammil is an unofficial WhatsApp desktop client for Windows that lets you run and manage multiple WhatsApp accounts simultaneously in one fast, private workspace.
                             </p>
                         </div>
 
