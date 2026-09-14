@@ -4,10 +4,9 @@ import { useTheme } from '../கொக்கிகள்/கருப்பொ�
 import { useSettings } from '../கொக்கிகள்/அமைப்புகள்கொக்கி';
 import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுயவிவரபடம்';
 import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்இணைப்பு';
-import { BrandTuner } from '../கூறுகள்/கட்டமைப்பு/BrandTuner';
 import profileData from '../தரவு/தன்னுரு.json';
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
-import { House, User, Monitor, Sun, Moon, Wrench, ListDashes, List, BookOpen } from '@phosphor-icons/react';
+import { House, User, Monitor, Sun, Moon, Wrench, SidebarSimple, BookOpen } from '@phosphor-icons/react';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
     React.lazy(() =>
@@ -169,9 +168,8 @@ const Layout = () => {
                 <div className="sidebar-top">
                     <div className="sidebar-header">
                         {!isSidebarCollapsed && (
-                            <div className="brand">
-                                <span className="brand-title" lang="ta">எல்வன் நவில்</span>
-                                <span className="brand-subtitle">Elvan Navil</span>
+                            <div className="brand" lang="ta">
+                                எல்வன் நவில்
                             </div>
                         )}
                         <button
@@ -179,7 +177,7 @@ const Layout = () => {
                             onClick={handleSidebarToggle}
                             title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                         >
-                            {isSidebarCollapsed ? <List weight="regular" size={19} /> : <ListDashes weight="regular" size={19} />}
+                            <SidebarSimple weight="regular" size={19} />
                         </button>
                     </div>
                     <div className="sidebar-nav">
@@ -232,6 +230,7 @@ const Layout = () => {
                                 <>
                                     <div className="settings-text">
                                         <span className="settings-name">{profileData?.fullName || 'Elvan Parthasarathy'}</span>
+                                        <span className="settings-brand-tag">Elvan Navil</span>
                                     </div>
                                     {theme === 'light' ? (
                                         <Sun weight="regular" size={16} className="settings-theme-icon" />
@@ -283,7 +282,6 @@ const Layout = () => {
                 <ScrollRestoration />
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, autoThumbnails }} />
             </main>
-            <BrandTuner />
         </div>
 
     );

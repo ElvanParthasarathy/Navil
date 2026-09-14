@@ -251,32 +251,16 @@ body {
 }
 
 .brand {
-  padding-left: var(--brand-padding-left, 20px);
+  font-size: 1.35rem;
+  font-weight: 600;
+  padding-left: 20px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   white-space: nowrap;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--brand-gap, 3px);
-  line-height: 1;
-}
-
-.brand-title {
-  font-size: var(--brand-title-size, 1.35rem);
-  font-weight: var(--brand-title-weight, 800);
+  overflow: visible;
   color: var(--text-main);
-  line-height: 1.15;
-}
-
-.brand-subtitle {
-  font-size: var(--brand-subtitle-size, 0.62rem);
-  font-weight: var(--brand-subtitle-weight, 600);
-  color: var(--text-muted);
-  opacity: var(--brand-subtitle-opacity, 0.7);
-  letter-spacing: var(--brand-subtitle-tracking, 2.6px);
-  text-transform: uppercase;
-  line-height: 1;
-  padding-left: 1px;
+  line-height: 1.4;
+  letter-spacing: normal;
 }
 
 .sidebar-header {
@@ -293,18 +277,18 @@ body {
   background: transparent;
   border: none;
   border-radius: 99px;
-  /* CHANGED FROM 8px TO 99px FOR PILL LOOK */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--text-main);
-  transition: background 0.2s ease, transform 0.1s ease;
+  color: var(--text-muted);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
   flex-shrink: 0;
 }
 
 .sidebar-toggle-btn:hover {
   background: var(--nav-hover);
+  color: var(--text-main);
   transform: none;
   box-shadow: none;
 }
@@ -315,17 +299,24 @@ body {
 
 .sidebar.collapsed .sidebar-header {
   justify-content: center;
+  padding-bottom: 5px;
 }
 
 .sidebar.collapsed .sidebar-toggle-btn {
-  width: 100%;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
 }
 
 .sidebar-toggle-btn svg {
-  width: 16px;
-  height: 16px;
-  stroke-width: 1.5px;
-  opacity: 0.6;
+  width: 19px;
+  height: 19px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-toggle-btn:hover svg {
+  opacity: 1;
 }
 
 @media (min-width: 769px) {
@@ -557,6 +548,10 @@ body {
 }
 
 .settings-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
   flex-grow: 1;
   min-width: 0;
   text-align: left;
@@ -564,13 +559,27 @@ body {
 }
 
 .settings-name {
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-main);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
+  line-height: 1.2;
+}
+
+.settings-brand-tag {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  opacity: 0.75;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 1.1;
 }
 
 .settings-theme-icon {
@@ -597,7 +606,8 @@ body {
   position: absolute;
   bottom: calc(100% + 10px);
   left: 0;
-  width: 240px;
+  width: 100%;
+  box-sizing: border-box;
   background: var(--bg-panel);
   border-radius: 20px;
   padding: 16px;
@@ -609,7 +619,8 @@ body {
 
 .settings-popup.side-popup {
   bottom: 0;
-  left: calc(100% + 20px);
+  left: calc(100% + 16px);
+  width: 220px;
   animation: popupSlideRight 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
