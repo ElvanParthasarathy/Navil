@@ -298,10 +298,15 @@ body:has(.ms-store-page) .main-content,
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 3px;
 }
 
 .ms-app-title {
     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px;
     line-height: 1.15;
 }
 
@@ -313,19 +318,17 @@ body:has(.ms-store-page) .main-content,
     line-height: 1.15;
 }
 
-.ms-app-subtitle {
-    font-size: 1.05rem;
+.ms-title-sub {
+    font-size: 1.15rem;
     font-weight: 500;
     color: var(--text-muted);
-    line-height: 1.2;
-    margin-top: 1px;
 }
 
 .ms-developer-link {
     display: flex;
     align-items: center;
-    font-size: 0.92rem;
-    margin-top: 3px;
+    font-size: 0.94rem;
+    margin: 0;
 }
 
 .ms-developer-link a {
@@ -338,6 +341,20 @@ body:has(.ms-store-page) .main-content,
 .ms-developer-link a:hover {
     color: #00a884;
     text-decoration: underline;
+}
+
+.ms-category-row {
+    display: flex;
+    align-items: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.ms-category-tag {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
 }
 
 /* HERO DESCRIPTION (ORDERLY PLACED BELOW LOGO) */

@@ -199,11 +199,15 @@ export default function NammilPage() {
                             <div className="ms-hero-title-group">
                                 <h1 className="ms-app-title">
                                     <span className="ms-title-main" lang="ta">நம்மில்</span>
+                                    <span className="ms-title-sub">Nammil</span>
                                 </h1>
-                                <div className="ms-app-subtitle">Nammil</div>
 
                                 <div className="ms-developer-link">
                                     <Link to="/about" className="ms-dev-item">Elvan Navil</Link>
+                                </div>
+
+                                <div className="ms-category-row">
+                                    <span className="ms-category-tag">Social • சமூகம்</span>
                                 </div>
                             </div>
                         </div>
