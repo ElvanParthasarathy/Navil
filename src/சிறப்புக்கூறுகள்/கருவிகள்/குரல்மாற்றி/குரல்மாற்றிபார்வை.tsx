@@ -35,9 +35,9 @@ const VocoderView = () => {
 
     return (
         <>
-            <MobileTopBar title={activeTab === 'presentation' ? 'Vocoder' : 'Interactive Story'} showBack={true} backUrl="/teaching" />
+            <MobileTopBar title={activeTab === 'presentation' ? 'குரல்மாற்றி|vocoder' : 'ஊடாடும் கதை|interactive story'} showBack={true} backUrl="/teaching" />
             <Helmet>
-                <title>{activeTab === 'presentation' ? 'உரைகுறியாக்கி | Vocoder' : 'ஊடாடும் கதை | Interactive Story'}</title>
+                <title>{activeTab === 'presentation' ? 'நவில் குரல்மாற்றி | Navil Vocoder' : 'ஊடாடும் கதை | Interactive Story'}</title>
             </Helmet>
             <div className="page-view animate-entry vocoder-page-container" style={{ width: '100%', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', background: 'var(--bg-app)', color: 'var(--text-main)' }}>
 

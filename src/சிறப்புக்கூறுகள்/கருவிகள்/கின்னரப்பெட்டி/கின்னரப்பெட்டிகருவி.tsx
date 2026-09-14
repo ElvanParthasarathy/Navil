@@ -13,9 +13,9 @@ export default function PianoTool() {
 
   return (
     <>
-      <MobileTopBar title="நவில் பியானோ|navil piano" backUrl="/tools" />
+      <MobileTopBar title="கின்னரப்பெட்டி|navil piano" backUrl="/tools" />
       <Helmet>
-          <title>நவில் பியானோ | Navil Piano</title>
+          <title>கின்னரப்பெட்டி | Navil Piano</title>
       </Helmet>
       
       <div className="writings-page page-view fadeIn">
@@ -23,10 +23,10 @@ export default function PianoTool() {
         
         <header className="writings-header animate-entry">
             <div style={{ flex: 1 }}>
-                <h1 className="writings-title">நவில் பியானோ</h1>
+                <h1 className="writings-title">கின்னரப்பெட்டி</h1>
                 <div className="writings-title-sub">Navil Piano</div>
                 <p className="writings-subtitle">
-                  மெய்நிகர் பியானோ மற்றும் இசையமைப்புக் கருவி.
+                  மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.
                 </p>
                 <p className="writings-subtitle writings-subtitle-en">
                   Virtual Piano Synthesizer with Keyboard Mapping
@@ -47,7 +47,7 @@ export default function PianoTool() {
           <h2 className="piano-notice-title">கணினிக்கு மட்டுமே உகந்தது</h2>
           <div className="piano-notice-sub">Desktop Only Experience</div>
           <p className="piano-notice-desc">
-            நவில் பியானோ இயங்குதளம் விசைப்பலகையுடன் (Physical Keyboard) இணைந்து இசைக்க மட்டுமே பிரத்யேகமாக வடிவமைக்கப்பட்டுள்ளது.
+            கின்னரப்பெட்டி இயங்குதளம் விசைப்பலகையுடன் (Physical Keyboard) இணைந்து இசைக்க மட்டுமே பிரத்யேகமாக வடிவமைக்கப்பட்டுள்ளது.
           </p>
           <p className="piano-notice-desc-sub">
             Navil Piano is designed exclusively for desktop screens with a physical keyboard. Please open on a desktop computer or laptop to play.

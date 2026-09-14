@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import AdBanner from '../../கூறுகள்/ஊடகம்/விளம்பரம்';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
+import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
+import '../படைப்புகள்/படைப்புகள்.css';
 import { Monitor, ArrowRight } from '@phosphor-icons/react';
 
 const Teaching = () => {
@@ -11,39 +13,12 @@ const Teaching = () => {
 
     return (
         <>
-            <MobileTopBar title="பயிற்றுவிப்பு|teaching" />
+            <MobileTopBar title="பயிற்றுவிப்பு|teaching" backUrl="/tools" />
             <Helmet>
                 <title>பயிற்றுவிப்பு | Teaching</title>
             </Helmet>
             <div className="writings-page page-view fadeIn">
-            <style>{`
-                .writings-page { max-width: 1200px; margin: 0 auto; padding: 10px 20px 32px; }
-                .writings-header { margin-bottom: 48px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
-                .writings-title { font-size: 2.4rem; font-weight: 800; letter-spacing: 0; margin-bottom: 10px; color: var(--text-main); line-height: 1.3; }
-
-                .writings-title-sub { font-size: 1rem; font-weight: 500; color: #888888; margin-bottom: 16px; letter-spacing: 0.5px; }
-                .writings-subtitle { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
-                /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
-                @media (max-width: 768px) {
-                    .writings-page { padding: 24px 0; }
-                    .writings-header { padding: 40px 20px 20px; text-align: center; margin-bottom: 32px; }
-                    .writings-title { display: none; }
-                    .writings-title-sub { display: none; }
-                    .writings-subtitle { font-size: 1rem; line-height: 1.5; }
-                    .category-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 20px; margin-top: 24px; }
-                    
-                    .category-card { 
-                        min-height: auto; 
-                        padding: 24px; 
-                    }
-
-                    .cat-footer {
-                        opacity: 1;
-                        transform: none;
-                    }
-                }
-
-            `}</style>
+            <FloatingBackButton to="/tools" />
 
             <header className="writings-header animate-entry">
                 <div style={{ flex: 1 }}>
@@ -52,30 +27,18 @@ const Teaching = () => {
                     <p className="writings-subtitle">
                         கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.
                     </p>
-                    <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                    <p className="writings-subtitle writings-subtitle-en">
                         Interactive teaching materials, slides, and educational resources.
                     </p>
                 </div>
-                <Link 
-                    to="/" 
-                    className="back-pill bp-fixed"
-                    onClick={(e) => {
-                        if (window.history.state && window.history.state.idx > 0) {
-                            e.preventDefault();
-                            navigate(-1);
-                        }
-                    }}
-                >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg> பின்செல்
-                </Link>
             </header>
 
             <div className="category-grid animate-entry">
                 <Link to="/teaching/vocoder" className="category-card">
                     <div className="cat-icon-box"><Monitor weight="regular" /></div>
                     <div className="cat-content">
-                        <div className="cat-title">Vocoder</div>
-                        <div className="cat-title-sub">Interactive Presentation</div>
+                        <div className="cat-title">நவில் குரல்மாற்றி</div>
+                        <div className="cat-title-sub">Navil Vocoder • Interactive Presentation</div>
                         <p className="cat-desc">எனது படைப்பு மற்றும் தொழில் நுட்ப விளக்கக்காட்சி.</p>
                         <p className="cat-desc-sub">Modern presentation for Vocoder engine concepts.</p>
                     </div>

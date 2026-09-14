@@ -72,4 +72,9 @@
                         opacity: 1;
                         transform: translateX(0);
                     }
+
+                    .desktop-only,
+                    .category-card.desktop-only {
+                        display: none !important;
+                    }
                 }

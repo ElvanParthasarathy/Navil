@@ -50,9 +50,8 @@ const Layout = () => {
         const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
         if (normalized === '/') return 0;
         if (normalized.startsWith('/navilgal') || normalized.startsWith('/writings') || normalized.startsWith('/arts')) return 1;
-        if (normalized.startsWith('/tools')) return 2;
-        if (normalized.startsWith('/teaching')) return 3;
-        if (normalized.startsWith('/about')) return 4;
+        if (normalized.startsWith('/tools') || normalized.startsWith('/teaching')) return 2;
+        if (normalized.startsWith('/about')) return 3;
         return 99;
     };
 
@@ -69,7 +68,6 @@ const Layout = () => {
             return normalized === '/' || 
                    normalized === '/navilgal' || 
                    normalized === '/tools' || 
-                   normalized === '/teaching' || 
                    normalized === '/about';
         };
 
@@ -135,7 +133,6 @@ const Layout = () => {
         '/about', 
         '/portfolio', 
         '/settings', 
-        '/teaching', 
         '/tools'
     ];
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));

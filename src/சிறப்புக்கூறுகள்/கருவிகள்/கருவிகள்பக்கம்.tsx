@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 import '../படைப்புகள்/படைப்புகள்.css';
-import { PianoKeys, ArrowRight, Translate, Scroll } from '@phosphor-icons/react';
+import { PianoKeys, ArrowRight, Translate, Scroll, Monitor } from '@phosphor-icons/react';
 
 const ToolsView = () => {
     const navigate = useNavigate();
@@ -49,18 +49,15 @@ const ToolsView = () => {
                 </header>
 
                 <div className="category-grid animate-entry">
-                    <Link to="/tools/piano" className="category-card">
+                    <Link to="/tools/piano" className="category-card desktop-only">
                         <div className="cat-icon-box"><PianoKeys weight="regular" /></div>
                         <div className="cat-content">
-                            <div className="cat-title">
-                                நவில் பியானோ
-                                <span className="cat-count-badge" style={{ fontSize: '0.65rem', padding: '2px 8px', borderRadius: '100px', marginLeft: '8px' }}>கணினி மட்டும்</span>
-                            </div>
-                            <div className="cat-title-sub">Navil Piano • Desktop Only</div>
-                            <p className="cat-desc">மெய்நிகர் பியானோ மற்றும் இசையமைப்புக் கருவி.</p>
+                            <div className="cat-title">கின்னரப்பெட்டி</div>
+                            <div className="cat-title-sub">Navil Piano</div>
+                            <p className="cat-desc">மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.</p>
                             <p className="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
                         </div>
-                        <div className="cat-footer">பியானோவைத் தொடங்க <ArrowRight weight="regular" /></div>
+                        <div className="cat-footer">கின்னரப்பெட்டியைத் தொடங்க <ArrowRight weight="regular" /></div>
                     </Link>
                     <Link to="/tools/transliterator" className="category-card">
                         <div className="cat-icon-box"><Translate weight="regular" /></div>
@@ -81,6 +78,16 @@ const ToolsView = () => {
                             <p className="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
                         </div>
                         <div className="cat-footer">அரிச்சுவடியைத் திறக்க <ArrowRight weight="regular" /></div>
+                    </Link>
+                    <Link to="/teaching" className="category-card">
+                        <div className="cat-icon-box"><Monitor weight="regular" /></div>
+                        <div className="cat-content">
+                            <div className="cat-title">பயிற்றுவிப்பு</div>
+                            <div className="cat-title-sub">Teaching & Presentations</div>
+                            <p className="cat-desc">கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.</p>
+                            <p className="cat-desc-sub">Interactive teaching materials, slides, and educational resources.</p>
+                        </div>
+                        <div className="cat-footer">பயிற்றுவிப்பைக் காண <ArrowRight weight="regular" /></div>
                     </Link>
                 </div>
             </div>

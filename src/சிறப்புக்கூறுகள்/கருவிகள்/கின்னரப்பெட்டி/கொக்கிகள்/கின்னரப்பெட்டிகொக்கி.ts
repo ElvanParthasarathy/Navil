@@ -3,8 +3,8 @@ import * as Tone from 'tone';
 import { BASE_KEYBOARD, LAYOUTS, buildMapFromLayout, NoteInfo } from '../மாறிலிகள்';
 
 export const SYNTH_PRESETS = [
-  { id: '001', name: 'பியானோ' },
-  { id: '002', name: 'இ-பியானோ' },
+  { id: '001', name: 'கின்னரப்பெட்டி' },
+  { id: '002', name: 'மின்-கின்னரப்பெட்டி' },
   { id: '003', name: 'ஆர்கன்' },
   { id: '004', name: 'மெல்லிசை' },
   { id: '005', name: 'பிராஸ்' },

@@ -35,11 +35,13 @@ export const router = createBrowserRouter([
             { path: "settings", element: <Settings /> },
             { path: "writings", element: <Writings /> },
             { path: "teaching", element: <Teaching /> },
+            { path: "tools/teaching", element: <Teaching /> },
             { path: "arts", element: <Arts /> },
             { path: "tools", element: <ToolsView /> },
             { path: "tools/piano", element: <PianoTool /> },
             { path: "tools/transliterator", element: <TransliteratorTool /> },
             { path: "tools/arichuvadi", element: <ArichuvadiTool /> },
+            { path: "tools/vocoder", element: <VocoderView /> },
             { path: "arts/:category", element: <ArtsGallery /> },
             { path: "teaching/vocoder", element: <VocoderView /> },
 

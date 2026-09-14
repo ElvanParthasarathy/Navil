@@ -121,15 +121,11 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                     {isMobileMenuOpen && (
                         <>
                             <div className="menu-backdrop" onClick={() => setIsMobileMenuOpen(false)} />
-                            <div className="top-menu-dropdown" style={{ height: mobileMenuView === 'main' ? '112px' : '220px' }}>
+                            <div className="top-menu-dropdown" style={{ height: mobileMenuView === 'main' ? '56px' : '220px' }}>
                                 <div className="menu-slider-track" style={{ transform: mobileMenuView === 'main' ? 'translateX(0%)' : 'translateX(-50%)' }}>
 
                                     {/* MAIN MENU */}
                                     <div className="menu-view">
-                                        <Link to="/teaching" onClick={() => setIsMobileMenuOpen(false)} className="menu-item">
-                                            <Monitor weight="regular" className="menu-icon" />
-                                            Teaching
-                                        </Link>
                                         <button onClick={() => setMobileMenuView('appearance')} className="menu-item space-between">
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                 <svg className="menu-icon" viewBox="0 0 24 24" fill="currentColor">

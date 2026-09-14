@@ -106,8 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         active={location.pathname.startsWith('/navilgal') || location.pathname.startsWith('/writings') || location.pathname.startsWith('/arts')} 
                         collapsed={isSidebarCollapsed} 
                     />
-                    <NavLink to="/tools" icon={<Wrench weight={location.pathname.startsWith('/tools') ? "fill" : "regular"} size={21} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools')} collapsed={isSidebarCollapsed} />
-                    <NavLink to="/teaching" icon={<Monitor weight={location.pathname.startsWith('/teaching') ? "fill" : "regular"} size={21} />} label="பயிற்றுவிப்பு" subLabel="teaching" active={location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} className="desktop-only" />
+                    <NavLink to="/tools" icon={<Wrench weight={(location.pathname.startsWith('/tools') || location.pathname.startsWith('/teaching')) ? "fill" : "regular"} size={21} />} label="கருவிகள்" subLabel="tools" badge="BETA" active={location.pathname.startsWith('/tools') || location.pathname.startsWith('/teaching')} collapsed={isSidebarCollapsed} />
 
                     <NavLink to="/about" icon={<User weight={location.pathname === '/about' ? "fill" : "regular"} size={21} />} label="பற்றி" subLabel="about" active={location.pathname === '/about'} className="desktop-only" collapsed={isSidebarCollapsed} />
                     <NavLink
