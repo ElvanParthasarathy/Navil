@@ -21,7 +21,7 @@ const ToolsView = () => {
                 
                 <header className="writings-header animate-entry">
                     <div style={{ flex: 1 }}>
-                        <h1 className="writings-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <h1 className="writings-title">
                             கருவிகள்
                             <span 
                                 style={{ 
