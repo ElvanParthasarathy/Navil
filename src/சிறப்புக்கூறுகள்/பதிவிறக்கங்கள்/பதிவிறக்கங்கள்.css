@@ -1,199 +1,15 @@
+/* ========================================================
+   DOWNLOADS & NAMMIL DETAIL PAGE STYLES (MONOCHROME & MINIMAL)
+======================================================== */
+
 .downloads-page {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 20px 80px;
+    padding: 10px 20px 60px;
     position: relative;
 }
 
-.downloads-header {
-    margin-bottom: 32px;
-    padding-top: 8px;
-}
-
-.downloads-title {
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--text-main);
-    margin: 0;
-    line-height: 1.2;
-}
-
-.downloads-title-sub {
-    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-    font-weight: 600;
-    color: var(--text-muted);
-    margin: 4px 0 12px;
-}
-
-.downloads-subtitle {
-    font-size: 1rem;
-    color: var(--text-muted);
-    max-width: 700px;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.downloads-subtitle-en {
-    font-size: 0.9rem;
-    opacity: 0.85;
-    margin-top: 4px;
-}
-
-/* SECTION HEADERS */
-.downloads-section {
-    margin-bottom: 48px;
-}
-
-.downloads-section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid color-mix(in srgb, var(--text-main) 10%, transparent);
-}
-
-.downloads-section-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--text-main) 8%, transparent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-main);
-    flex-shrink: 0;
-}
-
-.downloads-section-title {
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin: 0;
-    color: var(--text-main);
-}
-
-.downloads-section-desc {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin: 2px 0 0;
-}
-
-/* FLAGSHIP CARD */
-.flagship-download-card {
-    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 25%));
-    border-radius: 28px;
-    padding: 36px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-    border: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-[data-theme='dark'] .flagship-download-card {
-    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-    border-color: rgba(255, 255, 255, 0.06);
-}
-
-.flagship-download-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-}
-
-.flagship-badge-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.flagship-header-row {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 18px;
-}
-
-.flagship-icon-box {
-    width: 72px;
-    height: 72px;
-    border-radius: 20px;
-    overflow: hidden;
-    flex-shrink: 0;
-    box-shadow: 0 8px 24px rgba(18, 140, 126, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #128c7e;
-}
-
-.flagship-icon-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.flagship-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin: 0;
-    color: var(--text-main);
-    line-height: 1.2;
-}
-
-.flagship-subtitle {
-    font-size: 0.98rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin: 4px 0 0;
-}
-
-.flagship-desc {
-    font-size: 1rem;
-    line-height: 1.65;
-    color: var(--text-main);
-    opacity: 0.92;
-    margin-bottom: 24px;
-    max-width: 900px;
-}
-
-.flagship-features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin-bottom: 28px;
-}
-
-.flagship-feature-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 0.92rem;
-    line-height: 1.45;
-    color: var(--text-main);
-    padding: 14px 18px;
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--text-main) 4%, transparent);
-}
-
-.flagship-feature-icon {
-    color: #10b981;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.flagship-action-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 14px;
-    padding-top: 24px;
-    border-top: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);
-}
-
+/* BUTTONS */
 .dl-btn {
     display: inline-flex;
     align-items: center;
@@ -209,148 +25,274 @@
 }
 
 .dl-btn.primary {
-    background: #10b981;
-    color: #ffffff;
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    background: var(--text-main);
+    color: var(--bg-card);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .dl-btn.primary:hover {
-    background: #059669;
+    background: color-mix(in srgb, var(--text-main) 85%, transparent);
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
 
 .dl-btn.secondary {
-    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    background: color-mix(in srgb, var(--text-main) 7%, transparent);
     color: var(--text-main);
     border: 1px solid color-mix(in srgb, var(--text-main) 12%, transparent);
 }
 
 .dl-btn.secondary:hover {
-    background: color-mix(in srgb, var(--text-main) 14%, transparent);
+    background: color-mix(in srgb, var(--text-main) 12%, transparent);
     transform: translateY(-2px);
 }
 
-.dl-btn.sm {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    border-radius: 50px;
+/* ========================================================
+   NAMMIL DETAIL PAGE
+======================================================== */
+
+.nammil-detail-page {
+    padding-top: 10px;
 }
 
-/* CARDS GRID FOR FONTS AND DOCS */
-.downloads-resource-grid {
+.nammil-hero {
+    margin-bottom: 40px;
+}
+
+.nammil-header-top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.nammil-icon-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 22px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--text-main) 8%, var(--bg-card));
+    border: 1px solid color-mix(in srgb, var(--text-main) 12%, transparent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nammil-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nammil-header-meta {
+    flex: 1;
+}
+
+.nammil-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.nammil-title {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    margin: 0 0 4px;
+    line-height: 1.2;
+}
+
+.nammil-subtitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.nammil-desc {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text-main);
+    opacity: 0.92;
+    max-width: 860px;
+    margin: 0 0 6px;
+}
+
+.nammil-desc-en {
+    font-size: 0.94rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 860px;
+    margin: 0 0 28px;
+}
+
+.nammil-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+/* APP SCREENSHOT SHOWCASE */
+.nammil-showcase-section {
+    margin: 40px 0 50px;
+}
+
+.nammil-preview-frame {
+    background: #141416;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--text-main) 12%, transparent);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.nammil-frame-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: #0f0f12;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.frame-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.frame-title {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    margin-left: 8px;
+    letter-spacing: 0.2px;
+}
+
+.nammil-preview-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    background: #141416;
+}
+
+/* SECTION TITLES */
+.nammil-section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+}
+
+.nammil-section-desc {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin: 0 0 24px;
+}
+
+/* FEATURES GRID */
+.nammil-features-section {
+    margin-bottom: 48px;
+}
+
+.nammil-features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
-.dl-resource-card {
-    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 25%));
+.nammil-feature-card {
+    background: var(--bg-card);
     border-radius: 20px;
     padding: 24px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 12px;
     border: 1px solid color-mix(in srgb, var(--text-main) 6%, transparent);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-[data-theme='dark'] .dl-resource-card {
-    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.05);
+[data-theme='dark'] .nammil-feature-card {
+    background: linear-gradient(145deg, #141414, color-mix(in srgb, #141414, transparent 35%));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
-.dl-resource-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
-}
-
-.dl-resource-top {
-    margin-bottom: 16px;
-}
-
-.dl-resource-badge-row {
+.nammil-feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    color: var(--text-main);
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    justify-content: center;
 }
 
-.dl-resource-title {
-    font-size: 1.25rem;
+.nammil-feature-title {
+    font-size: 1.15rem;
     font-weight: 700;
-    margin: 0;
     color: var(--text-main);
-    line-height: 1.3;
+    margin: 0;
 }
 
-.dl-resource-subtitle {
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin: 2px 0 10px;
-}
-
-.dl-resource-desc {
-    font-size: 0.88rem;
+.nammil-feature-desc {
+    font-size: 0.92rem;
     line-height: 1.55;
     color: var(--text-muted);
     margin: 0;
 }
 
-.dl-specimen-box {
-    background: color-mix(in srgb, var(--bg-card, #ffffff) 50%, transparent);
-    padding: 12px 16px;
-    border-radius: 12px;
-    margin: 14px 0;
-    border: 1px solid color-mix(in srgb, var(--text-main) 6%, transparent);
+/* SPECS SECTION */
+.nammil-specs-section {
+    margin-bottom: 48px;
 }
 
-.dl-specimen-text {
-    font-size: 1.05rem;
-    color: var(--text-main);
-    font-weight: 600;
-    margin-bottom: 2px;
+.nammil-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
 }
 
-.dl-resource-action {
+.spec-item {
+    background: color-mix(in srgb, var(--text-main) 4%, transparent);
+    padding: 16px 20px;
+    border-radius: 14px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 14px;
-    margin-top: auto;
-    border-top: 1px solid color-mix(in srgb, var(--text-main) 6%, transparent);
+    flex-direction: column;
+    gap: 4px;
 }
 
-.dl-file-info {
-    font-size: 0.8rem;
+.spec-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: var(--text-muted);
 }
 
+.spec-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
 @media (max-width: 768px) {
-    .downloads-page {
-        padding: 16px 16px 60px;
-    }
-
-    .flagship-download-card {
-        padding: 24px;
-        border-radius: 22px;
-    }
-
-    .flagship-header-row {
+    .nammil-header-top {
         flex-direction: column;
         align-items: flex-start;
+        gap: 16px;
+    }
+
+    .nammil-features-grid {
+        grid-template-columns: 1fr;
         gap: 14px;
-    }
-
-    .flagship-features-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .downloads-resource-grid {
-        grid-template-columns: 1fr;
     }
 }
