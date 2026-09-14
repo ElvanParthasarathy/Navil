@@ -1,5 +1,5 @@
 import './பதிவிறக்கங்கள்.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
@@ -83,35 +83,79 @@ const slides = [
 export default function NammilPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [touchStart, setTouchStart] = useState<number | null>(null);
-    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+    const scrollerRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const isDragging = useRef(false);
+    const startX = useRef(0);
+    const scrollLeftStart = useRef(0);
+    const hasMoved = useRef(false);
+
+    const checkScrollButtons = () => {
+        if (!scrollerRef.current) return;
+        const { scrollLeft, scrollWidth, clientWidth } = scrollerRef.current;
+        setCanScrollLeft(scrollLeft > 12);
+        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 12);
+    };
+
+    const scroll = (direction: 'left' | 'right') => {
+        if (!scrollerRef.current) return;
+        const frame = scrollerRef.current.querySelector<HTMLElement>('.ms-shot-frame');
+        const scrollAmount = frame ? frame.offsetWidth + 16 : 400;
+        scrollerRef.current.scrollBy({
+            left: direction === 'right' ? scrollAmount : -scrollAmount,
+            behavior: 'smooth'
+        });
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (!scrollerRef.current) return;
+        isDragging.current = true;
+        hasMoved.current = false;
+        startX.current = e.pageX - scrollerRef.current.offsetLeft;
+        scrollLeftStart.current = scrollerRef.current.scrollLeft;
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging.current || !scrollerRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - scrollerRef.current.offsetLeft;
+        const walk = (x - startX.current) * 1.1;
+        if (Math.abs(walk) > 4) {
+            hasMoved.current = true;
+        }
+        scrollerRef.current.scrollLeft = scrollLeftStart.current - walk;
+    };
+
+    const handleMouseUp = () => {
+        isDragging.current = false;
+    };
+
+    const handleSlideClick = (idx: number) => {
+        if (hasMoved.current) return;
+        setCurrentSlide(idx);
+        setIsFullscreen(true);
+    };
 
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStart(e.targetTouches[0].clientX);
-    };
-    const handleTouchMove = (e: React.TouchEvent) => {
-        setTouchEnd(e.targetTouches[0].clientX);
-    };
-    const handleTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
-        const distance = touchStart - touchEnd;
-        if (distance > 50) nextSlide();
-        if (distance < -50) prevSlide();
-        setTouchStart(null);
-        setTouchEnd(null);
-    };
-
     useEffect(() => {
+        checkScrollButtons();
+        const handleResize = () => checkScrollButtons();
+        window.addEventListener('resize', handleResize);
+
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'ArrowRight') nextSlide();
             if (e.key === 'ArrowLeft') prevSlide();
             if (e.key === 'Escape') setIsFullscreen(false);
         };
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('keydown', handleKeyDown);
+        };
     }, []);
 
     return (
@@ -199,72 +243,63 @@ export default function NammilPage() {
 
                     {/* 2. STORE BODY */}
                     <div className="ms-store-body">
-                        {/* SCREENSHOTS SECTION (MICROSOFT STORE TWO-PANE CONTAINED) */}
+                        {/* SCREENSHOTS SECTION (MICROSOFT STORE HORIZONTAL SCROLLER) */}
                         <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
                             <div className="ms-section-header-link" onClick={() => setIsFullscreen(true)}>
                                 <h2 className="ms-section-title">Screenshots</h2>
                                 <CaretRight size={18} weight="bold" className="ms-section-chevron" />
                             </div>
 
-                            {/* CONTAINED SCREENSHOTS (2-PANE DESKTOP / 1-PANE MOBILE) */}
-                            <div 
-                                className="ms-screenshots-container"
-                                onTouchStart={handleTouchStart}
-                                onTouchMove={handleTouchMove}
-                                onTouchEnd={handleTouchEnd}
-                            >
-                                <div 
-                                    className="ms-shot-frame" 
-                                    onClick={() => { setCurrentSlide(currentSlide); setIsFullscreen(true); }}
-                                    title="Click to view fullscreen"
-                                >
-                                    <img 
-                                        src={slides[currentSlide].src} 
-                                        alt={slides[currentSlide].titleEn} 
-                                        className="ms-shot-img"
-                                        loading="eager"
-                                    />
+                            {/* HORIZONTAL SCROLLER WITH NATIVE SWIPE, DRAG & ARROW CONTROLS */}
+                            <div className="ms-screenshots-scroller-wrap">
+                                {canScrollLeft && (
                                     <button 
-                                        className="ms-shot-nav-btn prev"
-                                        onClick={(e) => { e.stopPropagation(); prevSlide(); }}
-                                        aria-label="Previous screenshot"
+                                        className="ms-scroll-nav-btn prev"
+                                        onClick={() => scroll('left')}
+                                        aria-label="Previous screenshots"
                                     >
-                                        <CaretLeft size={20} weight="bold" />
+                                        <CaretLeft size={22} weight="bold" />
                                     </button>
-                                    <button 
-                                        className="ms-shot-nav-btn next mobile-only"
-                                        onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-                                        aria-label="Next screenshot"
-                                    >
-                                        <CaretRight size={20} weight="bold" />
-                                    </button>
-                                    <div className="ms-shot-zoom-hint">
-                                        <ArrowsOutSimple size={18} weight="bold" />
-                                    </div>
-                                </div>
+                                )}
 
                                 <div 
-                                    className="ms-shot-frame ms-shot-frame-second" 
-                                    onClick={() => { setCurrentSlide((currentSlide + 1) % slides.length); setIsFullscreen(true); }}
-                                    title="Click to view fullscreen"
+                                    className="ms-screenshots-scroller"
+                                    ref={scrollerRef}
+                                    onScroll={checkScrollButtons}
+                                    onMouseDown={handleMouseDown}
+                                    onMouseMove={handleMouseMove}
+                                    onMouseUp={handleMouseUp}
+                                    onMouseLeave={handleMouseUp}
                                 >
-                                    <img 
-                                        src={slides[(currentSlide + 1) % slides.length].src} 
-                                        alt={slides[(currentSlide + 1) % slides.length].titleEn} 
-                                        className="ms-shot-img"
-                                        loading="lazy"
-                                    />
-                                    <button 
-                                        className="ms-shot-nav-btn next"
-                                        onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-                                        aria-label="Next screenshot"
-                                    >
-                                        <CaretRight size={20} weight="bold" />
-                                    </button>
-                                    <div className="ms-shot-zoom-hint">
-                                        <ArrowsOutSimple size={18} weight="bold" />
-                                    </div>
+                                    {slides.map((slide, idx) => (
+                                        <div 
+                                            key={idx}
+                                            className="ms-shot-frame" 
+                                            onClick={() => handleSlideClick(idx)}
+                                            title="Click to view fullscreen"
+                                        >
+                                            <img 
+                                                src={slide.src} 
+                                                alt={slide.titleEn} 
+                                                className="ms-shot-img"
+                                                loading={idx < 2 ? "eager" : "lazy"}
+                                            />
+                                            <div className="ms-shot-zoom-hint">
+                                                <ArrowsOutSimple size={18} weight="bold" />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
+
+                                {canScrollRight && (
+                                    <button 
+                                        className="ms-scroll-nav-btn next"
+                                        onClick={() => scroll('right')}
+                                        aria-label="Next screenshots"
+                                    >
+                                        <CaretRight size={22} weight="bold" />
+                                    </button>
+                                )}
                             </div>
                         </section>
 

@@ -464,21 +464,43 @@
     transform: translateX(4px);
 }
 
-/* SCREENSHOTS SECTION (MICROSOFT STORE TWO-PANE CONTAINED) */
+/* SCREENSHOTS SECTION (MICROSOFT STORE HORIZONTAL SCROLLER) */
 .ms-screenshots-section {
     margin-bottom: 32px;
 }
 
-.ms-screenshots-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+.ms-screenshots-scroller-wrap {
+    position: relative;
     width: 100%;
-    box-sizing: border-box;
     margin-top: 14px;
 }
 
+.ms-screenshots-scroller {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 4px 0 10px;
+    cursor: grab;
+    user-select: none;
+}
+
+.ms-screenshots-scroller:active {
+    cursor: grabbing;
+}
+
+.ms-screenshots-scroller::-webkit-scrollbar {
+    display: none;
+}
+
 .ms-shot-frame {
+    flex: 0 0 calc(50% - 8px);
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
     position: relative;
     border-radius: 10px;
     overflow: hidden;
@@ -503,46 +525,44 @@
     display: block;
     user-select: none;
     -webkit-user-drag: none;
+    pointer-events: none;
 }
 
-/* Nav arrows on frames */
-.ms-shot-nav-btn {
+/* Nav arrows over scroller */
+.ms-scroll-nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(11, 20, 26, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(11, 20, 26, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 5;
+    z-index: 10;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
-.ms-shot-nav-btn:hover {
+.ms-scroll-nav-btn:hover {
     background: #00a884;
     border-color: #00a884;
     transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 24px rgba(0, 168, 132, 0.45);
 }
 
-.ms-shot-nav-btn.prev {
+.ms-scroll-nav-btn.prev {
     left: 14px;
 }
 
-.ms-shot-nav-btn.next {
+.ms-scroll-nav-btn.next {
     right: 14px;
-}
-
-.ms-shot-nav-btn.mobile-only {
-    display: none;
 }
 
 .ms-shot-zoom-hint {
@@ -840,16 +860,8 @@
 }
 
 @media (max-width: 800px) {
-    .ms-screenshots-container {
-        grid-template-columns: 1fr;
-    }
-
-    .ms-shot-frame-second {
-        display: none;
-    }
-
-    .ms-shot-nav-btn.mobile-only {
-        display: flex;
+    .ms-shot-frame {
+        flex: 0 0 calc(88% - 8px);
     }
 }
 
@@ -876,17 +888,21 @@
         justify-content: center;
     }
 
-    .ms-shot-nav-btn {
-        width: 34px;
-        height: 34px;
+    .ms-shot-frame {
+        flex: 0 0 92%;
     }
 
-    .ms-shot-nav-btn.prev {
-        left: 10px;
+    .ms-scroll-nav-btn {
+        width: 36px;
+        height: 36px;
     }
 
-    .ms-shot-nav-btn.next {
-        right: 10px;
+    .ms-scroll-nav-btn.prev {
+        left: 8px;
+    }
+
+    .ms-scroll-nav-btn.next {
+        right: 8px;
     }
 
     .ms-info-grid {
