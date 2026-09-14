@@ -264,20 +264,27 @@ body:has(.ms-store-page) .main-content,
 /* 1. HERO SECTION */
 .ms-hero-card {
     display: flex;
-    gap: 32px;
+    flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 32px;
+    gap: 16px;
+    margin-bottom: 28px;
     padding-top: 10px;
 }
 
+.ms-hero-top-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .ms-app-icon-wrap {
-    width: 120px;
-    height: 120px;
+    width: 112px;
+    height: 112px;
     flex-shrink: 0;
-    border-radius: 24px;
+    border-radius: 22px;
     overflow: hidden;
     background: #00a884;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .ms-app-icon-img {
@@ -287,9 +294,10 @@ body:has(.ms-store-page) .main-content,
     display: block;
 }
 
-.ms-hero-meta {
-    flex: 1;
-    min-width: 0;
+.ms-hero-title-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .ms-app-title {
@@ -297,7 +305,7 @@ body:has(.ms-store-page) .main-content,
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 12px;
+    gap: 10px;
 }
 
 .ms-title-main {
@@ -305,10 +313,11 @@ body:has(.ms-store-page) .main-content,
     font-weight: 800;
     color: var(--text-main);
     letter-spacing: -0.02em;
+    line-height: 1.15;
 }
 
 .ms-title-sub {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     font-weight: 500;
     color: var(--text-muted);
 }
@@ -317,10 +326,9 @@ body:has(.ms-store-page) .main-content,
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
-    margin-bottom: 12px;
+    margin: 0;
 }
 
 .ms-dev-item {
@@ -338,67 +346,35 @@ body:has(.ms-store-page) .main-content,
     text-decoration: underline;
 }
 
-.ms-rating-row {
+/* HERO DESCRIPTION (ORDERLY PLACED BELOW LOGO) */
+.ms-hero-desc-wrap {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-}
-
-.ms-stars-group {
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 6px;
-}
-
-.ms-rating-score {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--text-main);
-}
-
-.ms-stars-icons {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
-
-.star-filled {
-    color: #f59e0b;
-}
-
-.ms-meta-divider {
-    color: color-mix(in srgb, var(--text-main) 20%, transparent);
-    font-size: 0.8rem;
-}
-
-.ms-ratings-count,
-.ms-category-tag {
-    font-size: 0.88rem;
-    color: var(--text-muted);
+    max-width: 860px;
+    margin-top: 2px;
 }
 
 .ms-hero-desc {
-    font-size: 0.92rem;
-    line-height: 1.55;
+    font-size: 0.94rem;
+    line-height: 1.6;
     color: var(--text-main);
-    margin: 0 0 6px;
-    max-width: 820px;
+    margin: 0;
 }
 
 .ms-hero-desc-en {
     color: var(--text-muted);
-    margin-bottom: 18px;
+    font-size: 0.91rem;
 }
 
-/* ACTION BUTTONS (MICROSOFT STORE ACCENT DOWNLOAD BUTTON) */
+/* ACTION BUTTONS (ALIGNED TO LEFT EDGE) */
 .ms-action-row {
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 10px;
+    margin-top: 4px;
+    margin-bottom: 8px;
 }
 
 .ms-btn-primary {
@@ -906,6 +882,16 @@ body:has(.ms-store-page) .main-content,
 
     .ms-store-container {
         padding: 16px 14px 0;
+    }
+
+    .ms-hero-top-row {
+        gap: 16px;
+    }
+
+    .ms-app-icon-wrap {
+        width: 84px;
+        height: 84px;
+        border-radius: 18px;
     }
 
     .ms-app-title {

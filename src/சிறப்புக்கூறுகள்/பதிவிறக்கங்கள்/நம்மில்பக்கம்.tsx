@@ -185,56 +185,59 @@ export default function NammilPage() {
                 <div className="ms-store-container">
                     {/* 1. APP HERO (MICROSOFT STORE HEADER) */}
                     <header className="ms-hero-card animate-entry">
-                        {/* LARGE APP ICON */}
-                        <div className="ms-app-icon-wrap">
-                            <img 
-                                src="/nammil_icon.png" 
-                                alt="Nammil App Icon" 
-                                className="ms-app-icon-img"
-                                onError={(e: any) => { e.target.style.display = 'none'; }}
-                            />
-                        </div>
-
-                        {/* APP DETAILS & ACTIONS */}
-                        <div className="ms-hero-meta">
-                            <h1 className="ms-app-title">
-                                <span className="ms-title-main" lang="ta">நம்மில்</span>
-                                <span className="ms-title-sub">Nammil</span>
-                            </h1>
-
-                            <div className="ms-developer-link">
-                                <span className="ms-dev-item">Published by <Link to="/about">Elvan Navil</Link></span>
+                        {/* TOP ROW: LOGO + TITLE & PUBLISHER */}
+                        <div className="ms-hero-top-row">
+                            <div className="ms-app-icon-wrap">
+                                <img 
+                                    src="/nammil_icon.png" 
+                                    alt="Nammil App Icon" 
+                                    className="ms-app-icon-img"
+                                    onError={(e: any) => { e.target.style.display = 'none'; }}
+                                />
                             </div>
 
-                            {/* SHORT TEASER DESCRIPTION */}
+                            <div className="ms-hero-title-group">
+                                <h1 className="ms-app-title">
+                                    <span className="ms-title-main" lang="ta">நம்மில்</span>
+                                    <span className="ms-title-sub">Nammil</span>
+                                </h1>
+
+                                <div className="ms-developer-link">
+                                    <span className="ms-dev-item">Published by <Link to="/about">Elvan Navil</Link></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* BELOW LOGO: TEASER DESCRIPTION (FULL-WIDTH, ALIGNED TO LEFT EDGE) */}
+                        <div className="ms-hero-desc-wrap">
                             <p className="ms-hero-desc" lang="ta">
                                 அதிகாரப்பூர்வ வாட்ஸ்அப் ஒரு கணக்கை மட்டுமே அனுமதிக்கும் தடையை உடைத்து, 5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கும் எல்வன் நவிலின் கணினிச் செயலி.
                             </p>
                             <p className="ms-hero-desc ms-hero-desc-en">
                                 Run up to 5 isolated WhatsApp sessions concurrently on Windows with automated file sorting, local cookie silos, and native chimes.
                             </p>
+                        </div>
 
-                            {/* ACTION BUTTON ROW */}
-                            <div className="ms-action-row">
-                                <a 
-                                    href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe" 
-                                    className="ms-btn-primary"
-                                    download
-                                >
-                                    <DownloadSimple weight="bold" size={18} />
-                                    <span>Download (.exe ~114MB)</span>
-                                </a>
-                                <a 
-                                    href="https://github.com/ElvanParthasarathy/Nammil" 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="ms-btn-secondary ms-btn-github"
-                                    title="View Source on GitHub"
-                                >
-                                    <GithubLogo weight="bold" size={18} />
-                                    <span>GitHub</span>
-                                </a>
-                            </div>
+                        {/* ACTION BUTTON ROW (ALIGNED TO LEFT EDGE) */}
+                        <div className="ms-action-row">
+                            <a 
+                                href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe" 
+                                className="ms-btn-primary"
+                                download
+                            >
+                                <DownloadSimple weight="bold" size={18} />
+                                <span>Download (.exe ~114MB)</span>
+                            </a>
+                            <a 
+                                href="https://github.com/ElvanParthasarathy/Nammil" 
+                                target="_blank" 
+                                rel="noreferrer"
+                                className="ms-btn-secondary ms-btn-github"
+                                title="View Source on GitHub"
+                            >
+                                <GithubLogo weight="bold" size={18} />
+                                <span>GitHub</span>
+                            </a>
                         </div>
                     </header>
 
