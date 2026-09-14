@@ -1,18 +1,10 @@
 import './முகப்பு.css';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
-import { 
-    BookOpen, 
-    Wrench, 
-    DownloadSimple, 
-    User 
-} from '@phosphor-icons/react';
+import { Wrench } from '@phosphor-icons/react';
 
 export default function CompanyHome() {
-    const navigate = useNavigate();
-
     return (
         <>
             <Helmet>
@@ -26,36 +18,22 @@ export default function CompanyHome() {
             <MobileTopBar title="எல்வன் நவில்" />
             
             <div className="home-page company-home-page page-view fadeIn">
-                {/* 1. STUDIO HERO HEADER (MINIMAL BRAND ESSENTIALS, NO PHOTO, PURE TYPOGRAPHY) */}
-                <header className="company-hero-card animate-entry" style={{ cursor: 'default' }}>
-                    <div className="company-hero-text">
-                        <h1 className="company-hero-title" lang="ta">எல்வன் நவில்</h1>
-                        <h2 className="company-hero-subtitle">Elvan Navil</h2>
-                        <p className="company-hero-desc-ta" lang="ta">
-                            நல்வரவு. இது எல்வன் நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் படைப்பரங்கு.
-                        </p>
-                        <p className="company-hero-desc-en">
-                            Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
-                        </p>
-                        <div className="company-quick-actions">
-                            <button onClick={() => navigate('/navilgal')} className="company-pill-btn">
-                                <BookOpen weight="regular" size={16} />
-                                <span lang="ta">நவில்கள் (Archive)</span>
-                            </button>
-                            <button onClick={() => navigate('/tools')} className="company-pill-btn">
-                                <Wrench weight="regular" size={16} />
-                                <span lang="ta">கருவிகள் (Tools)</span>
-                            </button>
-                            <button onClick={() => navigate('/downloads')} className="company-pill-btn">
-                                <DownloadSimple weight="regular" size={16} />
-                                <span lang="ta">பதிவிறக்கங்கள் (Downloads)</span>
-                            </button>
-                            <button onClick={() => navigate('/about')} className="company-pill-btn">
-                                <User weight="regular" size={16} />
-                                <span>பற்றி (About)</span>
-                            </button>
-                        </div>
-                    </div>
+                {/* 1. STUDIO HEADER (DIRECT ON PAGE, SAME PADDING AS OTHER PAGES, NO CARD, NO CHIPS) */}
+                <header className="home-brand-header animate-entry">
+                    <h1 className="home-brand-title" lang="ta">
+                        எல்வன் நவில்
+                        <span className="reconstruction-badge">
+                            <Wrench weight="regular" size={13} />
+                            <span>வலைத்தளம் மறுசீரமைப்பில் உள்ளது • Under Reconstruction</span>
+                        </span>
+                    </h1>
+                    <div className="home-brand-title-sub">Elvan Navil</div>
+                    <p className="home-brand-subtitle" lang="ta">
+                        நல்வரவு. இது எல்வன் நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் படைப்பரங்கு.
+                    </p>
+                    <p className="home-brand-subtitle home-brand-subtitle-en">
+                        Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
+                    </p>
                 </header>
 
                 {/* 2. BRAND DEFINITION & ETYMOLOGY */}
