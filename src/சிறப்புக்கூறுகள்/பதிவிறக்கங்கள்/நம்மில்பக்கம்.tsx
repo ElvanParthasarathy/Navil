@@ -6,7 +6,6 @@ import MobileTopBar from '../../கூறுகள்/கட்டமைப்�
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 import {
     DownloadSimple,
-    GithubLogo,
     ShieldCheck,
     FolderSimple,
     BellSimpleRinging,
@@ -16,9 +15,7 @@ import {
     ArrowsOutSimple,
     X,
     Star,
-    Desktop,
     Sparkle,
-    ShareNetwork,
     Package,
     ArrowsClockwise,
     CalendarBlank,
@@ -155,7 +152,9 @@ export default function NammilPage() {
                             </h1>
 
                             <div className="ms-developer-link">
-                                <Link to="/about">Elvan Navil</Link>
+                                <span className="ms-dev-item">Published by <Link to="/about">Elvan Navil</Link></span>
+                                <span className="ms-meta-divider">•</span>
+                                <span className="ms-dev-item">Designed by <Link to="/portfolio">Elvan Parthasarathy</Link></span>
                             </div>
 
                             {/* RATINGS & CATEGORY ROW */}
@@ -176,22 +175,6 @@ export default function NammilPage() {
                                 <span className="ms-category-tag">Social & Productivity</span>
                             </div>
 
-                            {/* FEATURE PILLS */}
-                            <div className="ms-chips-row">
-                                <div className="ms-feature-chip">
-                                    <Desktop weight="bold" size={14} />
-                                    <span>Built for Windows 10 & 11</span>
-                                </div>
-                                <div className="ms-feature-chip">
-                                    <ShieldCheck weight="bold" size={14} />
-                                    <span>100% Local Privacy</span>
-                                </div>
-                                <div className="ms-feature-chip">
-                                    <Sparkle weight="bold" size={14} />
-                                    <span>Multi-Account Engine</span>
-                                </div>
-                            </div>
-
                             {/* SHORT TEASER DESCRIPTION */}
                             <p className="ms-hero-desc" lang="ta">
                                 அதிகாரப்பூர்வ வாட்ஸ்அப் ஒரு கணக்கை மட்டுமே அனுமதிக்கும் தடையை உடைத்து, 5 கணக்குகள் வரை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக இயக்கும் எல்வன் நவிலின் கணினிச் செயலி.
@@ -210,143 +193,80 @@ export default function NammilPage() {
                                     <DownloadSimple weight="bold" size={18} />
                                     <span>Download (.exe ~114MB)</span>
                                 </a>
-
-                                <a 
-                                    href="https://github.com/ElvanParthasarathy/Nammil" 
-                                    target="_blank" 
-                                    rel="noreferrer" 
-                                    className="ms-btn-icon"
-                                    title="GitHub Repository"
-                                    aria-label="GitHub Repository"
-                                >
-                                    <GithubLogo weight="regular" size={20} />
-                                </a>
-
-                                <button 
-                                    className="ms-btn-icon"
-                                    onClick={() => {
-                                        if (navigator.share) {
-                                            navigator.share({
-                                                title: 'நம்மில் (Nammil) - Multi-Account WhatsApp Companion',
-                                                url: window.location.href
-                                            }).catch(() => {});
-                                        } else {
-                                            navigator.clipboard.writeText(window.location.href);
-                                            alert('Link copied to clipboard!');
-                                        }
-                                    }}
-                                    title="Share Nammil"
-                                    aria-label="Share Nammil"
-                                >
-                                    <ShareNetwork weight="regular" size={20} />
-                                </button>
-                            </div>
-
-                            {/* AGE / PRIVACY BADGE CARD */}
-                            <div className="ms-rating-badge-card">
-                                <div className="ms-age-box">
-                                    <span className="ms-age-num">3+</span>
-                                </div>
-                                <div className="ms-age-meta">
-                                    <div className="ms-age-title">Safe & Private</div>
-                                    <div className="ms-age-sub">Zero Telemetry • Local Silos Only</div>
-                                </div>
                             </div>
                         </div>
                     </header>
 
                     {/* 2. STORE BODY */}
                     <div className="ms-store-body">
-                        {/* SCREENSHOTS CAROUSEL */}
-                            <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
-                                <div className="ms-section-header-link" onClick={() => setIsFullscreen(true)}>
-                                    <h2 className="ms-section-title">Screenshots</h2>
-                                    <CaretRight size={18} weight="bold" className="ms-section-chevron" />
-                                </div>
+                        {/* SCREENSHOTS SECTION (MICROSOFT STORE TWO-PANE CONTAINED) */}
+                        <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
+                            <div className="ms-section-header-link" onClick={() => setIsFullscreen(true)}>
+                                <h2 className="ms-section-title">Screenshots</h2>
+                                <CaretRight size={18} weight="bold" className="ms-section-chevron" />
+                            </div>
 
-                                {/* VIEWPORT WITH PEEKING NEXT SLIDE */}
+                            {/* CONTAINED SCREENSHOTS (2-PANE DESKTOP / 1-PANE MOBILE) */}
+                            <div 
+                                className="ms-screenshots-container"
+                                onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
+                                onTouchEnd={handleTouchEnd}
+                            >
                                 <div 
-                                    className="ms-screenshot-viewport"
-                                    onTouchStart={handleTouchStart}
-                                    onTouchMove={handleTouchMove}
-                                    onTouchEnd={handleTouchEnd}
+                                    className="ms-shot-frame" 
+                                    onClick={() => { setCurrentSlide(currentSlide); setIsFullscreen(true); }}
+                                    title="Click to view fullscreen"
                                 >
+                                    <img 
+                                        src={slides[currentSlide].src} 
+                                        alt={slides[currentSlide].titleEn} 
+                                        className="ms-shot-img"
+                                        loading="eager"
+                                    />
                                     <button 
-                                        className="ms-nav-arrow prev" 
-                                        onClick={prevSlide}
+                                        className="ms-shot-nav-btn prev"
+                                        onClick={(e) => { e.stopPropagation(); prevSlide(); }}
                                         aria-label="Previous screenshot"
                                     >
                                         <CaretLeft size={20} weight="bold" />
                                     </button>
-
-                                    <div className="ms-carousel-track">
-                                        {/* ACTIVE SLIDE */}
-                                        <div 
-                                            className="ms-screenshot-card active"
-                                            onClick={() => setIsFullscreen(true)}
-                                            title="Click for fullscreen preview"
-                                        >
-                                            <img 
-                                                src={slides[currentSlide].src} 
-                                                alt={slides[currentSlide].titleEn} 
-                                                className="ms-slide-img"
-                                                loading="eager"
-                                            />
-                                            <div className="ms-slide-zoom-hint">
-                                                <ArrowsOutSimple size={18} weight="bold" />
-                                            </div>
-                                        </div>
-
-                                        {/* PEEKING NEXT SLIDE */}
-                                        <div 
-                                            className="ms-screenshot-card peek"
-                                            onClick={nextSlide}
-                                            title="Click to view next screenshot"
-                                        >
-                                            <img 
-                                                src={slides[(currentSlide + 1) % slides.length].src} 
-                                                alt={slides[(currentSlide + 1) % slides.length].titleEn} 
-                                                className="ms-slide-img"
-                                                loading="lazy"
-                                            />
-                                        </div>
-                                    </div>
-
                                     <button 
-                                        className="ms-nav-arrow next" 
-                                        onClick={nextSlide}
+                                        className="ms-shot-nav-btn next mobile-only"
+                                        onClick={(e) => { e.stopPropagation(); nextSlide(); }}
                                         aria-label="Next screenshot"
                                     >
                                         <CaretRight size={20} weight="bold" />
                                     </button>
-                                </div>
-
-                                {/* PILL NAVIGATION BAR */}
-                                <div className="ms-slide-tabs-row" role="tablist">
-                                    {slides.map((slide, idx) => (
-                                        <button
-                                            key={idx}
-                                            role="tab"
-                                            aria-selected={currentSlide === idx}
-                                            className={`ms-slide-pill ${currentSlide === idx ? 'active' : ''}`}
-                                            onClick={() => setCurrentSlide(idx)}
-                                        >
-                                            <span className="ms-pill-index">{idx + 1}</span>
-                                            <span className="ms-pill-text">{slide.label}</span>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {/* CAPTION CARD */}
-                                <div className="ms-slide-caption-box">
-                                    <div className="ms-caption-title-row">
-                                        <h3 className="ms-caption-title-ta">{slides[currentSlide].titleTa}</h3>
-                                        <span className="ms-caption-title-en">{slides[currentSlide].titleEn}</span>
+                                    <div className="ms-shot-zoom-hint">
+                                        <ArrowsOutSimple size={18} weight="bold" />
                                     </div>
-                                    <p className="ms-caption-desc-ta">{slides[currentSlide].descTa}</p>
-                                    <p className="ms-caption-desc-en">{slides[currentSlide].descEn}</p>
                                 </div>
-                            </section>
+
+                                <div 
+                                    className="ms-shot-frame ms-shot-frame-second" 
+                                    onClick={() => { setCurrentSlide((currentSlide + 1) % slides.length); setIsFullscreen(true); }}
+                                    title="Click to view fullscreen"
+                                >
+                                    <img 
+                                        src={slides[(currentSlide + 1) % slides.length].src} 
+                                        alt={slides[(currentSlide + 1) % slides.length].titleEn} 
+                                        className="ms-shot-img"
+                                        loading="lazy"
+                                    />
+                                    <button 
+                                        className="ms-shot-nav-btn next"
+                                        onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                                        aria-label="Next screenshot"
+                                    >
+                                        <CaretRight size={20} weight="bold" />
+                                    </button>
+                                    <div className="ms-shot-zoom-hint">
+                                        <ArrowsOutSimple size={18} weight="bold" />
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
                             {/* DESCRIPTION SECTION */}
                             <section className="ms-section ms-desc-section">
@@ -427,7 +347,7 @@ export default function NammilPage() {
                                         <Package size={20} weight="regular" className="ms-cell-icon" />
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Published by</div>
-                                            <div className="ms-cell-val">Elvan Parthasarathy</div>
+                                            <div className="ms-cell-val">Elvan Navil</div>
                                         </div>
                                     </div>
 
@@ -553,6 +473,19 @@ export default function NammilPage() {
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Installed version</div>
                                             <div className="ms-cell-val">1.2.9</div>
+                                        </div>
+                                    </div>
+
+                                    {/* ROW 5 */}
+                                    <div className="ms-info-cell">
+                                        <Sparkle size={20} weight="regular" className="ms-cell-icon" />
+                                        <div className="ms-cell-content">
+                                            <div className="ms-cell-label">Designed & Developed by</div>
+                                            <div className="ms-cell-val">
+                                                <Link to="/portfolio" style={{ color: 'inherit', textDecoration: 'underline' }}>
+                                                    Elvan Parthasarathy
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
 
