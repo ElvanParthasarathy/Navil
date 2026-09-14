@@ -1,4 +1,5 @@
 import './முகப்பு.css';
+import '../படைப்புகள்/படைப்புகள்.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -462,26 +463,22 @@ const Home = () => {
                 <meta name="description" content="Welcome to the digital home of Elvan Parthasarathy. A creative sanctuary for poetry, thoughts, writings, and artistic expressions." />
                 <link rel="canonical" href="https://elvannavil.vercel.app/" />
             </Helmet>
-            <MobileTopBar title={isNavilgal ? "நவில்கள்|navilgal" : "எல்வன் நவில்"} showBack={isNavilgal} backUrl="/" />
-            <div className="home-page page-view fadeIn">
+            <MobileTopBar title="நவில்கள்|navilgal" showBack={true} backUrl="/" />
+            <div className="writings-page navilgal-page page-view fadeIn">
 
-                {isNavilgal && (
-                    <>
-                        <FloatingBackButton to="/" />
-                        <header className="writings-header animate-entry" style={{ marginBottom: '32px' }}>
-                            <div style={{ flex: 1 }}>
-                                <h1 className="writings-title" lang="ta">நவில்கள்</h1>
-                                <div className="writings-title-sub">Navilgal</div>
-                                <p className="writings-subtitle" lang="ta">
-                                    சிந்தனைகள், கதைகள், கலைகள் & இலக்கியப் பெட்டகம்
-                                </p>
-                                <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
-                                    Literature, Visual Arts & Creative Expressions
-                                </p>
-                            </div>
-                        </header>
-                    </>
-                )}
+                <FloatingBackButton to="/" />
+                <header className="writings-header animate-entry">
+                    <div style={{ flex: 1 }}>
+                        <h1 className="writings-title" lang="ta">நவில்கள்</h1>
+                        <div className="writings-title-sub">Navilgal</div>
+                        <p className="writings-subtitle" lang="ta">
+                            சிந்தனைகள், கதைகள், கலைகள் & இலக்கியப் பெட்டகம்
+                        </p>
+                        <p className="writings-subtitle" style={{ fontSize: '0.9rem', color: '#888888', marginTop: '4px' }}>
+                            Literature, Visual Arts & Creative Expressions
+                        </p>
+                    </div>
+                </header>
 
                 {/* ANIMATED ABSTRACT GRADIENT BACKGROUND */}
                 <div className="home-bg-blobs">

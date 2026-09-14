@@ -75,7 +75,7 @@ const MobileTopBar: React.FC<MobileTopBarProps> = ({ title, showBack = false, ba
                         எல்வன் நவில்
                         <span className="brand-subtitle">Elvan Navil</span>
                     </div>
-                ) : title === 'நவில்கள்' || title === 'நவில்கள்|navilgal' || title === 'எல்வனின் நவில்கள்' || title === 'எல்வனின் நவில்கள்|elvanin navilgal' ? (
+                ) : title === 'எல்வனின் நவில்கள்' ? (
                     <div className="brand-bilingual" lang="ta">
                         எல்வனின் நவில்கள்
                         <span className="brand-subtitle">Elvanin Navilgal</span>

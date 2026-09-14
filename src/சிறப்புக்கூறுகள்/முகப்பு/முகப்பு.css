@@ -1140,4 +1140,17 @@
     gap: 12px;
 }
 
+/* NAVILGAL ARCHIVE PAGE ADJUSTMENTS */
+.navilgal-page {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .navilgal-page .bento-grid {
+        padding: 0 20px;
+        margin-top: 20px;
+    }
+}
+
+
 
