@@ -22,7 +22,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const location = useLocation();
     const { theme, setTheme } = useTheme();
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+    const [isToggleTooltipOpen, setIsToggleTooltipOpen] = React.useState(false);
+    const toggleTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
     const settingsZoneRef = React.useRef<HTMLDivElement>(null);
+
+    const handleToggleMouseEnter = () => {
+        if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        toggleTimerRef.current = setTimeout(() => {
+            setIsToggleTooltipOpen(true);
+        }, 1500);
+    };
+
+    const handleToggleMouseLeave = () => {
+        if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        setIsToggleTooltipOpen(false);
+    };
+
+    const handleToggleClick = () => {
+        if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        setIsToggleTooltipOpen(false);
+        onToggleSidebar();
+    };
+
+    React.useEffect(() => {
+        return () => {
+            if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        };
+    }, []);
 
     // Close popup on click outside
     React.useEffect(() => {
@@ -50,16 +76,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     )}
                     <Tooltip
                         title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-                        placement={isSidebarCollapsed ? "right" : "bottom"}
+                        placement="right"
                         arrow
-                        enterDelay={300}
-                        leaveDelay={0}
+                        open={isToggleTooltipOpen}
+                        disableHoverListener
+                        disableFocusListener
+                        disableTouchListener
                     >
                         <ButtonBase
                             component="button"
                             className="sidebar-toggle-btn"
-                            onClick={onToggleSidebar}
+                            onClick={handleToggleClick}
+                            onMouseEnter={handleToggleMouseEnter}
+                            onMouseLeave={handleToggleMouseLeave}
                             disableFocusRipple
+                            centerRipple
                         >
                             <SidebarSimple weight="regular" size={19} />
                         </ButtonBase>

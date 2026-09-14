@@ -287,13 +287,13 @@ body {
   height: 36px;
   background: transparent;
   border: none;
-  border-radius: 99px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: var(--text-muted);
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   flex-shrink: 0;
 }
 
@@ -310,7 +310,9 @@ body {
 }
 
 .sidebar-toggle-btn:active {
-  transform: scale(0.95);
+  background: color-mix(in srgb, var(--text-main) 16%, transparent);
+  color: var(--text-main);
+  transform: none;
 }
 
 .sidebar.collapsed .sidebar-header {
@@ -420,9 +422,9 @@ body {
   overflow: hidden !important;
   width: 36px !important;
   height: 36px !important;
-  background: transparent !important;
+  background: transparent;
   border: none !important;
-  border-radius: 99px !important;
+  border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -430,8 +432,22 @@ body {
   color: var(--text-muted) !important;
   padding: 0 !important;
   font-family: inherit !important;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  transition: background 0.2s ease, color 0.2s ease !important;
   flex-shrink: 0 !important;
+}
+
+.sidebar-toggle-btn:hover,
+.sidebar-toggle-btn.MuiButtonBase-root:hover {
+  background: var(--nav-hover) !important;
+  color: var(--text-main) !important;
+  transform: none !important;
+}
+
+.sidebar-toggle-btn:active,
+.sidebar-toggle-btn.MuiButtonBase-root:active {
+  background: color-mix(in srgb, var(--text-main) 16%, transparent) !important;
+  color: var(--text-main) !important;
+  transform: none !important;
 }
 
 .sidebar.collapsed .sidebar-toggle-btn,
@@ -439,6 +455,7 @@ body {
   width: 44px !important;
   height: 44px !important;
   margin: 0 auto !important;
+  border-radius: 50% !important;
 }
 
 .settings-trigger,
@@ -470,9 +487,15 @@ body {
 
 /* Ensure MUI TouchRipple clips strictly to the 99px pill border-radius */
 .nav-item .MuiTouchRipple-root,
-.sidebar-toggle-btn .MuiTouchRipple-root,
 .settings-trigger .MuiTouchRipple-root {
   border-radius: 99px !important;
+  overflow: hidden !important;
+  color: var(--text-main);
+  pointer-events: none;
+}
+
+.sidebar-toggle-btn .MuiTouchRipple-root {
+  border-radius: 50% !important;
   overflow: hidden !important;
   color: var(--text-main);
   pointer-events: none;

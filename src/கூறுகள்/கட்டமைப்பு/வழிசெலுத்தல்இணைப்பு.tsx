@@ -60,6 +60,7 @@ export const NavLink = ({ to, icon, label, subLabel, badge, active, className = 
                 arrow 
                 enterDelay={200}
                 leaveDelay={0}
+                disableFocusListener
             >
                 {navItemContent}
             </Tooltip>
