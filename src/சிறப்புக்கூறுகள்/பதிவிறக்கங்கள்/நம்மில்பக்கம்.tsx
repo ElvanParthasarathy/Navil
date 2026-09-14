@@ -488,7 +488,7 @@ export default function NammilPage() {
                         {/* SCREENSHOTS SECTION (MICROSOFT STORE HORIZONTAL SCROLLER) */}
                         <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
                             <div className="ms-section-header-link" onClick={() => openLightbox(0)}>
-                                <h2 className="ms-section-title">Screenshots</h2>
+                                <h2 className="ms-section-title">திரைப்படங்கள் • Screenshots</h2>
                                 <CaretRight size={18} weight="bold" className="ms-section-chevron" />
                             </div>
 
@@ -547,7 +547,7 @@ export default function NammilPage() {
 
                             {/* DESCRIPTION SECTION */}
                             <section className="ms-section ms-desc-section">
-                                <h2 className="ms-section-title">Description</h2>
+                                <h2 className="ms-section-title">விளக்கம் • Description</h2>
                                 <div className="ms-desc-body">
                                     <div className="ms-desc-block ms-desc-ta" lang="ta">
                                         <p>
@@ -577,15 +577,23 @@ export default function NammilPage() {
 
                             {/* FEATURES SECTION */}
                             <section className="ms-section ms-features-section">
-                                <h2 className="ms-section-title">Features</h2>
+                                <h2 className="ms-section-title">சிறப்பம்சங்கள் • Features</h2>
                                 <div className="ms-features-grid">
                                     <div className="ms-feature-item">
                                         <div className="ms-feature-icon-box">
                                             <Users size={22} weight="regular" />
                                         </div>
-                                        <div>
-                                            <h3 className="ms-feature-heading">5 Isolated Sessions</h3>
-                                            <p className="ms-feature-copy">
+                                        <div className="ms-feature-text">
+                                            <h3 className="ms-feature-heading">
+                                                <span className="ms-feature-title-ta">5 தனித்தனி அமர்வுகள்</span>
+                                                <span className="ms-feature-title-sep">•</span>
+                                                <span className="ms-feature-title-en">5 Isolated Sessions</span>
+                                            </h3>
+                                            <p className="ms-feature-copy-ta" lang="ta">
+                                                எந்தவொரு நற்சான்றிதழ் முரண்பாடும் இன்றி 5 வாட்ஸ்அப் கணக்குகளை ஒரே நேரத்தில் பாதுகாப்பாக இயக்கும் வசதி.
+                                            </p>
+                                            <div className="ms-feature-divider" />
+                                            <p className="ms-feature-copy-en" lang="en">
                                                 Simultaneously handle 5 WhatsApp accounts without credential collisions.
                                             </p>
                                         </div>
@@ -595,9 +603,17 @@ export default function NammilPage() {
                                         <div className="ms-feature-icon-box">
                                             <FolderSimple size={22} weight="regular" />
                                         </div>
-                                        <div>
-                                            <h3 className="ms-feature-heading">Automated Media Sorter</h3>
-                                            <p className="ms-feature-copy">
+                                        <div className="ms-feature-text">
+                                            <h3 className="ms-feature-heading">
+                                                <span className="ms-feature-title-ta">தானியங்கி ஊடக வரிசையாக்கம்</span>
+                                                <span className="ms-feature-title-sep">•</span>
+                                                <span className="ms-feature-title-en">Automated Media Sorter</span>
+                                            </h3>
+                                            <p className="ms-feature-copy-ta" lang="ta">
+                                                பதிவிறக்கம் செய்யப்படும் கோப்புகளைத் தானாகப் படங்கள், ஆவணங்கள், ஒலிக் கோப்புகளாக ஒழுங்கமைக்கும் வசதி.
+                                            </p>
+                                            <div className="ms-feature-divider" />
+                                            <p className="ms-feature-copy-en" lang="en">
                                                 Auto-classifies incoming WhatsApp downloads into dedicated Images, Audio, and Document directories.
                                             </p>
                                         </div>
@@ -607,9 +623,17 @@ export default function NammilPage() {
                                         <div className="ms-feature-icon-box">
                                             <BellSimpleRinging size={22} weight="regular" />
                                         </div>
-                                        <div>
-                                            <h3 className="ms-feature-heading">Native Windows Chimes</h3>
-                                            <p className="ms-feature-copy">
+                                        <div className="ms-feature-text">
+                                            <h3 className="ms-feature-heading">
+                                                <span className="ms-feature-title-ta">விண்டோஸ் நேரலை அறிவிப்புகள்</span>
+                                                <span className="ms-feature-title-sep">•</span>
+                                                <span className="ms-feature-title-en">Native Windows Chimes</span>
+                                            </h3>
+                                            <p className="ms-feature-copy-ta" lang="ta">
+                                                படிக்காத செய்திகளின் எண்ணிக்கை மற்றும் விண்டோஸின் பிரத்யேக ஒலி எச்சரிக்கையுடன் நிகழ்நேர அறிவிப்புகள்.
+                                            </p>
+                                            <div className="ms-feature-divider" />
+                                            <p className="ms-feature-copy-en" lang="en">
                                                 Real-time notification audio with unread badge counter in the Windows taskbar.
                                             </p>
                                         </div>
@@ -619,9 +643,17 @@ export default function NammilPage() {
                                         <div className="ms-feature-icon-box">
                                             <ShieldCheck size={22} weight="regular" />
                                         </div>
-                                        <div>
-                                            <h3 className="ms-feature-heading">100% Local Privacy</h3>
-                                            <p className="ms-feature-copy">
+                                        <div className="ms-feature-text">
+                                            <h3 className="ms-feature-heading">
+                                                <span className="ms-feature-title-ta">100% உள்ளூர் தனியுரிமை</span>
+                                                <span className="ms-feature-title-sep">•</span>
+                                                <span className="ms-feature-title-en">100% Local Privacy</span>
+                                            </h3>
+                                            <p className="ms-feature-copy-ta" lang="ta">
+                                                எந்தவொரு கிளவுட் இடைத்தரகரோ அல்லது வெளிப் பதிவுகளோ இன்றி உங்கள் தகவல்கள் உங்கள் கணினியிலேயே பாதுகாப்பாக இருக்கும்.
+                                            </p>
+                                            <div className="ms-feature-divider" />
+                                            <p className="ms-feature-copy-en" lang="en">
                                                 Zero cloud proxy, zero analytics, zero external logging. Your messages never touch third-party servers.
                                             </p>
                                         </div>
@@ -631,7 +663,7 @@ export default function NammilPage() {
 
                             {/* ADDITIONAL INFORMATION SECTION (EXACTLY AS IN MICROSOFT STORE) */}
                             <section className="ms-additional-info-section">
-                                <h2 className="ms-info-main-title">Additional information</h2>
+                                <h2 className="ms-info-main-title">கூடுதல் விவரங்கள் • Additional information</h2>
                                 <div className="ms-info-grid">
                                     {/* ROW 1 */}
                                     <div className="ms-info-cell">

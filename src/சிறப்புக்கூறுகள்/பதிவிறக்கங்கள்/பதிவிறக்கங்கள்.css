@@ -716,18 +716,57 @@ body:has(.ms-store-page) .main-content,
     background: color-mix(in srgb, var(--text-main) 12%, transparent);
 }
 
-.ms-feature-heading {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin: 0 0 4px;
+.ms-feature-text {
+    min-width: 0;
+    flex: 1;
 }
 
-.ms-feature-copy {
+.ms-feature-heading {
+    font-size: 0.96rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    line-height: 1.35;
+}
+
+.ms-feature-title-ta {
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.ms-feature-title-sep {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    opacity: 0.6;
+}
+
+.ms-feature-title-en {
+    color: var(--text-muted);
     font-size: 0.84rem;
+    font-weight: 500;
+}
+
+.ms-feature-copy-ta {
+    margin: 0;
+    font-size: 0.85rem;
     line-height: 1.5;
     color: var(--text-muted);
+}
+
+.ms-feature-divider {
+    height: 1px;
+    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    margin: 8px 0;
+}
+
+.ms-feature-copy-en {
     margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--text-muted) 82%, transparent);
 }
 
 /* 3. ADDITIONAL INFORMATION GRID (MICROSOFT STORE STYLE) */
