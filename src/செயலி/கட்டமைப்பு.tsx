@@ -4,6 +4,7 @@ import { useTheme } from '../கொக்கிகள்/கருப்பொ�
 import { useSettings } from '../கொக்கிகள்/அமைப்புகள்கொக்கி';
 import { ProfileImage } from '../கூறுகள்/ஊடகம்/சுயவிவரபடம்';
 import { NavLink } from '../கூறுகள்/கட்டமைப்பு/வழிசெலுத்தல்இணைப்பு';
+import { BrandTuner } from '../கூறுகள்/கட்டமைப்பு/BrandTuner';
 import profileData from '../தரவு/தன்னுரு.json';
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import { House, User, Monitor, Sun, Moon, Wrench, ListDashes, List, BookOpen } from '@phosphor-icons/react';
@@ -169,8 +170,8 @@ const Layout = () => {
                     <div className="sidebar-header">
                         {!isSidebarCollapsed && (
                             <div className="brand">
-                                <span className="brand-subtitle">Elvan Navil</span>
                                 <span className="brand-title" lang="ta">எல்வன் நவில்</span>
+                                <span className="brand-subtitle">Elvan Navil</span>
                             </div>
                         )}
                         <button
@@ -282,6 +283,7 @@ const Layout = () => {
                 <ScrollRestoration />
                 <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, autoThumbnails }} />
             </main>
+            <BrandTuner />
         </div>
 
     );

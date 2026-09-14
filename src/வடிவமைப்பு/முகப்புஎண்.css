@@ -251,32 +251,32 @@ body {
 }
 
 .brand {
-  font-size: 1.35rem;
-  font-weight: 800;
-  padding-left: 20px;
+  padding-left: var(--brand-padding-left, 20px);
   white-space: nowrap;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1px;
-  line-height: 1.15;
-}
-
-.brand-subtitle {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  opacity: 0.75;
-  letter-spacing: 0.5px;
+  gap: var(--brand-gap, 3px);
   line-height: 1;
 }
 
 .brand-title {
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-size: var(--brand-title-size, 1.35rem);
+  font-weight: var(--brand-title-weight, 800);
   color: var(--text-main);
   line-height: 1.15;
+}
+
+.brand-subtitle {
+  font-size: var(--brand-subtitle-size, 0.62rem);
+  font-weight: var(--brand-subtitle-weight, 600);
+  color: var(--text-muted);
+  opacity: var(--brand-subtitle-opacity, 0.7);
+  letter-spacing: var(--brand-subtitle-tracking, 2.6px);
+  text-transform: uppercase;
+  line-height: 1;
+  padding-left: 1px;
 }
 
 .sidebar-header {
