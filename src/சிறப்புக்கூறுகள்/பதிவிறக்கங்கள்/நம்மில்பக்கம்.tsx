@@ -1,5 +1,5 @@
 import './பதிவிறக்கங்கள்.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
@@ -10,6 +10,7 @@ import {
     FolderSimple,
     BellSimpleRinging,
     Users,
+    UsersThree,
     ChatCircle,
     Plus,
     MagnifyingGlass,
@@ -18,10 +19,22 @@ import {
     Smiley,
     Paperclip,
     Microphone,
-    Checks
+    Checks,
+    Check,
+    Phone,
+    CircleDashed,
+    Star,
+    Archive,
+    VideoCamera,
+    PushPin,
+    SpeakerSlash,
+    Camera,
+    ArrowBendUpRight,
+    CheckCircle
 } from '@phosphor-icons/react';
 
 export default function NammilPage() {
+    const [mobileView, setMobileView] = useState<'chat' | 'list'>('chat');
     return (
         <>
             <Helmet>
@@ -97,183 +110,508 @@ export default function NammilPage() {
                     </div>
                 </header>
 
-                {/* 2. AUTHENTIC CSS DESKTOP APP INTERFACE PREVIEW */}
+                {/* 2. AUTHENTIC PIXEL-PERFECT DESKTOP APP INTERFACE PREVIEW */}
                 <section className="nammil-showcase-section animate-entry">
+                    {/* MOBILE TOGGLE TABS (ONLY VISIBLE ON PHONES) */}
+                    <div className="wa-mobile-toggle-row">
+                        <button 
+                            className={`wa-mobile-tab-btn ${mobileView === 'chat' ? 'active' : ''}`}
+                            onClick={() => setMobileView('chat')}
+                        >
+                            உரையாடல் (Chat)
+                        </button>
+                        <button 
+                            className={`wa-mobile-tab-btn ${mobileView === 'list' ? 'active' : ''}`}
+                            onClick={() => setMobileView('list')}
+                        >
+                            பட்டியல் (Chat List)
+                        </button>
+                    </div>
+
                     <div className="nammil-window-frame">
-                        {/* WINDOW OS TITLEBAR */}
+                        {/* 1. TOP NAMMIL APP TITLEBAR */}
                         <div className="mockup-window-bar">
-                            <div className="mockup-window-controls">
-                                <span className="window-dot dot-red" />
-                                <span className="window-dot dot-yellow" />
-                                <span className="window-dot dot-green" />
+                            <div className="nammil-titlebar-brand">
+                                <img src="/nammil_icon.png" alt="Nammil" className="titlebar-app-icon" />
+                                <span className="titlebar-app-title">Nammil</span>
                             </div>
-                            <div className="mockup-window-caption">
-                                <img src="/nammil_icon.png" alt="" className="mockup-caption-icon" />
-                                <span>Nammil — Multi-Account WhatsApp Desktop</span>
+
+                            <div className="nammil-titlebar-tabs">
+                                <div className="nammil-titlebar-tab active" title="Account 1">
+                                    <ChatCircle size={15} weight="fill" />
+                                    <span className="tab-unread-counter">6</span>
+                                </div>
+                                <div className="nammil-titlebar-tab" title="Account 2">
+                                    <ChatCircle size={15} weight="regular" />
+                                </div>
                             </div>
-                            <div className="mockup-window-right-actions">
-                                <span className="win-ctrl win-min">—</span>
-                                <span className="win-ctrl win-max">□</span>
-                                <span className="win-ctrl win-close">✕</span>
+
+                            <div className="nammil-titlebar-actions">
+                                <div className="titlebar-tool-btn has-badge" title="Notifications">
+                                    <BellSimpleRinging size={15} />
+                                    <span className="bell-badge-count">4</span>
+                                </div>
+                                <div className="titlebar-tool-btn" title="Downloads Folder">
+                                    <FolderSimple size={15} />
+                                </div>
+                                <div className="titlebar-tool-btn" title="Settings">
+                                    <Gear size={15} />
+                                </div>
+                                <div className="titlebar-win-controls">
+                                    <button className="win-ctrl-btn" aria-label="Minimize">—</button>
+                                    <button className="win-ctrl-btn" aria-label="Maximize">□</button>
+                                    <button className="win-ctrl-btn win-close" aria-label="Close">✕</button>
+                                </div>
                             </div>
                         </div>
 
-                        {/* NAMMIL TOPBAR (ACCOUNT TABS & UTILITIES) */}
-                        <div className="mockup-app-topbar">
-                            <div className="mockup-brand-area">
-                                <img src="/nammil_icon.png" alt="" className="mockup-brand-icon" />
-                                <span className="mockup-brand-title" lang="ta">நம்மில்</span>
-                            </div>
-
-                            <div className="mockup-accounts-tabs">
-                                <div className="mockup-tab active">
-                                    <ChatCircle size={14} weight="fill" className="tab-wa-icon" />
-                                    <span className="tab-name">முதன்மை (Personal)</span>
-                                    <span className="tab-status-dot" />
-                                </div>
-                                <div className="mockup-tab">
-                                    <ChatCircle size={14} weight="regular" className="tab-wa-icon" />
-                                    <span className="tab-name">வணிகம் (Business)</span>
-                                    <span className="tab-badge">2</span>
-                                </div>
-                                <div className="mockup-tab">
-                                    <ChatCircle size={14} weight="regular" className="tab-wa-icon" />
-                                    <span className="tab-name">பணி (Work)</span>
-                                </div>
-                                <div className="mockup-tab-add" title="Add Account">
-                                    <Plus size={12} weight="bold" />
-                                </div>
-                            </div>
-
-                            <div className="mockup-topbar-tools">
-                                <span className="mockup-tool-btn" title="Search">
-                                    <MagnifyingGlass size={14} />
-                                </span>
-                                <span className="mockup-tool-btn" title="Media Library">
-                                    <FolderSimple size={14} />
-                                </span>
-                                <span className="mockup-tool-btn has-badge" title="Notifications">
-                                    <BellSimpleRinging size={14} />
-                                    <span className="tool-indicator" />
-                                </span>
-                                <span className="mockup-tool-btn" title="Settings">
-                                    <Gear size={14} />
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* APP MAIN BODY: CHAT SIDEBAR + ACTIVE DISCUSSION PANE */}
-                        <div className="mockup-app-body">
-                            {/* CHAT LIST SIDEBAR */}
-                            <aside className="mockup-chat-sidebar">
-                                <div className="mockup-search-box">
-                                    <MagnifyingGlass size={13} className="mockup-search-icon" />
-                                    <span className="mockup-search-placeholder">Search or start new chat</span>
+                        {/* 2. APP 3-COLUMN BODY */}
+                        <div className={`mockup-desktop-body view-${mobileView}`}>
+                            {/* FAR LEFT: WHATSAPP ICON RAIL */}
+                            <aside className="wa-icon-rail" aria-label="WhatsApp Navigation Rail">
+                                <div className="wa-rail-top">
+                                    <button className="wa-rail-btn active" title="Chats">
+                                        <span className="wa-rail-active-bar" />
+                                        <ChatCircle size={20} weight="fill" />
+                                        <span className="wa-rail-badge">2</span>
+                                    </button>
+                                    <button className="wa-rail-btn" title="Calls">
+                                        <Phone size={20} />
+                                    </button>
+                                    <button className="wa-rail-btn" title="Status">
+                                        <CircleDashed size={20} weight="bold" />
+                                    </button>
+                                    <button className="wa-rail-btn" title="Communities">
+                                        <UsersThree size={20} />
+                                    </button>
+                                    <button className="wa-rail-btn wa-rail-meta-ai" title="Meta AI">
+                                        <div className="meta-ai-swirl" />
+                                    </button>
                                 </div>
 
-                                <div className="mockup-chat-list">
-                                    <div className="mockup-chat-item active">
-                                        <div className="chat-avatar avatar-ep">EP</div>
-                                        <div className="chat-info">
-                                            <div className="chat-info-top">
-                                                <span className="chat-name">Elvan Parthasarathy</span>
-                                                <span className="chat-time">12:45 PM</span>
-                                            </div>
-                                            <div className="chat-info-bottom">
-                                                <Checks size={14} weight="bold" className="chat-checks-read" />
-                                                <span className="chat-snippet" lang="ta">நம்மில் v1.2.8 பதிவிறக்கத்திற்கு தயார்...</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mockup-chat-item">
-                                        <div className="chat-avatar avatar-ns">NS</div>
-                                        <div className="chat-info">
-                                            <div className="chat-info-top">
-                                                <span className="chat-name">Navil Studio Updates</span>
-                                                <span className="chat-time">11:30 AM</span>
-                                            </div>
-                                            <div className="chat-info-bottom">
-                                                <span className="chat-snippet" lang="ta">5 தனித்தனி வாட்ஸ்அப் கணக்குகள்...</span>
-                                                <span className="chat-unread-count">1</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mockup-chat-item">
-                                        <div className="chat-avatar avatar-tf">TF</div>
-                                        <div className="chat-info">
-                                            <div className="chat-info-top">
-                                                <span className="chat-name">Tamil Typography Hub</span>
-                                                <span className="chat-time">Yesterday</span>
-                                            </div>
-                                            <div className="chat-info-bottom">
-                                                <span className="chat-snippet">Elvan Sans + Adinatha Brahmi</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mockup-chat-item">
-                                        <div className="chat-avatar avatar-mo">MO</div>
-                                        <div className="chat-info">
-                                            <div className="chat-info-top">
-                                                <span className="chat-name">Media Auto-Sorter</span>
-                                                <span className="chat-time">Sunday</span>
-                                            </div>
-                                            <div className="chat-info-bottom">
-                                                <span className="chat-snippet" lang="ta">14 கோப்புகள் வரிசைப்படுத்தப்பட்டன</span>
-                                            </div>
-                                        </div>
+                                <div className="wa-rail-bottom">
+                                    <button className="wa-rail-btn" title="Starred Messages">
+                                        <Star size={20} />
+                                    </button>
+                                    <button className="wa-rail-btn" title="Settings">
+                                        <Gear size={20} />
+                                    </button>
+                                    <div className="wa-beta-pill">BETA</div>
+                                    <div className="wa-rail-avatar" title="Profile">
+                                        <div className="avatar-circle avatar-rail-user">EP</div>
                                     </div>
                                 </div>
                             </aside>
 
-                            {/* MAIN ACTIVE CHAT VIEW */}
-                            <main className="mockup-chat-main">
-                                <div className="mockup-active-header">
-                                    <div className="active-header-contact">
-                                        <div className="chat-avatar avatar-ep sm">EP</div>
-                                        <div>
-                                            <div className="active-contact-name">Elvan Parthasarathy</div>
-                                            <div className="active-contact-status">
-                                                <span className="online-dot" /> online
+                            {/* COLUMN 2: WHATSAPP CHAT LIST SIDEBAR */}
+                            <section className="wa-sidebar" aria-label="Chat List">
+                                <div className="wa-sidebar-header">
+                                    <h2 className="wa-sidebar-title">WhatsApp</h2>
+                                    <div className="wa-sidebar-header-actions">
+                                        <button className="wa-header-icon-btn" title="Menu">
+                                            <DotsThreeVertical size={19} weight="bold" />
+                                        </button>
+                                        <button className="wa-new-chat-btn" title="New Chat">
+                                            <Plus size={16} weight="bold" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="wa-search-container">
+                                    <div className="wa-search-box">
+                                        <MagnifyingGlass size={15} className="wa-search-icon" />
+                                        <span className="wa-search-placeholder">Search or start new chat</span>
+                                    </div>
+                                </div>
+
+                                <div className="wa-filter-row">
+                                    <button className="wa-filter-chip active">All</button>
+                                    <button className="wa-filter-chip">RMD STAFF</button>
+                                    <button className="wa-filter-chip">Unread 3</button>
+                                </div>
+
+                                <div className="wa-archived-row">
+                                    <div className="wa-archived-left">
+                                        <Archive size={16} weight="bold" className="wa-archived-icon" />
+                                        <span className="wa-archived-label">Archived</span>
+                                    </div>
+                                </div>
+
+                                <div className="wa-chat-scroll-list">
+                                    {/* Contact 1 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-elvan">EP</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name">@ElvanParthasarathy (You)</span>
+                                                <span className="wa-row-time">4:05 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <Checks size={15} weight="bold" className="wa-checks-read" />
+                                                    <span className="wa-snippet-text">if i refresh the nammil the top abr icosn s...</span>
+                                                </div>
+                                                <PushPin size={14} weight="fill" className="wa-pin-icon" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="active-header-actions">
-                                        <MagnifyingGlass size={16} />
-                                        <DotsThreeVertical size={16} />
+
+                                    {/* Contact 2: ACTIVE CONTACT (MATCHING SCREENSHOT) */}
+                                    <div className="wa-chat-row active">
+                                        <div className="avatar-circle avatar-jeshwanth">🎓</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name">ச. ஜெஷ்வந்த் 🎓</span>
+                                                <span className="wa-row-time">10:03 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <Checks size={15} weight="bold" className="wa-checks-read" />
+                                                    <span className="wa-snippet-text">mm</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 3 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-jey">ஜே</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name">ஜேய்</span>
+                                                <span className="wa-row-time active-time">9:59 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <Phone size={13} weight="fill" className="wa-call-icon" />
+                                                    <span className="wa-snippet-text" lang="ta">வாய்ஸ் கால்</span>
+                                                </div>
+                                                <span className="wa-unread-badge">5</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 4 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-manosundar">செ</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name">செ. மனோசுந்தர் 🎓</span>
+                                                <span className="wa-row-time">9:51 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <Check size={14} className="wa-check-single" />
+                                                    <span className="wa-snippet-text">Uav</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 5 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-krishna">சு</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name">சு.பா. கிருஷ்ண விஷ்வா 🎓</span>
+                                                <span className="wa-row-time">9:12 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <Checks size={15} weight="bold" className="wa-checks-read" />
+                                                    <span className="wa-snippet-text">mm</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 6 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-veetargal">💫</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name" lang="ta">அன்பு வீட்டார்கள் 💫</span>
+                                                <span className="wa-row-time active-time">7:44 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <span className="wa-snippet-text" lang="ta">பாப்பா: </span>
+                                                    <Camera size={13} weight="fill" className="wa-camera-icon" />
+                                                    <span className="wa-snippet-text" lang="ta"> போட்டோ</span>
+                                                </div>
+                                                <div className="wa-row-badges">
+                                                    <SpeakerSlash size={14} className="wa-mute-icon" />
+                                                    <span className="wa-unread-badge">1</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 7 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-santhoshini">VS</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name">சந்தோஷினி ஆசிரியர் 👩‍🏫</span>
+                                                <span className="wa-row-time">7:25 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <Checks size={15} weight="bold" className="wa-checks-read" />
+                                                    <span className="wa-snippet-text">mam reference papers</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 8 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-periyamma">பெ</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name" lang="ta">பெரியம்மா</span>
+                                                <span className="wa-row-time">4:10 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <span className="wa-snippet-text" lang="ta">@ நீங்கள் பெரியம்மா என்பவரை...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contact 9 */}
+                                    <div className="wa-chat-row">
+                                        <div className="avatar-circle avatar-amma">அ</div>
+                                        <div className="wa-chat-row-details">
+                                            <div className="wa-row-top">
+                                                <span className="wa-contact-name" lang="ta">அம்மா</span>
+                                                <span className="wa-row-time">1:47 PM</span>
+                                            </div>
+                                            <div className="wa-row-bottom">
+                                                <div className="wa-snippet-wrap">
+                                                    <span className="wa-snippet-text" lang="ta">சரிப்பா, பத்திரமா இரு</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* COLUMN 3: WHATSAPP MAIN CONVERSATION PANE */}
+                            <main className="wa-main-canvas" aria-label="Conversation">
+                                {/* CHAT HEADER */}
+                                <div className="wa-chat-header">
+                                    <div className="wa-chat-header-user">
+                                        <div className="avatar-circle avatar-jeshwanth sm">🎓</div>
+                                        <div className="wa-chat-header-name">ச. ஜெஷ்வந்த் 🎓</div>
+                                    </div>
+                                    <div className="wa-chat-header-tools">
+                                        <button className="wa-header-tool-btn" title="Video Call">
+                                            <VideoCamera size={19} weight="bold" />
+                                        </button>
+                                        <button className="wa-header-tool-btn" title="Voice Call">
+                                            <Phone size={19} weight="bold" />
+                                        </button>
+                                        <button className="wa-header-tool-btn" title="Search">
+                                            <MagnifyingGlass size={19} weight="bold" />
+                                        </button>
+                                        <button className="wa-header-tool-btn" title="Menu">
+                                            <DotsThreeVertical size={19} weight="bold" />
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div className="mockup-messages-viewport">
-                                    <div className="mockup-date-divider">
-                                        <span>இன்று • TODAY</span>
+                                {/* MESSAGES VIEWPORT WITH WHATSAPP DOODLE PATTERN */}
+                                <div className="wa-messages-viewport mockup-canvas-doodle">
+                                    {/* Outgoing Message 1 */}
+                                    <div className="wa-msg-bubble outgoing">
+                                        <p className="wa-msg-text">
+                                            whatsapp web or whatsapp hang aaguthu la ithu aagathu
+                                        </p>
+                                        <div className="wa-msg-meta">
+                                            <span className="wa-msg-timestamp">10:02 PM</span>
+                                            <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                        </div>
                                     </div>
 
-                                    <div className="mockup-bubble incoming">
-                                        <p className="bubble-text" lang="ta">
-                                            நம்மில் (Nammil) கணினிச் செயலி 5 வாட்ஸ்அப் கணக்குகளை ஒரே நேரத்தில் தனித்தனிப் பெட்டகங்களாக (sandboxed sessions) இயக்க உதவுகிறது.
+                                    {/* Outgoing Message 2 */}
+                                    <div className="wa-msg-bubble outgoing">
+                                        <p className="wa-msg-text">
+                                            and custom folders for downloading downloads la documents images nu download pannradhu auto arrange aagum
                                         </p>
-                                        <span className="bubble-time">12:42 PM</span>
+                                        <div className="wa-msg-meta">
+                                            <span className="wa-msg-timestamp">10:02 PM</span>
+                                            <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                        </div>
                                     </div>
 
-                                    <div className="mockup-bubble outgoing">
-                                        <p className="bubble-text" lang="ta">
-                                            தானியங்கி மீடியா வரிசையாக்கம் (Documents / Media) மற்றும் விண்டோஸ் அறிவிப்புகளும் மிகச் சிறப்பாக இயங்குகின்றன!
+                                    {/* Outgoing Message 3 */}
+                                    <div className="wa-msg-bubble outgoing">
+                                        <p className="wa-msg-text">
+                                            and we can use multi whatsapp accounts
                                         </p>
-                                        <span className="bubble-time">
-                                            12:45 PM
-                                            <Checks size={13} weight="bold" className="chat-checks-read" />
-                                        </span>
+                                        <div className="wa-msg-meta">
+                                            <span className="wa-msg-timestamp">10:02 PM</span>
+                                            <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                        </div>
+                                    </div>
+
+                                    {/* Outgoing Message 4 */}
+                                    <div className="wa-msg-bubble outgoing">
+                                        <p className="wa-msg-text">
+                                            use pannitiu sollu
+                                        </p>
+                                        <div className="wa-msg-meta">
+                                            <span className="wa-msg-timestamp">10:03 PM</span>
+                                            <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                        </div>
+                                    </div>
+
+                                    {/* OUTGOING SCREENSHOT ATTACHMENT 1: NAMMIL NOTIFICATIONS SETTINGS */}
+                                    <div className="wa-media-row outgoing">
+                                        <button className="wa-forward-btn" title="Forward Message">
+                                            <ArrowBendUpRight size={15} weight="bold" />
+                                        </button>
+                                        <div className="wa-media-card">
+                                            <div className="media-preview-header">
+                                                <div className="media-header-left">
+                                                    <img src="/nammil_icon.png" alt="" className="media-app-icon" />
+                                                    <span className="media-header-title">Nammil • Notification Manager</span>
+                                                </div>
+                                                <div className="media-window-dots">
+                                                    <span className="mini-win-dot" />
+                                                    <span className="mini-win-dot" />
+                                                    <span className="mini-win-dot" />
+                                                </div>
+                                            </div>
+
+                                            <div className="media-card-body">
+                                                <div className="media-settings-tabs">
+                                                    <span className="media-tab active">Account 1 (Primary)</span>
+                                                    <span className="media-tab">Account 2 (Work)</span>
+                                                </div>
+
+                                                <div className="media-toggles-list">
+                                                    <div className="media-toggle-item">
+                                                        <div className="toggle-label-wrap">
+                                                            <CheckCircle size={14} weight="fill" className="toggle-ok-icon" />
+                                                            <span>Windows Notification Audio Chimes</span>
+                                                        </div>
+                                                        <span className="media-switch on" />
+                                                    </div>
+                                                    <div className="media-toggle-item">
+                                                        <div className="toggle-label-wrap">
+                                                            <CheckCircle size={14} weight="fill" className="toggle-ok-icon" />
+                                                            <span>Taskbar Unread Badge Counters (Green)</span>
+                                                        </div>
+                                                        <span className="media-switch on" />
+                                                    </div>
+                                                    <div className="media-toggle-item">
+                                                        <div className="toggle-label-wrap">
+                                                            <CheckCircle size={14} weight="fill" className="toggle-ok-icon" />
+                                                            <span>100% Local Sandbox Isolation</span>
+                                                        </div>
+                                                        <span className="media-switch on" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="wa-media-meta">
+                                                <span className="wa-msg-timestamp">10:03 PM</span>
+                                                <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* OUTGOING SCREENSHOT ATTACHMENT 2: NAMMIL MULTI-ACCOUNT & STORAGE */}
+                                    <div className="wa-media-row outgoing">
+                                        <button className="wa-forward-btn" title="Forward Message">
+                                            <ArrowBendUpRight size={15} weight="bold" />
+                                        </button>
+                                        <div className="wa-media-card">
+                                            <div className="media-preview-header">
+                                                <div className="media-header-left">
+                                                    <img src="/nammil_icon.png" alt="" className="media-app-icon" />
+                                                    <span className="media-header-title">Nammil • Multi-Session Workspace</span>
+                                                </div>
+                                                <div className="media-window-dots">
+                                                    <span className="mini-win-dot" />
+                                                    <span className="mini-win-dot" />
+                                                    <span className="mini-win-dot" />
+                                                </div>
+                                            </div>
+
+                                            <div className="media-card-body">
+                                                <div className="media-accounts-grid">
+                                                    <div className="media-acc-card active">
+                                                        <span className="acc-name">Account 1</span>
+                                                        <span className="acc-status">Active • 4 unread</span>
+                                                    </div>
+                                                    <div className="media-acc-card active">
+                                                        <span className="acc-name">Account 2</span>
+                                                        <span className="acc-status">Active • 1 unread</span>
+                                                    </div>
+                                                    <div className="media-acc-card add">
+                                                        <Plus size={14} weight="bold" />
+                                                        <span>Add Account</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="media-folders-box">
+                                                    <div className="folders-header">
+                                                        <FolderSimple size={13} weight="bold" />
+                                                        <span>Automated File Sorting Destination</span>
+                                                    </div>
+                                                    <div className="folders-path">
+                                                        Downloads &gt; Nammil &gt; [Documents | Images | Audio]
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="wa-media-meta">
+                                                <span className="wa-msg-timestamp">10:03 PM</span>
+                                                <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Incoming Message from Contact */}
+                                    <div className="wa-msg-bubble incoming">
+                                        <p className="wa-msg-text">
+                                            pantu soldren
+                                        </p>
+                                        <div className="wa-msg-meta">
+                                            <span className="wa-msg-timestamp">10:03 PM</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Outgoing Reply */}
+                                    <div className="wa-msg-bubble outgoing">
+                                        <p className="wa-msg-text">
+                                            mm
+                                        </p>
+                                        <div className="wa-msg-meta">
+                                            <span className="wa-msg-timestamp">10:03 PM</span>
+                                            <Checks size={15} weight="bold" className="wa-checks-blue" />
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="mockup-compose-bar">
-                                    <Smiley size={17} className="compose-icon" />
-                                    <Paperclip size={17} className="compose-icon" />
-                                    <div className="compose-input">Type a message...</div>
-                                    <Microphone size={17} className="compose-icon" />
+                                {/* BOTTOM COMPOSE BAR */}
+                                <div className="wa-compose-bar">
+                                    <button className="wa-compose-tool-btn" title="Attach Document / Media">
+                                        <Paperclip size={20} />
+                                    </button>
+                                    <button className="wa-compose-tool-btn" title="Emoji">
+                                        <Smiley size={20} />
+                                    </button>
+                                    <div className="wa-compose-input-wrapper">
+                                        <span className="wa-compose-placeholder">Type a message</span>
+                                    </div>
+                                    <button className="wa-compose-tool-btn mic" title="Voice Note">
+                                        <Microphone size={20} weight="fill" />
+                                    </button>
                                 </div>
                             </main>
                         </div>
