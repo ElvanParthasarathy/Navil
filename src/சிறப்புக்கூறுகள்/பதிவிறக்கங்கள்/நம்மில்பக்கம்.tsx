@@ -171,6 +171,13 @@ export default function NammilPage() {
             <MobileTopBar title="நம்மில்" />
             <FloatingBackButton to="/downloads" label="பதிவிறக்கங்கள்" />
 
+            {/* Ensure .main-content outer layout padding is removed so brand glow is truly edge-to-edge */}
+            <style>{`
+                .main-content {
+                    padding: 0 !important;
+                }
+            `}</style>
+
             <div className="ms-store-page page-view fadeIn">
                 {/* AMBIENT BRAND GLOW (MICROSOFT STORE ATMOSPHERE) */}
                 <div className="ms-ambient-glow" aria-hidden="true" />
