@@ -199,11 +199,11 @@ export default function NammilPage() {
                             <div className="ms-hero-title-group">
                                 <h1 className="ms-app-title">
                                     <span className="ms-title-main" lang="ta">நம்மில்</span>
-                                    <span className="ms-title-sub">Nammil</span>
                                 </h1>
+                                <div className="ms-app-subtitle">Nammil</div>
 
                                 <div className="ms-developer-link">
-                                    <span className="ms-dev-item">Published by <Link to="/about">Elvan Navil</Link></span>
+                                    <Link to="/about" className="ms-dev-item">Elvan Navil</Link>
                                 </div>
                             </div>
                         </div>
@@ -224,9 +224,10 @@ export default function NammilPage() {
                                 href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe" 
                                 className="ms-btn-primary"
                                 download
+                                title="Download Nammil (.exe ~114MB)"
                             >
                                 <DownloadSimple weight="bold" size={18} />
-                                <span>Download (.exe ~114MB)</span>
+                                <span>Download</span>
                             </a>
                             <a 
                                 href="https://github.com/ElvanParthasarathy/Nammil" 
