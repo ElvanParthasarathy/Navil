@@ -25,7 +25,7 @@ export default function CompanyHome() {
                     </h1>
                     <div className="home-brand-title-sub">Elvan Navil</div>
                     <p className="home-brand-subtitle" lang="ta">
-                        நல்வரவு. இது எல்வன் நவில் — சிந்தனைகளை உரைக்க, எழுத்துகளைப் பகிர, தன்னுரிமை மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் எண்மப் படைப்புகளைக் காட்சிப்படுத்தும் படைப்பரங்கு.
+                        நல்வரவு. இது எல்வன் நவில் — சிந்தனைமிக்க கணினி மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் இருமொழி இலக்கியங்களை நேர்த்தியாக உருவாக்கும் தன்னுரிமை எண்மப் படைப்பரங்கு.
                     </p>
                     <p className="home-brand-subtitle home-brand-subtitle-en">
                         Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.

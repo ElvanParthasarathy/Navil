@@ -248,7 +248,8 @@
                 }
 
                 .reconstruction-card {
-                    border: 1px solid color-mix(in srgb, var(--text-main) 6%, transparent);
+                    border: none;
+                    outline: none;
                 }
 
                 .reconstruction-word {
