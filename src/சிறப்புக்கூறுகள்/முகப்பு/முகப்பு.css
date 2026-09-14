@@ -6,50 +6,9 @@
                     contain: layout style;
                 }
 
-                /* BACKGROUND GRADIENT DECORATION */
+                /* BACKGROUND GRADIENT DECORATION - DISABLED */
                 .home-bg-blobs {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    overflow: hidden;
-                    z-index: -2;
-                    pointer-events: none;
-                    will-change: transform;
-                    transform: translateZ(0);
-                    contain: strict;
-                }
-
-                .bg-blob-circle {
-                    position: absolute;
-                    width: clamp(280px, 40vw, 450px);
-                    height: clamp(280px, 40vw, 450px);
-                    background: linear-gradient(135deg, color-mix(in srgb, var(--text-main) 8%, transparent), color-mix(in srgb, var(--bg-panel) 40%, transparent));
-                    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-                    filter: blur(60px);
-                    opacity: 0.4;
-                    animation: morphBlob 16s linear infinite alternate;
-                    will-change: transform, border-radius;
-                    transform: translateZ(0);
-                    backface-visibility: hidden;
-                }
-
-                .blob-1 {
-                    top: 5%;
-                    right: -10%;
-                }
-
-                .blob-2 {
-                    bottom: 10%;
-                    left: -10%;
-                    animation-delay: -5s;
-                }
-
-                @keyframes morphBlob {
-                    0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg) scale(1); }
-                    50% { border-radius: 60% 40% 50% 70% / 50% 70% 40% 60%; transform: rotate(90deg) scale(1.1); }
-                    100% { border-radius: 70% 30% 60% 50% / 30% 60% 50% 70%; transform: rotate(180deg) scale(0.9); }
+                    display: none !important;
                 }
 
                 /* GRID LAYOUT */
@@ -744,18 +703,18 @@
 }
 
 .company-pill-btn.primary {
-    background: #10b981;
-    color: #ffffff;
-    border-color: #10b981;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    background: var(--text-main);
+    color: var(--bg-card);
+    border-color: var(--text-main);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
 .company-pill-btn.primary:hover {
-    background: #059669;
-    border-color: #059669;
+    background: color-mix(in srgb, var(--text-main) 85%, transparent);
+    border-color: var(--text-main);
 }
 
-/* PRODUCT SHOWCASE CARDS */
+/* MONOCHROME BADGES */
 .product-badge-row {
     display: flex;
     flex-wrap: wrap;
@@ -764,31 +723,17 @@
     margin-bottom: 16px;
 }
 
-.badge-tag {
-    font-size: 0.75rem;
+.badge-tag,
+.badge-tag.green,
+.badge-tag.blue,
+.badge-tag.purple,
+.badge-tag.neutral {
+    font-size: 0.72rem;
     font-weight: 700;
     padding: 4px 10px;
     border-radius: 6px;
     letter-spacing: 0.03em;
-}
-
-.badge-tag.green {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-}
-
-.badge-tag.blue {
-    background: rgba(59, 130, 246, 0.15);
-    color: #3b82f6;
-}
-
-.badge-tag.purple {
-    background: rgba(139, 92, 246, 0.15);
-    color: #8b5cf6;
-}
-
-.badge-tag.neutral {
-    background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    background: color-mix(in srgb, var(--text-main) 7%, transparent);
     color: var(--text-muted);
 }
 
@@ -1226,6 +1171,11 @@
     box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
 }
 
+/* BACKGROUND GRADIENT DECORATION - HIDDEN FOR MONOCHROME MINIMALISM */
+.home-bg-blobs {
+    display: none !important;
+}
+
 .home-netflix-bg {
     position: absolute;
     inset: 0;
@@ -1345,6 +1295,22 @@
 @media (max-width: 900px) {
     .home-netflix-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* HOME PAGE UNIFIED CATEGORY GRID */
+.home-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .home-category-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 }
 
