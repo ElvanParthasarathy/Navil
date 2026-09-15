@@ -13,7 +13,6 @@ import {
     Users,
     CaretLeft,
     CaretRight,
-    ArrowsOutSimple,
     X,
     GithubLogo,
     Sparkle,
@@ -534,9 +533,6 @@ export default function NammilPage() {
                                                 className="ms-shot-img"
                                                 loading={idx < 2 ? "eager" : "lazy"}
                                             />
-                                            <div className="ms-shot-zoom-hint">
-                                                <ArrowsOutSimple size={18} weight="bold" />
-                                            </div>
                                         </div>
                                     ))}
                                 </div>
