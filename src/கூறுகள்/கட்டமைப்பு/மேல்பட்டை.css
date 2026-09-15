@@ -1,34 +1,82 @@
 /* ========================================================
-   DESKTOP SLIM TOP BAR (TITLEBAR STYLE - UNIFIED WITH SIDEBAR)
+   DESKTOP SLIM TOP BAR (FIXED FULL-WIDTH TITLEBAR STYLE)
 ======================================================== */
 
 .desktop-topbar {
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    width: 100vw;
     height: 46px;
-    z-index: 85;
+    z-index: 1000;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 28px;
     background: var(--shell-bg);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: none !important;
+    border-bottom: 1px solid var(--shell-border) !important;
     box-shadow: none !important;
     user-select: none;
     transition: background 0.3s ease;
+    box-sizing: border-box;
 }
 
 [data-theme='dark'] .desktop-topbar {
     background: var(--shell-bg);
     border: none !important;
+    border-bottom: 1px solid var(--shell-border) !important;
     box-shadow: none !important;
 }
 
-/* Left Section */
+/* Sidebar Zone (Top-Left, matching sidebar width) */
+.desktop-topbar-sidebar-zone {
+    width: var(--sidebar-width);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-right: 1px solid var(--shell-border);
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.desktop-topbar-sidebar-zone.collapsed {
+    width: 72px;
+    padding: 0 12px;
+    justify-content: center;
+}
+
+.desktop-topbar-sidebar-brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+    text-decoration: none;
+    font-family: "ElvanSans", system-ui, -apple-system, sans-serif;
+    line-height: 1;
+    white-space: nowrap;
+    letter-spacing: normal;
+    transition: opacity 0.2s ease;
+}
+
+.desktop-topbar-sidebar-brand:hover {
+    opacity: 0.85;
+}
+
+/* Content Zone (Top-Right, spans remainder of full width) */
+.desktop-topbar-content-zone {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    min-width: 0;
+}
+
+/* Left Section of Content Zone */
 .desktop-topbar-left {
     display: flex;
     align-items: center;

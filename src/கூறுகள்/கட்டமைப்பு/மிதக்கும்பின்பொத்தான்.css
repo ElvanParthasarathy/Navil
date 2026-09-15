@@ -39,7 +39,7 @@
 @media (min-width: 1024px) {
     .back-pill.bp-fixed {
         position: fixed !important;
-        top: 40px !important;
+        top: 58px !important;
         right: 40px !important;
         z-index: 1000 !important;
         backdrop-filter: blur(16px) !important;

@@ -426,8 +426,15 @@ export default function NammilPage() {
 
             {/* Ensure .main-content outer layout padding is removed so brand glow is truly edge-to-edge */}
             <style>{`
-                .main-content {
-                    padding: 0 !important;
+                @media (min-width: 769px) {
+                    .main-content {
+                        padding: 46px 0 0 0 !important;
+                    }
+                }
+                @media (max-width: 768px) {
+                    .main-content {
+                        padding: 0 !important;
+                    }
                 }
             `}</style>
 

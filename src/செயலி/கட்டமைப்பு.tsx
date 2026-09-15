@@ -163,6 +163,11 @@ const Layout = () => {
     return (
         <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''} ${navClass}`} style={{ display: 'flex' }}>
 
+            <DesktopTopBar
+                isSidebarCollapsed={isSidebarCollapsed}
+                onToggleSidebar={handleSidebarToggle}
+            />
+
             <Sidebar
                 isSidebarCollapsed={isSidebarCollapsed}
                 onToggleSidebar={handleSidebarToggle}
@@ -175,7 +180,6 @@ const Layout = () => {
                 width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', 
                 marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' 
             }}>
-                <DesktopTopBar />
                 <ScrollRestoration />
                 <div className="main-content-body">
                     <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, autoThumbnails }} />

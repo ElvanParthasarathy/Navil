@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { Tooltip } from '@mui/material';
-import { Copy, Check, GithubLogo, ArrowSquareOut } from '@phosphor-icons/react';
+import { Tooltip, ButtonBase } from '@mui/material';
+import { Copy, Check, GithubLogo, ArrowSquareOut, SidebarSimple } from '@phosphor-icons/react';
 import './மேல்பட்டை.css';
 
 interface RouteMeta {
@@ -102,15 +102,49 @@ function getRouteInfo(pathname: string): RouteMeta {
     }
 
     return {
-        title: 'எல்வன் நவில்',
-        subtitle: 'Elvan Navil',
+        title: 'முகப்பு',
+        subtitle: 'Home • Elvan Navil',
         icon: '/favicon.png'
     };
 }
 
-export const DesktopTopBar: React.FC = () => {
+export interface DesktopTopBarProps {
+    isSidebarCollapsed?: boolean;
+    onToggleSidebar?: () => void;
+}
+
+export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
+    isSidebarCollapsed = false,
+    onToggleSidebar
+}) => {
     const location = useLocation();
     const [copied, setCopied] = useState(false);
+    const [isToggleTooltipOpen, setIsToggleTooltipOpen] = useState(false);
+    const toggleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const handleToggleMouseEnter = () => {
+        if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        toggleTimerRef.current = setTimeout(() => {
+            setIsToggleTooltipOpen(true);
+        }, 1200);
+    };
+
+    const handleToggleMouseLeave = () => {
+        if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        setIsToggleTooltipOpen(false);
+    };
+
+    const handleToggleClick = () => {
+        if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        setIsToggleTooltipOpen(false);
+        if (onToggleSidebar) onToggleSidebar();
+    };
+
+    useEffect(() => {
+        return () => {
+            if (toggleTimerRef.current) clearTimeout(toggleTimerRef.current);
+        };
+    }, []);
 
     const routeInfo = getRouteInfo(location.pathname);
 
@@ -126,70 +160,104 @@ export const DesktopTopBar: React.FC = () => {
 
     return (
         <header className="desktop-topbar" aria-label="Desktop Top Bar">
-            {/* LEFT: LOGO + TITLES */}
-            <div className="desktop-topbar-left">
-                <Link 
-                    to={location.pathname} 
-                    className="desktop-topbar-brand"
+            {/* SIDEBAR ZONE (Top-Left, matches sidebar width and hairline divider) */}
+            <div className={`desktop-topbar-sidebar-zone ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+                {!isSidebarCollapsed && (
+                    <Link to="/" className="desktop-topbar-sidebar-brand" lang="ta">
+                        எல்வன் நவில்
+                    </Link>
+                )}
+                <Tooltip
+                    title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                    placement="right"
+                    arrow
+                    open={isToggleTooltipOpen}
+                    disableHoverListener
+                    disableFocusListener
+                    disableTouchListener
                 >
-                    <img 
-                        src={routeInfo.icon} 
-                        alt="" 
-                        className="desktop-topbar-icon"
-                        onError={(e: any) => { e.target.src = '/favicon.png'; }}
-                    />
-                    <div className="desktop-topbar-titles">
-                        <span className="desktop-topbar-title" lang="ta">{routeInfo.title}</span>
-                        <span className="desktop-topbar-subtitle">{routeInfo.subtitle}</span>
-                        {routeInfo.badge && (
-                            <span className="desktop-topbar-badge">{routeInfo.badge}</span>
-                        )}
-                    </div>
-                </Link>
+                    <ButtonBase
+                        component="button"
+                        className="sidebar-toggle-btn"
+                        onClick={handleToggleClick}
+                        onMouseEnter={handleToggleMouseEnter}
+                        onMouseLeave={handleToggleMouseLeave}
+                        disableFocusRipple
+                        centerRipple
+                        aria-label={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                    >
+                        <SidebarSimple weight="regular" size={19} />
+                    </ButtonBase>
+                </Tooltip>
             </div>
 
-            {/* RIGHT: ACTIONS (GITHUB, COPY LINK, EXTERNAL) - PILL SHAPES */}
-            <div className="desktop-topbar-right">
-                {routeInfo.githubUrl && (
-                    <Tooltip title="GitHub Repository" placement="bottom" arrow enterDelay={300}>
-                        <a 
-                            href={routeInfo.githubUrl} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="desktop-topbar-pill-btn"
-                            aria-label="GitHub Repository"
-                        >
-                            <GithubLogo size={14} weight="bold" />
-                            <span>GitHub</span>
-                            <ArrowSquareOut size={12} weight="bold" style={{ opacity: 0.6 }} />
-                        </a>
-                    </Tooltip>
-                )}
-
-                <Tooltip 
-                    title={copied ? "Copied to clipboard!" : "Copy link"} 
-                    placement="bottom" 
-                    arrow 
-                    enterDelay={300}
-                >
-                    <button 
-                        className={`desktop-topbar-pill-btn ${copied ? 'copied' : ''}`}
-                        onClick={handleCopyLink}
-                        aria-label="Copy page link"
+            {/* CONTENT ZONE (Top-Right, full width flex-1) */}
+            <div className="desktop-topbar-content-zone">
+                {/* PAGE IDENTITY (ICON + BILINGUAL TITLE) */}
+                <div className="desktop-topbar-left">
+                    <Link 
+                        to={location.pathname} 
+                        className="desktop-topbar-brand"
                     >
-                        {copied ? (
-                            <>
-                                <Check size={14} weight="bold" />
-                                <span>Copied</span>
-                            </>
-                        ) : (
-                            <>
-                                <Copy size={14} weight="bold" />
-                                <span>Share</span>
-                            </>
-                        )}
-                    </button>
-                </Tooltip>
+                        <img 
+                            src={routeInfo.icon} 
+                            alt="" 
+                            className="desktop-topbar-icon"
+                            onError={(e: any) => { e.target.src = '/favicon.png'; }}
+                        />
+                        <div className="desktop-topbar-titles">
+                            <span className="desktop-topbar-title" lang="ta">{routeInfo.title}</span>
+                            <span className="desktop-topbar-subtitle">{routeInfo.subtitle}</span>
+                            {routeInfo.badge && (
+                                <span className="desktop-topbar-badge">{routeInfo.badge}</span>
+                            )}
+                        </div>
+                    </Link>
+                </div>
+
+                {/* ACTIONS (GITHUB, COPY LINK / SHARE) */}
+                <div className="desktop-topbar-right">
+                    {routeInfo.githubUrl && (
+                        <Tooltip title="GitHub Repository" placement="bottom" arrow enterDelay={300}>
+                            <a 
+                                href={routeInfo.githubUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="desktop-topbar-pill-btn"
+                                aria-label="GitHub Repository"
+                            >
+                                <GithubLogo size={14} weight="bold" />
+                                <span>GitHub</span>
+                                <ArrowSquareOut size={12} weight="bold" style={{ opacity: 0.6 }} />
+                            </a>
+                        </Tooltip>
+                    )}
+
+                    <Tooltip 
+                        title={copied ? "Copied to clipboard!" : "Copy link"} 
+                        placement="bottom" 
+                        arrow 
+                        enterDelay={300}
+                    >
+                        <button 
+                            className={`desktop-topbar-pill-btn ${copied ? 'copied' : ''}`}
+                            onClick={handleCopyLink}
+                            aria-label="Copy page link"
+                        >
+                            {copied ? (
+                                <>
+                                    <Check size={14} weight="bold" />
+                                    <span>Copied</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Copy size={14} weight="bold" />
+                                    <span>Share</span>
+                                </>
+                            )}
+                        </button>
+                    </Tooltip>
+                </div>
             </div>
         </header>
     );
