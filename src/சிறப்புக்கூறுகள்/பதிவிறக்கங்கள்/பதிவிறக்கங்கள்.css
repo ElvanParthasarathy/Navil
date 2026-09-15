@@ -1336,19 +1336,19 @@ body:has(.ms-store-page) .main-content,
 
 .store-app-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(0, 168, 132, 0.35);
-    box-shadow: 0 16px 36px -8px rgba(0, 168, 132, 0.26), 0 0 24px -2px rgba(0, 168, 132, 0.18) !important;
+    border-color: color-mix(in srgb, var(--text-main) 20%, transparent);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08) !important;
 }
 
 [data-theme='dark'] .store-app-card:hover {
-    border-color: rgba(0, 168, 132, 0.45);
-    box-shadow: 0 20px 44px -8px rgba(0, 168, 132, 0.38), 0 0 28px 0px rgba(0, 168, 132, 0.24) !important;
+    border-color: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35) !important;
 }
 
 .store-app-card:active {
     transform: scale(0.985) !important;
     background: var(--nav-hover) !important;
-    box-shadow: 0 6px 18px rgba(0, 168, 132, 0.15) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
     transition: transform 0.1s ease-out, background 0.1s ease-out;
 }
 
@@ -1358,7 +1358,7 @@ body:has(.ms-store-page) .main-content,
     transform: translate(-50%, -50%) scale(0);
     width: 260px;
     height: 260px;
-    background: radial-gradient(circle, rgba(0, 168, 132, 0.32) 0%, rgba(0, 168, 132, 0.10) 50%, transparent 70%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--text-main) 12%, transparent) 0%, color-mix(in srgb, var(--text-main) 4%, transparent) 50%, transparent 70%);
     pointer-events: none;
     animation: storeCardRipple 0.65s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
     z-index: 10;
