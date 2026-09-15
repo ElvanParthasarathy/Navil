@@ -755,11 +755,9 @@ export default function NammilPage() {
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">This app can</div>
                                             <ul className="ms-cell-list">
-                                                <li>Runs 100% locally on your PC</li>
-                                                <li>Uses isolated session partitions</li>
-                                                <li>Zero telemetry, zero cloud logging</li>
                                                 <li>Access your Internet connection</li>
-                                                <li>Permissions info</li>
+                                                <li>Store and organize local media</li>
+                                                <li>Runs 100% offline with zero telemetry</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -808,8 +806,16 @@ export default function NammilPage() {
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Additional terms</div>
                                             <ul className="ms-cell-list">
-                                                <li>Nammil privacy policy</li>
-                                                <li>Terms of transaction / MIT License</li>
+                                                <li>
+                                                    <a href="https://github.com/ElvanParthasarathy/Nammil#%EF%B8%8F-zero-admin--complete-local-privacy" target="_blank" rel="noreferrer">
+                                                        Nammil privacy policy
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/ElvanParthasarathy/Nammil/blob/main/LICENSE" target="_blank" rel="noreferrer">
+                                                        MIT License
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -821,10 +827,14 @@ export default function NammilPage() {
                                             <ul className="ms-cell-list">
                                                 <li>
                                                     <a href="https://github.com/ElvanParthasarathy/Nammil/issues" target="_blank" rel="noreferrer">
-                                                        Report this product for bugs
+                                                        Report a bug or issue
                                                     </a>
                                                 </li>
-                                                <li>Report security vulnerability</li>
+                                                <li>
+                                                    <a href="mailto:jaiprakashpartha@gmail.com" target="_blank" rel="noreferrer">
+                                                        Report security vulnerability
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
