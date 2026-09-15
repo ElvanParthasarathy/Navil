@@ -24,6 +24,8 @@ export default function DownloadsPage() {
         <>
             <Helmet>
                 <title>பதிவிறக்கங்கள் | Downloads — Elvan Navil</title>
+                <link rel="icon" type="image/png" href="/favicon.png" />
+                <link rel="apple-touch-icon" href="/favicon.png" />
                 <meta 
                     name="description" 
                     content="Official desktop applications by Elvan Navil." 

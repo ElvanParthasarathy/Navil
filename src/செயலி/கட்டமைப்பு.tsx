@@ -122,6 +122,25 @@ const Layout = () => {
         localStorage.setItem('sidebarCollapsed', String(isSidebarCollapsed));
     }, [isSidebarCollapsed]);
 
+    // Global route-aware favicon synchronization
+    React.useEffect(() => {
+        const isNammil = location.pathname.toLowerCase().startsWith('/downloads/nammil');
+        const targetFavicon = isNammil ? '/nammil_icon.png' : '/favicon.png';
+
+        const iconLinks = document.querySelectorAll<HTMLLinkElement>("link[rel~='icon'], link[rel~='apple-touch-icon']");
+        iconLinks.forEach(link => {
+            link.href = targetFavicon;
+        });
+
+        if (iconLinks.length === 0) {
+            const newLink = document.createElement('link');
+            newLink.rel = 'icon';
+            newLink.type = 'image/png';
+            newLink.href = targetFavicon;
+            document.head.appendChild(newLink);
+        }
+    }, [location.pathname]);
+
     const normalizedPath = location.pathname.toLowerCase().replace(/\/$/, '') || '/';
     const mainLevelPaths = [
         '/navilgal', 
