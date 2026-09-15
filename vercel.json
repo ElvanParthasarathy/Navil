@@ -5,6 +5,10 @@
             "destination": "/nirvaagi.html"
         },
         {
+            "source": "/downloads/nammil",
+            "destination": "/downloads-nammil.html"
+        },
+        {
             "source": "/((?!assets/|.*\\..*).*)",
             "destination": "/index.html"
         }

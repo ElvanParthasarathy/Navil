@@ -128,6 +128,21 @@ export default function NammilPage() {
         }
     }, [lightboxIdx]);
 
+    // Dynamic browser tab favicon for Nammil page
+    useEffect(() => {
+        let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null;
+        const prevHref = link?.href || '/favicon.png';
+        if (link) {
+            link.href = '/nammil_icon.png';
+        }
+
+        return () => {
+            if (link) {
+                link.href = prevHref;
+            }
+        };
+    }, []);
+
     const checkScrollButtons = () => {
         if (!scrollerRef.current) return;
         const { scrollLeft, scrollWidth, clientWidth } = scrollerRef.current;
@@ -399,11 +414,28 @@ export default function NammilPage() {
     return (
         <>
             <Helmet>
-                <title>நம்மில் (Nammil) | Desktop App — Elvan Navil</title>
+                <title>நம்மில் • Nammil</title>
+                <link rel="icon" type="image/png" href="/nammil_icon.png" />
+                <link rel="apple-touch-icon" href="/nammil_icon.png" />
                 <meta 
                     name="description" 
                     content="A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications." 
                 />
+                <meta property="og:title" content="நம்மில் • Nammil" />
+                <meta property="og:site_name" content="Elvan Navil" />
+                <meta property="og:description" content="A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications." />
+                <meta property="og:image" content="https://elvannavil.vercel.app/nammil_icon.png" />
+                <meta property="og:image:secure_url" content="https://elvannavil.vercel.app/nammil_icon.png" />
+                <meta property="og:image:type" content="image/png" />
+                <meta property="og:image:width" content="512" />
+                <meta property="og:image:height" content="512" />
+                <meta property="og:image:alt" content="Nammil App Icon" />
+                <meta property="og:url" content="https://elvannavil.vercel.app/downloads/nammil" />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content="நம்மில் • Nammil" />
+                <meta name="twitter:description" content="A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications." />
+                <meta name="twitter:image" content="https://elvannavil.vercel.app/nammil_icon.png" />
             </Helmet>
 
             <MobileTopBar title="நம்மில்" />
