@@ -145,8 +145,8 @@ html {
   --accent-color: #000;
   --accent-text: #fff;
   --link-color: var(--text-main);
-  --shell-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 246, 248, 0.85) 100%);
-  --shell-border: var(--border-light);
+  --shell-bg: rgba(var(--bg-app-rgb, 245, 245, 247), 0.82);
+  --shell-border: transparent;
 }
 
 [data-theme='dark'] {
@@ -162,8 +162,8 @@ html {
   --accent-color: #fff;
   --accent-text: #000;
   --link-color: var(--text-main);
-  --shell-bg: linear-gradient(180deg, rgba(22, 22, 24, 0.92) 0%, rgba(14, 14, 16, 0.85) 100%);
-  --shell-border: rgba(255, 255, 255, 0.08);
+  --shell-bg: rgba(0, 0, 0, 0.82);
+  --shell-border: transparent;
 }
 
 /* Global native controls color-scheme adapt to current theme */
@@ -280,8 +280,8 @@ body {
   background: var(--shell-bg);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-right: 1px solid var(--shell-border);
-  box-shadow: none;
+  border: none !important;
+  box-shadow: none !important;
   border-radius: 0;
   display: flex;
   flex-direction: column;
@@ -289,7 +289,7 @@ body {
   padding: 30px 24px;
   z-index: 100;
 
-  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
   contain: layout style;
   /* REMOVED 'paint' TO ALLOW OVERFLOW VISIBILITY */
   overflow: visible;
@@ -314,8 +314,8 @@ body {
 
 [data-theme='dark'] .sidebar {
   background: var(--shell-bg);
-  border-right: 1px solid var(--shell-border);
-  box-shadow: none;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* FIX: Ensure Mobile 'Scoops' are hidden on Desktop */

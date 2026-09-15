@@ -16,14 +16,16 @@
     background: var(--shell-bg);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid var(--shell-border);
+    border: none !important;
+    box-shadow: none !important;
     user-select: none;
-    transition: background 0.3s ease, border-color 0.3s ease;
+    transition: background 0.3s ease;
 }
 
 [data-theme='dark'] .desktop-topbar {
     background: var(--shell-bg);
-    border-bottom-color: var(--shell-border);
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* Left Section */
@@ -104,8 +106,9 @@
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-main);
-    background: color-mix(in srgb, var(--text-main) 6%, transparent);
-    border: 1px solid color-mix(in srgb, var(--text-main) 10%, transparent);
+    background: color-mix(in srgb, var(--text-main) 7%, transparent);
+    border: none !important;
+    outline: none !important;
     cursor: pointer;
     text-decoration: none;
     user-select: none;
@@ -113,20 +116,18 @@
 }
 
 .desktop-topbar-pill-btn:hover {
-    background: color-mix(in srgb, var(--text-main) 12%, transparent);
-    border-color: color-mix(in srgb, var(--text-main) 18%, transparent);
+    background: color-mix(in srgb, var(--text-main) 13%, transparent);
     transform: translateY(-1px);
 }
 
 .desktop-topbar-pill-btn:active {
     transform: scale(0.96);
-    background: color-mix(in srgb, var(--text-main) 16%, transparent);
+    background: color-mix(in srgb, var(--text-main) 18%, transparent);
 }
 
 .desktop-topbar-pill-btn.copied {
     color: #10b981;
-    border-color: rgba(16, 185, 129, 0.35);
-    background: rgba(16, 185, 129, 0.12);
+    background: rgba(16, 185, 129, 0.15);
 }
 
 /* Hide on mobile devices - mobile uses MobileTopBar */
