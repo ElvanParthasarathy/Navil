@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
@@ -7,6 +7,19 @@ import '../படைப்புகள்/படைப்புகள்.css';
 import './பதிவிறக்கங்கள்.css';
 
 export default function DownloadsPage() {
+    const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([]);
+
+    const handleCardMouseDown = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const newRipple = { x, y, id: Date.now() + Math.random() };
+        setRipples(prev => [...prev, newRipple]);
+        setTimeout(() => {
+            setRipples(prev => prev.filter(r => r.id !== newRipple.id));
+        }, 650);
+    };
+
     return (
         <>
             <Helmet>
@@ -35,7 +48,19 @@ export default function DownloadsPage() {
                 </header>
 
                 <div className="store-app-grid animate-entry">
-                    <Link to="/downloads/nammil" className="store-app-card" title="Nammil — Multi-Account WhatsApp Companion">
+                    <Link 
+                        to="/downloads/nammil" 
+                        className="store-app-card" 
+                        title="Nammil — Multi-Account WhatsApp Companion"
+                        onMouseDown={handleCardMouseDown}
+                    >
+                        {ripples.map(ripple => (
+                            <span 
+                                key={ripple.id} 
+                                className="store-card-ripple" 
+                                style={{ left: ripple.x, top: ripple.y }} 
+                            />
+                        ))}
                         {/* TOP ROW: ICON + TITLE + FREE PILL */}
                         <div className="store-card-header">
                             <div className="store-card-identity">

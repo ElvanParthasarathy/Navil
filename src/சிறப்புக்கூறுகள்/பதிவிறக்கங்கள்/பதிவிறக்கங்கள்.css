@@ -1326,7 +1326,7 @@ body:has(.ms-store-page) .main-content,
     overflow: hidden;
     position: relative;
     box-shadow: none !important;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.2s ease;
 }
 
 [data-theme='dark'] .store-app-card {
@@ -1336,11 +1336,43 @@ body:has(.ms-store-page) .main-content,
 
 .store-app-card:hover {
     transform: translateY(-4px);
-    border-color: color-mix(in srgb, var(--text-main) 25%, transparent);
+    border-color: rgba(0, 168, 132, 0.35);
+    box-shadow: 0 16px 36px -8px rgba(0, 168, 132, 0.26), 0 0 24px -2px rgba(0, 168, 132, 0.18) !important;
 }
 
 [data-theme='dark'] .store-app-card:hover {
-    border-color: rgba(255, 255, 255, 0.22);
+    border-color: rgba(0, 168, 132, 0.45);
+    box-shadow: 0 20px 44px -8px rgba(0, 168, 132, 0.38), 0 0 28px 0px rgba(0, 168, 132, 0.24) !important;
+}
+
+.store-app-card:active {
+    transform: scale(0.985) !important;
+    background: var(--nav-hover) !important;
+    box-shadow: 0 6px 18px rgba(0, 168, 132, 0.15) !important;
+    transition: transform 0.1s ease-out, background 0.1s ease-out;
+}
+
+.store-card-ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(0, 168, 132, 0.32) 0%, rgba(0, 168, 132, 0.10) 50%, transparent 70%);
+    pointer-events: none;
+    animation: storeCardRipple 0.65s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    z-index: 10;
+}
+
+@keyframes storeCardRipple {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(4);
+        opacity: 0;
+    }
 }
 
 .store-card-header {
@@ -1408,14 +1440,16 @@ body:has(.ms-store-page) .main-content,
     font-weight: 600;
     background: color-mix(in srgb, var(--text-main) 10%, transparent);
     color: var(--text-main);
-    border: 1px solid color-mix(in srgb, var(--text-main) 12%, transparent);
+    border: none !important;
+    outline: none !important;
     flex-shrink: 0;
     line-height: 1.3;
 }
 
 [data-theme='dark'] .store-card-pill {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.10);
+    border: none !important;
+    outline: none !important;
 }
 
 .store-card-desc-wrap {
@@ -1457,11 +1491,6 @@ body:has(.ms-store-page) .main-content,
     display: block;
     user-select: none;
     -webkit-user-drag: none;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.store-app-card:hover .store-card-banner-img {
-    transform: scale(1.025);
 }
 
 @media (max-width: 640px) {
