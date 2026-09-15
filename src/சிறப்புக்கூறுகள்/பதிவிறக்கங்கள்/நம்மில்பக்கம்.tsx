@@ -96,6 +96,8 @@ export default function NammilPage() {
     const scrollerRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
+    const [isTaExpanded, setIsTaExpanded] = useState(false);
+    const [isEnExpanded, setIsEnExpanded] = useState(false);
 
     const isDragging = useRef(false);
     const startX = useRef(0);
@@ -557,26 +559,50 @@ export default function NammilPage() {
                                 <div className="ms-desc-body">
                                     <div className="ms-desc-block ms-desc-ta" lang="ta">
                                         <p>
-                                            வாட்ஸ்அப் கணினிக்கான அதிகாரப்பூர்வ செயலியும் இணையப் பதிப்பும் கடுமையான ஒற்றைக் கணக்குக் கட்டுப்பாட்டைக் கொண்டுள்ளன. தனிப்பட்ட பயன்பாடு, அலுவலகப் பணி, வணிகம் மற்றும் வாடிக்கையாளர் கணக்குகளை நிர்வகிப்போர், பல உலாவி சாளரங்களையும், மறைமுக (incognito) தாவல்களையும், கணினி நினைவகத்தை (RAM) உறிஞ்சும் மூன்றாம் தரப்பு வழிகளையும் கையாள வேண்டிய கட்டாயத்திற்கு உள்ளாகின்றனர். மேலும், பெறப்படும் படங்கள், குரல் பதிவுகள், மீம்கள், ஆவணங்கள் அனைத்தும் பொதுவான Downloads கோப்புறையில் கலந்து ஒழுங்கின்மையை ஏற்படுத்துகின்றன. உலாவித் தாவல்கள் உறங்கும்போது அறிவிப்புகள் தவறிவிடுவதுடன், கணினிக்குரிய இயல்பான ஒருங்கிணைப்பும் அமைதியான புதுப்பிப்புகளும் இன்றி பயனர்கள் சிரமப்படுகின்றனர்.
+                                            வாட்ஸ்அப் கணினிக்கான அதிகாரப்பூர்வ செயலியும் இணையப் பதிப்பும் கடுமையான ஒற்றைக் கணக்குக் கட்டுப்பாட்டைக் கொண்டுள்ளன. தனிப்பட்ட பயன்பாடு, அலுவலகப் பணி, வணிகம் மற்றும் வாடிக்கையாளர் கணக்குகளை நிர்வகிப்போர், பல உலாவி சாளரங்களையும், மறைமுக (incognito) தாவல்களையும், கணினி நினைவகத்தை (RAM) உறிஞ்சும் மூன்றாம் தரப்பு வழிகளையும் கையாள வேண்டிய கட்டாயத்திற்கு உள்ளாகின்றனர். மேலும், பெறப்படும் படங்கள், குரல் பதிவுகள், மீம்கள், ஆவணங்கள் அனைத்தும் பொதுவான Downloads கோப்புறையில் கலந்து ஒழுங்கின்மையை ஏற்படுத்துகின்றன. உலாவித் தாவல்கள் உறங்கும்போது அறிவிப்புகள் தவறிவிடுவதுடன், கணினிக்குரிய இயல்பான ஒருங்கிணைப்பும் அமைதியான புதுப்பிப்புகளும் இன்றி பயனர்கள் சிரமப்படுகின்றனர்{isTaExpanded ? '.' : '...'}
                                         </p>
-                                        <p>
-                                            <strong>நம்மில் (Nammil)</strong> இக்குறைபாடுகளை முழுமையாகக் களைய எல்வன் பார்த்தசாரதியால் எல்வன் நவிலில் உருவாக்கப்பட்டது. நவீன எலக்ட்ரான் கட்டமைப்பில் இயங்கும் இச்செயலி, 5 சுயாதீன வாட்ஸ்அப் கணக்குகள் வரை தனித்தனி அமர்வுகளாகப் பிரித்து (<code>persist:whatsapp_&#123;id&#125;</code>) குக்கீ மற்றும் நற்சான்றிதழ் முரண்பாடின்றி ஒரே மேடையில் இயக்குகிறது.
-                                        </p>
-                                        <p>
-                                            உள்வரும் கோப்புகளைத் தானாக வகைப்படுத்தி (<code>Documents\Nammil\Media</code>), உள்ளமைக்கப்பட்ட தேடல் மற்றும் Recycle Bin மீட்புடன் நிர்வகிக்கும் ஊடக உலாவி, 6 பிரத்யேக தமிழ்ப் பெயரிலான விண்டோஸ் ஒலி எச்சரிக்கைகள், 7 மொழி மற்றும் மாற்று-எழுத்துரு நுட்பங்கள், எல்வன் சான்ஸ் அச்சுக்கலை மற்றும் 100% உள்ளூர் தனியுரிமையுடன் விண்டோஸிற்கான மிக நேர்த்தியான கணினி வாட்ஸ்அப் அனுபவத்தை நம்மில் வழங்குகிறது.
-                                        </p>
+                                        {isTaExpanded && (
+                                            <div className="ms-desc-expanded-content">
+                                                <p>
+                                                    <strong>நம்மில் (Nammil)</strong> இக்குறைபாடுகளை முழுமையாகக் களைய எல்வன் பார்த்தசாரதியால் எல்வன் நவிலில் உருவாக்கப்பட்டது. நவீன எலக்ட்ரான் கட்டமைப்பில் இயங்கும் இச்செயலி, 5 சுயாதீன வாட்ஸ்அப் கணக்குகள் வரை தனித்தனி அமர்வுகளாகப் பிரித்து (<code>persist:whatsapp_&#123;id&#125;</code>) குக்கீ மற்றும் நற்சான்றிதழ் முரண்பாடின்றி ஒரே மேடையில் இயக்குகிறது.
+                                                </p>
+                                                <p>
+                                                    உள்வரும் கோப்புகளைத் தானாக வகைப்படுத்தி (<code>Documents\Nammil\Media</code>), உள்ளமைக்கப்பட்ட தேடல் மற்றும் Recycle Bin மீட்புடன் நிர்வகிக்கும் ஊடக உலாவி, 6 பிரத்யேக தமிழ்ப் பெயரிலான விண்டோஸ் ஒலி எச்சரிக்கைகள், 7 மொழி மற்றும் மாற்று-எழுத்துரு நுட்பங்கள், எல்வன் சான்ஸ் அச்சுக்கலை மற்றும் 100% உள்ளூர் தனியுரிமையுடன் விண்டோஸிற்கான மிக நேர்த்தியான கணினி வாட்ஸ்அப் அனுபவத்தை நம்மில் வழங்குகிறது.
+                                                </p>
+                                            </div>
+                                        )}
+                                        <button 
+                                            type="button"
+                                            className="ms-show-more-btn"
+                                            onClick={() => setIsTaExpanded(prev => !prev)}
+                                            aria-expanded={isTaExpanded}
+                                        >
+                                            {isTaExpanded ? 'குறைவாகக் காட்டுக • Show less' : 'மேலும் காட்டுக • Show more'}
+                                        </button>
                                     </div>
                                     <div className="ms-desc-divider" />
                                     <div className="ms-desc-block ms-desc-en" lang="en">
                                         <p>
-                                            Official WhatsApp Desktop and Web clients enforce a strict single-account lock. Users managing personal, business, client, or family accounts are forced to juggle multiple browser windows, incognito profiles, or memory-heavy workarounds that drain system resources. Standard web clients dump every received picture, meme, voice note, and document haphazardly into your generic Downloads folder, while browser notifications frequently fail when background tabs sleep, lack bespoke sound options, and fail to focus the correct chat session on click.
+                                            Official WhatsApp Desktop and Web clients enforce a strict single-account lock. Users managing personal, business, client, or family accounts are forced to juggle multiple browser windows, incognito profiles, or memory-heavy workarounds that drain system resources. Standard web clients dump every received picture, meme, voice note, and document haphazardly into your generic Downloads folder, while browser notifications frequently fail when background tabs sleep, lack bespoke sound options, and fail to focus the correct chat session on click{isEnExpanded ? '.' : '...'}
                                         </p>
-                                        <p>
-                                            <strong>Nammil</strong> was conceived and developed by Elvan Parthasarathy at Elvan Navil to provide a seamless, native desktop solution. Built on modern Electron technology, it lets you safely run up to 5 independent WhatsApp accounts side-by-side in isolated persistent sessions (<code>persist:whatsapp_&#123;id&#125;</code>) with zero cookie, session, or credential collisions.
-                                        </p>
-                                        <p>
-                                            Featuring an automated media organizer (<code>Documents\Nammil\Media</code>) with fast search and safe Recycle Bin recovery, 6 bespoke Windows notification chimes, deep localization across 7 language variants powered by navil-engine, bespoke Elvan Sans typography, and 100% offline privacy with zero external telemetry, Nammil delivers the ultimate multi-session WhatsApp experience for Windows.
-                                        </p>
+                                        {isEnExpanded && (
+                                            <div className="ms-desc-expanded-content">
+                                                <p>
+                                                    <strong>Nammil</strong> was conceived and developed by Elvan Parthasarathy at Elvan Navil to provide a seamless, native desktop solution. Built on modern Electron technology, it lets you safely run up to 5 independent WhatsApp accounts side-by-side in isolated persistent sessions (<code>persist:whatsapp_&#123;id&#125;</code>) with zero cookie, session, or credential collisions.
+                                                </p>
+                                                <p>
+                                                    Featuring an automated media organizer (<code>Documents\Nammil\Media</code>) with fast search and safe Recycle Bin recovery, 6 bespoke Windows notification chimes, deep localization across 7 language variants powered by navil-engine, bespoke Elvan Sans typography, and 100% offline privacy with zero external telemetry, Nammil delivers the ultimate multi-session WhatsApp experience for Windows.
+                                                </p>
+                                            </div>
+                                        )}
+                                        <button 
+                                            type="button"
+                                            className="ms-show-more-btn"
+                                            onClick={() => setIsEnExpanded(prev => !prev)}
+                                            aria-expanded={isEnExpanded}
+                                        >
+                                            {isEnExpanded ? 'Show less' : 'Show more'}
+                                        </button>
                                     </div>
                                 </div>
                             </section>
@@ -647,26 +673,6 @@ export default function NammilPage() {
 
                                     <div className="ms-feature-item">
                                         <div className="ms-feature-icon-box">
-                                            <ArrowsClockwise size={22} weight="regular" />
-                                        </div>
-                                        <div className="ms-feature-text">
-                                            <h3 className="ms-feature-heading">
-                                                <span className="ms-feature-title-ta">குரோம் பாணி பின்னணிப் புதுப்பிப்புகள்</span>
-                                                <span className="ms-feature-title-sep">•</span>
-                                                <span className="ms-feature-title-en">Silent Background Updates</span>
-                                            </h3>
-                                            <p className="ms-feature-copy-ta" lang="ta">
-                                                அரட்டைகளைத் தடை செய்யாமல் பின்னணியில் தானாகப் பதிவிறங்கி, டாப் பாரில் சதவீதக் காட்டியுடன் 1 நொடியில் புதுப்பிக்கும் வசதி.
-                                            </p>
-                                            <div className="ms-feature-divider" />
-                                            <p className="ms-feature-copy-en" lang="en">
-                                                Silent background update checks against GitHub Releases with real-time download progress and instant 1-click relaunch upgrades.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="ms-feature-item">
-                                        <div className="ms-feature-icon-box">
                                             <Globe size={22} weight="regular" />
                                         </div>
                                         <div className="ms-feature-text">
@@ -681,66 +687,6 @@ export default function NammilPage() {
                                             <div className="ms-feature-divider" />
                                             <p className="ms-feature-copy-en" lang="en">
                                                 Native localization across 7 language and cross-script transliteration variants (en, ta, ta_latn, ta_ml, ml, ml_latn, ml_tam) powered by navil-engine.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="ms-feature-item">
-                                        <div className="ms-feature-icon-box">
-                                            <Sparkle size={22} weight="regular" />
-                                        </div>
-                                        <div className="ms-feature-text">
-                                            <h3 className="ms-feature-heading">
-                                                <span className="ms-feature-title-ta">எல்வன் சான்ஸ் தனித்துவ அச்சுக்கலை</span>
-                                                <span className="ms-feature-title-sep">•</span>
-                                                <span className="ms-feature-title-en">Bespoke Elvan Sans Typography</span>
-                                            </h3>
-                                            <p className="ms-feature-copy-ta" lang="ta">
-                                                ரியாக்ட் 19 + மெட்டீரியல் UI மற்றும் தமிழ்-ஆங்கில எழுத்துகளின் தடிமனைச் சமன் செய்து எல்வன் பார்த்தசாரதியால் செதுக்கப்பட்ட பிரத்யேக அச்சுக்கலை.
-                                            </p>
-                                            <div className="ms-feature-divider" />
-                                            <p className="ms-feature-copy-en" lang="en">
-                                                Distraction-free interface built with React 19 & MUI, typographically powered by the bespoke Elvan Sans font family with Light/Dark sync.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="ms-feature-item">
-                                        <div className="ms-feature-icon-box">
-                                            <DownloadSimple size={22} weight="regular" />
-                                        </div>
-                                        <div className="ms-feature-text">
-                                            <h3 className="ms-feature-heading">
-                                                <span className="ms-feature-title-ta">நிர்வாகி அனுமதி தேவையில்லாத நிறுவல்</span>
-                                                <span className="ms-feature-title-sep">•</span>
-                                                <span className="ms-feature-title-en">Zero-Admin Local Installation</span>
-                                            </h3>
-                                            <p className="ms-feature-copy-ta" lang="ta">
-                                                விண்டோஸ் UAC நிர்வாகி அனுமதி எதுவும் கோராமல் %LOCALAPPDATA% கோப்புறையில் தூய்மையாக அமையும் இன்ஸ்டாலர்.
-                                            </p>
-                                            <div className="ms-feature-divider" />
-                                            <p className="ms-feature-copy-en" lang="en">
-                                                Installs cleanly into %LOCALAPPDATA%\Programs\Nammil without requiring Windows UAC administrator elevation, with a clean uninstaller.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="ms-feature-item">
-                                        <div className="ms-feature-icon-box">
-                                            <ShieldCheck size={22} weight="regular" />
-                                        </div>
-                                        <div className="ms-feature-text">
-                                            <h3 className="ms-feature-heading">
-                                                <span className="ms-feature-title-ta">100% உள்ளூர் தனியுரிமை</span>
-                                                <span className="ms-feature-title-sep">•</span>
-                                                <span className="ms-feature-title-en">100% Offline Privacy</span>
-                                            </h3>
-                                            <p className="ms-feature-copy-ta" lang="ta">
-                                                எந்தவொரு கிளவுட் இடைத்தரகரோ அல்லது வெளிப் பதிவுகளோ இன்றி உங்கள் தகவல்கள் உங்கள் கணினியிலேயே முழுமையாகப் பாதுகாக்கப்படும்.
-                                            </p>
-                                            <div className="ms-feature-divider" />
-                                            <p className="ms-feature-copy-en" lang="en">
-                                                Zero telemetry, zero analytics, zero intermediate cloud servers. All sessions and files remain strictly on your local PC.
                                             </p>
                                         </div>
                                     </div>
