@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
-import { ArrowLeft, Copy, Check, GithubLogo, ArrowSquareOut } from '@phosphor-icons/react';
+import { Copy, Check, GithubLogo, ArrowSquareOut } from '@phosphor-icons/react';
 import './மேல்பட்டை.css';
 
 interface RouteMeta {
@@ -9,8 +9,6 @@ interface RouteMeta {
     subtitle: string;
     icon: string;
     badge?: string;
-    hasBack: boolean;
-    backTo?: string;
     githubUrl?: string;
 }
 
@@ -23,8 +21,6 @@ function getRouteInfo(pathname: string): RouteMeta {
             subtitle: 'Nammil • Multi-Account WhatsApp Companion',
             icon: '/nammil_icon.png',
             badge: 'App',
-            hasBack: true,
-            backTo: '/downloads',
             githubUrl: 'https://github.com/ElvanParthasarathy/Nammil'
         };
     }
@@ -33,8 +29,7 @@ function getRouteInfo(pathname: string): RouteMeta {
         return {
             title: 'பதிவிறக்கங்கள்',
             subtitle: 'Downloads • Desktop Applications',
-            icon: '/favicon.png',
-            hasBack: false
+            icon: '/favicon.png'
         };
     }
 
@@ -43,9 +38,7 @@ function getRouteInfo(pathname: string): RouteMeta {
             title: 'மொழிமாற்றி',
             subtitle: 'Transliterator • Script Converter',
             icon: '/favicon.png',
-            badge: 'BETA',
-            hasBack: true,
-            backTo: '/tools'
+            badge: 'BETA'
         };
     }
 
@@ -54,9 +47,7 @@ function getRouteInfo(pathname: string): RouteMeta {
             title: 'அரிச்சுவடி',
             subtitle: 'Arichuvadi • Tamil Learning Suite',
             icon: '/favicon.png',
-            badge: 'BETA',
-            hasBack: true,
-            backTo: '/tools'
+            badge: 'BETA'
         };
     }
 
@@ -65,32 +56,24 @@ function getRouteInfo(pathname: string): RouteMeta {
             title: 'குரல்மாற்றி',
             subtitle: 'Vocoder • Audio Synth',
             icon: '/favicon.png',
-            badge: 'BETA',
-            hasBack: true,
-            backTo: '/tools'
+            badge: 'BETA'
         };
     }
 
     if (p.startsWith('/tools') || p.startsWith('/teaching')) {
-        const isSub = p !== '/tools' && p !== '/teaching';
         return {
             title: 'கருவிகள்',
             subtitle: 'Tools & Utilities',
             icon: '/favicon.png',
-            badge: 'BETA',
-            hasBack: isSub,
-            backTo: '/tools'
+            badge: 'BETA'
         };
     }
 
     if (p.startsWith('/writings') || p.startsWith('/navilgal')) {
-        const isSub = p !== '/writings' && p !== '/navilgal';
         return {
             title: 'நவில்கள்',
             subtitle: 'Navilgal • Literature & Articles',
-            icon: '/favicon.png',
-            hasBack: isSub,
-            backTo: '/navilgal'
+            icon: '/favicon.png'
         };
     }
 
@@ -98,8 +81,7 @@ function getRouteInfo(pathname: string): RouteMeta {
         return {
             title: 'கலைகள்',
             subtitle: 'Arts • Creative Gallery',
-            icon: '/favicon.png',
-            hasBack: false
+            icon: '/favicon.png'
         };
     }
 
@@ -107,8 +89,7 @@ function getRouteInfo(pathname: string): RouteMeta {
         return {
             title: 'பற்றி',
             subtitle: 'About • Elvan Navil',
-            icon: '/favicon.png',
-            hasBack: false
+            icon: '/favicon.png'
         };
     }
 
@@ -116,35 +97,22 @@ function getRouteInfo(pathname: string): RouteMeta {
         return {
             title: 'அமைப்புகள்',
             subtitle: 'Settings & Preferences',
-            icon: '/favicon.png',
-            hasBack: false
+            icon: '/favicon.png'
         };
     }
 
     return {
         title: 'எல்வன் நவில்',
         subtitle: 'Elvan Navil',
-        icon: '/favicon.png',
-        hasBack: false
+        icon: '/favicon.png'
     };
 }
 
 export const DesktopTopBar: React.FC = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const [copied, setCopied] = useState(false);
 
     const routeInfo = getRouteInfo(location.pathname);
-
-    const handleBack = () => {
-        if (routeInfo.backTo) {
-            navigate(routeInfo.backTo);
-        } else if (window.history.length > 1) {
-            navigate(-1);
-        } else {
-            navigate('/');
-        }
-    };
 
     const handleCopyLink = async () => {
         try {
@@ -158,22 +126,10 @@ export const DesktopTopBar: React.FC = () => {
 
     return (
         <header className="desktop-topbar" aria-label="Desktop Top Bar">
-            {/* LEFT: BACK BUTTON + LOGO + TITLES */}
+            {/* LEFT: LOGO + TITLES */}
             <div className="desktop-topbar-left">
-                {routeInfo.hasBack && (
-                    <Tooltip title="Back" placement="bottom" arrow enterDelay={300}>
-                        <button 
-                            className="desktop-topbar-back-btn" 
-                            onClick={handleBack}
-                            aria-label="Go back"
-                        >
-                            <ArrowLeft size={16} weight="bold" />
-                        </button>
-                    </Tooltip>
-                )}
-
                 <Link 
-                    to={routeInfo.hasBack && routeInfo.backTo ? routeInfo.backTo : location.pathname} 
+                    to={location.pathname} 
                     className="desktop-topbar-brand"
                 >
                     <img 
@@ -192,7 +148,7 @@ export const DesktopTopBar: React.FC = () => {
                 </Link>
             </div>
 
-            {/* RIGHT: ACTIONS (GITHUB, COPY LINK, EXTERNAL) */}
+            {/* RIGHT: ACTIONS (GITHUB, COPY LINK, EXTERNAL) - PILL SHAPES */}
             <div className="desktop-topbar-right">
                 {routeInfo.githubUrl && (
                     <Tooltip title="GitHub Repository" placement="bottom" arrow enterDelay={300}>
@@ -200,10 +156,10 @@ export const DesktopTopBar: React.FC = () => {
                             href={routeInfo.githubUrl} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="desktop-topbar-btn"
+                            className="desktop-topbar-pill-btn"
                             aria-label="GitHub Repository"
                         >
-                            <GithubLogo size={15} weight="bold" />
+                            <GithubLogo size={14} weight="bold" />
                             <span>GitHub</span>
                             <ArrowSquareOut size={12} weight="bold" style={{ opacity: 0.6 }} />
                         </a>
@@ -217,7 +173,7 @@ export const DesktopTopBar: React.FC = () => {
                     enterDelay={300}
                 >
                     <button 
-                        className={`desktop-topbar-btn ${copied ? 'copied' : ''}`}
+                        className={`desktop-topbar-pill-btn ${copied ? 'copied' : ''}`}
                         onClick={handleCopyLink}
                         aria-label="Copy page link"
                     >
