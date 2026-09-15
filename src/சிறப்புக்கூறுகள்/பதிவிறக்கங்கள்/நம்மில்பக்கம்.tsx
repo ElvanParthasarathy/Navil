@@ -401,7 +401,7 @@ export default function NammilPage() {
                 <title>நம்மில் (Nammil) | Desktop App — Elvan Navil</title>
                 <meta 
                     name="description" 
-                    content="Nammil is a sleek, privacy-focused desktop companion for WhatsApp allowing up to 5 isolated sessions simultaneously on Windows." 
+                    content="A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications." 
                 />
             </Helmet>
 
@@ -452,10 +452,10 @@ export default function NammilPage() {
                         {/* BELOW LOGO: TEASER DESCRIPTION (FULL-WIDTH, ALIGNED TO LEFT EDGE) */}
                         <div className="ms-hero-desc-wrap">
                             <p className="ms-hero-desc" lang="ta">
-                                நம்மில் என்பது கணினியில் வாட்ஸ்அப் உரையாடல்கள், பதிவிறக்கங்கள் மற்றும் கோப்புகளை நேர்த்தியாக ஒழுங்கமைத்து இயக்கும் நவீன டெஸ்க்டாப் செயலி.
+                                பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸின் பிரத்யேக அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்காக நேர்த்தியாக உருவாக்கப்பட்ட தனித்துவ தனியுரிமைக் கணினித் துணைச்செயலி.
                             </p>
                             <p className="ms-hero-desc ms-hero-desc-en">
-                                Nammil is a smart desktop organizer for WhatsApp on Windows, designed to keep your messaging sessions, incoming media, and files neatly structured in one place.
+                                A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.
                             </p>
                         </div>
 

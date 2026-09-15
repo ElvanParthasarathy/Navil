@@ -50,8 +50,8 @@ export default function DownloadsPage() {
                                 <span className="cat-beta-badge">DESKTOP</span>
                             </div>
                             <div className="cat-title-sub">Nammil — Multi-Account WhatsApp Companion</div>
-                            <p className="cat-desc">5 கணக்குகள் வரை ஒரே நேரத்தில் இயக்கும் தனியுரிமைக் கணினிச் செயலி.</p>
-                            <p className="cat-desc-sub">Sleek, privacy-focused multi-account WhatsApp desktop companion for Windows.</p>
+                            <p className="cat-desc">பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் கூடிய தனியுரிமைக் கணினித் துணைச்செயலி.</p>
+                            <p className="cat-desc-sub">A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.</p>
                         </div>
                         <div className="cat-footer">
                             செயலியைப் பற்றி அறிய / பதிவிறக்க <ArrowRight weight="regular" />
