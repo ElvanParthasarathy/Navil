@@ -686,7 +686,7 @@ export default function NammilPage() {
                                             </p>
                                             <div className="ms-feature-divider" />
                                             <p className="ms-feature-copy-en" lang="en">
-                                                Native localization across 7 language and cross-script transliteration variants (en, ta, ta_latn, ta_ml, ml, ml_latn, ml_tam) powered by navil-engine.
+                                                Native localization across 7 language and cross-script transliteration variants (English, Tamil, Thamizh Latin, Malayalam, Manglish, and cross-scripts) powered by navil-engine.
                                             </p>
                                         </div>
                                     </div>
@@ -769,13 +769,13 @@ export default function NammilPage() {
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Supported languages</div>
                                             <ul className="ms-cell-list">
-                                                <li>English (en)</li>
-                                                <li>தமிழ் (ta)</li>
-                                                <li>Thamizh Latin (ta_latn)</li>
-                                                <li>Tamil in Malayalam (ta_ml)</li>
-                                                <li>മലയാളം (ml)</li>
-                                                <li>Malayalam Latin / Manglish (ml_latn)</li>
-                                                <li>Malayalam in Tamil (ml_tam)</li>
+                                                <li>English</li>
+                                                <li>தமிழ் (Tamil)</li>
+                                                <li>Thamizh (Thamizh Latin)</li>
+                                                <li>തമിഴ് (Tamil in Malayalam Script)</li>
+                                                <li>മലയാളം (Malayalam)</li>
+                                                <li>Malayalam (Malayalam Latin / Manglish)</li>
+                                                <li>மலையாளம் (Malayalam in Tamil Script)</li>
                                             </ul>
                                         </div>
                                     </div>
