@@ -492,7 +492,7 @@ export default function NammilPage() {
                     </header>
 
                     {/* 2. STORE BODY */}
-                    <div className="ms-store-body">
+                    <div className="ms-store-body animate-entry">
                         {/* SCREENSHOTS SECTION (MICROSOFT STORE HORIZONTAL SCROLLER) */}
                         <section className="ms-section ms-screenshots-section" aria-label="Screenshots">
                             <div className="ms-section-header-link" onClick={() => openLightbox(0)}>
@@ -767,13 +767,13 @@ export default function NammilPage() {
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Supported languages</div>
                                             <ul className="ms-cell-list">
-                                                <li>English</li>
                                                 <li>தமிழ் (Tamil)</li>
                                                 <li>Thamizh (Thamizh Latin)</li>
                                                 <li>തമിഴ് (Tamil in Malayalam Script)</li>
-                                                <li>മലയാളം (Malayalam)</li>
-                                                <li>Malayalam (Malayalam Latin / Manglish)</li>
-                                                <li>மலையாளம் (Malayalam in Tamil Script)</li>
+                                                <li>English</li>
+                                                <li>മലയാളம் (Malayalam)</li>
+                                                <li>Malayalam (Malayalam Latin)</li>
+                                                <li>மலயாளம் (Malayalam in Tamil Script)</li>
                                             </ul>
                                         </div>
                                     </div>
