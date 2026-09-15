@@ -995,7 +995,16 @@ body {
 /* Main Content (Desktop) */
 .main-content {
   margin-left: var(--sidebar-width);
-  padding: 30px 40px;
+  padding: 0;
+}
+
+.main-content-body {
+  padding: 20px 40px 40px;
+}
+
+body:has(.ms-store-page) .main-content-body,
+.main-content-body:has(.ms-store-page) {
+  padding: 0 !important;
 }
 
 /* --- UTILITIES --- */
@@ -1665,6 +1674,10 @@ body {
     overflow: visible !important;
     background: var(--bg-app);
     transition: none !important; /* Disable margin/width transitions when switching to mobile */
+  }
+
+  .main-content-body {
+    padding: 0 !important;
   }
 
   /* --- D. CONTENT CARD --- */

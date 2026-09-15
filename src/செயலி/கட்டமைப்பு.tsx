@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate, ScrollRestoration, useNavigatio
 import { useTheme } from '../கொக்கிகள்/கருப்பொருள்';
 import { useSettings } from '../கொக்கிகள்/அமைப்புகள்கொக்கி';
 import { Sidebar } from '../கூறுகள்/கட்டமைப்பு/பக்கவாட்டுப்பட்டை';
+import { DesktopTopBar } from '../கூறுகள்/கட்டமைப்பு/மேல்பட்டை';
 
 const lazyWithRetry = (componentImport: () => Promise<any>) =>
     React.lazy(() =>
@@ -174,8 +175,11 @@ const Layout = () => {
                 width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', 
                 marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' 
             }}>
+                <DesktopTopBar />
                 <ScrollRestoration />
-                <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, autoThumbnails }} />
+                <div className="main-content-body">
+                    <Outlet context={{ theme, setTheme, toggleTheme, isSidebarCollapsed, autoThumbnails }} />
+                </div>
             </main>
         </div>
 
