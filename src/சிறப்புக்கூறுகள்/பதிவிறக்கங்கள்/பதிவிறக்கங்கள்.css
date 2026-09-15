@@ -1334,13 +1334,16 @@ body:has(.ms-store-page) .main-content,
     border-color: rgba(255, 255, 255, 0.08);
 }
 
+.animate-entry > .store-app-card:hover,
 .store-app-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px) !important;
     border-color: color-mix(in srgb, var(--text-main) 20%, transparent);
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08) !important;
 }
 
+[data-theme='dark'] .animate-entry > .store-app-card:hover,
 [data-theme='dark'] .store-app-card:hover {
+    transform: translateY(-4px) !important;
     border-color: rgba(255, 255, 255, 0.22);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35) !important;
 }
