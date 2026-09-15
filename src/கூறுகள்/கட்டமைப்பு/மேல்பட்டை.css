@@ -1,6 +1,6 @@
 /* ========================================================
-   DESKTOP TOP BAR (FIXED FULL-WIDTH TITLEBAR - 72PX THICKNESS)
-   Matches collapsed sidebar thickness (72px) for perfect symmetry
+   DESKTOP TOP BAR (FIXED FULL-WIDTH TITLEBAR - 58PX SLEEK STYLE)
+   Subtly balanced: neither too slim nor too bulky
 ======================================================== */
 
 .desktop-topbar {
@@ -9,7 +9,7 @@
     left: 0;
     right: 0;
     width: 100vw;
-    height: var(--topbar-height, 72px);
+    height: var(--topbar-height, 58px);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -51,7 +51,7 @@
 }
 
 .desktop-topbar-sidebar-brand {
-    font-size: 1.45rem;
+    font-size: 1.32rem;
     font-weight: 800;
     color: var(--text-main);
     text-decoration: none;
@@ -73,7 +73,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px;
+    padding: 0 28px;
     min-width: 0;
 }
 
@@ -81,45 +81,45 @@
 .desktop-topbar-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     min-width: 0;
 }
 
 .desktop-topbar-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     min-width: 0;
     text-decoration: none;
     color: inherit;
 }
 
 .desktop-topbar-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
     object-fit: cover;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 .desktop-topbar-titles {
     display: flex;
     align-items: baseline;
-    gap: 10px;
+    gap: 8px;
     min-width: 0;
     white-space: nowrap;
 }
 
 .desktop-topbar-title {
-    font-size: 1.1rem;
+    font-size: 1.0rem;
     font-weight: 700;
     color: var(--text-main);
     line-height: 1;
 }
 
 .desktop-topbar-subtitle {
-    font-size: 0.84rem;
+    font-size: 0.80rem;
     font-weight: 500;
     color: var(--text-muted);
     opacity: 0.75;
@@ -127,9 +127,9 @@
 }
 
 .desktop-topbar-badge {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    padding: 3px 9px;
+    padding: 2px 8px;
     border-radius: 99px;
     background: color-mix(in srgb, var(--text-main) 10%, transparent);
     color: var(--text-main);
@@ -141,18 +141,18 @@
 .desktop-topbar-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 0;
 }
 
 .desktop-topbar-pill-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    height: 36px;
-    padding: 0 16px;
+    gap: 6px;
+    height: 32px;
+    padding: 0 14px;
     border-radius: 99px;
-    font-size: 0.84rem;
+    font-size: 0.80rem;
     font-weight: 600;
     color: var(--text-main);
     background: color-mix(in srgb, var(--text-main) 7%, transparent);

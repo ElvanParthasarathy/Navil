@@ -186,7 +186,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
                         centerRipple
                         aria-label={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                     >
-                        <SidebarSimple weight="regular" size={20} />
+                        <SidebarSimple weight="regular" size={19} />
                     </ButtonBase>
                 </Tooltip>
             </div>
@@ -226,9 +226,9 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
                                 className="desktop-topbar-pill-btn"
                                 aria-label="GitHub Repository"
                             >
-                                <GithubLogo size={16} weight="bold" />
+                                <GithubLogo size={14} weight="bold" />
                                 <span>GitHub</span>
-                                <ArrowSquareOut size={13} weight="bold" style={{ opacity: 0.6 }} />
+                                <ArrowSquareOut size={12} weight="bold" style={{ opacity: 0.6 }} />
                             </a>
                         </Tooltip>
                     )}
@@ -246,12 +246,12 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
                         >
                             {copied ? (
                                 <>
-                                    <Check size={16} weight="bold" />
+                                    <Check size={14} weight="bold" />
                                     <span>Copied</span>
                                 </>
                             ) : (
                                 <>
-                                    <Copy size={16} weight="bold" />
+                                    <Copy size={14} weight="bold" />
                                     <span>Share</span>
                                 </>
                             )}

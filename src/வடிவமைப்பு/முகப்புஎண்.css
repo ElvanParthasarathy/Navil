@@ -147,7 +147,7 @@ html {
   --link-color: var(--text-main);
   --shell-bg: rgba(var(--bg-app-rgb, 245, 245, 247), 0.82);
   --shell-border: rgba(0, 0, 0, 0.07);
-  --topbar-height: 72px;
+  --topbar-height: 58px;
 }
 
 [data-theme='dark'] {
@@ -165,7 +165,7 @@ html {
   --link-color: var(--text-main);
   --shell-bg: rgba(0, 0, 0, 0.82);
   --shell-border: rgba(255, 255, 255, 0.07);
-  --topbar-height: 72px;
+  --topbar-height: 58px;
 }
 
 /* Global native controls color-scheme adapt to current theme */
