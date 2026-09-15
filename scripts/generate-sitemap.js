@@ -9,7 +9,7 @@ if (!process.env.VITE_FIREBASE_DATABASE_URL) {
 }
 
 const dbUrl = process.env.VITE_FIREBASE_DATABASE_URL;
-const hostname = 'https://elvanparthasarathy.vercel.app';
+const hostname = 'https://elvannavil.vercel.app';
 
 const staticRoutes = [
     '/',

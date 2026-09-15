@@ -659,6 +659,43 @@
     }
 }
 
+@media (max-width: 768px) {
+    .home-brand-header {
+        text-align: center !important;
+        padding: 12px 0 4px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .home-brand-header .home-brand-title,
+    .home-brand-header .home-brand-title-sub {
+        display: none !important;
+    }
+
+    .home-brand-subtitle {
+        font-size: 0.88rem !important;
+        line-height: 1.5 !important;
+        text-align: center !important;
+        margin: 0 auto 6px !important;
+    }
+
+    .home-brand-subtitle-en {
+        font-size: 0.8rem !important;
+        line-height: 1.45 !important;
+        color: #888888 !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+    }
+
+    .company-home-page .dictionary-container {
+        margin-top: 18px !important;
+    }
+
+    .company-home-page .dict-card {
+        border-radius: 24px !important;
+        padding: 24px !important;
+    }
+}
+
 .home-brand-title {
     font-size: clamp(2.2rem, 4.5vw, 3rem);
     font-weight: 800;

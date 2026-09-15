@@ -26,7 +26,7 @@ const Portfolio = () => {
             padding: 40px 20px; /* Reduced padding for compact look */
             background: var(--bg-card); 
             border: 1px solid var(--border-light); 
-            border-radius: 16px; 
+            border-radius: 24px; 
             margin-top: 25px; /* Added spacing */
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             

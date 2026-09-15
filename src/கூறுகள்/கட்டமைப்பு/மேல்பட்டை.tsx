@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Tooltip, ButtonBase } from '@mui/material';
-import { Copy, Check, GithubLogo, ArrowSquareOut, SidebarSimple } from '@phosphor-icons/react';
+import { SidebarSimple } from '@phosphor-icons/react';
 import './மேல்பட்டை.css';
 
 export interface RouteMeta {
@@ -20,8 +20,8 @@ export function getRouteInfo(pathname: string): RouteMeta {
     // 1. Root Company Home
     if (p === '/') {
         return {
-            title: 'எல்வன் நவில்',
-            subtitle: 'Elvan Navil',
+            title: 'முகப்பு',
+            subtitle: 'home',
             icon: '/favicon.png',
             showBack: false
         };
@@ -31,9 +31,8 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.startsWith('/downloads/nammil')) {
         return {
             title: 'நம்மில்',
-            subtitle: 'Nammil • Multi-Account WhatsApp Companion',
+            subtitle: 'nammil',
             icon: '/nammil_icon.png',
-            badge: 'App',
             githubUrl: 'https://github.com/ElvanParthasarathy/Nammil',
             showBack: true,
             backUrl: '/downloads'
@@ -43,7 +42,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/downloads') {
         return {
             title: 'பதிவிறக்கங்கள்',
-            subtitle: 'Downloads • Desktop Applications',
+            subtitle: 'downloads',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/'
@@ -54,7 +53,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/navilgal') {
         return {
             title: 'எல்வனின் நவில்கள்',
-            subtitle: 'Elvanin Navilgal',
+            subtitle: 'elvanin navilgal',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/'
@@ -65,7 +64,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/writings' || p === '/navilgal/writings' || p === '/navilgal/ezhuthugal' || p === '/navilgal/ezhutgal') {
         return {
             title: 'எழுத்துகள்',
-            subtitle: 'Writings & Literature',
+            subtitle: 'writings',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/navilgal'
@@ -81,7 +80,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/poems')) {
         return {
             title: 'நவில் மிழிகள்',
-            subtitle: 'Navil Poems',
+            subtitle: 'navil poems',
             icon: '/favicon.png',
             showBack: true,
             backUrl: writingsBase
@@ -91,7 +90,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/quotes')) {
         return {
             title: 'நவில் மொழிகள்',
-            subtitle: 'Navil Quotes',
+            subtitle: 'navil quotes',
             icon: '/favicon.png',
             showBack: true,
             backUrl: writingsBase
@@ -101,7 +100,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/stories')) {
         return {
             title: 'சிறுகதைகள்',
-            subtitle: 'Short Stories',
+            subtitle: 'short stories',
             icon: '/favicon.png',
             showBack: true,
             backUrl: writingsBase
@@ -111,7 +110,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/articles')) {
         return {
             title: 'கட்டுரைகள்',
-            subtitle: 'Articles',
+            subtitle: 'articles',
             icon: '/favicon.png',
             showBack: true,
             backUrl: writingsBase
@@ -121,7 +120,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/diary')) {
         return {
             title: 'நாளேடு',
-            subtitle: 'Diary',
+            subtitle: 'diary',
             icon: '/favicon.png',
             showBack: true,
             backUrl: writingsBase
@@ -136,7 +135,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/arts' || p === '/navilgal/arts' || p === '/navilgal/padaippugal') {
         return {
             title: 'கலைகள்',
-            subtitle: 'Arts & Creative Expressions',
+            subtitle: 'arts',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/navilgal'
@@ -146,7 +145,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/arts/sketches') || p.includes('/padaippugal/sketches')) {
         return {
             title: 'கரிக்கோல் ஓவியங்கள்',
-            subtitle: 'Pencil Sketches',
+            subtitle: 'pencil sketches',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -156,7 +155,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/arts/illustrations') || p.includes('/padaippugal/illustrations')) {
         return {
             title: 'விளக்கப்படங்கள்',
-            subtitle: 'Illustrations',
+            subtitle: 'illustrations',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -166,7 +165,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/arts/posters') || p.includes('/padaippugal/posters')) {
         return {
             title: 'சுவரொட்டிகள்',
-            subtitle: 'Posters',
+            subtitle: 'posters',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -176,7 +175,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/arts/albums') || p.includes('/padaippugal/albums')) {
         return {
             title: 'தொகுப்புகள்',
-            subtitle: 'Albums',
+            subtitle: 'albums',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -186,7 +185,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/arts/paintings') || p.includes('/padaippugal/paintings')) {
         return {
             title: 'ஓவியங்கள்',
-            subtitle: 'Paintings',
+            subtitle: 'paintings',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -196,7 +195,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.includes('/arts/digital') || p.includes('/padaippugal/digital')) {
         return {
             title: 'எண்மக்கலைகள்',
-            subtitle: 'Digital Arts',
+            subtitle: 'digital arts',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -206,7 +205,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.startsWith('/arts/') || p.startsWith('/navilgal/arts/') || p.startsWith('/navilgal/padaippugal/')) {
         return {
             title: 'கலைக்கூடம்',
-            subtitle: 'Arts Gallery',
+            subtitle: 'arts gallery',
             icon: '/favicon.png',
             showBack: true,
             backUrl: artsBase
@@ -217,7 +216,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.startsWith('/tools/transliter') || p.startsWith('/tools/mozhimatri')) {
         return {
             title: 'மொழிமாற்றி',
-            subtitle: 'Transliterator • Script Converter',
+            subtitle: 'transliterator',
             icon: '/favicon.png',
             badge: 'BETA',
             showBack: true,
@@ -228,7 +227,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.startsWith('/tools/arichuvadi')) {
         return {
             title: 'அரிச்சுவடி',
-            subtitle: 'Arichuvadi • Tamil Learning Suite',
+            subtitle: 'arichuvadi',
             icon: '/favicon.png',
             badge: 'BETA',
             showBack: true,
@@ -239,7 +238,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.startsWith('/tools/vocoder') || p.startsWith('/teaching/vocoder')) {
         return {
             title: 'குரல்மாற்றி',
-            subtitle: 'Vocoder • Audio Synth',
+            subtitle: 'vocoder',
             icon: '/favicon.png',
             badge: 'BETA',
             showBack: true,
@@ -250,7 +249,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p.startsWith('/tools/piano') || p.startsWith('/tools/kinnarappetti')) {
         return {
             title: 'கின்னரப்பெட்டி',
-            subtitle: 'Piano • Music Maker',
+            subtitle: 'piano',
             icon: '/favicon.png',
             badge: 'BETA',
             showBack: true,
@@ -261,7 +260,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/tools' || p === '/teaching' || p === '/tools/teaching') {
         return {
             title: 'கருவிகள்',
-            subtitle: 'Tools & Utilities',
+            subtitle: 'tools',
             icon: '/favicon.png',
             badge: 'BETA',
             showBack: true,
@@ -273,7 +272,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/about') {
         return {
             title: 'பற்றி',
-            subtitle: 'About • Elvan Parthasarathy',
+            subtitle: 'about',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/'
@@ -283,7 +282,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/portfolio') {
         return {
             title: 'தொகுப்பு',
-            subtitle: 'Portfolio',
+            subtitle: 'portfolio',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/'
@@ -293,7 +292,7 @@ export function getRouteInfo(pathname: string): RouteMeta {
     if (p === '/settings') {
         return {
             title: 'அமைப்புகள்',
-            subtitle: 'Settings & Preferences',
+            subtitle: 'settings',
             icon: '/favicon.png',
             showBack: true,
             backUrl: '/'
@@ -301,8 +300,8 @@ export function getRouteInfo(pathname: string): RouteMeta {
     }
 
     return {
-        title: 'எல்வன் நவில்',
-        subtitle: 'Elvan Navil',
+        title: 'முகப்பு',
+        subtitle: 'home',
         icon: '/favicon.png',
         showBack: true,
         backUrl: '/'
@@ -320,7 +319,6 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
 }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [copied, setCopied] = useState(false);
     const [isToggleTooltipOpen, setIsToggleTooltipOpen] = useState(false);
     const toggleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -360,23 +358,14 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
         }
     };
 
-    const handleCopyLink = async () => {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
-            console.error('Failed to copy link:', err);
-        }
-    };
-
     return (
         <header className="desktop-topbar" aria-label="Desktop Top Bar">
             {/* SIDEBAR ZONE (Top-Left, matches sidebar width and hairline divider) */}
             <div className={`desktop-topbar-sidebar-zone ${isSidebarCollapsed ? 'collapsed' : ''}`}>
                 {!isSidebarCollapsed && (
                     <Link to="/" className="desktop-topbar-sidebar-brand" lang="ta">
-                        எல்வன் நவில்
+                        <span className="desktop-topbar-sidebar-brand-title">எல்வன் நவில்</span>
+                        <span className="desktop-topbar-sidebar-brand-subtitle">Elvan Navil</span>
                     </Link>
                 )}
                 <Tooltip
@@ -405,88 +394,41 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
 
             {/* CONTENT ZONE (Top-Right, full width flex-1) */}
             <div className="desktop-topbar-content-zone">
-                {/* PAGE IDENTITY + EMBEDDED BACK BUTTON */}
+                {/* PAGE IDENTITY */}
                 <div className="desktop-topbar-left">
                     {routeInfo.showBack && (
                         <button 
                             type="button" 
-                            className="desktop-topbar-back-btn" 
+                            className="desktop-topbar-circle-back-btn" 
                             onClick={handleBack}
                             aria-label="பின்செல்"
                             title="முந்தைய பக்கத்திற்குச் செல்"
                         >
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <polyline points="15 18 9 12 15 6" />
                             </svg>
-                            <span>பின்செல்</span>
                         </button>
                     )}
-
                     <Link 
                         to={location.pathname} 
                         className="desktop-topbar-brand"
                     >
-                        <img 
-                            src={routeInfo.icon} 
-                            alt="" 
-                            className="desktop-topbar-icon"
-                            onError={(e: any) => { e.target.src = '/favicon.png'; }}
-                        />
                         <div className="desktop-topbar-titles">
-                            <span className="desktop-topbar-title" lang="ta">{routeInfo.title}</span>
+                            <div className="desktop-topbar-title-row">
+                                <span className="desktop-topbar-title" lang="ta">{routeInfo.title}</span>
+                                {routeInfo.badge && (
+                                    <span className="desktop-topbar-badge">{routeInfo.badge}</span>
+                                )}
+                            </div>
                             {routeInfo.subtitle && (
                                 <span className="desktop-topbar-subtitle">{routeInfo.subtitle}</span>
-                            )}
-                            {routeInfo.badge && (
-                                <span className="desktop-topbar-badge">{routeInfo.badge}</span>
                             )}
                         </div>
                     </Link>
                 </div>
 
-                {/* ACTIONS (GITHUB, COPY LINK / SHARE) */}
-                <div className="desktop-topbar-right">
-                    {routeInfo.githubUrl && (
-                        <Tooltip title="GitHub Repository" placement="bottom" arrow enterDelay={300}>
-                            <a 
-                                href={routeInfo.githubUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="desktop-topbar-pill-btn"
-                                aria-label="GitHub Repository"
-                            >
-                                <GithubLogo size={14} weight="bold" />
-                                <span>GitHub</span>
-                                <ArrowSquareOut size={12} weight="bold" style={{ opacity: 0.6 }} />
-                            </a>
-                        </Tooltip>
-                    )}
-
-                    <Tooltip 
-                        title={copied ? "Copied to clipboard!" : "Copy link"} 
-                        placement="bottom" 
-                        arrow 
-                        enterDelay={300}
-                    >
-                        <button 
-                            className={`desktop-topbar-pill-btn ${copied ? 'copied' : ''}`}
-                            onClick={handleCopyLink}
-                            aria-label="Copy page link"
-                        >
-                            {copied ? (
-                                <>
-                                    <Check size={14} weight="bold" />
-                                    <span>Copied</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Copy size={14} weight="bold" />
-                                    <span>Share</span>
-                                </>
-                            )}
-                        </button>
-                    </Tooltip>
-                </div>
+                {/* CONTROLS & ACTIONS ZONE */}
+                <div className="desktop-topbar-right" id="desktop-topbar-actions" />
             </div>
         </header>
     );

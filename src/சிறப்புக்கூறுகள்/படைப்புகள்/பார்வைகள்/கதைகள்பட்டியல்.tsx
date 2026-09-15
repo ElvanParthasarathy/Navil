@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate, useSearchParams, useOutletContext, useParams, useLocation } from 'react-router-dom';
 import { subscribe, getCached } from '../../../நூலகம்/ஃபயர்பேஸ்/தேக்ககம்';
 import AdBanner from '../../../கூறுகள்/ஊடகம்/விளம்பரம்';
@@ -289,8 +290,90 @@ const StoriesListView = () => {
     }, [posts, filteredPosts, searchTerm, activeGenre, seriesList]);
 
     const [isPaginationExpanded, setIsPaginationExpanded] = React.useState(false);
+    const [isDesktop, setIsDesktop] = React.useState(() => typeof window !== 'undefined' && window.innerWidth > 768);
+    const [portalTarget, setPortalTarget] = React.useState<HTMLElement | null>(null);
+
+    React.useEffect(() => {
+        const checkDesktop = () => {
+            const matches = window.innerWidth > 768;
+            setIsDesktop(matches);
+            if (matches) {
+                setPortalTarget(document.getElementById('desktop-topbar-actions'));
+            } else {
+                setPortalTarget(null);
+            }
+        };
+        checkDesktop();
+        window.addEventListener('resize', checkDesktop);
+        return () => window.removeEventListener('resize', checkDesktop);
+    }, []);
+
+    const activePortalTarget = portalTarget || (typeof document !== 'undefined' ? document.getElementById('desktop-topbar-actions') : null);
+
+    const handleTogglePagination = () => {
+        if (!isPaginationExpanded) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setIsPaginationExpanded(true);
+        } else {
+            setIsPaginationExpanded(false);
+        }
+    };
+
     const totalPages = Math.ceil(groupedItems.length / ITEMS_PER_PAGE);
     const currentItems = groupedItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+    const renderControls = (isTopBar: boolean = false) => (
+        <div className={isTopBar ? "topbar-controls-area" : "controls-area"} style={isTopBar ? undefined : { maxWidth: '800px' }}>
+            <div className="minimal-search">
+                <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input
+                    type="text"
+                    placeholder="தேடுக..."
+                    value={searchTerm}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        handleFilterResetPage();
+                    }}
+                    aria-label="Search Short Stories"
+                />
+            </div>
+
+            <div className="filter-icon-wrapper">
+                <svg className="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                <select
+                    className="theme-dropdown"
+                    value={activeGenre}
+                    onChange={(e) => {
+                        setActiveGenre(e.target.value);
+                        handleFilterResetPage();
+                    }}
+                >
+                    <option value="">வகைகள்</option>
+                    {allGenres.map(g => (
+                        <option key={g} value={g}>{g}</option>
+                    ))}
+                </select>
+            </div>
+            {totalPages > 1 && (
+                <button 
+                    type="button"
+                    className={`pagination-toggle-btn ${isPaginationExpanded ? 'active' : ''}`}
+                    onClick={handleTogglePagination}
+                    aria-label="Toggle Pages"
+                    title="பக்க எண்கள்"
+                >
+                    {isPaginationExpanded ? (
+                        <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    ) : (
+                        <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                    )}
+                </button>
+            )}
+        </div>
+    );
 
     const { seriesId } = useParams();
 
@@ -314,11 +397,18 @@ const StoriesListView = () => {
 
     return (
         <>
+            {!isDedicatedSeriesView && isDesktop && activePortalTarget && createPortal(renderControls(true), activePortalTarget)}
             {isDedicatedSeriesView ? (
                 <MobileTopBar 
                     title={expandedSeriesData.seriesName} 
                     showBack={true} 
-                    onBack={() => navigate(storiesBase)} 
+                    onBack={() => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            navigate(-1);
+                        } else {
+                            navigate(storiesBase);
+                        }
+                    }} 
                 />
             ) : (
                 <MobileTopBar 
@@ -355,7 +445,7 @@ const StoriesListView = () => {
                                 <Helmet>
                                     <title>{sd.seriesName} | Short Stories</title>
                                     <meta name="description" content={sdExcerpt} />
-                                    <link rel="canonical" href="https://elvanparthasarathy.vercel.app/writings/stories" />
+                                    <link rel="canonical" href="https://elvannavil.vercel.app/writings/stories" />
                                 </Helmet>
 
                                 <div className="tv-hero-bg">
@@ -459,58 +549,11 @@ const StoriesListView = () => {
                         <Helmet>
                             <title>சிறுகதைகள் | Short Stories</title>
                             <meta name="description" content="My original fiction and short narratives." />
-                            <link rel="canonical" href="https://elvanparthasarathy.vercel.app/writings/stories" />
+                            <link rel="canonical" href="https://elvannavil.vercel.app/writings/stories" />
                         </Helmet>
 
                         {/* Filters & Search Sync */}
-                        <div className="controls-area" style={{ maxWidth: '800px' }}>
-                            <div className="minimal-search">
-                                <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                                <input
-                                    type="text"
-                                    placeholder="தேடுக..."
-                                    value={searchTerm}
-                                    onChange={(e) => {
-                                        setSearchTerm(e.target.value);
-                                        handleFilterResetPage();
-                                    }}
-                                    aria-label="Search Short Stories"
-                                />
-                            </div>
-
-                            <div className="filter-icon-wrapper">
-                                <svg className="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                                <select
-                                    className="theme-dropdown"
-                                    value={activeGenre}
-                                    onChange={(e) => {
-                                        setActiveGenre(e.target.value);
-                                        handleFilterResetPage();
-                                    }}
-                                >
-                                    <option value="">வகைகள்</option>
-                                    {allGenres.map(g => (
-                                        <option key={g} value={g}>{g}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            {totalPages > 1 && (
-                                <button 
-                                    className={`pagination-toggle-btn ${isPaginationExpanded ? 'active' : ''}`}
-                                    onClick={() => setIsPaginationExpanded(!isPaginationExpanded)}
-                                    aria-label="Toggle Pages"
-                                >
-                                    {isPaginationExpanded ? (
-                                        <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    ) : (
-                                        <svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-                                    )}
-                                </button>
-                            )}
-                        </div>
+                        {(!isDesktop || !activePortalTarget) && renderControls(false)}
 
                         {totalPages > 1 && (
                             <div className={`pagination-collapsible ${isPaginationExpanded ? 'expanded' : ''}`}>
@@ -1714,10 +1757,14 @@ const StoriesListView = () => {
 
                     @media (min-width: 769px) {
                         .blog-grid-container {
-                            margin-top: 28px;
+                            margin-top: 24px;
                         }
                         .pagination-collapsible {
-                            padding-top: 16px;
+                            padding-top: 0;
+                        }
+                        .pagination-collapsible.expanded {
+                            padding-top: 8px;
+                            margin-bottom: 24px;
                         }
                         .controls-area {
                             gap: 16px;

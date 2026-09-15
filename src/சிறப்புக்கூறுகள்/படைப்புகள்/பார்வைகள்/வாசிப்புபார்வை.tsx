@@ -346,9 +346,24 @@ const toggleVariantTransl = (vKey, lang) => {
         if (currIndex > 0) prevPart = seriesParts[currIndex - 1];
     }
 
+    const storyBackUrl = (category === 'stories' && post?.series_name)
+        ? `${parentPath}/stories/series/${encodeURIComponent(post.series_name)}`
+        : `${parentPath}/${category}`;
+
     return (
         <>
-            <MobileTopBar title={`${meta?.title}|${meta?.subtitle || ''}`} showBack={true} backUrl={`${parentPath}/${category}`} />
+            <MobileTopBar 
+                title={`${meta?.title}|${meta?.subtitle || ''}`} 
+                showBack={true} 
+                backUrl={storyBackUrl} 
+                onBack={() => {
+                    if (window.history.state && window.history.state.idx > 0) {
+                        navigate(-1);
+                    } else {
+                        navigate(storyBackUrl);
+                    }
+                }}
+            />
             <Helmet>
                 <title>{displayPrimaryTitle} | {meta.subtitle}</title>
             </Helmet>

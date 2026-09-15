@@ -74,7 +74,7 @@ const About = () => {
             <Helmet>
                 <title>பற்றி | About</title>
                 <meta name="description" content="Learn more about Jaiprakash P (Elvan Parthasarathy), a pre-final year engineering student, writer, and creator based in Tamil Nadu." />
-                <link rel="canonical" href="https://elvanparthasarathy.vercel.app/about" />
+                <link rel="canonical" href="https://elvannavil.vercel.app/about" />
             </Helmet>
             <div className="about-page page-view animate-entry">
                 <style>{`

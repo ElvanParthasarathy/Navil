@@ -48,7 +48,7 @@ const VocoderView = () => {
                 }
                 @media (min-width: 769px) {
                     .main-content {
-                        padding: var(--topbar-height, 58px) 0 0 0 !important;
+                        padding: var(--topbar-height, 64px) 0 0 0 !important;
                     }
                 }
                 @media (max-width: 768px) {

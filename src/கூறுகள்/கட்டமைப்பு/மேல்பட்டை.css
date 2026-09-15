@@ -8,8 +8,8 @@
     top: 0;
     left: 0;
     right: 0;
-    width: 100vw;
-    height: var(--topbar-height, 58px);
+    width: 100%;
+    height: var(--topbar-height, 64px);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -42,6 +42,7 @@
     border-right: 1px solid var(--shell-border);
     flex-shrink: 0;
     box-sizing: border-box;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
 }
 
 .desktop-topbar-sidebar-zone.collapsed {
@@ -51,19 +52,37 @@
 }
 
 .desktop-topbar-sidebar-brand {
-    font-size: 1.32rem;
-    font-weight: 800;
-    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
     text-decoration: none;
-    font-family: "ElvanSans", system-ui, -apple-system, sans-serif;
-    line-height: 1;
-    white-space: nowrap;
-    letter-spacing: normal;
     transition: opacity 0.2s ease;
 }
 
 .desktop-topbar-sidebar-brand:hover {
     opacity: 0.85;
+}
+
+.desktop-topbar-sidebar-brand-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-main);
+    font-family: "ElvanSans", system-ui, -apple-system, sans-serif;
+    line-height: 1.1;
+    white-space: nowrap;
+    letter-spacing: normal;
+}
+
+.desktop-topbar-sidebar-brand-subtitle {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    opacity: 0.75;
+    line-height: 1;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
 }
 
 /* Content Zone (Top-Right, spans remainder of full width) */
@@ -73,7 +92,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 28px;
+    padding: 0 24px;
     min-width: 0;
 }
 
@@ -85,15 +104,13 @@
     min-width: 0;
 }
 
-.desktop-topbar-back-btn {
+.desktop-topbar-circle-back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    height: 32px;
-    padding: 0 14px;
-    border-radius: 99px;
-    font-size: 0.82rem;
-    font-weight: 600;
+    justify-content: center;
     color: var(--text-main);
     background: color-mix(in srgb, var(--text-main) 7%, transparent);
     border: none !important;
@@ -102,18 +119,17 @@
     text-decoration: none;
     user-select: none;
     flex-shrink: 0;
-    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    margin-right: 4px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.desktop-topbar-back-btn:hover {
-    background: color-mix(in srgb, var(--text-main) 13%, transparent);
-    transform: translateY(-1px);
+.desktop-topbar-circle-back-btn:hover {
+    background: var(--nav-hover);
+    transform: none;
 }
 
-.desktop-topbar-back-btn:active {
-    transform: scale(0.96);
-    background: color-mix(in srgb, var(--text-main) 18%, transparent);
+.desktop-topbar-circle-back-btn:active {
+    background: var(--nav-hover);
+    transform: scale(0.92);
 }
 
 .desktop-topbar-brand {
@@ -125,47 +141,53 @@
     color: inherit;
 }
 
-.desktop-topbar-icon {
-    width: 26px;
-    height: 26px;
-    border-radius: 7px;
-    object-fit: cover;
-    flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-
 .desktop-topbar-titles {
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+}
+
+.desktop-topbar-title-row {
+    display: flex;
+    align-items: center;
     gap: 8px;
     min-width: 0;
-    white-space: nowrap;
+    line-height: 1.1;
 }
 
 .desktop-topbar-title {
-    font-size: 1.0rem;
+    font-size: 1.02rem;
     font-weight: 700;
     color: var(--text-main);
-    line-height: 1;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
 }
 
 .desktop-topbar-subtitle {
-    font-size: 0.80rem;
+    font-size: 0.73rem;
     font-weight: 500;
     color: var(--text-muted);
     opacity: 0.75;
-    line-height: 1;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    text-transform: lowercase;
 }
 
 .desktop-topbar-badge {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    padding: 2px 8px;
+    padding: 1.5px 7px;
     border-radius: 99px;
     background: color-mix(in srgb, var(--text-main) 10%, transparent);
     color: var(--text-main);
     letter-spacing: 0.5px;
     line-height: 1;
+    display: inline-flex;
+    align-items: center;
 }
 
 /* Right Section - Pill Buttons matching Sidebar Aesthetic */
@@ -208,6 +230,164 @@
 .desktop-topbar-pill-btn.copied {
     color: #10b981;
     background: rgba(16, 185, 129, 0.15);
+}
+
+/* Injected TopBar Controls (Search Pill, Filter Pill, Page Toggle Button) */
+.topbar-controls-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topbar-controls-area .minimal-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+    border-radius: 100px;
+    padding: 0 14px;
+    height: 36px;
+    width: 200px;
+    transition: all 0.25s ease;
+}
+
+.topbar-controls-area .minimal-search:focus-within {
+    background: color-mix(in srgb, var(--text-main) 12%, transparent);
+    width: 250px;
+}
+
+.topbar-controls-area .search-icon {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    opacity: 0.55;
+    transition: opacity 0.2s;
+}
+
+.topbar-controls-area .minimal-search:focus-within .search-icon {
+    opacity: 1;
+}
+
+.topbar-controls-area .minimal-search input {
+    width: 100%;
+    padding: 0;
+    height: 100%;
+    font-size: 0.88rem;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    border-radius: 0;
+    font-family: "ElvanSans", system-ui, -apple-system, sans-serif;
+    outline: none;
+}
+
+.topbar-controls-area .minimal-search input::placeholder {
+    color: var(--text-muted);
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.topbar-controls-area .filter-icon-wrapper {
+    position: relative;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: color-mix(in srgb, var(--text-main) 6%, transparent) !important;
+    border-radius: 100px !important;
+    padding: 0 14px 0 14px !important;
+    height: 36px !important;
+    box-sizing: border-box !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease;
+}
+
+.topbar-controls-area .filter-icon-wrapper:hover {
+    background: color-mix(in srgb, var(--text-main) 12%, transparent) !important;
+}
+
+.topbar-controls-area .filter-icon {
+    color: var(--text-muted);
+    opacity: 0.75;
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    display: block !important;
+}
+
+.topbar-controls-area .filter-icon-wrapper .theme-dropdown,
+.topbar-controls-area .theme-dropdown {
+    height: 36px !important;
+    line-height: 36px !important;
+    padding: 0 20px 0 4px !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    color: var(--text-main) !important;
+    font-family: "ElvanSans", system-ui, -apple-system, sans-serif !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0px center !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    min-width: 0 !important;
+    width: auto !important;
+    position: static !important;
+    opacity: 1 !important;
+}
+
+.topbar-controls-area .filter-icon-wrapper .theme-dropdown:focus,
+.topbar-controls-area .theme-dropdown:focus {
+    color: var(--text-main) !important;
+}
+
+.topbar-controls-area .filter-icon-wrapper .theme-dropdown option,
+.topbar-controls-area .theme-dropdown option {
+    background: var(--bg-app);
+    color: var(--text-main);
+}
+
+.topbar-controls-area .pagination-toggle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--text-main) 6%, transparent);
+    border: none !important;
+    outline: none !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.topbar-controls-area .pagination-toggle-btn:hover {
+    background: var(--nav-hover);
+}
+
+.topbar-controls-area .pagination-toggle-btn:active {
+    transform: scale(0.92);
+}
+
+.topbar-controls-area .pagination-toggle-btn.active {
+    background: var(--text-main);
+}
+
+.topbar-controls-area .pagination-toggle-btn .icon {
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.topbar-controls-area .pagination-toggle-btn.active .icon {
+    color: var(--bg-app);
 }
 
 /* Hide on mobile devices - mobile uses MobileTopBar */

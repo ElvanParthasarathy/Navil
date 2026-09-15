@@ -147,7 +147,7 @@ html {
   --link-color: var(--text-main);
   --shell-bg: rgba(var(--bg-app-rgb, 245, 245, 247), 0.82);
   --shell-border: rgba(0, 0, 0, 0.07);
-  --topbar-height: 58px;
+  --topbar-height: 64px;
 }
 
 [data-theme='dark'] {
@@ -165,7 +165,7 @@ html {
   --link-color: var(--text-main);
   --shell-bg: rgba(0, 0, 0, 0.82);
   --shell-border: rgba(255, 255, 255, 0.07);
-  --topbar-height: 58px;
+  --topbar-height: 64px;
 }
 
 /* Global native controls color-scheme adapt to current theme */
@@ -275,9 +275,9 @@ body {
 
 .sidebar {
   width: var(--sidebar-width);
-  height: calc(100vh - var(--topbar-height, 72px));
+  height: calc(100vh - var(--topbar-height, 64px));
   position: fixed;
-  top: var(--topbar-height, 72px);
+  top: var(--topbar-height, 64px);
   left: 0;
   background: var(--shell-bg);
   backdrop-filter: blur(20px) saturate(180%);
@@ -292,7 +292,7 @@ body {
   padding: 18px 24px 24px;
   z-index: 100;
 
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, color 0.3s ease;
   contain: layout style;
   /* REMOVED 'paint' TO ALLOW OVERFLOW VISIBILITY */
   overflow: visible;
@@ -340,16 +340,32 @@ body {
 }
 
 .brand {
-  font-size: 1.35rem;
-  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
   padding-left: 20px;
   padding-top: 4px;
   padding-bottom: 4px;
   white-space: nowrap;
   overflow: visible;
   color: var(--text-main);
-  line-height: 1.4;
   letter-spacing: normal;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.brand-subtitle {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  opacity: 0.75;
+  line-height: 1;
+  text-transform: capitalize;
 }
 
 .sidebar-header {
@@ -1015,16 +1031,80 @@ body {
 .main-content {
   margin-left: var(--sidebar-width);
   padding: 0;
-  padding-top: var(--topbar-height, 72px);
+  padding-top: var(--topbar-height, 64px);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Align page content with topbar header (24px left and right padding) in both expanded and collapsed views */
 .main-content-body {
-  padding: 20px 40px 40px;
+  padding: 20px 24px 40px;
+  box-sizing: border-box;
 }
 
 body:has(.ms-store-page) .main-content-body,
-.main-content-body:has(.ms-store-page) {
+.main-content-body:has(.ms-store-page),
+body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
+.sidebar-collapsed body:has(.ms-store-page) .main-content-body {
   padding: 0 !important;
+}
+
+/* Ensure inner page containers align cleanly with the 24px content body padding on desktop */
+@media (min-width: 769px) {
+  .page-view,
+  .writings-page,
+  .downloads-page,
+  .home-page,
+  .company-home-page,
+  .arts-gallery-page {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Nammil page: align with the same 24px padding as all other pages */
+  .ms-store-container {
+    margin-left: 0 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  /* In collapsed view, expand width to edge */
+  .sidebar-collapsed .page-view,
+  .sidebar-collapsed .writings-page,
+  .sidebar-collapsed .downloads-page,
+  .sidebar-collapsed .home-page,
+  .sidebar-collapsed .company-home-page,
+  .sidebar-collapsed .arts-gallery-page,
+  .sidebar-collapsed .bento-grid,
+  .sidebar-collapsed .category-grid,
+  .sidebar-collapsed .store-app-grid,
+  .sidebar-collapsed .blog-grid-container {
+    max-width: 100% !important;
+    margin-right: 0 !important;
+  }
+
+  .sidebar-collapsed .ms-store-container {
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  .sidebar-collapsed .controls-area {
+    max-width: 100% !important;
+  }
+
+  .page-view,
+  .writings-page,
+  .downloads-page,
+  .ms-store-container,
+  .home-page,
+  .company-home-page,
+  .arts-gallery-page,
+  .blog-grid-container,
+  .controls-area {
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 /* --- UTILITIES --- */
@@ -1698,6 +1778,19 @@ body:has(.ms-store-page) .main-content-body,
 
   .main-content-body {
     padding: 0 !important;
+  }
+
+  /* Restore and enforce padding on mobile for reader views and general content pages (excluding hub pages with self-padded card grids) */
+  .page-view:not(.writings-page):not(.ms-store-page),
+  .reading-view {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    box-sizing: border-box !important;
+  }
+
+  .writings-page {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   /* --- D. CONTENT CARD --- */

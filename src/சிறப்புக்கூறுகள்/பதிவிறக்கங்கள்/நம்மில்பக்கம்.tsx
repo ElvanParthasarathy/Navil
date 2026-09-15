@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { FloatingBackButton } from '../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
+import { FaWindows } from 'react-icons/fa6';
 import {
-    DownloadSimple,
     ShieldCheck,
     FolderSimple,
     BellSimpleRinging,
@@ -428,7 +428,7 @@ export default function NammilPage() {
             <style>{`
                 @media (min-width: 769px) {
                     .main-content {
-                        padding: var(--topbar-height, 58px) 0 0 0 !important;
+                        padding: var(--topbar-height, 64px) 0 0 0 !important;
                     }
                 }
                 @media (max-width: 768px) {
@@ -490,7 +490,7 @@ export default function NammilPage() {
                                 download
                                 title="Download Nammil (.exe ~114MB)"
                             >
-                                <DownloadSimple weight="bold" size={20} />
+                                <FaWindows size={18} />
                                 <div className="ms-btn-text">
                                     <span className="ms-btn-label">பதிவிறக்கு</span>
                                     <span className="ms-btn-sublabel">Download</span>
@@ -758,7 +758,7 @@ export default function NammilPage() {
                                     </div>
 
                                     <div className="ms-info-cell">
-                                        <DownloadSimple size={20} weight="regular" className="ms-cell-icon" />
+                                        <FaWindows size={18} className="ms-cell-icon" />
                                         <div className="ms-cell-content">
                                             <div className="ms-cell-label">Installation</div>
                                             <div className="ms-cell-val">

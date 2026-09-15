@@ -39,12 +39,50 @@ const Layout = () => {
     const getPathDepth = (path: string) => {
         const normalized = path.toLowerCase().replace(/\/$/, '') || '/';
         if (normalized === '/') return 0;
-        if (normalized === '/navilgal' || normalized === '/downloads') return 1;
-        if (normalized === '/writings' || normalized === '/arts' || normalized === '/ezhuthugal' || normalized === '/padaippugal') return 2;
-        if (normalized.startsWith('/writings/') || normalized.startsWith('/arts/')) {
-            return normalized.split('/').filter(Boolean).length + 1;
+
+        // Bottom tab root pages
+        const rootTabs = ['/navilgal', '/tools', '/downloads', '/about'];
+        if (rootTabs.includes(normalized)) return 1;
+
+        // Hub pages
+        const hubPages = ['/writings', '/arts', '/teaching', '/portfolio', '/settings',
+            '/navilgal/writings', '/navilgal/ezhuthugal', '/navilgal/ezhutgal', '/navilgal/padaippugal', '/navilgal/arts'];
+        if (hubPages.includes(normalized)) return 2;
+
+        const segments = normalized.split('/').filter(Boolean);
+
+        // Check if inside literary archives or arts
+        const isLiteraryOrArts = normalized.includes('/writings') || 
+                                normalized.includes('/ezhuthugal') || 
+                                normalized.includes('/ezhutgal') || 
+                                normalized.includes('/arts') || 
+                                normalized.includes('/padaippugal');
+
+        if (isLiteraryOrArts) {
+            // Check for series dedicated view: .../series/:seriesId
+            if (normalized.includes('/series/')) {
+                return 4; // Dedicated Series view is depth 4
+            }
+
+            // Check if this is a reader/detail page (ends with post slug after category)
+            // e.g. /writings/stories/:slug, /navilgal/writings/poems/:slug
+            const lastSegment = segments[segments.length - 1];
+            const secondLast = segments[segments.length - 2];
+            const categories = ['stories', 'poems', 'quotes', 'blog', 'articles', 'diary', 'thoughts'];
+
+            if (categories.includes(lastSegment)) {
+                // e.g. /writings/stories or /navilgal/writings/stories -> Category List view
+                return 3;
+            }
+
+            if (secondLast && categories.includes(secondLast)) {
+                // e.g. /writings/stories/:slug or /writings/poems/:slug -> Reading/Post detail view
+                return 5; // Reading view is ALWAYS depth 5 (deeper than Series view depth 4)
+            }
         }
-        return normalized.split('/').filter(Boolean).length;
+
+        // Generic fallback based on segment count
+        return segments.length + 1;
     };
 
     const getTabIndex = (path: string) => {
@@ -161,7 +199,7 @@ const Layout = () => {
     const isMainLevel = normalizedPath === '/' || mainLevelPaths.some(p => normalizedPath === p || normalizedPath.endsWith(p));
 
     return (
-        <div className={`app-shell ${shouldAnimate ? 'animate-layout' : ''} ${navClass}`} style={{ display: 'flex' }}>
+        <div className={`app-shell ${isSidebarCollapsed ? 'sidebar-collapsed' : ''} ${shouldAnimate ? 'animate-layout' : ''} ${navClass}`} style={{ display: 'flex' }}>
 
             <DesktopTopBar
                 isSidebarCollapsed={isSidebarCollapsed}
@@ -174,11 +212,12 @@ const Layout = () => {
                 isMainLevel={isMainLevel}
             />
 
-            <main className={`main-content ${!isMainLevel ? 'no-bottom-nav' : ''} ${!isMainLevel ? 'mobile-full-width' : ''}`} style={{ 
+            <main className={`main-content ${isSidebarCollapsed ? 'sidebar-collapsed' : ''} ${!isMainLevel ? 'no-bottom-nav' : ''} ${!isMainLevel ? 'mobile-full-width' : ''}`} style={{ 
                 flexGrow: 1, 
                 minHeight: '100vh', 
                 width: isSidebarCollapsed ? 'calc(100% - 72px)' : 'calc(100% - var(--sidebar-width))', 
-                marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)' 
+                marginLeft: isSidebarCollapsed ? '72px' : 'var(--sidebar-width)',
+                transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}>
                 <ScrollRestoration />
                 <div className="main-content-body">

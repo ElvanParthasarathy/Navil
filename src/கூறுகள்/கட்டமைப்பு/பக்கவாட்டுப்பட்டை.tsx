@@ -71,7 +71,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="sidebar-header">
                     {!isSidebarCollapsed && (
                         <div className="brand" lang="ta">
-                            எல்வன் நவில்
+                            <span className="brand-title">எல்வன் நவில்</span>
+                            <span className="brand-subtitle">Elvan Navil</span>
                         </div>
                     )}
                     <Tooltip

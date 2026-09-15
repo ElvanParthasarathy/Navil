@@ -522,10 +522,14 @@
 
                 @media (min-width: 769px) {
                     .blog-grid-container {
-                        margin-top: 28px;
+                        margin-top: 24px;
                     }
                     .pagination-collapsible {
-                        padding-top: 16px;
+                        padding-top: 0;
+                    }
+                    .pagination-collapsible.expanded {
+                        padding-top: 8px;
+                        margin-bottom: 24px;
                     }
                     .controls-area {
                         gap: 16px;

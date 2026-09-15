@@ -219,21 +219,29 @@ const Arts = () => {
                 }
                 /* MOBILE / TOUCH DEVICE ADJUSTMENTS */
                 @media (max-width: 768px) {
-                    .writings-page { padding: 0 0 100px 0; }
-                    .writings-header { padding: 28px 28px 10px; text-align: center; margin-bottom: 24px; }
+                    .writings-page { 
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        padding-top: 0 !important;
+                        padding-bottom: 100px !important;
+                    }
+                    .writings-header { padding: 14px 16px 4px; text-align: center; margin-bottom: 12px; }
                     .writings-title { display: none; }
                     .writings-title-sub { display: none; }
                     .writings-subtitle { font-size: 1rem; line-height: 1.5; text-align: center; }
-                    .category-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 20px; margin-top: 24px; }
+                    .category-grid { grid-template-columns: 1fr !important; gap: 12px !important; padding: 0 16px !important; margin-top: 12px !important; }
                     
                     .category-card { 
-                        min-height: auto; 
-                        padding: 24px; 
+                        min-height: auto !important; 
+                        padding: 16px 16px !important; 
+                        gap: 12px !important;
+                        border-radius: 24px !important;
                     }
 
                     .cat-footer {
-                        opacity: 1;
-                        transform: none;
+                        opacity: 1 !important;
+                        transform: none !important;
+                        margin-top: 4px !important;
                     }
                 }
 
