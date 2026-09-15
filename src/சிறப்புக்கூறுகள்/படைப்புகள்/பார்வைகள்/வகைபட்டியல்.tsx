@@ -9,7 +9,6 @@ import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 import MobileTopBar from '../../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import StoriesListView from './கதைகள்பட்டியல்';
 import { ReadingView } from './வாசிப்புபார்வை';
-import { FloatingBackButton } from '../../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 import { CalendarBlank } from '@phosphor-icons/react';
 
 const CATEGORY_META = {
@@ -388,14 +387,6 @@ const CategoryListView = () => {
                 <meta name="description" content={meta.descEn} />
                 <link rel="canonical" href={`https://elvanparthasarathy.vercel.app/writings/${category}`} />
             </Helmet>
-            <FloatingBackButton to={parentPath} />
-
-            <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: '200px' }}>
-                    <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '10px', color: 'var(--text-main)' }}>{meta.title}</h1>
-                    <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>{meta.subtitle}</div>
-                </div>
-            </div>
 
             {/* Filters & Search Sync */}
             <div className="controls-area" style={{ maxWidth: '800px' }}>

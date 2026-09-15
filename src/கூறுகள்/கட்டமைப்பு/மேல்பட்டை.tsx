@@ -1,27 +1,42 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Tooltip, ButtonBase } from '@mui/material';
 import { Copy, Check, GithubLogo, ArrowSquareOut, SidebarSimple } from '@phosphor-icons/react';
 import './மேல்பட்டை.css';
 
-interface RouteMeta {
+export interface RouteMeta {
     title: string;
     subtitle: string;
     icon: string;
     badge?: string;
     githubUrl?: string;
+    showBack: boolean;
+    backUrl?: string;
 }
 
-function getRouteInfo(pathname: string): RouteMeta {
+export function getRouteInfo(pathname: string): RouteMeta {
     const p = pathname.toLowerCase().replace(/\/$/, '') || '/';
 
+    // 1. Root Company Home
+    if (p === '/') {
+        return {
+            title: 'எல்வன் நவில்',
+            subtitle: 'Elvan Navil',
+            icon: '/favicon.png',
+            showBack: false
+        };
+    }
+
+    // 2. Downloads & Applications
     if (p.startsWith('/downloads/nammil')) {
         return {
             title: 'நம்மில்',
             subtitle: 'Nammil • Multi-Account WhatsApp Companion',
             icon: '/nammil_icon.png',
             badge: 'App',
-            githubUrl: 'https://github.com/ElvanParthasarathy/Nammil'
+            githubUrl: 'https://github.com/ElvanParthasarathy/Nammil',
+            showBack: true,
+            backUrl: '/downloads'
         };
     }
 
@@ -29,16 +44,184 @@ function getRouteInfo(pathname: string): RouteMeta {
         return {
             title: 'பதிவிறக்கங்கள்',
             subtitle: 'Downloads • Desktop Applications',
-            icon: '/favicon.png'
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/'
         };
     }
 
-    if (p.startsWith('/tools/transliteration') || p.startsWith('/tools/mozhimatri')) {
+    // 3. Navilgal Landing
+    if (p === '/navilgal') {
+        return {
+            title: 'எல்வனின் நவில்கள்',
+            subtitle: 'Elvanin Navilgal',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/'
+        };
+    }
+
+    // 4. Writings Section Root
+    if (p === '/writings' || p === '/navilgal/writings' || p === '/navilgal/ezhuthugal' || p === '/navilgal/ezhutgal') {
+        return {
+            title: 'எழுத்துகள்',
+            subtitle: 'Writings & Literature',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/navilgal'
+        };
+    }
+
+    // 5. Writings Sub-Categories
+    const writingsBase = p.startsWith('/navilgal/ezhuthugal') ? '/navilgal/ezhuthugal'
+        : p.startsWith('/navilgal/ezhutgal') ? '/navilgal/ezhutgal'
+        : p.startsWith('/navilgal/writings') ? '/navilgal/writings'
+        : '/writings';
+
+    if (p.includes('/poems')) {
+        return {
+            title: 'நவில் மிழிகள்',
+            subtitle: 'Navil Poems',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: writingsBase
+        };
+    }
+
+    if (p.includes('/quotes')) {
+        return {
+            title: 'நவில் மொழிகள்',
+            subtitle: 'Navil Quotes',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: writingsBase
+        };
+    }
+
+    if (p.includes('/stories')) {
+        return {
+            title: 'சிறுகதைகள்',
+            subtitle: 'Short Stories',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: writingsBase
+        };
+    }
+
+    if (p.includes('/articles')) {
+        return {
+            title: 'கட்டுரைகள்',
+            subtitle: 'Articles',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: writingsBase
+        };
+    }
+
+    if (p.includes('/diary')) {
+        return {
+            title: 'நாளேடு',
+            subtitle: 'Diary',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: writingsBase
+        };
+    }
+
+    // 6. Arts Section
+    const artsBase = p.startsWith('/navilgal/padaippugal') ? '/navilgal/padaippugal'
+        : p.startsWith('/navilgal/arts') ? '/navilgal/arts'
+        : '/arts';
+
+    if (p === '/arts' || p === '/navilgal/arts' || p === '/navilgal/padaippugal') {
+        return {
+            title: 'கலைகள்',
+            subtitle: 'Arts & Creative Expressions',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/navilgal'
+        };
+    }
+
+    if (p.includes('/arts/sketches') || p.includes('/padaippugal/sketches')) {
+        return {
+            title: 'கரிக்கோல் ஓவியங்கள்',
+            subtitle: 'Pencil Sketches',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    if (p.includes('/arts/illustrations') || p.includes('/padaippugal/illustrations')) {
+        return {
+            title: 'விளக்கப்படங்கள்',
+            subtitle: 'Illustrations',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    if (p.includes('/arts/posters') || p.includes('/padaippugal/posters')) {
+        return {
+            title: 'சுவரொட்டிகள்',
+            subtitle: 'Posters',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    if (p.includes('/arts/albums') || p.includes('/padaippugal/albums')) {
+        return {
+            title: 'தொகுப்புகள்',
+            subtitle: 'Albums',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    if (p.includes('/arts/paintings') || p.includes('/padaippugal/paintings')) {
+        return {
+            title: 'ஓவியங்கள்',
+            subtitle: 'Paintings',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    if (p.includes('/arts/digital') || p.includes('/padaippugal/digital')) {
+        return {
+            title: 'எண்மக்கலைகள்',
+            subtitle: 'Digital Arts',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    if (p.startsWith('/arts/') || p.startsWith('/navilgal/arts/') || p.startsWith('/navilgal/padaippugal/')) {
+        return {
+            title: 'கலைக்கூடம்',
+            subtitle: 'Arts Gallery',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: artsBase
+        };
+    }
+
+    // 7. Tools Section
+    if (p.startsWith('/tools/transliter') || p.startsWith('/tools/mozhimatri')) {
         return {
             title: 'மொழிமாற்றி',
             subtitle: 'Transliterator • Script Converter',
             icon: '/favicon.png',
-            badge: 'BETA'
+            badge: 'BETA',
+            showBack: true,
+            backUrl: '/tools'
         };
     }
 
@@ -47,49 +230,63 @@ function getRouteInfo(pathname: string): RouteMeta {
             title: 'அரிச்சுவடி',
             subtitle: 'Arichuvadi • Tamil Learning Suite',
             icon: '/favicon.png',
-            badge: 'BETA'
+            badge: 'BETA',
+            showBack: true,
+            backUrl: '/tools'
         };
     }
 
-    if (p.startsWith('/tools/vocoder') || p.startsWith('/tools/kinnarappetti')) {
+    if (p.startsWith('/tools/vocoder') || p.startsWith('/teaching/vocoder')) {
         return {
             title: 'குரல்மாற்றி',
             subtitle: 'Vocoder • Audio Synth',
             icon: '/favicon.png',
-            badge: 'BETA'
+            badge: 'BETA',
+            showBack: true,
+            backUrl: '/tools'
         };
     }
 
-    if (p.startsWith('/tools') || p.startsWith('/teaching')) {
+    if (p.startsWith('/tools/piano') || p.startsWith('/tools/kinnarappetti')) {
+        return {
+            title: 'கின்னரப்பெட்டி',
+            subtitle: 'Piano • Music Maker',
+            icon: '/favicon.png',
+            badge: 'BETA',
+            showBack: true,
+            backUrl: '/tools'
+        };
+    }
+
+    if (p === '/tools' || p === '/teaching' || p === '/tools/teaching') {
         return {
             title: 'கருவிகள்',
             subtitle: 'Tools & Utilities',
             icon: '/favicon.png',
-            badge: 'BETA'
+            badge: 'BETA',
+            showBack: true,
+            backUrl: '/'
         };
     }
 
-    if (p.startsWith('/writings') || p.startsWith('/navilgal')) {
-        return {
-            title: 'நவில்கள்',
-            subtitle: 'Navilgal • Literature & Articles',
-            icon: '/favicon.png'
-        };
-    }
-
-    if (p.startsWith('/arts')) {
-        return {
-            title: 'கலைகள்',
-            subtitle: 'Arts • Creative Gallery',
-            icon: '/favicon.png'
-        };
-    }
-
-    if (p === '/about' || p === '/portfolio') {
+    // 8. Personal & Settings
+    if (p === '/about') {
         return {
             title: 'பற்றி',
-            subtitle: 'About • Elvan Navil',
-            icon: '/favicon.png'
+            subtitle: 'About • Elvan Parthasarathy',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/'
+        };
+    }
+
+    if (p === '/portfolio') {
+        return {
+            title: 'தொகுப்பு',
+            subtitle: 'Portfolio',
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/'
         };
     }
 
@@ -97,14 +294,18 @@ function getRouteInfo(pathname: string): RouteMeta {
         return {
             title: 'அமைப்புகள்',
             subtitle: 'Settings & Preferences',
-            icon: '/favicon.png'
+            icon: '/favicon.png',
+            showBack: true,
+            backUrl: '/'
         };
     }
 
     return {
-        title: 'முகப்பு',
-        subtitle: 'Home • Elvan Navil',
-        icon: '/favicon.png'
+        title: 'எல்வன் நவில்',
+        subtitle: 'Elvan Navil',
+        icon: '/favicon.png',
+        showBack: true,
+        backUrl: '/'
     };
 }
 
@@ -118,6 +319,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
     onToggleSidebar
 }) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [copied, setCopied] = useState(false);
     const [isToggleTooltipOpen, setIsToggleTooltipOpen] = useState(false);
     const toggleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -147,6 +349,16 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
     }, []);
 
     const routeInfo = getRouteInfo(location.pathname);
+
+    const handleBack = () => {
+        if (window.history.state && window.history.state.idx > 0) {
+            navigate(-1);
+        } else if (routeInfo.backUrl) {
+            navigate(routeInfo.backUrl);
+        } else {
+            navigate('/');
+        }
+    };
 
     const handleCopyLink = async () => {
         try {
@@ -193,8 +405,23 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
 
             {/* CONTENT ZONE (Top-Right, full width flex-1) */}
             <div className="desktop-topbar-content-zone">
-                {/* PAGE IDENTITY (ICON + BILINGUAL TITLE) */}
+                {/* PAGE IDENTITY + EMBEDDED BACK BUTTON */}
                 <div className="desktop-topbar-left">
+                    {routeInfo.showBack && (
+                        <button 
+                            type="button" 
+                            className="desktop-topbar-back-btn" 
+                            onClick={handleBack}
+                            aria-label="பின்செல்"
+                            title="முந்தைய பக்கத்திற்குச் செல்"
+                        >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                            <span>பின்செல்</span>
+                        </button>
+                    )}
+
                     <Link 
                         to={location.pathname} 
                         className="desktop-topbar-brand"
@@ -207,7 +434,9 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
                         />
                         <div className="desktop-topbar-titles">
                             <span className="desktop-topbar-title" lang="ta">{routeInfo.title}</span>
-                            <span className="desktop-topbar-subtitle">{routeInfo.subtitle}</span>
+                            {routeInfo.subtitle && (
+                                <span className="desktop-topbar-subtitle">{routeInfo.subtitle}</span>
+                            )}
                             {routeInfo.badge && (
                                 <span className="desktop-topbar-badge">{routeInfo.badge}</span>
                             )}

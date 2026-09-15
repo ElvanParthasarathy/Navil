@@ -6,7 +6,6 @@ import AdBanner from '../../../கூறுகள்/ஊடகம்/விள�
 import { Helmet } from 'react-helmet-async';
 import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 import MobileTopBar from '../../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
-import { FloatingBackButton } from '../../../கூறுகள்/கட்டமைப்பு/மிதக்கும்பின்பொத்தான்';
 
 const LANG_LABELS = { ta: 'தமிழ்', en: 'English', ml: 'മലയാളം', hi: 'Hindi', te: 'Telugu', sa: 'Sanskrit' };
 
@@ -364,8 +363,6 @@ const StoriesListView = () => {
                                     <div className="tv-hero-bg-overlay" />
                                 </div>
 
-                                <FloatingBackButton to={storiesBase} />
-
                                 <div className="tv-container">
                                     <div className="tv-hero-section">
                                         <div className="tv-hero-left">
@@ -464,15 +461,6 @@ const StoriesListView = () => {
                             <meta name="description" content="My original fiction and short narratives." />
                             <link rel="canonical" href="https://elvanparthasarathy.vercel.app/writings/stories" />
                         </Helmet>
-                        
-                        <FloatingBackButton to={parentPath} />
-
-                        <div className="mobile-hide" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
-                            <div style={{ flex: 1, minWidth: '200px' }}>
-                                <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '10px', color: 'var(--text-main)' }}>சிறுகதைகள்</h1>
-                                <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>Short Stories</div>
-                            </div>
-                        </div>
 
                         {/* Filters & Search Sync */}
                         <div className="controls-area" style={{ maxWidth: '800px' }}>

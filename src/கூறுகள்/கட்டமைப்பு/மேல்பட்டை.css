@@ -85,6 +85,37 @@
     min-width: 0;
 }
 
+.desktop-topbar-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 99px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-main);
+    background: color-mix(in srgb, var(--text-main) 7%, transparent);
+    border: none !important;
+    outline: none !important;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    flex-shrink: 0;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-right: 4px;
+}
+
+.desktop-topbar-back-btn:hover {
+    background: color-mix(in srgb, var(--text-main) 13%, transparent);
+    transform: translateY(-1px);
+}
+
+.desktop-topbar-back-btn:active {
+    transform: scale(0.96);
+    background: color-mix(in srgb, var(--text-main) 18%, transparent);
+}
+
 .desktop-topbar-brand {
     display: flex;
     align-items: center;

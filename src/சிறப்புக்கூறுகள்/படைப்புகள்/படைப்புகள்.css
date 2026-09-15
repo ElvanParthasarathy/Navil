@@ -33,6 +33,16 @@
                     letter-spacing: 0.5px;
                 }
 
+                @media (min-width: 769px) {
+                    .writings-title,
+                    .writings-title-sub {
+                        display: none !important;
+                    }
+                    .writings-header {
+                        margin-bottom: 24px;
+                    }
+                }
+
                 .writings-subtitle {
                     font-size: 1.05rem;
                     color: var(--text-muted);

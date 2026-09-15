@@ -647,6 +647,18 @@
     text-align: left;
 }
 
+@media (min-width: 769px) {
+    .home-brand-header .home-brand-title,
+    .home-brand-header .home-brand-title-sub {
+        display: none !important;
+    }
+    .home-brand-header {
+        margin-top: 8px;
+        margin-bottom: 24px;
+        padding-top: 0;
+    }
+}
+
 .home-brand-title {
     font-size: clamp(2.2rem, 4.5vw, 3rem);
     font-weight: 800;
