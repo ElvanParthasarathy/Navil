@@ -49,7 +49,7 @@ export default function DownloadsPage() {
                     </div>
                 </header>
 
-                <div className="store-app-grid animate-entry">
+                <div className="store-app-grid">
                     <Link 
                         to="/downloads/nammil" 
                         className="store-app-card" 

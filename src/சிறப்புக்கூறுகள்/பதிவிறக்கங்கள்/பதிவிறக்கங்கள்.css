@@ -1310,6 +1310,13 @@ body:has(.ms-store-page) .main-content,
     gap: 24px;
     margin-top: 32px;
     justify-content: flex-start;
+    animation: fadeInUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 0.08s;
+}
+
+.nav-none .store-app-grid,
+.nav-initial .store-app-grid {
+    animation: none !important;
 }
 
 .store-app-card {
@@ -1325,34 +1332,42 @@ body:has(.ms-store-page) .main-content,
     cursor: pointer;
     overflow: hidden;
     position: relative;
-    box-shadow: none !important;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.2s ease;
+    transform: translateY(0);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                box-shadow 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                border-color 0.25s ease, 
+                background-color 0.2s ease;
+    will-change: transform, box-shadow;
 }
 
 [data-theme='dark'] .store-app-card {
     background: linear-gradient(145deg, #181818, #131313);
     border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
 }
 
-.animate-entry > .store-app-card:hover,
 .store-app-card:hover {
-    transform: translateY(-4px) !important;
-    border-color: color-mix(in srgb, var(--text-main) 20%, transparent);
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--text-main) 22%, transparent);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09);
 }
 
-[data-theme='dark'] .animate-entry > .store-app-card:hover,
 [data-theme='dark'] .store-app-card:hover {
-    transform: translateY(-4px) !important;
-    border-color: rgba(255, 255, 255, 0.22);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35) !important;
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
 }
 
 .store-app-card:active {
-    transform: scale(0.985) !important;
-    background: var(--nav-hover) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
-    transition: transform 0.1s ease-out, background 0.1s ease-out;
+    transform: translateY(-1px) scale(0.985);
+    background: var(--nav-hover);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    transition-duration: 0.1s;
+}
+
+[data-theme='dark'] .store-app-card:active {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
 .store-card-ripple {
@@ -1502,6 +1517,7 @@ body:has(.ms-store-page) .main-content,
         gap: 16px;
         margin-top: 18px;
         padding: 0 16px;
+        animation: none !important;
     }
 
     .store-app-card {
