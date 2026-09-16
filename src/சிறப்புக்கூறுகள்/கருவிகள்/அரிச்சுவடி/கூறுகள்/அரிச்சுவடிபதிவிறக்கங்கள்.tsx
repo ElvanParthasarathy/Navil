@@ -64,7 +64,7 @@ export function ArichuvadiDownloads() {
   );
 
   return (
-    <div className="animate-entry" style={{ padding: '0 16px', position: 'relative' }}>
+    <div className="animate-entry" style={{ position: 'relative' }}>
       
       {/* Full-Screen PDF Viewer */}
       <AnimatePresence>

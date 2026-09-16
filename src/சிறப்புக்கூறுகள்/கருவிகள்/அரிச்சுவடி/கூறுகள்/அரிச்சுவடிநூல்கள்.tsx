@@ -202,9 +202,9 @@ export function ArichuvadiBooks() {
           <FloatingBackButton to="/tools/arichuvadi" />
 
           {/* Single clean header matching Writings Stories */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
+          <div className="arichuvadi-catalog-header">
             <div style={{ flex: 1, minWidth: '200px' }}>
-              <h1 lang="ta" style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '0', lineHeight: 1.3, marginBottom: '8px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h1 lang="ta" className="arichuvadi-catalog-title">
                 நூல்கள்
                 <span 
                   style={{ 
@@ -221,11 +221,11 @@ export function ArichuvadiBooks() {
                   BETA
                 </span>
               </h1>
-              <div style={{ fontSize: '1rem', fontWeight: 500, color: '#888888', marginBottom: '8px', letterSpacing: '0.5px' }}>Books</div>
-              <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+              <div className="arichuvadi-catalog-subtitle-en">Books</div>
+              <p className="arichuvadi-catalog-desc">
                 திருக்குறள், தொல்காப்பியம் செம்மொழி இலக்கியப் பேழைகள்.
               </p>
-              <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '0.85rem', opacity: 0.7 }}>
+              <p className="arichuvadi-catalog-desc-en">
                 Read classic Tamil literature in ancient scripts.
               </p>
             </div>
@@ -632,30 +632,30 @@ export function ArichuvadiBooks() {
         <div className="arichuvadi-story-reader-view animate-entry">
           <FloatingBackButton onClick={returnToDirectory} label={`${chaptersLabelPlural} பட்டியல்`} />
 
-          {/* Reader Topbar: Font Zoom Controls */}
-          <div className="reader-header-area" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px', marginBottom: '24px' }}>
-            <div className="arichuvadi-font-controls">
-              <button 
-                type="button"
-                className="arichuvadi-icon-pill-btn"
-                onClick={() => setFontSize(prev => Math.max(90, prev - 10))}
-                title="எழுத்தளவைக் குறைக்க"
-              >
-                A-
-              </button>
-              <button 
-                type="button"
-                className="arichuvadi-icon-pill-btn"
-                onClick={() => setFontSize(prev => Math.min(180, prev + 10))}
-                title="எழுத்தளவை அதிகரிக்க"
-              >
-                A+
-              </button>
-            </div>
-          </div>
-
           {/* Authentic Stories Reading View Article */}
-          <article className="animate-entry" style={{ maxWidth: '850px', textAlign: 'left' }}>
+          <article className="animate-entry" style={{ maxWidth: '850px', textAlign: 'left', width: '100%' }}>
+            {/* Reader Topbar: Font Zoom Controls */}
+            <div className="reader-header-area">
+              <div className="arichuvadi-font-controls">
+                <button 
+                  type="button"
+                  className="arichuvadi-icon-pill-btn"
+                  onClick={() => setFontSize(prev => Math.max(90, prev - 10))}
+                  title="எழுத்தளவைக் குறைக்க"
+                >
+                  A-
+                </button>
+                <button 
+                  type="button"
+                  className="arichuvadi-icon-pill-btn"
+                  onClick={() => setFontSize(prev => Math.min(180, prev + 10))}
+                  title="எழுத்தளவை அதிகரிக்க"
+                >
+                  A+
+                </button>
+              </div>
+            </div>
+
             <header style={{ marginBottom: '28px', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: '8px', color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '16px', fontWeight: 500 }}>
                 <span>{bookTitle}</span>

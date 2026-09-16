@@ -1078,7 +1078,9 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
   .sidebar-collapsed .bento-grid,
   .sidebar-collapsed .category-grid,
   .sidebar-collapsed .store-app-grid,
-  .sidebar-collapsed .blog-grid-container {
+  .sidebar-collapsed .blog-grid-container,
+  .sidebar-collapsed .arichuvadi-subview-container,
+  .sidebar-collapsed .arichuvadi-books-container {
     max-width: 100% !important;
     margin-right: 0 !important;
   }
@@ -1102,7 +1104,9 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
   .company-home-page,
   .arts-gallery-page,
   .blog-grid-container,
-  .controls-area {
+  .controls-area,
+  .arichuvadi-subview-container,
+  .arichuvadi-books-container {
     transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

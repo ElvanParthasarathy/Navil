@@ -155,7 +155,7 @@ export function ArichuvadiImage() {
   };
 
   return (
-    <div className="animate-entry" style={{ padding: '0 16px', maxWidth: '1000px', margin: '0' }}>
+    <div className="animate-entry" style={{ maxWidth: '1000px', margin: '0' }}>
       
       <div className="category-card static-card" style={{ cursor: 'default', margin: '0 0 24px 0' }}>
         <h3 style={{ marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
