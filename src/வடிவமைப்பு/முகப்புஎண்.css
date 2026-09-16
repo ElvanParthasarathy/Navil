@@ -1061,6 +1061,16 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
     padding-right: 0 !important;
   }
 
+  /* All page headers start after card curves on desktop */
+  .writings-header,
+  .home-brand-header,
+  .home-section-header,
+  .arichuvadi-catalog-header,
+  .arts-gallery-header,
+  .privacy-hero {
+    padding-left: 20px !important;
+  }
+
   /* Nammil page: align with the same 24px padding as all other pages */
   .ms-store-container {
     margin-left: 0 !important;
