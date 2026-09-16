@@ -141,7 +141,7 @@ async function prerenderAll() {
     const indexTemplate = fs.readFileSync(indexPath, 'utf8');
 
     // 1. Fetch live data from Firebase RTDB
-    const [poems, quotes, stories, diary, articles, blog, arts] = await Promise.all([
+    let [poems, quotes, stories, diary, articles, blog, arts] = await Promise.all([
         fetchCollection('poems'),
         fetchCollection('quotes'),
         fetchCollection('stories'),
@@ -150,6 +150,17 @@ async function prerenderAll() {
         fetchCollection('blog'),
         fetchCollection('arts')
     ]);
+
+    // Merge static local articles
+    try {
+        const staticArticlesPath = path.resolve(__dirname, '../src/தரவு/கட்டுரைகள்.json');
+        if (fs.existsSync(staticArticlesPath)) {
+            const staticArticles = JSON.parse(fs.readFileSync(staticArticlesPath, 'utf8'));
+            articles = { ...staticArticles, ...articles };
+        }
+    } catch (e) {
+        console.warn('Could not read static articles in prerender:', e.message);
+    }
 
     let count = 0;
 
@@ -255,6 +266,10 @@ async function prerenderAll() {
             <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
               <h2><a href="/writings/stories" style="color:#0070f3;text-decoration:none;">சிறுகதைகள் • Short Stories (${Object.keys(stories).length})</a></h2>
               <p>Fictional narratives and serialized adventure series.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/writings/articles" style="color:#0070f3;text-decoration:none;">கட்டுரைகள் • Articles (${Object.keys(articles).length})</a></h2>
+              <p>In-depth essays on Tamil history, linguistics, typography, and software engineering.</p>
             </section>
             <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
               <h2><a href="/writings/diary" style="color:#0070f3;text-decoration:none;">நாட்குறிப்பு • Diary (${Object.keys(diary).length})</a></h2>
@@ -443,6 +458,63 @@ async function prerenderAll() {
                 <h1 style="font-size:2.2rem;margin-bottom:8px;">${escapeHtml(title)}</h1>
                 <div style="font-size:1.1rem;line-height:1.9;margin-top:24px;">
                   ${body}
+                </div>
+              </article>
+            `
+        });
+        count++;
+    }
+
+    // --- Articles Listing ---
+    const articleListHtml = Object.entries(articles).map(([slug, a]) => {
+        const title = a.title || (a.variants && a.variants[0]?.title) || 'Untitled Article';
+        const rawSnippet = a.variants && a.variants[0]?.text ? cleanText(a.variants[0].text) : '';
+        return `
+          <article style="padding:18px 0;border-bottom:1px solid #f0f0f0;">
+            <h3 style="margin:0 0 6px;"><a href="/writings/articles/${encodeURIComponent(slug)}" style="color:#0070f3;text-decoration:none;">${escapeHtml(title)}</a></h3>
+            <div style="font-size:0.85rem;color:#888;margin-bottom:6px;">
+              ${a.classification ? `<span>${escapeHtml(a.classification)}</span> • ` : ''}
+              ${a.date ? `<span>${escapeHtml(a.date)}</span>` : ''}
+            </div>
+            <p style="margin:0;color:#666;font-size:0.95rem;">${escapeHtml(truncate(rawSnippet, 160))}</p>
+          </article>
+        `;
+    }).join('');
+
+    savePage(indexTemplate, {
+        route: '/writings/articles',
+        title: 'கட்டுரைகள் | Articles — Elvan Navil',
+        description: `In-depth essays and articles on Tamil history, linguistics, typography, software architecture, and creative philosophy.`,
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">கட்டுரைகள் • Articles</h1>
+            <p style="font-size:1.05rem;color:#555;">Detailed essays on literature, technology, linguistics, and philosophy.</p>
+          </header>
+          <div style="margin-top:24px;">
+            ${articleListHtml}
+          </div>
+        `
+    });
+    count++;
+
+    // Individual Article Pages
+    for (const [slug, a] of Object.entries(articles)) {
+        const title = a.title || (a.variants && a.variants[0]?.title) || 'Article';
+        const articleBody = a.variants && a.variants[0]?.text ? a.variants[0].text : '';
+
+        savePage(indexTemplate, {
+            route: `/writings/articles/${slug}`,
+            title: `${title} | Articles`,
+            description: truncate(articleBody, 160),
+            contentHtml: `
+              <article>
+                <h1 style="font-size:2.2rem;margin-bottom:8px;">${escapeHtml(title)}</h1>
+                <div style="color:#666;font-size:0.9rem;margin-bottom:20px;">
+                  ${a.classification ? `<span>வகைப்பாடு: ${escapeHtml(a.classification)}</span> • ` : ''}
+                  ${a.date ? `<span>${escapeHtml(a.date)}</span>` : ''}
+                </div>
+                <div style="font-size:1.08rem;line-height:1.9;margin-top:24px;">
+                  ${articleBody}
                 </div>
               </article>
             `

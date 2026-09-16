@@ -1,6 +1,11 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { SitemapStream, streamToPromise } from 'sitemap';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load env vars
 dotenv.config({ path: '.env.local' });
@@ -66,6 +71,23 @@ async function generateSitemap() {
             } catch (err) {
                 console.error(`Failed to fetch ${category} from Firebase:`, err);
             }
+        }
+
+        // Also add local static articles
+        try {
+            const staticArticlesPath = path.resolve(__dirname, '../src/தரவு/கட்டுரைகள்.json');
+            if (fs.existsSync(staticArticlesPath)) {
+                const staticArticles = JSON.parse(fs.readFileSync(staticArticlesPath, 'utf8'));
+                for (const slug of Object.keys(staticArticles)) {
+                    smStream.write({ 
+                        url: `/writings/articles/${slug}`, 
+                        changefreq: 'monthly', 
+                        priority: 0.7 
+                    });
+                }
+            }
+        } catch (err) {
+            console.error('Failed to add static articles to sitemap:', err);
         }
     } else {
         console.warn('VITE_FIREBASE_DATABASE_URL not found, skipping dynamic routes in sitemap.');

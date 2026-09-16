@@ -12,6 +12,7 @@ import { ref, onValue } from 'firebase/database';
 
 import staticStories from '../../தரவு/கதைகள்.json';
 import staticArts from '../../தரவு/கலைகள்.json';
+import staticArticles from '../../தரவு/கட்டுரைகள்.json';
 import { ArrowRight, ArrowClockwise, User, InstagramLogo, Feather, Image, Compass, Info, BookOpen, Pen, ChatCircleText, PencilSimpleLine, Newspaper, MoonStars, Palette } from '@phosphor-icons/react';
 
 const CLASSIFICATION_COLORS: Record<string, string> = {
@@ -33,7 +34,7 @@ const Home = () => {
         poems: 0,
         quotes: 0,
         blog: 0,
-        articles: 0,
+        articles: Object.keys(staticArticles).length,
         stories: staticStories.length,
         diary: 0,
         arts: staticArts.length
@@ -69,9 +70,11 @@ const Home = () => {
             writingKeys.forEach(key => {
                 const r = ref(db, key);
                 const unsub = onValue(r, (snap) => {
-                    if (snap.exists()) {
+                    if (snap.exists() && Object.keys(snap.val()).length > 0) {
                         const count = Object.keys(snap.val()).length;
                         setCounts(prev => ({ ...prev, [key]: count }));
+                    } else if (key === 'articles') {
+                        setCounts(prev => ({ ...prev, articles: Object.keys(staticArticles).length }));
                     }
                 }, () => { });
                 unsubs.push(unsub);

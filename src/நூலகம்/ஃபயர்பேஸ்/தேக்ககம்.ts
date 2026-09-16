@@ -10,6 +10,7 @@
  */
 import { db } from './வாடிக்கையாளர்';
 import { ref, onValue } from 'firebase/database';
+import staticArticles from '../../தரவு/கட்டுரைகள்.json';
 
 type Callback = (data: any[] | null) => void;
 
@@ -57,7 +58,16 @@ function normalise(dataObj: Record<string, any>): any[] {
 
 function ensureEntry(category: string): CacheEntry {
     if (!cache[category]) {
-        cache[category] = { data: null, rawObj: null, listeners: new Set(), unsubscribe: null };
+        if (category === 'articles' && staticArticles) {
+            cache[category] = { 
+                data: normalise(staticArticles), 
+                rawObj: staticArticles, 
+                listeners: new Set(), 
+                unsubscribe: null 
+            };
+        } else {
+            cache[category] = { data: null, rawObj: null, listeners: new Set(), unsubscribe: null };
+        }
     }
     return cache[category];
 }
@@ -70,9 +80,12 @@ function startListening(category: string) {
     entry.unsubscribe = onValue(
         catRef,
         (snapshot) => {
-            if (snapshot.exists()) {
+            if (snapshot.exists() && Object.keys(snapshot.val() || {}).length > 0) {
                 entry.rawObj = snapshot.val();
                 entry.data = normalise(entry.rawObj);
+            } else if (category === 'articles' && staticArticles) {
+                entry.rawObj = staticArticles;
+                entry.data = normalise(staticArticles);
             } else {
                 entry.rawObj = null;
                 entry.data = [];

@@ -10,6 +10,8 @@ import MobileTopBar from '../../கூறுகள்/கட்டமைப்�
 import './படைப்புகள்.css';
 import { ChatCircleText, PencilSimpleLine, Newspaper, FileText, BookOpen, Pen, Cloud, MoonStars, ArrowRight } from '@phosphor-icons/react';
 
+import staticArticles from '../../தரவு/கட்டுரைகள்.json';
+
 const FIREBASE_KEYS = ['poems', 'quotes', 'blog', 'articles', 'stories', 'diary'];
 
 const Writings = () => {
@@ -22,7 +24,9 @@ const Writings = () => {
         : location.pathname.startsWith('/navilgal/writings') 
         ? '/navilgal/writings' 
         : '/writings';
-    const [counts, setCounts] = useState({});
+    const [counts, setCounts] = useState({
+        articles: Object.keys(staticArticles).length
+    });
 
     useEffect(() => {
         // CLEAR CATEGORY MEMORY: When entering the hub, reset all sub-category states
@@ -39,7 +43,9 @@ const Writings = () => {
         const unsubs = FIREBASE_KEYS.map(key => {
             const catRef = ref(db, key);
             return onValue(catRef, (snapshot) => {
-                const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                const count = snapshot.exists() 
+                    ? Object.keys(snapshot.val()).length 
+                    : (key === 'articles' ? Object.keys(staticArticles).length : 0);
                 setCounts(prev => ({ ...prev, [key]: count }));
             }, () => {});
         });
