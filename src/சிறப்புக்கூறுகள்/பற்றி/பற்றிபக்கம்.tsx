@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { db } from '../../நூலகம்/ஃபயர்பேஸ்/வாடிக்கையாளர்';
 import { ref, onValue } from 'firebase/database';
-import { MapPin, Phone, EnvelopeSimple, LinkedinLogo, GithubLogo, InstagramLogo, ArrowRight } from '@phosphor-icons/react';
+import { MapPin, EnvelopeSimple, LinkedinLogo, GithubLogo, InstagramLogo, ArrowRight } from '@phosphor-icons/react';
 
 const getInitialAbout = () => {
     try {
@@ -464,9 +464,6 @@ const About = () => {
                         </div>
 
                         <div className="contact-socials">
-                            <a href="tel:+919345128797" className="social-icon-link" aria-label="Phone" title="Phone">
-                                <Phone weight="regular" size={20} />
-                            </a>
                             <a href="mailto:jaiprakashpartha@gmail.com" className="social-icon-link" aria-label="Email" title="Email">
                                 <EnvelopeSimple weight="regular" size={20} />
                             </a>
