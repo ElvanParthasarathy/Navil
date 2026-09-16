@@ -180,7 +180,60 @@ async function prerenderAll() {
     });
     count++;
 
-    // Writings Hub
+    // Privacy Policy
+    const privacyContentHtml = `
+      <header>
+        <h1 style="font-size:2.2rem;margin-bottom:8px;">தனியுரிமைக் கொள்கை • Privacy Policy</h1>
+        <p style="font-size:1rem;color:#666;">Last Updated: September 16, 2026</p>
+      </header>
+      <article style="margin-top:24px;line-height:1.8;">
+        <h2>1. அறிமுகம் • Introduction</h2>
+        <p>Welcome to <strong>Elvan Navil</strong> (https://elvannavil.vercel.app), an independent bilingual digital creation studio created and maintained by <strong>Elvan Parthasarathy (Jaiprakash P)</strong>. This Privacy Policy details how information is collected, recorded, and handled.</p>
+        
+        <h2>2. விளம்பரங்கள் & கூகுள் ஆட்சென்ஸ் • Advertising & Google AdSense Compliance</h2>
+        <p>Google is one of the third-party vendors on our website. It uses cookies, known as advertising cookies, to serve ads to our site visitors based upon their visit to <strong>elvannavil.vercel.app</strong> and other sites on the internet:</p>
+        <ul>
+          <li><strong>Third-party vendor cookies:</strong> Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.</li>
+          <li><strong>Personalized Advertising:</strong> Google's use of advertising cookies enables it and its partners to serve ads to users based on their visits to our sites and/or other sites on the Internet.</li>
+          <li><strong>Opting Out:</strong> Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noreferrer">Google Ads Settings</a> or <a href="http://www.aboutads.info/choices/" target="_blank" rel="noreferrer">www.aboutads.info</a>.</li>
+        </ul>
+        <p>Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons in their advertisements and links. They automatically receive your IP address when this occurs to measure campaign effectiveness and personalize content.</p>
+
+        <h2>3. பதிவு கோப்புகள் & பகுப்பாய்வு • Log Files & Analytics</h2>
+        <p>Elvan Navil follows a standard procedure of using log files. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, and referring/exit pages. These are not linked to any information that is personally identifiable.</p>
+
+        <h2>4. உள்ளமைவுச் சேமிப்பு • Cookies & Local Storage</h2>
+        <p>We use browser local storage to preserve user interface preferences such as Light/Dark theme mode, transliteration typing engine preferences, and font readability adjustments.</p>
+
+        <h2>5. நம்மில் கணினிச் செயலி • Nammil Desktop Application Privacy</h2>
+        <p>Nammil is a client-side desktop companion for WhatsApp. It operates under a strict privacy-first principle: all data, sessions, and media are stored strictly locally on your own computer. We do not operate intermediary servers that intercept, read, or monetize your WhatsApp communications.</p>
+
+        <h2>6. சிறுவர் தனியுரிமை • Children's Information</h2>
+        <p>We do not knowingly collect any Personal Identifiable Information from children under the age of 13. If you believe your child provided this information on our website, please contact us immediately.</p>
+
+        <h2>7. சம்மதம் & தொடர்பு • Consent & Contact Details</h2>
+        <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
+        <p><strong>Creator:</strong> Elvan Parthasarathy (Jaiprakash P)<br>
+        <strong>Email:</strong> <a href="mailto:jaiprakashpartha@gmail.com">jaiprakashpartha@gmail.com</a><br>
+        <strong>Website:</strong> <a href="https://elvannavil.vercel.app">https://elvannavil.vercel.app</a></p>
+      </article>
+    `;
+
+    savePage(indexTemplate, {
+        route: '/privacy',
+        title: 'தனியுரிமைக் கொள்கை | Privacy Policy — Elvan Navil',
+        description: 'Privacy Policy for Elvan Navil. Information on third-party advertising cookies, Google AdSense compliance, and user data protection.',
+        contentHtml: privacyContentHtml
+    });
+    count++;
+
+    savePage(indexTemplate, {
+        route: '/privacy-policy',
+        title: 'தனியுரிமைக் கொள்கை | Privacy Policy — Elvan Navil',
+        description: 'Privacy Policy for Elvan Navil. Information on third-party advertising cookies, Google AdSense compliance, and user data protection.',
+        contentHtml: privacyContentHtml
+    });
+    count++;
     savePage(indexTemplate, {
         route: '/writings',
         title: 'படைப்புகள் | Writings & Literature',

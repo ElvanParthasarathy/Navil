@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useTheme } from '../../கொக்கிகள்/கருப்பொருள்';
 import { ButtonBase, Tooltip } from '@mui/material';
 import { ProfileImage } from '../ஊடகம்/சுயவிவரபடம்';
@@ -194,6 +194,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
                                         </div>
                                     </Tooltip>
+                                </div>
+                                <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.8rem' }}>
+                                    <Link to="/about" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onClick={() => setIsSettingsOpen(false)}>பற்றி • About</Link>
+                                    <Link to="/privacy" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onClick={() => setIsSettingsOpen(false)}>தனியுரிமை • Privacy Policy</Link>
                                 </div>
                             </div>
                         </div>

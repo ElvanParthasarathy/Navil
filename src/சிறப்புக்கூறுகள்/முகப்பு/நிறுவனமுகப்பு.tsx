@@ -1,5 +1,6 @@
 import './முகப்பு.css';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import MobileTopBar from '../../கூறுகள்/கட்டமைப்பு/மொபைல்மேல்பட்டை';
 import { Wrench } from '@phosphor-icons/react';
@@ -83,6 +84,15 @@ export default function CompanyHome() {
                         </p>
                     </div>
                 </div>
+                
+                {/* 4. FOOTER */}
+                <footer style={{ marginTop: '56px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    <p style={{ margin: '0 0 6px' }}>© 2026 Elvan Navil (எல்வன் நவில்) • Made with passion & curiosity</p>
+                    <p style={{ margin: 0 }}>
+                        <Link to="/about" style={{ color: 'var(--text-muted)', textDecoration: 'none', marginRight: '16px' }}>பற்றி / About</Link>
+                        <Link to="/privacy" style={{ color: 'var(--text-muted)', textDecoration: 'underline' }}>தனியுரிமைக் கொள்கை / Privacy Policy</Link>
+                    </p>
+                </footer>
             </div>
         </>
     );

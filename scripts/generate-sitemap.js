@@ -14,6 +14,7 @@ const hostname = 'https://elvannavil.vercel.app';
 const staticRoutes = [
     '/',
     '/about',
+    '/privacy',
     '/portfolio',
     '/writings',
     '/teaching',

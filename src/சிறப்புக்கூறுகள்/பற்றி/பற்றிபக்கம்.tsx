@@ -485,7 +485,7 @@ const About = () => {
 
                 <footer className="about-footer-text animate-entry" style={{ animationDelay: '0.3s' }}>
                     <p>Made with passion & curiosity</p>
-                    <p>© 2026 — Elvan Parthasarathy</p>
+                    <p>© 2026 — Elvan Parthasarathy • <Link to="/privacy" style={{ color: 'inherit', textDecoration: 'underline' }}>Privacy Policy • தனியுரிமை</Link></p>
                 </footer>
 
             </div>
