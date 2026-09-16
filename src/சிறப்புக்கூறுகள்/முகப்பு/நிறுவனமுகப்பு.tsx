@@ -442,95 +442,102 @@ export default function CompanyHome() {
                     </div>
                 </div>
 
-                {/* 3. FEATURED DESKTOP SOFTWARE - NAMMIL */}
+                {/* 3. FEATURED PRODUCTS: NAMMIL & NAVIL TRANSLITERATOR (SIDE BY SIDE) */}
                 <section className="home-section animate-entry" style={{ marginTop: '48px' }}>
                     <div className="home-section-header" style={{ margin: '0 0 20px', paddingBottom: '8px' }}>
-                        <div className="home-section-badge">மென்பொருள் • Software</div>
-                        <h2 className="home-section-title" lang="ta">முதன்மை மென்பொருள்</h2>
-                        <div className="home-section-desc">Featured Desktop Software</div>
+                        <div className="home-section-badge">படைப்புகள் • Featured Creations</div>
+                        <h2 className="home-section-title" lang="ta">மென்பொருள் & கருவிகள்</h2>
+                        <div className="home-section-desc">Software & Linguistic Tools</div>
                     </div>
 
-                    <div className="store-app-grid" style={{ marginTop: 0 }}>
-                        <Link 
-                            to="/downloads/nammil" 
-                            className="store-app-card" 
-                            title="Nammil — Multi-Account WhatsApp Companion"
-                            onMouseDown={handleCardMouseDown}
-                        >
-                            {ripples.map(ripple => (
-                                <span 
-                                    key={ripple.id} 
-                                    className="store-card-ripple" 
-                                    style={{ left: ripple.x, top: ripple.y }} 
-                                />
-                            ))}
-                            {/* TOP ROW: ICON + TITLE + FREE PILL */}
-                            <div className="store-card-header">
-                                <div className="store-card-identity">
-                                    <img 
-                                        src="/nammil_icon.png" 
-                                        alt="Nammil App Icon" 
-                                        className="store-card-icon"
-                                        onError={(e: any) => { e.target.style.display = 'none'; }}
+                    <div className="bento-grid" style={{ marginTop: 0 }}>
+                        {/* CARD 1: NAMMIL */}
+                        <div className="span-6" style={{ display: 'flex' }}>
+                            <Link 
+                                to="/downloads/nammil" 
+                                className="store-app-card" 
+                                style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                                title="Nammil — Multi-Account WhatsApp Companion"
+                                onMouseDown={handleCardMouseDown}
+                            >
+                                {ripples.map(ripple => (
+                                    <span 
+                                        key={ripple.id} 
+                                        className="store-card-ripple" 
+                                        style={{ left: ripple.x, top: ripple.y }} 
                                     />
-                                    <div className="store-card-title-wrap">
-                                        <h2 className="store-card-title">
-                                            <span className="store-card-name-ta" lang="ta">நம்மில்</span>
-                                            <span className="store-card-name-en">Nammil</span>
-                                        </h2>
-                                        <div className="store-card-meta">
-                                            <span>Social & Productivity • சமூகம்</span>
+                                ))}
+                                <div>
+                                    {/* TOP ROW: ICON + TITLE + FREE PILL */}
+                                    <div className="store-card-header">
+                                        <div className="store-card-identity">
+                                            <img 
+                                                src="/nammil_icon.png" 
+                                                alt="Nammil App Icon" 
+                                                className="store-card-icon"
+                                                onError={(e: any) => { e.target.style.display = 'none'; }}
+                                            />
+                                            <div className="store-card-title-wrap">
+                                                <h2 className="store-card-title">
+                                                    <span className="store-card-name-ta" lang="ta">நம்மில்</span>
+                                                    <span className="store-card-name-en">Nammil</span>
+                                                </h2>
+                                                <div className="store-card-meta">
+                                                    <span>Social & Productivity • சமூகம்</span>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div className="store-card-pill">Free</div>
+                                    </div>
+
+                                    {/* TEASER DESCRIPTION */}
+                                    <div className="store-card-desc-wrap" style={{ marginTop: '16px' }}>
+                                        <p className="store-card-desc store-card-desc-ta" lang="ta">
+                                            பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்கான நவீன கணினித் துணைச்செயலி.
+                                        </p>
+                                        <p className="store-card-desc store-card-desc-en">
+                                            A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions and media organization.
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="store-card-pill">Free</div>
-                            </div>
 
-                            {/* TEASER DESCRIPTION */}
-                            <div className="store-card-desc-wrap">
-                                <p className="store-card-desc store-card-desc-ta" lang="ta">
-                                    பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்கான நவீன கணினித் துணைச்செயலி.
-                                </p>
-                                <p className="store-card-desc store-card-desc-en">
-                                    A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions and media organization.
-                                </p>
-                            </div>
-
-                            {/* SCREENSHOT PREVIEW BANNER */}
-                            <div className="store-card-banner-frame">
-                                <img 
-                                    src="/nammil/slide_1.webp" 
-                                    alt="Nammil Desktop Screenshot Preview" 
-                                    className="store-card-banner-img"
-                                    loading="eager"
-                                />
-                            </div>
-                        </Link>
-                    </div>
-                </section>
-
-                {/* 4. LANGUAGE ENGINEERING & TOOLS - NAVIL TRANSLITERATOR */}
-                <section className="home-section animate-entry" style={{ marginTop: '48px' }}>
-                    <div className="home-section-header" style={{ margin: '0 0 20px', paddingBottom: '8px' }}>
-                        <div className="home-section-badge">மொழி நுட்பம் • Language Engineering</div>
-                        <h2 className="home-section-title" lang="ta">கருவிகள்</h2>
-                        <div className="home-section-desc">Writing & Linguistic Tools</div>
-                    </div>
-
-                    <div className="category-grid tools-category-grid" style={{ marginTop: 0 }}>
-                        <Link to="/tools/transliterator" className="category-card">
-                            <div className="cat-icon-box"><Translate weight="regular" /></div>
-                            <div className="cat-content">
-                                <div className="cat-title">
-                                    நவில் மொழிமாற்றி
-                                    <span className="cat-beta-badge">BETA</span>
+                                {/* SCREENSHOT PREVIEW BANNER */}
+                                <div className="store-card-banner-frame" style={{ marginTop: '18px' }}>
+                                    <img 
+                                        src="/nammil/slide_1.webp" 
+                                        alt="Nammil Desktop Screenshot Preview" 
+                                        className="store-card-banner-img"
+                                        loading="eager"
+                                    />
                                 </div>
-                                <div className="cat-title-sub">Navil Transliterator</div>
-                                <p className="cat-desc">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
-                                <p className="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
-                            </div>
-                            <div className="cat-footer">மொழிமாற்றியைத் தொடங்க <ArrowRight weight="regular" /></div>
-                        </Link>
+                            </Link>
+                        </div>
+
+                        {/* CARD 2: NAVIL TRANSLITERATOR */}
+                        <div className="span-6" style={{ display: 'flex' }}>
+                            <Link 
+                                to="/tools/transliterator" 
+                                className="category-card"
+                                style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 'auto' }}
+                                title="Navil Transliterator — Phonetic Latin-to-Tamil typing engine"
+                            >
+                                <div>
+                                    <div className="cat-icon-box"><Translate weight="regular" /></div>
+                                    <div className="cat-content" style={{ marginTop: '16px' }}>
+                                        <div className="cat-title">
+                                            நவில் மொழிமாற்றி
+                                            <span className="cat-beta-badge">BETA</span>
+                                        </div>
+                                        <div className="cat-title-sub">Navil Transliterator</div>
+                                        <p className="cat-desc" lang="ta">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
+                                        <p className="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
+                                    </div>
+                                </div>
+                                <div className="cat-footer" style={{ marginTop: 'auto', paddingTop: '20px' }}>
+                                    மொழிமாற்றியைத் தொடங்க <ArrowRight weight="regular" />
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 </section>
 
