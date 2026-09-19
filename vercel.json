@@ -42,7 +42,7 @@
             "destination": "/downloads-nammil.html"
         },
         {
-            "source": "/((?!assets/|.*\\..*).*)",
+            "source": "/(.*)",
             "destination": "/index.html"
         }
     ]

@@ -20,12 +20,22 @@ const staticRoutes = [
     '/',
     '/about',
     '/privacy',
+    '/privacy-policy',
     '/portfolio',
     '/writings',
     '/teaching',
     '/archive',
     '/writings/quotes',
-    '/writings/poems'
+    '/writings/poems',
+    '/arts',
+    '/downloads',
+    '/downloads/nammil',
+    '/navilgal',
+    '/tools',
+    '/tools/transliterator',
+    '/tools/arichuvadi',
+    '/tools/piano',
+    '/tools/vocoder'
 ];
 
 const categories = [

@@ -47,7 +47,7 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
-function savePage(indexTemplate, { route, title, description, contentHtml, ogType = 'article' }) {
+function savePage(indexTemplate, { route, title, description, contentHtml, ogType = 'article', breadcrumbHtml = null }) {
     const canonicalUrl = `${BASE_URL}${route.startsWith('/') ? route : '/' + route}`;
     const fullTitle = title.includes('Elvan Navil') || title.includes('நவில்') 
         ? escapeHtml(title) 
@@ -82,13 +82,14 @@ function savePage(indexTemplate, { route, title, description, contentHtml, ogTyp
     html = html.replace(/<meta name="twitter:description" content="[^"]*"/i, `<meta name="twitter:description" content="${cleanDesc}"`);
 
     // 5. Inject Semantic Body into <div id="root">
+    const navContent = breadcrumbHtml !== null
+        ? breadcrumbHtml
+        : `<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a> &rsaquo; <a href="/writings" style="color:#0070f3;text-decoration:none;">படைப்புகள் / Writings</a>`;
+
     const prerenderMarkup = `
   <div id="root">
     <div style="max-width:880px;margin:0 auto;padding:40px 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.7;color:#222;">
-      <nav style="margin-bottom:24px;font-size:0.9rem;">
-        <a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a> &rsaquo; 
-        <a href="/writings" style="color:#0070f3;text-decoration:none;">படைப்புகள் / Writings</a>
-      </nav>
+      ${navContent ? `<nav style="margin-bottom:24px;font-size:0.9rem;">${navContent}</nav>` : ''}
       ${contentHtml}
     </div>
   </div>`;
@@ -170,6 +171,7 @@ async function prerenderAll() {
         route: '/about',
         title: 'பற்றி | About — Elvan Parthasarathy',
         description: 'About Elvan Parthasarathy (Jaiprakash P), pre-final year engineering student, writer, and creator behind Elvan Navil digital creation studio.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
         contentHtml: `
           <header>
             <h1 style="font-size:2rem;margin-bottom:8px;">பற்றி • About</h1>
@@ -234,6 +236,7 @@ async function prerenderAll() {
         route: '/privacy',
         title: 'தனியுரிமைக் கொள்கை | Privacy Policy — Elvan Navil',
         description: 'Privacy Policy for Elvan Navil. Information on third-party advertising cookies, Google AdSense compliance, and user data protection.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
         contentHtml: privacyContentHtml
     });
     count++;
@@ -242,6 +245,7 @@ async function prerenderAll() {
         route: '/privacy-policy',
         title: 'தனியுரிமைக் கொள்கை | Privacy Policy — Elvan Navil',
         description: 'Privacy Policy for Elvan Navil. Information on third-party advertising cookies, Google AdSense compliance, and user data protection.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
         contentHtml: privacyContentHtml
     });
     count++;
@@ -527,6 +531,7 @@ async function prerenderAll() {
         route: '/arts',
         title: 'கலைகள் | Arts & Gallery — Elvan Navil',
         description: `Visual art gallery featuring pencil sketches, digital arts, posters, and paintings by Elvan Parthasarathy.`,
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
         contentHtml: `
           <header>
             <h1 style="font-size:2rem;margin-bottom:8px;">கலைகள் • Arts Gallery</h1>
@@ -550,6 +555,7 @@ async function prerenderAll() {
         route: '/downloads',
         title: 'பதிவிறக்கங்கள் | Downloads — Elvan Navil',
         description: `Official desktop software downloads by Elvan Navil studio, including Nammil WhatsApp companion.`,
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
         contentHtml: `
           <header>
             <h1 style="font-size:2rem;margin-bottom:8px;">பதிவிறக்கங்கள் • Downloads</h1>
@@ -560,6 +566,169 @@ async function prerenderAll() {
             <p>A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.</p>
             <p><a href="/downloads/nammil" style="display:inline-block;background:#00a884;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Learn More &amp; Download</a></p>
           </div>
+        `
+    });
+    count++;
+
+    // --- Tools Hub ---
+    savePage(indexTemplate, {
+        route: '/tools',
+        title: 'கருவிகள் | Tools — Elvan Navil',
+        description: 'Bilingual productivity, language, and music tools including Tamil transliterator, ancient Tamil script converter, virtual piano synthesizer, and vocoder.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">கருவிகள் • Tools</h1>
+            <p style="font-size:1.05rem;color:#555;">இசை, மொழி &amp; பயன்பாடுகள் • Music, Language &amp; Productivity</p>
+          </header>
+          <div style="display:grid;grid-gap:20px;margin-top:28px;">
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/tools/transliterator" style="color:#0070f3;text-decoration:none;">நவில் மொழிமாற்றி • Navil Transliterator</a></h2>
+              <p>தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை. Phonetic Latin-to-Tamil typing engine.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/tools/arichuvadi" style="color:#0070f3;text-decoration:none;">நவில் அரிச்சுவடி • Navil Arichuvadi</a></h2>
+              <p>பண்டைய தமிழ் எழுத்து வடிவமாற்றி. Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/tools/piano" style="color:#0070f3;text-decoration:none;">கின்னரப்பெட்டி • Navil Piano</a></h2>
+              <p>மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி. Virtual piano synthesizer with keyboard mapping.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/tools/vocoder" style="color:#0070f3;text-decoration:none;">குரல்மாற்றி • Navil Vocoder</a></h2>
+              <p>ஒலி அதிர்வெண் மாற்றமைப்பு மற்றும் குரல் திருத்தக் கருவி. Audio manipulation and voice filter.</p>
+            </section>
+          </div>
+        `
+    });
+    count++;
+
+    // --- Transliterator Tool ---
+    savePage(indexTemplate, {
+        route: '/tools/transliterator',
+        title: 'நவில் மொழிமாற்றி | Navil Tamil Transliterator — Elvan Navil',
+        description: 'Phonetic English-to-Tamil typing engine and transliterator based on Tolkappiyam grammar rules. Type in English to get pure Tamil script.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a> &rsaquo; <a href="/tools" style="color:#0070f3;text-decoration:none;">கருவிகள் / Tools</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">நவில் மொழிமாற்றி • Navil Tamil Transliterator</h1>
+            <p style="font-size:1.05rem;color:#555;">Phonetic Latin-to-Tamil typing engine and transliteration system based on Tolkappiyam grammatical phonology.</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <p>Welcome to <strong>நவில் மொழிமாற்றி (Navil Transliterator)</strong>, a high-performance, browser-based transliteration engine that turns phonetic Latin script into pure Tamil Unicode text and vice-versa.</p>
+            <h2>முக்கிய அம்சங்கள் • Key Capabilities</h2>
+            <ul>
+              <li><strong>தொல்காப்பிய முறைமை (Navil Engine):</strong> Granular phonetic accuracy adhering to classical Tamil vowel-consonant combinations.</li>
+              <li><strong>அஞ்சல் முறைமை (Anjal Layout):</strong> Industry-standard Tamil phonetic keyboard layout support.</li>
+              <li><strong>இருவழி மொழிமாற்றம் (Bidirectional):</strong> Convert English phonetic text to Tamil and Tamil script back to readable romanized Latin.</li>
+              <li><strong>உடனடி நகல் (One-Click Copy &amp; Clear):</strong> Fast, responsive interface designed for both mobile touchscreens and desktop keyboards.</li>
+            </ul>
+            <h2>பயன்பாட்டு முறை • How to Use</h2>
+            <p>Type your words in phonetic English (e.g., <em>vanakkam</em> &rarr; <em>வணக்கம்</em>, <em>thamizh</em> &rarr; <em>தமிழ்</em>). The tool instantly generates accurate Tamil script in real time.</p>
+          </article>
+        `
+    });
+    count++;
+
+    // --- Arichuvadi Tool ---
+    savePage(indexTemplate, {
+        route: '/tools/arichuvadi',
+        title: 'நவில் அரிச்சுவடி | Navil Arichuvadi — Elvan Navil',
+        description: 'Convert modern Tamil into ancient Thamizhi (Tamil-Brahmi) and Vatteluttu script forms.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a> &rsaquo; <a href="/tools" style="color:#0070f3;text-decoration:none;">கருவிகள் / Tools</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">நவில் அரிச்சுவடி • Navil Arichuvadi</h1>
+            <p style="font-size:1.05rem;color:#555;">பண்டைய தமிழ் எழுத்து வடிவமாற்றி • Ancient Tamil Script Converter</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <p>Navil Arichuvadi is a historical linguistic utility that converts modern Tamil text into ancient scripts such as <strong>தமிழி (Thamizhi / Tamil Brahmi)</strong> and <strong>வட்டெழுத்து (Vatteluttu)</strong>.</p>
+          </article>
+        `
+    });
+    count++;
+
+    // --- Piano Tool ---
+    savePage(indexTemplate, {
+        route: '/tools/piano',
+        title: 'கின்னரப்பெட்டி | Navil Piano — Elvan Navil',
+        description: 'Interactive virtual piano synthesizer and music composition tool with computer keyboard mapping.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a> &rsaquo; <a href="/tools" style="color:#0070f3;text-decoration:none;">கருவிகள் / Tools</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">கின்னரப்பெட்டி • Navil Piano</h1>
+            <p style="font-size:1.05rem;color:#555;">மெய்நிகர் கின்னரப்பெட்டி • Virtual Piano Synthesizer</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <p>An interactive virtual piano synthesizer mapped for desktop keyboard input, featuring acoustic soundfonts and polyphonic synthesis.</p>
+          </article>
+        `
+    });
+    count++;
+
+    // --- Vocoder Tool ---
+    savePage(indexTemplate, {
+        route: '/tools/vocoder',
+        title: 'குரல்மாற்றி | Navil Vocoder — Elvan Navil',
+        description: 'Interactive voice modulator and audio filter tool.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a> &rsaquo; <a href="/tools" style="color:#0070f3;text-decoration:none;">கருவிகள் / Tools</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">குரல்மாற்றி • Navil Vocoder</h1>
+            <p style="font-size:1.05rem;color:#555;">குரல் திருத்தக் கருவி • Voice Modulator &amp; Audio Processing</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <p>Interactive browser-based audio synthesizer and vocoder for modulating vocal frequencies and sound waves.</p>
+          </article>
+        `
+    });
+    count++;
+
+    // --- Navilgal Hub ---
+    savePage(indexTemplate, {
+        route: '/navilgal',
+        title: 'நவில்கள் | Navilgal Literary Hub — Elvan Navil',
+        description: 'Literary archive of bilingual poetry, philosophy, quotes, short stories, and essays.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">நவில்கள் • Navilgal</h1>
+            <p style="font-size:1.05rem;color:#555;">Bilingual literary archive of poems, quotes, and fiction.</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <p>Welcome to the Navilgal literary portal, home to original Tamil and English literature by Elvan Parthasarathy.</p>
+            <p><a href="/writings" style="color:#0070f3;font-weight:600;">Browse All Writings &rarr;</a></p>
+          </article>
+        `
+    });
+    count++;
+
+    // --- Portfolio ---
+    savePage(indexTemplate, {
+        route: '/portfolio',
+        title: 'தொகுப்பு | Portfolio — Elvan Navil',
+        description: 'Engineering and creative portfolio of Elvan Parthasarathy.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">தொகுப்பு • Portfolio</h1>
+            <p style="font-size:1.05rem;color:#555;">Creative works, software engineering projects, and research.</p>
+          </header>
+        `
+    });
+    count++;
+
+    // --- Teaching ---
+    savePage(indexTemplate, {
+        route: '/teaching',
+        title: 'பயிற்றுவிப்பு | Teaching — Elvan Navil',
+        description: 'Interactive educational presentations and technical slides by Elvan Parthasarathy.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">பயிற்றுவிப்பு • Teaching &amp; Presentations</h1>
+            <p style="font-size:1.05rem;color:#555;">Interactive presentations, educational modules, and technical visual lectures.</p>
+          </header>
         `
     });
     count++;
