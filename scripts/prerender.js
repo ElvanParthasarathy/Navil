@@ -165,6 +165,99 @@ async function prerenderAll() {
 
     let count = 0;
 
+    // --- Homepage (Root /) ---
+    const featuredArticlesList = Object.entries(articles).slice(0, 3).map(([slug, a]) => {
+        const title = a.title || (a.variants && a.variants[0]?.title) || 'Article';
+        const rawSnippet = a.variants && a.variants[0]?.text ? cleanText(a.variants[0].text) : '';
+        return `
+          <div style="padding:16px;border:1px solid #eee;border-radius:12px;margin-bottom:12px;">
+            <h3 style="margin:0 0 6px;font-size:1.15rem;"><a href="/writings/articles/${encodeURIComponent(slug)}" style="color:#0070f3;text-decoration:none;">${escapeHtml(title)}</a></h3>
+            <p style="margin:0;color:#555;font-size:0.95rem;line-height:1.6;">${escapeHtml(truncate(rawSnippet, 160))}</p>
+          </div>
+        `;
+    }).join('');
+
+    savePage(indexTemplate, {
+        route: '/',
+        title: 'நவில் | Navil — Elvan Navil Digital Creation Studio',
+        description: 'A bilingual Tamil-English digital creation studio featuring original poems, quotes, short stories, essays, articles, diary entries, art gallery, and the Nammil desktop app.',
+        breadcrumbHtml: '',
+        contentHtml: `
+          <header style="margin-bottom:36px;text-align:center;">
+            <h1 style="font-size:2.5rem;font-weight:800;margin:0 0 12px;color:#111;letter-spacing:-0.02em;">எல்வன் நவில் • Elvan Navil</h1>
+            <p style="font-size:1.15rem;color:#555;max-width:700px;margin:0 auto 20px;line-height:1.6;">
+              An independent bilingual Tamil-English digital creation studio crafting thoughtful desktop software, bespoke typography, and classical-modern literature.
+            </p>
+            <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;font-size:0.92rem;">
+              <a href="/downloads/nammil" style="background:#00a884;color:#fff;padding:10px 20px;border-radius:99px;text-decoration:none;font-weight:600;">Download Nammil for Windows</a>
+              <a href="/writings" style="background:#0070f3;color:#fff;padding:10px 20px;border-radius:99px;text-decoration:none;font-weight:600;">Explore Writings &amp; Essays</a>
+              <a href="/tools" style="background:#f3f4f6;color:#111;padding:10px 20px;border-radius:99px;text-decoration:none;font-weight:600;">Linguistic Tools</a>
+            </div>
+          </header>
+
+          <section style="margin-bottom:36px;padding:28px;border:1px solid #e5e7eb;border-radius:16px;background:#fafafa;">
+            <h2 style="font-size:1.4rem;margin:0 0 8px;color:#111;">நம்மில் • Nammil: Privacy-First WhatsApp Desktop Companion</h2>
+            <p style="color:#555;line-height:1.7;margin:0 0 14px;">
+              Nammil is a bespoke client-side desktop companion engineered for WhatsApp power users on Windows. Built with a strict local-first architecture, it ensures all media, communications, and session stores remain strictly on your personal computer without third-party surveillance.
+            </p>
+            <ul style="color:#555;line-height:1.7;margin:0 0 14px;padding-left:20px;">
+              <li><strong>Multi-Account Sessions:</strong> Isolate personal and professional WhatsApp workflows in separate secure containers.</li>
+              <li><strong>Automated Media Sorting:</strong> Organize received photos, voice memos, and documents into chronological local folders automatically.</li>
+              <li><strong>Zero Telemetry:</strong> No intermediary servers, no message caching, and zero data monetization.</li>
+            </ul>
+            <a href="/downloads/nammil" style="color:#0070f3;font-weight:600;text-decoration:none;">Learn more about Nammil architecture &amp; download &rarr;</a>
+          </section>
+
+          <section style="margin-bottom:36px;">
+            <h2 style="font-size:1.4rem;margin:0 0 16px;color:#111;">மொழி மற்றும் இசைக் கருவிகள் • Language &amp; Creative Tools</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
+              <div style="padding:18px;border:1px solid #e5e7eb;border-radius:12px;">
+                <h3 style="margin:0 0 6px;font-size:1.1rem;"><a href="/tools/transliterator" style="color:#0070f3;text-decoration:none;">நவில் மொழிமாற்றி • Navil Transliterator</a></h3>
+                <p style="color:#666;font-size:0.9rem;line-height:1.5;">Phonetic Latin-to-Tamil typing engine adhering to Tolkappiyam grammatical phonology. Pure Tamil script generation in real-time.</p>
+              </div>
+              <div style="padding:18px;border:1px solid #e5e7eb;border-radius:12px;">
+                <h3 style="margin:0 0 6px;font-size:1.1rem;"><a href="/tools/arichuvadi" style="color:#0070f3;text-decoration:none;">நவில் அரிச்சுவடி • Navil Arichuvadi</a></h3>
+                <p style="color:#666;font-size:0.9rem;line-height:1.5;">Convert modern Tamil script into ancient Thamizhi (Tamil Brahmi) and Vatteluttu orthographic forms.</p>
+              </div>
+              <div style="padding:18px;border:1px solid #e5e7eb;border-radius:12px;">
+                <h3 style="margin:0 0 6px;font-size:1.1rem;"><a href="/tools/piano" style="color:#0070f3;text-decoration:none;">கின்னரப்பெட்டி • Navil Piano</a></h3>
+                <p style="color:#666;font-size:0.9rem;line-height:1.5;">Interactive browser-based virtual piano synthesizer with computer keyboard polyphonic mapping.</p>
+              </div>
+            </div>
+          </section>
+
+          <section style="margin-bottom:36px;">
+            <h2 style="font-size:1.4rem;margin:0 0 16px;color:#111;">சிறப்பு இலக்கியக் கட்டுரைகள் • Featured Articles &amp; Essays</h2>
+            <div>
+              ${featuredArticlesList}
+            </div>
+          </section>
+
+          <section style="margin-bottom:36px;padding:24px;border:1px solid #e5e7eb;border-radius:16px;background:#fcfcfd;">
+            <h2 style="font-size:1.3rem;margin:0 0 8px;color:#111;">உருவாக்கியவர் அறிமுகம் • About the Creator</h2>
+            <p style="color:#555;line-height:1.7;margin:0 0 12px;">
+              Elvan Navil is founded and maintained by <strong>Elvan Parthasarathy (Jaiprakash P)</strong>, an engineer, bilingual poet, and independent software developer based in Tamil Nadu, India. The studio blends literary art in Tamil and English with native desktop engineering, typography, and regional computational linguistics.
+            </p>
+            <p style="color:#555;font-size:0.92rem;margin:0;">
+              <a href="/about" style="color:#0070f3;text-decoration:none;margin-right:16px;font-weight:600;">Read Full Biography &rarr;</a>
+              <a href="/contact" style="color:#0070f3;text-decoration:none;font-weight:600;">Get in Touch &rarr;</a>
+            </p>
+          </section>
+
+          <footer style="margin-top:40px;padding-top:24px;border-top:1px solid #eee;text-align:center;font-size:0.88rem;color:#777;">
+            <p style="margin:0 0 8px;">© 2026 Elvan Navil (எல்வன் நவில்) • Independent Bilingual Digital Creation Studio</p>
+            <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+              <a href="/about" style="color:#555;text-decoration:none;">பற்றி / About</a>
+              <a href="/contact" style="color:#555;text-decoration:none;">தொடர்பு / Contact</a>
+              <a href="/privacy" style="color:#555;text-decoration:none;">தனியுரிமை / Privacy Policy</a>
+              <a href="/terms" style="color:#555;text-decoration:none;">விதிமுறைகள் / Terms</a>
+              <a href="/disclaimer" style="color:#555;text-decoration:none;">பொறுப்புத் துறப்பு / Disclaimer</a>
+            </div>
+          </footer>
+        `
+    });
+    count++;
+
     // --- Static Hub Pages ---
     // About
     savePage(indexTemplate, {
@@ -247,6 +340,111 @@ async function prerenderAll() {
         description: 'Privacy Policy for Elvan Navil. Information on third-party advertising cookies, Google AdSense compliance, and user data protection.',
         breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
         contentHtml: privacyContentHtml
+    });
+    // Contact
+    savePage(indexTemplate, {
+        route: '/contact',
+        title: 'தொடர்பு | Contact Us — Elvan Navil',
+        description: 'Get in touch with Elvan Parthasarathy (Jaiprakash P) at Elvan Navil. Inquiries for software engineering, desktop tools, literary licensing, or technical feedback.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">தொடர்பு கொள்ள • Contact Us</h1>
+            <p style="font-size:1.05rem;color:#555;">Official communication channel for Elvan Navil studio.</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <p>For technical feedback, software bug reports for Nammil or our online linguistic tools, literary licensing inquiries, or collaboration opportunities, please reach out directly:</p>
+            <div style="padding:20px;background:#f9f9fb;border-radius:12px;border:1px solid #eee;margin:20px 0;">
+              <p style="margin:0 0 8px;"><strong>Creator:</strong> Elvan Parthasarathy (Jaiprakash P)</p>
+              <p style="margin:0 0 8px;"><strong>Official Email:</strong> <a href="mailto:jaiprakashpartha@gmail.com" style="color:#0070f3;">jaiprakashpartha@gmail.com</a></p>
+              <p style="margin:0 0 8px;"><strong>Location:</strong> Tamil Nadu, India (IST / UTC+05:30)</p>
+              <p style="margin:0 0 8px;"><strong>Response Time:</strong> Within 24–48 Business Hours</p>
+              <p style="margin:0;"><strong>GitHub:</strong> <a href="https://github.com/ElvanParthasarathy" target="_blank" rel="noopener noreferrer" style="color:#0070f3;">github.com/ElvanParthasarathy</a></p>
+            </div>
+            <h2>பயன்பாட்டு வினவல்கள் • Types of Inquiries</h2>
+            <ul>
+              <li><strong>Nammil Desktop Companion:</strong> Bug reports, feature suggestions, and installation guidance for Windows.</li>
+              <li><strong>Linguistic Tools:</strong> Grammar feedback on Navil Transliterator or Thamizhi orthography on Arichuvadi.</li>
+              <li><strong>Bilingual Literature:</strong> Licensing inquiries for original Tamil poetry, stories, and translations.</li>
+            </ul>
+          </article>
+        `,
+        ogType: 'website'
+    });
+    count++;
+
+    // Terms of Service
+    const termsContentHtml = `
+      <header>
+        <h1 style="font-size:2rem;margin-bottom:8px;">பயன்பாட்டு விதிமுறைகள் • Terms of Service</h1>
+        <p style="font-size:1rem;color:#666;">Last Updated: September 2026</p>
+      </header>
+      <article style="margin-top:24px;line-height:1.8;">
+        <h2>1. அறிமுகமும் ஒப்புதலும் • Introduction &amp; Acceptance</h2>
+        <p>By accessing or downloading software from Elvan Navil (https://elvannavil.vercel.app), you agree to these Terms of Service, our Privacy Policy, and our Disclaimer.</p>
+        
+        <h2>2. அறிவுசார் சொத்துரிமை • Intellectual Property Rights</h2>
+        <p>All original poetry, philosophical quotes, short stories, essays, bespoke typefaces, vector graphics, and software source code published across this studio are the intellectual property of Elvan Parthasarathy.</p>
+        <p>Personal and educational reading with author attribution is warmly permitted. Commercial redistribution without prior consent is strictly prohibited.</p>
+
+        <h2>3. மென்பொருள் பயன்பாடு • Software License &amp; Tools</h2>
+        <p>Desktop software (such as Nammil) and web utilities (Transliterator, Arichuvadi, Piano) are provided for lawful, personal productivity. All tools operate with local-first privacy.</p>
+
+        <h2>4. விளம்பரங்கள் மற்றும் மூன்றாம் தரப்புச் சேவைகள் • Advertising &amp; Third-Party Services</h2>
+        <p>We partner with Google AdSense to serve relevant advertisements. Third-party ad vendors use cookies to serve ads based on prior visits. See our Privacy Policy for opt-out details.</p>
+
+        <h2>5. உத்தரவாத மறுப்பு • Disclaimer of Warranties</h2>
+        <p>All content and software are provided on an "as is" and "as available" basis without express or implied warranties.</p>
+
+        <h2>6. சட்ட வரம்பு • Governing Law</h2>
+        <p>These terms are governed by the laws of India, under the jurisdiction of Tamil Nadu.</p>
+        <p><strong>Contact:</strong> <a href="mailto:jaiprakashpartha@gmail.com">jaiprakashpartha@gmail.com</a></p>
+      </article>
+    `;
+
+    savePage(indexTemplate, {
+        route: '/terms',
+        title: 'விதிமுறைகள் | Terms of Service — Elvan Navil',
+        description: 'Terms of Service and legal guidelines for Elvan Navil studio, Nammil desktop companion, and online Tamil linguistic tools.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: termsContentHtml
+    });
+    count++;
+
+    savePage(indexTemplate, {
+        route: '/terms-and-conditions',
+        title: 'விதிமுறைகள் | Terms of Service — Elvan Navil',
+        description: 'Terms of Service and legal guidelines for Elvan Navil studio, Nammil desktop companion, and online Tamil linguistic tools.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: termsContentHtml
+    });
+    count++;
+
+    // Disclaimer
+    savePage(indexTemplate, {
+        route: '/disclaimer',
+        title: 'பொறுப்புத் துறப்பு | Disclaimer — Elvan Navil',
+        description: 'Legal disclaimer, trademark notices, and Google AdSense advertising disclosure for Elvan Navil.',
+        breadcrumbHtml: '<a href="/" style="color:#0070f3;text-decoration:none;">முகப்பு / Home</a>',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">பொறுப்புத் துறப்பு • Disclaimer</h1>
+            <p style="font-size:1rem;color:#666;">Transparency, trademark notices, and content disclosures</p>
+          </header>
+          <article style="margin-top:24px;line-height:1.8;">
+            <h2>1. பொதுவான தகவல் மறுப்புரை • General Information</h2>
+            <p>All literary, cultural, educational, and computational materials on Elvan Navil are published in good faith for cultural and creative purposes.</p>
+
+            <h2>2. மூன்றாம் தரப்பு வர்த்தக முத்திரைகள் • Trademark Notice</h2>
+            <p>WhatsApp is a registered trademark of Meta Platforms, Inc. The Nammil desktop companion is an independent client software and is not affiliated with, sponsored by, or endorsed by Meta Platforms, Inc. or WhatsApp.</p>
+
+            <h2>3. விளம்பர வெளிப்படைத்தன்மை • Advertising Disclosure</h2>
+            <p>This website displays contextual advertisements provided by Google AdSense to support server hosting and continued free software development.</p>
+
+            <h2>4. மொழிக் கருவிகள் • Linguistic Tools</h2>
+            <p>Linguistic utilities are designed based on Tolkappiyam phonetic principles. Machine transliterations should be manually reviewed for formal or legal documentation.</p>
+          </article>
+        `
     });
     count++;
     savePage(indexTemplate, {
@@ -337,10 +535,20 @@ async function prerenderAll() {
               <article>
                 <h1 style="font-size:2.2rem;margin-bottom:8px;">${escapeHtml(title)}</h1>
                 <div style="color:#666;font-size:0.9rem;margin-bottom:20px;">
-                  ${p.classification ? `<span>வகைப்பாடு: ${escapeHtml(p.classification)}</span> • ` : ''}
-                  ${p.date ? `<span>${escapeHtml(p.date)}</span>` : ''}
+                  ${p.classification ? `<span>வகைப்பாடு: <strong>${escapeHtml(p.classification)}</strong></span> • ` : ''}
+                  ${p.date ? `<span>${escapeHtml(p.date)}</span> • ` : ''}
+                  <span>கவிதை • Original Poem by Elvan Parthasarathy</span>
                 </div>
                 ${variantsHtml || `<div style="font-size:1.1rem;line-height:2;">${p.text || ''}</div>`}
+
+                <section style="margin-top:36px;padding:20px;background:#f9f9fb;border-radius:12px;border:1px solid #eee;font-size:0.95rem;line-height:1.7;color:#444;">
+                  <h3 style="margin-top:0;font-size:1.1rem;color:#222;">இலக்கியப் பார்வை • Literary Context</h3>
+                  <p>This poetic work explores philosophical, natural, and contemplative themes rooted in classical and contemporary Tamil literary traditions. Written and curated by Elvan Parthasarathy as part of the Elvan Navil bilingual collection.</p>
+                  <p style="margin-bottom:0;">
+                    <a href="/writings/poems" style="color:#0070f3;text-decoration:none;font-weight:600;">&larr; Return to all Poems</a> • 
+                    <a href="/writings" style="color:#0070f3;text-decoration:none;font-weight:600;">Explore All Writings</a>
+                  </p>
+                </section>
               </article>
             `
         });
@@ -390,7 +598,18 @@ async function prerenderAll() {
                 <blockquote style="font-size:1.3rem;line-height:1.8;padding:24px;background:#f9f9f9;border-left:4px solid #0070f3;border-radius:4px;margin:24px 0;">
                   ${q.variants && q.variants[0]?.text ? q.variants[0].text : escapeHtml(rawText)}
                 </blockquote>
-                ${q.classification ? `<p style="font-size:0.9rem;color:#777;">வகைப்பாடு / Classification: <strong>${escapeHtml(q.classification)}</strong></p>` : ''}
+                <div style="color:#666;font-size:0.9rem;margin-bottom:20px;">
+                  ${q.classification ? `<p style="margin:0 0 6px;">வகைப்பாடு / Classification: <strong>${escapeHtml(q.classification)}</strong></p>` : ''}
+                  <p style="margin:0;">எழுத்தாளர் / Author: <strong>Elvan Parthasarathy (Jaiprakash P)</strong></p>
+                </div>
+                <section style="margin-top:32px;padding:20px;background:#fafafa;border-radius:12px;border:1px solid #eee;font-size:0.95rem;line-height:1.7;color:#444;">
+                  <h3 style="margin-top:0;font-size:1.05rem;color:#222;">சிந்தனை உரை • Reflection Notes</h3>
+                  <p>Part of the <em>நவில் மொழிகள் (Navil Quotes)</em> collection. These bilingual aphorisms capture philosophical reflections on life, language, personal identity, and the continuous search for curiosity and truth.</p>
+                  <p style="margin-bottom:0;">
+                    <a href="/writings/quotes" style="color:#0070f3;text-decoration:none;font-weight:600;">&larr; Browse All Quotes</a> • 
+                    <a href="/writings" style="color:#0070f3;text-decoration:none;font-weight:600;">Explore All Writings</a>
+                  </p>
+                </section>
               </article>
             `
         });

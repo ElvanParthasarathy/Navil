@@ -24,6 +24,9 @@ import ReadingView from '../சிறப்புக்கூறுகள்/ப
 import DownloadsPage from '../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்பக்கம்';
 import NammilPage from '../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/நம்மில்பக்கம்';
 import PrivacyPolicy from '../சிறப்புக்கூறுகள்/பற்றி/தனியுரிமைபக்கம்';
+import ContactPage from '../சிறப்புக்கூறுகள்/பற்றி/தொடர்புபக்கம்';
+import TermsPage from '../சிறப்புக்கூறுகள்/பற்றி/விதிமுறைகள்பக்கம்';
+import DisclaimerPage from '../சிறப்புக்கூறுகள்/பற்றி/பொறுப்புத்துறப்புபக்கம்';
 
 export const router = createBrowserRouter([
     {
@@ -34,6 +37,10 @@ export const router = createBrowserRouter([
             { index: true, element: <CompanyHome /> },
             { path: "privacy", element: <PrivacyPolicy /> },
             { path: "privacy-policy", element: <PrivacyPolicy /> },
+            { path: "contact", element: <ContactPage /> },
+            { path: "terms", element: <TermsPage /> },
+            { path: "terms-and-conditions", element: <TermsPage /> },
+            { path: "disclaimer", element: <DisclaimerPage /> },
             { path: "downloads", element: <DownloadsPage /> },
             { path: "downloads/nammil", element: <NammilPage /> },
             { path: "navilgal", element: <Home /> },

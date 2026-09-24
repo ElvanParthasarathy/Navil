@@ -273,13 +273,15 @@ export default function PrivacyPolicy() {
                     </div>
                 </section>
 
-                <footer className="privacy-footer">
-                    <p>© 2026 Elvan Navil (எல்வன் நவில்). All rights reserved.</p>
-                    <p>
-                        <Link to="/" style={{ color: 'inherit', textDecoration: 'none', marginRight: '16px' }}>முகப்பு / Home</Link>
-                        <Link to="/about" style={{ color: 'inherit', textDecoration: 'none', marginRight: '16px' }}>பற்றி / About</Link>
-                        <Link to="/writings" style={{ color: 'inherit', textDecoration: 'none' }}>படைப்புகள் / Writings</Link>
-                    </p>
+                <footer className="privacy-footer" style={{ textAlign: 'center', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid var(--border-light)' }}>
+                    <p style={{ margin: '0 0 10px' }}>© 2026 Elvan Navil (எல்வன் நவில்). All rights reserved.</p>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px', fontSize: '0.85rem' }}>
+                        <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>முகப்பு / Home</Link>
+                        <Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>பற்றி / About</Link>
+                        <Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>தொடர்பு / Contact</Link>
+                        <Link to="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>விதிமுறைகள் / Terms</Link>
+                        <Link to="/disclaimer" style={{ color: 'inherit', textDecoration: 'none' }}>பொறுப்புத் துறப்பு / Disclaimer</Link>
+                    </div>
                 </footer>
             </div>
         </>

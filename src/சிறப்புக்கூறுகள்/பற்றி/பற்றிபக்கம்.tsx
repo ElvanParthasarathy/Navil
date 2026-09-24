@@ -11,12 +11,30 @@ import { db } from '../../நூலகம்/ஃபயர்பேஸ்/வா�
 import { ref, onValue } from 'firebase/database';
 import { MapPin, EnvelopeSimple, LinkedinLogo, GithubLogo, InstagramLogo, ArrowRight } from '@phosphor-icons/react';
 
+const DEFAULT_ABOUT = {
+    bio: profileData?.bio || 'Pre-final year engineering student, writer, and creator based in Tamil Nadu, India.',
+    identity_text: `<h3 style="margin-top:0;font-size:1.2rem;">அடையாளம் • Identity</h3><p>Pre-final year engineering student, bilingual writer, and independent creator behind Elvan Navil digital creation studio.</p>`,
+    education_text: `<h3 style="margin-top:0;font-size:1.2rem;">கல்வி • Education & Engineering</h3><p>Pursuing engineering with focus on software systems, web technologies, and computational linguistics.</p>`,
+    social_text: `<h3 style="margin-top:0;font-size:1.2rem;">இணைப்புகள் • Connect</h3><p>Active on GitHub, LinkedIn, and Instagram. Passionate about open software craftsmanship and regional typography.</p>`,
+    philosophy_lines: `<h3 style="margin-top:0;font-size:1.2rem;">தத்துவம் • Philosophy</h3><p>Blending classical Tamil literary aesthetics with modern client-side software engineering.</p>`,
+    cards: [
+        {
+            content: `<span lang="ta" style="display: block; margin-bottom: 6px; font-weight: 500;">
+    "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+</span>
+<span style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
+    Every idea begins with a simple question — why not?
+</span>`
+        }
+    ]
+};
+
 const getInitialAbout = () => {
     try {
         const cached = localStorage.getItem('elvan_about_cache');
         if (cached) return JSON.parse(cached);
     } catch (e) { console.error(e); }
-    return null;
+    return DEFAULT_ABOUT;
 };
 
 const getSpanClass = (index: number) => {
@@ -481,8 +499,14 @@ const About = () => {
                 </div>
 
                 <footer className="about-footer-text animate-entry" style={{ animationDelay: '0.3s' }}>
-                    <p>Made with passion & curiosity</p>
-                    <p>© 2026 — Elvan Parthasarathy • <Link to="/privacy" style={{ color: 'inherit', textDecoration: 'underline' }}>Privacy Policy • தனியுரிமை</Link></p>
+                    <p style={{ margin: '0 0 8px' }}>© 2026 Elvan Navil (எல்வன் நவில்) • Made with passion &amp; curiosity</p>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '14px', fontSize: '0.85rem' }}>
+                        <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>முகப்பு / Home</Link>
+                        <Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>தொடர்பு / Contact</Link>
+                        <Link to="/privacy" style={{ color: 'inherit', textDecoration: 'underline' }}>தனியுரிமை / Privacy</Link>
+                        <Link to="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>விதிமுறைகள் / Terms</Link>
+                        <Link to="/disclaimer" style={{ color: 'inherit', textDecoration: 'none' }}>பொறுப்புத் துறப்பு / Disclaimer</Link>
+                    </div>
                 </footer>
 
             </div>

@@ -640,12 +640,16 @@ export default function CompanyHome() {
                 </section>
                 
                 {/* 6. FOOTER */}
-                <footer style={{ marginTop: '64px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    <p style={{ margin: '0 0 6px' }}>© 2026 Elvan Navil (எல்வன் நவில்) • Made with passion & curiosity</p>
-                    <p style={{ margin: 0 }}>
-                        <Link to="/about" style={{ color: 'var(--text-muted)', textDecoration: 'none', marginRight: '16px' }}>பற்றி / About</Link>
-                        <Link to="/privacy" style={{ color: 'var(--text-muted)', textDecoration: 'underline' }}>தனியுரிமைக் கொள்கை / Privacy Policy</Link>
-                    </p>
+                <footer style={{ marginTop: '64px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-light)', paddingTop: '32px' }}>
+                    <p style={{ margin: '0 0 10px', fontWeight: 600 }}>© 2026 Elvan Navil (எல்வன் நவில்) • Bilingual Digital Creation Studio</p>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px', margin: 0 }}>
+                        <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>முகப்பு / Home</Link>
+                        <Link to="/about" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>பற்றி / About</Link>
+                        <Link to="/contact" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>தொடர்பு / Contact</Link>
+                        <Link to="/privacy" style={{ color: 'var(--text-muted)', textDecoration: 'underline' }}>தனியுரிமைக் கொள்கை / Privacy</Link>
+                        <Link to="/terms" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>விதிமுறைகள் / Terms</Link>
+                        <Link to="/disclaimer" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>பொறுப்புத் துறப்பு / Disclaimer</Link>
+                    </div>
                 </footer>
             </div>
         </>

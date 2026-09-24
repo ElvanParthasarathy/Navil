@@ -35,6 +35,47 @@
      crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-5392072917035799">
 
+  <!-- Structured Data (JSON-LD) for Google AdSense & Search E-E-A-T -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://elvannavil.vercel.app/#organization",
+        "name": "Elvan Navil",
+        "alternateName": "எல்வன் நவில்",
+        "url": "https://elvannavil.vercel.app",
+        "logo": "https://elvannavil.vercel.app/favicon.png",
+        "founder": {
+          "@type": "Person",
+          "name": "Elvan Parthasarathy",
+          "alternateName": "Jaiprakash P",
+          "jobTitle": "Software Developer & Bilingual Writer",
+          "url": "https://elvannavil.vercel.app/about",
+          "sameAs": [
+            "https://github.com/ElvanParthasarathy",
+            "https://linkedin.com/in/jaiprakashpartha",
+            "https://instagram.com/elvannavil"
+          ]
+        },
+        "description": "An independent bilingual Tamil-English digital creation studio crafting thoughtful desktop software, bespoke typography, and original literature."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://elvannavil.vercel.app/#website",
+        "url": "https://elvannavil.vercel.app",
+        "name": "Elvan Navil",
+        "description": "Bilingual Tamil-English digital creation studio featuring literature, desktop software, and linguistic tools.",
+        "publisher": {
+          "@id": "https://elvannavil.vercel.app/#organization"
+        },
+        "inLanguage": ["ta", "en"]
+      }
+    ]
+  }
+  </script>
+
   <script>
     // Check if the site is running inside an iframe (like inside your OS)
     if (window.self !== window.top) {
