@@ -480,6 +480,39 @@ async function prerenderAll() {
           </div>
         `
     });
+    savePage(indexTemplate, {
+        route: '/navilgal/writings',
+        title: 'படைப்புகள் | Writings & Literature — Elvan Navil',
+        description: 'Bilingual literary catalog of original Tamil poems, quotes, short stories, essays, and articles by Elvan Parthasarathy.',
+        contentHtml: `
+          <header>
+            <h1 style="font-size:2rem;margin-bottom:8px;">படைப்புகள் • Writings & Literature</h1>
+            <p style="font-size:1.05rem;color:#555;">Original Tamil & English literature, poems, reflections, and fiction.</p>
+          </header>
+          <div style="display:grid;grid-gap:20px;margin-top:28px;">
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/navilgal/writings/poems" style="color:#0070f3;text-decoration:none;">கவிதைகள் • Poems (${Object.keys(poems).length})</a></h2>
+              <p>Original poetry exploring love, existence, nature, and philosophy.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/navilgal/writings/quotes" style="color:#0070f3;text-decoration:none;">நவில் மொழிகள் • Quotes (${Object.keys(quotes).length})</a></h2>
+              <p>Short reflections, philosophical thoughts, and aphorisms.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/navilgal/writings/stories" style="color:#0070f3;text-decoration:none;">சிறுகதைகள் • Short Stories (${Object.keys(stories).length})</a></h2>
+              <p>Fictional narratives and serialized adventure series.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/navilgal/writings/articles" style="color:#0070f3;text-decoration:none;">கட்டுரைகள் • Articles (${Object.keys(articles).length})</a></h2>
+              <p>In-depth essays on Tamil history, linguistics, typography, and software engineering.</p>
+            </section>
+            <section style="padding:16px;border:1px solid #eee;border-radius:12px;">
+              <h2><a href="/navilgal/writings/diary" style="color:#0070f3;text-decoration:none;">நாட்குறிப்பு • Diary (${Object.keys(diary).length})</a></h2>
+              <p>Personal memoirs, creative chronicles, and life experiences.</p>
+            </section>
+          </div>
+        `
+    });
     count++;
 
     // --- Poems Listing ---
@@ -496,19 +529,29 @@ async function prerenderAll() {
         `;
     }).join('');
 
+    const poemListingContentHtml = `
+      <header>
+        <h1 style="font-size:2rem;margin-bottom:8px;">கவிதைகள் • Poems</h1>
+        <p style="font-size:1.05rem;color:#555;">Original Tamil & English poetic verses.</p>
+      </header>
+      <div style="margin-top:24px;">
+        ${poemListHtml}
+      </div>
+    `;
+
     savePage(indexTemplate, {
         route: '/writings/poems',
         title: 'கவிதைகள் | Poems — Elvan Navil',
         description: `Collection of original Tamil and English poems by Elvan Parthasarathy. ${Object.keys(poems).length} poems published.`,
-        contentHtml: `
-          <header>
-            <h1 style="font-size:2rem;margin-bottom:8px;">கவிதைகள் • Poems</h1>
-            <p style="font-size:1.05rem;color:#555;">Original Tamil & English poetic verses.</p>
-          </header>
-          <div style="margin-top:24px;">
-            ${poemListHtml}
-          </div>
-        `
+        contentHtml: poemListingContentHtml
+    });
+    count++;
+
+    savePage(indexTemplate, {
+        route: '/navilgal/writings/poems',
+        title: 'கவிதைகள் | Poems — Elvan Navil',
+        description: `Collection of original Tamil and English poems by Elvan Parthasarathy. ${Object.keys(poems).length} poems published.`,
+        contentHtml: poemListingContentHtml
     });
     count++;
 
@@ -567,19 +610,29 @@ async function prerenderAll() {
         `;
     }).join('');
 
+    const quotesListingContentHtml = `
+      <header>
+        <h1 style="font-size:2rem;margin-bottom:8px;">நவில் மொழிகள் • Quotes</h1>
+        <p style="font-size:1.05rem;color:#555;">Philosophical reflections and reflections.</p>
+      </header>
+      <div style="margin-top:24px;">
+        ${quoteListHtml}
+      </div>
+    `;
+
     savePage(indexTemplate, {
         route: '/writings/quotes',
         title: 'நவில் மொழிகள் | Quotes — Elvan Navil',
         description: `Curated philosophical quotes, aphorisms, and insights in Tamil and English by Elvan Parthasarathy.`,
-        contentHtml: `
-          <header>
-            <h1 style="font-size:2rem;margin-bottom:8px;">நவில் மொழிகள் • Quotes</h1>
-            <p style="font-size:1.05rem;color:#555;">Philosophical reflections and reflections.</p>
-          </header>
-          <div style="margin-top:24px;">
-            ${quoteListHtml}
-          </div>
-        `
+        contentHtml: quotesListingContentHtml
+    });
+    count++;
+
+    savePage(indexTemplate, {
+        route: '/navilgal/writings/quotes',
+        title: 'நவில் மொழிகள் | Quotes — Elvan Navil',
+        description: `Curated philosophical quotes, aphorisms, and insights in Tamil and English by Elvan Parthasarathy.`,
+        contentHtml: quotesListingContentHtml
     });
     count++;
 
@@ -629,19 +682,29 @@ async function prerenderAll() {
         `;
     }).join('');
 
+    const storiesListingContentHtml = `
+      <header>
+        <h1 style="font-size:2rem;margin-bottom:8px;">சிறுகதைகள் • Short Stories</h1>
+        <p style="font-size:1.05rem;color:#555;">Original narratives, fiction and serialized adventures.</p>
+      </header>
+      <div style="margin-top:24px;">
+        ${storyListHtml}
+      </div>
+    `;
+
     savePage(indexTemplate, {
         route: '/writings/stories',
         title: 'சிறுகதைகள் | Short Stories — Elvan Navil',
         description: `Original fiction and narrative adventure series by Elvan Parthasarathy.`,
-        contentHtml: `
-          <header>
-            <h1 style="font-size:2rem;margin-bottom:8px;">சிறுகதைகள் • Short Stories</h1>
-            <p style="font-size:1.05rem;color:#555;">Original narratives, fiction and serialized adventures.</p>
-          </header>
-          <div style="margin-top:24px;">
-            ${storyListHtml}
-          </div>
-        `
+        contentHtml: storiesListingContentHtml
+    });
+    count++;
+
+    savePage(indexTemplate, {
+        route: '/navilgal/writings/stories',
+        title: 'சிறுகதைகள் | Short Stories — Elvan Navil',
+        description: `Original fiction and narrative adventure series by Elvan Parthasarathy.`,
+        contentHtml: storiesListingContentHtml
     });
     count++;
 
@@ -704,19 +767,29 @@ async function prerenderAll() {
         `;
     }).join('');
 
+    const articlesListingContentHtml = `
+      <header>
+        <h1 style="font-size:2rem;margin-bottom:8px;">கட்டுரைகள் • Articles</h1>
+        <p style="font-size:1.05rem;color:#555;">Detailed essays on literature, technology, linguistics, and philosophy.</p>
+      </header>
+      <div style="margin-top:24px;">
+        ${articleListHtml}
+      </div>
+    `;
+
     savePage(indexTemplate, {
         route: '/writings/articles',
         title: 'கட்டுரைகள் | Articles — Elvan Navil',
         description: `In-depth essays and articles on Tamil history, linguistics, typography, software architecture, and creative philosophy.`,
-        contentHtml: `
-          <header>
-            <h1 style="font-size:2rem;margin-bottom:8px;">கட்டுரைகள் • Articles</h1>
-            <p style="font-size:1.05rem;color:#555;">Detailed essays on literature, technology, linguistics, and philosophy.</p>
-          </header>
-          <div style="margin-top:24px;">
-            ${articleListHtml}
-          </div>
-        `
+        contentHtml: articlesListingContentHtml
+    });
+    count++;
+
+    savePage(indexTemplate, {
+        route: '/navilgal/writings/articles',
+        title: 'கட்டுரைகள் | Articles — Elvan Navil',
+        description: `In-depth essays and articles on Tamil history, linguistics, typography, software architecture, and creative philosophy.`,
+        contentHtml: articlesListingContentHtml
     });
     count++;
 

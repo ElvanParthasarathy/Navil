@@ -1,5 +1,4 @@
 {
-    "cleanUrls": true,
     "headers": [
         {
             "source": "/ads.txt",
@@ -38,7 +37,7 @@
             "destination": "/nirvaagi.html"
         },
         {
-            "source": "/downloads/nammil",
+            "source": "/downloads/nammil(.*)",
             "destination": "/downloads-nammil.html"
         },
         {

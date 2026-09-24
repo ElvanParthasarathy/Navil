@@ -52,4 +52,12 @@ const staticDirPath = path.join(DIST_DIR, 'downloads', 'nammil');
 fs.mkdirSync(staticDirPath, { recursive: true });
 fs.writeFileSync(path.join(staticDirPath, 'index.html'), html, 'utf8');
 
-console.log('✓ Generated downloads-nammil.html and downloads/nammil/index.html with Nammil OG meta tags and favicon.');
+// Also write to dist/nirvaagi/index.html for static routing
+const nirvaagiSrc = path.join(DIST_DIR, 'nirvaagi.html');
+if (fs.existsSync(nirvaagiSrc)) {
+    const nirvaagiDir = path.join(DIST_DIR, 'nirvaagi');
+    fs.mkdirSync(nirvaagiDir, { recursive: true });
+    fs.copyFileSync(nirvaagiSrc, path.join(nirvaagiDir, 'index.html'));
+}
+
+console.log('✓ Generated downloads-nammil.html, downloads/nammil/index.html and nirvaagi/index.html.');
