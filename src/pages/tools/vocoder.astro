@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import VocoderIsland from '../../components/islands/VocoderIsland';
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <BaseLayout
-  title="குரல்மாற்றி | Source-Filter Formant Vocoder Lab — Elvan Navil"
+  title={`${UI_TA.routes.vocoder.title} | Source-Filter Formant Vocoder Lab — ${UI_EN.brand.name}`}
   description="Interactive educational Source-Filter Formant Vocoder synthesizer demonstrating vowel formants (F1, F2, F3), fundamental pitch, and speech acoustics in Web Audio."
   canonicalPath="/tools/vocoder"
-  mobileTitle="குரல்மாற்றி|vocoder"
+  mobileTitle={`${UI_TA.routes.vocoder.title}|${UI_EN.routes.vocoder.title}`}
   isBeta={true}
   backUrl="/teaching"
   hideFooter={true}

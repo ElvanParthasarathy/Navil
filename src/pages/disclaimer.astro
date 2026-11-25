@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../i18n';
 ---
 
 <BaseLayout
-  title="பொறுப்புத் துறப்பு | Disclaimer — Elvan Navil"
+  title={`${UI_TA.routes.disclaimer.title} | Disclaimer — ${UI_EN.brand.name}`}
   description="Legal and informational disclaimer for Elvan Navil studio, Nammil desktop companion, linguistic tools, and Google AdSense advertising."
   canonicalPath="/disclaimer"
-  mobileTitle="பொறுப்புத்துறப்பு|disclaimer"
+  mobileTitle={`${UI_TA.routes.disclaimer.title}|${UI_EN.routes.disclaimer.title}`}
   backUrl="/"
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
@@ -16,8 +17,8 @@ import Icon from '../components/astro/Icon.astro';
         <Icon name="WarningCircle" weight="fill" size={16} />
         <span>சட்ட மறுப்புரை • LEGAL DISCLAIMER</span>
       </div>
-      <h1 class="disclaimer-title">பொறுப்புத் துறப்பு • Disclaimer</h1>
-      <p class="disclaimer-subtitle">Transparency, trademark notices, and content disclosures for Elvan Navil</p>
+      <h1 class="disclaimer-title" data-ui-pair="routes.disclaimer.title">{UI_TA.routes.disclaimer.title} • {UI_EN.routes.disclaimer.title}</h1>
+      <p class="disclaimer-subtitle en-sub-inline">Transparency, trademark notices, and content disclosures for {UI_EN.brand.name}</p>
     </header>
 
     <section class="disclaimer-card">

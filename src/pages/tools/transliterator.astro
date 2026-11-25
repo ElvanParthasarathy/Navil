@@ -2,13 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import TransliteratorIsland from '../../components/islands/TransliteratorIsland';
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <BaseLayout
-  title="மொழிமாற்றி | Tamil Script Transliterator (Thamizhi, Vatteluttu, IAST) — Elvan Navil"
+  title={`${UI_TA.routes.transliterator.title} | ${UI_EN.tools.translitTitle} — ${UI_EN.brand.name}`}
   description="Transliterate Tamil text seamlessly into Thamizhi (Tamil-Brahmi), Vatteluttu, Pallava Grantha, Chozha, ISO 15919, IAST, and Devanagari using Tolkappiyam phonetic mapping."
   canonicalPath="/tools/transliterator"
-  mobileTitle="மொழிமாற்றி|transliterator"
+  mobileTitle={`${UI_TA.routes.transliterator.title}|${UI_EN.routes.transliterator.title}`}
   isBeta={true}
   backUrl="/tools"
 >
@@ -16,7 +17,9 @@ import TransliteratorIsland from '../../components/islands/TransliteratorIsland'
     <TransliteratorIsland client:only="react" />
 
     <section class="tool-editorial-guide" aria-label="Transliterator Documentation">
-      <h1 class="tool-guide-title" lang="ta">மொழிமாற்றி • Tamil Script &amp; Phonetic Transliterator</h1>
+      <h1 class="tool-guide-title" lang="ta">
+        <span data-ui-pair="tools.translitGuideTitle">{UI_TA.tools.translitGuideTitle} • {UI_EN.tools.translitGuideTitle}</span>
+      </h1>
       <p lang="ta">
         <strong>எல்வன் நவில் மொழிமாற்றி</strong> என்பது நவீன தமிழ் உரையைப் பண்டைய தமிழ் வரிவடிவங்களான
         <strong>தமிழி (Tamil-Brahmi)</strong>, <strong>வட்டெழுத்து</strong>, <strong>பல்லவர்</strong>,
@@ -29,8 +32,12 @@ import TransliteratorIsland from '../../components/islands/TransliteratorIsland'
         <em>g/h</em> and nasal-stop clusters like <em>ng</em>, <em>nj</em>, <em>nd</em>) rather than relying on naive character substitution.
       </p>
       <div class="tool-guide-links">
-        <a href="/writings/articles/evolution-of-tamil-script-thamizhi-to-modern">Read Article: Evolution of Tamil Script →</a>
-        <a href="/tools/arichuvadi">Open Arichuvadi Script Trainer →</a>
+        <a href="/writings/articles/evolution-of-tamil-script-thamizhi-to-modern">
+          <span data-ui-ta="tools.translitGuideLinkArticle">{UI_TA.tools.translitGuideLinkArticle}</span>
+        </a>
+        <a href="/tools/arichuvadi">
+          <span data-ui-ta="tools.translitGuideLinkArichuvadi">{UI_TA.tools.translitGuideLinkArichuvadi}</span>
+        </a>
       </div>
     </section>
 

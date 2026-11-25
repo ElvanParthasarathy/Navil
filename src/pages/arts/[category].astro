@@ -4,115 +4,32 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import ArtsGalleryIsland from '../../components/islands/ArtsGalleryIsland';
 import { getAllArts } from '../../lib/content';
+import { UI_TA, UI_EN } from '../../i18n';
 
-interface ArtCategoryMeta {
-  key: string;
-  titleTa: string;
-  titleEn: string;
-  descTa: string;
-  descEn: string;
-  editorialEn: string;
-  editorialTa: string;
-}
-
-const ART_CATEGORIES: Record<string, ArtCategoryMeta> = {
-  pencil: {
-    key: 'pencil',
-    titleTa: 'கரிக்கோல் ஓவியங்கள்',
-    titleEn: 'Pencil Drawings',
-    descTa: 'கையால் வரைந்த பென்சில் ஓவியங்கள் மற்றும் உருவப் படங்கள்.',
-    descEn: 'Freehand graphite pencil sketches, shading studies, and portrait artworks.',
-    editorialTa:
-      'ஒளி-நிழல் நுணுக்கங்களுடன் காகிதத்தில் கையால் வரையப்பட்ட கரிக்கோல் ஓவியத் தொகுப்பு.',
-    editorialEn:
-      'Explore hand-drawn graphite studies focusing on natural shading, expressive portraiture, and fine line textures.',
-  },
-  illustrations: {
-    key: 'illustrations',
-    titleTa: 'விளக்கப்படங்கள்',
-    titleEn: 'Illustrations',
-    descTa: 'டிஜிட்டல் சித்திரங்கள், இலச்சினைகள் மற்றும் வெக்டர் வடிவமைப்புகள்.',
-    descEn: 'Digital illustrations, brand logos, character concepts, and vector art.',
-    editorialTa:
-      'சின்னங்கள், எழுத்துரு வடிவங்கள் மற்றும் கதைசொல்லும் டிஜிட்டல் சித்திரங்களின் தொகுப்பு.',
-    editorialEn:
-      'A curated showcase of minimal icons, bespoke Tamil typographic emblems, and vector concept illustrations.',
-  },
-  poster: {
-    key: 'poster',
-    titleTa: 'சுவரொட்டிகள்',
-    titleEn: 'Posters',
-    descTa: 'நிகழ்வுகளுக்கான சுவரொட்டிகள் மற்றும் படைப்பு வடிவமைப்புகள்.',
-    descEn: 'Event banners, typographic layouts, and creative poster compositions.',
-    editorialTa:
-      'கல்லூரி விழாக்கள், பண்பாட்டு நிகழ்வுகள் மற்றும் காட்சித் தொடர்புக்கான சுவரொட்டி வடிவமைப்புகள்.',
-    editorialEn:
-      'Poster compositions pairing modern visual hierarchy with expressive Tamil and English typography.',
-  },
-  editing: {
-    key: 'editing',
-    titleTa: 'தொகுப்புகள்',
-    titleEn: 'Editings',
-    descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் எண்மக் காட்சிப் படைப்புகள்.',
-    descEn: 'Photo manipulations, retouching experiments, and layered visual compositions.',
-    editorialTa:
-      'வண்ணச் சமநிலையும் ஒளிப்பதிவு நுட்பமும் இணைந்த புகைப்படத் தொகுப்புப் படைப்புகள்.',
-    editorialEn:
-      'Layered composite edits exploring color grading, atmospheric lighting, and visual storytelling.',
-  },
-  poems: {
-    key: 'poems',
-    titleTa: 'நவில் மிழிகள் — காட்சிப் படங்கள்',
-    titleEn: 'Visual Poem Cards',
-    descTa: 'கவிதை வரிகளைத் தாங்கிய காட்சி வடிவமைப்புகள்.',
-    descEn: 'Illustrated poetry cards pairing original Tamil verses with visual typography.',
-    editorialTa:
-      'இலக்கிய வரிகளையும் அழகிய எழுத்தமைப்பையும் ஒருங்கே கொண்ட கவிதை அட்டைகள்.',
-    editorialEn:
-      'Typographic cards crafted for sharing bilingual verse snippets alongside minimalist imagery.',
-  },
-  quotes: {
-    key: 'quotes',
-    titleTa: 'நவில் மொழிகள் — காட்சிப் படங்கள்',
-    titleEn: 'Visual Quote Cards',
-    descTa: 'சிந்தனைத் துளிகளின் காட்சி வடிவமைப்புகள்.',
-    descEn: 'Typographic quote cards highlighting short Tamil and English reflections.',
-    editorialTa:
-      'நம் சிந்தனையைத் தூண்டும் சிறு தொடர்களின் காட்சி வடிவப் பகிர்வுகள்.',
-    editorialEn:
-      'Designed typographic cards featuring original aphorisms and timeless cultural observations.',
-  },
-  painting: {
-    key: 'painting',
-    titleTa: 'ஓவியங்கள்',
-    titleEn: 'Paintings',
-    descTa: 'வண்ணங்களில் வரையப்பட்ட ஓவியங்களும் தூரிகைப் படைப்புகளும்.',
-    descEn: 'Color paintings, brushwork studies, and expressive mixed media canvases.',
-    editorialTa:
-      'வண்ணக் கலவைகளாலும் தூரிகை அசைவுகளாலும் உயிர்ப்பிக்கப்பட்ட ஓவியப் படைப்புகள்.',
-    editorialEn:
-      'Expressive color studies created across watercolor, acrylic, and mixed physical mediums.',
-  },
-  digital_arts: {
-    key: 'digital_arts',
-    titleTa: 'எண்மக்கலைகள்',
-    titleEn: 'Digital Arts',
-    descTa: 'கணினி மென்பொருளில் உருவாக்கிய கலைப்படைப்புகள்.',
-    descEn: 'Digital paintings and experimental graphic works created on screen.',
-    editorialTa:
-      'மின்னணுத் தூரிகைகளும் வடிவமைப்புக் கருவிகளும் கொண்டு உருவாக்கிய கலைத்தொகுப்பு.',
-    editorialEn:
-      'Contemporary digital artworks experimenting with texture brushes, symmetry, and mood.',
-  },
-};
+const ART_KEYS = ['pencil', 'illustrations', 'poster', 'editing', 'poems', 'quotes', 'painting', 'digital_arts'] as const;
+type ArtCategoryKey = (typeof ART_KEYS)[number];
 
 export async function getStaticPaths() {
-  const keys = ['pencil', 'illustrations', 'poster', 'editing', 'poems', 'quotes', 'painting', 'digital_arts'];
-  return keys.map((category) => ({ params: { category } }));
+  return ['pencil', 'illustrations', 'poster', 'editing', 'poems', 'quotes', 'painting', 'digital_arts'].map((category) => ({
+    params: { category },
+  }));
 }
 
-const { category = 'pencil' } = Astro.params;
-const meta = ART_CATEGORIES[category] || ART_CATEGORIES.pencil;
+const rawCat = Astro.params.category || 'pencil';
+const category: ArtCategoryKey = (ART_KEYS as readonly string[]).includes(rawCat)
+  ? (rawCat as ArtCategoryKey)
+  : 'pencil';
+const metaTa = UI_TA.artCategories[category];
+const metaEn = UI_EN.artCategories[category];
+const meta = {
+  key: category,
+  titleTa: metaTa.title,
+  titleEn: metaEn.title,
+  descTa: metaTa.desc,
+  descEn: metaEn.desc,
+  editorialTa: metaTa.editorial,
+  editorialEn: metaEn.editorial,
+};
 
 const allArts = await getAllArts();
 const items = allArts.filter((item) => item?.category === category && !item?.is_private);
@@ -155,12 +72,12 @@ function cleanArtTitle(
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
         <h1 class="writings-title" lang="ta">
-          {meta.titleTa}
+          <span data-ui-ta={`artCategories.${category}.title`}>{meta.titleTa}</span>
           {items.length > 0 && <span class="cat-count-badge">{items.length}</span>}
         </h1>
-        <div class="writings-title-sub">{meta.titleEn}</div>
-        <p class="writings-subtitle" lang="ta">{meta.descTa}</p>
-        <p class="writings-subtitle writings-subtitle-en">{meta.descEn}</p>
+        <div class="writings-title-sub" data-ui-en={`artCategories.${category}.title`}>{meta.titleEn}</div>
+        <p class="writings-subtitle" lang="ta" data-ui-ta={`artCategories.${category}.desc`}>{meta.descTa}</p>
+        <p class="writings-subtitle writings-subtitle-en" data-ui-en={`artCategories.${category}.desc`}>{meta.descEn}</p>
       </div>
     </header>
 
@@ -172,9 +89,9 @@ function cleanArtTitle(
 
     <section class="art-collection-guide" aria-label="Collection Overview and Catalog Index">
       <div class="art-guide-intro">
-        <h2 lang="ta">தொகுப்பு அறிமுகம் • About this Collection</h2>
-        <p lang="ta">{meta.editorialTa}</p>
-        <p>{meta.editorialEn}</p>
+        <h2 lang="ta" data-ui-pair="arts.collectionGuideHeading">{UI_TA.arts.collectionGuideHeading} • {UI_EN.arts.collectionGuideHeading}</h2>
+        <p lang="ta" data-ui-ta={`artCategories.${category}.editorial`}>{meta.editorialTa}</p>
+        <p class="en-sub-inline" data-ui-en={`artCategories.${category}.editorial`}>{meta.editorialEn}</p>
       </div>
 
       {items.length > 0 ? (
@@ -210,7 +127,8 @@ function cleanArtTitle(
         </div>
       ) : (
         <p class="art-archive-empty">
-          புதிய படைப்புகள் விரைவில் சேர்க்கப்படும். New artworks are being curated for this category.
+          <span data-ui-ta="common.comingSoonArts">{UI_TA.common.comingSoonArts}</span>{' '}
+          <span class="en-sub-inline" data-ui-en="common.comingSoonArts">{UI_EN.common.comingSoonArts}</span>
         </p>
       )}
     </section>

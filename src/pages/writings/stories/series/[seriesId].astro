@@ -5,6 +5,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import AdUnit from '../../../../components/astro/AdUnit.astro';
 import { getStoriesGrouped, getPrimaryTitle, getPrimaryExcerpt, getPostTags } from '../../../../lib/content';
 import { getOptimizedImage } from '../../../../நூலகம்/ஊடகம்';
+import { UI_TA, UI_EN } from '../../../../i18n';
 
 export async function getStaticPaths() {
   const { seriesMap } = await getStoriesGrouped();
@@ -65,7 +66,7 @@ const synopsis = getPrimaryExcerpt(firstPart, 220);
         <div class="tv-hero-right">
           <h1 class="tv-series-title">{seriesName}</h1>
           <div class="tv-meta-row">
-            <span class="tv-ep-count-badge">{parts.length} அத்தியாயங்கள்</span>
+            <span class="tv-ep-count-badge">{parts.length} <span data-ui-ta="reader.episodesSuffix">{UI_TA.reader.episodesSuffix}</span></span>
             {classification && (
               <span class={`tv-class-badge ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>
                 {classification}
@@ -80,8 +81,8 @@ const synopsis = getPrimaryExcerpt(firstPart, 220);
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
               <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 0; line-height: 1.2;">
-                <span style="font-size: 1em;">வாசிக்கத் தொடங்கு</span>
-                <span style="font-size: 0.7em; opacity: 0.7; font-weight: 500; letter-spacing: 0.2px;">Start reading (Part 1)</span>
+                <span style="font-size: 1em;" data-ui-ta="reader.startReadingEpisode">{UI_TA.reader.startReadingEpisode}</span>
+                <span style="font-size: 0.7em; opacity: 0.7; font-weight: 500; letter-spacing: 0.2px;" class="en-sub-inline" data-ui-en="reader.startReadingPart1">{UI_EN.reader.startReadingPart1}</span>
               </div>
             </a>
           </div>
@@ -90,8 +91,8 @@ const synopsis = getPrimaryExcerpt(firstPart, 220);
 
       <section class="tv-episodes-section">
         <div style="margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-left: 24px;">
-          <h2 class="tv-section-title" style="margin-bottom: 4px; padding-bottom: 0; border-bottom: none;">அத்தியாயங்கள்</h2>
-          <span style="font-size: 0.95em; opacity: 0.6; font-weight: 500; letter-spacing: 0.5px;">chapters</span>
+          <h2 class="tv-section-title" style="margin-bottom: 4px; padding-bottom: 0; border-bottom: none;" data-ui-ta="reader.chaptersHeading">{UI_TA.reader.chaptersHeading}</h2>
+          <span style="font-size: 0.95em; opacity: 0.6; font-weight: 500; letter-spacing: 0.5px;" class="en-sub-inline" data-ui-en="reader.chaptersHeading">{UI_EN.reader.chaptersHeading}</span>
         </div>
         <div class="tv-episodes-grid">
           {parts.map((part: any, idx: number) => {
@@ -104,7 +105,7 @@ const synopsis = getPrimaryExcerpt(firstPart, 220);
                 <div class="tv-ep-number-bg">{partNumStr}</div>
                 <div class="tv-ep-card-body">
                   <div class="tv-ep-meta">
-                    <span class="tv-ep-num-pill">பகுதி {part.series_part || idx + 1}</span>
+                    <span class="tv-ep-num-pill"><span data-ui-ta="common.partLabel">{UI_TA.common.partLabel}</span> {part.series_part || idx + 1}</span>
                     {pDate && (
                       <span class="tv-ep-date">
                         {new Date(pDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -114,7 +115,7 @@ const synopsis = getPrimaryExcerpt(firstPart, 220);
                   <h3 class="tv-ep-title">{pTitle}</h3>
                   {pExcerpt && <p class="tv-ep-excerpt">{pExcerpt}</p>}
                   <div class="tv-ep-footer">
-                    <span>வாசிக்கத் தொடங்கு</span>
+                    <span data-ui-ta="reader.startReadingEpisode">{UI_TA.reader.startReadingEpisode}</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                       <polyline points="9 18 15 12 9 6" />
                     </svg>

@@ -5,6 +5,7 @@ import AdUnit from '../../components/astro/AdUnit.astro';
 import Icon from '../../components/astro/Icon.astro';
 import { getActiveWritingCategories } from '../../lib/content';
 import type { IconName } from '../../lib/icons';
+import { UI_TA, UI_EN } from '../../i18n';
 
 const categories = await getActiveWritingCategories();
 
@@ -19,19 +20,19 @@ const CATEGORY_ICONS: Record<string, IconName> = {
 ---
 
 <BaseLayout
-  title="எழுத்துகள் | Writings & Literature — Elvan Navil"
+  title={`${UI_TA.writings.title} | ${UI_EN.writings.title} — ${UI_EN.brand.name}`}
   description="Bilingual literary catalog of original Tamil and English poems, quotes, short stories, essays, and articles by Elvan Parthasarathy."
   canonicalPath="/writings"
-  mobileTitle="எழுத்துகள்|writings"
+  mobileTitle={`${UI_TA.routes.writings.title}|${UI_EN.routes.writings.title}`}
   backUrl="/navilgal"
 >
   <div class="writings-page page-view fadeIn">
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
-        <h1 class="writings-title">எழுத்துகள்</h1>
-        <div class="writings-title-sub">Writings</div>
-        <p class="writings-subtitle">சிந்தனைகள், கதைகள் &amp; பட்டறிவுகள்</p>
-        <p class="writings-subtitle writings-subtitle-en">Thoughts, Stories &amp; Observations</p>
+        <h1 class="writings-title" data-ui-ta="writings.title">{UI_TA.writings.title}</h1>
+        <div class="writings-title-sub" data-ui-en="writings.title">{UI_EN.writings.title}</div>
+        <p class="writings-subtitle" data-ui-ta="writings.subtitle">{UI_TA.writings.subtitle}</p>
+        <p class="writings-subtitle writings-subtitle-en" data-ui-en="writings.subtitle">{UI_EN.writings.subtitle}</p>
       </div>
     </header>
 
@@ -43,15 +44,15 @@ const CATEGORY_ICONS: Record<string, IconName> = {
           </div>
           <div class="cat-content">
             <div class="cat-title" lang="ta">
-              {cat.titleTa}
+              <span data-ui-ta={`writingCategories.${cat.key}.title`}>{cat.titleTa}</span>
               <span class="cat-count-badge">{cat.count}</span>
             </div>
-            <div class="cat-title-sub">{cat.titleEn}</div>
-            <p class="cat-desc" lang="ta">{cat.descTa}</p>
-            <p class="cat-desc-sub">{cat.descEn}</p>
+            <div class="cat-title-sub" data-ui-en={`writingCategories.${cat.key}.title`}>{cat.titleEn}</div>
+            <p class="cat-desc" lang="ta" data-ui-ta={`writingCategories.${cat.key}.desc`}>{cat.descTa}</p>
+            <p class="cat-desc-sub" data-ui-en={`writingCategories.${cat.key}.desc`}>{cat.descEn}</p>
           </div>
           <div class="cat-footer">
-            {cat.footerTa} <Icon name="ArrowRight" weight="regular" />
+            <span data-ui-ta={`writingCategories.${cat.key}.footer`}>{cat.footerTa}</span> <Icon name="ArrowRight" weight="regular" />
           </div>
         </a>
       ))}

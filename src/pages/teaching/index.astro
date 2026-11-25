@@ -3,23 +3,24 @@ import '../../சிறப்புக்கூறுகள்/படைப்�
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import Icon from '../../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <BaseLayout
-  title="பயிற்றுவிப்பு | Teaching — Elvan Navil"
+  title={`${UI_TA.teaching.title} | ${UI_EN.teaching.title} — ${UI_EN.brand.name}`}
   description="Interactive educational teaching modules by Elvan Navil, featuring real-time acoustics and Source-Filter Formant Vocoder demonstrations."
   canonicalPath="/teaching"
-  mobileTitle="பயிற்றுவிப்பு|teaching"
+  mobileTitle={`${UI_TA.routes.teaching.title}|${UI_EN.routes.teaching.title}`}
   backUrl="/tools"
 >
   <div class="writings-page page-view fadeIn">
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
-        <h1 class="writings-title" lang="ta">பயிற்றுவிப்பு</h1>
-        <div class="writings-title-sub">Teaching &amp; Presentations</div>
-        <p class="writings-subtitle" lang="ta">கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.</p>
-        <p class="writings-subtitle writings-subtitle-en">
-          Interactive teaching materials, slides, and educational resources.
+        <h1 class="writings-title" lang="ta" data-ui-ta="teaching.title">{UI_TA.teaching.title}</h1>
+        <div class="writings-title-sub" data-ui-en="teaching.title">{UI_EN.teaching.title}</div>
+        <p class="writings-subtitle" lang="ta" data-ui-ta="teaching.subtitle">{UI_TA.teaching.subtitle}</p>
+        <p class="writings-subtitle writings-subtitle-en" data-ui-en="teaching.subtitle">
+          {UI_EN.teaching.subtitle}
         </p>
       </div>
     </header>
@@ -30,13 +31,13 @@ import Icon from '../../components/astro/Icon.astro';
           <Icon name="Monitor" weight="regular" />
         </div>
         <div class="cat-content">
-          <div class="cat-title" lang="ta">நவில் குரல்மாற்றி</div>
-          <div class="cat-title-sub">Navil Vocoder • Interactive Presentation</div>
-          <p class="cat-desc" lang="ta">எனது படைப்பு மற்றும் தொழில் நுட்ப விளக்கக்காட்சி.</p>
-          <p class="cat-desc-sub">Modern presentation for Vocoder engine concepts.</p>
+          <div class="cat-title" lang="ta" data-ui-ta="teaching.vocoderTitle">{UI_TA.teaching.vocoderTitle}</div>
+          <div class="cat-title-sub" data-ui-en="teaching.vocoderSub">{UI_EN.teaching.vocoderSub}</div>
+          <p class="cat-desc" lang="ta" data-ui-ta="teaching.vocoderDesc">{UI_TA.teaching.vocoderDesc}</p>
+          <p class="cat-desc-sub" data-ui-en="teaching.vocoderDesc">{UI_EN.teaching.vocoderDesc}</p>
         </div>
         <div class="cat-footer">
-          விளக்கக்காட்சியைக் காண <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-ta="teaching.vocoderCta">{UI_TA.teaching.vocoderCta}</span> <Icon name="ArrowRight" weight="regular" />
         </div>
       </a>
 
@@ -45,17 +46,17 @@ import Icon from '../../components/astro/Icon.astro';
           <Icon name="Scroll" weight="regular" />
         </div>
         <div class="cat-content">
-          <div class="cat-title" lang="ta">தமிழி &amp; வட்டெழுத்துப் பாடம்</div>
-          <div class="cat-title-sub">Paleography Guided Study</div>
-          <p class="cat-desc" lang="ta">
-            சங்க கால கல்வெட்டு எழுத்துக்களின் வரிவடிவ வளர்ச்சியைப் படிப்படியாகக் கற்கும் பகுதி.
+          <div class="cat-title" lang="ta" data-ui-ta="teaching.paleographyTitle">{UI_TA.teaching.paleographyTitle}</div>
+          <div class="cat-title-sub" data-ui-en="teaching.paleographyTitle">{UI_EN.teaching.paleographyTitle}</div>
+          <p class="cat-desc" lang="ta" data-ui-ta="teaching.paleographyDesc">
+            {UI_TA.teaching.paleographyDesc}
           </p>
-          <p class="cat-desc-sub">
-            Step-by-step comparative study of Thamizhi (Tamil-Brahmi) and Vatteluttu glyph structures.
+          <p class="cat-desc-sub" data-ui-en="teaching.paleographyDesc">
+            {UI_EN.teaching.paleographyDesc}
           </p>
         </div>
         <div class="cat-footer">
-          பாடத்தைத் திறக்க <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-ta="teaching.paleographyCta">{UI_TA.teaching.paleographyCta}</span> <Icon name="ArrowRight" weight="regular" />
         </div>
       </a>
     </div>

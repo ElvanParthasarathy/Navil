@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../i18n';
 ---
 
 <BaseLayout
-  title="அமைப்புகள் | Settings — Elvan Navil"
+  title={`${UI_TA.settingsPage.title} | ${UI_EN.settingsPage.title} — ${UI_EN.brand.name}`}
   description="Personalize your appearance and reading experience on Elvan Navil."
   canonicalPath="/settings"
-  mobileTitle="அமைப்புகள்|settings"
+  mobileTitle={`${UI_TA.routes.settings.title}|${UI_EN.routes.settings.title}`}
   noindex={true}
   includeAdsense={false}
   backUrl="/"
@@ -15,32 +16,73 @@ import Icon from '../components/astro/Icon.astro';
   <div class="settings-page page-view animate-entry">
     <div class="settings-hero animate-entry">
       <div>
-        <h1 class="settings-title">Settings</h1>
-        <h2 class="settings-subtitle">Personalize your experience.</h2>
+        <h1 class="settings-title" lang="ta">
+          <span data-ui-ta="settingsPage.title">{UI_TA.settingsPage.title}</span><span class="en-sub-inline"> • <span data-ui-en="settingsPage.title">{UI_EN.settingsPage.title}</span></span>
+        </h1>
+        <h2 class="settings-subtitle" lang="ta">
+          <span data-ui-ta="settingsPage.subtitle">{UI_TA.settingsPage.subtitle}</span><span class="en-sub-inline"> <span data-ui-en="settingsPage.subtitle">{UI_EN.settingsPage.subtitle}</span></span>
+        </h2>
       </div>
     </div>
 
-    <div class="settings-section animate-entry" style="animation-delay: 0.1s;">
-      <h3 class="section-label">Appearance</h3>
+    <div class="settings-section animate-entry" style="animation-delay: 0.08s;">
+      <h3 class="section-label" lang="ta">
+        <span data-ui-ta="settingsPage.scriptSectionLabel">{UI_TA.settingsPage.scriptSectionLabel}</span><span class="en-sub-inline"> • <span data-ui-en="settingsPage.scriptSectionLabel">{UI_EN.settingsPage.scriptSectionLabel}</span></span>
+      </h3>
+
+      <div class="settings-card">
+        <div class="settings-theme-slider-container" id="settings-lang-slider" data-no-translit>
+          <div class="slider-indicator" id="settings-lang-slider-indicator"></div>
+
+          <button type="button" class="theme-option" data-lang-choice="bilingual">
+            {UI_TA.settingsMenu.modeBilingual}
+          </button>
+
+          <button type="button" class="theme-option" data-lang-choice="tanglish-en">
+            Ta+En
+          </button>
+
+          <button type="button" class="theme-option" data-lang-choice="tanglish">
+            Pure Tanglish
+          </button>
+        </div>
+        <p id="settings-lang-desc" data-no-translit style="text-align: center; margin: 16px 0 0; font-size: 0.9rem; color: var(--text-muted);">
+          <span id="settings-lang-desc-ta" style="display: block;">{UI_TA.settingsPage.modeBilingualDesc}</span>
+          <span id="settings-lang-desc-en" class="en-sub-inline" style="display: block; margin-top: 4px; opacity: 0.8;">{UI_EN.settingsPage.modeBilingualDesc}</span>
+        </p>
+        <div class="settings-lang-preview" data-no-translit>
+          <span class="settings-lang-preview-badge">
+            <span data-ui-pair="settingsPage.previewBadge">{UI_TA.settingsPage.previewBadge} • {UI_EN.settingsPage.previewBadge}</span>
+          </span>
+          <span id="settings-lang-preview-sample">{UI_TA.settingsPage.previewSample} • {UI_EN.settingsPage.previewSample}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section animate-entry" style="animation-delay: 0.14s;">
+      <h3 class="section-label" lang="ta">
+        <span data-ui-ta="settingsPage.appearanceSectionLabel">{UI_TA.settingsPage.appearanceSectionLabel}</span><span class="en-sub-inline"> • <span data-ui-en="settingsPage.appearanceSectionLabel">{UI_EN.settingsPage.appearanceSectionLabel}</span></span>
+      </h3>
 
       <div class="settings-card">
         <div class="settings-theme-slider-container" id="settings-slider">
           <div class="slider-indicator" id="settings-slider-indicator"></div>
 
           <button type="button" class="theme-option" data-theme-choice="light">
-            <Icon name="Sun" weight="regular" size={18} /> Light
+            <Icon name="Sun" weight="regular" size={18} /> <span data-ui-ta="settingsMenu.light">{UI_TA.settingsMenu.light}</span><span class="en-sub-inline"> / {UI_EN.settingsMenu.light}</span>
           </button>
 
           <button type="button" class="theme-option" data-theme-choice="auto">
-            <Icon name="Monitor" weight="regular" size={18} /> Auto
+            <Icon name="Monitor" weight="regular" size={18} /> <span data-ui-ta="settingsMenu.auto">{UI_TA.settingsMenu.auto}</span><span class="en-sub-inline"> / {UI_EN.settingsMenu.auto}</span>
           </button>
 
           <button type="button" class="theme-option" data-theme-choice="dark">
-            <Icon name="Moon" weight="regular" size={18} /> Dark
+            <Icon name="Moon" weight="regular" size={18} /> <span data-ui-ta="settingsMenu.dark">{UI_TA.settingsMenu.dark}</span><span class="en-sub-inline"> / {UI_EN.settingsMenu.dark}</span>
           </button>
         </div>
         <p id="settings-theme-desc" style="text-align: center; margin: 16px 0 0; font-size: 0.9rem; color: var(--text-muted);">
-          Syncs with your system preferences.
+          <span id="settings-theme-desc-ta" style="display: block;">{UI_TA.settingsPage.themeAutoDesc}</span>
+          <span id="settings-theme-desc-en" class="en-sub-inline" style="display: block; margin-top: 4px; opacity: 0.8;">{UI_EN.settingsPage.themeAutoDesc}</span>
         </p>
       </div>
     </div>
@@ -49,31 +91,42 @@ import Icon from '../components/astro/Icon.astro';
       <div class="cs-icon">
         <Icon name="Gear" weight="regular" />
       </div>
-      <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px;">More Coming Soon</h3>
+      <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px;">
+        <span data-ui-pair="settingsPage.comingSoonTitle">{UI_TA.settingsPage.comingSoonTitle} • {UI_EN.settingsPage.comingSoonTitle}</span>
+      </h3>
       <p style="font-size: 0.95rem; margin: 0;">
-        Profile customization and extra configuration options are being built.
+        <span data-ui-ta="settingsPage.comingSoonDesc" style="display: block;">{UI_TA.settingsPage.comingSoonDesc}</span>
+        <span class="en-sub-inline" style="display: block; margin-top: 4px;">{UI_EN.settingsPage.comingSoonDesc}</span>
       </p>
     </div>
   </div>
 
-  <script is:inline>
+  <script is:inline define:vars={{
+    themeAutoTa: UI_TA.settingsPage.themeAutoDesc,
+    themeDarkTa: UI_TA.settingsPage.themeDarkDesc,
+    themeLightTa: UI_TA.settingsPage.themeLightDesc,
+    themeAutoEn: UI_EN.settingsPage.themeAutoDesc,
+    themeDarkEn: UI_EN.settingsPage.themeDarkDesc,
+    themeLightEn: UI_EN.settingsPage.themeLightDesc,
+  }}>
     (function () {
       function syncSettingsSlider() {
         var indicator = document.getElementById('settings-slider-indicator');
-        var desc = document.getElementById('settings-theme-desc');
-        if (!indicator) return;
-        var mode = document.documentElement.getAttribute('data-theme-mode') || localStorage.getItem('theme') || 'auto';
-        indicator.style.transform = 'translateX(' + (mode === 'light' ? '0%' : mode === 'auto' ? '100%' : '200%') + ')';
-        if (desc) {
-          desc.textContent = mode === 'auto'
-            ? 'Syncs with your system preferences.'
-            : mode === 'dark'
-              ? 'Dark mode is active.'
-              : 'Light mode is active.';
+        var descTa = document.getElementById('settings-theme-desc-ta');
+        var descEn = document.getElementById('settings-theme-desc-en');
+        if (indicator) {
+          var mode = document.documentElement.getAttribute('data-theme-mode') || localStorage.getItem('theme') || 'auto';
+          indicator.style.transform = 'translateX(' + (mode === 'light' ? '0%' : mode === 'auto' ? '100%' : '200%') + ')';
+          if (descTa) descTa.textContent = mode === 'auto' ? themeAutoTa : mode === 'dark' ? themeDarkTa : themeLightTa;
+          if (descEn) descEn.textContent = mode === 'auto' ? themeAutoEn : mode === 'dark' ? themeDarkEn : themeLightEn;
+          document.querySelectorAll('#settings-slider .theme-option').forEach(function (btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-theme-choice') === mode);
+          });
         }
-        document.querySelectorAll('#settings-slider .theme-option').forEach(function (btn) {
-          btn.classList.toggle('active', btn.getAttribute('data-theme-choice') === mode);
-        });
+
+        if (window.__elvanApplyLangMode) {
+          window.__elvanApplyLangMode(document);
+        }
       }
       function bindSettingsPage() {
         syncSettingsSlider();
@@ -82,6 +135,16 @@ import Icon from '../components/astro/Icon.astro';
           btn.dataset.settingsBound = '1';
           btn.addEventListener('click', function () {
             setTimeout(syncSettingsSlider, 0);
+          });
+        });
+        document.querySelectorAll('#settings-lang-slider [data-lang-choice]').forEach(function (btn) {
+          if (btn.dataset.settingsLangBound) return;
+          btn.dataset.settingsLangBound = '1';
+          btn.addEventListener('click', function () {
+            var next = btn.getAttribute('data-lang-choice');
+            if (next && window.__elvanSetLangMode) {
+              window.__elvanSetLangMode(next);
+            }
           });
         });
       }
@@ -96,6 +159,31 @@ import Icon from '../components/astro/Icon.astro';
     max-width: 800px;
     margin: 0 auto;
     padding: 32px 20px 80px;
+  }
+  .settings-lang-preview {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+  .settings-lang-preview-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.75;
+  }
+  #settings-lang-preview-sample {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.5;
   }
   .settings-hero {
     text-align: left;

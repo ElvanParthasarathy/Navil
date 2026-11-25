@@ -1,23 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../i18n';
 ---
 
 <BaseLayout
-  title="தனியுரிமைக் கொள்கை | Privacy Policy — Elvan Navil"
+  title={`${UI_TA.routes.privacy.title} | Privacy Policy — ${UI_EN.brand.name}`}
   description="Privacy Policy for Elvan Navil. Details on how we respect your privacy, third-party advertising cookies, Google AdSense compliance, and data protection."
   canonicalPath="/privacy"
-  mobileTitle="தனியுரிமை|privacy"
+  mobileTitle={`${UI_TA.routes.privacy.title}|${UI_EN.routes.privacy.title}`}
   backUrl="/"
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
     <header class="privacy-hero">
       <div class="privacy-badge">
         <Icon name="ShieldCheck" weight="bold" size={18} />
-        <span>தனியுரிமை நெறிமுறை • Privacy Policy</span>
+        <span data-ui-pair="routes.privacy.title">{UI_TA.routes.privacy.title} • {UI_EN.routes.privacy.title}</span>
       </div>
-      <h1 class="privacy-title">தனியுரிமைக் கொள்கை</h1>
-      <div class="privacy-subtitle">Privacy Policy for Elvan Navil</div>
+      <h1 class="privacy-title" data-ui-ta="routes.privacy.title">{UI_TA.routes.privacy.title}</h1>
+      <div class="privacy-subtitle en-sub-inline">Privacy Policy for {UI_EN.brand.name}</div>
       <div class="privacy-updated">கடைசியாகப் புதுப்பிக்கப்பட்டது / Last Updated: September 16, 2026</div>
     </header>
 

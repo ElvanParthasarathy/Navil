@@ -4,35 +4,34 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import Icon from '../../components/astro/Icon.astro';
 import { getArtsCounts } from '../../lib/content';
+import { UI_TA, UI_EN } from '../../i18n';
 
 const counts = await getArtsCounts();
 
-const ARTS_CATEGORIES = [
-  { key: 'pencil', titleTa: 'கரிக்கோல் ஓவியங்கள்', titleEn: 'Pencil Drawings', descTa: 'கையால் வரைந்த பென்சில் ஓவியங்கள்', descEn: 'Freehand pencil sketches and portrait art.', footerTa: 'ஓவியங்களைக் காண' },
-  { key: 'illustrations', titleTa: 'விளக்கப்படங்கள்', titleEn: 'Illustrations', descTa: 'டிஜிட்டல் சித்திரங்கள் மற்றும் லோகோ வடிவமைப்புகள்', descEn: 'Digital illustrations, logos, and vector art.', footerTa: 'படைப்புகளைக் காண' },
-  { key: 'poster', titleTa: 'சுவரொட்டிகள்', titleEn: 'Posters', descTa: 'நிகழ்வுகளுக்கான போஸ்டர் வடிவமைப்புகள்', descEn: 'Event banners and creative poster designs.', footerTa: 'வடிவமைப்புகளைக் காண' },
-  { key: 'editing', titleTa: 'தொகுப்புகள்', titleEn: 'Editings', descTa: 'புகைப்படத் திருத்தங்கள் மற்றும் டிஜிட்டல் படைப்புகள்', descEn: 'Photo manipulations and digital creations.', footerTa: 'படைப்புகளைக் காண' },
-  { key: 'poems', titleTa: 'நவில் மிழிகள்', titleEn: 'Poems', descTa: 'கவிதைகளின் காட்சி வடிவமைப்புகள்', descEn: 'Visual poem cards and creative typography.', footerTa: 'கவிதைகளைக் காண' },
-  { key: 'quotes', titleTa: 'நவில் மொழிகள்', titleEn: 'Quotes', descTa: 'நவில் மொழிகளின் காட்சி வடிவமைப்புகள்', descEn: 'Visual quote cards and typographic designs.', footerTa: 'மேற்கோள்களைக் காண' },
-  { key: 'painting', titleTa: 'ஓவியங்கள்', titleEn: 'Paintings', descTa: 'வண்ணங்களில் வரையப்பட்ட ஓவியங்கள்', descEn: 'Color paintings and mixed media artworks.', footerTa: 'ஓவியங்களைக் காண' },
-  { key: 'digital_arts', titleTa: 'எண்மக்கலைகள்', titleEn: 'Digital Arts', descTa: 'கணினி மென்பொருளில் உருவாக்கிய கலைப்படைப்புகள்', descEn: 'Artworks created using digital software.', footerTa: 'படைப்புகளைக் காண' },
-];
+const ARTS_CATEGORIES = (['pencil', 'illustrations', 'poster', 'editing', 'poems', 'quotes', 'painting', 'digital_arts'] as const).map((key) => ({
+  key,
+  titleTa: UI_TA.artCategories[key].title,
+  titleEn: UI_EN.artCategories[key].title,
+  descTa: UI_TA.artCategories[key].desc,
+  descEn: UI_EN.artCategories[key].desc,
+  footerTa: UI_TA.artCategories[key].footer,
+}));
 ---
 
 <BaseLayout
-  title="படைப்புகள் | Arts & Visual Gallery — Elvan Navil"
+  title={`${UI_TA.arts.title} | ${UI_EN.arts.title} — ${UI_EN.brand.name}`}
   description="Visual art gallery featuring pencil sketches, illustrations, posters, paintings, and digital creations by Elvan Parthasarathy."
   canonicalPath="/arts"
-  mobileTitle="படைப்புகள்|arts"
+  mobileTitle={`${UI_TA.routes.arts.title}|${UI_EN.routes.arts.title}`}
   backUrl="/navilgal"
 >
   <div class="writings-page arts-hub-page page-view fadeIn">
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
-        <h1 class="writings-title">படைப்புகள்</h1>
-        <div class="writings-title-sub">Arts &amp; Creations</div>
-        <p class="writings-subtitle">வரைவுகள், வடிவமைப்புகள் &amp; டிஜிட்டல் படைப்புகள்</p>
-        <p class="writings-subtitle writings-subtitle-en">Drawings, Designs &amp; Digital Creations</p>
+        <h1 class="writings-title" data-ui-ta="arts.title">{UI_TA.arts.title}</h1>
+        <div class="writings-title-sub" data-ui-en="arts.title">{UI_EN.arts.title}</div>
+        <p class="writings-subtitle" data-ui-ta="arts.subtitle">{UI_TA.arts.subtitle}</p>
+        <p class="writings-subtitle writings-subtitle-en" data-ui-en="arts.subtitle">{UI_EN.arts.subtitle}</p>
       </div>
     </header>
 
@@ -99,15 +98,15 @@ const ARTS_CATEGORIES = [
           </div>
           <div class="cat-content">
             <div class="cat-title">
-              {cat.titleTa}
+              <span data-ui-ta={`artCategories.${cat.key}.title`}>{cat.titleTa}</span>
               {(counts[cat.key] || 0) > 0 && <span class="arts-count-badge">{counts[cat.key]}</span>}
             </div>
-            <div class="cat-title-sub">{cat.titleEn}</div>
-            <p class="cat-desc">{cat.descTa}</p>
-            <p class="cat-desc-sub">{cat.descEn}</p>
+            <div class="cat-title-sub" data-ui-en={`artCategories.${cat.key}.title`}>{cat.titleEn}</div>
+            <p class="cat-desc" data-ui-ta={`artCategories.${cat.key}.desc`}>{cat.descTa}</p>
+            <p class="cat-desc-sub" data-ui-en={`artCategories.${cat.key}.desc`}>{cat.descEn}</p>
           </div>
           <div class="cat-footer">
-            {cat.footerTa} <Icon name="ArrowRight" weight="regular" />
+            <span data-ui-ta={`artCategories.${cat.key}.footer`}>{cat.footerTa}</span> <Icon name="ArrowRight" weight="regular" />
           </div>
         </a>
       ))}

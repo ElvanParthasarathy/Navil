@@ -2,13 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import PianoIsland from '../../components/islands/PianoIsland';
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <BaseLayout
-  title="கின்னரப்பெட்டி | Interactive Web Audio Piano — Elvan Navil"
+  title={`${UI_TA.routes.piano.title} | ${UI_EN.tools.pianoGuideTitle} — ${UI_EN.brand.name}`}
   description="Play multi-octave scales and chords directly in your browser using Elvan Navil's Web Audio synthesizer piano keyboard."
   canonicalPath="/tools/piano"
-  mobileTitle="கின்னரப்பெட்டி|piano"
+  mobileTitle={`${UI_TA.routes.piano.title}|${UI_EN.routes.piano.title}`}
   isBeta={true}
   backUrl="/tools"
 >
@@ -16,7 +17,9 @@ import PianoIsland from '../../components/islands/PianoIsland';
     <PianoIsland client:only="react" />
 
     <section class="tool-editorial-guide" aria-label="Keyboard Synthesizer Notes">
-      <h1 class="tool-guide-title" lang="ta">கின்னரப்பெட்டி • Interactive Web Audio Keyboard</h1>
+      <h1 class="tool-guide-title" lang="ta">
+        <span data-ui-pair="tools.pianoGuideTitle">{UI_TA.tools.pianoGuideTitle} • {UI_EN.tools.pianoGuideTitle}</span>
+      </h1>
       <p lang="ta">
         உலாவியிலேயே சுரங்களையும் மேலைத்தேய இசைக் குறிப்புகளையும் (Octaves, Chords &amp; Harmonies)
         நேரடியாக இசைத்துப் பயிற்சி செய்ய உதவும் இலவச இணையப் பியானோ கருவி.

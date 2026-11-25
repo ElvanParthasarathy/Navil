@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../i18n';
 ---
 
 <BaseLayout
-  title="பயன்பாட்டு விதிமுறைகள் | Terms of Service — Elvan Navil"
+  title={`${UI_TA.routes.terms.title} | Terms of Service — ${UI_EN.brand.name}`}
   description="Terms of Service and conditions for using Elvan Navil digital studio, Nammil desktop companion, and online Tamil linguistic tools."
   canonicalPath="/terms"
-  mobileTitle="விதிமுறைகள்|terms"
+  mobileTitle={`${UI_TA.routes.terms.title}|${UI_EN.routes.terms.title}`}
   backUrl="/"
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
@@ -16,8 +17,8 @@ import Icon from '../components/astro/Icon.astro';
         <Icon name="Scales" weight="fill" size={16} />
         <span>சட்ட விதிமுறைகள் • TERMS &amp; CONDITIONS</span>
       </div>
-      <h1 class="terms-title">பயன்பாட்டு விதிமுறைகள் • Terms of Service</h1>
-      <p class="terms-subtitle">Legal guidelines, intellectual property rights, and terms of software usage</p>
+      <h1 class="terms-title" data-ui-pair="routes.terms.title">{UI_TA.routes.terms.title} • {UI_EN.routes.terms.title}</h1>
+      <p class="terms-subtitle en-sub-inline">Legal guidelines, intellectual property rights, and terms of software usage</p>
       <p class="terms-updated">Last Updated: September 2026 • Effective Immediately</p>
     </header>
 

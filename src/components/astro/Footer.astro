@@ -1,21 +1,23 @@
 ---
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <footer class="global-site-footer">
   <p class="global-footer-copy">
-    © 2026 Elvan Navil (எல்வன் நவில்) • Independent Bilingual Digital Creation Studio
+    © 2026 <span data-ui-ta="brand.name">{UI_TA.brand.name}</span><span class="footer-brand-ta"> (<span data-ui-en="brand.name">{UI_EN.brand.name}</span>)</span>
+    <span class="en-sub-inline"> • </span><span data-ui-ta="footer.studioDesc" lang="ta">{UI_TA.footer.studioDesc}</span><span class="en-sub-inline"> • {UI_EN.footer.studioDesc}</span>
   </p>
   <nav class="global-footer-links" aria-label="Footer navigation">
-    <a href="/">முகப்பு / Home</a>
-    <a href="/writings">படைப்புகள் / Writings</a>
-    <a href="/arts">கலைகள் / Arts</a>
-    <a href="/tools">கருவிகள் / Tools</a>
-    <a href="/downloads/nammil">நம்மில் / Nammil</a>
-    <a href="/about">பற்றி / About</a>
-    <a href="/contact">தொடர்பு / Contact</a>
-    <a href="/privacy">தனியுரிமை / Privacy Policy</a>
-    <a href="/terms">விதிமுறைகள் / Terms</a>
-    <a href="/disclaimer">பொறுப்புத் துறப்பு / Disclaimer</a>
+    <a href="/" data-ui-pair="footer.home" data-ui-sep=" / ">{UI_TA.footer.home} / {UI_EN.footer.home}</a>
+    <a href="/writings" data-ui-pair="footer.writings" data-ui-sep=" / ">{UI_TA.footer.writings} / {UI_EN.footer.writings}</a>
+    <a href="/arts" data-ui-pair="footer.arts" data-ui-sep=" / ">{UI_TA.footer.arts} / {UI_EN.footer.arts}</a>
+    <a href="/tools" data-ui-pair="footer.tools" data-ui-sep=" / ">{UI_TA.footer.tools} / {UI_EN.footer.tools}</a>
+    <a href="/downloads/nammil" data-ui-pair="footer.nammil" data-ui-sep=" / ">{UI_TA.footer.nammil} / {UI_EN.footer.nammil}</a>
+    <a href="/about" data-ui-pair="footer.about" data-ui-sep=" / ">{UI_TA.footer.about} / {UI_EN.footer.about}</a>
+    <a href="/contact" data-ui-pair="footer.contact" data-ui-sep=" / ">{UI_TA.footer.contact} / {UI_EN.footer.contact}</a>
+    <a href="/privacy" data-ui-pair="footer.privacy" data-ui-sep=" / ">{UI_TA.footer.privacy} / {UI_EN.footer.privacy}</a>
+    <a href="/terms" data-ui-pair="footer.terms" data-ui-sep=" / ">{UI_TA.footer.terms} / {UI_EN.footer.terms}</a>
+    <a href="/disclaimer" data-ui-pair="footer.disclaimer" data-ui-sep=" / ">{UI_TA.footer.disclaimer} / {UI_EN.footer.disclaimer}</a>
   </nav>
 </footer>
 

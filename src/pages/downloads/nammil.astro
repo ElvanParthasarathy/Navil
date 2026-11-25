@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import Icon from '../../components/astro/Icon.astro';
 import { BASE_URL } from '../../lib/content';
+import { UI_TA, UI_EN } from '../../i18n';
 
 const slides = [
   { src: '/nammil/slide_1.webp', titleTa: 'பல கணக்குகள் • முதன்மை கணக்கு', titleEn: 'Multi Accounts • Primary Session' },
@@ -28,12 +29,12 @@ const nammilJsonLd = {
 ---
 
 <BaseLayout
-  title="நம்மில் • Nammil — WhatsApp Desktop Companion | Elvan Navil"
+  title={`${UI_TA.nammil.title} • ${UI_EN.nammil.title} — WhatsApp Desktop Companion | ${UI_EN.brand.name}`}
   description="Download Nammil for Windows — a privacy-first WhatsApp desktop companion with 5 isolated accounts, automated media organizer, and bespoke sound notifications."
   canonicalPath="/downloads/nammil"
   ogImage={`${BASE_URL}/nammil_icon.png`}
   favicon="/nammil_icon.png"
-  mobileTitle="நம்மில்"
+  mobileTitle={UI_TA.nammil.title}
   backUrl="/downloads"
   jsonLd={nammilJsonLd}
 >
@@ -50,24 +51,24 @@ const nammilJsonLd = {
 
           <div class="ms-hero-title-group">
             <h1 class="ms-app-title">
-              <span class="ms-title-main" lang="ta">நம்மில்</span>
-              <span class="ms-title-sub">Nammil</span>
+              <span class="ms-title-main" lang="ta" data-ui-ta="nammil.title">{UI_TA.nammil.title}</span>
+              <span class="ms-title-sub" data-ui-en="nammil.title">{UI_EN.nammil.title}</span>
             </h1>
             <div class="ms-developer-link">
-              <a href="/about" class="ms-dev-item">Elvan Navil</a>
+              <a href="/about" class="ms-dev-item" data-ui-en="brand.name">{UI_EN.brand.name}</a>
             </div>
             <div class="ms-category-row">
-              <span class="ms-category-tag">Social • சமூகம்</span>
+              <span class="ms-category-tag" data-ui-pair="nammil.categoryTag">{UI_TA.nammil.categoryTag} • {UI_EN.nammil.categoryTag}</span>
             </div>
           </div>
         </div>
 
         <div class="ms-hero-desc-wrap">
-          <p class="ms-hero-desc" lang="ta">
-            பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸின் பிரத்யேக அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்காக நேர்த்தியாக உருவாக்கப்பட்ட தனித்துவ தனியுரிமைக் கணினித் துணைச்செயலி.
+          <p class="ms-hero-desc" lang="ta" data-ui-ta="nammil.heroDesc">
+            {UI_TA.nammil.heroDesc}
           </p>
-          <p class="ms-hero-desc ms-hero-desc-en">
-            A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.
+          <p class="ms-hero-desc ms-hero-desc-en" data-ui-en="nammil.heroDesc">
+            {UI_EN.nammil.heroDesc}
           </p>
         </div>
 
@@ -80,8 +81,8 @@ const nammilJsonLd = {
           >
             <Icon name="FaWindows" size={18} />
             <div class="ms-btn-text">
-              <span class="ms-btn-label">பதிவிறக்கு</span>
-              <span class="ms-btn-sublabel">Download</span>
+              <span class="ms-btn-label" data-ui-ta="nammil.downloadBtn">{UI_TA.nammil.downloadBtn}</span>
+              <span class="ms-btn-sublabel" data-ui-en="nammil.downloadBtn">{UI_EN.nammil.downloadBtn}</span>
             </div>
           </a>
           <a
@@ -93,8 +94,8 @@ const nammilJsonLd = {
           >
             <Icon name="GithubLogo" weight="bold" size={20} />
             <div class="ms-btn-text">
-              <span class="ms-btn-label">கிட்ஹப்</span>
-              <span class="ms-btn-sublabel">GitHub</span>
+              <span class="ms-btn-label" data-ui-ta="nammil.githubBtn">{UI_TA.nammil.githubBtn}</span>
+              <span class="ms-btn-sublabel" data-ui-en="nammil.githubBtn">{UI_EN.nammil.githubBtn}</span>
             </div>
           </a>
         </div>
@@ -105,7 +106,7 @@ const nammilJsonLd = {
         <!-- SCREENSHOTS -->
         <section class="ms-section ms-screenshots-section" aria-label="Screenshots">
           <div class="ms-section-header-link" id="nammil-open-lb">
-            <h2 class="ms-section-title">திரைப்பிடிப்பு • Screenshots</h2>
+            <h2 class="ms-section-title" data-ui-pair="nammil.screenshotsHeading">{UI_TA.nammil.screenshotsHeading} • {UI_EN.nammil.screenshotsHeading}</h2>
             <Icon name="CaretRight" weight="bold" size={18} class="ms-section-chevron" />
           </div>
 
@@ -133,7 +134,7 @@ const nammilJsonLd = {
 
         <!-- DESCRIPTION -->
         <section class="ms-section ms-desc-section">
-          <h2 class="ms-section-title">விளக்கம் • Description</h2>
+          <h2 class="ms-section-title" data-ui-pair="nammil.descriptionHeading">{UI_TA.nammil.descriptionHeading} • {UI_EN.nammil.descriptionHeading}</h2>
           <div class="ms-desc-body">
             <div class="ms-desc-block ms-desc-ta" lang="ta">
               <p>
@@ -147,8 +148,8 @@ const nammilJsonLd = {
                   உள்வரும் கோப்புகளைத் தானாக வகைப்படுத்தி (<code>Documents\Nammil\Media</code>), உள்ளமைக்கப்பட்ட தேடல் மற்றும் Recycle Bin மீட்புடன் நிர்வகிக்கும் ஊடக உலாவி, 6 பிரத்யேக தமிழ்ப் பெயரிலான விண்டோஸ் ஒலி எச்சரிக்கைகள், 7 மொழி மற்றும் மாற்று-எழுத்துரு நுட்பங்கள், எல்வன் சான்ஸ் அச்சுக்கலை மற்றும் 100% உள்ளூர் தனியுரிமையுடன் விண்டோஸிற்கான நேர்த்தியான அனுபவத்தை நம்மில் வழங்குகிறது.
                 </p>
               </div>
-              <button type="button" class="ms-show-more-btn" id="nammil-ta-btn" aria-expanded="false">
-                மேலும் காட்டுக • Show more
+              <button type="button" class="ms-show-more-btn" id="nammil-ta-btn" aria-expanded="false" data-ui-pair="nammil.showMore">
+                {UI_TA.nammil.showMore} • {UI_EN.nammil.showMore}
               </button>
             </div>
 
@@ -166,8 +167,8 @@ const nammilJsonLd = {
                   Featuring an automated media organizer (<code>Documents\Nammil\Media</code>) with fast search and safe Recycle Bin recovery, 6 bespoke Windows notification chimes, deep localization across 7 language variants powered by navil-engine, bespoke Elvan Sans typography, and 100% offline privacy with zero external telemetry.
                 </p>
               </div>
-              <button type="button" class="ms-show-more-btn" id="nammil-en-btn" aria-expanded="false">
-                Show more
+              <button type="button" class="ms-show-more-btn" id="nammil-en-btn" aria-expanded="false" data-ui-en="nammil.showMore">
+                {UI_EN.nammil.showMore}
               </button>
             </div>
           </div>
@@ -175,7 +176,7 @@ const nammilJsonLd = {
 
         <!-- FEATURES -->
         <section class="ms-section ms-features-section">
-          <h2 class="ms-section-title">சிறப்பம்சங்கள் • Features</h2>
+          <h2 class="ms-section-title" data-ui-pair="nammil.featuresHeading">{UI_TA.nammil.featuresHeading} • {UI_EN.nammil.featuresHeading}</h2>
           <div class="ms-features-grid">
             <div class="ms-feature-item">
               <div class="ms-feature-icon-box">
@@ -183,16 +184,16 @@ const nammilJsonLd = {
               </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
-                  <span class="ms-feature-title-ta">5 தனித்தனி வாட்ஸ்அப் அமர்வுகள்</span>
+                  <span class="ms-feature-title-ta" data-ui-ta="nammil.features.sandboxTitle">{UI_TA.nammil.features.sandboxTitle}</span>
                   <span class="ms-feature-title-sep">•</span>
-                  <span class="ms-feature-title-en">Multi-Account Sandboxing</span>
+                  <span class="ms-feature-title-en" data-ui-en="nammil.features.sandboxTitle">{UI_EN.nammil.features.sandboxTitle}</span>
                 </h3>
-                <p class="ms-feature-copy-ta" lang="ta">
-                  5 சுயாதீன கணக்குகளை தனித்தனி எலக்ட்ரான் அமர்வுகளில் குக்கீ மற்றும் நற்சான்றிதழ் முரண்பாடின்றி ஒரே நேரத்தில் இயக்கும் வசதி.
+                <p class="ms-feature-copy-ta" lang="ta" data-ui-ta="nammil.features.sandboxDesc">
+                  {UI_TA.nammil.features.sandboxDesc}
                 </p>
                 <div class="ms-feature-divider"></div>
-                <p class="ms-feature-copy-en">
-                  Run up to 5 independent WhatsApp accounts simultaneously in isolated sessions with zero credential collision.
+                <p class="ms-feature-copy-en" data-ui-en="nammil.features.sandboxDesc">
+                  {UI_EN.nammil.features.sandboxDesc}
                 </p>
               </div>
             </div>
@@ -203,16 +204,16 @@ const nammilJsonLd = {
               </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
-                  <span class="ms-feature-title-ta">தானியங்கி ஊடக உலாவி &amp; மீட்பு</span>
+                  <span class="ms-feature-title-ta" data-ui-ta="nammil.features.mediaTitle">{UI_TA.nammil.features.mediaTitle}</span>
                   <span class="ms-feature-title-sep">•</span>
-                  <span class="ms-feature-title-en">Media Organizer &amp; Recovery</span>
+                  <span class="ms-feature-title-en" data-ui-en="nammil.features.mediaTitle">{UI_EN.nammil.features.mediaTitle}</span>
                 </h3>
-                <p class="ms-feature-copy-ta" lang="ta">
-                  கோப்புகளைத் தானாகப் படங்கள், ஆவணங்கள், ஒலிகளாகப் பிரித்து, தேடல் மற்றும் Recycle Bin மீட்புடன் நிர்வகிக்கும் வசதி.
+                <p class="ms-feature-copy-ta" lang="ta" data-ui-ta="nammil.features.mediaDesc">
+                  {UI_TA.nammil.features.mediaDesc}
                 </p>
                 <div class="ms-feature-divider"></div>
-                <p class="ms-feature-copy-en">
-                  Auto-indexes incoming media into clean folders with instant search, thumbnail previews, format filters, and safe Recycle Bin restore.
+                <p class="ms-feature-copy-en" data-ui-en="nammil.features.mediaDesc">
+                  {UI_EN.nammil.features.mediaDesc}
                 </p>
               </div>
             </div>
@@ -223,16 +224,16 @@ const nammilJsonLd = {
               </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
-                  <span class="ms-feature-title-ta">6 தனித்துவ விண்டோஸ் ஒலி எச்சரிக்கைகள்</span>
+                  <span class="ms-feature-title-ta" data-ui-ta="nammil.features.chimesTitle">{UI_TA.nammil.features.chimesTitle}</span>
                   <span class="ms-feature-title-sep">•</span>
-                  <span class="ms-feature-title-en">6 Bespoke Sound Chimes</span>
+                  <span class="ms-feature-title-en" data-ui-en="nammil.features.chimesTitle">{UI_EN.nammil.features.chimesTitle}</span>
                 </h3>
-                <p class="ms-feature-copy-ta" lang="ta">
-                  குமிழி, மின்னல், அலை, தென்றல், துளி, துள்ளல் ஆகிய 6 பிரத்யேக ஒலிகள் மற்றும் 1-கிளிக் நேரடி அரட்டை மீட்பு.
+                <p class="ms-feature-copy-ta" lang="ta" data-ui-ta="nammil.features.chimesDesc">
+                  {UI_TA.nammil.features.chimesDesc}
                 </p>
                 <div class="ms-feature-divider"></div>
-                <p class="ms-feature-copy-en">
-                  Six bespoke notification chimes (Kumizhi, Minnal, Alai, Thendral, Thuli, Thullal) with per-account sound assignment and 1-click chat focus.
+                <p class="ms-feature-copy-en" data-ui-en="nammil.features.chimesDesc">
+                  {UI_EN.nammil.features.chimesDesc}
                 </p>
               </div>
             </div>
@@ -243,16 +244,16 @@ const nammilJsonLd = {
               </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
-                  <span class="ms-feature-title-ta">7 மொழி &amp; மாற்று-எழுத்துரு நுட்பம்</span>
+                  <span class="ms-feature-title-ta" data-ui-ta="nammil.features.langTitle">{UI_TA.nammil.features.langTitle}</span>
                   <span class="ms-feature-title-sep">•</span>
-                  <span class="ms-feature-title-en">Deep Multilingual Localization</span>
+                  <span class="ms-feature-title-en" data-ui-en="nammil.features.langTitle">{UI_EN.nammil.features.langTitle}</span>
                 </h3>
-                <p class="ms-feature-copy-ta" lang="ta">
-                  ஆங்கிலம், தமிழ், navil-engine இயக்கும் தமிழ் லத்தீன், மலையாளம், மங்கிலிஷ் என 7 மொழி வகைகள்.
+                <p class="ms-feature-copy-ta" lang="ta" data-ui-ta="nammil.features.langDesc">
+                  {UI_TA.nammil.features.langDesc}
                 </p>
                 <div class="ms-feature-divider"></div>
-                <p class="ms-feature-copy-en">
-                  Native localization across 7 language and cross-script transliteration variants powered by navil-engine.
+                <p class="ms-feature-copy-en" data-ui-en="nammil.features.langDesc">
+                  {UI_EN.nammil.features.langDesc}
                 </p>
               </div>
             </div>
@@ -263,54 +264,54 @@ const nammilJsonLd = {
 
         <!-- ADDITIONAL INFO -->
         <section class="ms-additional-info-section">
-          <h2 class="ms-info-main-title">கூடுதல் விவரங்கள் • Additional information</h2>
+          <h2 class="ms-info-main-title" data-ui-pair="nammil.additionalInfoHeading">{UI_TA.nammil.additionalInfoHeading} • {UI_EN.nammil.additionalInfoHeading}</h2>
           <div class="ms-info-grid">
             <div class="ms-info-cell">
               <Icon name="Package" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Published by</div>
-                <div class="ms-cell-val">Elvan Navil</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.publishedBy">{UI_TA.nammil.publishedBy} • {UI_EN.nammil.publishedBy}</div>
+                <div class="ms-cell-val" data-ui-en="brand.name">{UI_EN.brand.name}</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="ArrowsClockwise" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Last updated date</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.lastUpdated">{UI_TA.nammil.lastUpdated} • {UI_EN.nammil.lastUpdated}</div>
                 <div class="ms-cell-val">9/15/2026</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="CalendarBlank" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Release date</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.releaseDate">{UI_TA.nammil.releaseDate} • {UI_EN.nammil.releaseDate}</div>
                 <div class="ms-cell-val">9/1/2026</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="BookmarkSimple" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Category</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.categoryLabel">{UI_TA.nammil.categoryLabel} • {UI_EN.nammil.categoryLabel}</div>
                 <div class="ms-cell-val">Social &amp; Productivity</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="HardDrive" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Approximate size</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.sizeLabel">{UI_TA.nammil.sizeLabel} • {UI_EN.nammil.sizeLabel}</div>
                 <div class="ms-cell-val">114.2 MB</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="FaWindows" size={18} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Installation</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.installLabel">{UI_TA.nammil.installLabel} • {UI_EN.nammil.installLabel}</div>
                 <div class="ms-cell-val">Get this app on Windows 10 and 11 devices (64-bit). Inno Setup per-user installer (Zero UAC prompts).</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="ShieldCheck" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">This app can</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.capabilitiesLabel">{UI_TA.nammil.capabilitiesLabel} • {UI_EN.nammil.capabilitiesLabel}</div>
                 <ul class="ms-cell-list">
                   <li>Access your Internet connection</li>
                   <li>Store and organize local media</li>
@@ -321,8 +322,8 @@ const nammilJsonLd = {
             <div class="ms-info-cell">
               <Icon name="Globe" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Supported languages</div>
-                <ul class="ms-cell-list">
+                <div class="ms-cell-label" data-ui-pair="nammil.languagesLabel">{UI_TA.nammil.languagesLabel} • {UI_EN.nammil.languagesLabel}</div>
+                <ul class="ms-cell-list" data-no-translit>
                   <li>தமிழ் (Tamil)</li>
                   <li>Thamizh (Thamizh Latin)</li>
                   <li>തമിഴ് (Tamil in Malayalam Script)</li>
@@ -336,7 +337,7 @@ const nammilJsonLd = {
             <div class="ms-info-cell">
               <Icon name="Buildings" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Publisher Info</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.publisherInfoLabel">{UI_TA.nammil.publisherInfoLabel} • {UI_EN.nammil.publisherInfoLabel}</div>
                 <ul class="ms-cell-list">
                   <li><a href="https://github.com/ElvanParthasarathy/Nammil" target="_blank" rel="noreferrer">Nammil GitHub support</a></li>
                   <li><a href="/about">Elvan Navil website</a></li>
@@ -347,7 +348,7 @@ const nammilJsonLd = {
             <div class="ms-info-cell">
               <Icon name="FileText" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Additional terms</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.termsLabel">{UI_TA.nammil.termsLabel} • {UI_EN.nammil.termsLabel}</div>
                 <ul class="ms-cell-list">
                   <li><a href="https://github.com/ElvanParthasarathy/Nammil#%EF%B8%8F-zero-admin--complete-local-privacy" target="_blank" rel="noreferrer">Nammil privacy policy</a></li>
                   <li><a href="https://github.com/ElvanParthasarathy/Nammil/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT License</a></li>
@@ -357,7 +358,7 @@ const nammilJsonLd = {
             <div class="ms-info-cell">
               <Icon name="Flag" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Report this product</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.reportLabel">{UI_TA.nammil.reportLabel} • {UI_EN.nammil.reportLabel}</div>
                 <ul class="ms-cell-list">
                   <li><a href="https://github.com/ElvanParthasarathy/Nammil/issues" target="_blank" rel="noreferrer">Report a bug or issue</a></li>
                   <li><a href="mailto:jaiprakashpartha@gmail.com" target="_blank" rel="noreferrer">Report security vulnerability</a></li>
@@ -367,17 +368,17 @@ const nammilJsonLd = {
             <div class="ms-info-cell">
               <Icon name="Code" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Installed version</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.versionLabel">{UI_TA.nammil.versionLabel} • {UI_EN.nammil.versionLabel}</div>
                 <div class="ms-cell-val">1.2.9</div>
               </div>
             </div>
             <div class="ms-info-cell">
               <Icon name="Sparkle" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Designed &amp; Developed by</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.developedByLabel">{UI_TA.nammil.developedByLabel} • {UI_EN.nammil.developedByLabel}</div>
                 <div class="ms-cell-val">
                   <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noreferrer" style="color: inherit; text-decoration: underline;">
-                    Elvan Parthasarathy
+                    <span data-ui-en="about.nameTitle">{UI_EN.about.nameTitle}</span>
                   </a>
                 </div>
               </div>
@@ -385,7 +386,7 @@ const nammilJsonLd = {
             <div class="ms-info-cell ms-cell-disclaimer">
               <Icon name="Info" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
-                <div class="ms-cell-label">Legal disclaimers</div>
+                <div class="ms-cell-label" data-ui-pair="nammil.legalDisclaimersLabel">{UI_TA.nammil.legalDisclaimersLabel} • {UI_EN.nammil.legalDisclaimersLabel}</div>
                 <div class="ms-cell-val">
                   This software is an independent open-source application crafted by Elvan Parthasarathy under MIT License and is not affiliated with, endorsed by, or sponsored by WhatsApp Inc. or Meta Platforms, Inc.
                 </div>
@@ -469,19 +470,22 @@ const nammilJsonLd = {
         if (leftBtn) leftBtn.addEventListener('click', function () { scroller.scrollBy({ left: -420, behavior: 'smooth' }); }, sig);
         if (rightBtn) rightBtn.addEventListener('click', function () { scroller.scrollBy({ left: 420, behavior: 'smooth' }); }, sig);
 
-        function setupToggle(btnId, boxId, moreLabel, lessLabel) {
+        function setupToggle(btnId, boxId, attrName, moreKey, lessKey) {
           var btn = document.getElementById(btnId);
           var box = document.getElementById(boxId);
           if (!btn || !box) return;
           btn.addEventListener('click', function () {
             var open = box.style.display !== 'none';
             box.style.display = open ? 'none' : 'block';
-            btn.textContent = open ? moreLabel : lessLabel;
+            btn.setAttribute(attrName, open ? moreKey : lessKey);
             btn.setAttribute('aria-expanded', String(!open));
+            if (typeof window.__elvanApplyLangMode === 'function') {
+              window.__elvanApplyLangMode();
+            }
           }, sig);
         }
-        setupToggle('nammil-ta-btn', 'nammil-ta-more', 'மேலும் காட்டுக • Show more', 'குறைவாகக் காட்டுக • Show less');
-        setupToggle('nammil-en-btn', 'nammil-en-more', 'Show more', 'Show less');
+        setupToggle('nammil-ta-btn', 'nammil-ta-more', 'data-ui-pair', 'nammil.showMore', 'nammil.showLess');
+        setupToggle('nammil-en-btn', 'nammil-en-more', 'data-ui-en', 'nammil.showMore', 'nammil.showLess');
 
         var lb = document.getElementById('nammil-lightbox');
         var lbImg = document.getElementById('nammil-lb-img');

@@ -10,6 +10,7 @@ import Footer from '../components/astro/Footer.astro';
 import Icon from '../components/astro/Icon.astro';
 import { getRouteInfo } from '../components/astro/routeMeta';
 import { BASE_URL } from '../lib/content';
+import { UI_TA, UI_EN } from '../i18n';
 
 interface Props {
   title: string;
@@ -192,6 +193,12 @@ const fullJsonLd = {
           document.documentElement.setAttribute('data-theme', effective);
           document.documentElement.setAttribute('data-theme-mode', theme);
 
+          var langMode = localStorage.getItem('langMode') || 'bilingual';
+          if (langMode !== 'bilingual' && langMode !== 'tanglish-en' && langMode !== 'tanglish') {
+            langMode = 'bilingual';
+          }
+          document.documentElement.setAttribute('data-lang-mode', langMode);
+
           if (localStorage.getItem('sidebarCollapsed') === 'true') {
             document.documentElement.classList.add('sidebar-collapsed-init');
           }
@@ -215,15 +222,16 @@ const fullJsonLd = {
       <header class="desktop-topbar" aria-label="Desktop Top Bar">
         <div id="topbar-sidebar-zone" class="desktop-topbar-sidebar-zone" transition:persist="topbar-sidebar-zone">
           <a href="/" class="desktop-topbar-sidebar-brand" lang="ta">
-            <span class="desktop-topbar-sidebar-brand-title">எல்வன் நவில்</span>
-            <span class="desktop-topbar-sidebar-brand-subtitle">Elvan Navil</span>
+            <span class="desktop-topbar-sidebar-brand-title" data-ui-ta="brand.name">{UI_TA.brand.name}</span>
+            <span class="desktop-topbar-sidebar-brand-subtitle" data-ui-en="brand.name">{UI_EN.brand.name}</span>
           </a>
           <button
             type="button"
             id="topbar-sidebar-toggle"
             class="sidebar-toggle-btn"
-            aria-label="Collapse Sidebar"
-            title="Collapse Sidebar"
+            aria-label={UI_EN.nav.collapseSidebar}
+            data-ui-title="nav.collapseSidebar"
+            title={UI_TA.nav.collapseSidebar}
           >
             <Icon name="SidebarSimple" weight="regular" size={19} />
           </button>
@@ -235,8 +243,9 @@ const fullJsonLd = {
               <a
                 href={resolvedBackUrl}
                 class="desktop-topbar-circle-back-btn"
-                aria-label="பின்செல்"
-                title="முந்தைய பக்கத்திற்குச் செல்"
+                aria-label={UI_TA.nav.backAria}
+                data-ui-title="nav.backTitle"
+                title={UI_TA.nav.backTitle}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polyline points="15 18 9 12 15 6" />
@@ -246,10 +255,10 @@ const fullJsonLd = {
             <a href={pathname} class="desktop-topbar-brand">
               <div class="desktop-topbar-titles">
                 <div class="desktop-topbar-title-row">
-                  <span class="desktop-topbar-title" lang="ta">{routeInfo.title}</span>
+                  <span class="desktop-topbar-title" lang="ta" data-ui-ta={`routes.${routeInfo.key}.title`}>{routeInfo.title}</span>
                   {routeInfo.badge && <span class="desktop-topbar-badge">{routeInfo.badge}</span>}
                 </div>
-                {routeInfo.subtitle && <span class="desktop-topbar-subtitle">{routeInfo.subtitle}</span>}
+                {routeInfo.subtitle && <span class="desktop-topbar-subtitle" data-ui-en={`routes.${routeInfo.key}.title`}>{routeInfo.subtitle}</span>}
               </div>
             </a>
           </div>
@@ -267,63 +276,63 @@ const fullJsonLd = {
         <div class="sidebar-backdrop"></div>
         <div class="sidebar-top">
           <div class="sidebar-nav">
-            <a href="/" data-nav-key="home" data-tip="முகப்பு (home)" class={`nav-item ${isHome ? 'active' : ''}`}>
+            <a href="/" data-nav-key="home" data-ui-tip="nav.home" data-tip={`${UI_TA.nav.home} (${UI_EN.nav.home})`} class={`nav-item ${isHome ? 'active' : ''}`}>
               <span class="nav-icon" aria-hidden="true">
                 <Icon name="House" weight="regular" size="100%" class="nav-svg-reg" />
                 <Icon name="House" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
-                <span class="label">முகப்பு</span>
-                <span class="sub-label desktop-only">home</span>
+                <span class="label" data-ui-ta="nav.home">{UI_TA.nav.home}</span>
+                <span class="sub-label desktop-only" data-ui-en="nav.home">{UI_EN.nav.home}</span>
               </div>
             </a>
 
-            <a href="/navilgal" data-nav-key="navilgal" data-tip="நவில்கள் (navilgal)" class={`nav-item ${isNavilgalActive ? 'active' : ''}`}>
+            <a href="/navilgal" data-nav-key="navilgal" data-ui-tip="nav.navilgal" data-tip={`${UI_TA.nav.navilgal} (${UI_EN.nav.navilgal})`} class={`nav-item ${isNavilgalActive ? 'active' : ''}`}>
               <span class="nav-icon" aria-hidden="true">
                 <Icon name="BookOpen" weight="regular" size="100%" class="nav-svg-reg" />
                 <Icon name="BookOpen" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
-                <span class="label">நவில்கள்</span>
-                <span class="sub-label desktop-only">navilgal</span>
+                <span class="label" data-ui-ta="nav.navilgal">{UI_TA.nav.navilgal}</span>
+                <span class="sub-label desktop-only" data-ui-en="nav.navilgal">{UI_EN.nav.navilgal}</span>
               </div>
             </a>
 
-            <a href="/tools" data-nav-key="tools" data-tip="கருவிகள் (tools • BETA)" class={`nav-item ${isToolsActive ? 'active' : ''}`}>
+            <a href="/tools" data-nav-key="tools" data-ui-tip="nav.tools" data-ui-tip-badge="BETA" data-tip={`${UI_TA.nav.tools} (${UI_EN.nav.tools} • BETA)`} class={`nav-item ${isToolsActive ? 'active' : ''}`}>
               <span class="nav-icon" aria-hidden="true">
                 <Icon name="Wrench" weight="regular" size="100%" class="nav-svg-reg" />
                 <Icon name="Wrench" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
                 <span class="label" style="display: flex; align-items: center;">
-                  கருவிகள்
+                  <span data-ui-ta="nav.tools">{UI_TA.nav.tools}</span>
                   <span class={`nav-badge desktop-only ${isToolsActive ? 'is-active-badge' : ''}`}>
                     BETA
                   </span>
                 </span>
-                <span class="sub-label desktop-only">tools</span>
+                <span class="sub-label desktop-only" data-ui-en="nav.tools">{UI_EN.nav.tools}</span>
               </div>
             </a>
 
-            <a href="/downloads" data-nav-key="downloads" data-tip="பதிவிறக்கங்கள் (downloads)" class={`nav-item ${isDownloadsActive ? 'active' : ''}`}>
+            <a href="/downloads" data-nav-key="downloads" data-ui-tip="nav.downloads" data-tip={`${UI_TA.nav.downloads} (${UI_EN.nav.downloads})`} class={`nav-item ${isDownloadsActive ? 'active' : ''}`}>
               <span class="nav-icon" aria-hidden="true">
                 <Icon name="DownloadSimple" weight="regular" size="100%" class="nav-svg-reg" />
                 <Icon name="DownloadSimple" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
-                <span class="label">பதிவிறக்கங்கள்</span>
-                <span class="sub-label desktop-only">downloads</span>
+                <span class="label" data-ui-ta="nav.downloads">{UI_TA.nav.downloads}</span>
+                <span class="sub-label desktop-only" data-ui-en="nav.downloads">{UI_EN.nav.downloads}</span>
               </div>
             </a>
 
-            <a href="/about" data-nav-key="about" data-tip="பற்றி (about)" class={`nav-item desktop-only ${isAboutActive ? 'active' : ''}`}>
+            <a href="/about" data-nav-key="about" data-ui-tip="nav.about" data-tip={`${UI_TA.nav.about} (${UI_EN.nav.about})`} class={`nav-item desktop-only ${isAboutActive ? 'active' : ''}`}>
               <span class="nav-icon" aria-hidden="true">
                 <Icon name="User" weight="regular" size="100%" class="nav-svg-reg" />
                 <Icon name="User" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
-                <span class="label">பற்றி</span>
-                <span class="sub-label desktop-only">about</span>
+                <span class="label" data-ui-ta="nav.about">{UI_TA.nav.about}</span>
+                <span class="sub-label desktop-only" data-ui-en="nav.about">{UI_EN.nav.about}</span>
               </div>
             </a>
 
@@ -332,7 +341,7 @@ const fullJsonLd = {
                 <img src={profilePic.src} alt="Profile" class="nav-profile-avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;pointer-events:auto;" />
               </span>
               <div class="nav-text-container">
-                <span class="label">Profile</span>
+                <span class="label" data-ui-ta="nav.profile">{UI_TA.nav.profile}</span>
               </div>
             </a>
           </div>
@@ -346,7 +355,7 @@ const fullJsonLd = {
               </div>
               <div class="settings-text">
                 <span class="settings-name">{(profileData as any)?.fullName || 'Elvan Parthasarathy'}</span>
-                <span class="settings-brand-tag">Elvan Navil</span>
+                <span class="settings-brand-tag" data-ui-en="brand.name">{UI_EN.brand.name}</span>
               </div>
               <span class="settings-theme-icon" aria-hidden="true">
                 <Icon name="Sun" weight="regular" size={16} class="theme-ind theme-ind-light" />
@@ -360,30 +369,46 @@ const fullJsonLd = {
 
             <div id="settings-popup" class="settings-popup" style="display: none;">
               <div class="popup-theme-section">
-                <span class="popup-theme-label">Appearance</span>
+                <span class="popup-theme-label" data-ui-pair="settingsMenu.appearanceLabel">{UI_TA.settingsMenu.appearanceLabel} • {UI_EN.settingsMenu.appearanceLabel}</span>
                 <div class="theme-slider-container">
                   <div class="slider-thumb" id="desktop-slider-thumb" style="transform: translateX(100%);"></div>
-                  <div class="slider-option" data-theme-choice="light" title="Light">
+                  <div class="slider-option" data-theme-choice="light" title={UI_EN.settingsMenu.light}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="4" />
                       <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
                     </svg>
                   </div>
-                  <div class="slider-option" data-theme-choice="auto" title="Auto">
+                  <div class="slider-option" data-theme-choice="auto" title={UI_EN.settingsMenu.auto}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
                     </svg>
                   </div>
-                  <div class="slider-option" data-theme-choice="dark" title="Dark">
+                  <div class="slider-option" data-theme-choice="dark" title={UI_EN.settingsMenu.dark}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
                   </div>
                 </div>
+
+                <span class="popup-theme-label" data-ui-pair="settingsMenu.scriptLabel" style="display: block; margin-top: 14px;">{UI_TA.settingsMenu.scriptLabel} • {UI_EN.settingsMenu.scriptLabel}</span>
+                <div class="theme-slider-container" id="desktop-lang-slider" data-no-translit>
+                  <div class="slider-thumb" id="desktop-lang-thumb" style="transform: translateX(0%);"></div>
+                  <div class="slider-option lang-slider-opt" data-lang-choice="bilingual" title={UI_EN.settingsMenu.modeBilingual}>
+                    தமிழ்
+                  </div>
+                  <div class="slider-option lang-slider-opt" data-lang-choice="tanglish-en" title={UI_EN.settingsMenu.modeTanglishEn}>
+                    Ta+En
+                  </div>
+                  <div class="slider-option lang-slider-opt" data-lang-choice="tanglish" title={UI_EN.settingsMenu.modeTanglish}>
+                    Tanglish
+                  </div>
+                </div>
+
                 <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
-                  <a href="/about" style="color: var(--text-muted); text-decoration: none;">பற்றி • About</a>
-                  <a href="/privacy" style="color: var(--text-muted); text-decoration: none;">தனியுரிமை • Privacy Policy</a>
+                  <a href="/settings" data-ui-pair="settingsMenu.settingsLink" style="color: var(--text-muted); text-decoration: none;">{UI_TA.settingsMenu.settingsLink} • {UI_EN.settingsMenu.settingsLink}</a>
+                  <a href="/about" data-ui-pair="settingsMenu.aboutLink" style="color: var(--text-muted); text-decoration: none;">{UI_TA.settingsMenu.aboutLink} • {UI_EN.settingsMenu.aboutLink}</a>
+                  <a href="/privacy" data-ui-pair="settingsMenu.privacyLink" style="color: var(--text-muted); text-decoration: none;">{UI_TA.settingsMenu.privacyLink} • {UI_EN.settingsMenu.privacyLink}</a>
                 </div>
               </div>
             </div>
@@ -395,7 +420,7 @@ const fullJsonLd = {
       <header class={`mobile-topbar ${!isHome ? 'is-centered' : ''} ${resolvedShowBack ? 'has-back' : ''}`} transition:animate="none">
         <div class="mobile-topbar-left">
           {resolvedShowBack && (
-            <a href={resolvedBackUrl} class="mobile-back-btn" aria-label="Go back">
+            <a href={resolvedBackUrl} class="mobile-back-btn" aria-label={UI_EN.nav.backAria}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
@@ -405,14 +430,16 @@ const fullJsonLd = {
 
         <div class="brand">
           <div class="brand-main" lang="ta">
-            {mobileMain}
+            <span data-ui-ta={mobileMain === routeInfo.title ? `routes.${routeInfo.key}.title` : undefined}>{mobileMain}</span>
             {resolvedBeta && (
               <span style="margin-left: 8px; font-size: 0.65rem; background: color-mix(in srgb, var(--text-main) 14%, transparent); color: var(--text-main); padding: 2px 7px; border-radius: 100px; vertical-align: middle; font-weight: 700; letter-spacing: 0.5px;">
                 BETA
               </span>
             )}
           </div>
-          {mobileSub && <div class="brand-sub">{mobileSub}</div>}
+          {mobileSub && (
+            <div class="brand-sub" data-ui-en={mobileSub === routeInfo.subtitle ? `routes.${routeInfo.key}.title` : undefined}>{mobileSub}</div>
+          )}
         </div>
 
         <div class="top-bar-actions">
@@ -425,7 +452,7 @@ const fullJsonLd = {
               </svg>
             </button>
             <div id="mobile-menu-backdrop" class="menu-backdrop" style="display: none;"></div>
-            <div id="mobile-menu-dropdown" class="top-menu-dropdown" style="display: none; height: 56px;">
+            <div id="mobile-menu-dropdown" class="top-menu-dropdown" style="display: none; height: 112px;">
               <div id="mobile-menu-track" class="menu-slider-track" style="transform: translateX(0%);">
                 <div class="menu-view">
                   <button type="button" id="mobile-appearance-btn" class="menu-item space-between">
@@ -433,7 +460,23 @@ const fullJsonLd = {
                       <svg class="menu-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" d="M12 2.25c5.385 0 9.75 4.365 9.75 9.75s-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12 6.615 2.25 12 2.25Zm0 1.5v16.5c4.557 0 8.25-3.693 8.25-8.25 0-4.557-3.693-8.25-8.25-8.25Z" clip-rule="evenodd" />
                       </svg>
-                      <span>Appearance</span>
+                      <span data-ui-pair="settingsMenu.appearanceLabel">{UI_TA.settingsMenu.appearanceLabel} • {UI_EN.settingsMenu.appearanceLabel}</span>
+                    </span>
+                    <svg style="width: 18px; height: 18px; opacity: 0.4;" viewBox="0 0 24 24" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button type="button" id="mobile-lang-btn" class="menu-item space-between">
+                    <span style="display: flex; align-items: center; gap: 12px;">
+                      <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m5 8 6 6" />
+                        <path d="m4 14 6-6 2-3" />
+                        <path d="M2 5h12" />
+                        <path d="M7 2h1" />
+                        <path d="m22 22-5-10-5 10" />
+                        <path d="M14 18h6" />
+                      </svg>
+                      <span data-ui-pair="settingsMenu.scriptLabel">{UI_TA.settingsMenu.scriptLabel} • {UI_EN.settingsMenu.scriptLabel}</span>
                     </span>
                     <svg style="width: 18px; height: 18px; opacity: 0.4;" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
@@ -445,11 +488,22 @@ const fullJsonLd = {
                     <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
                     </svg>
-                    Back
+                    <span data-ui-pair="settingsMenu.back">{UI_TA.settingsMenu.back} • {UI_EN.settingsMenu.back}</span>
                   </button>
-                  <button type="button" class="menu-item" data-theme-choice="auto">Auto System</button>
-                  <button type="button" class="menu-item" data-theme-choice="light">Light Mode</button>
-                  <button type="button" class="menu-item" data-theme-choice="dark">Dark Mode</button>
+                  <button type="button" class="menu-item" data-theme-choice="auto"><span data-ui-pair="settingsMenu.autoSystem">{UI_TA.settingsMenu.autoSystem} • {UI_EN.settingsMenu.autoSystem}</span></button>
+                  <button type="button" class="menu-item" data-theme-choice="light"><span data-ui-pair="settingsMenu.lightMode">{UI_TA.settingsMenu.lightMode} • {UI_EN.settingsMenu.lightMode}</span></button>
+                  <button type="button" class="menu-item" data-theme-choice="dark"><span data-ui-pair="settingsMenu.darkMode">{UI_TA.settingsMenu.darkMode} • {UI_EN.settingsMenu.darkMode}</span></button>
+                </div>
+                <div class="menu-view" data-no-translit>
+                  <button type="button" id="mobile-lang-back-btn" class="menu-item back-btn">
+                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="currentColor">
+                      <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-ui-pair="settingsMenu.back">{UI_TA.settingsMenu.back} • {UI_EN.settingsMenu.back}</span>
+                  </button>
+                  <button type="button" class="menu-item" data-lang-choice="bilingual">{UI_TA.settingsMenu.modeBilingual}</button>
+                  <button type="button" class="menu-item" data-lang-choice="tanglish-en">Ta+En • Tanglish</button>
+                  <button type="button" class="menu-item" data-lang-choice="tanglish">Pure Tanglish</button>
                 </div>
               </div>
             </div>
@@ -559,9 +613,10 @@ const fullJsonLd = {
           if (topZone) topZone.classList.toggle('collapsed', collapsed);
           if (shell) shell.classList.toggle('sidebar-collapsed', collapsed);
           if (toggleBtn) {
-            var toggleLabel = collapsed ? 'Expand Sidebar' : 'Collapse Sidebar';
-            toggleBtn.setAttribute('aria-label', toggleLabel);
-            toggleBtn.setAttribute('title', toggleLabel);
+            toggleBtn.setAttribute('data-ui-title', collapsed ? 'nav.expandSidebar' : 'nav.collapseSidebar');
+            if (window.__elvanApplyLangMode) {
+              window.__elvanApplyLangMode(doc);
+            }
           }
           if (settingsTrigger) settingsTrigger.classList.toggle('collapsed-trigger', collapsed);
           if (settingsPopup) settingsPopup.classList.toggle('side-popup', collapsed);
@@ -703,13 +758,15 @@ const fullJsonLd = {
           var dropdown = document.getElementById('mobile-menu-dropdown');
           var track = document.getElementById('mobile-menu-track');
           var appBtn = document.getElementById('mobile-appearance-btn');
+          var langBtn = document.getElementById('mobile-lang-btn');
           var backBtn = document.getElementById('mobile-menu-back-btn');
+          var langBackBtn = document.getElementById('mobile-lang-back-btn');
 
           function closeMobileMenu() {
             if (dropdown) {
               dropdown.classList.remove('is-open');
               dropdown.style.display = 'none';
-              dropdown.style.height = '56px';
+              dropdown.style.height = '112px';
             }
             if (backdrop) {
               backdrop.classList.remove('is-open');
@@ -731,7 +788,7 @@ const fullJsonLd = {
                 dropdown.style.display = 'block';
                 backdrop.style.display = 'block';
                 if (track) track.style.transform = 'translateX(0%)';
-                dropdown.style.height = '56px';
+                dropdown.style.height = '112px';
               }
             });
             backdrop.addEventListener('click', closeMobileMenu);
@@ -739,7 +796,14 @@ const fullJsonLd = {
           if (appBtn && track && dropdown && !appBtn.dataset.bound) {
             appBtn.dataset.bound = '1';
             appBtn.addEventListener('click', function () {
-              track.style.transform = 'translateX(-50%)';
+              track.style.transform = 'translateX(-33.3333%)';
+              dropdown.style.height = '220px';
+            });
+          }
+          if (langBtn && track && dropdown && !langBtn.dataset.bound) {
+            langBtn.dataset.bound = '1';
+            langBtn.addEventListener('click', function () {
+              track.style.transform = 'translateX(-66.6667%)';
               dropdown.style.height = '220px';
             });
           }
@@ -747,9 +811,28 @@ const fullJsonLd = {
             backBtn.dataset.bound = '1';
             backBtn.addEventListener('click', function () {
               track.style.transform = 'translateX(0%)';
-              dropdown.style.height = '56px';
+              dropdown.style.height = '112px';
             });
           }
+          if (langBackBtn && track && dropdown && !langBackBtn.dataset.bound) {
+            langBackBtn.dataset.bound = '1';
+            langBackBtn.addEventListener('click', function () {
+              track.style.transform = 'translateX(0%)';
+              dropdown.style.height = '112px';
+            });
+          }
+
+          document.querySelectorAll('[data-lang-choice]').forEach(function (el) {
+            if (el.dataset.langChoiceBound) return;
+            el.dataset.langChoiceBound = '1';
+            el.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var choice = el.getAttribute('data-lang-choice');
+              if (choice && window.__elvanSetLangMode) {
+                window.__elvanSetLangMode(choice);
+              }
+            });
+          });
         }
 
         function pushUnloadedAds() {
@@ -823,7 +906,9 @@ const fullJsonLd = {
 
     <script>
       import { inject } from '@vercel/analytics';
+      import { initDynamicLangMode } from '../lib/langMode';
       inject();
+      initDynamicLangMode();
     </script>
 
     <style is:global>
@@ -1068,6 +1153,50 @@ const fullJsonLd = {
       }
       .main-content-body:has(.ms-store-page) .global-site-footer {
         padding-inline: 24px;
+      }
+
+      /* Dynamic Navil Tanglish Mode Switcher & Paired Gloss Controls */
+      .lang-slider-opt {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--text-muted);
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+      .lang-slider-opt.active {
+        color: var(--accent-text);
+      }
+
+      [data-lang-mode^="tanglish"] .store-card-name-en,
+      [data-lang-mode^="tanglish"] .home-brand-title-sub,
+      [data-lang-mode^="tanglish"] .desktop-topbar-sidebar-brand-subtitle,
+      [data-lang-mode^="tanglish"] .footer-brand-ta,
+      [data-lang-mode^="tanglish"] [data-dup-tanglish="true"] {
+        display: none !important;
+      }
+
+      [data-lang-mode="tanglish"] .sidebar .sub-label,
+      [data-lang-mode="tanglish"] .desktop-topbar-subtitle,
+      [data-lang-mode="tanglish"] .mobile-topbar .brand-sub,
+      [data-lang-mode="tanglish"] .home-brand-title-sub,
+      [data-lang-mode="tanglish"] .home-brand-subtitle-en,
+      [data-lang-mode="tanglish"] .cat-title-sub,
+      [data-lang-mode="tanglish"] .cat-desc ~ .cat-desc-sub,
+      [data-lang-mode="tanglish"] .writings-title-sub,
+      [data-lang-mode="tanglish"] .writings-subtitle-en,
+      [data-lang-mode="tanglish"] .store-card-desc-en,
+      [data-lang-mode="tanglish"] .home-section-title ~ .home-section-desc,
+      [data-lang-mode="tanglish"] .ms-title-sub,
+      [data-lang-mode="tanglish"] .ms-hero-desc-en,
+      [data-lang-mode="tanglish"] .ms-desc-en,
+      [data-lang-mode="tanglish"] .ms-desc-divider,
+      [data-lang-mode="tanglish"] .ms-feature-title-sep,
+      [data-lang-mode="tanglish"] .ms-feature-title-en,
+      [data-lang-mode="tanglish"] .ms-feature-divider,
+      [data-lang-mode="tanglish"] .ms-feature-copy-en,
+      [data-lang-mode="tanglish"] .ms-btn-sublabel,
+      [data-lang-mode="tanglish"] .en-sub-inline {
+        display: none !important;
       }
     </style>
   </body>

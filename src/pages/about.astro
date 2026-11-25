@@ -6,16 +6,17 @@ import Icon from '../components/astro/Icon.astro';
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import profileData from '../தரவு/தன்னுரு.json';
 import { getAboutConfig } from '../lib/content';
+import { UI_TA, UI_EN } from '../i18n';
 
 const about = await getAboutConfig();
 
 const cards = about.cards || [
   {
     content: `<span lang="ta" style="display: block; margin-bottom: 6px; font-weight: 500;">
-    "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+    ${UI_TA.about.defaultQuote}
 </span>
-<span style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
-    Every idea begins with a simple question — why not?
+<span class="en-sub-inline" style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
+    ${UI_EN.about.defaultQuote}
 </span>`,
   },
   { content: about.identity_text || '' },
@@ -34,11 +35,11 @@ function getSpanClass(index: number) {
 ---
 
 <BaseLayout
-  title="பற்றி | About — Elvan Parthasarathy"
+  title={`${UI_TA.routes.about.title} | ${UI_EN.about.nameTitle}`}
   description="Learn more about Jaiprakash P (Elvan Parthasarathy), engineering student, writer, software developer, and creator behind Elvan Navil."
   canonicalPath="/about"
   ogType="profile"
-  mobileTitle="பற்றி|about"
+  mobileTitle={`${UI_TA.routes.about.title}|${UI_EN.routes.about.title}`}
   backUrl="/"
 >
   <div class="about-page page-view animate-entry">
@@ -47,11 +48,11 @@ function getSpanClass(index: number) {
         <div class="hero-avatar-bg"></div>
         <img src={profilePic.src} alt={(profileData as any).name} class="hero-avatar" />
       </div>
-      <h1 class="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
+      <h1 class="hero-title" lang="ta" data-ui-ta="about.nameTitle">{UI_TA.about.nameTitle}</h1>
       <h2 class="hero-subtitle">{(profileData as any).name} Parthasarathy</h2>
       {about.portfolio_url && (
         <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" class="explore-portfolio-btn-unique">
-          Explore Portfolio <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-pair="about.explorePortfolio">{UI_TA.about.explorePortfolio} • {UI_EN.about.explorePortfolio}</span> <Icon name="ArrowRight" weight="regular" />
         </a>
       )}
     </section>
@@ -70,11 +71,11 @@ function getSpanClass(index: number) {
       <div class="contact-info-block">
         <div class="contact-header">
           <h3 lang="ta">{about.contact_tamil}</h3>
-          <div class="contact-divider"></div>
-          <h3>{about.contact_english}</h3>
+          <div class="contact-divider en-sub-inline"></div>
+          <h3 class="en-sub-inline">{about.contact_english}</h3>
         </div>
         <p lang="ta" style="color: #888888; margin: 0;">{about.contact_desc_tamil}</p>
-        <p style="font-size: 0.85rem; color: #888888; margin: 4px 0 0;">{about.contact_desc_english}</p>
+        <p class="en-sub-inline" style="font-size: 0.85rem; color: #888888; margin: 4px 0 0;">{about.contact_desc_english}</p>
       </div>
 
       <div class="contact-right-side">

@@ -884,7 +884,7 @@ body {
 .settings-popup.side-popup {
   bottom: 0;
   left: calc(100% + 16px);
-  width: 220px;
+  width: 244px;
   animation: popupSlideRight 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -1622,13 +1622,13 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
   /* Sliding Container */
   .menu-slider-track {
     display: flex;
-    width: 200%;
+    width: 300%;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     align-items: flex-start;
   }
 
   .menu-view {
-    width: 50%;
+    width: 33.3333%;
     padding: 8px 12px;
     display: flex;
     flex-direction: column;

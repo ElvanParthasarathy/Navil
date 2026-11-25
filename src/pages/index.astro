@@ -12,6 +12,7 @@ import {
   formatPlayerPoem,
   formatPlayerQuote,
 } from '../lib/content';
+import { UI_TA, UI_EN } from '../i18n';
 
 const [poems, quotes, articles] = await Promise.all([
   getCategoryPosts('poems'),
@@ -41,21 +42,21 @@ function getClassColor(name: string) {
 ---
 
 <BaseLayout
-  title="எல்வன் நவில் | Elvan Navil — Bilingual Digital Creation Studio"
+  title={`${UI_TA.brand.name} | ${UI_EN.brand.name} — Bilingual Digital Creation Studio`}
   description="Elvan Navil is an independent bilingual Tamil-English digital creation studio crafting thoughtful desktop software (Nammil), linguistic tools, and original literature."
   canonicalPath="/"
-  mobileTitle="எல்வன் நவில்"
+  mobileTitle={UI_TA.brand.name}
 >
   <div class="home-page company-home-page page-view fadeIn">
     <!-- 1. STUDIO HEADER -->
     <header class="home-brand-header animate-entry">
-      <h1 class="home-brand-title" lang="ta">எல்வன் நவில்</h1>
-      <div class="home-brand-title-sub">Elvan Navil</div>
-      <p class="home-brand-subtitle" lang="ta">
-        நல்வரவு. இது எல்வன் நவில் — சிந்தனைமிக்க கணினி மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் இருமொழி இலக்கியங்களை நேர்த்தியாக உருவாக்கும் தன்னுரிமை எண்மப் படைப்பரங்கு.
+      <h1 class="home-brand-title" lang="ta" data-ui-ta="brand.name">{UI_TA.brand.name}</h1>
+      <div class="home-brand-title-sub" data-ui-en="brand.name">{UI_EN.brand.name}</div>
+      <p class="home-brand-subtitle" lang="ta" data-ui-ta="home.welcomeSubtitle">
+        {UI_TA.home.welcomeSubtitle}
       </p>
-      <p class="home-brand-subtitle home-brand-subtitle-en">
-        Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
+      <p class="home-brand-subtitle home-brand-subtitle-en" data-ui-en="home.welcomeSubtitle">
+        {UI_EN.home.welcomeSubtitle}
       </p>
     </header>
 
@@ -63,21 +64,21 @@ function getClassColor(name: string) {
     <div class="dictionary-container animate-entry">
       <div class="dict-card">
         <div class="dict-word-header">
-          <span class="dict-word" lang="ta">நவில்</span>
-          <span class="dict-meta">வினைச்சொல்</span>
+          <span class="dict-word" lang="ta" data-ui-ta="brand.navilWord">{UI_TA.brand.navilWord}</span>
+          <span class="dict-meta" data-ui-ta="brand.navilPos">{UI_TA.brand.navilPos}</span>
         </div>
-        <p class="dict-definition" lang="ta">
-          தமிழ் வேர்ச்சொல் "நவிலுதல்" — உரைத்தல், பேசுதல், பாடுதல், அல்லது வார்த்தைகள் வழி எண்ணங்களை வெளிப்படுத்துதல்.
+        <p class="dict-definition" lang="ta" data-ui-ta="brand.navilDef">
+          {UI_TA.brand.navilDef}
         </p>
       </div>
 
-      <div class="dict-card">
+      <div class="dict-card dict-card-en">
         <div class="dict-word-header">
-          <span class="dict-word">Navil</span>
-          <span class="dict-meta">/nʌvɪl/ • verb</span>
+          <span class="dict-word" data-ui-en="brand.navilWord">{UI_EN.brand.navilWord}</span>
+          <span class="dict-meta" data-ui-en="brand.navilPos">{UI_EN.brand.navilPos}</span>
         </div>
-        <p class="dict-definition">
-          Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
+        <p class="dict-definition" data-ui-en="brand.navilDef">
+          {UI_EN.brand.navilDef}
         </p>
       </div>
     </div>
@@ -85,9 +86,9 @@ function getClassColor(name: string) {
     <!-- 3. FEATURED PRODUCTS: NAMMIL & NAVIL TRANSLITERATOR -->
     <section class="home-section animate-entry" style="margin-top: 48px;">
       <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
-        <div class="home-section-badge">படைப்புகள் • Featured Creations</div>
-        <h2 class="home-section-title" lang="ta">மென்பொருள் &amp; கருவிகள்</h2>
-        <div class="home-section-desc">Software &amp; Linguistic Tools</div>
+        <div class="home-section-badge" data-ui-pair="home.creationsBadge">{UI_TA.home.creationsBadge} • {UI_EN.home.creationsBadge}</div>
+        <h2 class="home-section-title" lang="ta" data-ui-ta="home.creationsTitle">{UI_TA.home.creationsTitle}</h2>
+        <div class="home-section-desc" data-ui-en="home.creationsDesc">{UI_EN.home.creationsDesc}</div>
       </div>
 
       <div class="bento-grid" style="margin-top: 0;">
@@ -105,23 +106,23 @@ function getClassColor(name: string) {
                   <img src="/nammil_icon.png" alt="Nammil App Icon" class="store-card-icon" />
                   <div class="store-card-title-wrap">
                     <h2 class="store-card-title">
-                      <span class="store-card-name-ta" lang="ta">நம்மில்</span>
-                      <span class="store-card-name-en">Nammil</span>
+                      <span class="store-card-name-ta" lang="ta" data-ui-ta="home.nammilName">{UI_TA.home.nammilName}</span>
+                      <span class="store-card-name-en" data-ui-en="home.nammilName">{UI_EN.home.nammilName}</span>
                     </h2>
                     <div class="store-card-meta">
-                      <span>Social &amp; Productivity • சமூகம்</span>
+                      <span data-ui-pair="home.nammilCategory">{UI_TA.home.nammilCategory} • {UI_EN.home.nammilCategory}</span>
                     </div>
                   </div>
                 </div>
-                <div class="store-card-pill">Free</div>
+                <div class="store-card-pill" data-ui-ta="home.nammilPrice">{UI_TA.home.nammilPrice}</div>
               </div>
 
               <div class="store-card-desc-wrap" style="margin-top: 16px;">
-                <p class="store-card-desc store-card-desc-ta" lang="ta">
-                  பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்கான நவீன கணினித் துணைச்செயலி.
+                <p class="store-card-desc store-card-desc-ta" lang="ta" data-ui-ta="home.nammilShortDesc">
+                  {UI_TA.home.nammilShortDesc}
                 </p>
-                <p class="store-card-desc store-card-desc-en">
-                  A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions and media organization.
+                <p class="store-card-desc store-card-desc-en" data-ui-en="home.nammilShortDesc">
+                  {UI_EN.home.nammilShortDesc}
                 </p>
               </div>
             </div>
@@ -150,20 +151,20 @@ function getClassColor(name: string) {
               </div>
               <div class="cat-content" style="margin-top: 16px;">
                 <div class="cat-title">
-                  நவில் மொழிமாற்றி
+                  <span data-ui-ta="home.translitTitle">{UI_TA.home.translitTitle}</span>
                   <span class="cat-beta-badge">BETA</span>
                 </div>
-                <div class="cat-title-sub">Navil Transliterator</div>
-                <p class="cat-desc" lang="ta">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
-                <p class="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
+                <div class="cat-title-sub" data-ui-en="home.translitTitle">{UI_EN.home.translitTitle}</div>
+                <p class="cat-desc" lang="ta" data-ui-ta="home.translitDesc">{UI_TA.home.translitDesc}</p>
+                <p class="cat-desc-sub" data-ui-en="home.translitDesc">{UI_EN.home.translitDesc}</p>
               </div>
-              <div class="font-specimen-box" style="margin: 18px 0 0;">
+              <div class="font-specimen-box" data-no-translit style="margin: 18px 0 0;">
                 <div class="font-sample-ta" lang="ta">தமிழ் → Thamizhi · Vatteluttu · IAST</div>
                 <div class="font-sample-en">Tolkappiyam positional phonetics · ka / ga · ca / sa · ta / da</div>
               </div>
             </div>
             <div class="cat-footer" style="margin-top: auto; padding-top: 20px;">
-              மொழிமாற்றியைத் தொடங்க <Icon name="ArrowRight" weight="regular" />
+              <span data-ui-ta="home.translitCta">{UI_TA.home.translitCta}</span> <Icon name="ArrowRight" weight="regular" />
             </div>
           </a>
         </div>
@@ -173,16 +174,16 @@ function getClassColor(name: string) {
     <!-- 4. REFLECTIONS & POETRY PLAYERS -->
     <section class="home-section animate-entry" style="margin-top: 48px;">
       <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
-        <div class="home-section-badge">இலக்கியம் • Literature</div>
-        <h2 class="home-section-title" lang="ta">நவில்கள்</h2>
-        <div class="home-section-desc">Reflections &amp; Lyrical Literature</div>
+        <div class="home-section-badge" data-ui-pair="home.navilgalBadge">{UI_TA.home.navilgalBadge} • {UI_EN.home.navilgalBadge}</div>
+        <h2 class="home-section-title" lang="ta" data-ui-ta="home.navilgalTitle">{UI_TA.home.navilgalTitle}</h2>
+        <div class="home-section-desc" data-ui-en="home.navilgalDesc">{UI_EN.home.navilgalDesc}</div>
       </div>
 
       <div class="bento-grid" style="margin-top: 0;">
         <!-- POEM PLAYER -->
         <section class="bento-card span-6 quote-bento clickable-card" id="home-poem-card" data-href={(initialPoem.slug || initialPoem.id) ? `/writings/poems/${encodeURIComponent(initialPoem.slug || initialPoem.id)}` : '/writings/poems'}>
           <div class="quote-header-row">
-            <span class="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
+            <span class="quote-tag-badge" lang="ta" data-ui-pair="home.poemCardBadge">{UI_TA.home.poemCardBadge} • {UI_EN.home.poemCardBadge}</span>
             <button type="button" id="refresh-poem-btn" class="quote-refresh-btn" title="Read another poem" aria-label="Read another poem">
               <Icon name="ArrowClockwise" weight="regular" size={18} />
             </button>
@@ -202,7 +203,7 @@ function getClassColor(name: string) {
                 class="player-read-more-btn"
                 style="text-decoration: none;"
               >
-                Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                <span data-ui-pair="common.readMore">{UI_TA.common.readMore} • {UI_EN.common.readMore}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
               </a>
               {initialPoem.classification && (
                 <span class="classification-badge" id="poem-class-badge" style={`color: ${getClassColor(initialPoem.classification)};`}>
@@ -212,14 +213,14 @@ function getClassColor(name: string) {
             </div>
           </div>
           <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
-            <span id="poem-theme-label" style="font-weight: 600; color: var(--text-main);">{initialPoem.theme}</span> • Click card to read full poem, or refresh to load another.
+            <span id="poem-theme-label" style="font-weight: 600; color: var(--text-main);">{initialPoem.theme}</span><span class="en-sub-inline" data-ui-en="home.poemHint"> • {UI_EN.home.poemHint}</span>
           </div>
         </section>
 
         <!-- QUOTE PLAYER -->
         <section class="bento-card span-6 quote-bento clickable-card" id="home-quote-card" data-href={(initialQuote.slug || initialQuote.id) ? `/writings/quotes/${encodeURIComponent(initialQuote.slug || initialQuote.id)}` : '/writings/quotes'}>
           <div class="quote-header-row">
-            <span class="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
+            <span class="quote-tag-badge" lang="ta" data-ui-pair="home.quoteCardBadge">{UI_TA.home.quoteCardBadge} • {UI_EN.home.quoteCardBadge}</span>
             <button type="button" id="refresh-quote-btn" class="quote-refresh-btn" title="Read another reflection" aria-label="Read another reflection">
               <Icon name="ArrowClockwise" weight="regular" size={18} />
             </button>
@@ -239,7 +240,7 @@ function getClassColor(name: string) {
                 class="player-read-more-btn"
                 style="text-decoration: none;"
               >
-                Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                <span data-ui-pair="common.readMore">{UI_TA.common.readMore} • {UI_EN.common.readMore}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
               </a>
               {initialQuote.classification && (
                 <span class="classification-badge" id="quote-class-badge" style={`color: ${getClassColor(initialQuote.classification)};`}>
@@ -249,7 +250,7 @@ function getClassColor(name: string) {
             </div>
           </div>
           <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
-            <span id="quote-tag-label" style="font-weight: 600; color: var(--text-main);">{initialQuote.tag}</span> • Click card to read full quote, or refresh to load another.
+            <span id="quote-tag-label" style="font-weight: 600; color: var(--text-main);">{initialQuote.tag}</span><span class="en-sub-inline" data-ui-en="home.quoteHint"> • {UI_EN.home.quoteHint}</span>
           </div>
         </section>
       </div>
@@ -259,9 +260,9 @@ function getClassColor(name: string) {
     {featuredArticles.length > 0 && (
       <section class="home-section animate-entry" style="margin-top: 48px;">
         <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
-          <div class="home-section-badge">கட்டுரைகள் • Featured Articles</div>
-          <h2 class="home-section-title" lang="ta">சிறப்பு இலக்கிய &amp; தொழில்நுட்பக் கட்டுரைகள்</h2>
-          <div class="home-section-desc">Essays on Tamil Linguistics, Typography &amp; Local-First Software</div>
+          <div class="home-section-badge" data-ui-pair="home.articlesBadge">{UI_TA.home.articlesBadge} • {UI_EN.home.articlesBadge}</div>
+          <h2 class="home-section-title" lang="ta" data-ui-ta="home.articlesTitle">{UI_TA.home.articlesTitle}</h2>
+          <div class="home-section-desc" data-ui-en="home.articlesDesc">{UI_EN.home.articlesDesc}</div>
         </div>
 
         <div class="bento-grid" style="margin-top: 0;">
@@ -287,7 +288,7 @@ function getClassColor(name: string) {
                     <p class="cat-desc-sub" style="margin: 0; line-height: 1.65;">{artExcerpt}</p>
                   </div>
                   <div class="cat-footer">
-                    கட்டுரையைப் படிக்க • Read Article <Icon name="ArrowRight" weight="regular" />
+                    <span data-ui-pair="common.readArticle">{UI_TA.common.readArticle} • {UI_EN.common.readArticle}</span> <Icon name="ArrowRight" weight="regular" />
                   </div>
                 </a>
               </div>

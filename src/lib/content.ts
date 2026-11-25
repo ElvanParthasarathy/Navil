@@ -2,6 +2,7 @@ import dns from 'node:dns';
 import staticArticles from '../தரவு/கட்டுரைகள்.json';
 import staticArts from '../தரவு/கலைகள்.json';
 import profileData from '../தரவு/தன்னுரு.json';
+import { UI_TA, UI_EN } from '../i18n';
 
 try {
   dns.setDefaultResultOrder('ipv4first');
@@ -73,51 +74,51 @@ export const CATEGORY_META: Record<
 > = {
   poems: {
     key: 'poems',
-    titleTa: 'நவில் மிழிகள்',
-    titleEn: 'Navil Poems',
-    descTa: 'என் உணர்வுகளைப் பேசும் ஓசைநயமிக்க வரிகள்.',
-    descEn: 'My lyrical verses and emotional expressions.',
-    footerTa: 'நவில் மிழிகளை வாசிக்க',
+    titleTa: UI_TA.writingCategories.poems.title,
+    titleEn: UI_EN.writingCategories.poems.title,
+    descTa: UI_TA.writingCategories.poems.desc,
+    descEn: UI_EN.writingCategories.poems.desc,
+    footerTa: UI_TA.writingCategories.poems.footer,
   },
   quotes: {
     key: 'quotes',
-    titleTa: 'நவில் மொழிகள்',
-    titleEn: 'Navil Quotes',
-    descTa: 'என் பட்டறிவில் உதித்த சிந்தனைத் துளிகள்.',
-    descEn: 'My short quotes and personal insights.',
-    footerTa: 'நவில் மொழிகளைப் பார்க்க',
+    titleTa: UI_TA.writingCategories.quotes.title,
+    titleEn: UI_EN.writingCategories.quotes.title,
+    descTa: UI_TA.writingCategories.quotes.desc,
+    descEn: UI_EN.writingCategories.quotes.desc,
+    footerTa: UI_TA.writingCategories.quotes.footer,
   },
   articles: {
     key: 'articles',
-    titleTa: 'கட்டுரைகள்',
-    titleEn: 'Articles',
-    descTa: 'என் ஆழமான பகுப்பாய்வுப் பதிவுகள்.',
-    descEn: 'My in-depth technical and structured writings.',
-    footerTa: 'கட்டுரைகளைப் படிக்க',
+    titleTa: UI_TA.writingCategories.articles.title,
+    titleEn: UI_EN.writingCategories.articles.title,
+    descTa: UI_TA.writingCategories.articles.desc,
+    descEn: UI_EN.writingCategories.articles.desc,
+    footerTa: UI_TA.writingCategories.articles.footer,
   },
   stories: {
     key: 'stories',
-    titleTa: 'சிறுகதைகள்',
-    titleEn: 'Short Stories',
-    descTa: 'ஒரு கதை சொல்லட்டா சார்?',
-    descEn: 'My original fiction and short narratives.',
-    footerTa: 'சிறுகதைகளை வாசிக்க',
+    titleTa: UI_TA.writingCategories.stories.title,
+    titleEn: UI_EN.writingCategories.stories.title,
+    descTa: UI_TA.writingCategories.stories.desc,
+    descEn: UI_EN.writingCategories.stories.desc,
+    footerTa: UI_TA.writingCategories.stories.footer,
   },
   blog: {
     key: 'blog',
-    titleTa: 'வலைப்பதிவுகள்',
-    titleEn: 'Blog Posts',
-    descTa: 'என் அன்றாடத் தேடல்களும் வாழ்வியல் பகிர்வுகளும்.',
-    descEn: 'My daily reflections and personal updates.',
-    footerTa: 'பகிர்வுகளை வாசிக்க',
+    titleTa: UI_TA.writingCategories.blog.title,
+    titleEn: UI_EN.writingCategories.blog.title,
+    descTa: UI_TA.writingCategories.blog.desc,
+    descEn: UI_EN.writingCategories.blog.desc,
+    footerTa: UI_TA.writingCategories.blog.footer,
   },
   diary: {
     key: 'diary',
-    titleTa: 'நாளேடு',
-    titleEn: 'Diary',
-    descTa: 'என் நாள்களின் நினைவுகளும் பதிவுகளும்.',
-    descEn: 'Memories and records of my days.',
-    footerTa: 'நாளேட்டைத் திறக்க',
+    titleTa: UI_TA.writingCategories.diary.title,
+    titleEn: UI_EN.writingCategories.diary.title,
+    descTa: UI_TA.writingCategories.diary.desc,
+    descEn: UI_EN.writingCategories.diary.desc,
+    footerTa: UI_TA.writingCategories.diary.footer,
   },
 };
 

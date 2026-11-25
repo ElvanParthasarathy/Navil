@@ -3,13 +3,14 @@ import '../../சிறப்புக்கூறுகள்/படைப்�
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
 import Icon from '../../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <BaseLayout
-  title="கருவிகள் | Tools — Elvan Navil"
+  title={`${UI_TA.tools.title} | ${UI_EN.tools.title} — ${UI_EN.brand.name}`}
   description="Interactive web tools by Elvan Navil: Tolkappiyam Tamil script transliterator (Thamizhi, Vatteluttu, IAST), Arichuvadi classical script trainer, Web Audio piano, and Formant Vocoder."
   canonicalPath="/tools"
-  mobileTitle="கருவிகள்|tools"
+  mobileTitle={`${UI_TA.routes.tools.title}|${UI_EN.routes.tools.title}`}
   isBeta={true}
   backUrl="/"
 >
@@ -17,16 +18,16 @@ import Icon from '../../components/astro/Icon.astro';
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
         <h1 class="writings-title" lang="ta">
-          கருவிகள்
+          <span data-ui-ta="tools.title">{UI_TA.tools.title}</span>
           <span
             style="font-size: 0.75rem; background: color-mix(in srgb, var(--text-main) 12%, transparent); color: var(--text-main); padding: 3px 9px; border-radius: 100px; font-weight: 700; letter-spacing: 0.5px; line-height: 1;"
           >
             BETA
           </span>
         </h1>
-        <div class="writings-title-sub">Tools</div>
-        <p class="writings-subtitle" lang="ta">இசை, மொழி &amp; பயன்பாடுகள்</p>
-        <p class="writings-subtitle writings-subtitle-en">Music, Language &amp; Productivity</p>
+        <div class="writings-title-sub" data-ui-en="tools.title">{UI_EN.tools.title}</div>
+        <p class="writings-subtitle" lang="ta" data-ui-ta="tools.subtitle">{UI_TA.tools.subtitle}</p>
+        <p class="writings-subtitle writings-subtitle-en" data-ui-en="tools.subtitle">{UI_EN.tools.subtitle}</p>
       </div>
     </header>
 
@@ -37,15 +38,15 @@ import Icon from '../../components/astro/Icon.astro';
         </div>
         <div class="cat-content">
           <div class="cat-title" lang="ta">
-            நவில் மொழிமாற்றி
+            <span data-ui-ta="tools.translitTitle">{UI_TA.tools.translitTitle}</span>
             <span class="cat-beta-badge">BETA</span>
           </div>
-          <div class="cat-title-sub">Navil Transliterator</div>
-          <p class="cat-desc" lang="ta">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
-          <p class="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
+          <div class="cat-title-sub" data-ui-en="tools.translitTitle">{UI_EN.tools.translitTitle}</div>
+          <p class="cat-desc" lang="ta" data-ui-ta="tools.translitDesc">{UI_TA.tools.translitDesc}</p>
+          <p class="cat-desc-sub" data-ui-en="tools.translitDesc">{UI_EN.tools.translitDesc}</p>
         </div>
         <div class="cat-footer">
-          மொழிமாற்றியைத் தொடங்க <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-ta="tools.translitCta">{UI_TA.tools.translitCta}</span> <Icon name="ArrowRight" weight="regular" />
         </div>
       </a>
 
@@ -55,15 +56,15 @@ import Icon from '../../components/astro/Icon.astro';
         </div>
         <div class="cat-content">
           <div class="cat-title" lang="ta">
-            நவில் அரிச்சுவடி
+            <span data-ui-ta="tools.arichuvadiTitle">{UI_TA.tools.arichuvadiTitle}</span>
             <span class="cat-beta-badge">BETA</span>
           </div>
-          <div class="cat-title-sub">Navil Arichuvadi</div>
-          <p class="cat-desc" lang="ta">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
-          <p class="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
+          <div class="cat-title-sub" data-ui-en="tools.arichuvadiTitle">{UI_EN.tools.arichuvadiTitle}</div>
+          <p class="cat-desc" lang="ta" data-ui-ta="tools.arichuvadiDesc">{UI_TA.tools.arichuvadiDesc}</p>
+          <p class="cat-desc-sub" data-ui-en="tools.arichuvadiDesc">{UI_EN.tools.arichuvadiDesc}</p>
         </div>
         <div class="cat-footer">
-          அரிச்சுவடியைத் திறக்க <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-ta="tools.arichuvadiCta">{UI_TA.tools.arichuvadiCta}</span> <Icon name="ArrowRight" weight="regular" />
         </div>
       </a>
 
@@ -73,15 +74,15 @@ import Icon from '../../components/astro/Icon.astro';
         </div>
         <div class="cat-content">
           <div class="cat-title" lang="ta">
-            கின்னரப்பெட்டி
+            <span data-ui-ta="tools.pianoTitle">{UI_TA.tools.pianoTitle}</span>
             <span class="cat-beta-badge">BETA</span>
           </div>
-          <div class="cat-title-sub">Navil Piano</div>
-          <p class="cat-desc" lang="ta">மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.</p>
-          <p class="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
+          <div class="cat-title-sub" data-ui-en="tools.pianoTitle">{UI_EN.tools.pianoTitle}</div>
+          <p class="cat-desc" lang="ta" data-ui-ta="tools.pianoDesc">{UI_TA.tools.pianoDesc}</p>
+          <p class="cat-desc-sub" data-ui-en="tools.pianoDesc">{UI_EN.tools.pianoDesc}</p>
         </div>
         <div class="cat-footer">
-          கின்னரப்பெட்டியைத் தொடங்க <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-ta="tools.pianoCta">{UI_TA.tools.pianoCta}</span> <Icon name="ArrowRight" weight="regular" />
         </div>
       </a>
 
@@ -90,13 +91,13 @@ import Icon from '../../components/astro/Icon.astro';
           <Icon name="Monitor" weight="regular" />
         </div>
         <div class="cat-content">
-          <div class="cat-title" lang="ta">பயிற்றுவிப்பு</div>
-          <div class="cat-title-sub">Teaching &amp; Presentations</div>
-          <p class="cat-desc" lang="ta">கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.</p>
-          <p class="cat-desc-sub">Interactive teaching materials, slides, and educational resources.</p>
+          <div class="cat-title" lang="ta" data-ui-ta="tools.teachingTitle">{UI_TA.tools.teachingTitle}</div>
+          <div class="cat-title-sub" data-ui-en="tools.teachingTitle">{UI_EN.tools.teachingTitle}</div>
+          <p class="cat-desc" lang="ta" data-ui-ta="tools.teachingDesc">{UI_TA.tools.teachingDesc}</p>
+          <p class="cat-desc-sub" data-ui-en="tools.teachingDesc">{UI_EN.tools.teachingDesc}</p>
         </div>
         <div class="cat-footer">
-          பயிற்றுவிப்பைக் காண <Icon name="ArrowRight" weight="regular" />
+          <span data-ui-ta="tools.teachingCta">{UI_TA.tools.teachingCta}</span> <Icon name="ArrowRight" weight="regular" />
         </div>
       </a>
     </div>

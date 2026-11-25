@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { UI_TA, UI_EN } from '../i18n';
 ---
 
 <BaseLayout
-  title="பக்கம் கிடைக்கவில்லை | 404 Page Not Found — Elvan Navil"
+  title={`${UI_TA.notFound.heading} | 404 — ${UI_EN.brand.name}`}
   description="The requested page could not be found on Elvan Navil."
   noindex={true}
   includeAdsense={false}
@@ -13,14 +14,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="not-found-page">
     <div class="not-found-card">
       <div class="not-found-code">404</div>
-      <h1 lang="ta">நீங்கள் தேடிய பக்கம் கிடைக்கவில்லை</h1>
-      <p class="not-found-sub">The page you are looking for may have moved or been archived.</p>
+      <h1 lang="ta" data-ui-ta="notFound.heading">{UI_TA.notFound.heading}</h1>
+      <p class="not-found-sub" data-ui-en="notFound.subtext">{UI_EN.notFound.subtext}</p>
       <div class="not-found-actions">
-        <a href="/" class="nf-btn nf-primary">முகப்பு / Home</a>
-        <a href="/writings" class="nf-btn">எழுத்துகள் / Writings</a>
-        <a href="/arts" class="nf-btn">படைப்புகள் / Arts</a>
-        <a href="/tools" class="nf-btn">கருவிகள் / Tools</a>
-        <a href="/downloads/nammil" class="nf-btn">நம்மில் / Nammil</a>
+        <a href="/" class="nf-btn nf-primary" data-ui-pair="footer.home" data-ui-sep=" / ">{UI_TA.footer.home} / {UI_EN.footer.home}</a>
+        <a href="/writings" class="nf-btn" data-ui-pair="writings.title" data-ui-sep=" / ">{UI_TA.writings.title} / {UI_EN.writings.title}</a>
+        <a href="/arts" class="nf-btn" data-ui-pair="arts.title" data-ui-sep=" / ">{UI_TA.arts.title} / {UI_EN.footer.arts}</a>
+        <a href="/tools" class="nf-btn" data-ui-pair="footer.tools" data-ui-sep=" / ">{UI_TA.footer.tools} / {UI_EN.footer.tools}</a>
+        <a href="/downloads/nammil" class="nf-btn" data-ui-pair="footer.nammil" data-ui-sep=" / ">{UI_TA.footer.nammil} / {UI_EN.footer.nammil}</a>
       </div>
     </div>
   </section>

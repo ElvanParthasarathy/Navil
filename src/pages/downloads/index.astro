@@ -3,22 +3,23 @@ import '../../சிறப்புக்கூறுகள்/படைப்�
 import '../../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
+import { UI_TA, UI_EN } from '../../i18n';
 ---
 
 <BaseLayout
-  title="பதிவிறக்கங்கள் | Downloads — Elvan Navil"
+  title={`${UI_TA.downloads.title} | ${UI_EN.downloads.title} — ${UI_EN.brand.name}`}
   description="Official desktop applications by Elvan Navil, including Nammil privacy-first WhatsApp companion for Windows."
   canonicalPath="/downloads"
-  mobileTitle="பதிவிறக்கங்கள்"
+  mobileTitle={`${UI_TA.routes.downloads.title}|${UI_EN.routes.downloads.title}`}
   backUrl="/"
 >
   <div class="writings-page page-view fadeIn">
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
-        <h1 class="writings-title">பதிவிறக்கங்கள்</h1>
-        <div class="writings-title-sub">Downloads</div>
-        <p class="writings-subtitle">கணினி மென்பொருட்கள் &amp; பயன்பாடுகள்</p>
-        <p class="writings-subtitle writings-subtitle-en">Desktop Applications &amp; Productivity Tools</p>
+        <h1 class="writings-title" data-ui-ta="downloads.title">{UI_TA.downloads.title}</h1>
+        <div class="writings-title-sub" data-ui-en="downloads.title">{UI_EN.downloads.title}</div>
+        <p class="writings-subtitle" data-ui-ta="downloads.subtitle">{UI_TA.downloads.subtitle}</p>
+        <p class="writings-subtitle writings-subtitle-en" data-ui-en="downloads.subtitle">{UI_EN.downloads.subtitle}</p>
       </div>
     </header>
 
@@ -34,23 +35,23 @@ import AdUnit from '../../components/astro/AdUnit.astro';
             <img src="/nammil_icon.png" alt="Nammil App Icon" class="store-card-icon" />
             <div class="store-card-title-wrap">
               <h2 class="store-card-title">
-                <span class="store-card-name-ta" lang="ta">நம்மில்</span>
-                <span class="store-card-name-en">Nammil</span>
+                <span class="store-card-name-ta" lang="ta" data-ui-ta="home.nammilName">{UI_TA.home.nammilName}</span>
+                <span class="store-card-name-en" data-ui-en="home.nammilName">{UI_EN.home.nammilName}</span>
               </h2>
               <div class="store-card-meta">
-                <span>Social &amp; Productivity • சமூகம்</span>
+                <span data-ui-pair="home.nammilCategory">{UI_TA.home.nammilCategory} • {UI_EN.home.nammilCategory}</span>
               </div>
             </div>
           </div>
-          <div class="store-card-pill">Free</div>
+          <div class="store-card-pill" data-ui-ta="home.nammilPrice">{UI_TA.home.nammilPrice}</div>
         </div>
 
         <div class="store-card-desc-wrap">
-          <p class="store-card-desc store-card-desc-ta" lang="ta">
-            பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்கான நவீன கணினித் துணைச்செயலி.
+          <p class="store-card-desc store-card-desc-ta" lang="ta" data-ui-ta="home.nammilShortDesc">
+            {UI_TA.home.nammilShortDesc}
           </p>
-          <p class="store-card-desc store-card-desc-en">
-            A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions and media organization.
+          <p class="store-card-desc store-card-desc-en" data-ui-en="home.nammilShortDesc">
+            {UI_EN.home.nammilShortDesc}
           </p>
         </div>
 

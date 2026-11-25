@@ -20,6 +20,7 @@ import {
   capitalizeWords,
   capitalizeWordsHtml,
 } from '../../../சிறப்புக்கூறுகள்/கருவிகள்/மொழிமாற்றி/பயன்பாடுகள்/மொழிமாற்றம்';
+import { UI_TA, UI_EN } from '../../../i18n';
 
 export async function getStaticPaths() {
   const paths: any[] = [];
@@ -52,14 +53,7 @@ const description = getPrimaryExcerpt(post, 160) || `${primaryTitle} — ${meta.
 const coverImg = post.cover_image ? getOptimizedImage(post.cover_image, 'medium') : null;
 const tags = getPostTags(post);
 
-const LANG_LABELS: Record<string, string> = {
-  ta: 'தமிழ்',
-  en: 'English',
-  ml: 'മലയാളം',
-  hi: 'Hindi',
-  te: 'Telugu',
-  sa: 'Sanskrit',
-};
+const LANG_LABELS: Record<string, string> = UI_TA.reader.langLabels;
 const TRANSL_LABELS: Record<string, string> = {
   en: 'Aa',
   ta: 'த',
@@ -178,11 +172,11 @@ const articleJsonLd = {
 >
   <div class="page-view fadeIn" id="reading-article-root" style="max-width: 1200px; margin: 0 auto; padding: 10px 20px 60px;">
     <nav aria-label="Breadcrumb" style="margin-bottom: 20px; font-size: 0.88rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px;">
-      <a href="/" style="color: var(--text-muted); text-decoration: none;">முகப்பு / Home</a>
+      <a href="/" style="color: var(--text-muted); text-decoration: none;" data-ui-pair="reader.breadcrumbHome" data-ui-sep=" / ">{UI_TA.reader.breadcrumbHome} / {UI_EN.reader.breadcrumbHome}</a>
       <span>›</span>
-      <a href="/writings" style="color: var(--text-muted); text-decoration: none;">படைப்புகள் / Writings</a>
+      <a href="/writings" style="color: var(--text-muted); text-decoration: none;" data-ui-pair="reader.breadcrumbWritings" data-ui-sep=" / ">{UI_TA.reader.breadcrumbWritings} / {UI_EN.reader.breadcrumbWritings}</a>
       <span>›</span>
-      <a href={`/writings/${category}`} style="color: var(--text-muted); text-decoration: none;">{meta.titleTa} • {meta.titleEn}</a>
+      <a href={`/writings/${category}`} style="color: var(--text-muted); text-decoration: none;" data-ui-pair={`writingCategories.${category}.title`}>{meta.titleTa} • {meta.titleEn}</a>
     </nav>
 
     <div class="reader-header-area" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
@@ -343,16 +337,16 @@ const articleJsonLd = {
             {post.urai && (
               <button type="button" class="expand-pill" id="btn-toggle-urai">
                 <div class="pill-text-stack">
-                  <span class="pill-ta">விளக்கம்</span>
-                  <span class="pill-en">meaning</span>
+                  <span class="pill-ta" data-ui-ta="reader.meaning">{UI_TA.reader.meaning}</span>
+                  <span class="pill-en en-sub-inline" data-ui-en="reader.meaning">{UI_EN.reader.meaning}</span>
                 </div>
               </button>
             )}
             {post.notes && (
               <button type="button" class="expand-pill" id="btn-toggle-notes">
                 <div class="pill-text-stack">
-                  <span class="pill-ta">குறிப்புகள்</span>
-                  <span class="pill-en">notes</span>
+                  <span class="pill-ta" data-ui-ta="reader.notes">{UI_TA.reader.notes}</span>
+                  <span class="pill-en en-sub-inline" data-ui-en="reader.notes">{UI_EN.reader.notes}</span>
                 </div>
               </button>
             )}
@@ -360,24 +354,28 @@ const articleJsonLd = {
 
           {isLocked ? (
             <div id="urai-lock-box" style="display: none; text-align: center; padding: 20px 0; max-width: 320px; margin: 0 auto;">
-              <p style="color: var(--text-muted); margin-bottom: 12px;">This section is locked. Enter password to view.</p>
+              <p style="color: var(--text-muted); margin-bottom: 12px;">
+                <span data-ui-ta="reader.lockedPrompt">{UI_TA.reader.lockedPrompt}</span>
+                <span class="en-sub-inline" style="display: block; margin-top: 4px;" data-ui-en="reader.lockedPrompt">{UI_EN.reader.lockedPrompt}</span>
+              </p>
               {post.uraiNotesPasswordHint && (
                 <p style="font-style: italic; font-size: 0.9rem; color: var(--text-main); opacity: 0.8; margin-bottom: 12px;">
-                  Hint: {post.uraiNotesPasswordHint}
+                  <span data-ui-pair="reader.hintPrefix">{UI_TA.reader.hintPrefix} • {UI_EN.reader.hintPrefix}</span> {post.uraiNotesPasswordHint}
                 </p>
               )}
               <form id="urai-unlock-form" style="display: flex; flex-direction: column; gap: 10px;">
                 <input
                   id="urai-pwd-input"
                   type="password"
-                  placeholder="Enter Password"
+                  data-ui-placeholder="reader.passwordPlaceholder"
+                  placeholder={UI_TA.reader.passwordPlaceholder}
                   style="padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); background: var(--bg-panel); color: var(--text-main);"
                 />
-                <button type="submit" style="padding: 12px; border-radius: 12px; border: none; background: var(--text-main); color: var(--bg-app); cursor: pointer; font-weight: bold;">
-                  Unlock
+                <button type="submit" style="padding: 12px; border-radius: 12px; border: none; background: var(--text-main); color: var(--bg-app); cursor: pointer; font-weight: bold;" data-ui-pair="reader.unlockBtn">
+                  {UI_TA.reader.unlockBtn} • {UI_EN.reader.unlockBtn}
                 </button>
               </form>
-              <p id="urai-pwd-error" style="display: none; color: #ff4444; font-size: 0.85rem; margin-top: 10px;">Incorrect password.</p>
+              <p id="urai-pwd-error" style="display: none; color: #ff4444; font-size: 0.85rem; margin-top: 10px;" data-ui-pair="reader.wrongPassword">{UI_TA.reader.wrongPassword} • {UI_EN.reader.wrongPassword}</p>
             </div>
           ) : null}
 
@@ -393,18 +391,18 @@ const articleJsonLd = {
       {isStory && (prevPart || nextPart) && (
         <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 16px;">
           <h4 style="margin: 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">
-            {post.series_name} — Continue Reading
+            {post.series_name} — <span data-ui-pair="reader.continueReading">{UI_TA.reader.continueReading} • {UI_EN.reader.continueReading}</span>
           </h4>
           <div style="display: flex; gap: 12px; align-items: center; justify-content: center;">
             {prevPart && (
               <a href={`/writings/stories/${encodeURIComponent(prevPart.slug)}`} class="page-btn prev-btn" style="text-decoration: none; gap: 6px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
-                பகுதி {prevPart.series_part}
+                <span data-ui-ta="common.partLabel">{UI_TA.common.partLabel}</span> {prevPart.series_part}
               </a>
             )}
             {nextPart && (
               <a href={`/writings/stories/${encodeURIComponent(nextPart.slug)}`} class="page-btn next-btn" style="text-decoration: none; gap: 6px;">
-                பகுதி {nextPart.series_part}
+                <span data-ui-ta="common.partLabel">{UI_TA.common.partLabel}</span> {nextPart.series_part}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
               </a>
             )}
@@ -414,13 +412,15 @@ const articleJsonLd = {
 
       <!-- Literary context block for rich internal linking -->
       <section style="margin-top: 40px; padding: 20px 24px; background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border-light); font-size: 0.93rem; line-height: 1.7; color: var(--text-muted);">
-        <h3 style="margin: 0 0 8px; font-size: 1.05rem; color: var(--text-main);">இலக்கியப் பார்வை • About This Work</h3>
+        <h3 style="margin: 0 0 8px; font-size: 1.05rem; color: var(--text-main);" data-ui-pair="reader.aboutWorkHeading">{UI_TA.reader.aboutWorkHeading} • {UI_EN.reader.aboutWorkHeading}</h3>
         <p style="margin: 0 0 10px;">
-          Published in <strong>{meta.titleTa} ({meta.titleEn})</strong> on Elvan Navil by <strong>Elvan Parthasarathy</strong>. Explore bilingual Tamil and English literature, stories, and essays across the collection.
+          Published in <strong><span data-ui-ta={`writingCategories.${category}.title`}>{meta.titleTa}</span><span class="en-sub-inline"> ({meta.titleEn})</span></strong> on Elvan Navil by <strong>Elvan Parthasarathy</strong>. Explore bilingual Tamil and English literature, stories, and essays across the collection.
         </p>
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <a href={`/writings/${category}`} style="color: var(--text-main); font-weight: 600; text-decoration: underline;">← All {meta.titleEn}</a>
-          <a href="/writings" style="color: var(--text-main); font-weight: 600; text-decoration: underline;">Explore All Writings</a>
+          <a href={`/writings/${category}`} style="color: var(--text-main); font-weight: 600; text-decoration: underline;">
+            ← <span data-ui-ta={`writingCategories.${category}.title`}>{meta.titleTa}</span><span class="en-sub-inline"> ({meta.titleEn})</span>
+          </a>
+          <a href="/writings" style="color: var(--text-main); font-weight: 600; text-decoration: underline;" data-ui-pair="reader.exploreAllWritings">{UI_TA.reader.exploreAllWritings} • {UI_EN.reader.exploreAllWritings}</a>
         </div>
       </section>
 

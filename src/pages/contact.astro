@@ -1,32 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/astro/Icon.astro';
+import { UI_TA, UI_EN } from '../i18n';
 const contactEmail = 'jaiprakashpartha@gmail.com';
 ---
 
 <BaseLayout
-  title="தொடர்பு | Contact Us — Elvan Navil"
+  title={`${UI_TA.contact.title} | ${UI_EN.contact.title} — ${UI_EN.brand.name}`}
   description="Get in touch with Elvan Parthasarathy (Jaiprakash P) at Elvan Navil for software engineering, desktop tools, literary licensing, or technical feedback."
   canonicalPath="/contact"
-  mobileTitle="தொடர்பு|contact"
+  mobileTitle={`${UI_TA.routes.contact.title}|${UI_EN.routes.contact.title}`}
   backUrl="/"
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
     <header class="contact-hero">
       <div class="contact-badge">
         <Icon name="ChatsCircle" weight="fill" size={16} />
-        <span>தொடர்பு • GET IN TOUCH</span>
+        <span data-ui-pair="contact.badge">{UI_TA.contact.badge} • {UI_EN.contact.badge}</span>
       </div>
-      <h1 class="contact-title">தொடர்பு கொள்ள • Contact Us</h1>
+      <h1 class="contact-title" data-ui-pair="contact.title">{UI_TA.contact.title} • {UI_EN.contact.title}</h1>
       <p class="contact-subtitle">
-        Have an inquiry, feedback regarding our software tools, or interest in collaborating on bilingual literary creations? We are always pleased to connect.
+        <span data-ui-ta="contact.subtitle" style="display: block;">{UI_TA.contact.subtitle}</span>
+        <span class="en-sub-inline" data-ui-en="contact.subtitle" style="display: block; margin-top: 6px; opacity: 0.8;">{UI_EN.contact.subtitle}</span>
       </p>
     </header>
 
     <div class="contact-grid">
       <div class="contact-card">
-        <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-main);">
-          தொடர்பு விவரங்கள் • Direct Information
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-main);" data-ui-pair="contact.directInfoTitle">
+          {UI_TA.contact.directInfoTitle} • {UI_EN.contact.directInfoTitle}
         </h2>
 
         <div class="contact-item">
@@ -34,10 +36,10 @@ const contactEmail = 'jaiprakashpartha@gmail.com';
             <Icon name="UserCheck" weight="regular" size={22} />
           </div>
           <div>
-            <p class="contact-item-title">உருவாக்கியவர் • Creator</p>
+            <p class="contact-item-title" data-ui-pair="contact.creatorLabel">{UI_TA.contact.creatorLabel} • {UI_EN.contact.creatorLabel}</p>
             <p class="contact-item-val">Elvan Parthasarathy (Jaiprakash P)</p>
-            <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">
-              Founder &amp; Developer, Elvan Navil
+            <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);" data-ui-pair="contact.creatorRole">
+              {UI_TA.contact.creatorRole} • {UI_EN.contact.creatorRole}
             </p>
           </div>
         </div>
@@ -47,14 +49,14 @@ const contactEmail = 'jaiprakashpartha@gmail.com';
             <Icon name="EnvelopeSimple" weight="regular" size={22} />
           </div>
           <div style="flex: 1;">
-            <p class="contact-item-title">மின்னஞ்சல் • Official Email</p>
+            <p class="contact-item-title" data-ui-pair="contact.emailLabel">{UI_TA.contact.emailLabel} • {UI_EN.contact.emailLabel}</p>
             <p class="contact-item-val">
               <a href={`mailto:${contactEmail}`} style="color: inherit; text-decoration: none;">{contactEmail}</a>
             </p>
             <button type="button" id="copy-email-btn" class="copy-btn">
               <span class="copy-icon-default" style="display:inline-flex;align-items:center;"><Icon name="EnvelopeSimple" weight="regular" size={16} /></span>
               <span class="copy-icon-done" style="display:none;align-items:center;"><Icon name="CheckCircle" weight="fill" size={16} /></span>
-              <span id="copy-email-label">Copy Email Address</span>
+              <span id="copy-email-label" data-ui-pair="contact.copyEmail">{UI_TA.contact.copyEmail} • {UI_EN.contact.copyEmail}</span>
             </button>
           </div>
         </div>
@@ -64,7 +66,7 @@ const contactEmail = 'jaiprakashpartha@gmail.com';
             <Icon name="MapPin" weight="regular" size={22} />
           </div>
           <div>
-            <p class="contact-item-title">இடம் • Location &amp; Timezone</p>
+            <p class="contact-item-title" data-ui-pair="contact.locationLabel">{UI_TA.contact.locationLabel} • {UI_EN.contact.locationLabel}</p>
             <p class="contact-item-val">Tamil Nadu, India (IST / UTC+05:30)</p>
           </div>
         </div>
@@ -74,13 +76,13 @@ const contactEmail = 'jaiprakashpartha@gmail.com';
             <Icon name="Clock" weight="regular" size={22} />
           </div>
           <div>
-            <p class="contact-item-title">பதில் காலக்கெடு • Response Window</p>
-            <p class="contact-item-val">Within 24–48 Business Hours</p>
+            <p class="contact-item-title" data-ui-pair="contact.responseLabel">{UI_TA.contact.responseLabel} • {UI_EN.contact.responseLabel}</p>
+            <p class="contact-item-val" data-ui-pair="contact.responseValue">{UI_TA.contact.responseValue} • {UI_EN.contact.responseValue}</p>
           </div>
         </div>
 
         <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light);">
-          <p class="contact-item-title" style="margin-bottom: 8px;">இணையவழி இணைப்புகள் • Web Profiles</p>
+          <p class="contact-item-title" style="margin-bottom: 8px;" data-ui-pair="contact.webProfilesLabel">{UI_TA.contact.webProfilesLabel} • {UI_EN.contact.webProfilesLabel}</p>
           <div class="social-row">
             <a href="https://github.com/ElvanParthasarathy" target="_blank" rel="noopener noreferrer" class="social-chip">
               <Icon name="GithubLogo" weight="regular" size={18} /> GitHub
@@ -96,39 +98,39 @@ const contactEmail = 'jaiprakashpartha@gmail.com';
       </div>
 
       <div class="contact-card">
-        <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 8px; color: var(--text-main);">
-          செய்தி அனுப்ப • Send a Message
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 8px; color: var(--text-main);" data-ui-pair="contact.sendMsgTitle">
+          {UI_TA.contact.sendMsgTitle} • {UI_EN.contact.sendMsgTitle}
         </h2>
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0 0 20px; line-height: 1.5;">
-          Fill out the form below to initiate an email draft directly to our inbox.
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0 0 20px; line-height: 1.5;" data-ui-pair="contact.sendMsgDesc">
+          {UI_TA.contact.sendMsgDesc} • {UI_EN.contact.sendMsgDesc}
         </p>
 
         <form id="contact-inquiry-form">
-          <label class="contact-label" for="cf-name">உங்கள் பெயர் • Your Name</label>
+          <label class="contact-label" for="cf-name" data-ui-pair="contact.nameField">{UI_TA.contact.nameField} • {UI_EN.contact.nameField}</label>
           <input id="cf-name" type="text" required placeholder="e.g. Anbarasan / John Doe" class="contact-form-input" />
 
-          <label class="contact-label" for="cf-email">மின்னஞ்சல் • Your Email Address</label>
+          <label class="contact-label" for="cf-email" data-ui-pair="contact.emailField">{UI_TA.contact.emailField} • {UI_EN.contact.emailField}</label>
           <input id="cf-email" type="email" required placeholder="name@example.com" class="contact-form-input" />
 
-          <label class="contact-label" for="cf-subject">பொருள் • Subject</label>
+          <label class="contact-label" for="cf-subject" data-ui-pair="contact.subjectField">{UI_TA.contact.subjectField} • {UI_EN.contact.subjectField}</label>
           <input id="cf-subject" type="text" required placeholder="Subject of inquiry or software feedback" class="contact-form-input" />
 
-          <label class="contact-label" for="cf-msg">செய்தி • Message</label>
+          <label class="contact-label" for="cf-msg" data-ui-pair="contact.msgField">{UI_TA.contact.msgField} • {UI_EN.contact.msgField}</label>
           <textarea id="cf-msg" required rows={4} placeholder="How can we assist you?" class="contact-form-input" style="resize: vertical;"></textarea>
 
           <button type="submit" class="contact-form-btn">
             <Icon name="PaperPlaneTilt" weight="fill" size={18} />
-            மின்னஞ்சல் அனுப்ப • Open Email Draft
+            <span data-ui-pair="contact.submitBtn">{UI_TA.contact.submitBtn} • {UI_EN.contact.submitBtn}</span>
           </button>
-          <p id="cf-sent" style="display: none; margin: 12px 0 0; font-size: 0.85rem; color: #10b981; text-align: center; font-weight: 600;">
-            ✓ Email client triggered successfully. Thank you for reaching out!
+          <p id="cf-sent" style="display: none; margin: 12px 0 0; font-size: 0.85rem; color: #10b981; text-align: center; font-weight: 600;" data-ui-pair="contact.sentSuccess">
+            {UI_TA.contact.sentSuccess}
           </p>
         </form>
       </div>
     </div>
   </div>
 
-  <script is:inline define:vars={{ contactEmail }}>
+  <script is:inline define:vars={{ contactEmail, copiedTa: UI_TA.contact.copiedEmail, copiedEn: UI_EN.contact.copiedEmail, copyTa: UI_TA.contact.copyEmail, copyEn: UI_EN.contact.copyEmail }}>
     (function () {
       function initContactPage() {
         var copyBtn = document.getElementById('copy-email-btn');
@@ -139,13 +141,14 @@ const contactEmail = 'jaiprakashpartha@gmail.com';
               var lbl = document.getElementById('copy-email-label');
               var defIco = copyBtn.querySelector('.copy-icon-default');
               var doneIco = copyBtn.querySelector('.copy-icon-done');
-              if (lbl) lbl.textContent = 'Email Copied!';
+              if (lbl) lbl.textContent = copiedTa + ' • ' + copiedEn;
               if (defIco) defIco.style.display = 'none';
               if (doneIco) doneIco.style.display = 'inline-flex';
               setTimeout(function () {
-                if (lbl) lbl.textContent = 'Copy Email Address';
+                if (lbl) lbl.textContent = copyTa + ' • ' + copyEn;
                 if (defIco) defIco.style.display = 'inline-flex';
                 if (doneIco) doneIco.style.display = 'none';
+                if (window.__elvanApplyLangMode) window.__elvanApplyLangMode(document);
               }, 2500);
             });
           });
