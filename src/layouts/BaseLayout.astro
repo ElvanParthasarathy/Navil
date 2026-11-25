@@ -574,18 +574,26 @@ const fullJsonLd = {
         var backBtn = document.getElementById('mobile-menu-back-btn');
 
         function closeMobileMenu() {
-          if (dropdown) dropdown.style.display = 'none';
-          if (backdrop) backdrop.style.display = 'none';
+          if (dropdown) {
+            dropdown.classList.remove('is-open');
+            dropdown.style.display = 'none';
+            dropdown.style.height = '56px';
+          }
+          if (backdrop) {
+            backdrop.classList.remove('is-open');
+            backdrop.style.display = 'none';
+          }
           if (track) track.style.transform = 'translateX(0%)';
-          if (dropdown) dropdown.style.height = '56px';
         }
         if (dotBtn && dropdown && backdrop) {
           dotBtn.addEventListener('click', function (e) {
             e.stopPropagation();
-            var isOpen = dropdown.style.display !== 'none';
+            var isOpen = dropdown.classList.contains('is-open');
             if (isOpen) {
               closeMobileMenu();
             } else {
+              dropdown.classList.add('is-open');
+              backdrop.classList.add('is-open');
               dropdown.style.display = 'block';
               backdrop.style.display = 'block';
               if (track) track.style.transform = 'translateX(0%)';
@@ -624,6 +632,20 @@ const fullJsonLd = {
     </script>
 
     <style is:global>
+      html,
+      body,
+      .app-shell {
+        max-width: 100%;
+        overflow-x: clip;
+      }
+      .main-content {
+        min-width: 0;
+        max-width: 100%;
+      }
+      #mobile-menu-dropdown:not(.is-open),
+      #mobile-menu-backdrop:not(.is-open) {
+        display: none !important;
+      }
       .astro-island-root .mobile-topbar,
       .astro-island-root .back-pill.bp-fixed {
         display: none !important;
