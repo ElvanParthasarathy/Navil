@@ -192,6 +192,10 @@ const fullJsonLd = {
           document.documentElement.setAttribute('data-theme', effective);
           document.documentElement.setAttribute('data-theme-mode', theme);
 
+          if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            document.documentElement.classList.add('sidebar-collapsed-init');
+          }
+
           if (window.self !== window.top) {
             var style = document.createElement('style');
             style.textContent =
@@ -218,8 +222,8 @@ const fullJsonLd = {
             type="button"
             id="topbar-sidebar-toggle"
             class="sidebar-toggle-btn"
-            aria-label="Toggle Sidebar"
-            title="Toggle Sidebar"
+            aria-label="Collapse Sidebar"
+            title="Collapse Sidebar"
           >
             <Icon name="SidebarSimple" weight="regular" size={19} />
           </button>
@@ -253,7 +257,7 @@ const fullJsonLd = {
         </div>
       </header>
 
-      <!-- PERSISTENT SIDEBAR / MOBILE BOTTOM BAR -->
+      <!-- PERSISTENT VANILLA SIDEBAR / MOBILE BOTTOM BAR -->
       <nav
         id="app-sidebar"
         class={`sidebar ${!isMainLevel ? 'mobile-hidden-nav' : ''}`}
@@ -263,10 +267,10 @@ const fullJsonLd = {
         <div class="sidebar-backdrop"></div>
         <div class="sidebar-top">
           <div class="sidebar-nav">
-            <a href="/" data-nav-key="home" class={`nav-item ${isHome ? 'active' : ''}`}>
-              <span class="nav-icon">
-                <span class="nav-icon-reg"><Icon name="House" weight="regular" size={21} /></span>
-                <span class="nav-icon-fill"><Icon name="House" weight="fill" size={21} /></span>
+            <a href="/" data-nav-key="home" data-tip="முகப்பு (home)" class={`nav-item ${isHome ? 'active' : ''}`}>
+              <span class="nav-icon" aria-hidden="true">
+                <Icon name="House" weight="regular" size="100%" class="nav-svg-reg" />
+                <Icon name="House" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
                 <span class="label">முகப்பு</span>
@@ -274,10 +278,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/navilgal" data-nav-key="navilgal" class={`nav-item ${isNavilgalActive ? 'active' : ''}`}>
-              <span class="nav-icon">
-                <span class="nav-icon-reg"><Icon name="BookOpen" weight="regular" size={21} /></span>
-                <span class="nav-icon-fill"><Icon name="BookOpen" weight="fill" size={21} /></span>
+            <a href="/navilgal" data-nav-key="navilgal" data-tip="நவில்கள் (navilgal)" class={`nav-item ${isNavilgalActive ? 'active' : ''}`}>
+              <span class="nav-icon" aria-hidden="true">
+                <Icon name="BookOpen" weight="regular" size="100%" class="nav-svg-reg" />
+                <Icon name="BookOpen" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
                 <span class="label">நவில்கள்</span>
@@ -285,10 +289,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/tools" data-nav-key="tools" class={`nav-item ${isToolsActive ? 'active' : ''}`}>
-              <span class="nav-icon">
-                <span class="nav-icon-reg"><Icon name="Wrench" weight="regular" size={21} /></span>
-                <span class="nav-icon-fill"><Icon name="Wrench" weight="fill" size={21} /></span>
+            <a href="/tools" data-nav-key="tools" data-tip="கருவிகள் (tools • BETA)" class={`nav-item ${isToolsActive ? 'active' : ''}`}>
+              <span class="nav-icon" aria-hidden="true">
+                <Icon name="Wrench" weight="regular" size="100%" class="nav-svg-reg" />
+                <Icon name="Wrench" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
                 <span class="label" style="display: flex; align-items: center;">
@@ -301,10 +305,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/downloads" data-nav-key="downloads" class={`nav-item ${isDownloadsActive ? 'active' : ''}`}>
-              <span class="nav-icon">
-                <span class="nav-icon-reg"><Icon name="DownloadSimple" weight="regular" size={21} /></span>
-                <span class="nav-icon-fill"><Icon name="DownloadSimple" weight="fill" size={21} /></span>
+            <a href="/downloads" data-nav-key="downloads" data-tip="பதிவிறக்கங்கள் (downloads)" class={`nav-item ${isDownloadsActive ? 'active' : ''}`}>
+              <span class="nav-icon" aria-hidden="true">
+                <Icon name="DownloadSimple" weight="regular" size="100%" class="nav-svg-reg" />
+                <Icon name="DownloadSimple" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
                 <span class="label">பதிவிறக்கங்கள்</span>
@@ -312,10 +316,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/about" data-nav-key="about" class={`nav-item desktop-only ${isAboutActive ? 'active' : ''}`}>
-              <span class="nav-icon">
-                <span class="nav-icon-reg"><Icon name="User" weight="regular" size={21} /></span>
-                <span class="nav-icon-fill"><Icon name="User" weight="fill" size={21} /></span>
+            <a href="/about" data-nav-key="about" data-tip="பற்றி (about)" class={`nav-item desktop-only ${isAboutActive ? 'active' : ''}`}>
+              <span class="nav-icon" aria-hidden="true">
+                <Icon name="User" weight="regular" size="100%" class="nav-svg-reg" />
+                <Icon name="User" weight="fill" size="100%" class="nav-svg-fill" />
               </span>
               <div class="nav-text-container">
                 <span class="label">பற்றி</span>
@@ -336,7 +340,7 @@ const fullJsonLd = {
 
         <div class="sidebar-bottom" id="settings-zone">
           <div class="settings-profile-container">
-            <button type="button" id="settings-trigger-btn" class="settings-trigger">
+            <button type="button" id="settings-trigger-btn" class="settings-trigger" aria-label="Appearance and settings">
               <div class="settings-avatar">
                 <img src={profilePic.src} alt="Profile" style="width:100%;height:100%;object-fit:cover;pointer-events:auto;" />
               </div>
@@ -344,10 +348,10 @@ const fullJsonLd = {
                 <span class="settings-name">{(profileData as any)?.fullName || 'Elvan Parthasarathy'}</span>
                 <span class="settings-brand-tag">Elvan Navil</span>
               </div>
-              <span class="settings-theme-icon" aria-hidden="true" style="display:inline-flex;align-items:center;">
-                <span class="theme-ind theme-ind-light"><Icon name="Sun" weight="regular" size={16} /></span>
-                <span class="theme-ind theme-ind-dark"><Icon name="Moon" weight="regular" size={16} /></span>
-                <svg class="theme-ind theme-ind-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+              <span class="settings-theme-icon" aria-hidden="true">
+                <Icon name="Sun" weight="regular" size={16} class="theme-ind theme-ind-light" />
+                <Icon name="Moon" weight="regular" size={16} class="theme-ind theme-ind-dark" />
+                <svg class="theme-ind theme-ind-auto" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
                 </svg>
@@ -379,7 +383,6 @@ const fullJsonLd = {
                 </div>
                 <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
                   <a href="/about" style="color: var(--text-muted); text-decoration: none;">பற்றி • About</a>
-                  <a href="/contact" style="color: var(--text-muted); text-decoration: none;">தொடர்பு • Contact</a>
                   <a href="/privacy" style="color: var(--text-muted); text-decoration: none;">தனியுரிமை • Privacy Policy</a>
                 </div>
               </div>
@@ -544,27 +547,27 @@ const fullJsonLd = {
           var main = doc.getElementById('app-main-content');
           var topZone = doc.getElementById('topbar-sidebar-zone');
           var shell = doc.getElementById('app-shell');
+          var toggleBtn = doc.getElementById('topbar-sidebar-toggle');
           var settingsTrigger = doc.getElementById('settings-trigger-btn');
           var settingsPopup = doc.getElementById('settings-popup');
 
+          if (doc.documentElement) {
+            doc.documentElement.classList.toggle('sidebar-collapsed-init', collapsed);
+          }
           if (sidebar) sidebar.classList.toggle('collapsed', collapsed);
           if (main) main.classList.toggle('sidebar-collapsed', collapsed);
           if (topZone) topZone.classList.toggle('collapsed', collapsed);
           if (shell) shell.classList.toggle('sidebar-collapsed', collapsed);
+          if (toggleBtn) {
+            var toggleLabel = collapsed ? 'Expand Sidebar' : 'Collapse Sidebar';
+            toggleBtn.setAttribute('aria-label', toggleLabel);
+            toggleBtn.setAttribute('title', toggleLabel);
+          }
           if (settingsTrigger) settingsTrigger.classList.toggle('collapsed-trigger', collapsed);
           if (settingsPopup) settingsPopup.classList.toggle('side-popup', collapsed);
-          if (topZone) {
-            var brandEl = topZone.querySelector('.desktop-topbar-sidebar-brand');
-            if (brandEl) brandEl.style.display = collapsed ? 'none' : '';
-          }
-          if (settingsTrigger) {
-            var stText = settingsTrigger.querySelector('.settings-text');
-            var stIcon = settingsTrigger.querySelector('.settings-theme-icon');
-            if (stText) stText.style.display = collapsed ? 'none' : '';
-            if (stIcon) stIcon.style.display = collapsed ? 'none' : '';
-          }
-          doc.querySelectorAll('#app-sidebar .nav-text-container').forEach(function (el) {
-            el.style.display = collapsed ? 'none' : '';
+
+          doc.querySelectorAll('#app-sidebar .nav-item').forEach(function (link) {
+            link.classList.toggle('collapsed', collapsed);
           });
         }
 
@@ -838,26 +841,29 @@ const fullJsonLd = {
       ::view-transition-new(root) {
         animation: none !important;
       }
-      .nav-icon-reg,
-      .nav-icon-fill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+
+      /* Direct Phosphor regular/fill SVG swap inside .nav-icon */
+      .nav-icon {
+        flex-shrink: 0;
       }
-      .nav-icon-fill {
+      .nav-icon > svg.nav-svg-reg {
+        display: block;
+      }
+      .nav-icon > svg.nav-svg-fill {
         display: none;
       }
-      .nav-item.active .nav-icon-reg {
+      .nav-item.active .nav-icon > svg.nav-svg-reg {
         display: none;
       }
-      .nav-item.active .nav-icon-fill {
-        display: inline-flex;
+      .nav-item.active .nav-icon > svg.nav-svg-fill {
+        display: block;
       }
+
       .nav-badge {
         font-size: 0.6rem;
         background: color-mix(in srgb, var(--text-main) 15%, transparent);
         color: var(--text-main);
-        padding: 1px 5px;
+        padding: 2px 6px;
         border-radius: 100px;
         margin-left: 6px;
         font-weight: 700;
@@ -868,6 +874,11 @@ const fullJsonLd = {
       .nav-badge.is-active-badge {
         background: var(--text-main);
         color: var(--bg-app);
+      }
+
+      .settings-theme-icon {
+        display: inline-flex;
+        align-items: center;
       }
       .theme-ind {
         display: none;
@@ -881,6 +892,168 @@ const fullJsonLd = {
       html[data-theme-mode='dark'] .theme-ind-dark {
         display: inline-flex;
       }
+
+      /* Pure vanilla desktop sidebar & minimised (collapsed) rail polish */
+      @media (min-width: 769px) {
+        .main-content {
+          margin-left: var(--sidebar-width);
+          width: calc(100% - var(--sidebar-width));
+        }
+        html.sidebar-collapsed-init .main-content,
+        #app-shell.sidebar-collapsed .main-content,
+        .main-content.sidebar-collapsed {
+          margin-left: 72px;
+          width: calc(100% - 72px);
+        }
+        #app-shell.animate-layout #app-sidebar,
+        #app-shell.animate-layout #app-main-content,
+        #app-shell.animate-layout #topbar-sidebar-zone {
+          transition:
+            width 0.32s cubic-bezier(0.2, 0, 0, 1),
+            margin-left 0.32s cubic-bezier(0.2, 0, 0, 1),
+            padding 0.32s cubic-bezier(0.2, 0, 0, 1),
+            background 0.3s ease,
+            color 0.3s ease !important;
+        }
+        html.sidebar-collapsed-init #topbar-sidebar-zone,
+        #topbar-sidebar-zone.collapsed {
+          width: 72px;
+          padding: 0 12px;
+          justify-content: center;
+        }
+        html.sidebar-collapsed-init #topbar-sidebar-zone .desktop-topbar-sidebar-brand,
+        #topbar-sidebar-zone.collapsed .desktop-topbar-sidebar-brand {
+          display: none;
+        }
+        html.sidebar-collapsed-init #app-sidebar,
+        #app-sidebar.collapsed {
+          width: 72px;
+          padding: 18px 12px 24px;
+          align-items: center;
+        }
+        html.sidebar-collapsed-init #app-sidebar .sidebar-top,
+        #app-sidebar.collapsed .sidebar-top {
+          align-items: center;
+        }
+        html.sidebar-collapsed-init #app-sidebar .sidebar-nav,
+        #app-sidebar.collapsed .sidebar-nav {
+          width: 100%;
+          margin: 0;
+          padding: 4px 0 12px;
+          align-items: center;
+          gap: 10px;
+          overflow: visible;
+        }
+        html.sidebar-collapsed-init #app-sidebar .nav-item,
+        #app-sidebar.collapsed .nav-item {
+          position: relative !important;
+          width: 44px !important;
+          height: 44px !important;
+          padding: 0 !important;
+          gap: 0 !important;
+          margin: 0 auto !important;
+          justify-content: center !important;
+          align-items: center !important;
+          border-radius: 50% !important;
+          overflow: visible !important;
+        }
+        html.sidebar-collapsed-init #app-sidebar .nav-item .nav-icon,
+        #app-sidebar.collapsed .nav-item .nav-icon {
+          width: 22px !important;
+          height: 22px !important;
+          flex-shrink: 0 !important;
+        }
+        html.sidebar-collapsed-init #app-sidebar .nav-text-container,
+        #app-sidebar.collapsed .nav-text-container,
+        html.sidebar-collapsed-init #app-sidebar .settings-text,
+        #app-sidebar.collapsed .settings-text,
+        html.sidebar-collapsed-init #app-sidebar .settings-theme-icon,
+        #app-sidebar.collapsed .settings-theme-icon {
+          display: none !important;
+        }
+        html.sidebar-collapsed-init #app-sidebar .sidebar-bottom,
+        #app-sidebar.collapsed .sidebar-bottom {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          padding-top: 14px;
+        }
+        html.sidebar-collapsed-init #app-sidebar .settings-profile-container,
+        #app-sidebar.collapsed .settings-profile-container {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
+        html.sidebar-collapsed-init #app-sidebar .settings-trigger,
+        #app-sidebar.collapsed .settings-trigger {
+          width: 44px !important;
+          height: 44px !important;
+          padding: 0 !important;
+          margin: 0 auto !important;
+          justify-content: center !important;
+          align-items: center !important;
+          border-radius: 50% !important;
+        }
+        html.sidebar-collapsed-init #app-sidebar .settings-trigger .settings-avatar,
+        #app-sidebar.collapsed .settings-trigger .settings-avatar {
+          margin-right: 0 !important;
+        }
+        #app-sidebar.collapsed .settings-trigger:hover,
+        #app-sidebar.collapsed .settings-trigger.active-trigger {
+          background: var(--nav-hover) !important;
+        }
+        #app-sidebar .nav-item:active {
+          transform: scale(0.97);
+        }
+        #app-sidebar.collapsed .nav-item:active {
+          transform: scale(0.92) !important;
+        }
+        #topbar-sidebar-toggle:active {
+          transform: scale(0.92) !important;
+        }
+        #app-sidebar .nav-item:focus-visible,
+        #topbar-sidebar-toggle:focus-visible,
+        #settings-trigger-btn:focus-visible {
+          outline: 2px solid color-mix(in srgb, var(--text-main) 35%, transparent);
+          outline-offset: 2px;
+        }
+      }
+
+      @media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+        #app-sidebar.collapsed .nav-item[data-tip]::after {
+          content: attr(data-tip);
+          position: absolute;
+          left: calc(100% + 14px);
+          top: 50%;
+          transform: translateY(-50%) translateX(-4px);
+          padding: 6px 11px;
+          border-radius: 9px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          white-space: nowrap;
+          background: var(--text-main);
+          color: var(--bg-app);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.16s ease, transform 0.16s ease;
+          z-index: 2500;
+        }
+        #app-sidebar.collapsed .nav-item[data-tip]:hover::after {
+          opacity: 1;
+          transform: translateY(-50%) translateX(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        #app-sidebar .nav-item.collapsed {
+          width: auto !important;
+          height: 100% !important;
+          padding: 0 !important;
+          border-radius: 0 !important;
+        }
+      }
+
       #mobile-menu-dropdown:not(.is-open),
       #mobile-menu-backdrop:not(.is-open) {
         display: none !important;
