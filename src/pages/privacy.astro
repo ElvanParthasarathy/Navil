@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/astro/Icon.astro';
 ---
 
 <BaseLayout
@@ -11,7 +12,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
     <header class="privacy-hero">
-      <div class="privacy-badge">தனியுரிமை நெறிமுறை • Privacy Policy</div>
+      <div class="privacy-badge">
+        <Icon name="ShieldCheck" weight="bold" size={18} />
+        <span>தனியுரிமை நெறிமுறை • Privacy Policy</span>
+      </div>
       <h1 class="privacy-title">தனியுரிமைக் கொள்கை</h1>
       <div class="privacy-subtitle">Privacy Policy for Elvan Navil</div>
       <div class="privacy-updated">கடைசியாகப் புதுப்பிக்கப்பட்டது / Last Updated: September 16, 2026</div>
@@ -31,7 +35,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="privacy-card">
-      <h2>2. விளம்பரங்கள் &amp; கூகுள் ஆட்சென்ஸ் • Advertising &amp; Google AdSense</h2>
+      <h2>
+        <Icon name="Cookie" weight="regular" size={22} />
+        <span>2. விளம்பரங்கள் &amp; கூகுள் ஆட்சென்ஸ் • Advertising &amp; Google AdSense</span>
+      </h2>
       <div class="privacy-highlight-box">
         <p style="margin: 0; font-weight: 500;">
           <strong>முக்கிய அறிவிப்பு:</strong> எங்கள் வலைத்தளம் கூகுள் ஆட்சென்ஸ் (Google AdSense) உள்ளிட்ட மூன்றாம் தரப்பு விளம்பரச் சேவைகளைப் பயன்படுத்தக்கூடும். கூகுள் பயனர்களின் முந்தைய வருகைகளின் அடிப்படையில் விளம்பரங்களை வழங்க குக்கீகளைப் (Cookies) பயன்படுத்துகிறது.
@@ -56,7 +63,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         எல்வன் நவில் இணையதளம் வழக்கமான பதிவு கோப்புகளைப் (Log files) பயன்படுத்துகிறது. இதில் இணைய நெறிமுறை (IP) முகவரிகள், உலாவி வகை (Browser type), இணைய சேவை வழங்குநர் (ISP), தேதி மற்றும் நேர முத்திரைகள் ஆகியவை அடங்கும்.
       </p>
       <p>
-        Elvan Navil follows a standard procedure of using log files. Information collected includes IP addresses, browser type, ISP, date and time stamps, referring/exit pages, and click counts—none of which are linked to personally identifiable information.
+        Elvan Navil follows a standard procedure of using log files. Information collected includes IP addresses, browser type, ISP, date and time stamp, referring/exit pages, and click counts—none of which are linked to personally identifiable information.
       </p>
     </section>
 
@@ -101,25 +108,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .privacy-badge {
     display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 100px;
     background: color-mix(in srgb, var(--text-main) 8%, transparent); color: var(--text-main);
-    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px;
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.5px;
   }
-  .privacy-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; }
+  .privacy-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; letter-spacing: -0.02em; }
   .privacy-subtitle { font-size: 1.1rem; color: var(--text-muted); margin: 0 0 12px; }
   .privacy-updated { font-size: 0.8rem; color: var(--text-muted); opacity: 0.7; }
   .privacy-card {
     background: linear-gradient(145deg, var(--bg-card), color-mix(in srgb, var(--bg-card), transparent 20%));
-    border: 1px solid var(--border-light); border-radius: 24px; padding: 32px; margin-bottom: 24px; line-height: 1.8;
+    border: 1px solid var(--border-light); border-radius: 24px; padding: 32px; margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03); line-height: 1.8;
   }
   :global([data-theme='dark']) .privacy-card {
     background: linear-gradient(145deg, #141414, color-mix(in srgb, #141414, transparent 35%));
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
   }
-  .privacy-card h2 { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px; }
+  .privacy-card h2 {
+    font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
   .privacy-card p, .privacy-card ul { color: var(--text-main); opacity: 0.9; font-size: 0.96rem; margin: 0 0 14px; }
   .privacy-card ul { margin-left: 20px; }
   .privacy-card li { margin-bottom: 8px; }
   .privacy-card a { color: #0070f3; text-decoration: underline; text-underline-offset: 3px; }
   .privacy-highlight-box {
-    background: color-mix(in srgb, #0070f3 8%, transparent); border-left: 4px solid #0070f3;
-    padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 18px 0;
+    background: color-mix(in srgb, #0070f3 8%, transparent);
+    border-left: 4px solid #0070f3; padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 18px 0;
   }
 </style>

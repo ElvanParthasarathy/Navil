@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/astro/Icon.astro';
 ---
 
 <BaseLayout
@@ -11,33 +12,195 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   includeAdsense={false}
   backUrl="/"
 >
-  <div class="settings-page page-view animate-entry" style="max-width: 800px; margin: 0 auto; padding: 24px 20px 60px;">
-    <div style="margin-bottom: 36px;">
-      <h1 style="font-size: 2.3rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">Settings</h1>
-      <p style="font-size: 1.05rem; color: var(--text-muted); margin: 0;">Personalize your experience.</p>
-    </div>
-
-    <div>
-      <h2 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 14px;">
-        Appearance
-      </h2>
-      <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 24px;">
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="settings-theme-btn" data-theme-choice="light">☀ Light</button>
-          <button type="button" class="settings-theme-btn" data-theme-choice="auto">◐ Auto</button>
-          <button type="button" class="settings-theme-btn" data-theme-choice="dark">☾ Dark</button>
-        </div>
+  <div class="settings-page page-view animate-entry">
+    <div class="settings-hero animate-entry">
+      <div>
+        <h1 class="settings-title">Settings</h1>
+        <h2 class="settings-subtitle">Personalize your experience.</h2>
       </div>
     </div>
+
+    <div class="settings-section animate-entry" style="animation-delay: 0.1s;">
+      <h3 class="section-label">Appearance</h3>
+
+      <div class="settings-card">
+        <div class="settings-theme-slider-container" id="settings-slider">
+          <div class="slider-indicator" id="settings-slider-indicator"></div>
+
+          <button type="button" class="theme-option" data-theme-choice="light">
+            <Icon name="Sun" weight="regular" size={18} /> Light
+          </button>
+
+          <button type="button" class="theme-option" data-theme-choice="auto">
+            <Icon name="Monitor" weight="regular" size={18} /> Auto
+          </button>
+
+          <button type="button" class="theme-option" data-theme-choice="dark">
+            <Icon name="Moon" weight="regular" size={18} /> Dark
+          </button>
+        </div>
+        <p id="settings-theme-desc" style="text-align: center; margin: 16px 0 0; font-size: 0.9rem; color: var(--text-muted);">
+          Syncs with your system preferences.
+        </p>
+      </div>
+    </div>
+
+    <div class="coming-soon-container animate-entry" style="animation-delay: 0.2s;">
+      <div class="cs-icon">
+        <Icon name="Gear" weight="regular" />
+      </div>
+      <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px;">More Coming Soon</h3>
+      <p style="font-size: 0.95rem; margin: 0;">
+        Profile customization and extra configuration options are being built.
+      </p>
+    </div>
   </div>
+
+  <script is:inline>
+    (function () {
+      function syncSettingsSlider() {
+        var indicator = document.getElementById('settings-slider-indicator');
+        var desc = document.getElementById('settings-theme-desc');
+        if (!indicator) return;
+        var mode = document.documentElement.getAttribute('data-theme-mode') || localStorage.getItem('theme') || 'auto';
+        indicator.style.transform = 'translateX(' + (mode === 'light' ? '0%' : mode === 'auto' ? '100%' : '200%') + ')';
+        if (desc) {
+          desc.textContent = mode === 'auto'
+            ? 'Syncs with your system preferences.'
+            : mode === 'dark'
+              ? 'Dark mode is active.'
+              : 'Light mode is active.';
+        }
+        document.querySelectorAll('#settings-slider .theme-option').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-theme-choice') === mode);
+        });
+      }
+      function bindSettingsPage() {
+        syncSettingsSlider();
+        document.querySelectorAll('#settings-slider .theme-option').forEach(function (btn) {
+          if (btn.dataset.settingsBound) return;
+          btn.dataset.settingsBound = '1';
+          btn.addEventListener('click', function () {
+            setTimeout(syncSettingsSlider, 0);
+          });
+        });
+      }
+      bindSettingsPage();
+      document.addEventListener('astro:page-load', bindSettingsPage);
+    })();
+  </script>
 </BaseLayout>
 
 <style>
-  .settings-theme-btn {
-    flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--border-light);
-    background: var(--bg-panel); color: var(--text-muted); font-weight: 600; font-size: 0.95rem; cursor: pointer;
+  .settings-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
   }
-  .settings-theme-btn.active {
-    background: var(--text-main); color: var(--bg-app); border-color: var(--text-main);
+  .settings-hero {
+    text-align: left;
+    margin-bottom: 48px;
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .settings-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    letter-spacing: -1px;
+    color: var(--text-main);
+  }
+  .settings-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0;
+  }
+  .section-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin: 0 0 16px;
+    padding-left: 12px;
+  }
+  .settings-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+  .settings-theme-slider-container {
+    background: var(--bg-panel);
+    border-radius: 18px;
+    padding: 6px;
+    display: flex;
+    position: relative;
+  }
+  .theme-option {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+  }
+  .theme-option:hover {
+    color: var(--text-main);
+  }
+  .theme-option.active {
+    color: var(--bg-app);
+  }
+  .slider-indicator {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 6px;
+    width: calc(33.33% - 4px);
+    background: var(--text-main);
+    border-radius: 14px;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .coming-soon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 48px 20px;
+    opacity: 0.6;
+  }
+  .cs-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: inline-flex;
+    animation: gearSpin 8s linear infinite;
+    color: var(--text-main);
+  }
+  @keyframes gearSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @media (max-width: 768px) {
+    .settings-hero {
+      text-align: center;
+      display: block;
+    }
   }
 </style>

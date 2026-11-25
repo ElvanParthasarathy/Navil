@@ -2,81 +2,103 @@
 import '../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
-
-const TOOLS_CARDS = [
-  {
-    href: '/tools/transliterator',
-    titleTa: 'மொழிமாற்றி',
-    titleEn: 'Transliterator',
-    descTa: 'தமிழ் எழுத்துகளை தமிழி, வட்டெழுத்து, பல்லவர், IAST மற்றும் தேவநாகரி வடிவங்களுக்கு மாற்றித் தரும் கருவி.',
-    descEn: 'Rule-based phonetic & script converter transforming Tamil into Thamizhi (Tamil-Brahmi), Vatteluttu, Pallava, Chozha, IAST, and Devanagari.',
-    footerTa: 'கருவியைத் திறக்க',
-    icon: '🔤',
-  },
-  {
-    href: '/tools/arichuvadi',
-    titleTa: 'அரிச்சுவடி',
-    titleEn: 'Arichuvadi — Classical Script Lab',
-    descTa: 'தமிழி (தமிழ் பிராமி) மற்றும் வட்டெழுத்து எழுத்து முறைகளைக் கற்கவும், எழுதவும், பயிற்சி செய்யவுமான ஊடாடும் தளம்.',
-    descEn: 'Interactive workspace to type, trace, match, memorize, and download historical Tamil-Brahmi and Vatteluttu script resources.',
-    footerTa: 'பயிற்சியைத் தொடங்க',
-    icon: '🪶',
-  },
-  {
-    href: '/tools/piano',
-    titleTa: 'கின்னரப்பெட்டி',
-    titleEn: 'Web Piano Synthesizer',
-    descTa: 'உலாவியிலேயே சுரங்களையும் மேலைத்தேய இசைக் குறிப்புகளையும் இசைத்துப் பார்க்கும் மின்னணு இசைக்கருவி.',
-    descEn: 'Low-latency interactive virtual keyboard built with Web Audio synthesis for practicing scales and melodies.',
-    footerTa: 'இசைக்கத் தொடங்க',
-    icon: '🎹',
-  },
-  {
-    href: '/teaching',
-    titleTa: 'பயிற்றுவிப்பு',
-    titleEn: 'Teaching & DSP Studio',
-    descTa: 'குரல் ஒலி உருவாக்கம் (Formant Vocoder) மற்றும் கற்றல் ஆய்வுகளுக்கான எண்மச் செய்முறைக் கூடம்.',
-    descEn: 'Educational signal-processing demonstrations including the interactive Source-Filter Formant Vocoder Lab.',
-    footerTa: 'ஆய்வகத்தைத் திறக்க',
-    icon: '🎙️',
-  },
-];
+import Icon from '../../components/astro/Icon.astro';
 ---
 
 <BaseLayout
-  title="கருவிகள் | Tamil Linguistic & Interactive Web Tools — Elvan Navil"
+  title="கருவிகள் | Tools — Elvan Navil"
   description="Interactive web tools by Elvan Navil: Tolkappiyam Tamil script transliterator (Thamizhi, Vatteluttu, IAST), Arichuvadi classical script trainer, Web Audio piano, and Formant Vocoder."
   canonicalPath="/tools"
   mobileTitle="கருவிகள்|tools"
   isBeta={true}
   backUrl="/"
 >
-  <div class="writings-page tools-hub-page page-view fadeIn">
+  <div class="writings-page page-view fadeIn">
     <header class="writings-header animate-entry">
       <div style="flex: 1;">
         <h1 class="writings-title" lang="ta">
           கருவிகள்
-          <span class="cat-count-badge">BETA</span>
+          <span
+            style="font-size: 0.75rem; background: color-mix(in srgb, var(--text-main) 12%, transparent); color: var(--text-main); padding: 3px 9px; border-radius: 100px; font-weight: 700; letter-spacing: 0.5px; line-height: 1;"
+          >
+            BETA
+          </span>
         </h1>
-        <div class="writings-title-sub">Tools &amp; Interactive Utilities</div>
-        <p class="writings-subtitle" lang="ta">தமிழ் எழுத்துரு மாற்றம், ஒலி நுட்பம் &amp; கற்றல் கருவிகள்</p>
-        <p class="writings-subtitle writings-subtitle-en">Tamil Script Transliteration, Learning Labs &amp; Audio Utilities</p>
+        <div class="writings-title-sub">Tools</div>
+        <p class="writings-subtitle" lang="ta">இசை, மொழி &amp; பயன்பாடுகள்</p>
+        <p class="writings-subtitle writings-subtitle-en">Music, Language &amp; Productivity</p>
       </div>
     </header>
 
-    <div class="category-grid animate-entry">
-      {TOOLS_CARDS.map((tool) => (
-        <a href={tool.href} class="category-card">
-          <div class="cat-icon-box" aria-hidden="true">{tool.icon}</div>
-          <div class="cat-content">
-            <div class="cat-title" lang="ta">{tool.titleTa}</div>
-            <div class="cat-title-sub">{tool.titleEn}</div>
-            <p class="cat-desc" lang="ta">{tool.descTa}</p>
-            <p class="cat-desc-sub">{tool.descEn}</p>
+    <div class="category-grid tools-category-grid animate-entry">
+      <a href="/tools/transliterator" class="category-card">
+        <div class="cat-icon-box">
+          <Icon name="Translate" weight="regular" />
+        </div>
+        <div class="cat-content">
+          <div class="cat-title" lang="ta">
+            நவில் மொழிமாற்றி
+            <span class="cat-beta-badge">BETA</span>
           </div>
-          <div class="cat-footer">{tool.footerTa} →</div>
-        </a>
-      ))}
+          <div class="cat-title-sub">Navil Transliterator</div>
+          <p class="cat-desc" lang="ta">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
+          <p class="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
+        </div>
+        <div class="cat-footer">
+          மொழிமாற்றியைத் தொடங்க <Icon name="ArrowRight" weight="regular" />
+        </div>
+      </a>
+
+      <a href="/tools/arichuvadi" class="category-card">
+        <div class="cat-icon-box">
+          <Icon name="Scroll" weight="regular" />
+        </div>
+        <div class="cat-content">
+          <div class="cat-title" lang="ta">
+            நவில் அரிச்சுவடி
+            <span class="cat-beta-badge">BETA</span>
+          </div>
+          <div class="cat-title-sub">Navil Arichuvadi</div>
+          <p class="cat-desc" lang="ta">பண்டைய தமிழ் எழுத்து வடிவமாற்றி.</p>
+          <p class="cat-desc-sub">Convert modern Tamil into ancient Thamizhi and Vatteluttu.</p>
+        </div>
+        <div class="cat-footer">
+          அரிச்சுவடியைத் திறக்க <Icon name="ArrowRight" weight="regular" />
+        </div>
+      </a>
+
+      <a href="/tools/piano" class="category-card desktop-only">
+        <div class="cat-icon-box">
+          <Icon name="PianoKeys" weight="regular" />
+        </div>
+        <div class="cat-content">
+          <div class="cat-title" lang="ta">
+            கின்னரப்பெட்டி
+            <span class="cat-beta-badge">BETA</span>
+          </div>
+          <div class="cat-title-sub">Navil Piano</div>
+          <p class="cat-desc" lang="ta">மெய்நிகர் கின்னரப்பெட்டி மற்றும் இசையமைப்புக் கருவி.</p>
+          <p class="cat-desc-sub">Virtual piano synthesizer with keyboard mapping.</p>
+        </div>
+        <div class="cat-footer">
+          கின்னரப்பெட்டியைத் தொடங்க <Icon name="ArrowRight" weight="regular" />
+        </div>
+      </a>
+
+      <a href="/teaching" class="category-card">
+        <div class="cat-icon-box">
+          <Icon name="Monitor" weight="regular" />
+        </div>
+        <div class="cat-content">
+          <div class="cat-title" lang="ta">பயிற்றுவிப்பு</div>
+          <div class="cat-title-sub">Teaching &amp; Presentations</div>
+          <p class="cat-desc" lang="ta">கற்றல் கற்பித்தல் மற்றும் தொழில்நுட்ப விளக்கக்காட்சிகள்.</p>
+          <p class="cat-desc-sub">Interactive teaching materials, slides, and educational resources.</p>
+        </div>
+        <div class="cat-footer">
+          பயிற்றுவிப்பைக் காண <Icon name="ArrowRight" weight="regular" />
+        </div>
+      </a>
     </div>
 
     <section class="tools-overview-guide animate-entry">
@@ -99,11 +121,11 @@ const TOOLS_CARDS = [
     padding: 24px 26px;
     background: var(--bg-card);
     border: 1px solid var(--border-light);
-    border-radius: 16px;
+    border-radius: 20px;
   }
   .tools-overview-guide h2 {
     margin: 0 0 12px;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--text-main);
   }
@@ -111,6 +133,7 @@ const TOOLS_CARDS = [
     margin: 0 0 10px;
     color: var(--text-muted);
     line-height: 1.7;
+    font-size: 0.94rem;
   }
   .tools-overview-guide p:last-child {
     margin-bottom: 0;

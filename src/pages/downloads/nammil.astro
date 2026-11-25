@@ -2,6 +2,7 @@
 import '../../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
+import Icon from '../../components/astro/Icon.astro';
 import { BASE_URL } from '../../lib/content';
 
 const slides = [
@@ -28,7 +29,7 @@ const nammilJsonLd = {
 
 <BaseLayout
   title="நம்மில் • Nammil — WhatsApp Desktop Companion | Elvan Navil"
-  description="A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications."
+  description="Download Nammil for Windows — a privacy-first WhatsApp desktop companion with 5 isolated accounts, automated media organizer, and bespoke sound notifications."
   canonicalPath="/downloads/nammil"
   ogImage={`${BASE_URL}/nammil_icon.png`}
   favicon="/nammil_icon.png"
@@ -77,9 +78,7 @@ const nammilJsonLd = {
             download
             title="Download Nammil (.exe ~114MB)"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
-            </svg>
+            <Icon name="FaWindows" size={18} />
             <div class="ms-btn-text">
               <span class="ms-btn-label">பதிவிறக்கு</span>
               <span class="ms-btn-sublabel">Download</span>
@@ -92,6 +91,7 @@ const nammilJsonLd = {
             class="ms-btn-secondary ms-btn-github"
             title="View Source on GitHub"
           >
+            <Icon name="GithubLogo" weight="bold" size={20} />
             <div class="ms-btn-text">
               <span class="ms-btn-label">கிட்ஹப்</span>
               <span class="ms-btn-sublabel">GitHub</span>
@@ -106,11 +106,13 @@ const nammilJsonLd = {
         <section class="ms-section ms-screenshots-section" aria-label="Screenshots">
           <div class="ms-section-header-link" id="nammil-open-lb">
             <h2 class="ms-section-title">திரைப்பிடிப்பு • Screenshots</h2>
-            <span class="ms-section-chevron">›</span>
+            <Icon name="CaretRight" weight="bold" size={18} class="ms-section-chevron" />
           </div>
 
           <div class="ms-screenshots-scroller-wrap">
-            <button type="button" id="nammil-scroll-left" class="ms-scroll-nav-btn prev" style="display: none;" aria-label="Previous screenshots">‹</button>
+            <button type="button" id="nammil-scroll-left" class="ms-scroll-nav-btn prev" style="display: none;" aria-label="Previous screenshots">
+              <Icon name="CaretLeft" weight="bold" size={22} />
+            </button>
             <div class="ms-screenshots-scroller" id="nammil-scroller">
               {slides.map((slide, idx) => (
                 <div class="ms-shot-frame" data-slide-idx={idx} title="Click to view fullscreen">
@@ -123,7 +125,9 @@ const nammilJsonLd = {
                 </div>
               ))}
             </div>
-            <button type="button" id="nammil-scroll-right" class="ms-scroll-nav-btn next" aria-label="Next screenshots">›</button>
+            <button type="button" id="nammil-scroll-right" class="ms-scroll-nav-btn next" aria-label="Next screenshots">
+              <Icon name="CaretRight" weight="bold" size={22} />
+            </button>
           </div>
         </section>
 
@@ -174,6 +178,9 @@ const nammilJsonLd = {
           <h2 class="ms-section-title">சிறப்பம்சங்கள் • Features</h2>
           <div class="ms-features-grid">
             <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="Users" weight="regular" size={22} />
+              </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
                   <span class="ms-feature-title-ta">5 தனித்தனி வாட்ஸ்அப் அமர்வுகள்</span>
@@ -191,6 +198,9 @@ const nammilJsonLd = {
             </div>
 
             <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="FolderSimple" weight="regular" size={22} />
+              </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
                   <span class="ms-feature-title-ta">தானியங்கி ஊடக உலாவி &amp; மீட்பு</span>
@@ -208,6 +218,9 @@ const nammilJsonLd = {
             </div>
 
             <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="BellSimpleRinging" weight="regular" size={22} />
+              </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
                   <span class="ms-feature-title-ta">6 தனித்துவ விண்டோஸ் ஒலி எச்சரிக்கைகள்</span>
@@ -225,6 +238,9 @@ const nammilJsonLd = {
             </div>
 
             <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="Globe" weight="regular" size={22} />
+              </div>
               <div class="ms-feature-text">
                 <h3 class="ms-feature-heading">
                   <span class="ms-feature-title-ta">7 மொழி &amp; மாற்று-எழுத்துரு நுட்பம்</span>
@@ -250,42 +266,49 @@ const nammilJsonLd = {
           <h2 class="ms-info-main-title">கூடுதல் விவரங்கள் • Additional information</h2>
           <div class="ms-info-grid">
             <div class="ms-info-cell">
+              <Icon name="Package" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Published by</div>
                 <div class="ms-cell-val">Elvan Navil</div>
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="ArrowsClockwise" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Last updated date</div>
                 <div class="ms-cell-val">9/15/2026</div>
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="CalendarBlank" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Release date</div>
                 <div class="ms-cell-val">9/1/2026</div>
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="BookmarkSimple" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Category</div>
                 <div class="ms-cell-val">Social &amp; Productivity</div>
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="HardDrive" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Approximate size</div>
                 <div class="ms-cell-val">114.2 MB</div>
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="FaWindows" size={18} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Installation</div>
-                <div class="ms-cell-val">Windows 10 and 11 (64-bit). Inno Setup per-user installer (Zero UAC prompts).</div>
+                <div class="ms-cell-val">Get this app on Windows 10 and 11 devices (64-bit). Inno Setup per-user installer (Zero UAC prompts).</div>
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="ShieldCheck" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">This app can</div>
                 <ul class="ms-cell-list">
@@ -296,16 +319,75 @@ const nammilJsonLd = {
               </div>
             </div>
             <div class="ms-info-cell">
+              <Icon name="Globe" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Supported languages</div>
+                <ul class="ms-cell-list">
+                  <li>தமிழ் (Tamil)</li>
+                  <li>Thamizh (Thamizh Latin)</li>
+                  <li>തമിഴ് (Tamil in Malayalam Script)</li>
+                  <li>English</li>
+                  <li>മലയാളம் (Malayalam)</li>
+                  <li>Malayalam (Malayalam Latin)</li>
+                  <li>மலயாளம் (Malayalam in Tamil Script)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="Buildings" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Publisher Info</div>
+                <ul class="ms-cell-list">
+                  <li><a href="https://github.com/ElvanParthasarathy/Nammil" target="_blank" rel="noreferrer">Nammil GitHub support</a></li>
+                  <li><a href="/about">Elvan Navil website</a></li>
+                  <li><a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noreferrer">Contact information</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="FileText" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Additional terms</div>
+                <ul class="ms-cell-list">
+                  <li><a href="https://github.com/ElvanParthasarathy/Nammil#%EF%B8%8F-zero-admin--complete-local-privacy" target="_blank" rel="noreferrer">Nammil privacy policy</a></li>
+                  <li><a href="https://github.com/ElvanParthasarathy/Nammil/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT License</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="Flag" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Report this product</div>
+                <ul class="ms-cell-list">
+                  <li><a href="https://github.com/ElvanParthasarathy/Nammil/issues" target="_blank" rel="noreferrer">Report a bug or issue</a></li>
+                  <li><a href="mailto:jaiprakashpartha@gmail.com" target="_blank" rel="noreferrer">Report security vulnerability</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="Code" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Installed version</div>
                 <div class="ms-cell-val">1.2.9</div>
               </div>
             </div>
+            <div class="ms-info-cell">
+              <Icon name="Sparkle" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Designed &amp; Developed by</div>
+                <div class="ms-cell-val">
+                  <a href="https://jaiprakashpartha.vercel.app" target="_blank" rel="noreferrer" style="color: inherit; text-decoration: underline;">
+                    Elvan Parthasarathy
+                  </a>
+                </div>
+              </div>
+            </div>
             <div class="ms-info-cell ms-cell-disclaimer">
+              <Icon name="Info" weight="regular" size={20} class="ms-cell-icon" />
               <div class="ms-cell-content">
                 <div class="ms-cell-label">Legal disclaimers</div>
                 <div class="ms-cell-val">
-                  Independent open-source software crafted by Elvan Parthasarathy under MIT License; not affiliated with WhatsApp Inc. or Meta Platforms, Inc.
+                  This software is an independent open-source application crafted by Elvan Parthasarathy under MIT License and is not affiliated with, endorsed by, or sponsored by WhatsApp Inc. or Meta Platforms, Inc.
                 </div>
               </div>
             </div>
@@ -319,11 +401,17 @@ const nammilJsonLd = {
   <div id="nammil-lightbox" class="nammil-lightbox" style="display: none;">
     <div class="nammil-lb-header">
       <div class="nammil-lb-counter" id="nammil-lb-counter">1 / 6</div>
-      <button type="button" class="nammil-lb-close" id="nammil-lb-close" aria-label="Close">✕</button>
+      <button type="button" class="nammil-lb-close" id="nammil-lb-close" aria-label="Close">
+        <Icon name="X" weight="bold" size={20} />
+      </button>
     </div>
     <div class="nammil-lb-main-container">
-      <button type="button" class="nammil-lb-nav prev" id="nammil-lb-prev" aria-label="Previous screenshot">‹</button>
-      <button type="button" class="nammil-lb-nav next" id="nammil-lb-next" aria-label="Next screenshot">›</button>
+      <button type="button" class="nammil-lb-nav prev" id="nammil-lb-prev" aria-label="Previous screenshot">
+        <Icon name="CaretLeft" weight="bold" size={24} />
+      </button>
+      <button type="button" class="nammil-lb-nav next" id="nammil-lb-next" aria-label="Next screenshot">
+        <Icon name="CaretRight" weight="bold" size={24} />
+      </button>
       <div class="nammil-lb-img-wrapper">
         <div class="nammil-lb-slide">
           <img id="nammil-lb-img" src="" alt="" class="nammil-lb-img" />
@@ -341,80 +429,122 @@ const nammilJsonLd = {
 
   <script is:inline define:vars={{ slides }}>
     (function () {
-      var scroller = document.getElementById('nammil-scroller');
-      var leftBtn = document.getElementById('nammil-scroll-left');
-      var rightBtn = document.getElementById('nammil-scroll-right');
-      function updateBtns() {
-        if (!scroller) return;
-        if (leftBtn) leftBtn.style.display = scroller.scrollLeft > 12 ? 'flex' : 'none';
-        if (rightBtn) rightBtn.style.display = scroller.scrollLeft < scroller.scrollWidth - scroller.clientWidth - 12 ? 'flex' : 'none';
-      }
-      if (scroller) {
-        scroller.addEventListener('scroll', updateBtns);
-        window.addEventListener('resize', updateBtns);
-        updateBtns();
-      }
-      if (leftBtn && scroller) leftBtn.addEventListener('click', function () { scroller.scrollBy({ left: -420, behavior: 'smooth' }); });
-      if (rightBtn && scroller) rightBtn.addEventListener('click', function () { scroller.scrollBy({ left: 420, behavior: 'smooth' }); });
+      var nammilAbort = null;
+      function initNammil() {
+        var scroller = document.getElementById('nammil-scroller');
+        if (!scroller || scroller.dataset.bound) return;
+        scroller.dataset.bound = '1';
 
-      function setupToggle(btnId, boxId, moreLabel, lessLabel) {
-        var btn = document.getElementById(btnId);
-        var box = document.getElementById(boxId);
-        if (!btn || !box) return;
-        btn.addEventListener('click', function () {
-          var open = box.style.display !== 'none';
-          box.style.display = open ? 'none' : 'block';
-          btn.textContent = open ? moreLabel : lessLabel;
-          btn.setAttribute('aria-expanded', String(!open));
-        });
-      }
-      setupToggle('nammil-ta-btn', 'nammil-ta-more', 'மேலும் காட்டுக • Show more', 'குறைவாகக் காட்டுக • Show less');
-      setupToggle('nammil-en-btn', 'nammil-en-more', 'Show more', 'Show less');
+        if (nammilAbort) nammilAbort.abort();
+        nammilAbort = new AbortController();
+        var sig = { signal: nammilAbort.signal };
 
-      var lb = document.getElementById('nammil-lightbox');
-      var lbImg = document.getElementById('nammil-lb-img');
-      var lbCounter = document.getElementById('nammil-lb-counter');
-      var currentIdx = 0;
-
-      function showSlide(idx) {
-        currentIdx = Math.max(0, Math.min(slides.length - 1, idx));
-        if (lbImg) {
-          lbImg.src = slides[currentIdx].src;
-          lbImg.alt = slides[currentIdx].titleEn;
+        var leftBtn = document.getElementById('nammil-scroll-left');
+        var rightBtn = document.getElementById('nammil-scroll-right');
+        function updateBtns() {
+          if (!scroller) return;
+          if (leftBtn) leftBtn.style.display = scroller.scrollLeft > 12 ? 'flex' : 'none';
+          if (rightBtn) rightBtn.style.display = scroller.scrollLeft < scroller.scrollWidth - scroller.clientWidth - 12 ? 'flex' : 'none';
         }
-        if (lbCounter) lbCounter.textContent = (currentIdx + 1) + ' / ' + slides.length;
-        document.querySelectorAll('[data-lb-thumb]').forEach(function (el) {
-          el.classList.toggle('active', Number(el.getAttribute('data-lb-thumb')) === currentIdx);
+        scroller.addEventListener('scroll', updateBtns, sig);
+        window.addEventListener('resize', updateBtns, sig);
+        updateBtns();
+
+        var isDrag = false, startX = 0, scrollStart = 0, moved = false;
+        scroller.addEventListener('mousedown', function (e) {
+          isDrag = true; moved = false;
+          startX = e.pageX - scroller.offsetLeft;
+          scrollStart = scroller.scrollLeft;
+        }, sig);
+        scroller.addEventListener('mousemove', function (e) {
+          if (!isDrag) return;
+          e.preventDefault();
+          var walk = (e.pageX - scroller.offsetLeft - startX) * 1.1;
+          if (Math.abs(walk) > 4) moved = true;
+          scroller.scrollLeft = scrollStart - walk;
+        }, sig);
+        scroller.addEventListener('mouseup', function () { isDrag = false; }, sig);
+        scroller.addEventListener('mouseleave', function () { isDrag = false; }, sig);
+
+        if (leftBtn) leftBtn.addEventListener('click', function () { scroller.scrollBy({ left: -420, behavior: 'smooth' }); }, sig);
+        if (rightBtn) rightBtn.addEventListener('click', function () { scroller.scrollBy({ left: 420, behavior: 'smooth' }); }, sig);
+
+        function setupToggle(btnId, boxId, moreLabel, lessLabel) {
+          var btn = document.getElementById(btnId);
+          var box = document.getElementById(boxId);
+          if (!btn || !box) return;
+          btn.addEventListener('click', function () {
+            var open = box.style.display !== 'none';
+            box.style.display = open ? 'none' : 'block';
+            btn.textContent = open ? moreLabel : lessLabel;
+            btn.setAttribute('aria-expanded', String(!open));
+          }, sig);
+        }
+        setupToggle('nammil-ta-btn', 'nammil-ta-more', 'மேலும் காட்டுக • Show more', 'குறைவாகக் காட்டுக • Show less');
+        setupToggle('nammil-en-btn', 'nammil-en-more', 'Show more', 'Show less');
+
+        var lb = document.getElementById('nammil-lightbox');
+        var lbImg = document.getElementById('nammil-lb-img');
+        var lbCounter = document.getElementById('nammil-lb-counter');
+        var currentIdx = 0;
+
+        function showSlide(idx) {
+          currentIdx = Math.max(0, Math.min(slides.length - 1, idx));
+          if (lbImg) {
+            lbImg.src = slides[currentIdx].src;
+            lbImg.alt = slides[currentIdx].titleEn;
+          }
+          if (lbCounter) lbCounter.textContent = (currentIdx + 1) + ' / ' + slides.length;
+          document.querySelectorAll('[data-lb-thumb]').forEach(function (el) {
+            el.classList.toggle('active', Number(el.getAttribute('data-lb-thumb')) === currentIdx);
+          });
+        }
+        function openLb(idx) {
+          if (!lb) return;
+          if (lb.parentElement !== document.body) {
+            document.body.appendChild(lb);
+          }
+          showSlide(idx);
+          lb.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        }
+        function closeLb() {
+          if (!lb) return;
+          lb.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+        document.querySelectorAll('[data-slide-idx]').forEach(function (el) {
+          el.addEventListener('click', function () {
+            if (moved) return;
+            openLb(Number(el.getAttribute('data-slide-idx')));
+          }, sig);
         });
+        var openHeader = document.getElementById('nammil-open-lb');
+        if (openHeader) openHeader.addEventListener('click', function () { openLb(0); }, sig);
+        var cBtn = document.getElementById('nammil-lb-close');
+        var pBtn = document.getElementById('nammil-lb-prev');
+        var nBtn = document.getElementById('nammil-lb-next');
+        if (cBtn) cBtn.addEventListener('click', closeLb, sig);
+        if (pBtn) pBtn.addEventListener('click', function () { showSlide(currentIdx - 1); }, sig);
+        if (nBtn) nBtn.addEventListener('click', function () { showSlide(currentIdx + 1); }, sig);
+        document.querySelectorAll('[data-lb-thumb]').forEach(function (el) {
+          el.addEventListener('click', function () { showSlide(Number(el.getAttribute('data-lb-thumb'))); }, sig);
+        });
+        if (lb) lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); }, sig);
+        document.addEventListener('keydown', function (e) {
+          if (!lb || lb.style.display === 'none') return;
+          if (e.key === 'Escape') closeLb();
+          if (e.key === 'ArrowRight') showSlide(currentIdx + 1);
+          if (e.key === 'ArrowLeft') showSlide(currentIdx - 1);
+        }, sig);
       }
-      function openLb(idx) {
-        if (!lb) return;
-        showSlide(idx);
-        lb.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-      function closeLb() {
-        if (!lb) return;
-        lb.style.display = 'none';
+      initNammil();
+      document.addEventListener('astro:page-load', initNammil);
+      document.addEventListener('astro:before-swap', function () {
+        if (nammilAbort) { nammilAbort.abort(); nammilAbort = null; }
+        var strayLb = document.body.querySelector(':scope > #nammil-lightbox');
+        if (strayLb) strayLb.remove();
         document.body.style.overflow = '';
-      }
-      document.querySelectorAll('[data-slide-idx]').forEach(function (el) {
-        el.addEventListener('click', function () { openLb(Number(el.getAttribute('data-slide-idx'))); });
-      });
-      var openHeader = document.getElementById('nammil-open-lb');
-      if (openHeader) openHeader.addEventListener('click', function () { openLb(0); });
-      document.getElementById('nammil-lb-close')?.addEventListener('click', closeLb);
-      document.getElementById('nammil-lb-prev')?.addEventListener('click', function () { showSlide(currentIdx - 1); });
-      document.getElementById('nammil-lb-next')?.addEventListener('click', function () { showSlide(currentIdx + 1); });
-      document.querySelectorAll('[data-lb-thumb]').forEach(function (el) {
-        el.addEventListener('click', function () { showSlide(Number(el.getAttribute('data-lb-thumb'))); });
-      });
-      if (lb) lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
-      document.addEventListener('keydown', function (e) {
-        if (!lb || lb.style.display === 'none') return;
-        if (e.key === 'Escape') closeLb();
-        if (e.key === 'ArrowRight') showSlide(currentIdx + 1);
-        if (e.key === 'ArrowLeft') showSlide(currentIdx - 1);
       });
     })();
   </script>

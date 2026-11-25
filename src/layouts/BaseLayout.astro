@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../வடிவமைப்பு/முகப்புஎண்.css';
 import '../வடிவமைப்பு/செயலி.css';
 import '../கூறுகள்/கட்டமைப்பு/மேல்பட்டை.css';
@@ -6,6 +7,7 @@ import '../கூறுகள்/கட்டமைப்பு/மிதக்�
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import profileData from '../தரவு/தன்னுரு.json';
 import Footer from '../components/astro/Footer.astro';
+import Icon from '../components/astro/Icon.astro';
 import { getRouteInfo } from '../components/astro/routeMeta';
 import { BASE_URL } from '../lib/content';
 
@@ -160,9 +162,9 @@ const fullJsonLd = {
     <link rel="manifest" href="/manifest.webmanifest" />
 
     <link rel="preload" href="/fonts/ElvanSans-Regular.woff" as="font" type="font/woff" crossorigin />
-    <link rel="preload" href="/fonts/ElvanSans-Medium.woff" as="font" type="font/woff" crossorigin />
-    <link rel="preload" href="/fonts/ElvanSans-SemiBold.woff" as="font" type="font/woff" crossorigin />
-    <link rel="preload" href="/fonts/ElvanSans-Bold.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="/fonts/ElvanSans-Medium.woff" as="font/woff" crossorigin />
+    <link rel="preload" href="/fonts/ElvanSans-SemiBold.woff" as="font/woff" crossorigin />
+    <link rel="preload" href="/fonts/ElvanSans-Bold.woff" as="font/woff" crossorigin />
 
     {includeAdsense && (
       <>
@@ -177,6 +179,8 @@ const fullJsonLd = {
 
     <script type="application/ld+json" set:html={JSON.stringify(fullJsonLd)} />
 
+    <ClientRouter fallback="swap" />
+
     <script is:inline>
       (function () {
         try {
@@ -186,6 +190,7 @@ const fullJsonLd = {
             effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
           document.documentElement.setAttribute('data-theme', effective);
+          document.documentElement.setAttribute('data-theme-mode', theme);
 
           if (window.self !== window.top) {
             var style = document.createElement('style');
@@ -204,7 +209,7 @@ const fullJsonLd = {
     <div id="app-shell" class="app-shell nav-initial" style="display: flex;">
       <!-- DESKTOP TOP BAR -->
       <header class="desktop-topbar" aria-label="Desktop Top Bar">
-        <div id="topbar-sidebar-zone" class="desktop-topbar-sidebar-zone">
+        <div id="topbar-sidebar-zone" class="desktop-topbar-sidebar-zone" transition:persist="topbar-sidebar-zone">
           <a href="/" class="desktop-topbar-sidebar-brand" lang="ta">
             <span class="desktop-topbar-sidebar-brand-title">எல்வன் நவில்</span>
             <span class="desktop-topbar-sidebar-brand-subtitle">Elvan Navil</span>
@@ -216,13 +221,11 @@ const fullJsonLd = {
             aria-label="Toggle Sidebar"
             title="Toggle Sidebar"
           >
-            <svg width="19" height="19" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H80V200H40ZM216,200H96V56H216V200Z" />
-            </svg>
+            <Icon name="SidebarSimple" weight="regular" size={19} />
           </button>
         </div>
 
-        <div class="desktop-topbar-content-zone">
+        <div class="desktop-topbar-content-zone" transition:animate="none">
           <div class="desktop-topbar-left">
             {resolvedShowBack && (
               <a
@@ -231,7 +234,7 @@ const fullJsonLd = {
                 aria-label="பின்செல்"
                 title="முந்தைய பக்கத்திற்குச் செல்"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polyline points="15 18 9 12 15 6" />
                 </svg>
               </a>
@@ -250,20 +253,20 @@ const fullJsonLd = {
         </div>
       </header>
 
-      <!-- SIDEBAR / MOBILE BOTTOM BAR -->
-      <nav id="app-sidebar" class={`sidebar ${!isMainLevel ? 'mobile-hidden-nav' : ''}`} aria-label="Main navigation">
+      <!-- PERSISTENT SIDEBAR / MOBILE BOTTOM BAR -->
+      <nav
+        id="app-sidebar"
+        class={`sidebar ${!isMainLevel ? 'mobile-hidden-nav' : ''}`}
+        aria-label="Main navigation"
+        transition:persist="app-sidebar"
+      >
         <div class="sidebar-backdrop"></div>
         <div class="sidebar-top">
           <div class="sidebar-nav">
-            <a href="/" class={`nav-item ${isHome ? 'active' : ''}`}>
+            <a href="/" data-nav-key="home" class={`nav-item ${isHome ? 'active' : ''}`}>
               <span class="nav-icon">
-                <svg width="21" height="21" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                  {isHome ? (
-                    <path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0l.11.11,80,75.48A16,16,0,0,1,224,115.55Z" />
-                  ) : (
-                    <path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z" />
-                  )}
-                </svg>
+                <span class="nav-icon-reg"><Icon name="House" weight="regular" size={21} /></span>
+                <span class="nav-icon-fill"><Icon name="House" weight="fill" size={21} /></span>
               </span>
               <div class="nav-text-container">
                 <span class="label">முகப்பு</span>
@@ -271,11 +274,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/navilgal" class={`nav-item ${isNavilgalActive ? 'active' : ''}`}>
+            <a href="/navilgal" data-nav-key="navilgal" class={`nav-item ${isNavilgalActive ? 'active' : ''}`}>
               <span class="nav-icon">
-                <svg width="21" height="21" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                  <path d="M224,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h64a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z" />
-                </svg>
+                <span class="nav-icon-reg"><Icon name="BookOpen" weight="regular" size={21} /></span>
+                <span class="nav-icon-fill"><Icon name="BookOpen" weight="fill" size={21} /></span>
               </span>
               <div class="nav-text-container">
                 <span class="label">நவில்கள்</span>
@@ -283,19 +285,15 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/tools" class={`nav-item ${isToolsActive ? 'active' : ''}`}>
+            <a href="/tools" data-nav-key="tools" class={`nav-item ${isToolsActive ? 'active' : ''}`}>
               <span class="nav-icon">
-                <svg width="21" height="21" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                  <path d="M226.76,69a8,8,0,0,0-12.84-2.88l-40.3,37.19-17.23-3.7-3.7-17.23,37.19-40.3A8,8,0,0,0,187,29.24,72,72,0,0,0,88,96,72.34,72.34,0,0,0,94,124.94L33.79,177.26a24,24,0,0,0,33.94,33.94l52.32-60.21A72,72,0,0,0,226.76,69ZM159.4,151.31a56.08,56.08,0,0,1-44.78-12.16,8,8,0,0,0-11,.5L56.4,193.94a8,8,0,0,1-11.31-11.31l54.29-47.21a8,8,0,0,0,.5-11A56,56,0,0,1,170.51,46.63l-31.94,34.6a8,8,0,0,0-1.95,7.09l5.18,24.16a8,8,0,0,0,6.14,6.14l24.16,5.18a8,8,0,0,0,7.09-1.95l34.6-31.94A56.11,56.11,0,0,1,159.4,151.31Z" />
-                </svg>
+                <span class="nav-icon-reg"><Icon name="Wrench" weight="regular" size={21} /></span>
+                <span class="nav-icon-fill"><Icon name="Wrench" weight="fill" size={21} /></span>
               </span>
               <div class="nav-text-container">
                 <span class="label" style="display: flex; align-items: center;">
                   கருவிகள்
-                  <span
-                    class="nav-badge desktop-only"
-                    style={`font-size: 0.6rem; background: ${isToolsActive ? 'var(--text-main)' : 'color-mix(in srgb, var(--text-main) 15%, transparent)'}; color: ${isToolsActive ? 'var(--bg-app)' : 'var(--text-main)'}; padding: 1px 5px; border-radius: 100px; margin-left: 6px; font-weight: 700; letter-spacing: 0.5px; display: inline-block; line-height: 1;`}
-                  >
+                  <span class={`nav-badge desktop-only ${isToolsActive ? 'is-active-badge' : ''}`}>
                     BETA
                   </span>
                 </span>
@@ -303,11 +301,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/downloads" class={`nav-item ${isDownloadsActive ? 'active' : ''}`}>
+            <a href="/downloads" data-nav-key="downloads" class={`nav-item ${isDownloadsActive ? 'active' : ''}`}>
               <span class="nav-icon">
-                <svg width="21" height="21" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                  <path d="M224,144v64a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V144a8,8,0,0,1,16,0v64H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z" />
-                </svg>
+                <span class="nav-icon-reg"><Icon name="DownloadSimple" weight="regular" size={21} /></span>
+                <span class="nav-icon-fill"><Icon name="DownloadSimple" weight="fill" size={21} /></span>
               </span>
               <div class="nav-text-container">
                 <span class="label">பதிவிறக்கங்கள்</span>
@@ -315,11 +312,10 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/about" class={`nav-item desktop-only ${isAboutActive ? 'active' : ''}`}>
+            <a href="/about" data-nav-key="about" class={`nav-item desktop-only ${isAboutActive ? 'active' : ''}`}>
               <span class="nav-icon">
-                <svg width="21" height="21" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                  <path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z" />
-                </svg>
+                <span class="nav-icon-reg"><Icon name="User" weight="regular" size={21} /></span>
+                <span class="nav-icon-fill"><Icon name="User" weight="fill" size={21} /></span>
               </span>
               <div class="nav-text-container">
                 <span class="label">பற்றி</span>
@@ -327,7 +323,7 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/about" class={`nav-item mobile-only-nav-item ${isAboutActive ? 'active' : ''}`}>
+            <a href="/about" data-nav-key="about-mobile" class={`nav-item mobile-only-nav-item ${isAboutActive ? 'active' : ''}`}>
               <span class="nav-icon">
                 <img src={profilePic.src} alt="Profile" class="nav-profile-avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;pointer-events:auto;" />
               </span>
@@ -348,10 +344,14 @@ const fullJsonLd = {
                 <span class="settings-name">{(profileData as any)?.fullName || 'Elvan Parthasarathy'}</span>
                 <span class="settings-brand-tag">Elvan Navil</span>
               </div>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="settings-theme-icon" style="width:16px;height:16px;">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
-              </svg>
+              <span class="settings-theme-icon" aria-hidden="true" style="display:inline-flex;align-items:center;">
+                <span class="theme-ind theme-ind-light"><Icon name="Sun" weight="regular" size={16} /></span>
+                <span class="theme-ind theme-ind-dark"><Icon name="Moon" weight="regular" size={16} /></span>
+                <svg class="theme-ind theme-ind-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
+                </svg>
+              </span>
             </button>
 
             <div id="settings-popup" class="settings-popup" style="display: none;">
@@ -389,11 +389,11 @@ const fullJsonLd = {
       </nav>
 
       <!-- MOBILE TOP BAR -->
-      <header class={`mobile-topbar ${!isHome ? 'is-centered' : ''} ${resolvedShowBack ? 'has-back' : ''}`}>
+      <header class={`mobile-topbar ${!isHome ? 'is-centered' : ''} ${resolvedShowBack ? 'has-back' : ''}`} transition:animate="none">
         <div class="mobile-topbar-left">
           {resolvedShowBack && (
             <a href={resolvedBackUrl} class="mobile-back-btn" aria-label="Go back">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </a>
@@ -415,7 +415,7 @@ const fullJsonLd = {
         <div class="top-bar-actions">
           <div class="mobile-menu-zone" id="mobile-menu-zone">
             <button type="button" id="mobile-dot-btn" class="top-dot-btn" aria-label="More options">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <circle cx="5" cy="12" r="2" />
                 <circle cx="12" cy="12" r="2" />
                 <circle cx="19" cy="12" r="2" />
@@ -455,7 +455,7 @@ const fullJsonLd = {
       </header>
 
       <!-- MAIN CONTENT -->
-      <main id="app-main-content" class={`main-content ${!isMainLevel ? 'no-bottom-nav mobile-full-width' : ''}`} style="flex-grow: 1; min-height: 100vh;">
+      <main id="app-main-content" class={`main-content ${!isMainLevel ? 'no-bottom-nav mobile-full-width' : ''}`} style="flex-grow: 1; min-height: 100vh;" transition:animate="none">
         <div class="main-content-body">
           <slot />
           {!hideFooter && <Footer />}
@@ -465,155 +465,347 @@ const fullJsonLd = {
 
     <script is:inline>
       (function () {
-        // Sidebar collapse state
-        var sidebar = document.getElementById('app-sidebar');
-        var main = document.getElementById('app-main-content');
-        var topZone = document.getElementById('topbar-sidebar-zone');
-        var shell = document.getElementById('app-shell');
-        var toggleBtn = document.getElementById('topbar-sidebar-toggle');
-        var settingsTrigger = document.getElementById('settings-trigger-btn');
-        var settingsPopup = document.getElementById('settings-popup');
+        if (window.__elvanShellInit) return;
+        window.__elvanShellInit = true;
 
-        function applySidebarState(collapsed) {
-          if (!sidebar || !main || !topZone || !shell) return;
-          sidebar.classList.toggle('collapsed', collapsed);
-          main.classList.toggle('sidebar-collapsed', collapsed);
-          topZone.classList.toggle('collapsed', collapsed);
-          shell.classList.toggle('sidebar-collapsed', collapsed);
+        var MAIN_LEVEL_PATHS = [
+          '/',
+          '/navilgal',
+          '/writings',
+          '/arts',
+          '/about',
+          '/portfolio',
+          '/settings',
+          '/tools',
+          '/downloads',
+        ];
+        var CATEGORIES = ['stories', 'poems', 'quotes', 'blog', 'articles', 'diary', 'thoughts'];
+
+        function normPath(p) {
+          return (p || '/').toLowerCase().replace(/\/$/, '') || '/';
+        }
+
+        function isBottomTab(p) {
+          var n = normPath(p);
+          return n === '/' || n === '/navilgal' || n === '/tools' || n === '/downloads' || n === '/about';
+        }
+
+        function getTabIndex(p) {
+          var n = normPath(p);
+          if (n === '/') return 0;
+          if (n.indexOf('/navilgal') === 0 || n.indexOf('/writings') === 0 || n.indexOf('/arts') === 0) return 1;
+          if (n.indexOf('/tools') === 0 || n.indexOf('/teaching') === 0) return 2;
+          if (n.indexOf('/downloads') === 0) return 3;
+          if (n.indexOf('/about') === 0) return 4;
+          return 99;
+        }
+
+        function getPathDepth(p) {
+          var n = normPath(p);
+          if (n === '/') return 0;
+          if (isBottomTab(n)) return 1;
+          var hub = ['/writings', '/arts', '/teaching', '/portfolio', '/settings'];
+          if (hub.indexOf(n) !== -1) return 2;
+          var segs = n.split('/').filter(Boolean);
+          if (n.indexOf('/writings') !== -1 || n.indexOf('/arts') !== -1) {
+            if (n.indexOf('/series/') !== -1) return 4;
+            var last = segs[segs.length - 1];
+            var prev = segs[segs.length - 2];
+            if (CATEGORIES.indexOf(last) !== -1) return 3;
+            if (prev && CATEGORIES.indexOf(prev) !== -1) return 5;
+          }
+          return segs.length + 1;
+        }
+
+        function computeNavClass(fromPath, toPath, directionHint) {
+          var f = normPath(fromPath);
+          var t = normPath(toPath);
+          if (f === t) return 'nav-none';
+          if (isBottomTab(f) && isBottomTab(t)) return 'nav-none';
+          if (directionHint === 'back') return 'nav-pop';
+          var dTo = getPathDepth(t);
+          var dFrom = getPathDepth(f);
+          if (dTo < dFrom) return 'nav-pop';
+          if (dTo > dFrom) return 'nav-push';
+          return getTabIndex(t) < getTabIndex(f) ? 'nav-pop' : 'nav-push';
+        }
+
+        function getSavedTheme() {
+          try { return localStorage.getItem('theme') || 'auto'; } catch (e) { return 'auto'; }
+        }
+
+        function getSidebarCollapsed() {
+          try { return localStorage.getItem('sidebarCollapsed') === 'true'; } catch (e) { return false; }
+        }
+
+        function syncSidebarUiState(collapsed, rootDoc) {
+          var doc = rootDoc || document;
+          var sidebar = doc.getElementById('app-sidebar');
+          var main = doc.getElementById('app-main-content');
+          var topZone = doc.getElementById('topbar-sidebar-zone');
+          var shell = doc.getElementById('app-shell');
+          var settingsTrigger = doc.getElementById('settings-trigger-btn');
+          var settingsPopup = doc.getElementById('settings-popup');
+
+          if (sidebar) sidebar.classList.toggle('collapsed', collapsed);
+          if (main) main.classList.toggle('sidebar-collapsed', collapsed);
+          if (topZone) topZone.classList.toggle('collapsed', collapsed);
+          if (shell) shell.classList.toggle('sidebar-collapsed', collapsed);
           if (settingsTrigger) settingsTrigger.classList.toggle('collapsed-trigger', collapsed);
           if (settingsPopup) settingsPopup.classList.toggle('side-popup', collapsed);
-          var brandEl = topZone.querySelector('.desktop-topbar-sidebar-brand');
-          if (brandEl) brandEl.style.display = collapsed ? 'none' : '';
-          var stText = settingsTrigger ? settingsTrigger.querySelector('.settings-text') : null;
-          var stIcon = settingsTrigger ? settingsTrigger.querySelector('.settings-theme-icon') : null;
-          if (stText) stText.style.display = collapsed ? 'none' : '';
-          if (stIcon) stIcon.style.display = collapsed ? 'none' : '';
-          document.querySelectorAll('#app-sidebar .nav-text-container').forEach(function (el) {
+          if (topZone) {
+            var brandEl = topZone.querySelector('.desktop-topbar-sidebar-brand');
+            if (brandEl) brandEl.style.display = collapsed ? 'none' : '';
+          }
+          if (settingsTrigger) {
+            var stText = settingsTrigger.querySelector('.settings-text');
+            var stIcon = settingsTrigger.querySelector('.settings-theme-icon');
+            if (stText) stText.style.display = collapsed ? 'none' : '';
+            if (stIcon) stIcon.style.display = collapsed ? 'none' : '';
+          }
+          doc.querySelectorAll('#app-sidebar .nav-text-container').forEach(function (el) {
             el.style.display = collapsed ? 'none' : '';
           });
         }
 
-        var isCollapsed = false;
-        try {
-          isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        } catch (e) {}
-        applySidebarState(isCollapsed);
+        function syncActiveNavItems(pathname, rootDoc) {
+          var doc = rootDoc || document;
+          var p = normPath(pathname);
+          var isHome = p === '/';
+          var isNavilgal = p.indexOf('/navilgal') === 0 || p.indexOf('/writings') === 0 || p.indexOf('/arts') === 0;
+          var isTools = p.indexOf('/tools') === 0 || p.indexOf('/teaching') === 0;
+          var isDownloads = p.indexOf('/downloads') === 0;
+          var isAbout = p === '/about';
+          var isMain = MAIN_LEVEL_PATHS.indexOf(p) !== -1;
 
-        if (toggleBtn) {
-          toggleBtn.addEventListener('click', function () {
-            isCollapsed = !isCollapsed;
-            shell.classList.add('animate-layout');
-            setTimeout(function () { shell.classList.remove('animate-layout'); }, 450);
-            try { localStorage.setItem('sidebarCollapsed', String(isCollapsed)); } catch (e) {}
-            applySidebarState(isCollapsed);
+          var sidebar = doc.getElementById('app-sidebar');
+          if (sidebar) sidebar.classList.toggle('mobile-hidden-nav', !isMain);
+          var main = doc.getElementById('app-main-content');
+          if (main) {
+            main.classList.toggle('no-bottom-nav', !isMain);
+            main.classList.toggle('mobile-full-width', !isMain);
+          }
+
+          var map = {
+            home: isHome,
+            navilgal: isNavilgal,
+            tools: isTools,
+            downloads: isDownloads,
+            about: isAbout,
+            'about-mobile': isAbout,
+          };
+          doc.querySelectorAll('#app-sidebar [data-nav-key]').forEach(function (link) {
+            var key = link.getAttribute('data-nav-key');
+            var active = Boolean(map[key]);
+            link.classList.toggle('active', active);
+            if (key === 'tools') {
+              var badge = link.querySelector('.nav-badge');
+              if (badge) badge.classList.toggle('is-active-badge', active);
+            }
           });
         }
 
-        // Theme management
-        function getSavedTheme() {
-          try { return localStorage.getItem('theme') || 'auto'; } catch (e) { return 'auto'; }
-        }
-        function applyTheme(next) {
+        function applyTheme(next, rootDoc) {
+          var doc = rootDoc || document;
           try { localStorage.setItem('theme', next); } catch (e) {}
           var effective = next === 'auto'
             ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
             : next;
-          document.documentElement.setAttribute('data-theme', effective);
+          doc.documentElement.setAttribute('data-theme', effective);
+          doc.documentElement.setAttribute('data-theme-mode', next);
 
-          if (window.parent && window.parent !== window) {
+          if (doc === document && window.parent && window.parent !== window) {
             window.parent.postMessage({ type: 'IFRAMETHEMECHANGE', appId: 'elvan', isDark: effective === 'dark' }, '*');
           }
 
-          var thumb = document.getElementById('desktop-slider-thumb');
+          var thumb = doc.getElementById('desktop-slider-thumb');
           if (thumb) {
             thumb.style.transform = 'translateX(' + (next === 'light' ? '0%' : next === 'auto' ? '100%' : '200%') + ')';
           }
-          document.querySelectorAll('[data-theme-choice]').forEach(function (el) {
+          doc.querySelectorAll('[data-theme-choice]').forEach(function (el) {
             var choice = el.getAttribute('data-theme-choice');
             el.classList.toggle('active', choice === next);
             el.classList.toggle('selected', choice === next);
           });
         }
 
-        applyTheme(getSavedTheme());
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
-          if (getSavedTheme() === 'auto') applyTheme('auto');
-        });
+        function bindPersistentShellEvents() {
+          var toggleBtn = document.getElementById('topbar-sidebar-toggle');
+          if (toggleBtn && !toggleBtn.dataset.bound) {
+            toggleBtn.dataset.bound = '1';
+            toggleBtn.addEventListener('click', function () {
+              var next = !getSidebarCollapsed();
+              var shell = document.getElementById('app-shell');
+              if (shell) {
+                shell.classList.add('animate-layout');
+                setTimeout(function () {
+                  var s = document.getElementById('app-shell');
+                  if (s) s.classList.remove('animate-layout');
+                }, 450);
+              }
+              try { localStorage.setItem('sidebarCollapsed', String(next)); } catch (e) {}
+              syncSidebarUiState(next, document);
+            });
+          }
 
-        document.querySelectorAll('[data-theme-choice]').forEach(function (el) {
-          el.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var choice = el.getAttribute('data-theme-choice');
-            if (choice) applyTheme(choice);
-          });
-        });
+          var settingsTrigger = document.getElementById('settings-trigger-btn');
+          var settingsPopup = document.getElementById('settings-popup');
+          var settingsZone = document.getElementById('settings-zone');
+          if (settingsTrigger && settingsPopup && !settingsTrigger.dataset.bound) {
+            settingsTrigger.dataset.bound = '1';
+            settingsTrigger.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var open = settingsPopup.style.display !== 'none';
+              settingsPopup.style.display = open ? 'none' : 'block';
+              settingsTrigger.classList.toggle('active-trigger', !open);
+            });
+            document.addEventListener('mousedown', function (e) {
+              if (settingsZone && !settingsZone.contains(e.target)) {
+                settingsPopup.style.display = 'none';
+                settingsTrigger.classList.remove('active-trigger');
+              }
+            });
+            settingsPopup.querySelectorAll('a').forEach(function (a) {
+              a.addEventListener('click', function () {
+                settingsPopup.style.display = 'none';
+                settingsTrigger.classList.remove('active-trigger');
+              });
+            });
+          }
 
-        // Desktop settings popup
-        var settingsZone = document.getElementById('settings-zone');
-        if (settingsTrigger && settingsPopup) {
-          settingsTrigger.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var open = settingsPopup.style.display !== 'none';
-            settingsPopup.style.display = open ? 'none' : 'block';
-            settingsTrigger.classList.toggle('active-trigger', !open);
-          });
-          document.addEventListener('mousedown', function (e) {
-            if (settingsZone && !settingsZone.contains(e.target)) {
-              settingsPopup.style.display = 'none';
-              settingsTrigger.classList.remove('active-trigger');
-            }
+          document.querySelectorAll('#app-sidebar [data-theme-choice]').forEach(function (el) {
+            if (el.dataset.themeBound) return;
+            el.dataset.themeBound = '1';
+            el.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var choice = el.getAttribute('data-theme-choice');
+              if (choice) applyTheme(choice, document);
+            });
           });
         }
 
-        // Mobile 3-dot menu
-        var dotBtn = document.getElementById('mobile-dot-btn');
-        var backdrop = document.getElementById('mobile-menu-backdrop');
-        var dropdown = document.getElementById('mobile-menu-dropdown');
-        var track = document.getElementById('mobile-menu-track');
-        var appBtn = document.getElementById('mobile-appearance-btn');
-        var backBtn = document.getElementById('mobile-menu-back-btn');
+        function bindPerPageMobileMenuAndThemes() {
+          document.querySelectorAll('main [data-theme-choice], .mobile-topbar [data-theme-choice]').forEach(function (el) {
+            if (el.dataset.themeBound) return;
+            el.dataset.themeBound = '1';
+            el.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var choice = el.getAttribute('data-theme-choice');
+              if (choice) applyTheme(choice, document);
+            });
+          });
 
-        function closeMobileMenu() {
-          if (dropdown) {
-            dropdown.classList.remove('is-open');
-            dropdown.style.display = 'none';
-            dropdown.style.height = '56px';
-          }
-          if (backdrop) {
-            backdrop.classList.remove('is-open');
-            backdrop.style.display = 'none';
-          }
-          if (track) track.style.transform = 'translateX(0%)';
-        }
-        if (dotBtn && dropdown && backdrop) {
-          dotBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var isOpen = dropdown.classList.contains('is-open');
-            if (isOpen) {
-              closeMobileMenu();
-            } else {
-              dropdown.classList.add('is-open');
-              backdrop.classList.add('is-open');
-              dropdown.style.display = 'block';
-              backdrop.style.display = 'block';
-              if (track) track.style.transform = 'translateX(0%)';
+          var dotBtn = document.getElementById('mobile-dot-btn');
+          var backdrop = document.getElementById('mobile-menu-backdrop');
+          var dropdown = document.getElementById('mobile-menu-dropdown');
+          var track = document.getElementById('mobile-menu-track');
+          var appBtn = document.getElementById('mobile-appearance-btn');
+          var backBtn = document.getElementById('mobile-menu-back-btn');
+
+          function closeMobileMenu() {
+            if (dropdown) {
+              dropdown.classList.remove('is-open');
+              dropdown.style.display = 'none';
               dropdown.style.height = '56px';
             }
-          });
-          backdrop.addEventListener('click', closeMobileMenu);
+            if (backdrop) {
+              backdrop.classList.remove('is-open');
+              backdrop.style.display = 'none';
+            }
+            if (track) track.style.transform = 'translateX(0%)';
+          }
+
+          if (dotBtn && dropdown && backdrop && !dotBtn.dataset.bound) {
+            dotBtn.dataset.bound = '1';
+            dotBtn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var isOpen = dropdown.classList.contains('is-open');
+              if (isOpen) {
+                closeMobileMenu();
+              } else {
+                dropdown.classList.add('is-open');
+                backdrop.classList.add('is-open');
+                dropdown.style.display = 'block';
+                backdrop.style.display = 'block';
+                if (track) track.style.transform = 'translateX(0%)';
+                dropdown.style.height = '56px';
+              }
+            });
+            backdrop.addEventListener('click', closeMobileMenu);
+          }
+          if (appBtn && track && dropdown && !appBtn.dataset.bound) {
+            appBtn.dataset.bound = '1';
+            appBtn.addEventListener('click', function () {
+              track.style.transform = 'translateX(-50%)';
+              dropdown.style.height = '220px';
+            });
+          }
+          if (backBtn && track && dropdown && !backBtn.dataset.bound) {
+            backBtn.dataset.bound = '1';
+            backBtn.addEventListener('click', function () {
+              track.style.transform = 'translateX(0%)';
+              dropdown.style.height = '56px';
+            });
+          }
         }
-        if (appBtn && track && dropdown) {
-          appBtn.addEventListener('click', function () {
-            track.style.transform = 'translateX(-50%)';
-            dropdown.style.height = '220px';
+
+        function pushUnloadedAds() {
+          document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(function () {
+            try {
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {}
           });
         }
-        if (backBtn && track && dropdown) {
-          backBtn.addEventListener('click', function () {
-            track.style.transform = 'translateX(0%)';
-            dropdown.style.height = '56px';
-          });
-        }
+
+        // Initial hydration/load state
+        syncSidebarUiState(getSidebarCollapsed(), document);
+        syncActiveNavItems(window.location.pathname, document);
+        applyTheme(getSavedTheme(), document);
+        bindPersistentShellEvents();
+        bindPerPageMobileMenuAndThemes();
+        pushUnloadedAds();
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+          if (getSavedTheme() === 'auto') applyTheme('auto', document);
+        });
+
+        // Clean ClientRouter SPA-shell transitions across static HTML pages
+        document.addEventListener('astro:before-swap', function (ev) {
+          document.body.style.overflow = '';
+          var newDoc = ev.newDocument;
+          if (!newDoc) return;
+
+          var toPath = ev.to ? ev.to.pathname : window.location.pathname;
+          var fromPath = ev.from ? ev.from.pathname : window.location.pathname;
+          var navCls = computeNavClass(fromPath, toPath, ev.direction);
+
+          var newShell = newDoc.getElementById('app-shell');
+          if (newShell) {
+            newShell.classList.remove('nav-initial', 'nav-push', 'nav-pop', 'nav-none');
+            newShell.classList.add(navCls);
+          }
+
+          applyTheme(getSavedTheme(), newDoc);
+          syncSidebarUiState(getSidebarCollapsed(), newDoc);
+          // Also sync persisted sidebar/main shell classes immediately
+          syncSidebarUiState(getSidebarCollapsed(), document);
+          syncActiveNavItems(toPath, document);
+          syncActiveNavItems(toPath, newDoc);
+
+          var settingsPopup = document.getElementById('settings-popup');
+          var settingsTrigger = document.getElementById('settings-trigger-btn');
+          if (settingsPopup) settingsPopup.style.display = 'none';
+          if (settingsTrigger) settingsTrigger.classList.remove('active-trigger');
+        });
+
+        document.addEventListener('astro:page-load', function () {
+          syncSidebarUiState(getSidebarCollapsed(), document);
+          syncActiveNavItems(window.location.pathname, document);
+          applyTheme(getSavedTheme(), document);
+          bindPersistentShellEvents();
+          bindPerPageMobileMenuAndThemes();
+          pushUnloadedAds();
+        });
 
         // Unregister legacy SPA service worker if installed in visitor's browser
         if ('serviceWorker' in navigator) {
@@ -641,6 +833,53 @@ const fullJsonLd = {
       .main-content {
         min-width: 0;
         max-width: 100%;
+      }
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none !important;
+      }
+      .nav-icon-reg,
+      .nav-icon-fill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-icon-fill {
+        display: none;
+      }
+      .nav-item.active .nav-icon-reg {
+        display: none;
+      }
+      .nav-item.active .nav-icon-fill {
+        display: inline-flex;
+      }
+      .nav-badge {
+        font-size: 0.6rem;
+        background: color-mix(in srgb, var(--text-main) 15%, transparent);
+        color: var(--text-main);
+        padding: 1px 5px;
+        border-radius: 100px;
+        margin-left: 6px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        display: inline-block;
+        line-height: 1;
+      }
+      .nav-badge.is-active-badge {
+        background: var(--text-main);
+        color: var(--bg-app);
+      }
+      .theme-ind {
+        display: none;
+      }
+      html[data-theme-mode='auto'] .theme-ind-auto {
+        display: inline-flex;
+      }
+      html[data-theme-mode='light'] .theme-ind-light {
+        display: inline-flex;
+      }
+      html[data-theme-mode='dark'] .theme-ind-dark {
+        display: inline-flex;
       }
       #mobile-menu-dropdown:not(.is-open),
       #mobile-menu-backdrop:not(.is-open) {

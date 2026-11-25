@@ -3,6 +3,7 @@ import '../../சிறப்புக்கூறுகள்/முகப்�
 import '../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
+import Icon from '../../components/astro/Icon.astro';
 import {
   getCategoryPosts,
   getAllArts,
@@ -28,6 +29,19 @@ const initialPoem = formatPlayerPoem(poems[0] || null);
 const initialQuote = formatPlayerQuote(quotes[0] || null);
 const poemsPool = poems.map((p) => formatPlayerPoem(p));
 const quotesPool = quotes.map((q) => formatPlayerQuote(q));
+
+const CLASSIFICATION_COLORS: Record<string, string> = {
+  அகம்: '#e8a0bf',
+  புறம்: '#d4af37',
+};
+function getClassColor(name: string) {
+  if (!name) return '#888';
+  if (CLASSIFICATION_COLORS[name]) return CLASSIFICATION_COLORS[name];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  const hue = ((hash % 360) + 360) % 360;
+  return `hsl(${hue}, 55%, 60%)`;
+}
 ---
 
 <BaseLayout
@@ -51,12 +65,15 @@ const quotesPool = quotes.map((q) => formatPlayerQuote(q));
       </div>
     </header>
 
+    <div class="home-bg-blobs">
+      <div class="bg-blob-circle blob-1"></div>
+      <div class="bg-blob-circle blob-2"></div>
+    </div>
+
     <div class="bento-grid animate-entry">
       <a href="/writings" class="category-card span-6">
         <div class="cat-icon-box">
-          <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-            <path d="M221.28,34.75A64,64,0,0,0,120,64v7.59L63.59,128a15.9,15.9,0,0,0-4.68,11.31V192H40a8,8,0,0,0,0,16H92.69a15.9,15.9,0,0,0,11.31-4.69l91.41-91.41a64,64,0,0,0,25.87-77.15ZM92.69,192H74.91V139.31L131.31,82.9l52.69,52.69Zm111.79-91.31L151.8,48a48,48,0,0,1,52.68,52.68Z" />
-          </svg>
+          <Icon name="Feather" weight="regular" />
         </div>
         <div class="cat-content">
           <div class="cat-title" lang="ta">
@@ -71,14 +88,14 @@ const quotesPool = quotes.map((q) => formatPlayerQuote(q));
             Navil poems, quotes, short stories, articles &amp; personal diary.
           </p>
         </div>
-        <div class="cat-footer">எழுத்துகளை வாசிக்க →</div>
+        <div class="cat-footer">
+          எழுத்துகளை வாசிக்க <Icon name="ArrowRight" weight="regular" />
+        </div>
       </a>
 
       <a href="/arts" class="category-card span-6">
         <div class="cat-icon-box">
-          <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-            <path d="M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89ZM198.21,160H152a32,32,0,0,0-32,32,16,16,0,0,1-21.31,15.07C62.49,194.3,40,164,40,128a88,88,0,0,1,87.09-88h.9a88.35,88.35,0,0,1,88,87.25A88.86,88.86,0,0,1,213.81,147,15.86,15.86,0,0,1,198.21,160Z" />
-          </svg>
+          <Icon name="Palette" weight="regular" />
         </div>
         <div class="cat-content">
           <div class="cat-title" lang="ta">
@@ -93,17 +110,19 @@ const quotesPool = quotes.map((q) => formatPlayerQuote(q));
             Pencil drawings, posters, paintings &amp; digital art creations.
           </p>
         </div>
-        <div class="cat-footer">படைப்புகளைக் காண →</div>
+        <div class="cat-footer">
+          படைப்புகளைக் காண <Icon name="ArrowRight" weight="regular" />
+        </div>
       </a>
 
       <section class="bento-card span-6 quote-bento clickable-card" id="nav-poem-card" data-href={(initialPoem.slug || initialPoem.id) ? `/writings/poems/${encodeURIComponent(initialPoem.slug || initialPoem.id)}` : '/writings/poems'}>
         <div class="quote-header-row">
           <span class="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
           <button type="button" id="nav-refresh-poem" class="quote-refresh-btn" title="Read another poem" aria-label="Read another poem">
-            ↻
+            <Icon name="ArrowClockwise" weight="regular" size={18} />
           </button>
         </div>
-        <div class="player-display">
+        <div class="player-display" id="nav-poem-display">
           <p class="player-main-text" id="nav-poem-main" lang={initialPoem.main.lang}>{initialPoem.main.text}</p>
           {initialPoem.sub && (
             <div class="player-sub-display" id="nav-poem-sub-wrap">
@@ -112,20 +131,28 @@ const quotesPool = quotes.map((q) => formatPlayerQuote(q));
           )}
           <div class="player-read-more-container">
             <a id="nav-poem-link" href={(initialPoem.slug || initialPoem.id) ? `/writings/poems/${encodeURIComponent(initialPoem.slug || initialPoem.id)}` : '/writings/poems'} class="player-read-more-btn" style="text-decoration:none;">
-              Click here to read more →
+              Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
             </a>
+            {initialPoem.classification && (
+              <span class="classification-badge" id="nav-poem-class-badge" style={`color: ${getClassColor(initialPoem.classification)};`}>
+                {initialPoem.classification}
+              </span>
+            )}
           </div>
+        </div>
+        <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
+          <span id="nav-poem-theme-label" style="font-weight: 600; color: var(--text-main);">{initialPoem.theme}</span> • Click card to read full poem, or refresh to load another.
         </div>
       </section>
 
       <section class="bento-card span-6 quote-bento clickable-card" id="nav-quote-card" data-href={(initialQuote.slug || initialQuote.id) ? `/writings/quotes/${encodeURIComponent(initialQuote.slug || initialQuote.id)}` : '/writings/quotes'}>
         <div class="quote-header-row">
           <span class="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
-          <button type="button" id="nav-refresh-quote" class="quote-refresh-btn" title="Read another quote" aria-label="Read another quote">
-            ↻
+          <button type="button" id="nav-refresh-quote" class="quote-refresh-btn" title="Read another reflection" aria-label="Read another reflection">
+            <Icon name="ArrowClockwise" weight="regular" size={18} />
           </button>
         </div>
-        <div class="player-display">
+        <div class="player-display" id="nav-quote-display">
           <blockquote class="player-main-text" id="nav-quote-main" lang={initialQuote.mainLang}>“{initialQuote.main}”</blockquote>
           {initialQuote.sub && (
             <div class="player-sub-display" id="nav-quote-sub-wrap">
@@ -134,9 +161,17 @@ const quotesPool = quotes.map((q) => formatPlayerQuote(q));
           )}
           <div class="player-read-more-container">
             <a id="nav-quote-link" href={(initialQuote.slug || initialQuote.id) ? `/writings/quotes/${encodeURIComponent(initialQuote.slug || initialQuote.id)}` : '/writings/quotes'} class="player-read-more-btn" style="text-decoration:none;">
-              Click here to read more →
+              Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
             </a>
+            {initialQuote.classification && (
+              <span class="classification-badge" id="nav-quote-class-badge" style={`color: ${getClassColor(initialQuote.classification)};`}>
+                {initialQuote.classification}
+              </span>
+            )}
           </div>
+        </div>
+        <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
+          <span id="nav-quote-tag-label" style="font-weight: 600; color: var(--text-main);">{initialQuote.tag}</span> • Click card to read full quote, or refresh to load another.
         </div>
       </section>
     </div>
@@ -146,48 +181,98 @@ const quotesPool = quotes.map((q) => formatPlayerQuote(q));
 
   <script is:inline define:vars={{ poemsPool, quotesPool }}>
     (function () {
-      var pIdx = 0;
-      var qIdx = 0;
-      var pBtn = document.getElementById('nav-refresh-poem');
-      var qBtn = document.getElementById('nav-refresh-quote');
-      var pCard = document.getElementById('nav-poem-card');
-      var qCard = document.getElementById('nav-quote-card');
-      if (pCard) pCard.addEventListener('click', function (e) { if (!e.target.closest('button') && !e.target.closest('a')) window.location.href = pCard.getAttribute('data-href'); });
-      if (qCard) qCard.addEventListener('click', function (e) { if (!e.target.closest('button') && !e.target.closest('a')) window.location.href = qCard.getAttribute('data-href'); });
-      if (pBtn && poemsPool && poemsPool.length > 1) {
-        pBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          pIdx = (pIdx + 1) % poemsPool.length;
-          var p = poemsPool[pIdx];
-          var pTarget = p.slug || p.id;
-          var url = pTarget ? '/writings/poems/' + encodeURIComponent(pTarget) : '/writings/poems';
-          document.getElementById('nav-poem-main').textContent = p.main.text;
-          var sub = document.getElementById('nav-poem-sub');
-          var subWrap = document.getElementById('nav-poem-sub-wrap');
-          if (sub && subWrap) {
-            if (p.sub && p.sub.text) { subWrap.style.display = ''; sub.textContent = p.sub.text; } else { subWrap.style.display = 'none'; }
-          }
-          document.getElementById('nav-poem-link').setAttribute('href', url);
-          pCard.setAttribute('data-href', url);
+      function initNavilgal() {
+        var pBtn = document.getElementById('nav-refresh-poem');
+        var qBtn = document.getElementById('nav-refresh-quote');
+        var pCard = document.getElementById('nav-poem-card');
+        var qCard = document.getElementById('nav-quote-card');
+        if (!pCard || pCard.dataset.bound) return;
+        pCard.dataset.bound = '1';
+
+        var pIdx = 0;
+        var qIdx = 0;
+
+        pCard.addEventListener('click', function (e) {
+          if (e.target.closest('button') || e.target.closest('a')) return;
+          var link = document.getElementById('nav-poem-link');
+          if (link) link.click();
         });
+        if (qCard) {
+          qCard.addEventListener('click', function (e) {
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            var link = document.getElementById('nav-quote-link');
+            if (link) link.click();
+          });
+        }
+
+        if (pBtn && poemsPool && poemsPool.length > 1) {
+          pBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var display = document.getElementById('nav-poem-display');
+            var icon = pBtn.querySelector('svg');
+            if (icon) icon.classList.add('rotate-icon');
+            if (display) display.style.opacity = '0';
+            setTimeout(function () {
+              pIdx = (pIdx + 1) % poemsPool.length;
+              var p = poemsPool[pIdx];
+              var pTarget = p.slug || p.id;
+              var url = pTarget ? '/writings/poems/' + encodeURIComponent(pTarget) : '/writings/poems';
+              var main = document.getElementById('nav-poem-main');
+              if (main) main.textContent = p.main.text;
+              var sub = document.getElementById('nav-poem-sub');
+              var subWrap = document.getElementById('nav-poem-sub-wrap');
+              if (sub && subWrap) {
+                if (p.sub && p.sub.text) { subWrap.style.display = ''; sub.textContent = p.sub.text; }
+                else { subWrap.style.display = 'none'; }
+              }
+              var linkEl = document.getElementById('nav-poem-link');
+              if (linkEl) linkEl.setAttribute('href', url);
+              pCard.setAttribute('data-href', url);
+              var themeEl = document.getElementById('nav-poem-theme-label');
+              if (themeEl) themeEl.textContent = p.theme || 'Literature';
+              var clsEl = document.getElementById('nav-poem-class-badge');
+              if (clsEl) clsEl.textContent = p.classification || '';
+              if (display) display.style.opacity = '1';
+              setTimeout(function () { if (icon) icon.classList.remove('rotate-icon'); }, 450);
+            }, 260);
+          });
+        }
+
+        if (qBtn && quotesPool && quotesPool.length > 1) {
+          qBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var display = document.getElementById('nav-quote-display');
+            var icon = qBtn.querySelector('svg');
+            if (icon) icon.classList.add('rotate-icon');
+            if (display) display.style.opacity = '0';
+            setTimeout(function () {
+              qIdx = (qIdx + 1) % quotesPool.length;
+              var q = quotesPool[qIdx];
+              var qTarget = q.slug || q.id;
+              var url = qTarget ? '/writings/quotes/' + encodeURIComponent(qTarget) : '/writings/quotes';
+              var main = document.getElementById('nav-quote-main');
+              if (main) main.textContent = '“' + q.main + '”';
+              var sub = document.getElementById('nav-quote-sub');
+              var subWrap = document.getElementById('nav-quote-sub-wrap');
+              if (sub && subWrap) {
+                if (q.sub) { subWrap.style.display = ''; sub.textContent = q.sub; }
+                else { subWrap.style.display = 'none'; }
+              }
+              var linkEl = document.getElementById('nav-quote-link');
+              if (linkEl) linkEl.setAttribute('href', url);
+              if (qCard) qCard.setAttribute('data-href', url);
+              var tagEl = document.getElementById('nav-quote-tag-label');
+              if (tagEl) tagEl.textContent = q.tag || '';
+              var clsEl = document.getElementById('nav-quote-class-badge');
+              if (clsEl) clsEl.textContent = q.classification || '';
+              if (display) display.style.opacity = '1';
+              setTimeout(function () { if (icon) icon.classList.remove('rotate-icon'); }, 450);
+            }, 260);
+          });
+        }
       }
-      if (qBtn && quotesPool && quotesPool.length > 1) {
-        qBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          qIdx = (qIdx + 1) % quotesPool.length;
-          var q = quotesPool[qIdx];
-          var qTarget = q.slug || q.id;
-          var url = qTarget ? '/writings/quotes/' + encodeURIComponent(qTarget) : '/writings/quotes';
-          document.getElementById('nav-quote-main').textContent = '“' + q.main + '”';
-          var sub = document.getElementById('nav-quote-sub');
-          var subWrap = document.getElementById('nav-quote-sub-wrap');
-          if (sub && subWrap) {
-            if (q.sub) { subWrap.style.display = ''; sub.textContent = q.sub; } else { subWrap.style.display = 'none'; }
-          }
-          document.getElementById('nav-quote-link').setAttribute('href', url);
-          qCard.setAttribute('data-href', url);
-        });
-      }
+      initNavilgal();
+      document.addEventListener('astro:page-load', initNavilgal);
     })();
   </script>
 </BaseLayout>

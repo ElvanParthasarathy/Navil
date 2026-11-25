@@ -3,6 +3,7 @@ import '../../../சிறப்புக்கூறுகள்/படைப�
 import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வகைபட்டியல்.css';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdUnit from '../../../components/astro/AdUnit.astro';
+import Icon from '../../../components/astro/Icon.astro';
 import {
   ALL_WRITING_CATEGORIES,
   CATEGORY_META,
@@ -10,13 +11,14 @@ import {
   getPrimaryTitle,
   getPrimaryExcerpt,
   getPostTags,
+  analyzePostVersions,
 } from '../../../lib/content';
 import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 
 export async function getStaticPaths() {
   const paths = [];
   for (const cat of ALL_WRITING_CATEGORIES) {
-    if (cat === 'stories') continue; // handled by src/pages/writings/stories/index.astro
+    if (cat === 'stories') continue;
     const posts = await getCategoryPosts(cat);
     if (posts.length > 0) {
       paths.push({
@@ -31,9 +33,24 @@ export async function getStaticPaths() {
 const { category, posts } = Astro.props;
 const meta = CATEGORY_META[category];
 
+const LANG_LABELS: Record<string, string> = {
+  ta: 'தமிழ்',
+  en: 'English',
+  ml: 'മലയാളം',
+  hi: 'Hindi',
+  te: 'Telugu',
+  sa: 'Sanskrit',
+};
+
+const EXCLUDED_TAGS = new Set(['அகம்', 'புறம்', 'അകം', 'പുറം', 'agam', 'puram', 'തമിഴാളം', 'തമിഴാழம்'].map((s) => s.toLowerCase()));
 const allGenresSet = new Set<string>();
-posts.forEach((p) => getPostTags(p).forEach((g) => allGenresSet.add(g)));
+posts.forEach((p: any) =>
+  getPostTags(p).forEach((g) => {
+    if (!EXCLUDED_TAGS.has(g.toLowerCase())) allGenresSet.add(g);
+  })
+);
 const allGenres = Array.from(allGenresSet).sort();
+const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
 ---
 
 <BaseLayout
@@ -43,43 +60,96 @@ const allGenres = Array.from(allGenresSet).sort();
   mobileTitle={`${meta.titleTa}|${meta.titleEn.toLowerCase()}`}
   backUrl="/writings"
 >
-  <div class="writings-page page-view fadeIn">
-    <header class="writings-header animate-entry">
-      <div style="flex: 1;">
-        <h1 class="writings-title" lang="ta">{meta.titleTa}</h1>
-        <div class="writings-title-sub">{meta.titleEn}</div>
-        <p class="writings-subtitle" lang="ta">{meta.descTa}</p>
-        <p class="writings-subtitle writings-subtitle-en">{meta.descEn}</p>
-      </div>
-    </header>
+  <div class="writings-page page-view fadeIn" id="cat-list-root">
+    <!-- Controls (mounted inline on mobile, moved to #desktop-topbar-actions on desktop) -->
+    <div id="cat-controls-mount">
+      <div class="controls-area" id="cat-controls-el" style="max-width: 800px;">
+        <div class="minimal-search">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" id="cat-search-input" placeholder="தேடுக..." aria-label={`Search ${meta.titleTa}`} />
+        </div>
 
-    <div class="controls-area" style="margin-bottom: 24px; flex-wrap: wrap;">
-      <div class="minimal-search">
-        <span class="search-icon">🔍</span>
-        <input type="search" id="cat-search-input" placeholder="Search titles, tags, or excerpts..." aria-label="Search posts" />
-      </div>
-      {allGenres.length > 0 && (
-        <select
-          id="cat-genre-select"
-          aria-label="Filter by tag"
-          style="height: 44px; padding: 0 16px; border-radius: 100px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-main); font-size: 0.9rem; font-weight: 600;"
+        {allGenres.length > 0 && (
+          <div class="filter-icon-wrapper">
+            <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <select id="cat-genre-select" class="theme-dropdown" aria-label="Filter by topic">
+              <option value="">வகைகள்</option>
+              {allGenres.map((g) => <option value={g.toLowerCase()}>{g}</option>)}
+            </select>
+          </div>
+        )}
+
+        <button
+          type="button"
+          id="cat-pag-toggle"
+          class="pagination-toggle-btn"
+          aria-label="Toggle Pages"
+          title="பக்க எண்கள்"
+          style={posts.length <= itemsPerPage ? 'display: none;' : ''}
         >
-          <option value="">All Topics ({posts.length})</option>
-          {allGenres.map((g) => <option value={g.toLowerCase()}>{g}</option>)}
-        </select>
-      )}
+          <svg class="icon pag-ico-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+          </svg>
+          <svg class="icon pag-ico-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Pagination Drawer -->
+    <div id="cat-pagination-drawer" class="pagination-collapsible" style="display: none;">
+      <div class="pagination-collapsible-inner">
+        <div class="pagination-wrapper" style="margin-top: 0; border-top: none;">
+          <div class="pagination-inner">
+            <div class="page-numbers centered" id="cat-page-numbers"></div>
+            <div class="pagination-nav-pill">
+              <button type="button" class="page-btn prev-btn" id="cat-prev-btn" lang="ta">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg> முந்தை
+              </button>
+              <span class="pagination-label" id="cat-page-label">1 / 1</span>
+              <button type="button" class="page-btn next-btn" id="cat-next-btn" lang="ta">
+                அடுத்து <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="blog-grid-container animate-entry" id="cat-posts-grid">
-      {posts.map((post) => {
+      {posts.map((post: any) => {
         const title = getPrimaryTitle(post, category);
         const excerpt = getPrimaryExcerpt(post, 150);
         const tags = getPostTags(post);
         const cover = post.cover_image ? getOptimizedImage(post.cover_image, 'thumb') : null;
         const dateStr = post.publish_date || post.date;
         const formattedDate = dateStr
-          ? new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+          ? new Date(dateStr).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
           : '';
+        const isPinned = Boolean((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent'));
+        const versionInfo = analyzePostVersions(post.variants);
+        const versionTags: { text: string; type: string }[] = [];
+        if (versionInfo) {
+          versionInfo.variants.forEach((ve) => {
+            const name = LANG_LABELS[ve.lang] || ve.lang;
+            const isMain = ve.label === 'Original';
+            versionTags.push({ text: !isMain ? `${name} ${ve.label}` : name, type: isMain ? 'main' : 'v' });
+          });
+          versionInfo.translations.forEach((te) => {
+            versionTags.push({ text: `${LANG_LABELS[te.lang] || te.lang} Translation`, type: 't' });
+          });
+          versionInfo.transliterations.forEach((tl) => {
+            versionTags.push({ text: `${LANG_LABELS[tl] || tl} Transliteration`, type: 'tl' });
+          });
+        }
         const searchBlob = `${title} ${excerpt} ${tags.join(' ')} ${post.classification || ''}`.toLowerCase();
 
         return (
@@ -94,6 +164,7 @@ const allGenres = Array.from(allGenresSet).sort();
               {cover && (
                 <div class="blog-cover-wrapper">
                   <img src={cover} alt={title} loading="lazy" />
+                  {isPinned && <span class="blog-featured-badge">✨ Featured</span>}
                   {post.classification && (
                     <span class={`blog-classification-badge ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
                       {post.classification}
@@ -102,15 +173,18 @@ const allGenres = Array.from(allGenresSet).sort();
                 </div>
               )}
               <div class="blog-card-content">
-                {!cover && post.classification && (
-                  <div>
-                    <span class={`blog-classification-badge inline ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
-                      {post.classification}
-                    </span>
+                {!cover && (isPinned || post.classification) && (
+                  <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    {isPinned && <span class="blog-featured-badge inline">✨ Featured</span>}
+                    {post.classification && (
+                      <span class={`blog-classification-badge inline ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
+                        {post.classification}
+                      </span>
+                    )}
                   </div>
                 )}
                 <div class="blog-meta-minimal">
-                  {formattedDate && <span>{formattedDate}</span>}
+                  {formattedDate && <span class="meta-date">{formattedDate}</span>}
                   {formattedDate && tags.length > 0 && <span class="meta-dot">•</span>}
                   {tags.slice(0, 2).map((t, idx) => (
                     <>
@@ -120,10 +194,20 @@ const allGenres = Array.from(allGenresSet).sort();
                   ))}
                 </div>
                 <h2 class="blog-title" lang={post.variants?.[0]?.lang || 'ta'}>{title}</h2>
-                {excerpt && <p class="blog-excerpt">{excerpt}</p>}
+                {excerpt && <p class="blog-excerpt" lang={post.variants?.[0]?.lang || 'ta'}>{excerpt}</p>}
                 <div class="blog-card-footer">
+                  {versionTags.length > 0 && (
+                    <div class="vs-line">
+                      {versionTags.map((t, i) => (
+                        <>
+                          {i > 0 && <span class="vs-sep">·</span>}
+                          <span class={`vs-tag vs-${t.type}`}>{t.text}</span>
+                        </>
+                      ))}
+                    </div>
+                  )}
                   <span class="blog-read-more">
-                    வாசிக்க • Read <span class="arrow">→</span>
+                    வாசிக்க • Read <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
                   </span>
                 </div>
               </div>
@@ -136,25 +220,121 @@ const allGenres = Array.from(allGenresSet).sort();
     <AdUnit margin="48px 0 0" />
   </div>
 
-  <script is:inline>
+  <script is:inline define:vars={{ itemsPerPage }}>
     (function () {
-      var input = document.getElementById('cat-search-input');
-      var select = document.getElementById('cat-genre-select');
-      var cards = Array.prototype.slice.call(document.querySelectorAll('.cat-post-card'));
+      var catAbort = null;
+      function initCategoryList() {
+        var root = document.getElementById('cat-list-root');
+        if (!root || root.dataset.bound) return;
+        root.dataset.bound = '1';
 
-      function filter() {
-        var q = (input ? input.value : '').trim().toLowerCase();
-        var g = (select ? select.value : '').trim().toLowerCase();
-        cards.forEach(function (card) {
-          var blob = card.getAttribute('data-search') || '';
-          var tags = (card.getAttribute('data-tags') || '').split(',');
-          var matchQ = !q || blob.indexOf(q) !== -1;
-          var matchG = !g || tags.indexOf(g) !== -1;
-          card.style.display = matchQ && matchG ? 'flex' : 'none';
-        });
+        if (catAbort) catAbort.abort();
+        catAbort = new AbortController();
+        var sig = { signal: catAbort.signal };
+
+        var controlsEl = document.getElementById('cat-controls-el');
+        var controlsMount = document.getElementById('cat-controls-mount');
+
+        function syncControlsPlacement() {
+          var target = document.getElementById('desktop-topbar-actions');
+          if (!controlsEl || !controlsMount) return;
+          if (window.innerWidth > 768 && target) {
+            controlsEl.className = 'topbar-controls-area';
+            controlsEl.removeAttribute('style');
+            if (controlsEl.parentNode !== target) target.appendChild(controlsEl);
+          } else {
+            controlsEl.className = 'controls-area';
+            controlsEl.style.maxWidth = '800px';
+            if (controlsEl.parentNode !== controlsMount) controlsMount.appendChild(controlsEl);
+          }
+        }
+        syncControlsPlacement();
+        window.addEventListener('resize', syncControlsPlacement, sig);
+
+        var input = document.getElementById('cat-search-input');
+        var select = document.getElementById('cat-genre-select');
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.cat-post-card'));
+        var drawer = document.getElementById('cat-pagination-drawer');
+        var toggleBtn = document.getElementById('cat-pag-toggle');
+        var pageNumsEl = document.getElementById('cat-page-numbers');
+        var pageLabelEl = document.getElementById('cat-page-label');
+        var prevBtn = document.getElementById('cat-prev-btn');
+        var nextBtn = document.getElementById('cat-next-btn');
+
+        var currentPage = 1;
+        var isExpanded = false;
+
+        function renderList() {
+          var q = (input ? input.value : '').trim().toLowerCase();
+          var g = (select ? select.value : '').trim().toLowerCase();
+          var matched = [];
+          cards.forEach(function (card) {
+            var blob = card.getAttribute('data-search') || '';
+            var tags = (card.getAttribute('data-tags') || '').split(',');
+            var ok = (!q || blob.indexOf(q) !== -1) && (!g || tags.indexOf(g) !== -1);
+            if (ok) matched.push(card);
+            else card.style.display = 'none';
+          });
+
+          var totalPages = Math.max(1, Math.ceil(matched.length / itemsPerPage));
+          if (currentPage > totalPages) currentPage = totalPages;
+
+          var start = (currentPage - 1) * itemsPerPage;
+          var end = start + itemsPerPage;
+          matched.forEach(function (card, idx) {
+            card.style.display = idx >= start && idx < end ? 'flex' : 'none';
+          });
+
+          if (toggleBtn) toggleBtn.style.display = totalPages > 1 ? 'inline-flex' : 'none';
+          if (drawer) drawer.style.display = totalPages > 1 ? 'block' : 'none';
+          if (pageLabelEl) pageLabelEl.textContent = currentPage + ' / ' + totalPages;
+          if (prevBtn) prevBtn.disabled = currentPage <= 1;
+          if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+
+          if (pageNumsEl) {
+            pageNumsEl.innerHTML = '';
+            for (var i = 1; i <= totalPages; i++) {
+              (function (n) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'page-number-btn' + (n === currentPage ? ' active' : '');
+                btn.textContent = String(n);
+                btn.addEventListener('click', function () {
+                  currentPage = n;
+                  renderList();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                pageNumsEl.appendChild(btn);
+              })(i);
+            }
+          }
+        }
+
+        if (toggleBtn && drawer) {
+          toggleBtn.addEventListener('click', function () {
+            isExpanded = !isExpanded;
+            toggleBtn.classList.toggle('active', isExpanded);
+            drawer.classList.toggle('expanded', isExpanded);
+            var c = toggleBtn.querySelector('.pag-ico-closed');
+            var o = toggleBtn.querySelector('.pag-ico-open');
+            if (c) c.style.display = isExpanded ? 'none' : '';
+            if (o) o.style.display = isExpanded ? '' : 'none';
+            if (isExpanded) window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, sig);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', function () { currentPage = Math.max(1, currentPage - 1); renderList(); window.scrollTo({ top: 0, behavior: 'smooth' }); }, sig);
+        if (nextBtn) nextBtn.addEventListener('click', function () { currentPage = currentPage + 1; renderList(); window.scrollTo({ top: 0, behavior: 'smooth' }); }, sig);
+        if (input) input.addEventListener('input', function () { currentPage = 1; renderList(); }, sig);
+        if (select) select.addEventListener('change', function () { currentPage = 1; renderList(); }, sig);
+
+        renderList();
       }
-      if (input) input.addEventListener('input', filter);
-      if (select) select.addEventListener('change', filter);
+      initCategoryList();
+      document.addEventListener('astro:page-load', initCategoryList);
+      document.addEventListener('astro:before-swap', function () {
+        if (catAbort) { catAbort.abort(); catAbort = null; }
+      });
     })();
   </script>
 </BaseLayout>

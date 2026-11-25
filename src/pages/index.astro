@@ -4,6 +4,7 @@ import '../சிறப்புக்கூறுகள்/பதிவிற�
 import '../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdUnit from '../components/astro/AdUnit.astro';
+import Icon from '../components/astro/Icon.astro';
 import {
   getCategoryPosts,
   getPrimaryTitle,
@@ -93,6 +94,7 @@ function getClassColor(name: string) {
         <div class="span-6" style="display: flex;">
           <a
             href="/downloads/nammil"
+            id="home-nammil-card"
             class="store-app-card"
             style="width: 100%; display: flex; flex-direction: column; justify-content: space-between;"
             title="Nammil — Multi-Account WhatsApp Companion"
@@ -144,9 +146,7 @@ function getClassColor(name: string) {
           >
             <div>
               <div class="cat-icon-box">
-                <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                  <path d="M247.15,212.42l-56-112a8,8,0,0,0-14.31,0l-21.71,43.43A88,88,0,0,1,108,126.93,103.65,103.65,0,0,0,135.69,64H160a8,8,0,0,0,0-16H104V32a8,8,0,0,0-16,0V48H32a8,8,0,0,0,0,16h87.63A87.76,87.76,0,0,1,96,116.35a87.74,87.74,0,0,1-19-31,8,8,0,1,0-15.08,5.34A103.63,103.63,0,0,0,84,127a87.55,87.55,0,0,1-52,17,8,8,0,0,0,0,16,103.46,103.46,0,0,0,64-22.08,104.18,104.18,0,0,0,51.44,21.31l-26.6,53.19a8,8,0,0,0,14.31,7.16L148.94,192h70.11l13.79,27.58A8,8,0,0,0,240,224a8,8,0,0,0,7.15-11.58ZM156.94,176,184,121.89,211.05,176Z" />
-                </svg>
+                <Icon name="Translate" weight="regular" />
               </div>
               <div class="cat-content" style="margin-top: 16px;">
                 <div class="cat-title">
@@ -159,7 +159,7 @@ function getClassColor(name: string) {
               </div>
             </div>
             <div class="cat-footer" style="margin-top: auto; padding-top: 20px;">
-              மொழிமாற்றியைத் தொடங்க →
+              மொழிமாற்றியைத் தொடங்க <Icon name="ArrowRight" weight="regular" />
             </div>
           </a>
         </div>
@@ -180,9 +180,7 @@ function getClassColor(name: string) {
           <div class="quote-header-row">
             <span class="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
             <button type="button" id="refresh-poem-btn" class="quote-refresh-btn" title="Read another poem" aria-label="Read another poem">
-              <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                <path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64A81.59,81.59,0,0,0,46.37,90.32a8,8,0,0,1-14.5-6.78,97.56,97.56,0,0,1,164.38-23L224,84.7V56a8,8,0,0,1,16,0ZM217.75,165.68a8,8,0,0,0-10.63,3.86A81.59,81.59,0,0,1,71.19,184.36L44.6,160H72a8,8,0,0,0,0-16H24a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V171.3l27.75,24.16A97.56,97.56,0,0,0,224.13,172.46,8,8,0,0,0,217.75,165.68Z" />
-              </svg>
+              <Icon name="ArrowClockwise" weight="regular" size={18} />
             </button>
           </div>
 
@@ -200,7 +198,7 @@ function getClassColor(name: string) {
                 class="player-read-more-btn"
                 style="text-decoration: none;"
               >
-                Click here to read more →
+                Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
               </a>
               {initialPoem.classification && (
                 <span class="classification-badge" id="poem-class-badge" style={`color: ${getClassColor(initialPoem.classification)};`}>
@@ -219,9 +217,7 @@ function getClassColor(name: string) {
           <div class="quote-header-row">
             <span class="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
             <button type="button" id="refresh-quote-btn" class="quote-refresh-btn" title="Read another reflection" aria-label="Read another reflection">
-              <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                <path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64A81.59,81.59,0,0,0,46.37,90.32a8,8,0,0,1-14.5-6.78,97.56,97.56,0,0,1,164.38-23L224,84.7V56a8,8,0,0,1,16,0ZM217.75,165.68a8,8,0,0,0-10.63,3.86A81.59,81.59,0,0,1,71.19,184.36L44.6,160H72a8,8,0,0,0,0-16H24a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V171.3l27.75,24.16A97.56,97.56,0,0,0,224.13,172.46,8,8,0,0,0,217.75,165.68Z" />
-              </svg>
+              <Icon name="ArrowClockwise" weight="regular" size={18} />
             </button>
           </div>
 
@@ -239,7 +235,7 @@ function getClassColor(name: string) {
                 class="player-read-more-btn"
                 style="text-decoration: none;"
               >
-                Click here to read more →
+                Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
               </a>
               {initialQuote.classification && (
                 <span class="classification-badge" id="quote-class-badge" style={`color: ${getClassColor(initialQuote.classification)};`}>
@@ -287,7 +283,7 @@ function getClassColor(name: string) {
                     <p class="cat-desc-sub" style="margin: 0; line-height: 1.65;">{artExcerpt}</p>
                   </div>
                   <div class="cat-footer" style="margin-top: 12px;">
-                    கட்டுரையைப் படிக்க • Read Article →
+                    கட்டுரையைப் படிக்க • Read Article <Icon name="ArrowRight" weight="regular" />
                   </div>
                 </a>
               </div>
@@ -302,86 +298,121 @@ function getClassColor(name: string) {
 
   <script is:inline define:vars={{ poemsPool, quotesPool }}>
     (function () {
-      var poemIdx = 0;
-      var quoteIdx = 0;
+      function initHomePage() {
+        var nammilCard = document.getElementById('home-nammil-card');
+        if (nammilCard && !nammilCard.dataset.bound) {
+          nammilCard.dataset.bound = '1';
+          nammilCard.addEventListener('mousedown', function (e) {
+            var rect = nammilCard.getBoundingClientRect();
+            var ripple = document.createElement('span');
+            ripple.className = 'store-card-ripple';
+            ripple.style.left = (e.clientX - rect.left) + 'px';
+            ripple.style.top = (e.clientY - rect.top) + 'px';
+            nammilCard.appendChild(ripple);
+            setTimeout(function () { ripple.remove(); }, 650);
+          });
+        }
 
-      var poemCard = document.getElementById('home-poem-card');
-      var quoteCard = document.getElementById('home-quote-card');
-      var refreshPoemBtn = document.getElementById('refresh-poem-btn');
-      var refreshQuoteBtn = document.getElementById('refresh-quote-btn');
+        var poemCard = document.getElementById('home-poem-card');
+        var quoteCard = document.getElementById('home-quote-card');
+        var refreshPoemBtn = document.getElementById('refresh-poem-btn');
+        var refreshQuoteBtn = document.getElementById('refresh-quote-btn');
+        if (!poemCard || poemCard.dataset.bound) return;
+        poemCard.dataset.bound = '1';
 
-      if (poemCard) {
+        var poemIdx = 0;
+        var quoteIdx = 0;
+
         poemCard.addEventListener('click', function (e) {
           if (e.target.closest('button') || e.target.closest('a')) return;
-          var href = poemCard.getAttribute('data-href');
-          if (href) window.location.href = href;
+          var link = document.getElementById('poem-read-link');
+          if (link) link.click();
         });
-      }
-      if (quoteCard) {
-        quoteCard.addEventListener('click', function (e) {
-          if (e.target.closest('button') || e.target.closest('a')) return;
-          var href = quoteCard.getAttribute('data-href');
-          if (href) window.location.href = href;
-        });
-      }
 
-      if (refreshPoemBtn && Array.isArray(poemsPool) && poemsPool.length > 1) {
-        refreshPoemBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          poemIdx = (poemIdx + 1) % poemsPool.length;
-          var p = poemsPool[poemIdx];
-          var mainEl = document.getElementById('poem-main-text');
-          var subEl = document.getElementById('poem-sub-text');
-          var subWrap = document.getElementById('poem-sub-wrap');
-          var linkEl = document.getElementById('poem-read-link');
-          var themeEl = document.getElementById('poem-theme-label');
-          var badgeEl = document.getElementById('poem-class-badge');
-          var pTarget = p.slug || p.id;
-          var url = pTarget ? '/writings/poems/' + encodeURIComponent(pTarget) : '/writings/poems';
-          if (mainEl) mainEl.textContent = p.main.text;
-          if (subEl && subWrap) {
-            if (p.sub && p.sub.text) {
-              subWrap.style.display = '';
-              subEl.textContent = p.sub.text;
-            } else {
-              subWrap.style.display = 'none';
-            }
-          }
-          if (linkEl) linkEl.setAttribute('href', url);
-          if (poemCard) poemCard.setAttribute('data-href', url);
-          if (themeEl) themeEl.textContent = p.theme;
-          if (badgeEl) badgeEl.textContent = p.classification || '';
-        });
-      }
+        if (quoteCard) {
+          quoteCard.addEventListener('click', function (e) {
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            var link = document.getElementById('quote-read-link');
+            if (link) link.click();
+          });
+        }
 
-      if (refreshQuoteBtn && Array.isArray(quotesPool) && quotesPool.length > 1) {
-        refreshQuoteBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          quoteIdx = (quoteIdx + 1) % quotesPool.length;
-          var q = quotesPool[quoteIdx];
-          var mainEl = document.getElementById('quote-main-text');
-          var subEl = document.getElementById('quote-sub-text');
-          var subWrap = document.getElementById('quote-sub-wrap');
-          var linkEl = document.getElementById('quote-read-link');
-          var tagEl = document.getElementById('quote-tag-label');
-          var badgeEl = document.getElementById('quote-class-badge');
-          var qTarget = q.slug || q.id;
-          var url = qTarget ? '/writings/quotes/' + encodeURIComponent(qTarget) : '/writings/quotes';
-          if (mainEl) mainEl.textContent = '“' + q.main + '”';
-          if (subEl && subWrap) {
-            if (q.sub) {
-              subWrap.style.display = '';
-              subEl.textContent = q.sub;
-            } else {
-              subWrap.style.display = 'none';
-            }
-          }
-          if (linkEl) linkEl.setAttribute('href', url);
-          if (quoteCard) quoteCard.setAttribute('data-href', url);
-          if (tagEl) tagEl.textContent = q.tag;
-          if (badgeEl) badgeEl.textContent = q.classification || '';
-        });
+        if (refreshPoemBtn && Array.isArray(poemsPool) && poemsPool.length > 1) {
+          refreshPoemBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var display = document.getElementById('poem-player-display');
+            var icon = refreshPoemBtn.querySelector('svg');
+            if (icon) icon.classList.add('rotate-icon');
+            if (display) display.style.opacity = '0';
+            setTimeout(function () {
+              poemIdx = (poemIdx + 1) % poemsPool.length;
+              var p = poemsPool[poemIdx];
+              var mainEl = document.getElementById('poem-main-text');
+              var subEl = document.getElementById('poem-sub-text');
+              var subWrap = document.getElementById('poem-sub-wrap');
+              var linkEl = document.getElementById('poem-read-link');
+              var themeEl = document.getElementById('poem-theme-label');
+              var badgeEl = document.getElementById('poem-class-badge');
+              var pTarget = p.slug || p.id;
+              var url = pTarget ? '/writings/poems/' + encodeURIComponent(pTarget) : '/writings/poems';
+              if (mainEl) mainEl.textContent = p.main.text;
+              if (subEl && subWrap) {
+                if (p.sub && p.sub.text) {
+                  subWrap.style.display = '';
+                  subEl.textContent = p.sub.text;
+                } else {
+                  subWrap.style.display = 'none';
+                }
+              }
+              if (linkEl) linkEl.setAttribute('href', url);
+              poemCard.setAttribute('data-href', url);
+              if (themeEl) themeEl.textContent = p.theme;
+              if (badgeEl) badgeEl.textContent = p.classification || '';
+              if (display) display.style.opacity = '1';
+              setTimeout(function () { if (icon) icon.classList.remove('rotate-icon'); }, 450);
+            }, 260);
+          });
+        }
+
+        if (refreshQuoteBtn && Array.isArray(quotesPool) && quotesPool.length > 1) {
+          refreshQuoteBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var display = document.getElementById('quote-player-display');
+            var icon = refreshQuoteBtn.querySelector('svg');
+            if (icon) icon.classList.add('rotate-icon');
+            if (display) display.style.opacity = '0';
+            setTimeout(function () {
+              quoteIdx = (quoteIdx + 1) % quotesPool.length;
+              var q = quotesPool[quoteIdx];
+              var mainEl = document.getElementById('quote-main-text');
+              var subEl = document.getElementById('quote-sub-text');
+              var subWrap = document.getElementById('quote-sub-wrap');
+              var linkEl = document.getElementById('quote-read-link');
+              var tagEl = document.getElementById('quote-tag-label');
+              var badgeEl = document.getElementById('quote-class-badge');
+              var qTarget = q.slug || q.id;
+              var url = qTarget ? '/writings/quotes/' + encodeURIComponent(qTarget) : '/writings/quotes';
+              if (mainEl) mainEl.textContent = '“' + q.main + '”';
+              if (subEl && subWrap) {
+                if (q.sub) {
+                  subWrap.style.display = '';
+                  subEl.textContent = q.sub;
+                } else {
+                  subWrap.style.display = 'none';
+                }
+              }
+              if (linkEl) linkEl.setAttribute('href', url);
+              if (quoteCard) quoteCard.setAttribute('data-href', url);
+              if (tagEl) tagEl.textContent = q.tag;
+              if (badgeEl) badgeEl.textContent = q.classification || '';
+              if (display) display.style.opacity = '1';
+              setTimeout(function () { if (icon) icon.classList.remove('rotate-icon'); }, 450);
+            }, 260);
+          });
+        }
       }
+      initHomePage();
+      document.addEventListener('astro:page-load', initHomePage);
     })();
   </script>
 </BaseLayout>

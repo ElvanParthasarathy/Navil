@@ -344,6 +344,38 @@ export function getPostTags(post: WritingItem): string[] {
   return Array.from(set);
 }
 
+export interface VersionSummary {
+  variants: Array<{ lang: string; label: string }>;
+  transliterations: string[];
+  translations: Array<{ lang: string }>;
+}
+
+export function analyzePostVersions(variants: WritingVariant[] | undefined | null): VersionSummary | null {
+  if (!variants || variants.length === 0) return null;
+  const variantEntries: Array<{ lang: string; label: string }> = [];
+  const translitLangs = new Set<string>();
+  const translationEntries: Array<{ lang: string }> = [];
+
+  variants.forEach((v) => {
+    const lang = v.lang || '';
+    if (v.label === 'Translation') {
+      translationEntries.push({ lang });
+    } else {
+      variantEntries.push({ lang, label: v.label || 'Original' });
+    }
+    const translits = v.transliterations || {};
+    Object.keys(translits).forEach((tl) => {
+      if (translits[tl]) translitLangs.add(tl);
+    });
+  });
+
+  return {
+    variants: variantEntries,
+    transliterations: [...translitLangs],
+    translations: translationEntries,
+  };
+}
+
 export interface StorySeriesGroup {
   type: 'series';
   id: string;

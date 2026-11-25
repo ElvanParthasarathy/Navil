@@ -22,9 +22,10 @@ import AdUnit from '../../components/astro/AdUnit.astro';
       </div>
     </header>
 
-    <div class="store-app-grid">
+    <div class="store-app-grid animate-entry">
       <a
         href="/downloads/nammil"
+        id="downloads-nammil-card"
         class="store-app-card"
         title="Nammil — Multi-Account WhatsApp Companion"
       >
@@ -66,4 +67,25 @@ import AdUnit from '../../components/astro/AdUnit.astro';
 
     <AdUnit margin="48px 0 0" />
   </div>
+
+  <script is:inline>
+    (function () {
+      function bindDownloads() {
+        var card = document.getElementById('downloads-nammil-card');
+        if (!card || card.dataset.bound) return;
+        card.dataset.bound = '1';
+        card.addEventListener('mousedown', function (e) {
+          var rect = card.getBoundingClientRect();
+          var ripple = document.createElement('span');
+          ripple.className = 'store-card-ripple';
+          ripple.style.left = (e.clientX - rect.left) + 'px';
+          ripple.style.top = (e.clientY - rect.top) + 'px';
+          card.appendChild(ripple);
+          setTimeout(function () { ripple.remove(); }, 650);
+        });
+      }
+      bindDownloads();
+      document.addEventListener('astro:page-load', bindDownloads);
+    })();
+  </script>
 </BaseLayout>

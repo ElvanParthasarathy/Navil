@@ -4,10 +4,15 @@ import '../../../சிறப்புக்கூறுகள்/படைப�
 import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/கதைகள்பட்டியல்.css';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdUnit from '../../../components/astro/AdUnit.astro';
-import { getStoriesGrouped, getPrimaryTitle, getPrimaryExcerpt } from '../../../lib/content';
+import Icon from '../../../components/astro/Icon.astro';
+import { getStoriesGrouped, getPrimaryTitle, getPrimaryExcerpt, getPostTags } from '../../../lib/content';
 import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 
 const { posts, grouped } = await getStoriesGrouped();
+
+const genresSet = new Set<string>();
+posts.forEach((p) => getPostTags(p).forEach((g) => genresSet.add(g)));
+const allGenres = Array.from(genresSet).sort();
 ---
 
 <BaseLayout
@@ -17,22 +22,42 @@ const { posts, grouped } = await getStoriesGrouped();
   mobileTitle="சிறுகதைகள்|short stories"
   backUrl="/writings"
 >
-  <div class="writings-page page-view fadeIn">
-    <header class="writings-header animate-entry">
-      <div style="flex: 1;">
-        <h1 class="writings-title" lang="ta">சிறுகதைகள்</h1>
-        <div class="writings-title-sub">Short Stories</div>
-        <p class="writings-subtitle" lang="ta">ஒரு கதை சொல்லட்டா சார்?</p>
-        <p class="writings-subtitle writings-subtitle-en">My original fiction and serialized narratives.</p>
+  <div class="writings-page page-view fadeIn" id="stories-list-root">
+    <!-- Controls (inline on mobile, moved to #desktop-topbar-actions on desktop) -->
+    <div id="stories-controls-mount">
+      <div class="controls-area" id="stories-controls-el" style="max-width: 800px;">
+        <div class="minimal-search">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" id="stories-search-input" placeholder="தேடுக..." aria-label="Search Short Stories" />
+        </div>
+        {allGenres.length > 0 && (
+          <div class="filter-icon-wrapper">
+            <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <select id="stories-genre-select" class="theme-dropdown" aria-label="Filter by topic">
+              <option value="">வகைகள்</option>
+              {allGenres.map((g) => <option value={g.toLowerCase()}>{g}</option>)}
+            </select>
+          </div>
+        )}
       </div>
-    </header>
+    </div>
 
     <div class="blog-grid-container animate-entry">
       {grouped.map((item) => {
         if (item.type === 'series') {
           const cover = item.coverImage ? getOptimizedImage(item.coverImage, 'thumb') : null;
+          const searchBlob = `${item.seriesName} ${item.excerpt} ${item.genres.join(' ')}`.toLowerCase();
           return (
-            <article class="blog-card-item series-card">
+            <article
+              class="blog-card-item series-card story-filter-card"
+              data-search={searchBlob}
+              data-tags={item.genres.map((g) => g.toLowerCase()).join(',')}
+            >
               {cover && (
                 <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} class="blog-cover-wrapper" style="display: block;">
                   <img src={cover} alt={item.seriesName} loading="lazy" />
@@ -41,6 +66,7 @@ const { posts, grouped } = await getStoriesGrouped();
                       {item.classification}
                     </span>
                   )}
+                  <div class="series-hover-play">▶ Start Reading</div>
                 </a>
               )}
               <div class="blog-card-content">
@@ -63,15 +89,17 @@ const { posts, grouped } = await getStoriesGrouped();
                   {item.parts.slice(0, 4).map((part) => (
                     <a
                       href={`/writings/stories/${encodeURIComponent(part.slug)}`}
-                      style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none;"
+                      class="series-part-link"
+                      style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none; display:flex; justify-content:space-between; align-items:center;"
                     >
-                      பகுதி {part.series_part}: {getPrimaryTitle(part, 'stories')} →
+                      <span>பகுதி {part.series_part}: {getPrimaryTitle(part, 'stories')}</span>
+                      <Icon name="ArrowRight" weight="regular" size={14} />
                     </a>
                   ))}
                 </div>
                 <div class="blog-card-footer">
                   <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} class="blog-read-more" style="text-decoration: none;">
-                    தொடரைப் பார்க்க • View Series ({item.parts.length} Parts) →
+                    தொடரைப் பார்க்க • View Series ({item.parts.length} Parts) <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
                   </a>
                 </div>
               </div>
@@ -82,8 +110,16 @@ const { posts, grouped } = await getStoriesGrouped();
           const title = getPrimaryTitle(p, 'stories');
           const excerpt = getPrimaryExcerpt(p, 140);
           const cover = p.cover_image ? getOptimizedImage(p.cover_image, 'thumb') : null;
+          const tags = getPostTags(p);
+          const searchBlob = `${title} ${excerpt} ${tags.join(' ')}`.toLowerCase();
           return (
-            <a href={`/writings/stories/${encodeURIComponent(p.slug)}`} class="blog-link-card" style="text-decoration: none; color: inherit; display: flex;">
+            <a
+              href={`/writings/stories/${encodeURIComponent(p.slug)}`}
+              class="blog-link-card story-filter-card"
+              data-search={searchBlob}
+              data-tags={tags.map((g) => g.toLowerCase()).join(',')}
+              style="text-decoration: none; color: inherit; display: flex;"
+            >
               <article class="blog-card-item" style="width: 100%;">
                 {cover && (
                   <div class="blog-cover-wrapper">
@@ -94,7 +130,9 @@ const { posts, grouped } = await getStoriesGrouped();
                   <h2 class="blog-title">{title}</h2>
                   {excerpt && <p class="blog-excerpt">{excerpt}</p>}
                   <div class="blog-card-footer">
-                    <span class="blog-read-more">கதையை வாசிக்க • Read Story →</span>
+                    <span class="blog-read-more">
+                      கதையை வாசிக்க • Read Story <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                    </span>
                   </div>
                 </div>
               </article>
@@ -106,4 +144,60 @@ const { posts, grouped } = await getStoriesGrouped();
 
     <AdUnit margin="48px 0 0" />
   </div>
+
+  <script is:inline>
+    (function () {
+      var stAbort = null;
+      function initStoriesList() {
+        var root = document.getElementById('stories-list-root');
+        if (!root || root.dataset.bound) return;
+        root.dataset.bound = '1';
+
+        if (stAbort) stAbort.abort();
+        stAbort = new AbortController();
+        var sig = { signal: stAbort.signal };
+
+        var controlsEl = document.getElementById('stories-controls-el');
+        var controlsMount = document.getElementById('stories-controls-mount');
+
+        function syncControlsPlacement() {
+          var target = document.getElementById('desktop-topbar-actions');
+          if (!controlsEl || !controlsMount) return;
+          if (window.innerWidth > 768 && target) {
+            controlsEl.className = 'topbar-controls-area';
+            controlsEl.removeAttribute('style');
+            if (controlsEl.parentNode !== target) target.appendChild(controlsEl);
+          } else {
+            controlsEl.className = 'controls-area';
+            controlsEl.style.maxWidth = '800px';
+            if (controlsEl.parentNode !== controlsMount) controlsMount.appendChild(controlsEl);
+          }
+        }
+        syncControlsPlacement();
+        window.addEventListener('resize', syncControlsPlacement, sig);
+
+        var input = document.getElementById('stories-search-input');
+        var select = document.getElementById('stories-genre-select');
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.story-filter-card'));
+
+        function filter() {
+          var q = (input ? input.value : '').trim().toLowerCase();
+          var g = (select ? select.value : '').trim().toLowerCase();
+          cards.forEach(function (card) {
+            var blob = card.getAttribute('data-search') || '';
+            var tags = (card.getAttribute('data-tags') || '').split(',');
+            var ok = (!q || blob.indexOf(q) !== -1) && (!g || tags.indexOf(g) !== -1);
+            card.style.display = ok ? (card.tagName === 'A' ? 'flex' : '') : 'none';
+          });
+        }
+        if (input) input.addEventListener('input', filter, sig);
+        if (select) select.addEventListener('change', filter, sig);
+      }
+      initStoriesList();
+      document.addEventListener('astro:page-load', initStoriesList);
+      document.addEventListener('astro:before-swap', function () {
+        if (stAbort) { stAbort.abort(); stAbort = null; }
+      });
+    })();
+  </script>
 </BaseLayout>

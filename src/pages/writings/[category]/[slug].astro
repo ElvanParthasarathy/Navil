@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdUnit from '../../../components/astro/AdUnit.astro';
+import Icon from '../../../components/astro/Icon.astro';
 import EngagementIsland from '../../../components/islands/EngagementIsland';
 import {
   ALL_WRITING_CATEGORIES,
@@ -175,7 +176,7 @@ const articleJsonLd = {
   backUrl={`/writings/${category}`}
   jsonLd={articleJsonLd}
 >
-  <div class="page-view fadeIn" style="max-width: 1200px; margin: 0 auto; padding: 10px 20px 60px;">
+  <div class="page-view fadeIn" id="reading-article-root" style="max-width: 1200px; margin: 0 auto; padding: 10px 20px 60px;">
     <nav aria-label="Breadcrumb" style="margin-bottom: 20px; font-size: 0.88rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px;">
       <a href="/" style="color: var(--text-muted); text-decoration: none;">முகப்பு / Home</a>
       <span>›</span>
@@ -204,7 +205,12 @@ const articleJsonLd = {
 
       <header style="margin-bottom: 32px; text-align: left;">
         <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--text-muted); font-size: 0.92rem; font-weight: 500;">
-          {formattedDate && <span>📅 {formattedDate}</span>}
+          {formattedDate && (
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <Icon name="CalendarBlank" weight="regular" size={16} />
+              {formattedDate}
+            </span>
+          )}
           {post.classification && (
             <span style="padding: 2px 10px; border-radius: 99px; background: color-mix(in srgb, var(--text-main) 8%, transparent); color: var(--text-main); font-size: 0.8rem; font-weight: 600;">
               {post.classification}
@@ -391,13 +397,15 @@ const articleJsonLd = {
           </h4>
           <div style="display: flex; gap: 12px; align-items: center; justify-content: center;">
             {prevPart && (
-              <a href={`/writings/stories/${encodeURIComponent(prevPart.slug)}`} class="page-btn prev-btn" style="text-decoration: none;">
-                ← பகுதி {prevPart.series_part}
+              <a href={`/writings/stories/${encodeURIComponent(prevPart.slug)}`} class="page-btn prev-btn" style="text-decoration: none; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
+                பகுதி {prevPart.series_part}
               </a>
             )}
             {nextPart && (
-              <a href={`/writings/stories/${encodeURIComponent(nextPart.slug)}`} class="page-btn next-btn" style="text-decoration: none;">
-                பகுதி {nextPart.series_part} →
+              <a href={`/writings/stories/${encodeURIComponent(nextPart.slug)}`} class="page-btn next-btn" style="text-decoration: none; gap: 6px;">
+                பகுதி {nextPart.series_part}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
               </a>
             )}
           </div>
@@ -432,90 +440,97 @@ const articleJsonLd = {
     }}
   >
     (function () {
-      var origData = (preparedVariants || []).map(function (v) {
-        return { title: v.title, author: v.author, bodyHtml: v.bodyHtml, lang: v.lang, alternatives: v.alternatives || {} };
-      });
-      var primaryH1 = document.getElementById('primary-reading-title');
-      var origPrimaryTitle = primaryH1 ? primaryH1.getAttribute('data-original-title') : '';
+      function initReadingView() {
+        var root = document.getElementById('reading-article-root');
+        if (!root || root.dataset.bound) return;
+        root.dataset.bound = '1';
 
-      document.querySelectorAll('.transl-toggle-input').forEach(function (inp) {
-        inp.addEventListener('change', function () {
-          var vIdx = Number(inp.getAttribute('data-vidx'));
-          var key = inp.getAttribute('data-alt-key');
-          var checked = inp.checked;
+        var origData = (preparedVariants || []).map(function (v) {
+          return { title: v.title, author: v.author, bodyHtml: v.bodyHtml, lang: v.lang, alternatives: v.alternatives || {} };
+        });
+        var primaryH1 = document.getElementById('primary-reading-title');
+        var origPrimaryTitle = primaryH1 ? primaryH1.getAttribute('data-original-title') : '';
 
-          document.querySelectorAll('.transl-toggle-input[data-vidx="' + vIdx + '"]').forEach(function (other) {
-            if (other !== inp) other.checked = false;
+        document.querySelectorAll('.transl-toggle-input').forEach(function (inp) {
+          inp.addEventListener('change', function () {
+            var vIdx = Number(inp.getAttribute('data-vidx'));
+            var key = inp.getAttribute('data-alt-key');
+            var checked = inp.checked;
+
+            document.querySelectorAll('.transl-toggle-input[data-vidx="' + vIdx + '"]').forEach(function (other) {
+              if (other !== inp) other.checked = false;
+            });
+
+            var vData = origData[vIdx];
+            if (!vData) return;
+            var bodyEl = document.querySelector('.variant-body[data-vidx="' + vIdx + '"]');
+            var subTitleEl = document.querySelector('.variant-sub-title[data-vidx="' + vIdx + '"]');
+            var authorEl = document.querySelector('.variant-author[data-vidx="' + vIdx + '"]');
+
+            if (checked && vData.alternatives[key]) {
+              var alt = vData.alternatives[key];
+              if (bodyEl) { bodyEl.innerHTML = alt.html; bodyEl.setAttribute('lang', alt.lang); }
+              if (subTitleEl && alt.title) subTitleEl.textContent = alt.title;
+              if (authorEl && alt.author) authorEl.textContent = '— ' + alt.author;
+              if (vIdx === 0 && primaryH1 && alt.title) primaryH1.textContent = alt.title;
+            } else {
+              if (bodyEl) { bodyEl.innerHTML = vData.bodyHtml; bodyEl.setAttribute('lang', vData.lang); }
+              if (subTitleEl) subTitleEl.textContent = vData.title;
+              if (authorEl) authorEl.textContent = '— ' + vData.author;
+              if (vIdx === 0 && primaryH1 && origPrimaryTitle) primaryH1.textContent = origPrimaryTitle;
+            }
           });
-
-          var vData = origData[vIdx];
-          if (!vData) return;
-          var bodyEl = document.querySelector('.variant-body[data-vidx="' + vIdx + '"]');
-          var subTitleEl = document.querySelector('.variant-sub-title[data-vidx="' + vIdx + '"]');
-          var authorEl = document.querySelector('.variant-author[data-vidx="' + vIdx + '"]');
-
-          if (checked && vData.alternatives[key]) {
-            var alt = vData.alternatives[key];
-            if (bodyEl) { bodyEl.innerHTML = alt.html; bodyEl.setAttribute('lang', alt.lang); }
-            if (subTitleEl && alt.title) subTitleEl.textContent = alt.title;
-            if (authorEl && alt.author) authorEl.textContent = '— ' + alt.author;
-            if (vIdx === 0 && primaryH1 && alt.title) primaryH1.textContent = alt.title;
-          } else {
-            if (bodyEl) { bodyEl.innerHTML = vData.bodyHtml; bodyEl.setAttribute('lang', vData.lang); }
-            if (subTitleEl) subTitleEl.textContent = vData.title;
-            if (authorEl) authorEl.textContent = '— ' + vData.author;
-            if (vIdx === 0 && primaryH1 && origPrimaryTitle) primaryH1.textContent = origPrimaryTitle;
-          }
         });
-      });
 
-      // Urai / Notes toggles
-      var unlocked = !isLocked;
-      var activeSec = null;
-      var btnUrai = document.getElementById('btn-toggle-urai');
-      var btnNotes = document.getElementById('btn-toggle-notes');
-      var boxUrai = document.getElementById('urai-content-box');
-      var boxNotes = document.getElementById('notes-content-box');
-      var lockBox = document.getElementById('urai-lock-box');
+        var unlocked = !isLocked;
+        var activeSec = null;
+        var btnUrai = document.getElementById('btn-toggle-urai');
+        var btnNotes = document.getElementById('btn-toggle-notes');
+        var boxUrai = document.getElementById('urai-content-box');
+        var boxNotes = document.getElementById('notes-content-box');
+        var lockBox = document.getElementById('urai-lock-box');
 
-      function renderSection() {
-        if (btnUrai) btnUrai.classList.toggle('active', activeSec === 'urai');
-        if (btnNotes) btnNotes.classList.toggle('active', activeSec === 'notes');
-        if (!activeSec) {
-          if (lockBox) lockBox.style.display = 'none';
-          if (boxUrai) boxUrai.style.display = 'none';
-          if (boxNotes) boxNotes.style.display = 'none';
-          return;
+        function renderSection() {
+          if (btnUrai) btnUrai.classList.toggle('active', activeSec === 'urai');
+          if (btnNotes) btnNotes.classList.toggle('active', activeSec === 'notes');
+          if (!activeSec) {
+            if (lockBox) lockBox.style.display = 'none';
+            if (boxUrai) boxUrai.style.display = 'none';
+            if (boxNotes) boxNotes.style.display = 'none';
+            return;
+          }
+          if (!unlocked && lockBox) {
+            lockBox.style.display = 'block';
+            if (boxUrai) boxUrai.style.display = 'none';
+            if (boxNotes) boxNotes.style.display = 'none';
+          } else {
+            if (lockBox) lockBox.style.display = 'none';
+            if (boxUrai) boxUrai.style.display = activeSec === 'urai' ? 'block' : 'none';
+            if (boxNotes) boxNotes.style.display = activeSec === 'notes' ? 'block' : 'none';
+          }
         }
-        if (!unlocked && lockBox) {
-          lockBox.style.display = 'block';
-          if (boxUrai) boxUrai.style.display = 'none';
-          if (boxNotes) boxNotes.style.display = 'none';
-        } else {
-          if (lockBox) lockBox.style.display = 'none';
-          if (boxUrai) boxUrai.style.display = activeSec === 'urai' ? 'block' : 'none';
-          if (boxNotes) boxNotes.style.display = activeSec === 'notes' ? 'block' : 'none';
+
+        if (btnUrai) btnUrai.addEventListener('click', function () { activeSec = activeSec === 'urai' ? null : 'urai'; renderSection(); });
+        if (btnNotes) btnNotes.addEventListener('click', function () { activeSec = activeSec === 'notes' ? null : 'notes'; renderSection(); });
+
+        var unlockForm = document.getElementById('urai-unlock-form');
+        if (unlockForm) {
+          unlockForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var val = (document.getElementById('urai-pwd-input').value || '').trim();
+            var errEl = document.getElementById('urai-pwd-error');
+            if (val === expectedPwd) {
+              unlocked = true;
+              if (errEl) errEl.style.display = 'none';
+              renderSection();
+            } else {
+              if (errEl) errEl.style.display = 'block';
+            }
+          });
         }
       }
-
-      if (btnUrai) btnUrai.addEventListener('click', function () { activeSec = activeSec === 'urai' ? null : 'urai'; renderSection(); });
-      if (btnNotes) btnNotes.addEventListener('click', function () { activeSec = activeSec === 'notes' ? null : 'notes'; renderSection(); });
-
-      var unlockForm = document.getElementById('urai-unlock-form');
-      if (unlockForm) {
-        unlockForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          var val = (document.getElementById('urai-pwd-input').value || '').trim();
-          var errEl = document.getElementById('urai-pwd-error');
-          if (val === expectedPwd) {
-            unlocked = true;
-            if (errEl) errEl.style.display = 'none';
-            renderSection();
-          } else {
-            if (errEl) errEl.style.display = 'block';
-          }
-        });
-      }
+      initReadingView();
+      document.addEventListener('astro:page-load', initReadingView);
     })();
   </script>
 </BaseLayout>

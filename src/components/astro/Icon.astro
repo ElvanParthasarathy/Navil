@@ -1,0 +1,15 @@
+---
+import { renderIconSvg, type IconName } from '../../lib/icons';
+
+interface Props {
+  name: IconName;
+  weight?: 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone';
+  size?: number | string;
+  class?: string;
+}
+
+const { name, weight = 'regular', size = '1em', class: className = '' } = Astro.props;
+const svgHtml = renderIconSvg(name, { weight, size, className });
+---
+
+<Fragment set:html={svgHtml} />

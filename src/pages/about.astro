@@ -2,6 +2,7 @@
 import '../சிறப்புக்கூறுகள்/பற்றி/பற்றி.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdUnit from '../components/astro/AdUnit.astro';
+import Icon from '../components/astro/Icon.astro';
 import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
 import profileData from '../தரவு/தன்னுரு.json';
 import { getAboutConfig } from '../lib/content';
@@ -9,11 +10,19 @@ import { getAboutConfig } from '../lib/content';
 const about = await getAboutConfig();
 
 const cards = about.cards || [
+  {
+    content: `<span lang="ta" style="display: block; margin-bottom: 6px; font-weight: 500;">
+    "ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.
+</span>
+<span style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
+    Every idea begins with a simple question — why not?
+</span>`,
+  },
   { content: about.identity_text || '' },
   { content: about.education_text || '' },
   { content: about.social_text || '' },
   { content: about.philosophy_lines || '' },
-];
+].filter((c) => c.content);
 
 function getSpanClass(index: number) {
   const mod = index % 4;
@@ -39,34 +48,25 @@ function getSpanClass(index: number) {
         <img src={profilePic.src} alt={(profileData as any).name} class="hero-avatar" />
       </div>
       <h1 class="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
-      <h2 class="hero-subtitle">{about.hero_title || 'Elvan Parthasarathy'} {about.hero_subtitle || '(Jaiprakash P)'}</h2>
+      <h2 class="hero-subtitle">{(profileData as any).name} Parthasarathy</h2>
       {about.portfolio_url && (
         <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" class="explore-portfolio-btn-unique">
-          Explore Portfolio →
+          Explore Portfolio <Icon name="ArrowRight" weight="regular" />
         </a>
       )}
     </section>
 
-    <div class="about-grid animate-entry">
+    <div class="about-grid animate-entry" style="animation-delay: 0.1s;">
       {cards.map((card: any, idx: number) => (
         <div class={`about-card ${card.size || getSpanClass(idx)}`}>
           <div class="card-text" set:html={card.content} />
         </div>
       ))}
-      <div class="about-card span-5">
-        <div class="card-text" set:html={about.identity_text} />
-      </div>
-      <div class="about-card span-7">
-        <div class="card-text" set:html={about.education_text} />
-      </div>
-      <div class="about-card span-12">
-        <div class="card-text" set:html={about.philosophy_lines} />
-      </div>
     </div>
 
     <AdUnit margin="48px 0" />
 
-    <div class="contact-footer animate-entry">
+    <div class="contact-footer animate-entry" style="animation-delay: 0.2s;">
       <div class="contact-info-block">
         <div class="contact-header">
           <h3 lang="ta">{about.contact_tamil}</h3>
@@ -79,20 +79,21 @@ function getSpanClass(index: number) {
 
       <div class="contact-right-side">
         <div class="contact-location">
-          <span>📍 {about.location}</span>
+          <Icon name="MapPin" weight="regular" size={14} />
+          <span>{about.location}</span>
         </div>
         <div class="contact-socials">
           <a href="mailto:jaiprakashpartha@gmail.com" class="social-icon-link" aria-label="Email" title="Email">
-            ✉
+            <Icon name="EnvelopeSimple" weight="regular" size={20} />
           </a>
           <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" class="social-icon-link" aria-label="LinkedIn" title="LinkedIn">
-            in
+            <Icon name="LinkedinLogo" weight="regular" size={20} />
           </a>
           <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" class="social-icon-link" aria-label="GitHub" title="GitHub">
-            GH
+            <Icon name="GithubLogo" weight="regular" size={20} />
           </a>
           <a href="https://instagram.com/elvannavil" target="_blank" rel="noreferrer" class="social-icon-link" aria-label="Instagram" title="Instagram: @elvannavil">
-            IG
+            <Icon name="InstagramLogo" weight="regular" size={20} />
           </a>
         </div>
       </div>
@@ -128,6 +129,11 @@ function getSpanClass(index: number) {
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
     filter: blur(30px);
     opacity: 0.25;
+    animation: morph 10s linear infinite alternate;
+  }
+  @keyframes morph {
+    0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    100% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; }
   }
   .hero-avatar {
     width: 100%;
@@ -165,12 +171,16 @@ function getSpanClass(index: number) {
     font-weight: 700;
     text-decoration: none;
     font-size: 0.95rem;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .explore-portfolio-btn-unique:hover {
+    transform: translate3d(0, -1px, 0);
   }
   .about-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
   }
   .about-card {
     background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
@@ -180,15 +190,23 @@ function getSpanClass(index: number) {
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
   :global([data-theme='dark']) .about-card {
     background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
   .card-text {
-    font-size: 1.05rem;
-    line-height: 1.7;
+    font-size: 1.1rem;
+    line-height: 1.6;
     color: var(--text-main);
+    font-weight: 500;
+  }
+  :global(.card-text p) {
+    margin: 0 0 8px;
+  }
+  :global(.card-text p:last-child) {
+    margin-bottom: 0;
   }
   .contact-footer {
     display: flex;
@@ -203,6 +221,7 @@ function getSpanClass(index: number) {
   }
   :global([data-theme='dark']) .contact-footer {
     background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
   .contact-header {
     display: flex;
@@ -216,6 +235,10 @@ function getSpanClass(index: number) {
     background: var(--border-color);
     opacity: 0.6;
   }
+  .contact-info-block h3 {
+    font-weight: 800;
+    margin: 0;
+  }
   .contact-right-side {
     display: flex;
     flex-direction: column-reverse;
@@ -223,11 +246,14 @@ function getSpanClass(index: number) {
     gap: 12px;
   }
   .contact-location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
     padding: 8px 16px;
     background: color-mix(in srgb, var(--text-main), transparent 92%);
     border-radius: 99px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
   }
   .contact-socials {
     display: flex;
@@ -243,8 +269,12 @@ function getSpanClass(index: number) {
     justify-content: center;
     color: var(--text-main);
     text-decoration: none;
-    font-weight: 700;
-    font-size: 0.85rem;
+    transition: all 0.3s ease;
+  }
+  .social-icon-link:hover {
+    background: var(--text-main);
+    color: var(--bg-app);
+    transform: translateY(-3px);
   }
   @media (min-width: 1024px) {
     .about-grid {
@@ -258,6 +288,8 @@ function getSpanClass(index: number) {
   @media (max-width: 1023px) {
     .hero-avatar-wrapper { width: 140px; height: 140px; }
     .contact-footer { flex-direction: column; text-align: center; align-items: center; }
+    .contact-header { flex-direction: column; gap: 0; align-items: center; }
+    .contact-divider { display: none; }
     .contact-right-side { flex-direction: column; align-items: center; }
   }
 </style>

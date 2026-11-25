@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/astro/Icon.astro';
 ---
 
 <BaseLayout
@@ -11,20 +12,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
     <header class="disclaimer-hero">
-      <div class="disclaimer-badge">சட்ட மறுப்புரை • LEGAL DISCLAIMER</div>
+      <div class="disclaimer-badge">
+        <Icon name="WarningCircle" weight="fill" size={16} />
+        <span>சட்ட மறுப்புரை • LEGAL DISCLAIMER</span>
+      </div>
       <h1 class="disclaimer-title">பொறுப்புத் துறப்பு • Disclaimer</h1>
       <p class="disclaimer-subtitle">Transparency, trademark notices, and content disclosures for Elvan Navil</p>
     </header>
 
     <section class="disclaimer-card">
-      <h2 class="disclaimer-section-title">1. பொதுவான தகவல் மறுப்புரை • General Information Disclaimer</h2>
+      <h2 class="disclaimer-section-title">
+        <Icon name="Info" weight="regular" size={22} />
+        1. பொதுவான தகவல் மறுப்புரை • General Information Disclaimer
+      </h2>
       <p class="disclaimer-p">
         All information, literary compositions, articles, essays, and educational tools published on <strong>Elvan Navil</strong> (https://elvannavil.vercel.app) are provided in good faith for cultural, linguistic, educational, and creative enjoyment.
       </p>
     </section>
 
     <section class="disclaimer-card">
-      <h2 class="disclaimer-section-title">2. மூன்றாம் தரப்பு வர்த்தக முத்திரைகள் • Trademark Notice</h2>
+      <h2 class="disclaimer-section-title">
+        <Icon name="ShieldCheck" weight="regular" size={22} />
+        2. மூன்றாம் தரப்பு வர்த்தக முத்திரைகள் • Trademark Notice
+      </h2>
       <ul class="disclaimer-ul">
         <li><strong>WhatsApp:</strong> WhatsApp is a registered trademark of Meta Platforms, Inc. The <strong>Nammil (நம்மில்)</strong> desktop application is an independent client-side companion software and is <em>not affiliated with, authorized, maintained, sponsored, or endorsed by Meta Platforms, Inc. or WhatsApp</em>.</li>
         <li><strong>Google &amp; Google AdSense:</strong> Google is a registered trademark of Google LLC. Advertising displayed on this website is served by Google AdSense adhering strictly to their publisher guidelines.</li>
@@ -33,14 +43,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="disclaimer-card">
-      <h2 class="disclaimer-section-title">3. விளம்பரங்கள் மற்றும் ஆட்சென்ஸ் வெளிப்படைத்தன்மை • Advertising Disclosure</h2>
+      <h2 class="disclaimer-section-title">
+        <Icon name="FileText" weight="regular" size={22} />
+        3. விளம்பரங்கள் மற்றும் ஆட்சென்ஸ் வெளிப்படைத்தன்மை • Advertising Disclosure
+      </h2>
       <p class="disclaimer-p">
         To maintain our digital studio, support hosting infrastructure, and continue providing free software and bilingual literature, this website displays contextual advertisements provided by Google AdSense and its certified partners.
       </p>
     </section>
 
     <section class="disclaimer-card">
-      <h2 class="disclaimer-section-title">4. மொழி மற்றும் இலக்கணக் கருவிகள் • Linguistic &amp; Synthesizer Tools</h2>
+      <h2 class="disclaimer-section-title">
+        <Icon name="Info" weight="regular" size={22} />
+        4. மொழி மற்றும் இலக்கணக் கருவிகள் • Linguistic &amp; Synthesizer Tools
+      </h2>
       <p class="disclaimer-p">
         Our linguistic tools—including the <strong>Navil Transliterator</strong> and <strong>Navil Arichuvadi</strong>—are engineered based on Tolkappiyam phonetic principles and historical orthographic models. Machine transliterations should be manually reviewed for formal or legal documentation.
       </p>
@@ -51,17 +67,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
   .disclaimer-hero { text-align: center; padding: 32px 16px 24px; margin-bottom: 32px; }
   .disclaimer-badge {
-    display: inline-flex; padding: 6px 16px; border-radius: 100px;
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 100px;
     background: color-mix(in srgb, var(--text-main) 8%, transparent); color: var(--text-main);
-    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px;
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.5px;
   }
-  .disclaimer-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; }
+  .disclaimer-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; letter-spacing: -0.02em; }
   .disclaimer-subtitle { font-size: 1.1rem; color: var(--text-muted); margin: 0 0 12px; }
   .disclaimer-card {
     background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px;
-    padding: 32px; margin-bottom: 24px; line-height: 1.8;
+    padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); line-height: 1.8;
   }
-  .disclaimer-section-title { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px; }
+  .disclaimer-section-title {
+    font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
   .disclaimer-p, .disclaimer-ul { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 14px; }
   .disclaimer-ul { padding-left: 20px; }
   .disclaimer-ul li { margin-bottom: 8px; }

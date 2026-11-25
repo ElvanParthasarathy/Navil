@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/astro/Icon.astro';
 ---
 
 <BaseLayout
@@ -11,14 +12,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 >
   <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
     <header class="terms-hero">
-      <div class="terms-badge">சட்ட விதிமுறைகள் • TERMS &amp; CONDITIONS</div>
+      <div class="terms-badge">
+        <Icon name="Scales" weight="fill" size={16} />
+        <span>சட்ட விதிமுறைகள் • TERMS &amp; CONDITIONS</span>
+      </div>
       <h1 class="terms-title">பயன்பாட்டு விதிமுறைகள் • Terms of Service</h1>
       <p class="terms-subtitle">Legal guidelines, intellectual property rights, and terms of software usage</p>
       <p class="terms-updated">Last Updated: September 2026 • Effective Immediately</p>
     </header>
 
     <section class="terms-card">
-      <h2 class="terms-section-title">1. அறிமுகமும் ஒப்புதலும் • Introduction &amp; Acceptance</h2>
+      <h2 class="terms-section-title">
+        <Icon name="FileText" weight="regular" size={22} />
+        1. அறிமுகமும் ஒப்புதலும் • Introduction &amp; Acceptance
+      </h2>
       <p class="terms-p">
         Welcome to <strong>Elvan Navil</strong> (https://elvannavil.vercel.app), an independent bilingual digital creation studio established and operated by <strong>Elvan Parthasarathy (Jaiprakash P)</strong>.
       </p>
@@ -28,7 +35,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="terms-card">
-      <h2 class="terms-section-title">2. அறிவுசார் சொத்துரிமை • Intellectual Property Rights</h2>
+      <h2 class="terms-section-title">
+        <Icon name="Scroll" weight="regular" size={22} />
+        2. அறிவுசார் சொத்துரிமை • Intellectual Property Rights
+      </h2>
       <p class="terms-p">
         All original creative, literary, aesthetic, and technical materials published across Elvan Navil are the intellectual property of Elvan Parthasarathy unless otherwise attributed:
       </p>
@@ -43,7 +53,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="terms-card">
-      <h2 class="terms-section-title">3. மென்பொருள் மற்றும் கருவிகள் பயன்பாடு • Software &amp; Tools License</h2>
+      <h2 class="terms-section-title">
+        <Icon name="ShieldCheck" weight="regular" size={22} />
+        3. மென்பொருள் மற்றும் கருவிகள் பயன்பாடு • Software &amp; Tools License
+      </h2>
       <ul class="terms-ul">
         <li><strong>நம்மில் கணினிச் செயலி (Nammil Desktop Companion):</strong> Provided free of charge for personal productivity on Windows.</li>
         <li><strong>உள்ளமைவுத் தனியுரிமை (Client-Side Privacy):</strong> Online tools (Transliterator, Arichuvadi, Piano) execute locally in your browser without external data retention.</li>
@@ -51,21 +64,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="terms-card">
-      <h2 class="terms-section-title">4. விளம்பரங்கள் மற்றும் மூன்றாம் தரப்புச் சேவைகள் • Third-Party Services &amp; Advertising</h2>
+      <h2 class="terms-section-title">
+        <Icon name="Scales" weight="regular" size={22} />
+        4. விளம்பரங்கள் மற்றும் மூன்றாம் தரப்புச் சேவைகள் • Third-Party Services &amp; Advertising
+      </h2>
       <p class="terms-p">
         We partner with Google AdSense to serve relevant advertisements. Google uses cookies to display ads based on prior visits. See our <a href="/privacy">Privacy Policy</a> for opt-out details.
       </p>
     </section>
 
     <section class="terms-card">
-      <h2 class="terms-section-title">5. உத்தரவாத மறுப்பும் பொறுப்பு வரம்பும் • Disclaimers &amp; Limitation of Liability</h2>
+      <h2 class="terms-section-title">
+        <Icon name="FileText" weight="regular" size={22} />
+        5. உத்தரவாத மறுப்பும் பொறுப்பு வரம்பும் • Disclaimers &amp; Limitation of Liability
+      </h2>
       <p class="terms-p">
         All materials, tools, and downloads provided on Elvan Navil are supplied on an "as is" and "as available" basis without express or implied warranties.
       </p>
     </section>
 
     <section class="terms-card">
-      <h2 class="terms-section-title">6. சட்ட வரம்பும் தொடர்பும் • Governing Law &amp; Contact</h2>
+      <h2 class="terms-section-title">
+        <Icon name="CheckCircle" weight="regular" size={22} />
+        6. சட்ட வரம்பும் தொடர்பும் • Governing Law &amp; Contact
+      </h2>
       <p class="terms-p">
         These Terms of Service are governed by the laws of India, under the jurisdiction of courts in Tamil Nadu. Reach us via our <a href="/contact">Contact Page</a> or email <strong>jaiprakashpartha@gmail.com</strong>.
       </p>
@@ -76,18 +98,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
   .terms-hero { text-align: center; padding: 32px 16px 24px; margin-bottom: 32px; }
   .terms-badge {
-    display: inline-flex; padding: 6px 16px; border-radius: 100px;
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 100px;
     background: color-mix(in srgb, var(--text-main) 8%, transparent); color: var(--text-main);
-    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px;
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.5px;
   }
-  .terms-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; }
+  .terms-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; letter-spacing: -0.02em; }
   .terms-subtitle { font-size: 1.1rem; color: var(--text-muted); margin: 0 0 12px; }
   .terms-updated { font-size: 0.8rem; color: var(--text-muted); opacity: 0.7; }
   .terms-card {
     background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px;
-    padding: 32px; margin-bottom: 24px; line-height: 1.8;
+    padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); line-height: 1.8;
   }
-  .terms-section-title { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px; }
+  .terms-section-title {
+    font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
   .terms-p, .terms-ul { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 14px; }
   .terms-ul { padding-left: 20px; }
   .terms-ul li { margin-bottom: 8px; }
