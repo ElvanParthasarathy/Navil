@@ -58,11 +58,17 @@ const FEATURES = [
     padding-bottom: 32px;
   }
   .tool-editorial-guide {
-    margin-top: 36px;
+    margin-top: 12px;
     padding: 24px 28px;
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: 16px;
+  }
+  @media (max-width: 768px) {
+    .tool-editorial-guide {
+      margin: 12px 18px 0;
+      padding: 20px 18px;
+    }
   }
   .tool-guide-title {
     margin: 0 0 12px;

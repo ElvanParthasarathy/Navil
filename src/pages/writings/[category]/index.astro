@@ -174,7 +174,7 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
               )}
               <div class="blog-card-content">
                 {!cover && (isPinned || post.classification) && (
-                  <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                  <div class="blog-badges-inline-row">
                     {isPinned && <span class="blog-featured-badge inline">✨ Featured</span>}
                     {post.classification && (
                       <span class={`blog-classification-badge inline ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
@@ -286,7 +286,7 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
           });
 
           if (toggleBtn) toggleBtn.style.display = totalPages > 1 ? 'inline-flex' : 'none';
-          if (drawer) drawer.style.display = totalPages > 1 ? 'block' : 'none';
+          if (drawer) drawer.style.display = totalPages > 1 ? 'grid' : 'none';
           if (pageLabelEl) pageLabelEl.textContent = currentPage + ' / ' + totalPages;
           if (prevBtn) prevBtn.disabled = currentPage <= 1;
           if (nextBtn) nextBtn.disabled = currentPage >= totalPages;

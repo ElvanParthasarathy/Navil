@@ -47,7 +47,7 @@ export const CategoryGrid = ({ posts, category }: any) => {
                             )}
                             <div className="blog-card-content">
                                 {!coverImage && classification && (
-                                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                                    <div className="blog-badges-inline-row">
                                         <span className={`blog-classification-badge inline ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>{classification}</span>
                                     </div>
                                 )}

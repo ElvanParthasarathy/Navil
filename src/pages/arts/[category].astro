@@ -125,6 +125,23 @@ function resolveArtThumb(rawUrl: string | undefined): string {
   }
   return rawUrl;
 }
+
+function cleanArtTitle(
+  rawCaption: string | undefined,
+  rawTitle: string | undefined,
+  fallback: string,
+  index: number
+): string {
+  const src = (rawTitle || rawCaption || '').replace(/&#064;/g, '@').replace(/&amp;/g, '&');
+  const firstLine = src
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .find((s) => s.length > 0);
+  if (!firstLine) return `${fallback} #${index + 1}`;
+  const withoutHashTail = firstLine.replace(/(?:\s+#\S+)+$/g, '').trim();
+  const title = withoutHashTail || firstLine;
+  return title.length > 72 ? `${title.slice(0, 69).trim()}...` : title;
+}
 ---
 
 <BaseLayout
@@ -162,29 +179,34 @@ function resolveArtThumb(rawUrl: string | undefined): string {
 
       {items.length > 0 ? (
         <div class="art-archive-grid">
-          {items.map((art) => (
-            <article class="art-archive-card">
-              {art.image_url && (
-                <div class="art-archive-thumb-wrap">
-                  <img
-                    src={resolveArtThumb(art.image_url)}
-                    alt={art.title || meta.titleEn}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              )}
-              <div class="art-archive-body">
-                <h3>{art.title || 'Untitled Artwork'}</h3>
-                {(art.date || art.medium || art.classification) && (
-                  <p class="art-archive-meta">
-                    {[art.medium, art.classification, art.date].filter(Boolean).join(' • ')}
-                  </p>
+          {items.map((art, index) => {
+            const thumbRaw = (Array.isArray(art.images) && art.images[0]) || art.image || art.image_url;
+            const artTitle = cleanArtTitle(art.caption, art.title, meta.titleEn, index);
+            const artDesc = (art.description || '').trim();
+            return (
+              <article class="art-archive-card">
+                {thumbRaw && (
+                  <div class="art-archive-thumb-wrap">
+                    <img
+                      src={resolveArtThumb(thumbRaw)}
+                      alt={artTitle}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 )}
-                {art.description && <p class="art-archive-desc">{art.description}</p>}
-              </div>
-            </article>
-          ))}
+                <div class="art-archive-body">
+                  <h3>{artTitle}</h3>
+                  {(art.date || art.medium || art.classification) && (
+                    <p class="art-archive-meta">
+                      {[art.medium, art.classification, art.date].filter(Boolean).join(' • ')}
+                    </p>
+                  )}
+                  {artDesc && <p class="art-archive-desc">{artDesc}</p>}
+                </div>
+              </article>
+            );
+          })}
         </div>
       ) : (
         <p class="art-archive-empty">
@@ -247,7 +269,12 @@ function resolveArtThumb(rawUrl: string | undefined): string {
     margin: 0 0 6px;
     font-size: 0.98rem;
     font-weight: 600;
+    line-height: 1.4;
     color: var(--text-main);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .art-archive-meta {
     margin: 0 0 6px;
@@ -263,5 +290,15 @@ function resolveArtThumb(rawUrl: string | undefined): string {
   .art-archive-empty {
     margin-top: 16px;
     color: var(--text-muted);
+  }
+  @media (max-width: 768px) {
+    .art-collection-guide {
+      padding-inline: 18px;
+      box-sizing: border-box;
+    }
+    .arts-category-page .elvan-ad-slot-wrapper {
+      padding-inline: 18px;
+      box-sizing: border-box;
+    }
   }
 </style>

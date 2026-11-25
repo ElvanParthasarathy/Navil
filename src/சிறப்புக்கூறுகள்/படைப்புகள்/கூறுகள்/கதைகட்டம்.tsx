@@ -46,7 +46,7 @@ export const StoryGrid = ({ posts, onSeriesClick }: any) => {
                                 
                                 <div className="blog-card-content">
                                     {!coverImage && (
-                                        <div style={{ marginBottom: '16px' }}>
+                                        <div className="blog-badges-inline-row">
                                             <span className="blog-classification-badge inline series">தொடர்</span>
                                         </div>
                                     )}
@@ -104,7 +104,7 @@ export const StoryGrid = ({ posts, onSeriesClick }: any) => {
                             )}
                             <div className="blog-card-content">
                                 {!coverImage && (((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) || post.classification) && (
-                                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                                    <div className="blog-badges-inline-row">
                                         {((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) && (
                                             <span className="blog-featured-badge inline">✨ Featured</span>
                                         )}

@@ -138,6 +138,11 @@
                         font-size: 0.82rem !important;
                     }
 
+                    .writings-page .elvan-ad-slot-wrapper {
+                        padding-inline: 18px;
+                        box-sizing: border-box;
+                    }
+
                     .desktop-only,
                     .category-card.desktop-only {
                         display: none !important;

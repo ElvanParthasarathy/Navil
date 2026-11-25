@@ -1782,7 +1782,7 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    padding-top: 56px !important;
+    padding-top: 64px !important;
     padding-bottom: 60px !important;
     min-height: 100vh;
     overflow: visible !important;

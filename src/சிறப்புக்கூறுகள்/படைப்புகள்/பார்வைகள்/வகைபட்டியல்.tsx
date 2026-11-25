@@ -714,7 +714,7 @@ const CategoryListView = () => {
                                     )}
                                     <div className="blog-card-content">
                                         {!coverImage && (((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) || post.classification) && (
-                                            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                                            <div className="blog-badges-inline-row">
                                                 {((post.isPinned || post.is_pinned) && (post.pinType === 'permanent' || post.pin_type === 'permanent')) && (
                                                     <span className="blog-featured-badge inline">✨ Featured</span>
                                                 )}
@@ -1133,13 +1133,21 @@ const CategoryListView = () => {
                     font-weight: 600;
                     letter-spacing: 0.5px;
                 }
+                .blog-badges-inline-row {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 10px;
+                }
                 .blog-classification-badge.inline {
                     position: static;
                     display: inline-block;
                     background: color-mix(in srgb, var(--text-main) 8%, transparent);
                     color: var(--text-main);
                     backdrop-filter: none;
-                    margin-bottom: 12px;
+                    line-height: 1.25;
+                    margin-bottom: 0;
                 }
                 .blog-featured-badge.inline {
                     position: static;
@@ -1147,7 +1155,8 @@ const CategoryListView = () => {
                     background: color-mix(in srgb, #f59e0b 10%, transparent);
                     backdrop-filter: none;
                     color: #f59e0b;
-                    margin-bottom: 12px;
+                    line-height: 1.25;
+                    margin-bottom: 0;
                 }
                 .blog-classification-badge.agam {
                     background: color-mix(in srgb, #ec4899 20%, rgba(0,0,0,0.7));
@@ -1159,7 +1168,7 @@ const CategoryListView = () => {
                 }
 
                 .blog-card-content {
-                    padding: 24px;
+                    padding: 20px 22px;
                     display: flex;
                     flex-direction: column;
                     flex: 1;
@@ -1168,11 +1177,12 @@ const CategoryListView = () => {
                 .blog-meta-minimal {
                     display: flex;
                     align-items: center;
+                    flex-wrap: wrap;
                     gap: 8px;
                     font-size: 0.8rem;
                     font-weight: 600;
                     color: var(--text-muted);
-                    margin-bottom: 12px;
+                    margin-bottom: 8px;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 }
@@ -1181,12 +1191,12 @@ const CategoryListView = () => {
                 }
 
                 .blog-title {
-                    font-size: 1.4rem;
+                    font-size: 1.35rem;
                     font-weight: 700;
-                    line-height: 1.5; /* Increased for Malayalam script breathing room */
+                    line-height: 1.44; /* Breathable without excessive gap above/below */
                     color: var(--text-main);
-                    margin-bottom: 12px;
-                    padding: 4px 0; /* Prevents clipping of tall characters */
+                    margin-bottom: 8px;
+                    padding: 2px 0; /* Prevents clipping of tall characters */
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
@@ -1201,7 +1211,7 @@ const CategoryListView = () => {
                     font-size: 0.8rem;
                     font-weight: 600;
                     color: var(--text-main);
-                    margin-bottom: 12px;
+                    margin-bottom: 10px;
                     background: color-mix(in srgb, var(--text-main) 8%, transparent);
                     padding: 4px 10px;
                     border-radius: 6px;
@@ -1210,10 +1220,10 @@ const CategoryListView = () => {
 
                 .blog-excerpt {
                     font-size: 0.95rem;
-                    line-height: 1.8; /* Increased for Malayalam/Tamil clarity */
+                    line-height: 1.72; /* Increased for Malayalam/Tamil clarity */
                     color: var(--text-muted);
-                    margin-bottom: 20px;
-                    padding-bottom: 4px;
+                    margin-bottom: 16px;
+                    padding-bottom: 2px;
                     display: -webkit-box;
                     -webkit-line-clamp: 3;
                     -webkit-box-orient: vertical;
