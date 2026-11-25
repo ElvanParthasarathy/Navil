@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+import TransliteratorIsland from '../../components/islands/TransliteratorIsland';
+---
+
+<BaseLayout
+  title="மொழிமாற்றி | Tamil Script Transliterator (Thamizhi, Vatteluttu, IAST) — Elvan Navil"
+  description="Transliterate Tamil text seamlessly into Thamizhi (Tamil-Brahmi), Vatteluttu, Pallava Grantha, Chozha, ISO 15919, IAST, and Devanagari using Tolkappiyam phonetic mapping."
+  canonicalPath="/tools/transliterator"
+  mobileTitle="மொழிமாற்றி|transliterator"
+  isBeta={true}
+  backUrl="/tools"
+>
+  <div class="tool-astro-page">
+    <TransliteratorIsland client:only="react" />
+
+    <section class="tool-editorial-guide" aria-label="Transliterator Documentation">
+      <h1 class="tool-guide-title" lang="ta">மொழிமாற்றி • Tamil Script &amp; Phonetic Transliterator</h1>
+      <p lang="ta">
+        <strong>எல்வன் நவில் மொழிமாற்றி</strong> என்பது நவீன தமிழ் உரையைப் பண்டைய தமிழ் வரிவடிவங்களான
+        <strong>தமிழி (Tamil-Brahmi)</strong>, <strong>வட்டெழுத்து</strong>, <strong>பல்லவர்</strong>,
+        <strong>சோழர்</strong> எழுத்துக்களுக்கும், அனைத்துலக ஒலிபெயர்ப்பு முறைகளான
+        <strong>IAST</strong>, <strong>ISO 15919</strong> மற்றும் <strong>தேவநாகரி</strong> வடிவங்களுக்கும் மாற்றும் எண்மக் கருவியாகும்.
+      </p>
+      <p>
+        Built around classical <em>Tolkappiyam</em> phonology (வல்லினம், மெல்லினம், இடையினம் context rules),
+        this tool distinguishes voiced/unvoiced positional allophones (such as initial <em>k</em> vs intervocalic
+        <em>g/h</em> and nasal-stop clusters like <em>ng</em>, <em>nj</em>, <em>nd</em>) rather than relying on naive character substitution.
+      </p>
+      <div class="tool-guide-links">
+        <a href="/writings/articles/evolution-of-tamil-script-thamizhi-to-modern">Read Article: Evolution of Tamil Script →</a>
+        <a href="/tools/arichuvadi">Open Arichuvadi Script Trainer →</a>
+      </div>
+    </section>
+
+    <AdUnit margin="36px 0 0" />
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-astro-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+  }
+  .tool-editorial-guide {
+    margin-top: 36px;
+    padding: 24px 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+  }
+  .tool-guide-title {
+    margin: 0 0 12px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .tool-editorial-guide p {
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .tool-guide-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .tool-guide-links a {
+    color: var(--accent-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .tool-guide-links a:hover {
+    text-decoration: underline;
+  }
+</style>

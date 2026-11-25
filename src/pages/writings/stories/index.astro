@@ -1,0 +1,109 @@
+---
+import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வகைபட்டியல்.css';
+import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/கதைகள்பட்டியல்.css';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AdUnit from '../../../components/astro/AdUnit.astro';
+import { getStoriesGrouped, getPrimaryTitle, getPrimaryExcerpt } from '../../../lib/content';
+import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
+
+const { posts, grouped } = await getStoriesGrouped();
+---
+
+<BaseLayout
+  title="சிறுகதைகள் | Short Stories — Elvan Navil"
+  description={`Original Tamil and English short stories and serialized narratives (${posts.length} episodes/stories) by Elvan Parthasarathy.`}
+  canonicalPath="/writings/stories"
+  mobileTitle="சிறுகதைகள்|short stories"
+  backUrl="/writings"
+>
+  <div class="writings-page page-view fadeIn">
+    <header class="writings-header animate-entry">
+      <div style="flex: 1;">
+        <h1 class="writings-title" lang="ta">சிறுகதைகள்</h1>
+        <div class="writings-title-sub">Short Stories</div>
+        <p class="writings-subtitle" lang="ta">ஒரு கதை சொல்லட்டா சார்?</p>
+        <p class="writings-subtitle writings-subtitle-en">My original fiction and serialized narratives.</p>
+      </div>
+    </header>
+
+    <div class="blog-grid-container animate-entry">
+      {grouped.map((item) => {
+        if (item.type === 'series') {
+          const cover = item.coverImage ? getOptimizedImage(item.coverImage, 'thumb') : null;
+          return (
+            <article class="blog-card-item series-card">
+              {cover && (
+                <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} class="blog-cover-wrapper" style="display: block;">
+                  <img src={cover} alt={item.seriesName} loading="lazy" />
+                  {item.classification && (
+                    <span class={`blog-classification-badge ${item.classification === 'அகம்' ? 'agam' : item.classification === 'புறம்' ? 'puram' : ''}`}>
+                      {item.classification}
+                    </span>
+                  )}
+                </a>
+              )}
+              <div class="blog-card-content">
+                <div class="blog-meta-minimal">
+                  <span class="series-badge">📚 தொடர் ({item.parts.length} பகுதிகள்)</span>
+                  {item.genres.slice(0, 2).map((g) => (
+                    <>
+                      <span class="meta-dot">•</span>
+                      <span>{g}</span>
+                    </>
+                  ))}
+                </div>
+                <h2 class="blog-title">
+                  <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} style="text-decoration: none; color: inherit;">
+                    {item.seriesName}
+                  </a>
+                </h2>
+                {item.excerpt && <p class="blog-excerpt">{item.excerpt}</p>}
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+                  {item.parts.slice(0, 4).map((part) => (
+                    <a
+                      href={`/writings/stories/${encodeURIComponent(part.slug)}`}
+                      style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none;"
+                    >
+                      பகுதி {part.series_part}: {getPrimaryTitle(part, 'stories')} →
+                    </a>
+                  ))}
+                </div>
+                <div class="blog-card-footer">
+                  <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} class="blog-read-more" style="text-decoration: none;">
+                    தொடரைப் பார்க்க • View Series ({item.parts.length} Parts) →
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        } else {
+          const p = item.post;
+          const title = getPrimaryTitle(p, 'stories');
+          const excerpt = getPrimaryExcerpt(p, 140);
+          const cover = p.cover_image ? getOptimizedImage(p.cover_image, 'thumb') : null;
+          return (
+            <a href={`/writings/stories/${encodeURIComponent(p.slug)}`} class="blog-link-card" style="text-decoration: none; color: inherit; display: flex;">
+              <article class="blog-card-item" style="width: 100%;">
+                {cover && (
+                  <div class="blog-cover-wrapper">
+                    <img src={cover} alt={title} loading="lazy" />
+                  </div>
+                )}
+                <div class="blog-card-content">
+                  <h2 class="blog-title">{title}</h2>
+                  {excerpt && <p class="blog-excerpt">{excerpt}</p>}
+                  <div class="blog-card-footer">
+                    <span class="blog-read-more">கதையை வாசிக்க • Read Story →</span>
+                  </div>
+                </div>
+              </article>
+            </a>
+          );
+        }
+      })}
+    </div>
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+</BaseLayout>

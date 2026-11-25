@@ -1,0 +1,69 @@
+---
+import '../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import '../../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+---
+
+<BaseLayout
+  title="பதிவிறக்கங்கள் | Downloads — Elvan Navil"
+  description="Official desktop applications by Elvan Navil, including Nammil privacy-first WhatsApp companion for Windows."
+  canonicalPath="/downloads"
+  mobileTitle="பதிவிறக்கங்கள்"
+  backUrl="/"
+>
+  <div class="writings-page page-view fadeIn">
+    <header class="writings-header animate-entry">
+      <div style="flex: 1;">
+        <h1 class="writings-title">பதிவிறக்கங்கள்</h1>
+        <div class="writings-title-sub">Downloads</div>
+        <p class="writings-subtitle">கணினி மென்பொருட்கள் &amp; பயன்பாடுகள்</p>
+        <p class="writings-subtitle writings-subtitle-en">Desktop Applications &amp; Productivity Tools</p>
+      </div>
+    </header>
+
+    <div class="store-app-grid">
+      <a
+        href="/downloads/nammil"
+        class="store-app-card"
+        title="Nammil — Multi-Account WhatsApp Companion"
+      >
+        <div class="store-card-header">
+          <div class="store-card-identity">
+            <img src="/nammil_icon.png" alt="Nammil App Icon" class="store-card-icon" />
+            <div class="store-card-title-wrap">
+              <h2 class="store-card-title">
+                <span class="store-card-name-ta" lang="ta">நம்மில்</span>
+                <span class="store-card-name-en">Nammil</span>
+              </h2>
+              <div class="store-card-meta">
+                <span>Social &amp; Productivity • சமூகம்</span>
+              </div>
+            </div>
+          </div>
+          <div class="store-card-pill">Free</div>
+        </div>
+
+        <div class="store-card-desc-wrap">
+          <p class="store-card-desc store-card-desc-ta" lang="ta">
+            பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்கான நவீன கணினித் துணைச்செயலி.
+          </p>
+          <p class="store-card-desc store-card-desc-en">
+            A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions and media organization.
+          </p>
+        </div>
+
+        <div class="store-card-banner-frame">
+          <img
+            src="/nammil/slide_1.webp"
+            alt="Nammil Desktop Screenshot Preview"
+            class="store-card-banner-img"
+            loading="eager"
+          />
+        </div>
+      </a>
+    </div>
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+</BaseLayout>

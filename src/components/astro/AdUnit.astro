@@ -1,0 +1,45 @@
+---
+interface Props {
+  slot?: string;
+  margin?: string;
+  label?: string;
+}
+
+const { slot = '1749945992', margin = '48px 0', label = 'Advertisement' } = Astro.props;
+---
+
+<aside class="elvan-ad-slot-wrapper" style={`margin: ${margin};`} aria-label={label}>
+  <div class="elvan-ad-slot-inner">
+    <ins
+      class="adsbygoogle"
+      style="display:block; width:100%; min-height:90px;"
+      data-ad-client="ca-pub-5392072917035799"
+      data-ad-slot={slot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+  </div>
+</aside>
+
+<script is:inline>
+  (function () {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  .elvan-ad-slot-wrapper {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    clear: both;
+  }
+  .elvan-ad-slot-inner {
+    width: 100%;
+    min-height: 90px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+</style>

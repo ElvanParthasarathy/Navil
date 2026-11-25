@@ -1,0 +1,118 @@
+---
+import '../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+
+const TOOLS_CARDS = [
+  {
+    href: '/tools/transliterator',
+    titleTa: 'மொழிமாற்றி',
+    titleEn: 'Transliterator',
+    descTa: 'தமிழ் எழுத்துகளை தமிழி, வட்டெழுத்து, பல்லவர், IAST மற்றும் தேவநாகரி வடிவங்களுக்கு மாற்றித் தரும் கருவி.',
+    descEn: 'Rule-based phonetic & script converter transforming Tamil into Thamizhi (Tamil-Brahmi), Vatteluttu, Pallava, Chozha, IAST, and Devanagari.',
+    footerTa: 'கருவியைத் திறக்க',
+    icon: '🔤',
+  },
+  {
+    href: '/tools/arichuvadi',
+    titleTa: 'அரிச்சுவடி',
+    titleEn: 'Arichuvadi — Classical Script Lab',
+    descTa: 'தமிழி (தமிழ் பிராமி) மற்றும் வட்டெழுத்து எழுத்து முறைகளைக் கற்கவும், எழுதவும், பயிற்சி செய்யவுமான ஊடாடும் தளம்.',
+    descEn: 'Interactive workspace to type, trace, match, memorize, and download historical Tamil-Brahmi and Vatteluttu script resources.',
+    footerTa: 'பயிற்சியைத் தொடங்க',
+    icon: '🪶',
+  },
+  {
+    href: '/tools/piano',
+    titleTa: 'கின்னரப்பெட்டி',
+    titleEn: 'Web Piano Synthesizer',
+    descTa: 'உலாவியிலேயே சுரங்களையும் மேலைத்தேய இசைக் குறிப்புகளையும் இசைத்துப் பார்க்கும் மின்னணு இசைக்கருவி.',
+    descEn: 'Low-latency interactive virtual keyboard built with Web Audio synthesis for practicing scales and melodies.',
+    footerTa: 'இசைக்கத் தொடங்க',
+    icon: '🎹',
+  },
+  {
+    href: '/teaching',
+    titleTa: 'பயிற்றுவிப்பு',
+    titleEn: 'Teaching & DSP Studio',
+    descTa: 'குரல் ஒலி உருவாக்கம் (Formant Vocoder) மற்றும் கற்றல் ஆய்வுகளுக்கான எண்மச் செய்முறைக் கூடம்.',
+    descEn: 'Educational signal-processing demonstrations including the interactive Source-Filter Formant Vocoder Lab.',
+    footerTa: 'ஆய்வகத்தைத் திறக்க',
+    icon: '🎙️',
+  },
+];
+---
+
+<BaseLayout
+  title="கருவிகள் | Tamil Linguistic & Interactive Web Tools — Elvan Navil"
+  description="Interactive web tools by Elvan Navil: Tolkappiyam Tamil script transliterator (Thamizhi, Vatteluttu, IAST), Arichuvadi classical script trainer, Web Audio piano, and Formant Vocoder."
+  canonicalPath="/tools"
+  mobileTitle="கருவிகள்|tools"
+  isBeta={true}
+  backUrl="/"
+>
+  <div class="writings-page tools-hub-page page-view fadeIn">
+    <header class="writings-header animate-entry">
+      <div style="flex: 1;">
+        <h1 class="writings-title" lang="ta">
+          கருவிகள்
+          <span class="cat-count-badge">BETA</span>
+        </h1>
+        <div class="writings-title-sub">Tools &amp; Interactive Utilities</div>
+        <p class="writings-subtitle" lang="ta">தமிழ் எழுத்துரு மாற்றம், ஒலி நுட்பம் &amp; கற்றல் கருவிகள்</p>
+        <p class="writings-subtitle writings-subtitle-en">Tamil Script Transliteration, Learning Labs &amp; Audio Utilities</p>
+      </div>
+    </header>
+
+    <div class="category-grid animate-entry">
+      {TOOLS_CARDS.map((tool) => (
+        <a href={tool.href} class="category-card">
+          <div class="cat-icon-box" aria-hidden="true">{tool.icon}</div>
+          <div class="cat-content">
+            <div class="cat-title" lang="ta">{tool.titleTa}</div>
+            <div class="cat-title-sub">{tool.titleEn}</div>
+            <p class="cat-desc" lang="ta">{tool.descTa}</p>
+            <p class="cat-desc-sub">{tool.descEn}</p>
+          </div>
+          <div class="cat-footer">{tool.footerTa} →</div>
+        </a>
+      ))}
+    </div>
+
+    <section class="tools-overview-guide animate-entry">
+      <h2>About Elvan Navil Web Utilities • கருவிகளின் நோக்கம்</h2>
+      <p lang="ta">
+        தமிழ் மொழியியல் மரபையும் நவீன வலைத் தொழில்நுட்பத்தையும் இணைக்கும் வகையில் இக்கருவிகள் உருவாக்கப்பட்டுள்ளன. தொல்காப்பிய எழுத்திலக்கண அடிப்படையில் பழங்கால எழுத்து வடிவங்களான தமிழி மற்றும் வட்டெழுத்துகளை உடனுக்குடன் மாற்றிப் பார்க்கவும் கற்கவும் முடியும்.
+      </p>
+      <p>
+        Every tool runs directly inside your browser using client-side computational linguistics and Web Audio APIs—requiring no uploads or external server round-trips for text processing or sound synthesis.
+      </p>
+    </section>
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+</BaseLayout>
+
+<style>
+  .tools-overview-guide {
+    margin-top: 40px;
+    padding: 24px 26px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+  }
+  .tools-overview-guide h2 {
+    margin: 0 0 12px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .tools-overview-guide p {
+    margin: 0 0 10px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .tools-overview-guide p:last-child {
+    margin-bottom: 0;
+  }
+</style>

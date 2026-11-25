@@ -1,0 +1,117 @@
+---
+import '../../../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import '../../../../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/கதைகள்பட்டியல்.css';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import AdUnit from '../../../../components/astro/AdUnit.astro';
+import { getStoriesGrouped, getPrimaryTitle, getPrimaryExcerpt, getPostTags } from '../../../../lib/content';
+import { getOptimizedImage } from '../../../../நூலகம்/ஊடகம்';
+
+export async function getStaticPaths() {
+  const { seriesMap } = await getStoriesGrouped();
+  const paths: any[] = [];
+  seriesMap.forEach((parts, seriesName) => {
+    const sorted = [...parts].sort((a, b) => (a.series_part || 0) - (b.series_part || 0));
+    paths.push({
+      params: { seriesId: seriesName },
+      props: { seriesName, parts: sorted },
+    });
+  });
+  return paths;
+}
+
+const { seriesName, parts } = Astro.props;
+const firstPart = parts[0];
+const coverRaw = parts.find((p: any) => p.cover_image)?.cover_image || null;
+const cover = coverRaw ? getOptimizedImage(coverRaw, 'medium') : null;
+const classification = parts.find((p: any) => p.classification)?.classification || null;
+const genreSet = new Set<string>();
+parts.forEach((p: any) => getPostTags(p).forEach((g) => genreSet.add(g)));
+const genres = Array.from(genreSet);
+const synopsis = getPrimaryExcerpt(firstPart, 220);
+---
+
+<BaseLayout
+  title={`${seriesName} — Story Series | Elvan Navil`}
+  description={`${seriesName} (${parts.length} episodes): ${synopsis}`}
+  canonicalPath={`/writings/stories/series/${encodeURIComponent(seriesName)}`}
+  mobileTitle={`${seriesName}|series`}
+  backUrl="/writings/stories"
+>
+  <div class="tv-series-view">
+    {cover && (
+      <div class="tv-hero-bg">
+        <img src={cover} alt="" />
+        <div class="tv-hero-bg-overlay"></div>
+      </div>
+    )}
+
+    <div class="tv-container">
+      <div class="tv-hero-section">
+        <div class="tv-hero-left">
+          <div class="tv-hero-cover-wrapper">
+            {cover ? (
+              <img src={cover} alt={seriesName} />
+            ) : (
+              <div class="tv-cover-placeholder">📚</div>
+            )}
+          </div>
+        </div>
+
+        <div class="tv-hero-right">
+          <span class="tv-show-tagline">ORIGINAL SERIES • கதைத் தொடர்</span>
+          <h1 class="tv-series-title">{seriesName}</h1>
+          <div class="tv-meta-row">
+            <span class="tv-ep-count-badge">{parts.length} பகுதிகள் • Episodes</span>
+            {classification && (
+              <span class={`tv-class-badge ${classification === 'அகம்' ? 'agam' : classification === 'புறம்' ? 'puram' : ''}`}>
+                {classification}
+              </span>
+            )}
+            {genres.slice(0, 3).map((g) => <span class="tv-genre-badge">{g}</span>)}
+          </div>
+          {synopsis && <p class="tv-synopsis">{synopsis}</p>}
+          <div class="tv-actions">
+            <a href={`/writings/stories/${encodeURIComponent(firstPart.slug)}`} class="tv-primary-btn">
+              ▶ முதல் பகுதியைப் படிக்க • Start Reading
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <section class="tv-episodes-section">
+        <h2 class="tv-section-title">பகுதிகள் • Episodes ({parts.length})</h2>
+        <div class="tv-episodes-grid">
+          {parts.map((part: any) => {
+            const pTitle = getPrimaryTitle(part, 'stories');
+            const pExcerpt = getPrimaryExcerpt(part, 130);
+            const pDate = part.publish_date || part.date;
+            return (
+              <a href={`/writings/stories/${encodeURIComponent(part.slug)}`} class="tv-ep-card">
+                <span class="tv-ep-number-bg">{part.series_part || ''}</span>
+                <div class="tv-ep-card-body">
+                  <div class="tv-ep-meta">
+                    <span class="tv-ep-num-pill">பகுதி {part.series_part}</span>
+                    {pDate && (
+                      <span class="tv-ep-date">
+                        {new Date(pDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    )}
+                  </div>
+                  <h3 class="tv-ep-title">{pTitle}</h3>
+                  {pExcerpt && <p class="tv-ep-excerpt">{pExcerpt}</p>}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
+      <AdUnit margin="48px 0 0" />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tv-ep-title { font-weight: 700; color: var(--text-main); margin: 0 0 8px; }
+  .tv-ep-excerpt { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
+</style>

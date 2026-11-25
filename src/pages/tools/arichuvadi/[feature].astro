@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AdUnit from '../../../components/astro/AdUnit.astro';
+import ArichuvadiIsland from '../../../components/islands/ArichuvadiIsland';
+
+interface FeatureMeta {
+  key: string;
+  titleTa: string;
+  titleEn: string;
+  descEn: string;
+  descTa: string;
+}
+
+const FEATURE_MAP: Record<string, FeatureMeta> = {
+  editor: {
+    key: 'editor',
+    titleTa: 'தமிழி எழுதி',
+    titleEn: 'Thamizhi & Vatteluttu Script Editor',
+    descTa: 'நவீன தமிழ் சொற்களைத் தட்டச்சு செய்து தமிழி மற்றும் வட்டெழுத்து வடிவங்களில் உடனுக்குடன் காணும் எழுதி.',
+    descEn: 'Type modern Tamil or phonetic Latin input and inspect live Thamizhi (Tamil-Brahmi) and Vatteluttu ligatures.',
+  },
+  learn: {
+    key: 'learn',
+    titleTa: 'எழுத்துக் கற்றல்',
+    titleEn: 'Learn Uyir, Mei & Uyirmei Glyphs',
+    descTa: 'உயிர், மெய், உயிர்மெய் எழுத்துகளின் தொல்வடிவ ஒப்பீட்டு அட்டவணைகள்.',
+    descEn: 'Structured character chart mapping Uyir vowels, Mei consonants, and Uyirmei compounds across eras.',
+  },
+  practice: {
+    key: 'practice',
+    titleTa: 'எழுத்துப் பயிற்சி',
+    titleEn: 'Interactive Writing Canvas',
+    descTa: 'தொடுதிரை மற்றும் சுட்டி மூலம் பண்டைய தமிழ் எழுத்துகளை வரைந்து பழகும் பலகை.',
+    descEn: 'Guided drawing canvas to trace ancient epigraphic strokes directly in your browser.',
+  },
+  match: {
+    key: 'match',
+    titleTa: 'பொருத்திப் பார்',
+    titleEn: 'Script Matching Quiz',
+    descTa: 'நவீன தமிழ் எழுத்துகளோடு சரியான தமிழி வடிவத்தைப் பொருத்தும் பயிற்சி விளையாட்டு.',
+    descEn: 'Timed matching exercises pairing modern Tamil characters with classical Thamizhi equivalents.',
+  },
+  memorize: {
+    key: 'memorize',
+    titleTa: 'நினைவாற்றல் அட்டைகள்',
+    titleEn: 'Memory Flashcards',
+    descTa: 'கல்வெட்டு எழுத்துகளை நினைவில் நிறுத்த உதவும் விரைவு அட்டைப் பயிற்சி.',
+    descEn: 'Spaced recall flashcards built for rapid recognition of Keezhadi and Mangulam inscription glyphs.',
+  },
+  books: {
+    key: 'books',
+    titleTa: 'கல்வெட்டு நூல்கள்',
+    titleEn: 'Paleography & Epigraphy References',
+    descTa: 'தமிழகத் தொல்லியல் மற்றும் தமிழ்-பிராமி கல்வெட்டுகள் குறித்த பரிந்துரை நூற்பட்டியல்.',
+    descEn: 'Curated bibliography covering South Indian epigraphy, Keezhadi excavations, and script evolution.',
+  },
+  image: {
+    key: 'image',
+    titleTa: 'எழுத்துப் பட உருவாக்கி',
+    titleEn: 'Typography Image Generator',
+    descTa: 'உங்கள் பெயர் அல்லது கவிதையைத் தமிழி எழுத்து வடிவப் படமாகப் பதிவிறக்கும் கருவி.',
+    descEn: 'Export custom stylized posters featuring your name or quotes rendered in Thamizhi script.',
+  },
+  downloads: {
+    key: 'downloads',
+    titleTa: 'எழுத்துரு பதிவிறக்கங்கள்',
+    titleEn: 'Font & Chart Downloads',
+    descTa: 'தமிழி, வட்டெழுத்து எழுத்துருக்கள் மற்றும் கற்றல் அட்டவணைப் பதிவிறக்கங்கள்.',
+    descEn: 'Download Unicode-mapped Thamizhi fonts, printable practice sheets, and reference wallcharts.',
+  },
+  about: {
+    key: 'about',
+    titleTa: 'அரிச்சுவடி பற்றி',
+    titleEn: 'About Arichuvadi',
+    descTa: 'அரிச்சுவடித் திட்டத்தின் வரலாற்றுப் பின்னணி மற்றும் வடிவமைப்பு நோக்கம்.',
+    descEn: 'Design philosophy, Unicode script standards, and open paleography goals behind Arichuvadi.',
+  },
+};
+
+export async function getStaticPaths() {
+  const keys = ['editor', 'learn', 'practice', 'match', 'memorize', 'books', 'image', 'downloads', 'about'];
+  return keys.map((feature) => ({ params: { feature } }));
+}
+
+const { feature = 'editor' } = Astro.params;
+const meta = FEATURE_MAP[feature] || FEATURE_MAP.editor;
+---
+
+<BaseLayout
+  title={`${meta.titleTa} | ${meta.titleEn} — Arichuvadi | Elvan Navil`}
+  description={meta.descEn}
+  canonicalPath={`/tools/arichuvadi/${feature}`}
+  mobileTitle={`${meta.titleTa}|arichuvadi`}
+  isBeta={true}
+  backUrl="/tools/arichuvadi"
+>
+  <div class="tool-astro-page">
+    <ArichuvadiIsland feature={feature} client:only="react" />
+
+    <section class="tool-editorial-guide" aria-label="Module Overview">
+      <h1 class="tool-guide-title" lang="ta">{meta.titleTa} • {meta.titleEn}</h1>
+      <p lang="ta">{meta.descTa}</p>
+      <p>{meta.descEn}</p>
+      <div class="tool-guide-links">
+        <a href="/tools/arichuvadi">← All Arichuvadi Modules</a>
+        <a href="/tools/transliterator">Open Full Script Transliterator →</a>
+      </div>
+    </section>
+
+    <AdUnit margin="36px 0 0" />
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-astro-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+  }
+  .tool-editorial-guide {
+    margin-top: 36px;
+    padding: 24px 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+  }
+  .tool-guide-title {
+    margin: 0 0 12px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .tool-editorial-guide p {
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .tool-guide-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .tool-guide-links a {
+    color: var(--accent-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .tool-guide-links a:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+import '../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+import { getActiveWritingCategories } from '../../lib/content';
+
+const categories = await getActiveWritingCategories();
+---
+
+<BaseLayout
+  title="எழுத்துகள் | Writings & Literature — Elvan Navil"
+  description="Bilingual literary catalog of original Tamil and English poems, quotes, short stories, essays, and articles by Elvan Parthasarathy."
+  canonicalPath="/writings"
+  mobileTitle="எழுத்துகள்|writings"
+  backUrl="/navilgal"
+>
+  <div class="writings-page page-view fadeIn">
+    <header class="writings-header animate-entry">
+      <div style="flex: 1;">
+        <h1 class="writings-title">எழுத்துகள்</h1>
+        <div class="writings-title-sub">Writings</div>
+        <p class="writings-subtitle">சிந்தனைகள், கதைகள் &amp; பட்டறிவுகள்</p>
+        <p class="writings-subtitle writings-subtitle-en">Thoughts, Stories &amp; Observations</p>
+      </div>
+    </header>
+
+    <div class="category-grid animate-entry">
+      {categories.map((cat) => (
+        <a href={`/writings/${cat.key}`} class="category-card">
+          <div class="cat-icon-box">
+            <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z" />
+            </svg>
+          </div>
+          <div class="cat-content">
+            <div class="cat-title" lang="ta">
+              {cat.titleTa}
+              <span class="cat-count-badge">{cat.count}</span>
+            </div>
+            <div class="cat-title-sub">{cat.titleEn}</div>
+            <p class="cat-desc" lang="ta">{cat.descTa}</p>
+            <p class="cat-desc-sub">{cat.descEn}</p>
+          </div>
+          <div class="cat-footer">{cat.footerTa} →</div>
+        </a>
+      ))}
+    </div>
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+</BaseLayout>

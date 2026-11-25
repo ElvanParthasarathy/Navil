@@ -1,0 +1,160 @@
+---
+import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import '../../../சிறப்புக்கூறுகள்/படைப்புகள்/பார்வைகள்/வகைபட்டியல்.css';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AdUnit from '../../../components/astro/AdUnit.astro';
+import {
+  ALL_WRITING_CATEGORIES,
+  CATEGORY_META,
+  getCategoryPosts,
+  getPrimaryTitle,
+  getPrimaryExcerpt,
+  getPostTags,
+} from '../../../lib/content';
+import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const cat of ALL_WRITING_CATEGORIES) {
+    if (cat === 'stories') continue; // handled by src/pages/writings/stories/index.astro
+    const posts = await getCategoryPosts(cat);
+    if (posts.length > 0) {
+      paths.push({
+        params: { category: cat },
+        props: { category: cat, posts },
+      });
+    }
+  }
+  return paths;
+}
+
+const { category, posts } = Astro.props;
+const meta = CATEGORY_META[category];
+
+const allGenresSet = new Set<string>();
+posts.forEach((p) => getPostTags(p).forEach((g) => allGenresSet.add(g)));
+const allGenres = Array.from(allGenresSet).sort();
+---
+
+<BaseLayout
+  title={`${meta.titleTa} | ${meta.titleEn} — Elvan Navil`}
+  description={`${meta.descEn} Collection of ${posts.length} bilingual works by Elvan Parthasarathy.`}
+  canonicalPath={`/writings/${category}`}
+  mobileTitle={`${meta.titleTa}|${meta.titleEn.toLowerCase()}`}
+  backUrl="/writings"
+>
+  <div class="writings-page page-view fadeIn">
+    <header class="writings-header animate-entry">
+      <div style="flex: 1;">
+        <h1 class="writings-title" lang="ta">{meta.titleTa}</h1>
+        <div class="writings-title-sub">{meta.titleEn}</div>
+        <p class="writings-subtitle" lang="ta">{meta.descTa}</p>
+        <p class="writings-subtitle writings-subtitle-en">{meta.descEn}</p>
+      </div>
+    </header>
+
+    <div class="controls-area" style="margin-bottom: 24px; flex-wrap: wrap;">
+      <div class="minimal-search">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="cat-search-input" placeholder="Search titles, tags, or excerpts..." aria-label="Search posts" />
+      </div>
+      {allGenres.length > 0 && (
+        <select
+          id="cat-genre-select"
+          aria-label="Filter by tag"
+          style="height: 44px; padding: 0 16px; border-radius: 100px; border: 1px solid var(--border-light); background: var(--bg-card); color: var(--text-main); font-size: 0.9rem; font-weight: 600;"
+        >
+          <option value="">All Topics ({posts.length})</option>
+          {allGenres.map((g) => <option value={g.toLowerCase()}>{g}</option>)}
+        </select>
+      )}
+    </div>
+
+    <div class="blog-grid-container animate-entry" id="cat-posts-grid">
+      {posts.map((post) => {
+        const title = getPrimaryTitle(post, category);
+        const excerpt = getPrimaryExcerpt(post, 150);
+        const tags = getPostTags(post);
+        const cover = post.cover_image ? getOptimizedImage(post.cover_image, 'thumb') : null;
+        const dateStr = post.publish_date || post.date;
+        const formattedDate = dateStr
+          ? new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+          : '';
+        const searchBlob = `${title} ${excerpt} ${tags.join(' ')} ${post.classification || ''}`.toLowerCase();
+
+        return (
+          <a
+            href={`/writings/${category}/${encodeURIComponent(post.slug)}`}
+            class="blog-link-card cat-post-card"
+            data-search={searchBlob}
+            data-tags={tags.map((t) => t.toLowerCase()).join(',')}
+            style="text-decoration: none; color: inherit; display: flex;"
+          >
+            <article class="blog-card-item" style="width: 100%;">
+              {cover && (
+                <div class="blog-cover-wrapper">
+                  <img src={cover} alt={title} loading="lazy" />
+                  {post.classification && (
+                    <span class={`blog-classification-badge ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
+                      {post.classification}
+                    </span>
+                  )}
+                </div>
+              )}
+              <div class="blog-card-content">
+                {!cover && post.classification && (
+                  <div>
+                    <span class={`blog-classification-badge inline ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
+                      {post.classification}
+                    </span>
+                  </div>
+                )}
+                <div class="blog-meta-minimal">
+                  {formattedDate && <span>{formattedDate}</span>}
+                  {formattedDate && tags.length > 0 && <span class="meta-dot">•</span>}
+                  {tags.slice(0, 2).map((t, idx) => (
+                    <>
+                      <span>{t}</span>
+                      {idx < Math.min(tags.length, 2) - 1 && <span class="meta-dot">•</span>}
+                    </>
+                  ))}
+                </div>
+                <h2 class="blog-title" lang={post.variants?.[0]?.lang || 'ta'}>{title}</h2>
+                {excerpt && <p class="blog-excerpt">{excerpt}</p>}
+                <div class="blog-card-footer">
+                  <span class="blog-read-more">
+                    வாசிக்க • Read <span class="arrow">→</span>
+                  </span>
+                </div>
+              </div>
+            </article>
+          </a>
+        );
+      })}
+    </div>
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+
+  <script is:inline>
+    (function () {
+      var input = document.getElementById('cat-search-input');
+      var select = document.getElementById('cat-genre-select');
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.cat-post-card'));
+
+      function filter() {
+        var q = (input ? input.value : '').trim().toLowerCase();
+        var g = (select ? select.value : '').trim().toLowerCase();
+        cards.forEach(function (card) {
+          var blob = card.getAttribute('data-search') || '';
+          var tags = (card.getAttribute('data-tags') || '').split(',');
+          var matchQ = !q || blob.indexOf(q) !== -1;
+          var matchG = !g || tags.indexOf(g) !== -1;
+          card.style.display = matchQ && matchG ? 'flex' : 'none';
+        });
+      }
+      if (input) input.addEventListener('input', filter);
+      if (select) select.addEventListener('change', filter);
+    })();
+  </script>
+</BaseLayout>

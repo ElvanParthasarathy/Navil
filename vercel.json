@@ -31,18 +31,82 @@
             ]
         }
     ],
+    "redirects": [
+        {
+            "source": "/navilgal/writings",
+            "destination": "/writings",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/writings/:path*",
+            "destination": "/writings/:path*",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/ezhutgal",
+            "destination": "/writings",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/ezhutgal/:path*",
+            "destination": "/writings/:path*",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/ezhuthugal",
+            "destination": "/writings",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/ezhuthugal/:path*",
+            "destination": "/writings/:path*",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/arts",
+            "destination": "/arts",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/arts/:path*",
+            "destination": "/arts/:path*",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/padaippugal",
+            "destination": "/arts",
+            "permanent": true
+        },
+        {
+            "source": "/navilgal/padaippugal/:path*",
+            "destination": "/arts/:path*",
+            "permanent": true
+        },
+        {
+            "source": "/privacy-policy",
+            "destination": "/privacy",
+            "permanent": true
+        },
+        {
+            "source": "/terms-and-conditions",
+            "destination": "/terms",
+            "permanent": true
+        },
+        {
+            "source": "/tools/teaching",
+            "destination": "/teaching",
+            "permanent": true
+        },
+        {
+            "source": "/teaching/vocoder",
+            "destination": "/tools/vocoder",
+            "permanent": true
+        }
+    ],
     "rewrites": [
         {
-            "source": "/nirvaagi(.*)",
-            "destination": "/nirvaagi.html"
-        },
-        {
-            "source": "/downloads/nammil(.*)",
-            "destination": "/downloads-nammil.html"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
+            "source": "/nirvaagi/(.*)",
+            "destination": "/nirvaagi/index.html"
         }
     ]
 }

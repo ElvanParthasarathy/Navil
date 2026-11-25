@@ -1,0 +1,61 @@
+---
+import '../../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+---
+
+<BaseLayout
+  title="பயிற்றுவிப்பு | Teaching & Signal Processing Studio — Elvan Navil"
+  description="Interactive educational teaching modules by Elvan Navil, featuring real-time acoustics and Source-Filter Formant Vocoder demonstrations."
+  canonicalPath="/teaching"
+  mobileTitle="பயிற்றுவிப்பு|teaching"
+  backUrl="/tools"
+>
+  <div class="writings-page teaching-hub-page page-view fadeIn">
+    <header class="writings-header animate-entry">
+      <div style="flex: 1;">
+        <h1 class="writings-title" lang="ta">பயிற்றுவிப்பு</h1>
+        <div class="writings-title-sub">Teaching &amp; Learning Studio</div>
+        <p class="writings-subtitle" lang="ta">ஒலியியல் மற்றும் தொழில்நுட்பச் செய்முறைப் பாடங்கள்</p>
+        <p class="writings-subtitle writings-subtitle-en">Interactive Acoustics &amp; Engineering Demonstrations</p>
+      </div>
+    </header>
+
+    <div class="category-grid animate-entry">
+      <a href="/tools/vocoder" class="category-card">
+        <div class="cat-icon-box" aria-hidden="true">🎛️</div>
+        <div class="cat-content">
+          <div class="cat-title" lang="ta">
+            குரல்மாற்றி ஆய்வுக்கூடம்
+            <span class="cat-count-badge">LAB</span>
+          </div>
+          <div class="cat-title-sub">Source-Filter Formant Vocoder</div>
+          <p class="cat-desc" lang="ta">
+            மனிதக் குரலின் ஃபார்மன்ட் அதிர்வெண்கள் (F1, F2, F3) மற்றும் சுருதி மாற்றங்களை நேரடியாக இயக்கி அறியும் ஆய்வகம்.
+          </p>
+          <p class="cat-desc-sub">
+            Explore vowel formants, glottal pulse-train vs. aspirated white-noise excitation, and spectral shaping live in Web Audio.
+          </p>
+        </div>
+        <div class="cat-footer">ஆய்வகத்தைத் திறக்க →</div>
+      </a>
+
+      <a href="/tools/arichuvadi/learn" class="category-card">
+        <div class="cat-icon-box" aria-hidden="true">📜</div>
+        <div class="cat-content">
+          <div class="cat-title" lang="ta">தமிழி &amp; வட்டெழுத்துப் பாடம்</div>
+          <div class="cat-title-sub">Paleography Guided Study</div>
+          <p class="cat-desc" lang="ta">
+            சங்க கால கல்வெட்டு எழுத்துக்களின் வரிவடிவ வளர்ச்சியைப் படிப்படியாகக் கற்கும் பகுதி.
+          </p>
+          <p class="cat-desc-sub">
+            Step-by-step comparative study of Thamizhi (Tamil-Brahmi) and Vatteluttu glyph structures and vowel diacritics.
+          </p>
+        </div>
+        <div class="cat-footer">பாடத்தைத் திறக்க →</div>
+      </a>
+    </div>
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+</BaseLayout>

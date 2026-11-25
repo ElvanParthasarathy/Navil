@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="அமைப்புகள் | Settings — Elvan Navil"
+  description="Personalize your appearance and reading experience on Elvan Navil."
+  canonicalPath="/settings"
+  mobileTitle="அமைப்புகள்|settings"
+  noindex={true}
+  includeAdsense={false}
+  backUrl="/"
+>
+  <div class="settings-page page-view animate-entry" style="max-width: 800px; margin: 0 auto; padding: 24px 20px 60px;">
+    <div style="margin-bottom: 36px;">
+      <h1 style="font-size: 2.3rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">Settings</h1>
+      <p style="font-size: 1.05rem; color: var(--text-muted); margin: 0;">Personalize your experience.</p>
+    </div>
+
+    <div>
+      <h2 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 14px;">
+        Appearance
+      </h2>
+      <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 24px; padding: 24px;">
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="settings-theme-btn" data-theme-choice="light">☀ Light</button>
+          <button type="button" class="settings-theme-btn" data-theme-choice="auto">◐ Auto</button>
+          <button type="button" class="settings-theme-btn" data-theme-choice="dark">☾ Dark</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .settings-theme-btn {
+    flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--border-light);
+    background: var(--bg-panel); color: var(--text-muted); font-weight: 600; font-size: 0.95rem; cursor: pointer;
+  }
+  .settings-theme-btn.active {
+    background: var(--text-main); color: var(--bg-app); border-color: var(--text-main);
+  }
+</style>

@@ -1,0 +1,387 @@
+---
+import '../சிறப்புக்கூறுகள்/முகப்பு/முகப்பு.css';
+import '../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
+import '../சிறப்புக்கூறுகள்/படைப்புகள்/படைப்புகள்.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdUnit from '../components/astro/AdUnit.astro';
+import {
+  getCategoryPosts,
+  getPrimaryTitle,
+  getPrimaryExcerpt,
+  formatPlayerPoem,
+  formatPlayerQuote,
+} from '../lib/content';
+
+const [poems, quotes, articles] = await Promise.all([
+  getCategoryPosts('poems'),
+  getCategoryPosts('quotes'),
+  getCategoryPosts('articles'),
+]);
+
+const initialPoem = formatPlayerPoem(poems[0] || null);
+const initialQuote = formatPlayerQuote(quotes[0] || null);
+
+const poemsPool = poems.map((p) => formatPlayerPoem(p));
+const quotesPool = quotes.map((q) => formatPlayerQuote(q));
+const featuredArticles = articles.slice(0, 4);
+
+const CLASSIFICATION_COLORS: Record<string, string> = {
+  அகம்: '#e8a0bf',
+  புறம்: '#d4af37',
+};
+function getClassColor(name: string) {
+  if (!name) return '#888';
+  if (CLASSIFICATION_COLORS[name]) return CLASSIFICATION_COLORS[name];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  const hue = ((hash % 360) + 360) % 360;
+  return `hsl(${hue}, 55%, 60%)`;
+}
+---
+
+<BaseLayout
+  title="எல்வன் நவில் | Elvan Navil — Bilingual Digital Creation Studio"
+  description="Elvan Navil is an independent bilingual Tamil-English digital creation studio crafting thoughtful desktop software (Nammil), linguistic tools, and original literature."
+  canonicalPath="/"
+  mobileTitle="எல்வன் நவில்"
+>
+  <div class="home-page company-home-page page-view fadeIn">
+    <!-- 1. STUDIO HEADER -->
+    <header class="home-brand-header animate-entry">
+      <h1 class="home-brand-title" lang="ta">எல்வன் நவில்</h1>
+      <div class="home-brand-title-sub">Elvan Navil</div>
+      <p class="home-brand-subtitle" lang="ta">
+        நல்வரவு. இது எல்வன் நவில் — சிந்தனைமிக்க கணினி மென்பொருட்கள், தனித்துவ அச்சுக்கலை மற்றும் இருமொழி இலக்கியங்களை நேர்த்தியாக உருவாக்கும் தன்னுரிமை எண்மப் படைப்பரங்கு.
+      </p>
+      <p class="home-brand-subtitle home-brand-subtitle-en">
+        Welcome to Elvan Navil — an independent digital creation studio crafting thoughtful desktop software, bespoke typography, and bilingual literature.
+      </p>
+    </header>
+
+    <!-- 2. BRAND DEFINITION & ETYMOLOGY -->
+    <div class="dictionary-container animate-entry">
+      <div class="dict-card">
+        <div class="dict-word-header">
+          <span class="dict-word" lang="ta">நவில்</span>
+          <span class="dict-meta">வினைச்சொல்</span>
+        </div>
+        <p class="dict-definition" lang="ta">
+          தமிழ் வேர்ச்சொல் "நவிலுதல்" — உரைத்தல், பேசுதல், பாடுதல், அல்லது வார்த்தைகள் வழி எண்ணங்களை வெளிப்படுத்துதல்.
+        </p>
+      </div>
+
+      <div class="dict-card">
+        <div class="dict-word-header">
+          <span class="dict-word">Navil</span>
+          <span class="dict-meta">/nʌvɪl/ • verb</span>
+        </div>
+        <p class="dict-definition">
+          Derived from Tamil “Naviluthal” — meaning to speak, utter, narrate, or express core reflections through lyrical words.
+        </p>
+      </div>
+    </div>
+
+    <!-- 3. FEATURED PRODUCTS: NAMMIL & NAVIL TRANSLITERATOR -->
+    <section class="home-section animate-entry" style="margin-top: 48px;">
+      <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
+        <div class="home-section-badge">படைப்புகள் • Featured Creations</div>
+        <h2 class="home-section-title" lang="ta">மென்பொருள் &amp; கருவிகள்</h2>
+        <div class="home-section-desc">Software &amp; Linguistic Tools</div>
+      </div>
+
+      <div class="bento-grid" style="margin-top: 0;">
+        <div class="span-6" style="display: flex;">
+          <a
+            href="/downloads/nammil"
+            class="store-app-card"
+            style="width: 100%; display: flex; flex-direction: column; justify-content: space-between;"
+            title="Nammil — Multi-Account WhatsApp Companion"
+          >
+            <div>
+              <div class="store-card-header">
+                <div class="store-card-identity">
+                  <img src="/nammil_icon.png" alt="Nammil App Icon" class="store-card-icon" />
+                  <div class="store-card-title-wrap">
+                    <h2 class="store-card-title">
+                      <span class="store-card-name-ta" lang="ta">நம்மில்</span>
+                      <span class="store-card-name-en">Nammil</span>
+                    </h2>
+                    <div class="store-card-meta">
+                      <span>Social &amp; Productivity • சமூகம்</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="store-card-pill">Free</div>
+              </div>
+
+              <div class="store-card-desc-wrap" style="margin-top: 16px;">
+                <p class="store-card-desc store-card-desc-ta" lang="ta">
+                  பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸ் அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்கான நவீன கணினித் துணைச்செயலி.
+                </p>
+                <p class="store-card-desc store-card-desc-en">
+                  A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions and media organization.
+                </p>
+              </div>
+            </div>
+
+            <div class="store-card-banner-frame" style="margin-top: 18px;">
+              <img
+                src="/nammil/slide_1.webp"
+                alt="Nammil Desktop Screenshot Preview"
+                class="store-card-banner-img"
+                loading="eager"
+              />
+            </div>
+          </a>
+        </div>
+
+        <div class="span-6" style="display: flex;">
+          <a
+            href="/tools/transliterator"
+            class="category-card"
+            style="width: 100%; display: flex; flex-direction: column; justify-content: space-between; min-height: auto;"
+            title="Navil Transliterator — Phonetic Latin-to-Tamil typing engine"
+          >
+            <div>
+              <div class="cat-icon-box">
+                <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                  <path d="M247.15,212.42l-56-112a8,8,0,0,0-14.31,0l-21.71,43.43A88,88,0,0,1,108,126.93,103.65,103.65,0,0,0,135.69,64H160a8,8,0,0,0,0-16H104V32a8,8,0,0,0-16,0V48H32a8,8,0,0,0,0,16h87.63A87.76,87.76,0,0,1,96,116.35a87.74,87.74,0,0,1-19-31,8,8,0,1,0-15.08,5.34A103.63,103.63,0,0,0,84,127a87.55,87.55,0,0,1-52,17,8,8,0,0,0,0,16,103.46,103.46,0,0,0,64-22.08,104.18,104.18,0,0,0,51.44,21.31l-26.6,53.19a8,8,0,0,0,14.31,7.16L148.94,192h70.11l13.79,27.58A8,8,0,0,0,240,224a8,8,0,0,0,7.15-11.58ZM156.94,176,184,121.89,211.05,176Z" />
+                </svg>
+              </div>
+              <div class="cat-content" style="margin-top: 16px;">
+                <div class="cat-title">
+                  நவில் மொழிமாற்றி
+                  <span class="cat-beta-badge">BETA</span>
+                </div>
+                <div class="cat-title-sub">Navil Transliterator</div>
+                <p class="cat-desc" lang="ta">தொல்காப்பிய இலக்கண ஒலிபெயர்ப்பு முறைமை.</p>
+                <p class="cat-desc-sub">Phonetic Latin-to-Tamil typing engine.</p>
+              </div>
+            </div>
+            <div class="cat-footer" style="margin-top: auto; padding-top: 20px;">
+              மொழிமாற்றியைத் தொடங்க →
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. REFLECTIONS & POETRY PLAYERS -->
+    <section class="home-section animate-entry" style="margin-top: 48px;">
+      <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
+        <div class="home-section-badge">இலக்கியம் • Literature</div>
+        <h2 class="home-section-title" lang="ta">நவில்கள்</h2>
+        <div class="home-section-desc">Reflections &amp; Lyrical Literature</div>
+      </div>
+
+      <div class="bento-grid" style="margin-top: 0;">
+        <!-- POEM PLAYER -->
+        <section class="bento-card span-6 quote-bento clickable-card" id="home-poem-card" data-href={(initialPoem.slug || initialPoem.id) ? `/writings/poems/${encodeURIComponent(initialPoem.slug || initialPoem.id)}` : '/writings/poems'}>
+          <div class="quote-header-row">
+            <span class="quote-tag-badge" lang="ta">நவில் மிழிகள் • Navil Poems</span>
+            <button type="button" id="refresh-poem-btn" class="quote-refresh-btn" title="Read another poem" aria-label="Read another poem">
+              <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64A81.59,81.59,0,0,0,46.37,90.32a8,8,0,0,1-14.5-6.78,97.56,97.56,0,0,1,164.38-23L224,84.7V56a8,8,0,0,1,16,0ZM217.75,165.68a8,8,0,0,0-10.63,3.86A81.59,81.59,0,0,1,71.19,184.36L44.6,160H72a8,8,0,0,0,0-16H24a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V171.3l27.75,24.16A97.56,97.56,0,0,0,224.13,172.46,8,8,0,0,0,217.75,165.68Z" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="player-display" id="poem-player-display">
+            <p class="player-main-text" id="poem-main-text" lang={initialPoem.main.lang}>{initialPoem.main.text}</p>
+            {initialPoem.sub && (
+              <div class="player-sub-display" id="poem-sub-wrap">
+                <p class="player-sub-text" id="poem-sub-text" lang={initialPoem.sub.lang}>{initialPoem.sub.text}</p>
+              </div>
+            )}
+            <div class="player-read-more-container">
+              <a
+                id="poem-read-link"
+                href={(initialPoem.slug || initialPoem.id) ? `/writings/poems/${encodeURIComponent(initialPoem.slug || initialPoem.id)}` : '/writings/poems'}
+                class="player-read-more-btn"
+                style="text-decoration: none;"
+              >
+                Click here to read more →
+              </a>
+              {initialPoem.classification && (
+                <span class="classification-badge" id="poem-class-badge" style={`color: ${getClassColor(initialPoem.classification)};`}>
+                  {initialPoem.classification}
+                </span>
+              )}
+            </div>
+          </div>
+          <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
+            <span id="poem-theme-label" style="font-weight: 600; color: var(--text-main);">{initialPoem.theme}</span> • Click card to read full poem, or refresh to load another.
+          </div>
+        </section>
+
+        <!-- QUOTE PLAYER -->
+        <section class="bento-card span-6 quote-bento clickable-card" id="home-quote-card" data-href={(initialQuote.slug || initialQuote.id) ? `/writings/quotes/${encodeURIComponent(initialQuote.slug || initialQuote.id)}` : '/writings/quotes'}>
+          <div class="quote-header-row">
+            <span class="quote-tag-badge" lang="ta">நவில் மொழிகள் • Navil Quotes</span>
+            <button type="button" id="refresh-quote-btn" class="quote-refresh-btn" title="Read another reflection" aria-label="Read another reflection">
+              <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64A81.59,81.59,0,0,0,46.37,90.32a8,8,0,0,1-14.5-6.78,97.56,97.56,0,0,1,164.38-23L224,84.7V56a8,8,0,0,1,16,0ZM217.75,165.68a8,8,0,0,0-10.63,3.86A81.59,81.59,0,0,1,71.19,184.36L44.6,160H72a8,8,0,0,0,0-16H24a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V171.3l27.75,24.16A97.56,97.56,0,0,0,224.13,172.46,8,8,0,0,0,217.75,165.68Z" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="player-display" id="quote-player-display">
+            <blockquote class="player-main-text" id="quote-main-text" lang={initialQuote.mainLang}>“{initialQuote.main}”</blockquote>
+            {initialQuote.sub && (
+              <div class="player-sub-display" id="quote-sub-wrap">
+                <p class="player-sub-text" id="quote-sub-text" lang={initialQuote.subLang}>{initialQuote.sub}</p>
+              </div>
+            )}
+            <div class="player-read-more-container">
+              <a
+                id="quote-read-link"
+                href={(initialQuote.slug || initialQuote.id) ? `/writings/quotes/${encodeURIComponent(initialQuote.slug || initialQuote.id)}` : '/writings/quotes'}
+                class="player-read-more-btn"
+                style="text-decoration: none;"
+              >
+                Click here to read more →
+              </a>
+              {initialQuote.classification && (
+                <span class="classification-badge" id="quote-class-badge" style={`color: ${getClassColor(initialQuote.classification)};`}>
+                  {initialQuote.classification}
+                </span>
+              )}
+            </div>
+          </div>
+          <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
+            <span id="quote-tag-label" style="font-weight: 600; color: var(--text-main);">{initialQuote.tag}</span> • Click card to read full quote, or refresh to load another.
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- 5. FEATURED ARTICLES (CRAWLABLE SEMANTIC LINKS FOR GOOGLE & READERS) -->
+    {featuredArticles.length > 0 && (
+      <section class="home-section animate-entry" style="margin-top: 48px;">
+        <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
+          <div class="home-section-badge">கட்டுரைகள் • Featured Articles</div>
+          <h2 class="home-section-title" lang="ta">சிறப்பு இலக்கிய &amp; தொழில்நுட்பக் கட்டுரைகள்</h2>
+          <div class="home-section-desc">Essays on Tamil Linguistics, Typography &amp; Local-First Software</div>
+        </div>
+
+        <div class="bento-grid" style="margin-top: 0;">
+          {featuredArticles.map((art) => {
+            const artTitle = getPrimaryTitle(art, 'articles');
+            const artExcerpt = getPrimaryExcerpt(art, 150);
+            return (
+              <div class="span-6" style="display: flex;">
+                <a
+                  href={`/writings/articles/${encodeURIComponent(art.slug)}`}
+                  class="category-card"
+                  style="width: 100%; min-height: auto; justify-content: space-between;"
+                >
+                  <div class="cat-content">
+                    {art.classification && (
+                      <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        {art.classification}
+                      </div>
+                    )}
+                    <h3 class="cat-title" style="font-size: 1.18rem; line-height: 1.45; margin-bottom: 8px;" lang="ta">
+                      {artTitle}
+                    </h3>
+                    <p class="cat-desc-sub" style="margin: 0; line-height: 1.65;">{artExcerpt}</p>
+                  </div>
+                  <div class="cat-footer" style="margin-top: 12px;">
+                    கட்டுரையைப் படிக்க • Read Article →
+                  </div>
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <AdUnit margin="48px 0 0" />
+  </div>
+
+  <script is:inline define:vars={{ poemsPool, quotesPool }}>
+    (function () {
+      var poemIdx = 0;
+      var quoteIdx = 0;
+
+      var poemCard = document.getElementById('home-poem-card');
+      var quoteCard = document.getElementById('home-quote-card');
+      var refreshPoemBtn = document.getElementById('refresh-poem-btn');
+      var refreshQuoteBtn = document.getElementById('refresh-quote-btn');
+
+      if (poemCard) {
+        poemCard.addEventListener('click', function (e) {
+          if (e.target.closest('button') || e.target.closest('a')) return;
+          var href = poemCard.getAttribute('data-href');
+          if (href) window.location.href = href;
+        });
+      }
+      if (quoteCard) {
+        quoteCard.addEventListener('click', function (e) {
+          if (e.target.closest('button') || e.target.closest('a')) return;
+          var href = quoteCard.getAttribute('data-href');
+          if (href) window.location.href = href;
+        });
+      }
+
+      if (refreshPoemBtn && Array.isArray(poemsPool) && poemsPool.length > 1) {
+        refreshPoemBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          poemIdx = (poemIdx + 1) % poemsPool.length;
+          var p = poemsPool[poemIdx];
+          var mainEl = document.getElementById('poem-main-text');
+          var subEl = document.getElementById('poem-sub-text');
+          var subWrap = document.getElementById('poem-sub-wrap');
+          var linkEl = document.getElementById('poem-read-link');
+          var themeEl = document.getElementById('poem-theme-label');
+          var badgeEl = document.getElementById('poem-class-badge');
+          var pTarget = p.slug || p.id;
+          var url = pTarget ? '/writings/poems/' + encodeURIComponent(pTarget) : '/writings/poems';
+          if (mainEl) mainEl.textContent = p.main.text;
+          if (subEl && subWrap) {
+            if (p.sub && p.sub.text) {
+              subWrap.style.display = '';
+              subEl.textContent = p.sub.text;
+            } else {
+              subWrap.style.display = 'none';
+            }
+          }
+          if (linkEl) linkEl.setAttribute('href', url);
+          if (poemCard) poemCard.setAttribute('data-href', url);
+          if (themeEl) themeEl.textContent = p.theme;
+          if (badgeEl) badgeEl.textContent = p.classification || '';
+        });
+      }
+
+      if (refreshQuoteBtn && Array.isArray(quotesPool) && quotesPool.length > 1) {
+        refreshQuoteBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          quoteIdx = (quoteIdx + 1) % quotesPool.length;
+          var q = quotesPool[quoteIdx];
+          var mainEl = document.getElementById('quote-main-text');
+          var subEl = document.getElementById('quote-sub-text');
+          var subWrap = document.getElementById('quote-sub-wrap');
+          var linkEl = document.getElementById('quote-read-link');
+          var tagEl = document.getElementById('quote-tag-label');
+          var badgeEl = document.getElementById('quote-class-badge');
+          var qTarget = q.slug || q.id;
+          var url = qTarget ? '/writings/quotes/' + encodeURIComponent(qTarget) : '/writings/quotes';
+          if (mainEl) mainEl.textContent = '“' + q.main + '”';
+          if (subEl && subWrap) {
+            if (q.sub) {
+              subWrap.style.display = '';
+              subEl.textContent = q.sub;
+            } else {
+              subWrap.style.display = 'none';
+            }
+          }
+          if (linkEl) linkEl.setAttribute('href', url);
+          if (quoteCard) quoteCard.setAttribute('data-href', url);
+          if (tagEl) tagEl.textContent = q.tag;
+          if (badgeEl) badgeEl.textContent = q.classification || '';
+        });
+      }
+    })();
+  </script>
+</BaseLayout>

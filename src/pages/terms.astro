@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="பயன்பாட்டு விதிமுறைகள் | Terms of Service — Elvan Navil"
+  description="Terms of Service and conditions for using Elvan Navil digital studio, Nammil desktop companion, and online Tamil linguistic tools."
+  canonicalPath="/terms"
+  mobileTitle="விதிமுறைகள்|terms"
+  backUrl="/"
+>
+  <div class="page-view animate-entry" style="max-width: 960px; margin: 0 auto; padding: 16px 20px 40px;">
+    <header class="terms-hero">
+      <div class="terms-badge">சட்ட விதிமுறைகள் • TERMS &amp; CONDITIONS</div>
+      <h1 class="terms-title">பயன்பாட்டு விதிமுறைகள் • Terms of Service</h1>
+      <p class="terms-subtitle">Legal guidelines, intellectual property rights, and terms of software usage</p>
+      <p class="terms-updated">Last Updated: September 2026 • Effective Immediately</p>
+    </header>
+
+    <section class="terms-card">
+      <h2 class="terms-section-title">1. அறிமுகமும் ஒப்புதலும் • Introduction &amp; Acceptance</h2>
+      <p class="terms-p">
+        Welcome to <strong>Elvan Navil</strong> (https://elvannavil.vercel.app), an independent bilingual digital creation studio established and operated by <strong>Elvan Parthasarathy (Jaiprakash P)</strong>.
+      </p>
+      <p class="terms-p">
+        By accessing, browsing, downloading software from, or interacting with this website, you agree to be bound by these Terms of Service, along with our <a href="/privacy">Privacy Policy</a> and <a href="/disclaimer">Disclaimer</a>.
+      </p>
+    </section>
+
+    <section class="terms-card">
+      <h2 class="terms-section-title">2. அறிவுசார் சொத்துரிமை • Intellectual Property Rights</h2>
+      <p class="terms-p">
+        All original creative, literary, aesthetic, and technical materials published across Elvan Navil are the intellectual property of Elvan Parthasarathy unless otherwise attributed:
+      </p>
+      <ul class="terms-ul">
+        <li><strong>கவிதைகள் மற்றும் இலக்கியப் படைப்புகள் (Literature &amp; Poetry):</strong> Original Tamil poems, philosophical quotes, short stories, serialized narratives, and critical essays.</li>
+        <li><strong>வடிவமைப்பு மற்றும் கலைகள் (Visual Arts &amp; Typography):</strong> Bespoke typefaces (Elvan Sans), vector artworks, digital graphics, and illustrations.</li>
+        <li><strong>மென்பொருள் மூலக்குறியீடு (Software Code):</strong> Algorithms powering the Navil Transliterator, Arichuvadi, Piano Synthesizer, and Nammil desktop companion.</li>
+      </ul>
+      <p class="terms-p">
+        Personal, non-commercial reading and sharing with explicit author attribution is warmly permitted. Commercial syndication or unauthorized redistribution without prior written consent is prohibited.
+      </p>
+    </section>
+
+    <section class="terms-card">
+      <h2 class="terms-section-title">3. மென்பொருள் மற்றும் கருவிகள் பயன்பாடு • Software &amp; Tools License</h2>
+      <ul class="terms-ul">
+        <li><strong>நம்மில் கணினிச் செயலி (Nammil Desktop Companion):</strong> Provided free of charge for personal productivity on Windows.</li>
+        <li><strong>உள்ளமைவுத் தனியுரிமை (Client-Side Privacy):</strong> Online tools (Transliterator, Arichuvadi, Piano) execute locally in your browser without external data retention.</li>
+      </ul>
+    </section>
+
+    <section class="terms-card">
+      <h2 class="terms-section-title">4. விளம்பரங்கள் மற்றும் மூன்றாம் தரப்புச் சேவைகள் • Third-Party Services &amp; Advertising</h2>
+      <p class="terms-p">
+        We partner with Google AdSense to serve relevant advertisements. Google uses cookies to display ads based on prior visits. See our <a href="/privacy">Privacy Policy</a> for opt-out details.
+      </p>
+    </section>
+
+    <section class="terms-card">
+      <h2 class="terms-section-title">5. உத்தரவாத மறுப்பும் பொறுப்பு வரம்பும் • Disclaimers &amp; Limitation of Liability</h2>
+      <p class="terms-p">
+        All materials, tools, and downloads provided on Elvan Navil are supplied on an "as is" and "as available" basis without express or implied warranties.
+      </p>
+    </section>
+
+    <section class="terms-card">
+      <h2 class="terms-section-title">6. சட்ட வரம்பும் தொடர்பும் • Governing Law &amp; Contact</h2>
+      <p class="terms-p">
+        These Terms of Service are governed by the laws of India, under the jurisdiction of courts in Tamil Nadu. Reach us via our <a href="/contact">Contact Page</a> or email <strong>jaiprakashpartha@gmail.com</strong>.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .terms-hero { text-align: center; padding: 32px 16px 24px; margin-bottom: 32px; }
+  .terms-badge {
+    display: inline-flex; padding: 6px 16px; border-radius: 100px;
+    background: color-mix(in srgb, var(--text-main) 8%, transparent); color: var(--text-main);
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px;
+  }
+  .terms-title { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; color: var(--text-main); margin: 0 0 8px; }
+  .terms-subtitle { font-size: 1.1rem; color: var(--text-muted); margin: 0 0 12px; }
+  .terms-updated { font-size: 0.8rem; color: var(--text-muted); opacity: 0.7; }
+  .terms-card {
+    background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 20px;
+    padding: 32px; margin-bottom: 24px; line-height: 1.8;
+  }
+  .terms-section-title { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 16px; }
+  .terms-p, .terms-ul { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 14px; }
+  .terms-ul { padding-left: 20px; }
+  .terms-ul li { margin-bottom: 8px; }
+  .terms-card a { color: var(--text-main); text-decoration: underline; }
+</style>

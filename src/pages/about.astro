@@ -1,0 +1,263 @@
+---
+import '../சிறப்புக்கூறுகள்/பற்றி/பற்றி.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdUnit from '../components/astro/AdUnit.astro';
+import profilePic from '../வளங்கள்/இன்ஸ்டாகிராம்/தன்னுரு.png';
+import profileData from '../தரவு/தன்னுரு.json';
+import { getAboutConfig } from '../lib/content';
+
+const about = await getAboutConfig();
+
+const cards = about.cards || [
+  { content: about.identity_text || '' },
+  { content: about.education_text || '' },
+  { content: about.social_text || '' },
+  { content: about.philosophy_lines || '' },
+];
+
+function getSpanClass(index: number) {
+  const mod = index % 4;
+  if (mod === 0) return 'span-7';
+  if (mod === 1) return 'span-5';
+  if (mod === 2) return 'span-5';
+  return 'span-7';
+}
+---
+
+<BaseLayout
+  title="பற்றி | About — Elvan Parthasarathy"
+  description="Learn more about Jaiprakash P (Elvan Parthasarathy), engineering student, writer, software developer, and creator behind Elvan Navil."
+  canonicalPath="/about"
+  ogType="profile"
+  mobileTitle="பற்றி|about"
+  backUrl="/"
+>
+  <div class="about-page page-view animate-entry">
+    <section class="about-hero animate-entry">
+      <div class="hero-avatar-wrapper">
+        <div class="hero-avatar-bg"></div>
+        <img src={profilePic.src} alt={(profileData as any).name} class="hero-avatar" />
+      </div>
+      <h1 class="hero-title" lang="ta">எல்வன் பார்த்தசாரதி</h1>
+      <h2 class="hero-subtitle">{about.hero_title || 'Elvan Parthasarathy'} {about.hero_subtitle || '(Jaiprakash P)'}</h2>
+      {about.portfolio_url && (
+        <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" class="explore-portfolio-btn-unique">
+          Explore Portfolio →
+        </a>
+      )}
+    </section>
+
+    <div class="about-grid animate-entry">
+      {cards.map((card: any, idx: number) => (
+        <div class={`about-card ${card.size || getSpanClass(idx)}`}>
+          <div class="card-text" set:html={card.content} />
+        </div>
+      ))}
+      <div class="about-card span-5">
+        <div class="card-text" set:html={about.identity_text} />
+      </div>
+      <div class="about-card span-7">
+        <div class="card-text" set:html={about.education_text} />
+      </div>
+      <div class="about-card span-12">
+        <div class="card-text" set:html={about.philosophy_lines} />
+      </div>
+    </div>
+
+    <AdUnit margin="48px 0" />
+
+    <div class="contact-footer animate-entry">
+      <div class="contact-info-block">
+        <div class="contact-header">
+          <h3 lang="ta">{about.contact_tamil}</h3>
+          <div class="contact-divider"></div>
+          <h3>{about.contact_english}</h3>
+        </div>
+        <p lang="ta" style="color: #888888; margin: 0;">{about.contact_desc_tamil}</p>
+        <p style="font-size: 0.85rem; color: #888888; margin: 4px 0 0;">{about.contact_desc_english}</p>
+      </div>
+
+      <div class="contact-right-side">
+        <div class="contact-location">
+          <span>📍 {about.location}</span>
+        </div>
+        <div class="contact-socials">
+          <a href="mailto:jaiprakashpartha@gmail.com" class="social-icon-link" aria-label="Email" title="Email">
+            ✉
+          </a>
+          <a href="https://linkedin.com/in/jaiprakashpartha" target="_blank" rel="noreferrer" class="social-icon-link" aria-label="LinkedIn" title="LinkedIn">
+            in
+          </a>
+          <a href="https://github.com/elvanparthasarathy" target="_blank" rel="noreferrer" class="social-icon-link" aria-label="GitHub" title="GitHub">
+            GH
+          </a>
+          <a href="https://instagram.com/elvannavil" target="_blank" rel="noreferrer" class="social-icon-link" aria-label="Instagram" title="Instagram: @elvannavil">
+            IG
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    position: relative;
+  }
+  .about-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 56px;
+    padding-top: 24px;
+  }
+  .hero-avatar-wrapper {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 24px;
+  }
+  .hero-avatar-bg {
+    position: absolute;
+    inset: -15px;
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    filter: blur(30px);
+    opacity: 0.25;
+  }
+  .hero-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid var(--bg-app);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+    color: var(--text-main);
+  }
+  .hero-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0;
+  }
+  .explore-portfolio-btn-unique {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+    padding: 10px 26px;
+    background-color: var(--text-main);
+    color: var(--bg-app);
+    border-radius: 99px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  .about-card {
+    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+    padding: 32px;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  }
+  :global([data-theme='dark']) .about-card {
+    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  .card-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-main);
+  }
+  .contact-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px;
+    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 20%));
+    border-radius: 32px;
+    flex-wrap: wrap;
+    gap: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  }
+  :global([data-theme='dark']) .contact-footer {
+    background: linear-gradient(145deg, var(--bg-panel), color-mix(in srgb, var(--bg-panel), transparent 45%));
+  }
+  .contact-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .contact-divider {
+    width: 2px;
+    height: 24px;
+    background: var(--border-color);
+    opacity: 0.6;
+  }
+  .contact-right-side {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .contact-location {
+    padding: 8px 16px;
+    background: color-mix(in srgb, var(--text-main), transparent 92%);
+    border-radius: 99px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .contact-socials {
+    display: flex;
+    gap: 12px;
+  }
+  .social-icon-link {
+    width: 44px;
+    height: 44px;
+    background: color-mix(in srgb, var(--text-main), transparent 92%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  @media (min-width: 1024px) {
+    .about-grid {
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+    }
+    .span-12 { grid-column: span 12; }
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+  }
+  @media (max-width: 1023px) {
+    .hero-avatar-wrapper { width: 140px; height: 140px; }
+    .contact-footer { flex-direction: column; text-align: center; align-items: center; }
+    .contact-right-side { flex-direction: column; align-items: center; }
+  }
+</style>

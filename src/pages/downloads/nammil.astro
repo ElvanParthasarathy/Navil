@@ -1,0 +1,421 @@
+---
+import '../../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+import { BASE_URL } from '../../lib/content';
+
+const slides = [
+  { src: '/nammil/slide_1.webp', titleTa: 'பல கணக்குகள் • முதன்மை கணக்கு', titleEn: 'Multi Accounts • Primary Session' },
+  { src: '/nammil/slide_2.webp', titleTa: 'பல கணக்குகள் • இரண்டாம் கணக்கு', titleEn: 'Multi Accounts • Secondary Session' },
+  { src: '/nammil/slide_3.webp', titleTa: 'தானியங்கி கோப்பு வரிசையாக்கம்', titleEn: 'Automated Media Sorter' },
+  { src: '/nammil/slide_4.webp', titleTa: 'செயலியில் உடனடி அறிவிப்புகள்', titleEn: 'In-App Notification Feed' },
+  { src: '/nammil/slide_5.webp', titleTa: 'அமைப்புகள் & செயலி விவரம்', titleEn: 'Settings & About Nammil' },
+  { src: '/nammil/slide_6.webp', titleTa: 'நம்மில் • அடையாள முத்திரை', titleEn: 'Nammil • Brand Identity' },
+];
+
+const nammilJsonLd = {
+  '@type': 'SoftwareApplication',
+  name: 'Nammil (நம்மில்)',
+  operatingSystem: 'Windows 10, Windows 11 (64-bit)',
+  applicationCategory: 'SocialNetworkingApplication',
+  softwareVersion: '1.2.9',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@id': `${BASE_URL}/#organization` },
+  description:
+    'A privacy-focused desktop companion for WhatsApp featuring up to 5 isolated multi-account sessions, automated media sorting, and native Windows notifications.',
+};
+---
+
+<BaseLayout
+  title="நம்மில் • Nammil — WhatsApp Desktop Companion | Elvan Navil"
+  description="A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications."
+  canonicalPath="/downloads/nammil"
+  ogImage={`${BASE_URL}/nammil_icon.png`}
+  favicon="/nammil_icon.png"
+  mobileTitle="நம்மில்"
+  backUrl="/downloads"
+  jsonLd={nammilJsonLd}
+>
+  <div class="ms-store-page page-view fadeIn">
+    <div class="ms-ambient-glow" aria-hidden="true"></div>
+
+    <div class="ms-store-container">
+      <!-- 1. APP HERO -->
+      <header class="ms-hero-card animate-entry">
+        <div class="ms-hero-top-row">
+          <div class="ms-app-icon-wrap">
+            <img src="/nammil_icon.png" alt="Nammil App Icon" class="ms-app-icon-img" />
+          </div>
+
+          <div class="ms-hero-title-group">
+            <h1 class="ms-app-title">
+              <span class="ms-title-main" lang="ta">நம்மில்</span>
+              <span class="ms-title-sub">Nammil</span>
+            </h1>
+            <div class="ms-developer-link">
+              <a href="/about" class="ms-dev-item">Elvan Navil</a>
+            </div>
+            <div class="ms-category-row">
+              <span class="ms-category-tag">Social • சமூகம்</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-hero-desc-wrap">
+          <p class="ms-hero-desc" lang="ta">
+            பல கணக்கு அமர்வுகள், தானியங்கி ஊடக ஒழுங்கமைப்பு மற்றும் விண்டோஸின் பிரத்யேக அறிவிப்புகளுடன் வாட்ஸ்அப்பிற்காக நேர்த்தியாக உருவாக்கப்பட்ட தனித்துவ தனியுரிமைக் கணினித் துணைச்செயலி.
+          </p>
+          <p class="ms-hero-desc ms-hero-desc-en">
+            A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.
+          </p>
+        </div>
+
+        <div class="ms-action-row">
+          <a
+            href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe"
+            class="ms-btn-primary"
+            download
+            title="Download Nammil (.exe ~114MB)"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+            </svg>
+            <div class="ms-btn-text">
+              <span class="ms-btn-label">பதிவிறக்கு</span>
+              <span class="ms-btn-sublabel">Download</span>
+            </div>
+          </a>
+          <a
+            href="https://github.com/ElvanParthasarathy/Nammil"
+            target="_blank"
+            rel="noreferrer"
+            class="ms-btn-secondary ms-btn-github"
+            title="View Source on GitHub"
+          >
+            <div class="ms-btn-text">
+              <span class="ms-btn-label">கிட்ஹப்</span>
+              <span class="ms-btn-sublabel">GitHub</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <!-- 2. STORE BODY -->
+      <div class="ms-store-body animate-entry">
+        <!-- SCREENSHOTS -->
+        <section class="ms-section ms-screenshots-section" aria-label="Screenshots">
+          <div class="ms-section-header-link" id="nammil-open-lb">
+            <h2 class="ms-section-title">திரைப்பிடிப்பு • Screenshots</h2>
+            <span class="ms-section-chevron">›</span>
+          </div>
+
+          <div class="ms-screenshots-scroller-wrap">
+            <button type="button" id="nammil-scroll-left" class="ms-scroll-nav-btn prev" style="display: none;" aria-label="Previous screenshots">‹</button>
+            <div class="ms-screenshots-scroller" id="nammil-scroller">
+              {slides.map((slide, idx) => (
+                <div class="ms-shot-frame" data-slide-idx={idx} title="Click to view fullscreen">
+                  <img
+                    src={slide.src}
+                    alt={slide.titleEn}
+                    class="ms-shot-img"
+                    loading={idx < 2 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              ))}
+            </div>
+            <button type="button" id="nammil-scroll-right" class="ms-scroll-nav-btn next" aria-label="Next screenshots">›</button>
+          </div>
+        </section>
+
+        <!-- DESCRIPTION -->
+        <section class="ms-section ms-desc-section">
+          <h2 class="ms-section-title">விளக்கம் • Description</h2>
+          <div class="ms-desc-body">
+            <div class="ms-desc-block ms-desc-ta" lang="ta">
+              <p>
+                வாட்ஸ்அப் கணினிக்கான அதிகாரப்பூர்வ செயலியும் இணையப் பதிப்பும் கடுமையான ஒற்றைக் கணக்குக் கட்டுப்பாட்டைக் கொண்டுள்ளன. தனிப்பட்ட பயன்பாடு, அலுவலகப் பணி, வணிகம் மற்றும் வாடிக்கையாளர் கணக்குகளை நிர்வகிப்போர், பல உலாவி சாளரங்களையும், மறைமுக (incognito) தாவல்களையும் கையாள வேண்டிய கட்டாயத்திற்கு உள்ளாகின்றனர். மேலும், பெறப்படும் படங்கள், குரல் பதிவுகள், மீம்கள், ஆவணங்கள் அனைத்தும் பொதுவான Downloads கோப்புறையில் கலந்து ஒழுங்கின்மையை ஏற்படுத்துகின்றன.
+              </p>
+              <div class="ms-desc-expanded-content" id="nammil-ta-more" style="display: none;">
+                <p>
+                  <strong>நம்மில் (Nammil)</strong> இக்குறைபாடுகளை முழுமையாகக் களைய எல்வன் பார்த்தசாரதியால் எல்வன் நவிலில் உருவாக்கப்பட்டது. நவீன எலக்ட்ரான் கட்டமைப்பில் இயங்கும் இச்செயலி, 5 சுயாதீன வாட்ஸ்அப் கணக்குகள் வரை தனித்தனி அமர்வுகளாகப் பிரித்து குக்கீ மற்றும் நற்சான்றிதழ் முரண்பாடின்றி ஒரே மேடையில் இயக்குகிறது.
+                </p>
+                <p>
+                  உள்வரும் கோப்புகளைத் தானாக வகைப்படுத்தி (<code>Documents\Nammil\Media</code>), உள்ளமைக்கப்பட்ட தேடல் மற்றும் Recycle Bin மீட்புடன் நிர்வகிக்கும் ஊடக உலாவி, 6 பிரத்யேக தமிழ்ப் பெயரிலான விண்டோஸ் ஒலி எச்சரிக்கைகள், 7 மொழி மற்றும் மாற்று-எழுத்துரு நுட்பங்கள், எல்வன் சான்ஸ் அச்சுக்கலை மற்றும் 100% உள்ளூர் தனியுரிமையுடன் விண்டோஸிற்கான நேர்த்தியான அனுபவத்தை நம்மில் வழங்குகிறது.
+                </p>
+              </div>
+              <button type="button" class="ms-show-more-btn" id="nammil-ta-btn" aria-expanded="false">
+                மேலும் காட்டுக • Show more
+              </button>
+            </div>
+
+            <div class="ms-desc-divider"></div>
+
+            <div class="ms-desc-block ms-desc-en" lang="en">
+              <p>
+                Official WhatsApp Desktop and Web clients enforce a strict single-account lock. Users managing personal, business, client, or family accounts are forced to juggle multiple browser windows, incognito profiles, or memory-heavy workarounds. Standard web clients dump every received picture, meme, voice note, and document haphazardly into your generic Downloads folder, while browser notifications fail when background tabs sleep.
+              </p>
+              <div class="ms-desc-expanded-content" id="nammil-en-more" style="display: none;">
+                <p>
+                  <strong>Nammil</strong> was conceived and developed by Elvan Parthasarathy at Elvan Navil to provide a seamless, native desktop solution. Built on modern Electron technology, it lets you safely run up to 5 independent WhatsApp accounts side-by-side in isolated persistent sessions with zero cookie, session, or credential collisions.
+                </p>
+                <p>
+                  Featuring an automated media organizer (<code>Documents\Nammil\Media</code>) with fast search and safe Recycle Bin recovery, 6 bespoke Windows notification chimes, deep localization across 7 language variants powered by navil-engine, bespoke Elvan Sans typography, and 100% offline privacy with zero external telemetry.
+                </p>
+              </div>
+              <button type="button" class="ms-show-more-btn" id="nammil-en-btn" aria-expanded="false">
+                Show more
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="ms-section ms-features-section">
+          <h2 class="ms-section-title">சிறப்பம்சங்கள் • Features</h2>
+          <div class="ms-features-grid">
+            <div class="ms-feature-item">
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">5 தனித்தனி வாட்ஸ்அப் அமர்வுகள்</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">Multi-Account Sandboxing</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">
+                  5 சுயாதீன கணக்குகளை தனித்தனி எலக்ட்ரான் அமர்வுகளில் குக்கீ மற்றும் நற்சான்றிதழ் முரண்பாடின்றி ஒரே நேரத்தில் இயக்கும் வசதி.
+                </p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">
+                  Run up to 5 independent WhatsApp accounts simultaneously in isolated sessions with zero credential collision.
+                </p>
+              </div>
+            </div>
+
+            <div class="ms-feature-item">
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">தானியங்கி ஊடக உலாவி &amp; மீட்பு</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">Media Organizer &amp; Recovery</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">
+                  கோப்புகளைத் தானாகப் படங்கள், ஆவணங்கள், ஒலிகளாகப் பிரித்து, தேடல் மற்றும் Recycle Bin மீட்புடன் நிர்வகிக்கும் வசதி.
+                </p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">
+                  Auto-indexes incoming media into clean folders with instant search, thumbnail previews, format filters, and safe Recycle Bin restore.
+                </p>
+              </div>
+            </div>
+
+            <div class="ms-feature-item">
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">6 தனித்துவ விண்டோஸ் ஒலி எச்சரிக்கைகள்</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">6 Bespoke Sound Chimes</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">
+                  குமிழி, மின்னல், அலை, தென்றல், துளி, துள்ளல் ஆகிய 6 பிரத்யேக ஒலிகள் மற்றும் 1-கிளிக் நேரடி அரட்டை மீட்பு.
+                </p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">
+                  Six bespoke notification chimes (Kumizhi, Minnal, Alai, Thendral, Thuli, Thullal) with per-account sound assignment and 1-click chat focus.
+                </p>
+              </div>
+            </div>
+
+            <div class="ms-feature-item">
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">7 மொழி &amp; மாற்று-எழுத்துரு நுட்பம்</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">Deep Multilingual Localization</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">
+                  ஆங்கிலம், தமிழ், navil-engine இயக்கும் தமிழ் லத்தீன், மலையாளம், மங்கிலிஷ் என 7 மொழி வகைகள்.
+                </p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">
+                  Native localization across 7 language and cross-script transliteration variants powered by navil-engine.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <AdUnit margin="32px 0" />
+
+        <!-- ADDITIONAL INFO -->
+        <section class="ms-additional-info-section">
+          <h2 class="ms-info-main-title">கூடுதல் விவரங்கள் • Additional information</h2>
+          <div class="ms-info-grid">
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Published by</div>
+                <div class="ms-cell-val">Elvan Navil</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Last updated date</div>
+                <div class="ms-cell-val">9/15/2026</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Release date</div>
+                <div class="ms-cell-val">9/1/2026</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Category</div>
+                <div class="ms-cell-val">Social &amp; Productivity</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Approximate size</div>
+                <div class="ms-cell-val">114.2 MB</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Installation</div>
+                <div class="ms-cell-val">Windows 10 and 11 (64-bit). Inno Setup per-user installer (Zero UAC prompts).</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">This app can</div>
+                <ul class="ms-cell-list">
+                  <li>Access your Internet connection</li>
+                  <li>Store and organize local media</li>
+                  <li>Runs 100% offline with zero telemetry</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Installed version</div>
+                <div class="ms-cell-val">1.2.9</div>
+              </div>
+            </div>
+            <div class="ms-info-cell ms-cell-disclaimer">
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Legal disclaimers</div>
+                <div class="ms-cell-val">
+                  Independent open-source software crafted by Elvan Parthasarathy under MIT License; not affiliated with WhatsApp Inc. or Meta Platforms, Inc.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX OVERLAY -->
+  <div id="nammil-lightbox" class="nammil-lightbox" style="display: none;">
+    <div class="nammil-lb-header">
+      <div class="nammil-lb-counter" id="nammil-lb-counter">1 / 6</div>
+      <button type="button" class="nammil-lb-close" id="nammil-lb-close" aria-label="Close">✕</button>
+    </div>
+    <div class="nammil-lb-main-container">
+      <button type="button" class="nammil-lb-nav prev" id="nammil-lb-prev" aria-label="Previous screenshot">‹</button>
+      <button type="button" class="nammil-lb-nav next" id="nammil-lb-next" aria-label="Next screenshot">›</button>
+      <div class="nammil-lb-img-wrapper">
+        <div class="nammil-lb-slide">
+          <img id="nammil-lb-img" src="" alt="" class="nammil-lb-img" />
+        </div>
+      </div>
+    </div>
+    <div class="nammil-lb-filmstrip">
+      {slides.map((s, idx) => (
+        <div class="nammil-lb-fs-item" data-lb-thumb={idx} title={s.titleTa}>
+          <img src={s.src} alt={s.titleEn} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ slides }}>
+    (function () {
+      var scroller = document.getElementById('nammil-scroller');
+      var leftBtn = document.getElementById('nammil-scroll-left');
+      var rightBtn = document.getElementById('nammil-scroll-right');
+      function updateBtns() {
+        if (!scroller) return;
+        if (leftBtn) leftBtn.style.display = scroller.scrollLeft > 12 ? 'flex' : 'none';
+        if (rightBtn) rightBtn.style.display = scroller.scrollLeft < scroller.scrollWidth - scroller.clientWidth - 12 ? 'flex' : 'none';
+      }
+      if (scroller) {
+        scroller.addEventListener('scroll', updateBtns);
+        window.addEventListener('resize', updateBtns);
+        updateBtns();
+      }
+      if (leftBtn && scroller) leftBtn.addEventListener('click', function () { scroller.scrollBy({ left: -420, behavior: 'smooth' }); });
+      if (rightBtn && scroller) rightBtn.addEventListener('click', function () { scroller.scrollBy({ left: 420, behavior: 'smooth' }); });
+
+      function setupToggle(btnId, boxId, moreLabel, lessLabel) {
+        var btn = document.getElementById(btnId);
+        var box = document.getElementById(boxId);
+        if (!btn || !box) return;
+        btn.addEventListener('click', function () {
+          var open = box.style.display !== 'none';
+          box.style.display = open ? 'none' : 'block';
+          btn.textContent = open ? moreLabel : lessLabel;
+          btn.setAttribute('aria-expanded', String(!open));
+        });
+      }
+      setupToggle('nammil-ta-btn', 'nammil-ta-more', 'மேலும் காட்டுக • Show more', 'குறைவாகக் காட்டுக • Show less');
+      setupToggle('nammil-en-btn', 'nammil-en-more', 'Show more', 'Show less');
+
+      var lb = document.getElementById('nammil-lightbox');
+      var lbImg = document.getElementById('nammil-lb-img');
+      var lbCounter = document.getElementById('nammil-lb-counter');
+      var currentIdx = 0;
+
+      function showSlide(idx) {
+        currentIdx = Math.max(0, Math.min(slides.length - 1, idx));
+        if (lbImg) {
+          lbImg.src = slides[currentIdx].src;
+          lbImg.alt = slides[currentIdx].titleEn;
+        }
+        if (lbCounter) lbCounter.textContent = (currentIdx + 1) + ' / ' + slides.length;
+        document.querySelectorAll('[data-lb-thumb]').forEach(function (el) {
+          el.classList.toggle('active', Number(el.getAttribute('data-lb-thumb')) === currentIdx);
+        });
+      }
+      function openLb(idx) {
+        if (!lb) return;
+        showSlide(idx);
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLb() {
+        if (!lb) return;
+        lb.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      document.querySelectorAll('[data-slide-idx]').forEach(function (el) {
+        el.addEventListener('click', function () { openLb(Number(el.getAttribute('data-slide-idx'))); });
+      });
+      var openHeader = document.getElementById('nammil-open-lb');
+      if (openHeader) openHeader.addEventListener('click', function () { openLb(0); });
+      document.getElementById('nammil-lb-close')?.addEventListener('click', closeLb);
+      document.getElementById('nammil-lb-prev')?.addEventListener('click', function () { showSlide(currentIdx - 1); });
+      document.getElementById('nammil-lb-next')?.addEventListener('click', function () { showSlide(currentIdx + 1); });
+      document.querySelectorAll('[data-lb-thumb]').forEach(function (el) {
+        el.addEventListener('click', function () { showSlide(Number(el.getAttribute('data-lb-thumb'))); });
+      });
+      if (lb) lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
+      document.addEventListener('keydown', function (e) {
+        if (!lb || lb.style.display === 'none') return;
+        if (e.key === 'Escape') closeLb();
+        if (e.key === 'ArrowRight') showSlide(currentIdx + 1);
+        if (e.key === 'ArrowLeft') showSlide(currentIdx - 1);
+      });
+    })();
+  </script>
+</BaseLayout>

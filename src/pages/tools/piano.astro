@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+import PianoIsland from '../../components/islands/PianoIsland';
+---
+
+<BaseLayout
+  title="கின்னரப்பெட்டி | Interactive Web Audio Piano — Elvan Navil"
+  description="Play multi-octave scales and chords directly in your browser using Elvan Navil's Web Audio synthesizer piano keyboard."
+  canonicalPath="/tools/piano"
+  mobileTitle="கின்னரப்பெட்டி|piano"
+  isBeta={true}
+  backUrl="/tools"
+>
+  <div class="tool-astro-page">
+    <PianoIsland client:only="react" />
+
+    <section class="tool-editorial-guide" aria-label="Keyboard Synthesizer Notes">
+      <h1 class="tool-guide-title" lang="ta">கின்னரப்பெட்டி • Interactive Web Audio Keyboard</h1>
+      <p lang="ta">
+        உலாவியிலேயே சுரங்களையும் மேலைத்தேய இசைக் குறிப்புகளையும் (Octaves, Chords &amp; Harmonies)
+        நேரடியாக இசைத்துப் பயிற்சி செய்ய உதவும் இலவச இணையப் பியானோ கருவி.
+      </p>
+      <p>
+        Built with Web Audio API oscillators and soundfont synthesis for zero-install ear training,
+        chord exploration, and musical prototyping across desktop keyboards and touch devices.
+      </p>
+    </section>
+
+    <AdUnit margin="36px 0 0" />
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-astro-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+  }
+  .tool-editorial-guide {
+    margin-top: 36px;
+    padding: 24px 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+  }
+  .tool-guide-title {
+    margin: 0 0 12px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+  .tool-editorial-guide p {
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+</style>
