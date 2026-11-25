@@ -31,8 +31,12 @@ import { UI_TA, UI_EN } from '../i18n';
       </h3>
 
       <div class="settings-card">
-        <div class="settings-theme-slider-container" id="settings-lang-slider" data-no-translit>
+        <div class="settings-theme-slider-container is-four-options" id="settings-lang-slider" data-no-translit>
           <div class="slider-indicator" id="settings-lang-slider-indicator"></div>
+
+          <button type="button" class="theme-option" data-lang-choice="tamil">
+            {UI_TA.settingsMenu.modeTamil}
+          </button>
 
           <button type="button" class="theme-option" data-lang-choice="bilingual">
             {UI_TA.settingsMenu.modeBilingual}
@@ -266,6 +270,9 @@ import { UI_TA, UI_EN } from '../i18n';
     z-index: 1;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
+  .settings-theme-slider-container.is-four-options .slider-indicator {
+    width: calc(25% - 3px);
+  }
   .coming-soon-container {
     display: flex;
     flex-direction: column;
@@ -289,6 +296,13 @@ import { UI_TA, UI_EN } from '../i18n';
     .settings-hero {
       text-align: center;
       display: block;
+    }
+    .settings-theme-slider-container.is-four-options .theme-option {
+      font-size: 0.78rem;
+      padding: 10px 4px;
+      gap: 4px;
+      text-align: center;
+      line-height: 1.2;
     }
   }
 </style>

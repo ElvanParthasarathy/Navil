@@ -194,7 +194,7 @@ const fullJsonLd = {
           document.documentElement.setAttribute('data-theme-mode', theme);
 
           var langMode = localStorage.getItem('langMode') || 'bilingual';
-          if (langMode !== 'bilingual' && langMode !== 'tanglish-en' && langMode !== 'tanglish') {
+          if (langMode !== 'bilingual' && langMode !== 'tamil' && langMode !== 'tanglish-en' && langMode !== 'tanglish') {
             langMode = 'bilingual';
           }
           document.documentElement.setAttribute('data-lang-mode', langMode);
@@ -393,9 +393,12 @@ const fullJsonLd = {
 
                 <span class="popup-theme-label" data-ui-pair="settingsMenu.scriptLabel" style="display: block; margin-top: 14px;">{UI_TA.settingsMenu.scriptLabel} • {UI_EN.settingsMenu.scriptLabel}</span>
                 <div class="theme-slider-container" id="desktop-lang-slider" data-no-translit>
-                  <div class="slider-thumb" id="desktop-lang-thumb" style="transform: translateX(0%);"></div>
-                  <div class="slider-option lang-slider-opt" data-lang-choice="bilingual" title={UI_EN.settingsMenu.modeBilingual}>
+                  <div class="slider-thumb lang-slider-thumb" id="desktop-lang-thumb" style="transform: translateX(100%);"></div>
+                  <div class="slider-option lang-slider-opt" data-lang-choice="tamil" title={UI_EN.settingsMenu.modeTamil}>
                     தமிழ்
+                  </div>
+                  <div class="slider-option lang-slider-opt" data-lang-choice="bilingual" title={UI_EN.settingsMenu.modeBilingual}>
+                    த+En
                   </div>
                   <div class="slider-option lang-slider-opt" data-lang-choice="tanglish-en" title={UI_EN.settingsMenu.modeTanglishEn}>
                     Ta+En
@@ -501,6 +504,7 @@ const fullJsonLd = {
                     </svg>
                     <span data-ui-pair="settingsMenu.back">{UI_TA.settingsMenu.back} • {UI_EN.settingsMenu.back}</span>
                   </button>
+                  <button type="button" class="menu-item" data-lang-choice="tamil">{UI_TA.settingsMenu.modeTamil}</button>
                   <button type="button" class="menu-item" data-lang-choice="bilingual">{UI_TA.settingsMenu.modeBilingual}</button>
                   <button type="button" class="menu-item" data-lang-choice="tanglish-en">Ta+En • Tanglish</button>
                   <button type="button" class="menu-item" data-lang-choice="tanglish">Pure Tanglish</button>
@@ -804,7 +808,7 @@ const fullJsonLd = {
             langBtn.dataset.bound = '1';
             langBtn.addEventListener('click', function () {
               track.style.transform = 'translateX(-66.6667%)';
-              dropdown.style.height = '220px';
+              dropdown.style.height = '272px';
             });
           }
           if (backBtn && track && dropdown && !backBtn.dataset.bound) {
@@ -1155,18 +1159,26 @@ const fullJsonLd = {
         padding-inline: 24px;
       }
 
-      /* Dynamic Navil Tanglish Mode Switcher & Paired Gloss Controls */
+      /* Dynamic Script Mode Switcher (Tamil Only / தமிழ்+En / Ta+En / Pure Tanglish) */
+      .slider-thumb.lang-slider-thumb {
+        width: calc((100% - 4px) / 4);
+      }
       .lang-slider-opt {
-        font-size: 10.5px;
+        font-size: 10px;
         font-weight: 700;
         color: var(--text-muted);
-        letter-spacing: -0.01em;
+        letter-spacing: -0.02em;
         white-space: nowrap;
       }
       .lang-slider-opt.active {
         color: var(--accent-text);
       }
 
+      [data-lang-mode="tamil"] .store-card-name-en,
+      [data-lang-mode="tamil"] .home-brand-title-sub,
+      [data-lang-mode="tamil"] .desktop-topbar-sidebar-brand-subtitle,
+      [data-lang-mode="tamil"] .footer-brand-ta,
+      [data-lang-mode="tamil"] [data-dup-tanglish="true"],
       [data-lang-mode^="tanglish"] .store-card-name-en,
       [data-lang-mode^="tanglish"] .home-brand-title-sub,
       [data-lang-mode^="tanglish"] .desktop-topbar-sidebar-brand-subtitle,
@@ -1175,11 +1187,39 @@ const fullJsonLd = {
         display: none !important;
       }
 
+      [data-lang-mode="tamil"] .dictionary-container,
+      [data-lang-mode="tanglish"] .dictionary-container {
+        grid-template-columns: 1fr;
+      }
+
+      [data-lang-mode="tamil"] .sidebar .sub-label,
+      [data-lang-mode="tamil"] .desktop-topbar-subtitle,
+      [data-lang-mode="tamil"] .mobile-topbar .brand-sub,
+      [data-lang-mode="tamil"] .home-brand-title-sub,
+      [data-lang-mode="tamil"] .home-brand-subtitle-en,
+      [data-lang-mode="tamil"] .dict-card-en,
+      [data-lang-mode="tamil"] .cat-title-sub,
+      [data-lang-mode="tamil"] .cat-desc ~ .cat-desc-sub,
+      [data-lang-mode="tamil"] .writings-title-sub,
+      [data-lang-mode="tamil"] .writings-subtitle-en,
+      [data-lang-mode="tamil"] .store-card-desc-en,
+      [data-lang-mode="tamil"] .home-section-title ~ .home-section-desc,
+      [data-lang-mode="tamil"] .ms-title-sub,
+      [data-lang-mode="tamil"] .ms-hero-desc-en,
+      [data-lang-mode="tamil"] .ms-desc-en,
+      [data-lang-mode="tamil"] .ms-desc-divider,
+      [data-lang-mode="tamil"] .ms-feature-title-sep,
+      [data-lang-mode="tamil"] .ms-feature-title-en,
+      [data-lang-mode="tamil"] .ms-feature-divider,
+      [data-lang-mode="tamil"] .ms-feature-copy-en,
+      [data-lang-mode="tamil"] .ms-btn-sublabel,
+      [data-lang-mode="tamil"] .en-sub-inline,
       [data-lang-mode="tanglish"] .sidebar .sub-label,
       [data-lang-mode="tanglish"] .desktop-topbar-subtitle,
       [data-lang-mode="tanglish"] .mobile-topbar .brand-sub,
       [data-lang-mode="tanglish"] .home-brand-title-sub,
       [data-lang-mode="tanglish"] .home-brand-subtitle-en,
+      [data-lang-mode="tanglish"] .dict-card-en,
       [data-lang-mode="tanglish"] .cat-title-sub,
       [data-lang-mode="tanglish"] .cat-desc ~ .cat-desc-sub,
       [data-lang-mode="tanglish"] .writings-title-sub,
@@ -1196,6 +1236,11 @@ const fullJsonLd = {
       [data-lang-mode="tanglish"] .ms-feature-copy-en,
       [data-lang-mode="tanglish"] .ms-btn-sublabel,
       [data-lang-mode="tanglish"] .en-sub-inline {
+        display: none !important;
+      }
+
+      [data-lang-mode="tamil"] .about-card .card-text > p:not([lang="ta"]):has(> em:only-child),
+      [data-lang-mode="tanglish"] .about-card .card-text > p:not([lang="ta"]):has(> em:only-child) {
         display: none !important;
       }
     </style>

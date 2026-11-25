@@ -6,10 +6,18 @@ import {
   lookupUiKey,
 } from '../i18n';
 
-export type LangMode = 'bilingual' | 'tanglish-en' | 'tanglish';
+export type LangMode = 'bilingual' | 'tamil' | 'tanglish-en' | 'tanglish';
 
-const VALID_MODES: ReadonlyArray<LangMode> = ['bilingual', 'tanglish-en', 'tanglish'];
+const VALID_MODES: ReadonlyArray<LangMode> = ['bilingual', 'tamil', 'tanglish-en', 'tanglish'];
 const STORAGE_KEY = 'langMode';
+
+function usesTanglishScript(mode: LangMode): boolean {
+  return mode === 'tanglish-en' || mode === 'tanglish';
+}
+
+function isPureSingleScript(mode: LangMode): boolean {
+  return mode === 'tamil' || mode === 'tanglish';
+}
 
 const TAMIL_CHAR_RE = /[\u0B80-\u0BFF]/;
 
@@ -87,7 +95,7 @@ function shouldSkipContentElement(el: Element | null): boolean {
 }
 
 function formatContentText(original: string, parentEl: Element | null, mode: LangMode): string {
-  if (mode === 'bilingual') return original;
+  if (!usesTanglishScript(mode)) return original;
   if (!TAMIL_CHAR_RE.test(original)) return original;
   const isTitle = Boolean(parentEl && parentEl.closest(CONTENT_TITLE_CASE_SELECTOR));
   return transliterateInlineTamil(original, isTitle ? 'title' : 'sentence');
@@ -99,7 +107,8 @@ function formatContentText(original: string, parentEl: Element | null, mode: Lan
  * cleanly from `UI_TA`, `UI_EN`, and Navil-derived `UI_TANGLISH`.
  */
 function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
-  const taOrRomTree = mode === 'bilingual' ? UI_TA : UI_TANGLISH;
+  const taOrRomTree = usesTanglishScript(mode) ? UI_TANGLISH : UI_TA;
+  const pureSingleScript = isPureSingleScript(mode);
 
   rootBody.querySelectorAll('[data-ui-ta]').forEach((el) => {
     const key = el.getAttribute('data-ui-ta');
@@ -127,12 +136,11 @@ function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
     const enPart = lookupUiKey(UI_EN, key);
     if (!taPart && !enPart) return;
 
-    const nextVal =
-      mode === 'tanglish'
-        ? taPart || enPart
-        : taPart && enPart && taPart !== enPart
-          ? `${taPart}${sep}${enPart}`
-          : taPart || enPart;
+    const nextVal = pureSingleScript
+      ? taPart || enPart
+      : taPart && enPart && taPart !== enPart
+        ? `${taPart}${sep}${enPart}`
+        : taPart || enPart;
 
     if (el.textContent !== nextVal) {
       el.textContent = nextVal;
@@ -164,14 +172,13 @@ function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
     const enPart = lookupUiKey(UI_EN, key);
     const badge = el.getAttribute('data-ui-tip-badge') || '';
     const enCombined = badge ? `${enPart} • ${badge}` : enPart;
-    const nextTip =
-      mode === 'tanglish'
-        ? badge
-          ? `${taPart} (${badge})`
-          : taPart
-        : enCombined
-          ? `${taPart} (${enCombined})`
-          : taPart;
+    const nextTip = pureSingleScript
+      ? badge
+        ? `${taPart} (${badge})`
+        : taPart
+      : enCombined
+        ? `${taPart} (${enCombined})`
+        : taPart;
     if (nextTip && el.getAttribute('data-tip') !== nextTip) {
       el.setAttribute('data-tip', nextTip);
     }
@@ -206,7 +213,7 @@ function processContentAttributes(el: Element, mode: LangMode): void {
 
   for (const attr of Object.keys(cached)) {
     const orig = cached[attr];
-    if (mode === 'bilingual') {
+    if (!usesTanglishScript(mode)) {
       if (el.getAttribute(attr) !== orig) {
         el.setAttribute(attr, orig);
       }
@@ -234,6 +241,8 @@ function syncPlayerDuplicateSubWraps(rootDoc: Document, mode: LangMode): void {
     ['nav-quote-main', 'nav-quote-sub', 'nav-quote-sub-wrap'],
   ];
 
+  const pureSingleScript = isPureSingleScript(mode);
+
   for (const [mainId, subId, wrapId] of pairs) {
     const mainEl = rootDoc.getElementById(mainId);
     const subEl = rootDoc.getElementById(subId);
@@ -251,13 +260,18 @@ function syncPlayerDuplicateSubWraps(rootDoc: Document, mode: LangMode): void {
       '';
     const subLang = subEl.getAttribute('lang') || '';
     const subText = subEl.textContent || '';
+    const mainHasTamil = TAMIL_CHAR_RE.test(origMain);
+    const subHasTamil = TAMIL_CHAR_RE.test(subText);
+
     const subIsAlreadyTranslit =
       subLang === 'en' &&
-      !TAMIL_CHAR_RE.test(subText) &&
-      TAMIL_CHAR_RE.test(origMain) &&
+      !subHasTamil &&
+      mainHasTamil &&
       normalizeCmpPrefix(transliterateInlineTamil(origMain, 'sentence')) === normalizeCmpPrefix(subText);
 
-    if (subIsAlreadyTranslit) {
+    const hideInPureMode = pureSingleScript && mainHasTamil && !subHasTamil;
+
+    if (subIsAlreadyTranslit || hideInPureMode) {
       wrapEl.setAttribute('data-dup-tanglish', 'true');
     } else {
       wrapEl.removeAttribute('data-dup-tanglish');
@@ -325,7 +339,14 @@ export function applyLangModeToRoot(rootDoc: Document = document, forcedMode?: L
 
 export function syncLangSwitcherControls(rootDoc: Document = document, mode?: LangMode): void {
   const activeMode = mode || getSavedLangMode();
-  const idx = activeMode === 'bilingual' ? 0 : activeMode === 'tanglish-en' ? 1 : 2;
+  const idx =
+    activeMode === 'tamil'
+      ? 0
+      : activeMode === 'bilingual'
+        ? 1
+        : activeMode === 'tanglish-en'
+          ? 2
+          : 3;
 
   const desktopThumb = rootDoc.getElementById('desktop-lang-thumb');
   if (desktopThumb) {
@@ -341,12 +362,14 @@ export function syncLangSwitcherControls(rootDoc: Document = document, mode?: La
   const settingsDescEn = rootDoc.getElementById('settings-lang-desc-en');
   if (settingsDescTa || settingsDescEn) {
     const descKey =
-      activeMode === 'bilingual'
-        ? 'modeBilingualDesc'
-        : activeMode === 'tanglish-en'
-          ? 'modeTanglishEnDesc'
-          : 'modeTanglishDesc';
-    const taSrc = activeMode === 'bilingual' ? UI_TA : UI_TANGLISH;
+      activeMode === 'tamil'
+        ? 'modeTamilDesc'
+        : activeMode === 'bilingual'
+          ? 'modeBilingualDesc'
+          : activeMode === 'tanglish-en'
+            ? 'modeTanglishEnDesc'
+            : 'modeTanglishDesc';
+    const taSrc = usesTanglishScript(activeMode) ? UI_TANGLISH : UI_TA;
     if (settingsDescTa) settingsDescTa.textContent = taSrc.settingsPage[descKey];
     if (settingsDescEn) settingsDescEn.textContent = UI_EN.settingsPage[descKey];
   }
@@ -354,11 +377,13 @@ export function syncLangSwitcherControls(rootDoc: Document = document, mode?: La
   const settingsPreviewSample = rootDoc.getElementById('settings-lang-preview-sample');
   if (settingsPreviewSample) {
     settingsPreviewSample.textContent =
-      activeMode === 'bilingual'
-        ? `${UI_TA.settingsPage.previewSample} • ${UI_EN.settingsPage.previewSample}`
-        : activeMode === 'tanglish-en'
-          ? `${UI_TANGLISH.settingsPage.previewSample} • ${UI_EN.settingsPage.previewSample}`
-          : UI_TANGLISH.settingsPage.previewSample;
+      activeMode === 'tamil'
+        ? UI_TA.settingsPage.previewSample
+        : activeMode === 'bilingual'
+          ? `${UI_TA.settingsPage.previewSample} • ${UI_EN.settingsPage.previewSample}`
+          : activeMode === 'tanglish-en'
+            ? `${UI_TANGLISH.settingsPage.previewSample} • ${UI_EN.settingsPage.previewSample}`
+            : UI_TANGLISH.settingsPage.previewSample;
   }
 
   rootDoc.querySelectorAll('[data-lang-choice]').forEach((el) => {

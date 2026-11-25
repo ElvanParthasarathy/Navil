@@ -51,6 +51,7 @@ export interface UITranslations {
     auto: string;
     dark: string;
     modeBilingual: string;
+    modeTamil: string;
     modeTanglishEn: string;
     modeTanglish: string;
     settingsLink: string;
@@ -277,6 +278,7 @@ export interface UITranslations {
     scriptSectionLabel: string;
     appearanceSectionLabel: string;
     modeBilingualDesc: string;
+    modeTamilDesc: string;
     modeTanglishEnDesc: string;
     modeTanglishDesc: string;
     themeAutoDesc: string;

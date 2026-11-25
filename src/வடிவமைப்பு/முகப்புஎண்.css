@@ -870,7 +870,7 @@ body {
   position: absolute;
   bottom: calc(100% + 10px);
   left: 0;
-  width: 100%;
+  width: max(100%, 256px);
   box-sizing: border-box;
   background: var(--bg-panel);
   border-radius: 20px;
@@ -884,7 +884,7 @@ body {
 .settings-popup.side-popup {
   bottom: 0;
   left: calc(100% + 16px);
-  width: 244px;
+  width: 264px;
   animation: popupSlideRight 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 

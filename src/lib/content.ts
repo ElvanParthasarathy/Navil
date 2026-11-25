@@ -482,7 +482,7 @@ export async function getAboutConfig() {
     cards: [
       {
         content:
-          '<p>"ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.</p><p><em>Every idea begins with a simple question — why not?</em></p>',
+          '<p>"ஏன் கூடாது?" என்று வினவுகையில் புதிய எண்ணம் பிறக்கிறது.</p><p class="en-sub-inline"><em>Every idea begins with a simple question — why not?</em></p>',
       },
     ],
   };
