@@ -1,15 +1,15 @@
-import {
-  UI_TA,
-  UI_EN,
-  UI_TANGLISH,
-  transliterateInlineTamil,
-  lookupUiKey,
-} from '../i18n';
+import { UI_TA, UI_EN, UI_TANGLISH, lookupUiKey } from '../i18n';
 
 export type LangMode = 'bilingual' | 'tamil' | 'tanglish-en' | 'tanglish';
 
 const VALID_MODES: ReadonlyArray<LangMode> = ['bilingual', 'tamil', 'tanglish-en', 'tanglish'];
 const STORAGE_KEY = 'langMode';
+
+const UI_ATTR_SELECTOR = '[data-ui-ta], [data-ui-en], [data-ui-pair], [data-ui-placeholder], [data-ui-title], [data-ui-tip]';
+
+let activeObserver: MutationObserver | null = null;
+let pendingMutationFlush = false;
+let isApplying = false;
 
 function usesTanglishScript(mode: LangMode): boolean {
   return mode === 'tanglish-en' || mode === 'tanglish';
@@ -18,61 +18,6 @@ function usesTanglishScript(mode: LangMode): boolean {
 function isPureSingleScript(mode: LangMode): boolean {
   return mode === 'tamil' || mode === 'tanglish';
 }
-
-const TAMIL_CHAR_RE = /[\u0B80-\u0BFF]/;
-
-// Original content text & non-key attributes preserved losslessly per node identity
-const origTextMap = new WeakMap<Text, string>();
-const origAttrMap = new WeakMap<Element, Record<string, string>>();
-
-const SKIP_SELECTOR = [
-  'script',
-  'style',
-  'noscript',
-  'template',
-  'textarea',
-  'input',
-  'code',
-  'pre',
-  'svg',
-  'canvas',
-  '[contenteditable="true"]',
-  '[data-no-translit]',
-  '[data-ui-ta]',
-  '[data-ui-en]',
-  '[data-ui-pair]',
-  '.translit-grid',
-  '.translit-controls-row',
-  '.arichuvadi-subview-container',
-  '[class*="arichuvadi-output"]',
-  '.font-specimen-box',
-].join(',');
-
-const CONTENT_TITLE_CASE_SELECTOR = [
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  '.blog-title',
-  '.blog-classification-badge',
-  '.blog-featured-badge',
-  '.classification-badge',
-  '.series-badge',
-  '.tv-series-title',
-  '.tv-ep-title',
-  '.art-archive-body h3',
-  '.variant-badge',
-  'th',
-  'option',
-].join(',');
-
-const TRANSLIT_ATTRS = ['placeholder', 'data-tip', 'title'] as const;
-
-let activeObserver: MutationObserver | null = null;
-let pendingMutationFlush = false;
-let isApplying = false;
 
 export function normalizeLangMode(raw: string | null | undefined): LangMode {
   if (raw && (VALID_MODES as readonly string[]).includes(raw)) {
@@ -89,22 +34,11 @@ export function getSavedLangMode(): LangMode {
   }
 }
 
-function shouldSkipContentElement(el: Element | null): boolean {
-  if (!el) return true;
-  return Boolean(el.closest(SKIP_SELECTOR));
-}
-
-function formatContentText(original: string, parentEl: Element | null, mode: LangMode): string {
-  if (!usesTanglishScript(mode)) return original;
-  if (!TAMIL_CHAR_RE.test(original)) return original;
-  const isTitle = Boolean(parentEl && parentEl.closest(CONTENT_TITLE_CASE_SELECTOR));
-  return transliterateInlineTamil(original, isTitle ? 'title' : 'sentence');
-}
-
 /**
- * Resolves all declarative locale UI keys (`data-ui-ta`, `data-ui-en`,
+ * Resolves declarative locale UI keys (`data-ui-ta`, `data-ui-en`,
  * `data-ui-pair`, `data-ui-placeholder`, `data-ui-tip`, `data-ui-title`)
- * cleanly from `UI_TA`, `UI_EN`, and Navil-derived `UI_TANGLISH`.
+ * strictly from `UI_TA`, `UI_EN`, and Navil-derived `UI_TANGLISH`.
+ * Never mutates or hides literary, art, or biographical content.
  */
 function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
   const taOrRomTree = usesTanglishScript(mode) ? UI_TANGLISH : UI_TA;
@@ -185,100 +119,6 @@ function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
   });
 }
 
-function processContentAttributes(el: Element, mode: LangMode): void {
-  if (
-    el.hasAttribute('data-ui-placeholder') ||
-    el.hasAttribute('data-ui-tip') ||
-    el.hasAttribute('data-ui-title') ||
-    shouldSkipContentElement(el)
-  ) {
-    return;
-  }
-
-  let cached = origAttrMap.get(el);
-  if (!cached) {
-    const snapshot: Record<string, string> = {};
-    let hasRelevant = false;
-    for (const attr of TRANSLIT_ATTRS) {
-      const val = el.getAttribute(attr);
-      if (val && TAMIL_CHAR_RE.test(val)) {
-        snapshot[attr] = val;
-        hasRelevant = true;
-      }
-    }
-    if (!hasRelevant) return;
-    origAttrMap.set(el, snapshot);
-    cached = snapshot;
-  }
-
-  for (const attr of Object.keys(cached)) {
-    const orig = cached[attr];
-    if (!usesTanglishScript(mode)) {
-      if (el.getAttribute(attr) !== orig) {
-        el.setAttribute(attr, orig);
-      }
-      continue;
-    }
-    const formatted = transliterateInlineTamil(orig, attr === 'placeholder' ? 'sentence' : 'title');
-    if (el.getAttribute(attr) !== formatted) {
-      el.setAttribute(attr, formatted);
-    }
-  }
-}
-
-function normalizeCmpPrefix(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '')
-    .slice(0, 16);
-}
-
-function syncPlayerDuplicateSubWraps(rootDoc: Document, mode: LangMode): void {
-  const pairs: Array<[string, string, string]> = [
-    ['poem-main-text', 'poem-sub-text', 'poem-sub-wrap'],
-    ['quote-main-text', 'quote-sub-text', 'quote-sub-wrap'],
-    ['nav-poem-main', 'nav-poem-sub', 'nav-poem-sub-wrap'],
-    ['nav-quote-main', 'nav-quote-sub', 'nav-quote-sub-wrap'],
-  ];
-
-  const pureSingleScript = isPureSingleScript(mode);
-
-  for (const [mainId, subId, wrapId] of pairs) {
-    const mainEl = rootDoc.getElementById(mainId);
-    const subEl = rootDoc.getElementById(subId);
-    const wrapEl = rootDoc.getElementById(wrapId);
-    if (!wrapEl || !mainEl || !subEl) continue;
-
-    if (mode === 'bilingual') {
-      wrapEl.removeAttribute('data-dup-tanglish');
-      continue;
-    }
-
-    const origMain =
-      (mainEl.firstChild ? origTextMap.get(mainEl.firstChild as Text) : undefined) ||
-      mainEl.textContent ||
-      '';
-    const subLang = subEl.getAttribute('lang') || '';
-    const subText = subEl.textContent || '';
-    const mainHasTamil = TAMIL_CHAR_RE.test(origMain);
-    const subHasTamil = TAMIL_CHAR_RE.test(subText);
-
-    const subIsAlreadyTranslit =
-      subLang === 'en' &&
-      !subHasTamil &&
-      mainHasTamil &&
-      normalizeCmpPrefix(transliterateInlineTamil(origMain, 'sentence')) === normalizeCmpPrefix(subText);
-
-    const hideInPureMode = pureSingleScript && mainHasTamil && !subHasTamil;
-
-    if (subIsAlreadyTranslit || hideInPureMode) {
-      wrapEl.setAttribute('data-dup-tanglish', 'true');
-    } else {
-      wrapEl.removeAttribute('data-dup-tanglish');
-    }
-  }
-}
-
 export function applyLangModeToRoot(rootDoc: Document = document, forcedMode?: LangMode): void {
   const mode = forcedMode || getSavedLangMode();
   const rootEl = rootDoc.documentElement;
@@ -291,46 +131,7 @@ export function applyLangModeToRoot(rootDoc: Document = document, forcedMode?: L
 
   isApplying = true;
   try {
-    // 1. Update structured UI keys cleanly from src/i18n/ta.ts + en.ts + Navil-derived UI_TANGLISH
     applyLocaleUiKeys(rootBody, mode);
-
-    // 2. Dynamically transliterate dynamic Tamil content (poems, quotes, articles, stories, captions)
-    const walker = rootDoc.createTreeWalker(rootBody, NodeFilter.SHOW_TEXT, {
-      acceptNode(node: Node) {
-        const textNode = node as Text;
-        const parent = textNode.parentElement;
-        if (!parent || shouldSkipContentElement(parent)) return NodeFilter.FILTER_REJECT;
-        if (origTextMap.has(textNode)) return NodeFilter.FILTER_ACCEPT;
-        const val = textNode.nodeValue || '';
-        if (!val.trim() || !TAMIL_CHAR_RE.test(val)) return NodeFilter.FILTER_SKIP;
-        return NodeFilter.FILTER_ACCEPT;
-      },
-    });
-
-    const nodes: Text[] = [];
-    let current: Node | null;
-    while ((current = walker.nextNode())) {
-      nodes.push(current as Text);
-    }
-
-    for (const textNode of nodes) {
-      let orig = origTextMap.get(textNode);
-      if (orig === undefined) {
-        orig = textNode.nodeValue || '';
-        origTextMap.set(textNode, orig);
-      }
-
-      const nextVal = formatContentText(orig, textNode.parentElement, mode);
-      if (textNode.nodeValue !== nextVal) {
-        textNode.nodeValue = nextVal;
-      }
-    }
-
-    rootBody.querySelectorAll('[placeholder], [data-tip], [title]').forEach((el) => {
-      processContentAttributes(el, mode);
-    });
-
-    syncPlayerDuplicateSubWraps(rootDoc, mode);
     syncLangSwitcherControls(rootDoc, mode);
   } finally {
     isApplying = false;
@@ -420,6 +221,20 @@ function bindLangChoiceButtons(): void {
   });
 }
 
+function hasAddedUiKeyNodes(mutations: MutationRecord[]): boolean {
+  for (const m of mutations) {
+    if (m.type !== 'childList' || m.addedNodes.length === 0) continue;
+    for (const node of m.addedNodes) {
+      if (node.nodeType !== Node.ELEMENT_NODE) continue;
+      const el = node as Element;
+      if (el.matches(UI_ATTR_SELECTOR) || el.querySelector(UI_ATTR_SELECTOR)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function startMutationObserver(): void {
   if (typeof MutationObserver === 'undefined' || !document.body) return;
   if (activeObserver) {
@@ -428,27 +243,10 @@ function startMutationObserver(): void {
 
   activeObserver = new MutationObserver((mutations) => {
     if (isApplying) return;
-    const mode = getSavedLangMode();
-    if (mode === 'bilingual') return;
+    if (getSavedLangMode() === 'bilingual') return;
+    if (!hasAddedUiKeyNodes(mutations)) return;
 
-    let hasAddedOrTamil = false;
-    for (const m of mutations) {
-      if (m.type === 'childList' && m.addedNodes.length > 0) {
-        hasAddedOrTamil = true;
-        break;
-      }
-      if (m.type === 'characterData') {
-        const txt = m.target as Text;
-        const val = txt.nodeValue || '';
-        if (TAMIL_CHAR_RE.test(val)) {
-          origTextMap.set(txt, val);
-          hasAddedOrTamil = true;
-          break;
-        }
-      }
-    }
-
-    if (hasAddedOrTamil && !pendingMutationFlush) {
+    if (!pendingMutationFlush) {
       pendingMutationFlush = true;
       queueMicrotask(() => {
         pendingMutationFlush = false;
@@ -460,7 +258,6 @@ function startMutationObserver(): void {
   activeObserver.observe(document.body, {
     childList: true,
     subtree: true,
-    characterData: true,
   });
 }
 

@@ -15,7 +15,7 @@ const cards = about.cards || [
     content: `<span lang="ta" style="display: block; margin-bottom: 6px; font-weight: 500;">
     ${UI_TA.about.defaultQuote}
 </span>
-<span class="en-sub-inline" style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
+<span style="display: block; color: var(--text-muted); font-style: italic; font-weight: 500;">
     ${UI_EN.about.defaultQuote}
 </span>`,
   },
@@ -71,11 +71,11 @@ function getSpanClass(index: number) {
       <div class="contact-info-block">
         <div class="contact-header">
           <h3 lang="ta">{about.contact_tamil}</h3>
-          <div class="contact-divider en-sub-inline"></div>
-          <h3 class="en-sub-inline">{about.contact_english}</h3>
+          <div class="contact-divider"></div>
+          <h3>{about.contact_english}</h3>
         </div>
         <p lang="ta" style="color: #888888; margin: 0;">{about.contact_desc_tamil}</p>
-        <p class="en-sub-inline" style="font-size: 0.85rem; color: #888888; margin: 4px 0 0;">{about.contact_desc_english}</p>
+        <p style="font-size: 0.85rem; color: #888888; margin: 4px 0 0;">{about.contact_desc_english}</p>
       </div>
 
       <div class="contact-right-side">
