@@ -61,7 +61,7 @@ const allGenres = Array.from(genresSet).sort();
             >
               {cover && (
                 <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} class="blog-cover-wrapper" style="display: block;">
-                  <img src={cover} alt={item.seriesName} loading="lazy" />
+                  <img src={cover} alt={item.seriesName} loading="lazy" referrerpolicy="no-referrer" onerror="var w=this.parentElement;if(w)w.style.display='none';" />
                   {item.classification && (
                     <span class={`blog-classification-badge ${item.classification === 'அகம்' ? 'agam' : item.classification === 'புறம்' ? 'puram' : ''}`}>
                       {item.classification}
@@ -100,7 +100,7 @@ const allGenres = Array.from(genresSet).sort();
                 </div>
                 <div class="blog-card-footer">
                   <a href={`/writings/stories/series/${encodeURIComponent(item.seriesName)}`} class="blog-read-more" style="text-decoration: none;">
-                    <span data-ui-pair="common.viewSeries">{UI_TA.common.viewSeries} • {UI_EN.common.viewSeries}</span> ({item.parts.length} <span data-ui-en="common.partsSuffix" class="en-sub-inline">{UI_EN.common.partsSuffix}</span>) <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                    <span data-ui-ta="common.openSeries">{UI_TA.common.openSeries}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
                   </a>
                 </div>
               </div>
@@ -124,7 +124,7 @@ const allGenres = Array.from(genresSet).sort();
               <article class="blog-card-item" style="width: 100%;">
                 {cover && (
                   <div class="blog-cover-wrapper">
-                    <img src={cover} alt={title} loading="lazy" />
+                    <img src={cover} alt={title} loading="lazy" referrerpolicy="no-referrer" onerror="var w=this.parentElement;if(w)w.style.display='none';" />
                   </div>
                 )}
                 <div class="blog-card-content">
@@ -132,7 +132,7 @@ const allGenres = Array.from(genresSet).sort();
                   {excerpt && <p class="blog-excerpt">{excerpt}</p>}
                   <div class="blog-card-footer">
                     <span class="blog-read-more">
-                      <span data-ui-pair="common.readStory">{UI_TA.common.readStory} • {UI_EN.common.readStory}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                      <span data-ui-ta="common.readStory">{UI_TA.common.readStory}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
                     </span>
                   </div>
                 </div>

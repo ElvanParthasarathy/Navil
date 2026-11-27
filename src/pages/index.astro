@@ -110,11 +110,11 @@ function getClassColor(name: string) {
                       <span class="store-card-name-en" data-ui-en="home.nammilName">{UI_EN.home.nammilName}</span>
                     </h2>
                     <div class="store-card-meta">
-                      <span data-ui-pair="home.nammilCategory">{UI_TA.home.nammilCategory} • {UI_EN.home.nammilCategory}</span>
+                      <span>Social &amp; Productivity • <span data-ui-ta="nammil.categoryTag">{UI_TA.nammil.categoryTag}</span></span>
                     </div>
                   </div>
                 </div>
-                <div class="store-card-pill" data-ui-ta="home.nammilPrice">{UI_TA.home.nammilPrice}</div>
+                <div class="store-card-pill">Free</div>
               </div>
 
               <div class="store-card-desc-wrap" style="margin-top: 16px;">
@@ -203,7 +203,7 @@ function getClassColor(name: string) {
                 class="player-read-more-btn"
                 style="text-decoration: none;"
               >
-                <span data-ui-pair="common.readMore">{UI_TA.common.readMore} • {UI_EN.common.readMore}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
               </a>
               {initialPoem.classification && (
                 <span class="classification-badge" id="poem-class-badge" style={`color: ${getClassColor(initialPoem.classification)};`}>
@@ -240,7 +240,7 @@ function getClassColor(name: string) {
                 class="player-read-more-btn"
                 style="text-decoration: none;"
               >
-                <span data-ui-pair="common.readMore">{UI_TA.common.readMore} • {UI_EN.common.readMore}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
               </a>
               {initialQuote.classification && (
                 <span class="classification-badge" id="quote-class-badge" style={`color: ${getClassColor(initialQuote.classification)};`}>

@@ -49,10 +49,10 @@ function getSpanClass(index: number) {
         <img src={profilePic.src} alt={(profileData as any).name} class="hero-avatar" />
       </div>
       <h1 class="hero-title" lang="ta" data-ui-ta="about.nameTitle">{UI_TA.about.nameTitle}</h1>
-      <h2 class="hero-subtitle en-sub-inline">{(profileData as any).name} Parthasarathy</h2>
+      <h2 class="hero-subtitle">{(profileData as any).name} Parthasarathy</h2>
       {about.portfolio_url && (
         <a href={about.portfolio_url} target="_blank" rel="noopener noreferrer" class="explore-portfolio-btn-unique">
-          <span data-ui-pair="about.explorePortfolio">{UI_TA.about.explorePortfolio} • {UI_EN.about.explorePortfolio}</span> <Icon name="ArrowRight" weight="regular" />
+          Explore Portfolio <Icon name="ArrowRight" weight="regular" />
         </a>
       )}
     </section>
@@ -150,7 +150,7 @@ function getSpanClass(index: number) {
     font-size: clamp(2rem, 4vw, 2.8rem);
     font-weight: 800;
     margin-bottom: 8px;
-    letter-spacing: -1px;
+    letter-spacing: normal;
     color: var(--text-main);
   }
   .hero-subtitle {

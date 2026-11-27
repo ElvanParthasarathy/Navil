@@ -224,7 +224,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                     className={`mini-like-btn ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
                     onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 >
-                    <Heart weight="regular" className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
+                    <Heart weight={hasLiked ? 'fill' : 'regular'} className="eng-icon" />
                     <span className="mini-count">{likes}</span>
                 </button>
             </div>
@@ -238,7 +238,21 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                 {!hideComments && (
                     <div className="discussion-title">
                         <span className="title-ta">கருத்துரையாடல்</span>
-                        <span className="title-en">{`Discussion (${comments.length})`}</span>
+                        <span className="title-en">{`Discussion (${(() => {
+                            const byId = new Map(comments.map((c) => [c.id, c]));
+                            return comments.filter((c) => {
+                                let cur = c;
+                                const seen = new Set();
+                                while (cur.parentId) {
+                                    if (seen.has(cur.id)) return false;
+                                    seen.add(cur.id);
+                                    const parent = byId.get(cur.parentId);
+                                    if (!parent) return false;
+                                    cur = parent;
+                                }
+                                return true;
+                            }).length;
+                        })()})`}</span>
                     </div>
                 )}
                 
@@ -247,7 +261,7 @@ export const Engagement: React.FC<EngagementProps> = ({ postId, category, hideCo
                         className={`mini-like-btn ${isLiking ? 'liking' : ''} ${hasLiked ? 'active' : ''}`} 
                         onClick={handleLike}
                     >
-                        <Heart weight="regular" className="eng-icon" fill={hasLiked ? 'currentColor' : 'none'} />
+                        <Heart weight={hasLiked ? 'fill' : 'regular'} className="eng-icon" />
                         <span className="mini-count">{likes}</span>
                     </button>
                 </div>

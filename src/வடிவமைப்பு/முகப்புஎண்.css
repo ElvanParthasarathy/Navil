@@ -1,10 +1,9 @@
-/* Local fonts only. Script-balanced optical scaling keeps Latin (100%), Tamil (112%), and Malayalam (88%) visually uniform. */
+/* Local fonts only. Unified ElvanSans renders Latin, Tamil, Malayalam, and all scripts at natural 100% scale. */
 @font-face {
   font-family: "ElvanSans";
   font-style: normal;
   font-weight: 100 400;
-  font-display: block;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
+  font-display: swap;
   src: url('/fonts/ElvanSans-Regular.woff') format('woff'),
        url('/fonts/ElvanSans-Regular.ttf') format('truetype');
 }
@@ -12,8 +11,7 @@
   font-family: "ElvanSans";
   font-style: normal;
   font-weight: 500;
-  font-display: block;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
+  font-display: swap;
   src: url('/fonts/ElvanSans-Medium.woff') format('woff'),
        url('/fonts/ElvanSans-Medium.ttf') format('truetype');
 }
@@ -21,8 +19,7 @@
   font-family: "ElvanSans";
   font-style: normal;
   font-weight: 600;
-  font-display: block;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
+  font-display: swap;
   src: url('/fonts/ElvanSans-SemiBold.woff') format('woff'),
        url('/fonts/ElvanSans-SemiBold.ttf') format('truetype');
 }
@@ -30,8 +27,7 @@
   font-family: "ElvanSans";
   font-style: normal;
   font-weight: 700 900;
-  font-display: block;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
+  font-display: swap;
   src: url('/fonts/ElvanSans-Bold.woff') format('woff'),
        url('/fonts/ElvanSans-Bold.ttf') format('truetype');
 }
@@ -40,7 +36,6 @@
   font-style: italic;
   font-weight: 100 400;
   font-display: swap;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
   src: url('/fonts/ElvanSans-Italic.woff') format('woff'),
        url('/fonts/ElvanSans-Italic.ttf') format('truetype');
 }
@@ -49,7 +44,6 @@
   font-style: italic;
   font-weight: 500;
   font-display: swap;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
   src: url('/fonts/ElvanSans-MediumItalic.woff') format('woff'),
        url('/fonts/ElvanSans-MediumItalic.ttf') format('truetype');
 }
@@ -58,7 +52,6 @@
   font-style: italic;
   font-weight: 600;
   font-display: swap;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
   src: url('/fonts/ElvanSans-SemiBoldItalic.woff') format('woff'),
        url('/fonts/ElvanSans-SemiBoldItalic.ttf') format('truetype');
 }
@@ -67,123 +60,8 @@
   font-style: italic;
   font-weight: 700 900;
   font-display: swap;
-  unicode-range: U+0000-0AFF, U+0C00-0CFF, U+0D80-FFFF;
   src: url('/fonts/ElvanSans-BoldItalic.woff') format('woff'),
        url('/fonts/ElvanSans-BoldItalic.ttf') format('truetype');
-}
-
-/* Tamil block (U+0B80-0BFF): optically balanced (+12%) so Tamil glyph height aligns with Latin & Malayalam */
-@font-face {
-  font-family: "ElvanSans";
-  font-style: normal;
-  font-weight: 100 400;
-  font-display: block;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-Regular.woff') format('woff'),
-       url('/fonts/ElvanSans-Regular.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: normal;
-  font-weight: 500;
-  font-display: block;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-Medium.woff') format('woff'),
-       url('/fonts/ElvanSans-Medium.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: normal;
-  font-weight: 600;
-  font-display: block;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-SemiBold.woff') format('woff'),
-       url('/fonts/ElvanSans-SemiBold.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: normal;
-  font-weight: 700 900;
-  font-display: block;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-Bold.woff') format('woff'),
-       url('/fonts/ElvanSans-Bold.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: italic;
-  font-weight: 100 400;
-  font-display: swap;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-Italic.woff') format('woff'),
-       url('/fonts/ElvanSans-Italic.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: italic;
-  font-weight: 500;
-  font-display: swap;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-MediumItalic.woff') format('woff'),
-       url('/fonts/ElvanSans-MediumItalic.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: italic;
-  font-weight: 600;
-  font-display: swap;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-SemiBoldItalic.woff') format('woff'),
-       url('/fonts/ElvanSans-SemiBoldItalic.ttf') format('truetype');
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: italic;
-  font-weight: 700 900;
-  font-display: swap;
-  size-adjust: 112%;
-  unicode-range: U+0B80-0BFF;
-  src: url('/fonts/ElvanSans-BoldItalic.woff') format('woff'),
-       url('/fonts/ElvanSans-BoldItalic.ttf') format('truetype');
-}
-
-/* Malayalam block (U+0D00-0D7F): optically balanced (88%) to match ElvanSans Tamil & Latin */
-@font-face {
-  font-family: "ElvanSans";
-  font-style: normal;
-  font-weight: 100 500;
-  font-display: swap;
-  size-adjust: 88%;
-  unicode-range: U+0D00-0D7F;
-  src: local("Noto Sans Malayalam"),
-       local("Kohinoor Malayalam"),
-       local("Malayalam Sangam MN"),
-       local("Nirmala UI"),
-       local("NirmalaUI"),
-       local("Kartika");
-}
-@font-face {
-  font-family: "ElvanSans";
-  font-style: normal;
-  font-weight: 600 900;
-  font-display: swap;
-  size-adjust: 88%;
-  unicode-range: U+0D00-0D7F;
-  src: local("Noto Sans Malayalam Bold"),
-       local("Kohinoor Malayalam Bold"),
-       local("Malayalam Sangam MN Bold"),
-       local("Nirmala UI Bold"),
-       local("NirmalaUI-Bold"),
-       local("Nirmala UI"),
-       local("Kartika Bold"),
-       local("Kartika");
 }
 
 /* =========================================
@@ -329,18 +207,18 @@ select {
 }
 
 body {
-  font-family: "ElvanSans", "Noto Sans Malayalam", "Nirmala UI", sans-serif;
+  font-family: "ElvanSans", sans-serif;
   font-optical-sizing: auto;
+  line-height: 1.5;
   background: var(--bg-app);
   color: var(--text-main);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Tamil & Malayalam content share unified ElvanSans script metrics */
+/* Tamil & Malayalam share unified inherited line-height with English */
 [lang="ta"], :lang(ta),
 [lang="ml"], :lang(ml) {
-  font-family: "ElvanSans", "Noto Sans Malayalam", "Nirmala UI", sans-serif;
-  line-height: 1.48;
+  font-family: "ElvanSans", sans-serif;
   letter-spacing: normal !important;
 }
 
@@ -360,7 +238,7 @@ body {
 [lang="ta"] *:not(.arichuvadi-output-vatteluttu):not(.arichuvadi-output-brahmi):not(.arichuvadi-output-ebrahmi):not([class*="arichuvadi-output"]):not(.story-verse-line):not(.story-verse-lines),
 [lang="ml"]:not(.arichuvadi-output-vatteluttu):not(.arichuvadi-output-brahmi):not(.arichuvadi-output-ebrahmi),
 [lang="ml"] *:not(.arichuvadi-output-vatteluttu):not(.arichuvadi-output-brahmi):not(.arichuvadi-output-ebrahmi):not([class*="arichuvadi-output"]):not(.story-verse-line):not(.story-verse-lines) {
-  font-family: "ElvanSans", "Noto Sans Malayalam", "Nirmala UI", sans-serif !important;
+  font-family: "ElvanSans", sans-serif !important;
 }
 
 /* =========================================
@@ -1880,7 +1758,7 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
     font-size: 22px;
     font-weight: 800;
     padding: 0;
-    letter-spacing: -1px;
+    letter-spacing: normal;
     line-height: 1;
     color: var(--text-main);
   }
@@ -1970,8 +1848,9 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
     border-radius: 0 !important;
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
     transition: background 0.3s ease, color 0.3s ease; /* Only animate colors, not layout */
-    will-change: transform;
-    transform: translateZ(0);
+    contain: none;
+    will-change: auto;
+    transform: none;
   }
 
   /* No Scoops in IG Style */

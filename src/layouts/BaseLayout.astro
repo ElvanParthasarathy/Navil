@@ -194,7 +194,7 @@ const fullJsonLd = {
           document.documentElement.setAttribute('data-theme-mode', theme);
 
           var langMode = localStorage.getItem('langMode') || 'bilingual';
-          if (langMode !== 'bilingual' && langMode !== 'tamil' && langMode !== 'tanglish-en' && langMode !== 'tanglish') {
+          if (langMode !== 'bilingual' && langMode !== 'tanglish-en') {
             langMode = 'bilingual';
           }
           document.documentElement.setAttribute('data-lang-mode', langMode);
@@ -229,9 +229,8 @@ const fullJsonLd = {
             type="button"
             id="topbar-sidebar-toggle"
             class="sidebar-toggle-btn"
-            aria-label={UI_EN.nav.collapseSidebar}
-            data-ui-title="nav.collapseSidebar"
-            title={UI_TA.nav.collapseSidebar}
+            aria-label="Collapse Sidebar"
+            title="Collapse Sidebar"
           >
             <Icon name="SidebarSimple" weight="regular" size={19} />
           </button>
@@ -341,7 +340,7 @@ const fullJsonLd = {
                 <img src={profilePic.src} alt="Profile" class="nav-profile-avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;pointer-events:auto;" />
               </span>
               <div class="nav-text-container">
-                <span class="label" data-ui-ta="nav.profile">{UI_TA.nav.profile}</span>
+                <span class="label">Profile</span>
               </div>
             </a>
           </div>
@@ -369,7 +368,7 @@ const fullJsonLd = {
 
             <div id="settings-popup" class="settings-popup" style="display: none;">
               <div class="popup-theme-section">
-                <span class="popup-theme-label" data-ui-pair="settingsMenu.appearanceLabel">{UI_TA.settingsMenu.appearanceLabel} • {UI_EN.settingsMenu.appearanceLabel}</span>
+                <span class="popup-theme-label">Appearance</span>
                 <div class="theme-slider-container">
                   <div class="slider-thumb" id="desktop-slider-thumb" style="transform: translateX(100%);"></div>
                   <div class="slider-option" data-theme-choice="light" title={UI_EN.settingsMenu.light}>
@@ -391,25 +390,19 @@ const fullJsonLd = {
                   </div>
                 </div>
 
-                <span class="popup-theme-label" data-ui-pair="settingsMenu.scriptLabel" style="display: block; margin-top: 14px;">{UI_TA.settingsMenu.scriptLabel} • {UI_EN.settingsMenu.scriptLabel}</span>
+                <span class="popup-theme-label" style="display: block; margin-top: 14px;">Script Mode</span>
                 <div class="theme-slider-container" id="desktop-lang-slider" data-no-translit>
-                  <div class="slider-thumb lang-slider-thumb" id="desktop-lang-thumb" style="transform: translateX(100%);"></div>
-                  <div class="slider-option lang-slider-opt" data-lang-choice="tamil" title={UI_EN.settingsMenu.modeTamil}>
-                    தமிழ்
-                  </div>
+                  <div class="slider-thumb lang-slider-thumb" id="desktop-lang-thumb" style="transform: translateX(0%);"></div>
                   <div class="slider-option lang-slider-opt" data-lang-choice="bilingual" title={UI_EN.settingsMenu.modeBilingual}>
-                    த+En
+                    தமிழ் + En
                   </div>
                   <div class="slider-option lang-slider-opt" data-lang-choice="tanglish-en" title={UI_EN.settingsMenu.modeTanglishEn}>
                     Ta+En
                   </div>
-                  <div class="slider-option lang-slider-opt" data-lang-choice="tanglish" title={UI_EN.settingsMenu.modeTanglish}>
-                    Tanglish
-                  </div>
                 </div>
 
                 <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
-                  <a href="/settings" data-ui-pair="settingsMenu.settingsLink" style="color: var(--text-muted); text-decoration: none;">{UI_TA.settingsMenu.settingsLink} • {UI_EN.settingsMenu.settingsLink}</a>
+                  <a href="/settings" style="color: var(--text-muted); text-decoration: none;">Settings</a>
                   <a href="/about" data-ui-pair="settingsMenu.aboutLink" style="color: var(--text-muted); text-decoration: none;">{UI_TA.settingsMenu.aboutLink} • {UI_EN.settingsMenu.aboutLink}</a>
                   <a href="/privacy" data-ui-pair="settingsMenu.privacyLink" style="color: var(--text-muted); text-decoration: none;">{UI_TA.settingsMenu.privacyLink} • {UI_EN.settingsMenu.privacyLink}</a>
                 </div>
@@ -463,7 +456,7 @@ const fullJsonLd = {
                       <svg class="menu-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" d="M12 2.25c5.385 0 9.75 4.365 9.75 9.75s-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12 6.615 2.25 12 2.25Zm0 1.5v16.5c4.557 0 8.25-3.693 8.25-8.25 0-4.557-3.693-8.25-8.25-8.25Z" clip-rule="evenodd" />
                       </svg>
-                      <span data-ui-pair="settingsMenu.appearanceLabel">{UI_TA.settingsMenu.appearanceLabel} • {UI_EN.settingsMenu.appearanceLabel}</span>
+                      <span>Appearance</span>
                     </span>
                     <svg style="width: 18px; height: 18px; opacity: 0.4;" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
@@ -479,7 +472,7 @@ const fullJsonLd = {
                         <path d="m22 22-5-10-5 10" />
                         <path d="M14 18h6" />
                       </svg>
-                      <span data-ui-pair="settingsMenu.scriptLabel">{UI_TA.settingsMenu.scriptLabel} • {UI_EN.settingsMenu.scriptLabel}</span>
+                      <span>Script Mode</span>
                     </span>
                     <svg style="width: 18px; height: 18px; opacity: 0.4;" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
@@ -491,23 +484,21 @@ const fullJsonLd = {
                     <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
                     </svg>
-                    <span data-ui-pair="settingsMenu.back">{UI_TA.settingsMenu.back} • {UI_EN.settingsMenu.back}</span>
+                    Back
                   </button>
-                  <button type="button" class="menu-item" data-theme-choice="auto"><span data-ui-pair="settingsMenu.autoSystem">{UI_TA.settingsMenu.autoSystem} • {UI_EN.settingsMenu.autoSystem}</span></button>
-                  <button type="button" class="menu-item" data-theme-choice="light"><span data-ui-pair="settingsMenu.lightMode">{UI_TA.settingsMenu.lightMode} • {UI_EN.settingsMenu.lightMode}</span></button>
-                  <button type="button" class="menu-item" data-theme-choice="dark"><span data-ui-pair="settingsMenu.darkMode">{UI_TA.settingsMenu.darkMode} • {UI_EN.settingsMenu.darkMode}</span></button>
+                  <button type="button" class="menu-item" data-theme-choice="auto">Auto System</button>
+                  <button type="button" class="menu-item" data-theme-choice="light">Light Mode</button>
+                  <button type="button" class="menu-item" data-theme-choice="dark">Dark Mode</button>
                 </div>
                 <div class="menu-view" data-no-translit>
                   <button type="button" id="mobile-lang-back-btn" class="menu-item back-btn">
                     <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
                     </svg>
-                    <span data-ui-pair="settingsMenu.back">{UI_TA.settingsMenu.back} • {UI_EN.settingsMenu.back}</span>
+                    Back
                   </button>
-                  <button type="button" class="menu-item" data-lang-choice="tamil">{UI_TA.settingsMenu.modeTamil}</button>
                   <button type="button" class="menu-item" data-lang-choice="bilingual">{UI_TA.settingsMenu.modeBilingual}</button>
-                  <button type="button" class="menu-item" data-lang-choice="tanglish-en">Ta+En • Tanglish</button>
-                  <button type="button" class="menu-item" data-lang-choice="tanglish">Pure Tanglish</button>
+                  <button type="button" class="menu-item" data-lang-choice="tanglish-en">Ta+En</button>
                 </div>
               </div>
             </div>
@@ -617,10 +608,9 @@ const fullJsonLd = {
           if (topZone) topZone.classList.toggle('collapsed', collapsed);
           if (shell) shell.classList.toggle('sidebar-collapsed', collapsed);
           if (toggleBtn) {
-            toggleBtn.setAttribute('data-ui-title', collapsed ? 'nav.expandSidebar' : 'nav.collapseSidebar');
-            if (window.__elvanApplyLangMode) {
-              window.__elvanApplyLangMode(doc);
-            }
+            var toggleLabel = collapsed ? 'Expand Sidebar' : 'Collapse Sidebar';
+            toggleBtn.setAttribute('aria-label', toggleLabel);
+            toggleBtn.setAttribute('title', toggleLabel);
           }
           if (settingsTrigger) settingsTrigger.classList.toggle('collapsed-trigger', collapsed);
           if (settingsPopup) settingsPopup.classList.toggle('side-popup', collapsed);
@@ -808,7 +798,7 @@ const fullJsonLd = {
             langBtn.dataset.bound = '1';
             langBtn.addEventListener('click', function () {
               track.style.transform = 'translateX(-66.6667%)';
-              dropdown.style.height = '272px';
+              dropdown.style.height = '168px';
             });
           }
           if (backBtn && track && dropdown && !backBtn.dataset.bound) {
@@ -888,6 +878,20 @@ const fullJsonLd = {
           if (settingsTrigger) settingsTrigger.classList.remove('active-trigger');
         });
 
+        document.addEventListener('astro:after-swap', function () {
+          document.body.style.overflow = '';
+          syncSidebarUiState(getSidebarCollapsed(), document);
+          syncActiveNavItems(window.location.pathname, document);
+          applyTheme(getSavedTheme(), document);
+          if (typeof window.__elvanApplyLangMode === 'function') {
+            window.__elvanApplyLangMode(document);
+          }
+          var sidebar = document.getElementById('app-sidebar');
+          if (sidebar && !sidebar.classList.contains('mobile-hidden-nav')) {
+            void sidebar.offsetHeight;
+          }
+        });
+
         document.addEventListener('astro:page-load', function () {
           syncSidebarUiState(getSidebarCollapsed(), document);
           syncActiveNavItems(window.location.pathname, document);
@@ -926,9 +930,15 @@ const fullJsonLd = {
         min-width: 0;
         max-width: 100%;
       }
-      ::view-transition-old(root),
-      ::view-transition-new(root) {
+      ::view-transition,
+      ::view-transition-group(*),
+      ::view-transition-image-pair(*),
+      ::view-transition-old(*),
+      ::view-transition-new(*) {
         animation: none !important;
+        animation-duration: 0s !important;
+        transition: none !important;
+        pointer-events: none !important;
       }
 
       /* Direct Phosphor regular/fill SVG swap inside .nav-icon */
@@ -1159,77 +1169,25 @@ const fullJsonLd = {
         padding-inline: 24px;
       }
 
-      /* Dynamic Script Mode Switcher (Tamil Only / தமிழ்+En / Ta+En / Pure Tanglish) */
+      /* Dynamic Script Mode Switcher (தமிழ் + Eng / Ta+En Tanglish + Eng) */
       .slider-thumb.lang-slider-thumb {
-        width: calc((100% - 4px) / 4);
+        width: calc((100% - 4px) / 2);
       }
       .lang-slider-opt {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         color: var(--text-muted);
-        letter-spacing: -0.02em;
+        letter-spacing: normal;
         white-space: nowrap;
       }
       .lang-slider-opt.active {
         color: var(--accent-text);
       }
 
-      [data-lang-mode="tamil"] .store-card-name-en,
-      [data-lang-mode="tamil"] .home-brand-title-sub,
-      [data-lang-mode="tamil"] .desktop-topbar-sidebar-brand-subtitle,
-      [data-lang-mode="tamil"] .footer-brand-ta,
-      [data-lang-mode^="tanglish"] .store-card-name-en,
-      [data-lang-mode^="tanglish"] .home-brand-title-sub,
-      [data-lang-mode^="tanglish"] .desktop-topbar-sidebar-brand-subtitle,
-      [data-lang-mode^="tanglish"] .footer-brand-ta {
-        display: none !important;
-      }
-
-      [data-lang-mode="tamil"] .dictionary-container,
-      [data-lang-mode="tanglish"] .dictionary-container {
-        grid-template-columns: 1fr;
-      }
-
-      [data-lang-mode="tamil"] .sidebar .sub-label,
-      [data-lang-mode="tamil"] .desktop-topbar-subtitle,
-      [data-lang-mode="tamil"] .mobile-topbar .brand-sub,
-      [data-lang-mode="tamil"] .home-brand-title-sub,
-      [data-lang-mode="tamil"] .home-brand-subtitle-en,
-      [data-lang-mode="tamil"] .dict-card-en,
-      [data-lang-mode="tamil"] .cat-title-sub,
-      [data-lang-mode="tamil"] .cat-desc ~ .cat-desc-sub,
-      [data-lang-mode="tamil"] .writings-title-sub,
-      [data-lang-mode="tamil"] .writings-subtitle-en,
-      [data-lang-mode="tamil"] .store-card-desc-en,
-      [data-lang-mode="tamil"] .home-section-title ~ .home-section-desc,
-      [data-lang-mode="tamil"] .ms-title-sub,
-      [data-lang-mode="tamil"] .ms-hero-desc-en,
-      [data-lang-mode="tamil"] .ms-feature-title-sep,
-      [data-lang-mode="tamil"] .ms-feature-title-en,
-      [data-lang-mode="tamil"] .ms-feature-divider,
-      [data-lang-mode="tamil"] .ms-feature-copy-en,
-      [data-lang-mode="tamil"] .ms-btn-sublabel,
-      [data-lang-mode="tamil"] .en-sub-inline,
-      [data-lang-mode="tanglish"] .sidebar .sub-label,
-      [data-lang-mode="tanglish"] .desktop-topbar-subtitle,
-      [data-lang-mode="tanglish"] .mobile-topbar .brand-sub,
-      [data-lang-mode="tanglish"] .home-brand-title-sub,
-      [data-lang-mode="tanglish"] .home-brand-subtitle-en,
-      [data-lang-mode="tanglish"] .dict-card-en,
-      [data-lang-mode="tanglish"] .cat-title-sub,
-      [data-lang-mode="tanglish"] .cat-desc ~ .cat-desc-sub,
-      [data-lang-mode="tanglish"] .writings-title-sub,
-      [data-lang-mode="tanglish"] .writings-subtitle-en,
-      [data-lang-mode="tanglish"] .store-card-desc-en,
-      [data-lang-mode="tanglish"] .home-section-title ~ .home-section-desc,
-      [data-lang-mode="tanglish"] .ms-title-sub,
-      [data-lang-mode="tanglish"] .ms-hero-desc-en,
-      [data-lang-mode="tanglish"] .ms-feature-title-sep,
-      [data-lang-mode="tanglish"] .ms-feature-title-en,
-      [data-lang-mode="tanglish"] .ms-feature-divider,
-      [data-lang-mode="tanglish"] .ms-feature-copy-en,
-      [data-lang-mode="tanglish"] .ms-btn-sublabel,
-      [data-lang-mode="tanglish"] .en-sub-inline {
+      [data-lang-mode="tanglish-en"] .store-card-name-en,
+      [data-lang-mode="tanglish-en"] .home-brand-title-sub,
+      [data-lang-mode="tanglish-en"] .desktop-topbar-sidebar-brand-subtitle,
+      [data-lang-mode="tanglish-en"] .footer-brand-ta {
         display: none !important;
       }
     </style>

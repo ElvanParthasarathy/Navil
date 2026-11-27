@@ -29,9 +29,9 @@ export const getOptimizedImage = (url: string, size: 'thumb' | 'medium' | 'full'
             return `https://drive.google.com/thumbnail?id=${fileId}&sz=w600`;
         }
         
-        // For medium and full sizes, use the lh3 CDN endpoint which supports large images
-        const sizeParam = size === 'medium' ? 's1200' : 's0';
-        return `https://lh3.googleusercontent.com/d/${fileId}=${sizeParam}`;
+        // Drive thumbnail endpoint avoids Chromium ERR_BLOCKED_BY_ORB seen on lh3 URLs
+        const sizeParam = size === 'medium' ? 'w1200' : 'w2000';
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=${sizeParam}`;
     }
 
     // Passthrough for non-drive links (GitHub, External CDNs, etc.)

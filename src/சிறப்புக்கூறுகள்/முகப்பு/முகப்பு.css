@@ -70,7 +70,7 @@
                     font-size: clamp(2.4rem, 5vw, 3.4rem);
                     font-weight: 800;
                     line-height: 1.2;
-                    letter-spacing: -0.03em;
+                    letter-spacing: normal;
                     color: var(--text-main);
                     margin-bottom: 8px;
                 }
@@ -700,7 +700,7 @@
 .home-brand-title {
     font-size: clamp(2.2rem, 4.5vw, 3rem);
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: normal;
     color: var(--text-main);
     margin: 0 0 6px;
     line-height: 1.25;
@@ -729,7 +729,7 @@
     font-weight: 600;
     color: var(--text-muted);
     margin-bottom: 16px;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
 }
 
 .home-brand-subtitle {
@@ -1207,7 +1207,7 @@
     font-weight: 800;
     color: var(--text-main);
     margin: 0;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
 }
 
 .home-section-desc {

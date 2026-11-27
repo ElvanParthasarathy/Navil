@@ -162,7 +162,7 @@
     font-weight: 700;
     color: var(--text-main);
     line-height: 1.15;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
     white-space: nowrap;
 }
 

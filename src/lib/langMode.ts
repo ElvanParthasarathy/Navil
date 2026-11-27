@@ -1,8 +1,8 @@
 import { UI_TA, UI_EN, UI_TANGLISH, lookupUiKey } from '../i18n';
 
-export type LangMode = 'bilingual' | 'tamil' | 'tanglish-en' | 'tanglish';
+export type LangMode = 'bilingual' | 'tanglish-en';
 
-const VALID_MODES: ReadonlyArray<LangMode> = ['bilingual', 'tamil', 'tanglish-en', 'tanglish'];
+const VALID_MODES: ReadonlyArray<LangMode> = ['bilingual', 'tanglish-en'];
 const STORAGE_KEY = 'langMode';
 
 const UI_ATTR_SELECTOR = '[data-ui-ta], [data-ui-en], [data-ui-pair], [data-ui-placeholder], [data-ui-title], [data-ui-tip]';
@@ -12,11 +12,7 @@ let pendingMutationFlush = false;
 let isApplying = false;
 
 function usesTanglishScript(mode: LangMode): boolean {
-  return mode === 'tanglish-en' || mode === 'tanglish';
-}
-
-function isPureSingleScript(mode: LangMode): boolean {
-  return mode === 'tamil' || mode === 'tanglish';
+  return mode === 'tanglish-en';
 }
 
 export function normalizeLangMode(raw: string | null | undefined): LangMode {
@@ -42,7 +38,6 @@ export function getSavedLangMode(): LangMode {
  */
 function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
   const taOrRomTree = usesTanglishScript(mode) ? UI_TANGLISH : UI_TA;
-  const pureSingleScript = isPureSingleScript(mode);
 
   rootBody.querySelectorAll('[data-ui-ta]').forEach((el) => {
     const key = el.getAttribute('data-ui-ta');
@@ -70,9 +65,8 @@ function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
     const enPart = lookupUiKey(UI_EN, key);
     if (!taPart && !enPart) return;
 
-    const nextVal = pureSingleScript
-      ? taPart || enPart
-      : taPart && enPart && taPart !== enPart
+    const nextVal =
+      taPart && enPart && taPart !== enPart
         ? `${taPart}${sep}${enPart}`
         : taPart || enPart;
 
@@ -106,13 +100,7 @@ function applyLocaleUiKeys(rootBody: HTMLElement, mode: LangMode): void {
     const enPart = lookupUiKey(UI_EN, key);
     const badge = el.getAttribute('data-ui-tip-badge') || '';
     const enCombined = badge ? `${enPart} • ${badge}` : enPart;
-    const nextTip = pureSingleScript
-      ? badge
-        ? `${taPart} (${badge})`
-        : taPart
-      : enCombined
-        ? `${taPart} (${enCombined})`
-        : taPart;
+    const nextTip = enCombined ? `${taPart} (${enCombined})` : taPart;
     if (nextTip && el.getAttribute('data-tip') !== nextTip) {
       el.setAttribute('data-tip', nextTip);
     }
@@ -140,14 +128,7 @@ export function applyLangModeToRoot(rootDoc: Document = document, forcedMode?: L
 
 export function syncLangSwitcherControls(rootDoc: Document = document, mode?: LangMode): void {
   const activeMode = mode || getSavedLangMode();
-  const idx =
-    activeMode === 'tamil'
-      ? 0
-      : activeMode === 'bilingual'
-        ? 1
-        : activeMode === 'tanglish-en'
-          ? 2
-          : 3;
+  const idx = activeMode === 'bilingual' ? 0 : 1;
 
   const desktopThumb = rootDoc.getElementById('desktop-lang-thumb');
   if (desktopThumb) {
@@ -162,14 +143,7 @@ export function syncLangSwitcherControls(rootDoc: Document = document, mode?: La
   const settingsDescTa = rootDoc.getElementById('settings-lang-desc-ta');
   const settingsDescEn = rootDoc.getElementById('settings-lang-desc-en');
   if (settingsDescTa || settingsDescEn) {
-    const descKey =
-      activeMode === 'tamil'
-        ? 'modeTamilDesc'
-        : activeMode === 'bilingual'
-          ? 'modeBilingualDesc'
-          : activeMode === 'tanglish-en'
-            ? 'modeTanglishEnDesc'
-            : 'modeTanglishDesc';
+    const descKey = activeMode === 'bilingual' ? 'modeBilingualDesc' : 'modeTanglishEnDesc';
     const taSrc = usesTanglishScript(activeMode) ? UI_TANGLISH : UI_TA;
     if (settingsDescTa) settingsDescTa.textContent = taSrc.settingsPage[descKey];
     if (settingsDescEn) settingsDescEn.textContent = UI_EN.settingsPage[descKey];
@@ -177,14 +151,8 @@ export function syncLangSwitcherControls(rootDoc: Document = document, mode?: La
 
   const settingsPreviewSample = rootDoc.getElementById('settings-lang-preview-sample');
   if (settingsPreviewSample) {
-    settingsPreviewSample.textContent =
-      activeMode === 'tamil'
-        ? UI_TA.settingsPage.previewSample
-        : activeMode === 'bilingual'
-          ? `${UI_TA.settingsPage.previewSample} • ${UI_EN.settingsPage.previewSample}`
-          : activeMode === 'tanglish-en'
-            ? `${UI_TANGLISH.settingsPage.previewSample} • ${UI_EN.settingsPage.previewSample}`
-            : UI_TANGLISH.settingsPage.previewSample;
+    const taSrc = usesTanglishScript(activeMode) ? UI_TANGLISH : UI_TA;
+    settingsPreviewSample.textContent = taSrc.settingsPage.previewSample;
   }
 
   rootDoc.querySelectorAll('[data-lang-choice]').forEach((el) => {

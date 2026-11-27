@@ -132,7 +132,7 @@ function getClassColor(name: string) {
           )}
           <div class="player-read-more-container">
             <a id="nav-poem-link" href={(initialPoem.slug || initialPoem.id) ? `/writings/poems/${encodeURIComponent(initialPoem.slug || initialPoem.id)}` : '/writings/poems'} class="player-read-more-btn" style="text-decoration:none;">
-              <span data-ui-pair="common.readMore">{UI_TA.common.readMore} • {UI_EN.common.readMore}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+              Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
             </a>
             {initialPoem.classification && (
               <span class="classification-badge" id="nav-poem-class-badge" style={`color: ${getClassColor(initialPoem.classification)};`}>
@@ -162,7 +162,7 @@ function getClassColor(name: string) {
           )}
           <div class="player-read-more-container">
             <a id="nav-quote-link" href={(initialQuote.slug || initialQuote.id) ? `/writings/quotes/${encodeURIComponent(initialQuote.slug || initialQuote.id)}` : '/writings/quotes'} class="player-read-more-btn" style="text-decoration:none;">
-              <span data-ui-pair="common.readMore">{UI_TA.common.readMore} • {UI_EN.common.readMore}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+              Click here to read more <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
             </a>
             {initialQuote.classification && (
               <span class="classification-badge" id="nav-quote-class-badge" style={`color: ${getClassColor(initialQuote.classification)};`}>

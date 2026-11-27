@@ -170,21 +170,14 @@ const articleJsonLd = {
   backUrl={`/writings/${category}`}
   jsonLd={articleJsonLd}
 >
-  <div class="page-view fadeIn" id="reading-article-root" style="max-width: 1200px; margin: 0 auto; padding: 10px 20px 60px;">
-    <nav aria-label="Breadcrumb" style="margin-bottom: 20px; font-size: 0.88rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px;">
-      <a href="/" style="color: var(--text-muted); text-decoration: none;" data-ui-pair="reader.breadcrumbHome" data-ui-sep=" / ">{UI_TA.reader.breadcrumbHome} / {UI_EN.reader.breadcrumbHome}</a>
-      <span>›</span>
-      <a href="/writings" style="color: var(--text-muted); text-decoration: none;" data-ui-pair="reader.breadcrumbWritings" data-ui-sep=" / ">{UI_TA.reader.breadcrumbWritings} / {UI_EN.reader.breadcrumbWritings}</a>
-      <span>›</span>
-      <a href={`/writings/${category}`} style="color: var(--text-muted); text-decoration: none;" data-ui-pair={`writingCategories.${category}.title`}>{meta.titleTa} • {meta.titleEn}</a>
-    </nav>
+  <div class="page-view fadeIn" id="reading-article-root" style="max-width: 1200px; margin: 0 auto; padding: 10px 20px 100px;">
 
-    <div class="reader-header-area" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
+    <div class="reader-header-area" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 40px; flex-wrap: wrap;">
       <h1
         id="primary-reading-title"
         data-original-title={primaryTitle}
         lang={variants[0]?.lang || 'ta'}
-        style="font-size: clamp(1.8rem, 3.5vw, 2.3rem); font-weight: 800; line-height: 1.38; color: var(--text-main); margin: 0; letter-spacing: -0.02em; max-width: 820px;"
+        style="font-size: 2rem; font-weight: 700; line-height: 1.2; color: var(--text-main); margin: 0; letter-spacing: normal; max-width: 80%;"
       >
         {primaryTitle}
       </h1>
@@ -192,31 +185,23 @@ const articleJsonLd = {
 
     <article class="animate-entry" style="max-width: 800px;">
       {!isMinimal && coverImg && category !== 'poems' && category !== 'quotes' && (
-        <div style={`width: 100%; border-radius: ${isStory ? '12px' : '24px'}; overflow: hidden; margin-bottom: 36px;`}>
-          <img src={coverImg} alt={primaryTitle} style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;" />
+        <div style={`width: 100%; border-radius: ${isStory ? '0' : '24px'}; overflow: hidden; margin-bottom: 40px;`}>
+          <img src={coverImg} alt={primaryTitle} referrerpolicy="no-referrer" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;" onerror="var w=this.parentElement;if(w)w.style.display='none';" />
         </div>
       )}
 
-      <header style="margin-bottom: 32px; text-align: left;">
-        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--text-muted); font-size: 0.92rem; font-weight: 500;">
+      <header style="margin-bottom: 40px; text-align: left;">
+        <div style="display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 8px; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; font-weight: 500;">
           {formattedDate && (
-            <span style="display: inline-flex; align-items: center; gap: 6px;">
-              <Icon name="CalendarBlank" weight="regular" size={16} />
-              {formattedDate}
-            </span>
-          )}
-          {post.classification && (
-            <span style="padding: 2px 10px; border-radius: 99px; background: color-mix(in srgb, var(--text-main) 8%, transparent); color: var(--text-main); font-size: 0.8rem; font-weight: 600;">
-              {post.classification}
-            </span>
+            <>
+              <Icon name="CalendarBlank" weight="regular" />
+              <span>{formattedDate}</span>
+            </>
           )}
           {post.series_name && (
-            <a
-              href={`/writings/stories/series/${encodeURIComponent(post.series_name)}`}
-              style="color: var(--text-main); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;"
-            >
-              • {post.series_name} — Part {post.series_part}
-            </a>
+            <span style="color: var(--text-main);">
+              • <a href={`/writings/stories/series/${encodeURIComponent(post.series_name)}`} style="color: inherit; text-decoration: none;">{post.series_name} — Part {post.series_part}</a>
+            </span>
           )}
           {tags.length > 0 && <span>• {tags.join(', ')}</span>}
         </div>
@@ -226,12 +211,16 @@ const articleJsonLd = {
         <div style="display: flex; flex-direction: column; gap: 40px;">
           {preparedVariants.map((v) => {
             const isMulti = preparedVariants.length > 1;
+            const hasNextVariant = isMulti && v.vIndex < preparedVariants.length - 1;
             const altKeys = Object.keys(v.alternatives);
+            const bodyFormatClass = isStory
+              ? 'story-format'
+              : (category === 'poems' || category === 'quotes' ? 'verse-format' : 'prose-format');
             return (
               <div
                 class="variant-block"
                 data-variant-idx={v.vIndex}
-                style={isMulti ? 'padding-bottom: 36px; margin-bottom: 12px; border-bottom: 2px dashed var(--border-light);' : ''}
+                style={hasNextVariant ? 'padding-bottom: 40px; border-bottom: 2px dashed var(--border-light);' : ''}
               >
                 {!isStory && (
                   <div class="variant-header-row">
@@ -242,7 +231,7 @@ const articleJsonLd = {
                     {altKeys.map((k) => {
                       const alt = v.alternatives[k];
                       return (
-                        <div style="display: inline-flex; align-items: center; gap: 6px;">
+                        <>
                           <label class="transl-switch" title={alt.label}>
                             <input
                               type="checkbox"
@@ -252,15 +241,15 @@ const articleJsonLd = {
                             />
                             <span class="transl-slider"></span>
                           </label>
-                          <span class="transl-switch-label">
+                          <span class="transl-switch-label" style={alt.isBeta ? 'display: inline-flex; align-items: center; gap: 4px;' : ''}>
                             {alt.label}
                             {alt.isBeta && (
-                              <span style="margin-left: 4px; font-size: 0.55rem; font-weight: 700; padding: 1px 4px; border-radius: 4px; background: color-mix(in srgb, var(--text-main) 12%, transparent); color: var(--text-muted);">
+                              <span style="font-size: 0.55rem; font-weight: 700; letter-spacing: 0.5px; padding: 1px 4px; border-radius: 4px; background: color-mix(in srgb, var(--text-main) 12%, transparent); color: var(--text-muted); line-height: 1.1; text-transform: uppercase;">
                                 BETA
                               </span>
                             )}
                           </span>
-                        </div>
+                        </>
                       );
                     })}
                   </div>
@@ -271,7 +260,7 @@ const articleJsonLd = {
                     class="variant-sub-title"
                     data-vidx={v.vIndex}
                     lang={v.lang}
-                    style={`font-size: ${isStory ? '2rem' : '1.6rem'}; font-weight: 700; line-height: 1.3; color: var(--text-main); margin: 0 0 14px;`}
+                    style={`font-size: ${isStory ? '2.5rem' : '2rem'}; font-weight: ${isStory ? '800' : '700'}; font-family: ${isStory ? 'serif' : 'inherit'}; line-height: 1.2; color: var(--text-main); margin: 0 0 16px;`}
                   >
                     {v.title}
                   </h2>
@@ -279,17 +268,17 @@ const articleJsonLd = {
 
                 {v.author && (
                   <div
-                    class="variant-author"
+                    class="reader-variant-author"
                     data-vidx={v.vIndex}
                     lang={v.lang}
-                    style="font-size: 1rem; color: var(--text-muted); font-style: italic; margin-bottom: 16px;"
+                    style="font-size: 1rem; color: var(--text-muted); font-style: italic; margin-bottom: 16px; text-align: left;"
                   >
                     — {v.author}
                   </div>
                 )}
 
                 <div
-                  class={`rich-content-body variant-body ${isStory ? 'story-format' : ''}`}
+                  class={`rich-content-body variant-body ${bodyFormatClass}`}
                   data-vidx={v.vIndex}
                   data-orig-lang={v.lang}
                   lang={v.lang}
@@ -306,16 +295,19 @@ const articleJsonLd = {
             .filter((l) => contentObj[l]?.title || contentObj[l]?.body)
             .map((langCode) => {
               const lContent = contentObj[langCode] || {};
+              const fallbackFormatClass = isStory
+                ? 'story-format'
+                : (category === 'poems' || category === 'quotes' ? 'verse-format' : 'prose-format');
               return (
                 <div>
                   {lContent.title && lContent.title !== primaryTitle && (
-                    <h2 lang={langCode} style="font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px;">
+                    <h2 lang={langCode} style="font-size: 2.5rem; font-weight: 700; line-height: 1.2; color: var(--text-main); margin: 0 0 16px;">
                       {lContent.title}
                     </h2>
                   )}
                   <div
                     lang={langCode}
-                    class="rich-content-body"
+                    class={`rich-content-body ${fallbackFormatClass}`}
                     style="font-size: 1.15rem; line-height: 1.9; color: var(--text-main); white-space: pre-wrap;"
                     set:html={textToHtml(lContent.body) || '<p>No content available.</p>'}
                   />
@@ -327,15 +319,25 @@ const articleJsonLd = {
 
       {!isMinimal && coverImg && (category === 'poems' || category === 'quotes') && (
         <div style="width: 100%; border-radius: 24px; overflow: hidden; margin-top: 40px; background: var(--bg-panel);">
-          <img src={coverImg} alt={primaryTitle} style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;" />
+          <img src={coverImg} alt={primaryTitle} referrerpolicy="no-referrer" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;" onerror="var w=this.parentElement;if(w)w.style.display='none';" />
         </div>
       )}
 
       {(post.urai || post.notes) && !post.is_private && (
-        <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-light);">
-          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px;">
+        <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-light);">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
             {post.urai && (
               <button type="button" class="expand-pill" id="btn-toggle-urai">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  {isLocked ? (
+                    <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
+                  ) : (
+                    <>
+                      <line class="pill-plus-v" x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </>
+                  )}
+                </svg>
                 <div class="pill-text-stack">
                   <span class="pill-ta" data-ui-ta="reader.meaning">{UI_TA.reader.meaning}</span>
                   <span class="pill-en en-sub-inline" data-ui-en="reader.meaning">{UI_EN.reader.meaning}</span>
@@ -344,6 +346,16 @@ const articleJsonLd = {
             )}
             {post.notes && (
               <button type="button" class="expand-pill" id="btn-toggle-notes">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  {isLocked ? (
+                    <path d="M7 11V7a5 5 0 0 1 9.9-1 M5 11h14v10H5z" />
+                  ) : (
+                    <>
+                      <line class="pill-plus-v" x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </>
+                  )}
+                </svg>
                 <div class="pill-text-stack">
                   <span class="pill-ta" data-ui-ta="reader.notes">{UI_TA.reader.notes}</span>
                   <span class="pill-en en-sub-inline" data-ui-en="reader.notes">{UI_EN.reader.notes}</span>
@@ -353,29 +365,28 @@ const articleJsonLd = {
           </div>
 
           {isLocked ? (
-            <div id="urai-lock-box" style="display: none; text-align: center; padding: 20px 0; max-width: 320px; margin: 0 auto;">
-              <p style="color: var(--text-muted); margin-bottom: 12px;">
-                <span data-ui-ta="reader.lockedPrompt">{UI_TA.reader.lockedPrompt}</span>
-                <span class="en-sub-inline" style="display: block; margin-top: 4px;" data-ui-en="reader.lockedPrompt">{UI_EN.reader.lockedPrompt}</span>
+            <div id="urai-lock-box" style="display: none; text-align: center; padding: 30px 0; max-width: 300px; margin: 0 auto;">
+              <p style="color: var(--text-muted); margin-bottom: 20px;">
+                This section is locked. Enter password to view.
               </p>
               {post.uraiNotesPasswordHint && (
                 <p style="font-style: italic; font-size: 0.9rem; color: var(--text-main); opacity: 0.8; margin-bottom: 12px;">
-                  <span data-ui-pair="reader.hintPrefix">{UI_TA.reader.hintPrefix} • {UI_EN.reader.hintPrefix}</span> {post.uraiNotesPasswordHint}
+                  Hint: {post.uraiNotesPasswordHint}
                 </p>
               )}
-              <form id="urai-unlock-form" style="display: flex; flex-direction: column; gap: 10px;">
+              <form id="urai-unlock-form" style="display: flex; flex-direction: column; gap: 12px;">
                 <input
                   id="urai-pwd-input"
                   type="password"
-                  data-ui-placeholder="reader.passwordPlaceholder"
-                  placeholder={UI_TA.reader.passwordPlaceholder}
-                  style="padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); background: var(--bg-panel); color: var(--text-main);"
+                  class="pwd-input"
+                  placeholder="Enter Password"
+                  style="padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); background: var(--bg-panel); color: var(--text-main); outline: none; width: 100%;"
                 />
-                <button type="submit" style="padding: 12px; border-radius: 12px; border: none; background: var(--text-main); color: var(--bg-app); cursor: pointer; font-weight: bold;" data-ui-pair="reader.unlockBtn">
-                  {UI_TA.reader.unlockBtn} • {UI_EN.reader.unlockBtn}
+                <button type="submit" style="padding: 12px; border-radius: 12px; border: none; background: var(--text-main); color: var(--bg-app); cursor: pointer; font-weight: bold; width: 100%;">
+                  Unlock
                 </button>
               </form>
-              <p id="urai-pwd-error" style="display: none; color: #ff4444; font-size: 0.85rem; margin-top: 10px;" data-ui-pair="reader.wrongPassword">{UI_TA.reader.wrongPassword} • {UI_EN.reader.wrongPassword}</p>
+              <p id="urai-pwd-error" style="display: none; color: #ff4444; font-size: 0.85rem; margin-top: 12px;">Incorrect password.</p>
             </div>
           ) : null}
 
@@ -389,40 +400,27 @@ const articleJsonLd = {
       )}
 
       {isStory && (prevPart || nextPart) && (
-        <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 16px;">
-          <h4 style="margin: 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">
-            {post.series_name} — <span data-ui-pair="reader.continueReading">{UI_TA.reader.continueReading} • {UI_EN.reader.continueReading}</span>
+        <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; gap: 16px;">
+          <h4 style="margin: 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px;">
+            {post.series_name} — Continue Reading
           </h4>
-          <div style="display: flex; gap: 12px; align-items: center; justify-content: center;">
+          <div class="pagination-nav-pill" style="display: flex; gap: 12px; align-items: center; justify-content: center; width: auto;">
             {prevPart && (
-              <a href={`/writings/stories/${encodeURIComponent(prevPart.slug)}`} class="page-btn prev-btn" style="text-decoration: none; gap: 6px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
+              <a href={`/writings/stories/${encodeURIComponent(prevPart.slug)}`} class="page-btn prev-btn" style="text-decoration: none; display: inline-flex; align-items: center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
                 <span data-ui-ta="common.partLabel">{UI_TA.common.partLabel}</span> {prevPart.series_part}
               </a>
             )}
             {nextPart && (
-              <a href={`/writings/stories/${encodeURIComponent(nextPart.slug)}`} class="page-btn next-btn" style="text-decoration: none; gap: 6px;">
+              <a href={`/writings/stories/${encodeURIComponent(nextPart.slug)}`} class="page-btn next-btn" style="text-decoration: none; display: inline-flex; align-items: center;">
                 <span data-ui-ta="common.partLabel">{UI_TA.common.partLabel}</span> {nextPart.series_part}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
               </a>
             )}
           </div>
         </div>
       )}
 
-      <!-- Literary context block for rich internal linking -->
-      <section style="margin-top: 40px; padding: 20px 24px; background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border-light); font-size: 0.93rem; line-height: 1.7; color: var(--text-muted);">
-        <h3 style="margin: 0 0 8px; font-size: 1.05rem; color: var(--text-main);" data-ui-pair="reader.aboutWorkHeading">{UI_TA.reader.aboutWorkHeading} • {UI_EN.reader.aboutWorkHeading}</h3>
-        <p style="margin: 0 0 10px;">
-          Published in <strong><span data-ui-ta={`writingCategories.${category}.title`}>{meta.titleTa}</span><span class="en-sub-inline"> ({meta.titleEn})</span></strong> on Elvan Navil by <strong>Elvan Parthasarathy</strong>. Explore bilingual Tamil and English literature, stories, and essays across the collection.
-        </p>
-        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <a href={`/writings/${category}`} style="color: var(--text-main); font-weight: 600; text-decoration: underline;">
-            ← <span data-ui-ta={`writingCategories.${category}.title`}>{meta.titleTa}</span><span class="en-sub-inline"> ({meta.titleEn})</span>
-          </a>
-          <a href="/writings" style="color: var(--text-main); font-weight: 600; text-decoration: underline;" data-ui-pair="reader.exploreAllWritings">{UI_TA.reader.exploreAllWritings} • {UI_EN.reader.exploreAllWritings}</a>
-        </div>
-      </section>
 
       <!-- Live Real-time Likes & Comments React Island -->
       <EngagementIsland postId={post.id} category={category} client:only="react" />
@@ -465,19 +463,19 @@ const articleJsonLd = {
             if (!vData) return;
             var bodyEl = document.querySelector('.variant-body[data-vidx="' + vIdx + '"]');
             var subTitleEl = document.querySelector('.variant-sub-title[data-vidx="' + vIdx + '"]');
-            var authorEl = document.querySelector('.variant-author[data-vidx="' + vIdx + '"]');
+            var authorEl = document.querySelector('.reader-variant-author[data-vidx="' + vIdx + '"]');
 
             if (checked && vData.alternatives[key]) {
               var alt = vData.alternatives[key];
               if (bodyEl) { bodyEl.innerHTML = alt.html; bodyEl.setAttribute('lang', alt.lang); }
-              if (subTitleEl && alt.title) subTitleEl.textContent = alt.title;
-              if (authorEl && alt.author) authorEl.textContent = '— ' + alt.author;
-              if (vIdx === 0 && primaryH1 && alt.title) primaryH1.textContent = alt.title;
+              if (subTitleEl && alt.title) { subTitleEl.textContent = alt.title; subTitleEl.setAttribute('lang', alt.lang); }
+              if (authorEl && alt.author) { authorEl.textContent = '— ' + alt.author; authorEl.setAttribute('lang', alt.lang); }
+              if (vIdx === 0 && primaryH1 && alt.title) { primaryH1.textContent = alt.title; primaryH1.setAttribute('lang', alt.lang); }
             } else {
               if (bodyEl) { bodyEl.innerHTML = vData.bodyHtml; bodyEl.setAttribute('lang', vData.lang); }
-              if (subTitleEl) subTitleEl.textContent = vData.title;
-              if (authorEl) authorEl.textContent = '— ' + vData.author;
-              if (vIdx === 0 && primaryH1 && origPrimaryTitle) primaryH1.textContent = origPrimaryTitle;
+              if (subTitleEl) { subTitleEl.textContent = vData.title; subTitleEl.setAttribute('lang', vData.lang); }
+              if (authorEl) { authorEl.textContent = '— ' + vData.author; authorEl.setAttribute('lang', vData.lang); }
+              if (vIdx === 0 && primaryH1 && origPrimaryTitle) { primaryH1.textContent = origPrimaryTitle; primaryH1.setAttribute('lang', vData.lang); }
             }
           });
         });
@@ -544,34 +542,51 @@ const articleJsonLd = {
   }
   .transl-slider::before {
     content: ''; position: absolute; height: 16px; width: 16px; left: 2px; bottom: 2px;
-    background: var(--bg-app); border-radius: 50%; transition: transform 0.25s ease;
+    background: var(--bg-app); border-radius: 50%; transition: transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1), background 0.25s ease;
   }
   .transl-switch input:checked + .transl-slider { background: var(--text-main); }
-  .transl-switch input:checked + .transl-slider::before { transform: translateX(16px); }
-  .transl-switch-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); user-select: none; }
-  .variant-header-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .transl-switch input:checked + .transl-slider::before { transform: translateX(16px); background: var(--bg-app); }
+  .transl-switch-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.02em; user-select: none; }
+  .variant-header-row { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 12px; }
   .variant-badge {
-    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); opacity: 0.75;
+    display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); opacity: 0.7;
   }
   .expand-pill {
-    display: inline-flex; align-items: center; gap: 12px;
+    display: inline-flex; align-items: center; justify-content: flex-start; gap: 12px;
     background: color-mix(in srgb, var(--text-main) 6%, transparent); border-radius: 100px;
-    padding: 10px 20px; cursor: pointer; border: none; color: var(--text-main); min-width: 120px;
+    padding: 10px 18px; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border: none; color: var(--text-main); min-width: 120px;
   }
+  .expand-pill:hover { background: color-mix(in srgb, var(--text-main) 10%, transparent); }
   .expand-pill.active { background: var(--text-main); color: var(--bg-app); }
-  .expand-pill.active .pill-en { color: var(--bg-app); opacity: 0.7; }
-  .pill-text-stack { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
-  .pill-ta { font-size: 1rem; font-weight: 700; }
-  .pill-en { font-size: 0.7rem; font-weight: 500; color: var(--text-muted); opacity: 0.75; }
-  .page-btn {
-    background: var(--bg-panel); color: var(--text-main); padding: 10px 20px; border-radius: 99px;
-    font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center;
+  .expand-pill.active .pill-en { color: var(--bg-app); opacity: 0.6; }
+  .expand-pill svg { transition: transform 0.3s ease; opacity: 0.6; flex-shrink: 0; }
+  .expand-pill.active svg { opacity: 1; transform: rotate(180deg); }
+  .expand-pill.active .pill-plus-v { display: none; }
+  .pill-text-stack { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+  .pill-ta { font-size: 1rem; font-weight: 700; line-height: 1; }
+  .pill-en { font-size: 0.7rem; font-weight: 500; color: var(--text-muted); opacity: 0.7; text-transform: lowercase; letter-spacing: 0.01em; }
+  @media (max-width: 600px) {
+    .expand-pill { padding: 8px 16px; gap: 8px; flex: 1; }
   }
-  :global(.rich-content-body h2) { font-size: 1.65rem; margin: 36px 0 14px; font-weight: 700; color: var(--text-main); }
-  :global(.rich-content-body h3) { font-size: 1.35rem; margin: 28px 0 12px; font-weight: 600; color: var(--text-main); }
-  :global(.rich-content-body p) { margin: 0 0 14px; color: var(--text-main); }
-  :global(.rich-content-body blockquote) { border-left: 4px solid var(--text-main); padding-left: 20px; margin: 28px 0; font-style: italic; color: var(--text-muted); }
-  :global(.rich-content-body img) { max-width: 100%; border-radius: 16px; margin: 24px 0; }
-  :global(.rich-content-body ul, .rich-content-body ol) { padding-left: 24px; margin-bottom: 20px; }
-  :global(.rich-content-body li) { margin-bottom: 8px; }
+  @media (max-width: 768px) {
+    .reader-header-area { margin-top: 8px; }
+  }
+  .page-btn {
+    background: var(--bg-panel); color: var(--text-main); border: none; padding: 8px 18px; font-size: 0.85rem;
+    font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 3px; border-radius: 100px; white-space: nowrap;
+  }
+  .page-btn:hover { background: color-mix(in srgb, var(--text-main) 20%, transparent); }
+  .page-btn.prev-btn { padding-left: 12px; }
+  .page-btn.next-btn { padding-right: 12px; }
+  :global(.rich-content-body h2) { font-size: 1.8rem; margin: 40px 0 16px; font-weight: 700; color: var(--text-main); }
+  :global(.rich-content-body h3) { font-size: 1.4rem; margin: 32px 0 12px; font-weight: 600; color: var(--text-main); }
+  :global(.rich-content-body p) { margin: 0; color: var(--text-main); line-height: inherit; }
+  :global(.rich-content-body.prose-format p) { margin: 0 0 16px; color: var(--text-main); line-height: inherit; }
+  :global(.rich-content-body.story-format p) { font-size: 1.25rem; line-height: 2; margin-bottom: 28px; }
+  :global(.rich-content-body strong, .rich-content-body b) { font-weight: 800; color: var(--text-main); }
+  :global(.rich-content-body blockquote) { border-left: 4px solid var(--text-main); padding-left: 24px; margin: 32px 0; font-style: italic; color: var(--text-muted); font-size: 1.25rem; }
+  :global(.rich-content-body img) { max-width: 100%; border-radius: 16px; margin: 32px 0; }
+  :global(.rich-content-body ul, .rich-content-body ol) { padding-left: 24px; margin-bottom: 24px; }
+  :global(.rich-content-body li) { margin-bottom: 12px; }
+  :global(.rich-content-body hr) { border: none; border-top: 1px solid var(--border-light); margin: 48px 0; }
 </style>

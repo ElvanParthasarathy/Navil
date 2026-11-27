@@ -158,7 +158,7 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
             <article class="blog-card-item" style="width: 100%;">
               {cover && (
                 <div class="blog-cover-wrapper">
-                  <img src={cover} alt={title} loading="lazy" />
+                  <img src={cover} alt={title} loading="lazy" referrerpolicy="no-referrer" onerror="var w=this.parentElement;if(w)w.style.display='none';" />
                   {isPinned && <span class="blog-featured-badge">✨ Featured</span>}
                   {post.classification && (
                     <span class={`blog-classification-badge ${post.classification === 'அகம்' ? 'agam' : post.classification === 'புறம்' ? 'puram' : ''}`}>
@@ -202,7 +202,18 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
                     </div>
                   )}
                   <span class="blog-read-more">
-                    <span data-ui-pair="common.read">{UI_TA.common.read} • {UI_EN.common.read}</span> <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
+                    {(() => {
+                      const readKey = category === 'poems'
+                        ? 'readPoem'
+                        : category === 'quotes'
+                          ? 'readQuote'
+                          : category === 'diary'
+                            ? 'readDiary'
+                            : (category === 'articles' || category === 'blog')
+                              ? 'readArticleSingular'
+                              : 'readGeneric';
+                      return <span data-ui-ta={`common.${readKey}`}>{UI_TA.common[readKey]}</span>;
+                    })()} <Icon name="ArrowRight" weight="regular" size={14} class="arrow" />
                   </span>
                 </div>
               </div>

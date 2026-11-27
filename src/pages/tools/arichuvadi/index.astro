@@ -4,11 +4,17 @@ import AdUnit from '../../../components/astro/AdUnit.astro';
 import ArichuvadiIsland from '../../../components/islands/ArichuvadiIsland';
 import { UI_TA, UI_EN } from '../../../i18n';
 
-const FEATURES = (['editor', 'learn', 'practice', 'match', 'memorize', 'books', 'image', 'downloads', 'about'] as const).map((key) => ({
-  key,
-  titleTa: UI_TA.arichuvadiModules[key].title,
-  titleEn: UI_EN.arichuvadiModules[key].title,
-}));
+const FEATURES = [
+  { key: 'editor', titleTa: 'எழுதி', titleEn: 'Script Editor' },
+  { key: 'learn', titleTa: 'கற்றல்', titleEn: 'Learn Glyphs' },
+  { key: 'practice', titleTa: 'பயிற்சி', titleEn: 'Writing Canvas' },
+  { key: 'match', titleTa: 'பொருத்து', titleEn: 'Match Quiz' },
+  { key: 'memorize', titleTa: 'நினைவாற்றல்', titleEn: 'Memory Flashcards' },
+  { key: 'books', titleTa: 'நூல்கள்', titleEn: 'Epigraphy Books' },
+  { key: 'image', titleTa: 'பட உருவாக்கி', titleEn: 'Script Poster Generator' },
+  { key: 'downloads', titleTa: 'பதிவிறக்கங்கள்', titleEn: 'Fonts & Resources' },
+  { key: 'about', titleTa: 'பற்றி', titleEn: 'About Project' },
+];
 ---
 
 <BaseLayout
@@ -24,7 +30,7 @@ const FEATURES = (['editor', 'learn', 'practice', 'match', 'memorize', 'books', 
 
     <section class="tool-editorial-guide" aria-label="Arichuvadi Guide and Modules">
       <h1 class="tool-guide-title" lang="ta">
-        <span data-ui-pair="tools.arichuvadiGuideTitle">{UI_TA.tools.arichuvadiGuideTitle} • {UI_EN.tools.arichuvadiGuideTitle}</span>
+        <span data-ui-ta="routes.arichuvadi.title">{UI_TA.routes.arichuvadi.title}</span> • Classical Tamil Script Learning Suite
       </h1>
       <p lang="ta">
         தமிழர்களின் தொன்மையான எழுத்து முறைகளான <strong>தமிழி (Tamil-Brahmi)</strong> மற்றும்
@@ -38,7 +44,7 @@ const FEATURES = (['editor', 'learn', 'practice', 'match', 'memorize', 'books', 
       <nav class="arichuvadi-module-links" aria-label="Arichuvadi Modules">
         {FEATURES.map((f) => (
           <a href={`/tools/arichuvadi/${f.key}`} class="arichuvadi-chip">
-            <span lang="ta" data-ui-ta={`arichuvadiModules.${f.key}.title`}>{f.titleTa}</span><span class="en-sub-inline" data-ui-en={`arichuvadiModules.${f.key}.title`}> · {f.titleEn}</span>
+            <span lang="ta">{f.titleTa}</span> · {f.titleEn}
           </a>
         ))}
       </nav>

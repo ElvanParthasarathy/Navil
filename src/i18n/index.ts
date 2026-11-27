@@ -54,7 +54,7 @@ export function transliterateInlineTamil(raw: string, casing: UiCasing = 'senten
   return out;
 }
 
-const SENTENCE_KEYS = new Set(['studioTagline', 'navilDef', 'welcomeSubtitle', 'shortDesc', 'desc', 'subtitle', 'editorial', 'heroDesc', 'lockedPrompt', 'subtext', 'comingSoonDesc', 'comingDesc', 'sendMsgDesc', 'modeBilingualDesc', 'modeTanglishEnDesc', 'modeTanglishDesc', 'themeAutoDesc', 'themeDarkDesc', 'themeLightDesc']);
+const SENTENCE_KEYS = new Set(['studioTagline', 'navilDef', 'welcomeSubtitle', 'shortDesc', 'desc', 'subtitle', 'editorial', 'heroDesc', 'lockedPrompt', 'subtext', 'comingSoonDesc', 'comingDesc', 'sendMsgDesc', 'modeBilingualDesc', 'modeTanglishEnDesc', 'themeAutoDesc', 'themeDarkDesc', 'themeLightDesc']);
 
 function buildTanglishTree(node: unknown, keyName = ''): unknown {
   if (typeof node === 'string') {
