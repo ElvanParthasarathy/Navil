@@ -4,6 +4,7 @@ import '../../../சிறப்புக்கூறுகள்/படைப�
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdUnit from '../../../components/astro/AdUnit.astro';
 import Icon from '../../../components/astro/Icon.astro';
+import WritingControlsSheet from '../../../components/astro/WritingControlsSheet.astro';
 import {
   ALL_WRITING_CATEGORIES,
   CATEGORY_META,
@@ -55,7 +56,6 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
   backUrl="/writings"
 >
   <div class="writings-page page-view fadeIn" id="cat-list-root">
-    <!-- Controls (mounted inline on mobile, moved to #desktop-topbar-actions on desktop) -->
     <div id="cat-controls-mount">
       <div class="controls-area" id="cat-controls-el" style="max-width: 800px;">
         <div class="minimal-search">
@@ -98,6 +98,8 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
         </button>
       </div>
     </div>
+
+    <WritingControlsSheet controlsId="cat-controls-el" paginationId="cat-pagination-drawer" />
 
     <!-- Collapsible Pagination Drawer -->
     <div id="cat-pagination-drawer" class="pagination-collapsible" style="display: none;">
@@ -223,6 +225,21 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
       })}
     </div>
 
+    <nav class="category-bottom-pager" aria-label={UI_EN.common.togglePagesTitle} hidden>
+      <div class="page-numbers centered" data-bottom-page-numbers></div>
+      <div class="pagination-nav-pill">
+      <button type="button" class="page-btn prev-btn" data-bottom-prev lang="ta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
+        <span data-ui-ta="common.prev">{UI_TA.common.prev}</span>
+      </button>
+      <span class="pagination-label" data-bottom-page-label aria-live="polite">1 / 1</span>
+      <button type="button" class="page-btn next-btn" data-bottom-next lang="ta">
+        <span data-ui-ta="common.next">{UI_TA.common.next}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+      </button>
+      </div>
+    </nav>
+
     <AdUnit margin="48px 0 0" />
   </div>
 
@@ -238,34 +255,16 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
         catAbort = new AbortController();
         var sig = { signal: catAbort.signal };
 
-        var controlsEl = document.getElementById('cat-controls-el');
-        var controlsMount = document.getElementById('cat-controls-mount');
-
-        function syncControlsPlacement() {
-          var target = document.getElementById('desktop-topbar-actions');
-          if (!controlsEl || !controlsMount) return;
-          if (window.innerWidth > 768 && target) {
-            controlsEl.className = 'topbar-controls-area';
-            controlsEl.removeAttribute('style');
-            if (controlsEl.parentNode !== target) target.appendChild(controlsEl);
-          } else {
-            controlsEl.className = 'controls-area';
-            controlsEl.style.maxWidth = '800px';
-            if (controlsEl.parentNode !== controlsMount) controlsMount.appendChild(controlsEl);
-          }
-        }
-        syncControlsPlacement();
-        window.addEventListener('resize', syncControlsPlacement, sig);
-
         var input = document.getElementById('cat-search-input');
         var select = document.getElementById('cat-genre-select');
         var cards = Array.prototype.slice.call(document.querySelectorAll('.cat-post-card'));
         var drawer = document.getElementById('cat-pagination-drawer');
         var toggleBtn = document.getElementById('cat-pag-toggle');
-        var pageNumsEl = document.getElementById('cat-page-numbers');
-        var pageLabelEl = document.getElementById('cat-page-label');
-        var prevBtn = document.getElementById('cat-prev-btn');
-        var nextBtn = document.getElementById('cat-next-btn');
+        var pageNumberRows = root.querySelectorAll('#cat-page-numbers, [data-bottom-page-numbers]');
+        var bottomPager = root.querySelector('.category-bottom-pager');
+        var pageLabels = root.querySelectorAll('#cat-page-label, [data-bottom-page-label]');
+        var prevButtons = root.querySelectorAll('#cat-prev-btn, [data-bottom-prev]');
+        var nextButtons = root.querySelectorAll('#cat-next-btn, [data-bottom-next]');
 
         var currentPage = 1;
         var isExpanded = false;
@@ -293,27 +292,48 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
 
           if (toggleBtn) toggleBtn.style.display = totalPages > 1 ? 'inline-flex' : 'none';
           if (drawer) drawer.style.display = totalPages > 1 ? 'grid' : 'none';
-          if (pageLabelEl) pageLabelEl.textContent = currentPage + ' / ' + totalPages;
-          if (prevBtn) prevBtn.disabled = currentPage <= 1;
-          if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+          if (bottomPager) bottomPager.hidden = totalPages <= 1;
+          pageLabels.forEach(function (label) { label.textContent = currentPage + ' / ' + totalPages; });
+          prevButtons.forEach(function (button) { button.disabled = currentPage <= 1; });
+          nextButtons.forEach(function (button) { button.disabled = currentPage >= totalPages; });
 
-          if (pageNumsEl) {
-            pageNumsEl.innerHTML = '';
-            for (var i = 1; i <= totalPages; i++) {
-              (function (n) {
-                var btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'page-number-btn' + (n === currentPage ? ' active' : '');
-                btn.textContent = String(n);
-                btn.addEventListener('click', function () {
-                  currentPage = n;
-                  renderList();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-                pageNumsEl.appendChild(btn);
-              })(i);
+          var pageNumbers = [];
+          if (totalPages <= 5) {
+            for (var page = 1; page <= totalPages; page++) pageNumbers.push(page);
+          } else {
+            pageNumbers.push(1);
+            if (currentPage > 3) pageNumbers.push('...');
+            for (var nearby = Math.max(2, currentPage - 1); nearby <= Math.min(totalPages - 1, currentPage + 1); nearby++) {
+              pageNumbers.push(nearby);
             }
+            if (currentPage < totalPages - 2) pageNumbers.push('...');
+            pageNumbers.push(totalPages);
           }
+          pageNumberRows.forEach(function (row) {
+            row.classList.toggle('centered', pageNumbers.length <= 5);
+            row.classList.toggle('spread', pageNumbers.length > 5);
+            row.replaceChildren(...pageNumbers.map(function (number) {
+              var isPage = typeof number === 'number';
+              var entry = document.createElement(isPage ? 'button' : 'span');
+              entry.textContent = String(number);
+              if (!isPage) {
+                entry.className = 'pagination-dots';
+                entry.setAttribute('aria-hidden', 'true');
+                return entry;
+              }
+              entry.type = 'button';
+              entry.className = 'page-number-btn' + (number === currentPage ? ' active' : '');
+              if (number === currentPage) entry.setAttribute('aria-current', 'page');
+              entry.addEventListener('click', function () {
+                var openSheet = row.closest('dialog[open]');
+                currentPage = number;
+                renderList();
+                if (openSheet) openSheet.addEventListener('close', scrollToPosts, { once: true });
+                else scrollToPosts();
+              });
+              return entry;
+            }));
+          });
         }
 
         if (toggleBtn && drawer) {
@@ -329,8 +349,18 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
           }, sig);
         }
 
-        if (prevBtn) prevBtn.addEventListener('click', function () { currentPage = Math.max(1, currentPage - 1); renderList(); window.scrollTo({ top: 0, behavior: 'smooth' }); }, sig);
-        if (nextBtn) nextBtn.addEventListener('click', function () { currentPage = currentPage + 1; renderList(); window.scrollTo({ top: 0, behavior: 'smooth' }); }, sig);
+        function scrollToPosts() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function movePage(step, button) {
+          currentPage = Math.max(1, currentPage + step);
+          renderList();
+          if (!button.closest('dialog[open]')) scrollToPosts();
+        }
+
+        prevButtons.forEach(function (button) { button.addEventListener('click', function () { movePage(-1, button); }, sig); });
+        nextButtons.forEach(function (button) { button.addEventListener('click', function () { movePage(1, button); }, sig); });
         if (input) input.addEventListener('input', function () { currentPage = 1; renderList(); }, sig);
         if (select) select.addEventListener('change', function () { currentPage = 1; renderList(); }, sig);
 
@@ -344,3 +374,38 @@ const itemsPerPage = category === 'poems' || category === 'quotes' ? 6 : 5;
     })();
   </script>
 </BaseLayout>
+
+<style>
+  .category-bottom-pager:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(4px, 2vw, 12px);
+    width: fit-content;
+    max-width: calc(100% - 32px);
+    margin: 20px auto 0;
+  }
+
+  .category-bottom-pager .pagination-nav-pill {
+    justify-content: center;
+  }
+
+  .category-bottom-pager .page-number-btn {
+    flex: 0 0 auto;
+    font-weight: 550;
+  }
+
+  .category-bottom-pager .page-btn {
+    flex: none;
+    min-height: 44px;
+    padding-inline: clamp(8px, 3vw, 16px);
+    font-weight: 550;
+  }
+
+  .category-bottom-pager .pagination-label {
+    flex: none;
+    padding-inline: 4px;
+    white-space: nowrap;
+  }
+</style>

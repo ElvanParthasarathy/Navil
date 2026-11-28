@@ -58,6 +58,7 @@ export const UI_EN: UITranslations = {
   routes: {
     home: { title: 'home' },
     nammil: { title: 'nammil' },
+    elvanSans: { title: 'elvan sans' },
     downloads: { title: 'downloads' },
     navilgal: { title: 'elvanin navilgal' },
     writings: { title: 'writings' },
@@ -319,7 +320,17 @@ export const UI_EN: UITranslations = {
   },
   downloads: {
     title: 'Downloads',
-    subtitle: 'Desktop Applications & Productivity Tools',
+    subtitle: 'Apps, Typefaces & Open-Source Releases',
+    projectsHeading: 'Open-Source Projects',
+  },
+  elvanSans: {
+    title: 'Elvan Sans',
+    categoryTag: 'Typography & OpenType',
+    heroDesc:
+      'Unified multi-script sans-serif typeface pairing geometric Latin, legible Tamil, and balanced Malayalam at 100% native metrics (SIL OFL-1.1).',
+    downloadBtn: 'Download ZIP',
+    githubBtn: 'GitHub',
+    browseFontsBtn: 'TTF Files',
   },
   nammil: {
     title: 'Nammil',

@@ -275,6 +275,7 @@ const fullJsonLd = {
         <div class="sidebar-backdrop"></div>
         <div class="sidebar-top">
           <div class="sidebar-nav">
+            <span class="mobile-nav-pill" aria-hidden="true"></span>
             <a href="/" data-nav-key="home" data-ui-tip="nav.home" data-tip={`${UI_TA.nav.home} (${UI_EN.nav.home})`} class={`nav-item ${isHome ? 'active' : ''}`}>
               <span class="nav-icon" aria-hidden="true">
                 <Icon name="House" weight="regular" size="100%" class="nav-svg-reg" />
@@ -335,7 +336,7 @@ const fullJsonLd = {
               </div>
             </a>
 
-            <a href="/about" data-nav-key="about-mobile" class={`nav-item mobile-only-nav-item ${isAboutActive ? 'active' : ''}`}>
+            <a href="/about" data-nav-key="about-mobile" data-tip="Profile" class={`nav-item mobile-only-nav-item ${isAboutActive ? 'active' : ''}`}>
               <span class="nav-icon">
                 <img src={profilePic.src} alt="Profile" class="nav-profile-avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;pointer-events:auto;" />
               </span>
@@ -413,7 +414,11 @@ const fullJsonLd = {
       </nav>
 
       <!-- MOBILE TOP BAR -->
-      <header class={`mobile-topbar ${!isHome ? 'is-centered' : ''} ${resolvedShowBack ? 'has-back' : ''}`} transition:animate="none">
+      <div class="mobile-edge-fade mobile-edge-fade--top" aria-hidden="true"></div>
+      <div class="mobile-edge-fade mobile-edge-fade--bottom" aria-hidden="true"></div>
+      <div class="mobile-dot-glass" aria-hidden="true"></div>
+      {resolvedShowBack && <div class="mobile-back-glass" aria-hidden="true"></div>}
+      <header class={`mobile-topbar ${isHome ? 'is-home' : 'is-centered'} ${resolvedShowBack ? 'has-back' : ''}`} transition:animate="none">
         <div class="mobile-topbar-left">
           {resolvedShowBack && (
             <a href={resolvedBackUrl} class="mobile-back-btn" aria-label={UI_EN.nav.backAria}>
@@ -440,15 +445,18 @@ const fullJsonLd = {
 
         <div class="top-bar-actions">
           <div class="mobile-menu-zone" id="mobile-menu-zone">
-            <button type="button" id="mobile-dot-btn" class="top-dot-btn" aria-label="More options">
+            <button type="button" id="mobile-dot-btn" class="top-dot-btn" aria-label="More options" aria-controls="mobile-menu-dropdown" aria-expanded="false">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <circle cx="5" cy="12" r="2" />
                 <circle cx="12" cy="12" r="2" />
                 <circle cx="19" cy="12" r="2" />
               </svg>
             </button>
-            <div id="mobile-menu-backdrop" class="menu-backdrop" style="display: none;"></div>
-            <div id="mobile-menu-dropdown" class="top-menu-dropdown" style="display: none; height: 112px;">
+          </div>
+        </div>
+      </header>
+      <div id="mobile-menu-backdrop" class="menu-backdrop" style="display: none;"></div>
+      <div id="mobile-menu-dropdown" class="top-menu-dropdown" style="display: none; height: 112px;">
               <div id="mobile-menu-track" class="menu-slider-track" style="transform: translateX(0%);">
                 <div class="menu-view">
                   <button type="button" id="mobile-appearance-btn" class="menu-item space-between">
@@ -501,10 +509,7 @@ const fullJsonLd = {
                   <button type="button" class="menu-item" data-lang-choice="tanglish-en">Ta+En</button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      </div>
 
       <!-- MAIN CONTENT -->
       <main id="app-main-content" class={`main-content ${!isMainLevel ? 'no-bottom-nav mobile-full-width' : ''}`} style="flex-grow: 1; min-height: 100vh;" transition:animate="none">
@@ -591,6 +596,7 @@ const fullJsonLd = {
         }
 
         function syncSidebarUiState(collapsed, rootDoc) {
+          collapsed = collapsed && window.matchMedia('(min-width: 769px)').matches;
           var doc = rootDoc || document;
           var sidebar = doc.getElementById('app-sidebar');
           var main = doc.getElementById('app-main-content');
@@ -650,11 +656,14 @@ const fullJsonLd = {
             var key = link.getAttribute('data-nav-key');
             var active = Boolean(map[key]);
             link.classList.toggle('active', active);
+            if (active) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
             if (key === 'tools') {
               var badge = link.querySelector('.nav-badge');
               if (badge) badge.classList.toggle('is-active-badge', active);
             }
           });
+          if (sidebar) sidebar.dispatchEvent(new CustomEvent('elvan:nav-change', { detail: p }));
         }
 
         function applyTheme(next, rootDoc) {
@@ -681,7 +690,132 @@ const fullJsonLd = {
           });
         }
 
+        function bindFloatingNav() {
+          var sidebar = document.getElementById('app-sidebar');
+          var pill = sidebar?.querySelector('.mobile-nav-pill');
+          var track = pill?.parentElement;
+          if (!track || track.dataset.floatingNavBound) return;
+          track.dataset.floatingNavBound = '1';
+
+          var mobile = window.matchMedia('(max-width: 768px)');
+          var links = Array.from(track.querySelectorAll('a[data-nav-key]'));
+          var gesture = null;
+          var pendingLink = null;
+          var activePath = normPath(window.location.pathname);
+          var suppressClickUntil = 0;
+
+          links.forEach(function (link) {
+            var label = link.querySelector('.label');
+            if (!label) return;
+            label.id = 'nav-label-' + link.dataset.navKey;
+            link.setAttribute('aria-labelledby', label.id);
+            link.addEventListener('pointerleave', function () {
+              delete link.dataset.tipSuppressed;
+            });
+          });
+
+          function visibleLinks() {
+            return links.filter(function (link) { return link.offsetWidth > 0; });
+          }
+
+          function positionPill(link, fingerX) {
+            if (!mobile.matches || !track.offsetWidth || !link) return;
+            var trackRect = track.getBoundingClientRect();
+            var linkRect = link.getBoundingClientRect();
+            var width = Math.max(1, linkRect.width - 6);
+            var left = linkRect.left - trackRect.left + 3;
+            if (fingerX !== undefined) {
+              left = Math.max(3, Math.min(trackRect.width - width - 3, fingerX - trackRect.left - width / 2));
+            }
+            pill.style.setProperty('--pill-width', width + 'px');
+            pill.style.setProperty('--pill-x', left + 'px');
+            pill.dataset.ready = 'true';
+          }
+
+          function syncPill() {
+            if (gesture) return;
+            var visible = visibleLinks();
+            var selected = visible.includes(pendingLink)
+              ? pendingLink
+              : visible.find(function (link) { return link.classList.contains('active'); });
+            if (!selected) delete pill.dataset.ready;
+            else positionPill(selected);
+          }
+
+          function nearestLink(clientX) {
+            return visibleLinks().reduce(function (nearest, link) {
+              var rect = link.getBoundingClientRect();
+              var distance = Math.abs(clientX - rect.left - rect.width / 2);
+              return !nearest || distance < nearest.distance ? { link: link, distance: distance } : nearest;
+            }, null)?.link;
+          }
+
+          function endGesture(event, cancelled) {
+            if (!gesture || gesture.id !== event.pointerId) return;
+            var destination = !cancelled && gesture.dragging ? nearestLink(event.clientX) : null;
+            gesture = null;
+            delete track.dataset.pressing;
+            delete track.dataset.dragging;
+            if (destination) {
+              suppressClickUntil = performance.now() + 400;
+              destination.click();
+            } else syncPill();
+          }
+
+          track.addEventListener('pointerdown', function (event) {
+            if (!mobile.matches || !event.isPrimary || event.button !== 0 || event.ctrlKey ||
+                event.metaKey || event.shiftKey || event.altKey) return;
+            var link = event.target.closest('a[data-nav-key]');
+            if (!link) return;
+            link.dataset.tipSuppressed = 'true';
+            suppressClickUntil = 0;
+            gesture = { id: event.pointerId, startX: event.clientX, dragging: false };
+            track.dataset.pressing = 'true';
+          });
+          track.addEventListener('pointermove', function (event) {
+            if (!gesture || gesture.id !== event.pointerId) return;
+            if (!gesture.dragging) {
+              if (Math.abs(event.clientX - gesture.startX) < 8) return;
+              gesture.dragging = true;
+              track.dataset.dragging = 'true';
+              track.setPointerCapture(event.pointerId);
+            }
+            positionPill(nearestLink(event.clientX), event.clientX);
+          });
+          window.addEventListener('pointerup', function (event) { endGesture(event, false); });
+          window.addEventListener('pointercancel', function (event) { endGesture(event, true); });
+          track.addEventListener('lostpointercapture', function (event) {
+            if (event.target === track) endGesture(event, true);
+          });
+          track.addEventListener('dragstart', function (event) {
+            if (mobile.matches) event.preventDefault();
+          });
+          track.addEventListener('click', function (event) {
+            if (event.detail && performance.now() < suppressClickUntil) {
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+            if (!mobile.matches || event.defaultPrevented || event.button !== 0 ||
+                event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            var link = event.target.closest('a[data-nav-key]');
+            if (!link) return;
+            pendingLink = link.classList.contains('active') ? null : link;
+            positionPill(link);
+          }, true);
+
+          sidebar.addEventListener('elvan:nav-change', function (event) {
+            if (event.detail !== activePath) pendingLink = null;
+            activePath = event.detail;
+            syncPill();
+          });
+          new ResizeObserver(syncPill).observe(track);
+          mobile.addEventListener('change', syncPill);
+          syncPill();
+        }
+
         function bindPersistentShellEvents() {
+          bindFloatingNav();
           var toggleBtn = document.getElementById('topbar-sidebar-toggle');
           if (toggleBtn && !toggleBtn.dataset.bound) {
             toggleBtn.dataset.bound = '1';
@@ -737,7 +871,7 @@ const fullJsonLd = {
         }
 
         function bindPerPageMobileMenuAndThemes() {
-          document.querySelectorAll('main [data-theme-choice], .mobile-topbar [data-theme-choice]').forEach(function (el) {
+          document.querySelectorAll('main [data-theme-choice], #mobile-menu-dropdown [data-theme-choice]').forEach(function (el) {
             if (el.dataset.themeBound) return;
             el.dataset.themeBound = '1';
             el.addEventListener('click', function (e) {
@@ -757,32 +891,78 @@ const fullJsonLd = {
           var langBackBtn = document.getElementById('mobile-lang-back-btn');
 
           function closeMobileMenu() {
-            if (dropdown) {
-              dropdown.classList.remove('is-open');
+            if (dotBtn) dotBtn.setAttribute('aria-expanded', 'false');
+            if (!dropdown) {
+              if (backdrop) {
+                backdrop.classList.remove('is-entering', 'is-open', 'is-closing');
+                backdrop.style.display = 'none';
+              }
+              return;
+            }
+            if (dropdown._elvanCloseTimer) {
+              clearTimeout(dropdown._elvanCloseTimer);
+              dropdown._elvanCloseTimer = 0;
+            }
+            var wasActive = dropdown.classList.contains('is-open') || dropdown.classList.contains('is-entering');
+            if (!wasActive) {
+              dropdown.classList.remove('is-closing');
               dropdown.style.display = 'none';
               dropdown.style.height = '112px';
+              if (backdrop) {
+                backdrop.classList.remove('is-entering', 'is-open', 'is-closing');
+                backdrop.style.display = 'none';
+              }
+              if (track) track.style.transform = 'translateX(0%)';
+              return;
             }
+            dropdown.classList.remove('is-entering', 'is-open');
+            dropdown.classList.add('is-closing');
             if (backdrop) {
-              backdrop.classList.remove('is-open');
-              backdrop.style.display = 'none';
+              backdrop.classList.remove('is-entering', 'is-open');
+              backdrop.classList.add('is-closing');
             }
-            if (track) track.style.transform = 'translateX(0%)';
+            dropdown._elvanCloseTimer = window.setTimeout(function () {
+              dropdown._elvanCloseTimer = 0;
+              dropdown.classList.remove('is-closing', 'is-entering', 'is-open');
+              dropdown.style.display = 'none';
+              dropdown.style.height = '112px';
+              if (backdrop) {
+                backdrop.classList.remove('is-closing', 'is-entering', 'is-open');
+                backdrop.style.display = 'none';
+              }
+              if (track) track.style.transform = 'translateX(0%)';
+            }, 145);
           }
 
           if (dotBtn && dropdown && backdrop && !dotBtn.dataset.bound) {
             dotBtn.dataset.bound = '1';
             dotBtn.addEventListener('click', function (e) {
               e.stopPropagation();
-              var isOpen = dropdown.classList.contains('is-open');
+              var isOpen = dropdown.classList.contains('is-open') || dropdown.classList.contains('is-entering');
               if (isOpen) {
                 closeMobileMenu();
               } else {
-                dropdown.classList.add('is-open');
-                backdrop.classList.add('is-open');
+                if (dropdown._elvanCloseTimer) {
+                  clearTimeout(dropdown._elvanCloseTimer);
+                  dropdown._elvanCloseTimer = 0;
+                }
+                dotBtn.setAttribute('aria-expanded', 'true');
+                dropdown.classList.remove('is-closing', 'is-open');
+                dropdown.classList.add('is-entering');
+                backdrop.classList.remove('is-closing', 'is-open');
+                backdrop.classList.add('is-entering');
                 dropdown.style.display = 'block';
                 backdrop.style.display = 'block';
                 if (track) track.style.transform = 'translateX(0%)';
                 dropdown.style.height = '112px';
+                void dropdown.offsetWidth;
+                requestAnimationFrame(function () {
+                  if (!dropdown.classList.contains('is-entering')) return;
+                  dropdown.classList.remove('is-entering');
+                  dropdown.classList.add('is-open');
+                  backdrop.classList.remove('is-entering');
+                  backdrop.classList.add('is-open');
+                });
               }
             });
             backdrop.addEventListener('click', closeMobileMenu);
@@ -837,16 +1017,299 @@ const fullJsonLd = {
           });
         }
 
+        var mobileChrome = window.matchMedia('(max-width: 768px)');
+        var chromeFrame = 0;
+
+        function hasContentUnderTopHeader(shell) {
+          if (window.scrollY <= 4) return false;
+          var header = shell.querySelector(':scope > .mobile-topbar');
+          var cutoff = (header ? header.getBoundingClientRect().bottom : 64) - 2;
+          var body = document.querySelector('#app-main-content .main-content-body');
+          if (!body) return false;
+          var root = body.firstElementChild || body;
+          var targets = root.querySelectorAll('h1, h2, h3, p, blockquote, img, .bento-card, .category-card, .store-app-card, .store-project-card, .dict-card, .about-card, .ms-hero-icon, .ms-hero-title, .variant-header-slot, .expand-pill, .quote-card, .art-card, .poem-card');
+          for (var i = 0; i < targets.length; i++) {
+            var el = targets[i];
+            if (el.offsetHeight <= 0) continue;
+            var r = el.getBoundingClientRect();
+            if (r.height > 0 && r.bottom > 4 && r.top < cutoff) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        function hasContentUnderBottomChrome(shell, main) {
+          var hasBottom = (main && !main.classList.contains('no-bottom-nav')) ||
+            Boolean(shell.querySelector(':scope > .writing-list-dock'));
+          if (!hasBottom) return false;
+          var moreBelow = (window.scrollY + window.innerHeight) < (document.documentElement.scrollHeight - 10);
+          return moreBelow;
+        }
+
+        function syncMobileChrome() {
+          chromeFrame = 0;
+          var shell = document.getElementById('app-shell');
+          if (!shell || !mobileChrome.matches) return;
+          var header = shell.querySelector(':scope > .mobile-topbar');
+          if (header) {
+            var progress = Math.min(1, Math.max(0, (window.scrollY - 12) / 64));
+            header.style.setProperty('--mobile-title-opacity', String(1 - progress));
+            header.style.setProperty('--mobile-title-offset', (-8 * progress) + 'px');
+          }
+          var main = document.getElementById('app-main-content');
+          var scrolledTop = hasContentUnderTopHeader(shell);
+          var bottomNeeded = hasContentUnderBottomChrome(shell, main);
+          shell.toggleAttribute('data-mobile-scrolled', scrolledTop);
+          shell.toggleAttribute('data-mobile-bottom-fade', bottomNeeded);
+        }
+
+        function queueMobileChrome() {
+          if (mobileChrome.matches && !chromeFrame) {
+            chromeFrame = window.requestAnimationFrame(syncMobileChrome);
+          }
+        }
+
+        window.addEventListener('scroll', queueMobileChrome, { passive: true });
+        window.addEventListener('scrollend', syncMobileChrome, { passive: true });
+        window.addEventListener('resize', syncMobileChrome);
+        mobileChrome.addEventListener('change', syncMobileChrome);
+        mobileChrome.addEventListener('change', function () {
+          syncSidebarUiState(getSidebarCollapsed(), document);
+        });
+        window.addEventListener('pageshow', syncMobileChrome);
+
         // Initial hydration/load state
         syncSidebarUiState(getSidebarCollapsed(), document);
         syncActiveNavItems(window.location.pathname, document);
         applyTheme(getSavedTheme(), document);
         bindPersistentShellEvents();
         bindPerPageMobileMenuAndThemes();
+        syncMobileChrome();
         pushUnloadedAds();
 
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
           if (getSavedTheme() === 'auto') applyTheme('auto', document);
+        });
+
+        var executedScriptKeys = new Set();
+        try {
+          Array.prototype.forEach.call(document.scripts, function (sc) {
+            var k = sc.src ? new URL(sc.src, window.location.href).href : sc.textContent;
+            if (k) executedScriptKeys.add(k);
+          });
+        } catch (e) {}
+
+        function deselectNewDocScripts(newDoc) {
+          Array.prototype.forEach.call(newDoc.scripts, function (sc) {
+            if (sc.hasAttribute('data-astro-rerun')) return;
+            var k = sc.src ? new URL(sc.src, window.location.href).href : sc.textContent;
+            if (k && executedScriptKeys.has(k)) {
+              sc.dataset.astroExec = '';
+            } else if (k) {
+              executedScriptKeys.add(k);
+            }
+          });
+        }
+
+        function syncHeadElementsCleanly(newDoc) {
+          if (newDoc.title && document.title !== newDoc.title) {
+            document.title = newDoc.title;
+          }
+          var existingStylesheets = new Map();
+          var existingInlineStyles = new Map();
+          var removableMeta = [];
+          Array.prototype.forEach.call(document.head.children, function (el) {
+            if (el.tagName === 'LINK' && el.getAttribute('rel') === 'stylesheet') {
+              var href = el.getAttribute('href');
+              if (href) existingStylesheets.set(href, el);
+            } else if (el.tagName === 'STYLE') {
+              var viteId = el.getAttribute('data-vite-dev-id');
+              var key = viteId ? 'vite:' + viteId : 'css:' + (el.textContent || '').trim();
+              existingInlineStyles.set(key, el);
+            } else if (
+              (el.tagName === 'META' && (el.getAttribute('name') === 'description' || el.getAttribute('property') || el.getAttribute('name')?.indexOf('twitter:') === 0)) ||
+              (el.tagName === 'LINK' && el.getAttribute('rel') === 'canonical') ||
+              (el.tagName === 'SCRIPT' && el.getAttribute('type') === 'application/ld+json')
+            ) {
+              removableMeta.push(el);
+            }
+          });
+
+          var wantedStylesheets = new Set();
+          var wantedInlineStyles = new Set();
+          Array.prototype.forEach.call(newDoc.head.children, function (el) {
+            if (el.tagName === 'LINK' && el.getAttribute('rel') === 'stylesheet') {
+              var href = el.getAttribute('href');
+              if (!href) return;
+              wantedStylesheets.add(href);
+              if (!existingStylesheets.has(href)) {
+                document.head.appendChild(document.adoptNode(el.cloneNode(true)));
+              }
+            } else if (el.tagName === 'STYLE') {
+              var viteId = el.getAttribute('data-vite-dev-id');
+              var key = viteId ? 'vite:' + viteId : 'css:' + (el.textContent || '').trim();
+              wantedInlineStyles.add(key);
+              if (!existingInlineStyles.has(key)) {
+                document.head.appendChild(document.adoptNode(el.cloneNode(true)));
+              }
+            } else if (
+              (el.tagName === 'META' && (el.getAttribute('name') === 'description' || el.getAttribute('property') || el.getAttribute('name')?.indexOf('twitter:') === 0)) ||
+              (el.tagName === 'LINK' && el.getAttribute('rel') === 'canonical') ||
+              (el.tagName === 'SCRIPT' && el.getAttribute('type') === 'application/ld+json')
+            ) {
+              document.head.appendChild(document.adoptNode(el.cloneNode(true)));
+            }
+          });
+
+          removableMeta.forEach(function (el) { el.remove(); });
+          existingStylesheets.forEach(function (el, href) {
+            if (!wantedStylesheets.has(href)) el.remove();
+          });
+          existingInlineStyles.forEach(function (el, key) {
+            if (!wantedInlineStyles.has(key)) el.remove();
+          });
+        }
+
+        function syncRootAttributesCleanly(newDoc) {
+          var root = document.documentElement;
+          var newRoot = newDoc.documentElement;
+          if (!root || !newRoot) return;
+          var lang = newRoot.getAttribute('lang');
+          if (lang) root.setAttribute('lang', lang);
+          else root.removeAttribute('lang');
+        }
+
+        function replaceAdoptedChildren(targetEl, sourceEl) {
+          if (!targetEl || !sourceEl) return;
+          var nodes = Array.from(sourceEl.childNodes).map(function (c) {
+            return document.adoptNode(c);
+          });
+          targetEl.replaceChildren.apply(targetEl, nodes);
+        }
+
+        function inPlaceShellSwap(newDoc, navCls, toPath) {
+          var curShell = document.getElementById('app-shell');
+          var newShell = newDoc.getElementById('app-shell');
+          if (!curShell || !newShell) return;
+
+          deselectNewDocScripts(newDoc);
+          syncRootAttributesCleanly(newDoc);
+          syncHeadElementsCleanly(newDoc);
+
+          if (navCls === 'nav-none') {
+            curShell.classList.add('is-tab-swapping');
+          }
+          curShell.classList.remove('nav-initial', 'nav-push', 'nav-pop', 'nav-none');
+          curShell.classList.add(navCls);
+
+          replaceAdoptedChildren(
+            curShell.querySelector('.desktop-topbar-content-zone'),
+            newShell.querySelector('.desktop-topbar-content-zone')
+          );
+
+          var curMobileHeader = curShell.querySelector(':scope > .mobile-topbar');
+          var newMobileHeader = newShell.querySelector(':scope > .mobile-topbar');
+          var curBackGlass = curShell.querySelector(':scope > .mobile-back-glass');
+          var newBackGlass = newShell.querySelector(':scope > .mobile-back-glass');
+          if (newBackGlass && !curBackGlass && curMobileHeader) {
+            curShell.insertBefore(document.adoptNode(newBackGlass), curMobileHeader);
+          } else if (!newBackGlass && curBackGlass) {
+            curBackGlass.remove();
+          }
+
+          if (curMobileHeader && newMobileHeader) {
+            curMobileHeader.className = newMobileHeader.className;
+            curMobileHeader.style.setProperty('--mobile-title-opacity', '1');
+            curMobileHeader.style.setProperty('--mobile-title-offset', '0px');
+            replaceAdoptedChildren(
+              curMobileHeader.querySelector(':scope > .mobile-topbar-left'),
+              newMobileHeader.querySelector(':scope > .mobile-topbar-left')
+            );
+            replaceAdoptedChildren(
+              curMobileHeader.querySelector(':scope > .brand'),
+              newMobileHeader.querySelector(':scope > .brand')
+            );
+          }
+
+          curShell.querySelectorAll(':scope > .writing-list-dock, :scope > .writing-search-dock, :scope > .writing-controls-sheet, :scope > .variant-header-row').forEach(function (el) {
+            el.remove();
+          });
+          curShell.removeAttribute('data-reader-switch-pinned');
+
+          var curMain = document.getElementById('app-main-content');
+          var newMain = newDoc.getElementById('app-main-content');
+          if (curMain && newMain) {
+            curMain.className = newMain.className;
+            replaceAdoptedChildren(curMain, newMain);
+          }
+
+          var drop = document.getElementById('mobile-menu-dropdown');
+          var backdrop = document.getElementById('mobile-menu-backdrop');
+          var dotBtn = document.getElementById('mobile-dot-btn');
+          var track = document.getElementById('mobile-menu-track');
+          if (drop) {
+            if (drop._elvanCloseTimer) {
+              clearTimeout(drop._elvanCloseTimer);
+              drop._elvanCloseTimer = 0;
+            }
+            drop.classList.remove('is-open', 'is-entering', 'is-closing');
+            drop.style.display = 'none';
+            drop.style.height = '112px';
+          }
+          if (backdrop) {
+            backdrop.classList.remove('is-open', 'is-entering', 'is-closing');
+            backdrop.style.display = 'none';
+          }
+          if (dotBtn) dotBtn.setAttribute('aria-expanded', 'false');
+          if (track) track.style.transform = 'translateX(0%)';
+
+          syncSidebarUiState(getSidebarCollapsed(), document);
+          syncActiveNavItems(toPath, document);
+          applyTheme(getSavedTheme(), document);
+          if (typeof window.__elvanApplyLangMode === 'function') {
+            window.__elvanApplyLangMode(document);
+          }
+
+          var isMain = MAIN_LEVEL_PATHS.indexOf(normPath(toPath)) !== -1;
+          if (mobileChrome.matches) {
+            curShell.toggleAttribute('data-mobile-scrolled', false);
+            var hasBottom = isMain || Boolean(curShell.querySelector(':scope > .writing-list-dock'));
+            var overflows = document.documentElement.scrollHeight > (window.innerHeight + 6);
+            curShell.toggleAttribute('data-mobile-bottom-fade', Boolean(hasBottom && overflows));
+          }
+          if (navCls === 'nav-none') {
+            requestAnimationFrame(function () {
+              var s = document.getElementById('app-shell');
+              if (s) s.classList.remove('is-tab-swapping');
+            });
+          }
+        }
+
+        document.addEventListener('astro:after-preparation', function () {
+          var origStartVT = document.startViewTransition;
+          if (typeof origStartVT !== 'function') return;
+          var restored = false;
+          function restoreStartVT() {
+            if (restored) return;
+            restored = true;
+            if (document.startViewTransition === fakeStartVT) {
+              document.startViewTransition = origStartVT;
+            }
+          }
+          function fakeStartVT(cb) {
+            restoreStartVT();
+            var done = Promise.resolve().then(function () { return cb(); });
+            return {
+              updateCallbackDone: done,
+              ready: done,
+              finished: done,
+              skipTransition: function () {},
+              types: new Set(),
+            };
+          }
+          document.startViewTransition = fakeStartVT;
+          setTimeout(restoreStartVT, 100);
         });
 
         // Clean ClientRouter SPA-shell transitions across static HTML pages
@@ -859,7 +1322,21 @@ const fullJsonLd = {
           var fromPath = ev.from ? ev.from.pathname : window.location.pathname;
           var navCls = computeNavClass(fromPath, toPath, ev.direction);
 
+          var curShell = document.getElementById('app-shell');
           var newShell = newDoc.getElementById('app-shell');
+
+          var settingsPopup = document.getElementById('settings-popup');
+          var settingsTrigger = document.getElementById('settings-trigger-btn');
+          if (settingsPopup) settingsPopup.style.display = 'none';
+          if (settingsTrigger) settingsTrigger.classList.remove('active-trigger');
+
+          if (curShell && newShell) {
+            ev.swap = function () {
+              inPlaceShellSwap(newDoc, navCls, toPath);
+            };
+            return;
+          }
+
           if (newShell) {
             newShell.classList.remove('nav-initial', 'nav-push', 'nav-pop', 'nav-none');
             newShell.classList.add(navCls);
@@ -867,15 +1344,9 @@ const fullJsonLd = {
 
           applyTheme(getSavedTheme(), newDoc);
           syncSidebarUiState(getSidebarCollapsed(), newDoc);
-          // Also sync persisted sidebar/main shell classes immediately
           syncSidebarUiState(getSidebarCollapsed(), document);
           syncActiveNavItems(toPath, document);
           syncActiveNavItems(toPath, newDoc);
-
-          var settingsPopup = document.getElementById('settings-popup');
-          var settingsTrigger = document.getElementById('settings-trigger-btn');
-          if (settingsPopup) settingsPopup.style.display = 'none';
-          if (settingsTrigger) settingsTrigger.classList.remove('active-trigger');
         });
 
         document.addEventListener('astro:after-swap', function () {
@@ -886,10 +1357,7 @@ const fullJsonLd = {
           if (typeof window.__elvanApplyLangMode === 'function') {
             window.__elvanApplyLangMode(document);
           }
-          var sidebar = document.getElementById('app-sidebar');
-          if (sidebar && !sidebar.classList.contains('mobile-hidden-nav')) {
-            void sidebar.offsetHeight;
-          }
+          syncMobileChrome();
         });
 
         document.addEventListener('astro:page-load', function () {
@@ -898,6 +1366,8 @@ const fullJsonLd = {
           applyTheme(getSavedTheme(), document);
           bindPersistentShellEvents();
           bindPerPageMobileMenuAndThemes();
+          syncMobileChrome();
+          queueMobileChrome();
           pushUnloadedAds();
         });
 
@@ -1144,17 +1614,438 @@ const fullJsonLd = {
         }
       }
 
-      @media (max-width: 768px) {
-        #app-sidebar .nav-item.collapsed {
-          width: auto !important;
-          height: 100% !important;
-          padding: 0 !important;
-          border-radius: 0 !important;
+      #app-shell :is(
+        #app-sidebar, #app-sidebar *,
+        .mobile-topbar, #mobile-menu-dropdown, #mobile-menu-dropdown *,
+        .desktop-topbar, .desktop-topbar *,
+        .writing-list-dock, .writing-list-dock *,
+        .writing-controls-sheet, .writing-controls-sheet *,
+        .variant-header-row, .variant-header-row *,
+        .expand-pill, .expand-pill *,
+        .page-btn, .page-number-btn,
+        .store-app-card, .store-project-card, .category-card,
+        .nav-item, .menu-item, button, [role='button']
+      ) {
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+      }
+
+      #app-shell :is(input, textarea) {
+        user-select: text !important;
+        -webkit-user-select: text !important;
+      }
+
+      #app-shell :is(.MuiTouchRipple-root, .store-card-ripple) {
+        display: none !important;
+      }
+
+      .mobile-edge-fade,
+      .mobile-dot-glass,
+      .mobile-back-glass,
+      .mobile-nav-pill {
+        display: none;
+      }
+
+      @media (min-width: 769px) {
+        #mobile-menu-dropdown,
+        #mobile-menu-backdrop {
+          display: none !important;
         }
       }
 
-      #mobile-menu-dropdown:not(.is-open),
-      #mobile-menu-backdrop:not(.is-open) {
+      @media (max-width: 768px) {
+        html,
+        body {
+          overflow-x: clip !important;
+          overflow-y: visible !important;
+          overscroll-behavior-y: contain;
+        }
+
+        html {
+          scrollbar-gutter: auto !important;
+          scrollbar-width: none;
+        }
+
+        html::-webkit-scrollbar {
+          display: none;
+        }
+
+        #app-shell > .mobile-topbar {
+          height: calc(var(--mobile-header-height) + env(safe-area-inset-top, 0px));
+          box-sizing: border-box;
+          padding-top: env(safe-area-inset-top, 0px);
+          padding-inline: var(--mobile-header-gutter);
+          background: transparent;
+          border-bottom: 0;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          transform: none;
+          will-change: auto;
+          pointer-events: none;
+        }
+
+        #app-shell > .mobile-topbar > .brand {
+          opacity: var(--mobile-title-opacity, 1);
+          translate: 0 var(--mobile-title-offset, 0px);
+          transition: opacity 180ms ease-out, translate 180ms ease-out;
+        }
+
+        #app-shell > .mobile-topbar .mobile-back-btn {
+          width: var(--mobile-dot-size);
+          height: var(--mobile-dot-size);
+          color: var(--text-main);
+          pointer-events: auto;
+          background: transparent;
+        }
+
+        #app-shell > .mobile-topbar.has-back .mobile-topbar-left {
+          width: 46px;
+        }
+
+        #app-shell > .mobile-topbar #mobile-dot-btn {
+          position: relative;
+          width: var(--mobile-dot-size);
+          height: var(--mobile-dot-size);
+          background: transparent !important;
+          transform: none;
+        }
+
+        #app-shell > #mobile-menu-backdrop {
+          z-index: 1098;
+        }
+
+        #app-shell[data-reader-switch-pinned] > .mobile-topbar > .brand {
+          opacity: 0 !important;
+          pointer-events: none;
+        }
+
+        .mobile-edge-fade {
+          display: block;
+          position: fixed;
+          inset-inline: 0;
+          pointer-events: none;
+          z-index: 990;
+          opacity: 0;
+          transition: opacity 180ms ease-out;
+          background: linear-gradient(var(--edge-fade-direction),
+            color-mix(in srgb, var(--bg-app) 84%, transparent) 0%,
+            color-mix(in srgb, var(--bg-app) 58%, transparent) 44%,
+            color-mix(in srgb, var(--bg-app) 18%, transparent) 78%,
+            transparent 100%);
+        }
+
+        #app-shell.is-tab-swapping > .mobile-edge-fade {
+          transition: none !important;
+        }
+
+        #app-shell[data-mobile-scrolled] > .mobile-edge-fade--top,
+        #app-shell[data-mobile-bottom-fade] > .mobile-edge-fade--bottom {
+          opacity: 1;
+        }
+
+        .mobile-edge-fade--top {
+          --edge-fade-direction: to bottom;
+          top: 0;
+          height: calc(64px + env(safe-area-inset-top, 0px));
+        }
+
+        .mobile-edge-fade--bottom {
+          --edge-fade-direction: to top;
+          bottom: 0;
+          height: calc(82px + env(safe-area-inset-bottom, 0px));
+        }
+
+        #app-sidebar.mobile-hidden-nav ~ .mobile-edge-fade--bottom {
+          height: calc(52px + env(safe-area-inset-bottom, 0px));
+        }
+
+        #app-shell {
+          --mobile-header-height: 64px;
+          --mobile-header-gutter: 16px;
+          --mobile-dot-size: 46px;
+          --mobile-glass-fill: color-mix(in srgb, var(--bg-app) 77%, var(--text-main) 7%);
+          --mobile-glass-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+        }
+
+        [data-theme='light'] #app-shell {
+          --mobile-glass-fill: rgba(251, 251, 251, 0.88);
+          --mobile-glass-shadow: 0 2px 8px rgba(0, 0, 0, 0.045), 0 6px 20px rgba(0, 0, 0, 0.035), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        }
+
+        #app-sidebar,
+        #app-shell > .mobile-back-glass,
+        #app-shell > .mobile-dot-glass {
+          background: var(--mobile-glass-fill) !important;
+          border: none !important;
+          box-shadow: var(--mobile-glass-shadow);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+
+        #app-shell > :is(.mobile-dot-glass, .mobile-back-glass) {
+          display: block;
+          position: fixed;
+          top: calc(env(safe-area-inset-top, 0px) + (var(--mobile-header-height) - var(--mobile-dot-size)) / 2);
+          width: var(--mobile-dot-size);
+          height: var(--mobile-dot-size);
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 1099;
+        }
+
+        #app-shell > .mobile-dot-glass {
+          right: var(--mobile-header-gutter);
+        }
+
+        #app-shell > .mobile-back-glass {
+          left: var(--mobile-header-gutter);
+        }
+
+        #app-shell > #mobile-menu-dropdown {
+          position: fixed;
+          top: calc(env(safe-area-inset-top, 0px) + (var(--mobile-header-height) - var(--mobile-dot-size)) / 2 - 2px);
+          right: calc(var(--mobile-header-gutter) - 2px);
+          z-index: 1102;
+          transform-origin: top right !important;
+          transform: scale(1);
+          opacity: 1;
+          animation: none !important;
+          background: var(--bg-panel) !important;
+          border: none !important;
+          box-shadow: var(--mobile-glass-shadow);
+          transition:
+            transform 170ms cubic-bezier(0.2, 0.9, 0.25, 1),
+            opacity 150ms cubic-bezier(0.2, 0.9, 0.25, 1),
+            height 200ms cubic-bezier(0.2, 0.9, 0.25, 1);
+          will-change: transform, opacity;
+        }
+
+        @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+          #app-shell > #mobile-menu-dropdown {
+            background: var(--mobile-glass-fill) !important;
+            backdrop-filter: blur(26px) saturate(180%);
+            -webkit-backdrop-filter: blur(26px) saturate(180%);
+          }
+        }
+
+        #app-shell > #mobile-menu-dropdown.is-entering,
+        #app-shell > #mobile-menu-dropdown.is-closing {
+          transform: scale(0.24) !important;
+          opacity: 0 !important;
+          pointer-events: none;
+        }
+
+        #app-shell > #mobile-menu-dropdown.is-closing {
+          transition-duration: 135ms;
+          transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+        }
+
+        #app-shell :is(.mobile-back-btn, #mobile-menu-dropdown .menu-item) {
+          position: relative;
+        }
+
+        #app-shell > .mobile-dot-glass,
+        #app-shell #mobile-dot-btn,
+        #app-shell :is(.mobile-back-btn, .mobile-back-glass, #mobile-menu-dropdown .menu-item) {
+          transition:
+            opacity 120ms ease,
+            scale 200ms cubic-bezier(0.22, 1, 0.36, 1),
+            background-color 150ms ease;
+        }
+
+        #app-shell:has(#mobile-menu-dropdown:is(.is-entering, .is-open)) > .mobile-dot-glass,
+        #app-shell:has(#mobile-menu-dropdown:is(.is-entering, .is-open)) #mobile-dot-btn {
+          opacity: 0 !important;
+          pointer-events: none;
+        }
+
+        #app-shell :is(#mobile-dot-btn, .mobile-back-btn):active,
+        #app-shell:has(#mobile-dot-btn:active) > .mobile-dot-glass,
+        #app-shell:has(.mobile-back-btn:active) > .mobile-back-glass {
+          scale: 0.96;
+          transition-duration: 120ms;
+        }
+
+        #app-shell > .mobile-topbar .mobile-back-btn:active {
+          transform: none;
+          background: transparent;
+        }
+
+        #app-shell > #mobile-menu-dropdown .menu-item {
+          border-radius: 999px;
+          background: transparent !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          #app-shell > #mobile-menu-dropdown .menu-item:hover {
+            background: color-mix(in srgb, var(--text-main) 6%, transparent) !important;
+          }
+        }
+
+        #app-shell > #mobile-menu-dropdown .menu-item:active {
+          scale: 0.985;
+          transition-duration: 100ms;
+          background: color-mix(in srgb, var(--text-main) 8%, transparent) !important;
+        }
+
+        #app-shell > #mobile-menu-dropdown .menu-item.selected {
+          font-weight: 650;
+        }
+
+        #app-shell > #mobile-menu-dropdown .menu-item:focus:not(:focus-visible) {
+          outline: none;
+        }
+
+        #app-shell :is(#mobile-dot-btn, .mobile-back-btn, #mobile-menu-dropdown .menu-item):focus-visible {
+          outline: 2px solid var(--text-main);
+          outline-offset: -3px;
+        }
+
+        #app-sidebar {
+          left: max(12px, env(safe-area-inset-left));
+          right: max(12px, env(safe-area-inset-right));
+          bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+          width: auto !important;
+          max-width: 420px;
+          height: 60px;
+          margin-inline: auto;
+          padding: 4px !important;
+          box-sizing: border-box;
+          border-radius: 999px !important;
+          box-shadow: var(--mobile-glass-shadow) !important;
+        }
+
+        #app-main-content {
+          padding-top: calc(64px + env(safe-area-inset-top, 0px)) !important;
+        }
+
+        #app-shell > #app-main-content:has(.ms-store-page) {
+          padding-top: 0 !important;
+        }
+
+        #app-main-content:not(.no-bottom-nav) {
+          padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+        }
+
+        #app-main-content.no-bottom-nav {
+          padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+        }
+
+        #app-sidebar .sidebar-nav {
+          position: relative;
+          isolation: isolate;
+          touch-action: pan-y pinch-zoom;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        #app-sidebar .nav-item:not(.active) .nav-icon {
+          opacity: 0.76;
+        }
+
+        #app-sidebar .nav-item .nav-icon {
+          transform: none !important;
+        }
+
+        #app-sidebar .nav-item[data-tip]::after {
+          content: attr(data-tip);
+          position: absolute;
+          inset-block-end: calc(100% + 12px);
+          left: 50%;
+          translate: -50% 4px;
+          padding: 5px 9px;
+          border-radius: 999px;
+          background: var(--text-main);
+          color: var(--bg-app);
+          font-size: 0.72rem;
+          font-weight: 600;
+          white-space: nowrap;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 130ms ease, translate 130ms ease;
+          z-index: 2;
+        }
+
+        #app-sidebar .nav-item[data-nav-key='home'],
+        #app-sidebar .nav-item[data-nav-key='about-mobile'] {
+          --nav-tip-translate: 0px;
+        }
+
+        #app-sidebar .nav-item[data-nav-key='home']::after { left: 0; translate: 0 4px; }
+        #app-sidebar .nav-item[data-nav-key='about-mobile']::after { left: auto; right: 0; translate: 0 4px; }
+
+        #app-sidebar .nav-item[data-tip]:focus-visible:not(:active)::after {
+          opacity: 1;
+          translate: var(--nav-tip-translate, -50%) 0;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          #app-sidebar .nav-item[data-tip]:not([data-tip-suppressed]):hover:not(:active)::after {
+            opacity: 1;
+            translate: var(--nav-tip-translate, -50%) 0;
+            transition-delay: 250ms;
+          }
+        }
+
+        #app-sidebar .nav-item:focus-visible {
+          outline: 2px solid var(--text-main);
+          outline-offset: -4px;
+          border-radius: 999px !important;
+        }
+
+        .mobile-nav-pill {
+          display: block;
+          position: absolute;
+          pointer-events: none;
+          z-index: -1;
+          inset: 2px auto 2px 0;
+          width: var(--pill-width, 0);
+          border-radius: 999px;
+          background: color-mix(in srgb, var(--text-main) 12%, transparent);
+          opacity: 0;
+          transform: translate3d(var(--pill-x, 0px), 0, 0) scale(var(--pill-scale, 1));
+          transition: transform 420ms cubic-bezier(0.22, 1.32, 0.36, 1), opacity 150ms ease;
+        }
+
+        .mobile-nav-pill[data-ready] {
+          opacity: 1;
+        }
+
+        #app-sidebar .sidebar-nav[data-pressing] {
+          --pill-scale: 1.045;
+        }
+
+        #app-sidebar .sidebar-nav[data-dragging] .mobile-nav-pill {
+          transition-duration: 65ms, 150ms;
+          transition-timing-function: ease-out, ease;
+        }
+
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #app-shell > #mobile-menu-dropdown {
+          animation: none;
+        }
+
+        #app-shell :is(#mobile-dot-btn, .mobile-back-btn, .mobile-dot-glass, .mobile-back-glass, #mobile-menu-dropdown .menu-item) {
+          transition: none !important;
+          scale: none !important;
+        }
+
+        #app-shell > .mobile-topbar > .brand {
+          translate: none;
+        }
+
+        #app-sidebar .mobile-nav-pill,
+        #app-sidebar .sidebar-nav[data-dragging] .mobile-nav-pill,
+        #app-sidebar .nav-icon {
+          transition: none !important;
+        }
+      }
+
+      #mobile-menu-dropdown:not(.is-open):not(.is-entering):not(.is-closing),
+      #mobile-menu-backdrop:not(.is-open):not(.is-entering):not(.is-closing) {
         display: none !important;
       }
       .astro-island-root .mobile-topbar,

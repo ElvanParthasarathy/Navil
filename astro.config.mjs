@@ -6,6 +6,7 @@ export default defineConfig({
   site: 'https://elvannavil.vercel.app',
   output: 'static',
   trailingSlash: 'never',
+  devToolbar: { enabled: false },
   build: {
     format: 'directory',
   },

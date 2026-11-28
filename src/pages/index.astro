@@ -85,8 +85,7 @@ function getClassColor(name: string) {
 
     <!-- 3. FEATURED PRODUCTS: NAMMIL & NAVIL TRANSLITERATOR -->
     <section class="home-section animate-entry" style="margin-top: 48px;">
-      <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
-        <div class="home-section-badge" data-ui-pair="home.creationsBadge">{UI_TA.home.creationsBadge} • {UI_EN.home.creationsBadge}</div>
+      <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 4px;">
         <h2 class="home-section-title" lang="ta" data-ui-ta="home.creationsTitle">{UI_TA.home.creationsTitle}</h2>
         <div class="home-section-desc" data-ui-en="home.creationsDesc">{UI_EN.home.creationsDesc}</div>
       </div>
@@ -158,9 +157,9 @@ function getClassColor(name: string) {
                 <p class="cat-desc" lang="ta" data-ui-ta="home.translitDesc">{UI_TA.home.translitDesc}</p>
                 <p class="cat-desc-sub" data-ui-en="home.translitDesc">{UI_EN.home.translitDesc}</p>
               </div>
-              <div class="font-specimen-box" data-no-translit style="margin: 18px 0 0;">
-                <div class="font-sample-ta" lang="ta">தமிழ் → Thamizhi · Vatteluttu · IAST</div>
-                <div class="font-sample-en">Tolkappiyam positional phonetics · ka / ga · ca / sa · ta / da</div>
+              <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid color-mix(in srgb, var(--text-main) 7%, transparent);" data-no-translit>
+                <div class="font-sample-ta" lang="ta" style="font-size: 1rem;">தமிழ் → Thamizhi · Vatteluttu · IAST</div>
+                <div class="font-sample-en" style="font-size: 0.84rem;">Tolkappiyam positional phonetics · ka / ga · ca / sa · ta / da</div>
               </div>
             </div>
             <div class="cat-footer" style="margin-top: auto; padding-top: 20px;">
@@ -173,8 +172,7 @@ function getClassColor(name: string) {
 
     <!-- 4. REFLECTIONS & POETRY PLAYERS -->
     <section class="home-section animate-entry" style="margin-top: 48px;">
-      <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
-        <div class="home-section-badge" data-ui-pair="home.navilgalBadge">{UI_TA.home.navilgalBadge} • {UI_EN.home.navilgalBadge}</div>
+      <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 4px;">
         <h2 class="home-section-title" lang="ta" data-ui-ta="home.navilgalTitle">{UI_TA.home.navilgalTitle}</h2>
         <div class="home-section-desc" data-ui-en="home.navilgalDesc">{UI_EN.home.navilgalDesc}</div>
       </div>
@@ -212,8 +210,8 @@ function getClassColor(name: string) {
               )}
             </div>
           </div>
-          <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
-            <span id="poem-theme-label" style="font-weight: 600; color: var(--text-main);">{initialPoem.theme}</span><span class="en-sub-inline" data-ui-en="home.poemHint"> • {UI_EN.home.poemHint}</span>
+          <div style="margin-top: 14px; font-size: 0.78rem; color: var(--text-muted);">
+            <span id="poem-theme-label" style="font-weight: 600; color: var(--text-main);">{initialPoem.theme}</span>
           </div>
         </section>
 
@@ -249,8 +247,8 @@ function getClassColor(name: string) {
               )}
             </div>
           </div>
-          <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
-            <span id="quote-tag-label" style="font-weight: 600; color: var(--text-main);">{initialQuote.tag}</span><span class="en-sub-inline" data-ui-en="home.quoteHint"> • {UI_EN.home.quoteHint}</span>
+          <div style="margin-top: 14px; font-size: 0.78rem; color: var(--text-muted);">
+            <span id="quote-tag-label" style="font-weight: 600; color: var(--text-main);">{initialQuote.tag}</span>
           </div>
         </section>
       </div>
@@ -259,8 +257,7 @@ function getClassColor(name: string) {
     <!-- 5. FEATURED ARTICLES (CRAWLABLE SEMANTIC LINKS FOR GOOGLE & READERS) -->
     {featuredArticles.length > 0 && (
       <section class="home-section animate-entry" style="margin-top: 48px;">
-        <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 8px;">
-          <div class="home-section-badge" data-ui-pair="home.articlesBadge">{UI_TA.home.articlesBadge} • {UI_EN.home.articlesBadge}</div>
+        <div class="home-section-header" style="margin: 0 0 20px; padding-bottom: 4px;">
           <h2 class="home-section-title" lang="ta" data-ui-ta="home.articlesTitle">{UI_TA.home.articlesTitle}</h2>
           <div class="home-section-desc" data-ui-en="home.articlesDesc">{UI_EN.home.articlesDesc}</div>
         </div>
@@ -304,20 +301,6 @@ function getClassColor(name: string) {
   <script is:inline define:vars={{ poemsPool, quotesPool }}>
     (function () {
       function initHomePage() {
-        var nammilCard = document.getElementById('home-nammil-card');
-        if (nammilCard && !nammilCard.dataset.bound) {
-          nammilCard.dataset.bound = '1';
-          nammilCard.addEventListener('mousedown', function (e) {
-            var rect = nammilCard.getBoundingClientRect();
-            var ripple = document.createElement('span');
-            ripple.className = 'store-card-ripple';
-            ripple.style.left = (e.clientX - rect.left) + 'px';
-            ripple.style.top = (e.clientY - rect.top) + 'px';
-            nammilCard.appendChild(ripple);
-            setTimeout(function () { ripple.remove(); }, 650);
-          });
-        }
-
         var poemCard = document.getElementById('home-poem-card');
         var quoteCard = document.getElementById('home-quote-card');
         var refreshPoemBtn = document.getElementById('refresh-poem-btn');

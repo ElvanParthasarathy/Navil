@@ -1663,18 +1663,30 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
     text-decoration: none;
   }
 
-  .menu-item:hover,
-  .menu-item:active,
+  @media (hover: hover) and (pointer: fine) {
+    .menu-item:hover {
+      background: rgba(0, 0, 0, 0.05) !important;
+      color: var(--text-main) !important;
+    }
+
+    [data-theme='dark'] .menu-item:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: var(--text-main) !important;
+    }
+  }
+
   .menu-item:focus {
+    outline: none;
+  }
+
+  .menu-item:active {
     outline: none;
     background: rgba(0, 0, 0, 0.06) !important;
     color: var(--text-main) !important;
   }
 
-  [data-theme='dark'] .menu-item:hover,
-  [data-theme='dark'] .menu-item:active,
-  [data-theme='dark'] .menu-item:focus {
-    background: rgba(255, 255, 255, 0.15) !important;
+  [data-theme='dark'] .menu-item:active {
+    background: rgba(255, 255, 255, 0.12) !important;
     color: var(--text-main) !important;
   }
 
@@ -1703,16 +1715,27 @@ body:has(.ms-store-page) .sidebar-collapsed.main-content .main-content-body,
     opacity: 1;
   }
 
-  /* Selected State (Grey Pill + Checkmark) */
+  /* Selected State (Minimal Checkmark, Pill Only on Hover/Press) */
   .menu-item.selected {
-    background: rgba(0, 0, 0, 0.06) !important;
+    background: transparent;
+    font-weight: 650;
     color: var(--text-main) !important;
     border: none;
   }
 
   [data-theme='dark'] .menu-item.selected {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: transparent;
     color: var(--text-main) !important;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .menu-item.selected:hover {
+      background: rgba(0, 0, 0, 0.05) !important;
+    }
+
+    [data-theme='dark'] .menu-item.selected:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
   }
 
   .menu-item.selected::after {

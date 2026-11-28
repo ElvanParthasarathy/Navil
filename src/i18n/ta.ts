@@ -58,6 +58,7 @@ export const UI_TA: UITranslations = {
   routes: {
     home: { title: 'முகப்பு' },
     nammil: { title: 'நம்மில்' },
+    elvanSans: { title: 'எல்வன் சான்ஸ்' },
     downloads: { title: 'பதிவிறக்கங்கள்' },
     navilgal: { title: 'எல்வனின் நவில்கள்' },
     writings: { title: 'எழுத்துகள்' },
@@ -315,7 +316,17 @@ export const UI_TA: UITranslations = {
   },
   downloads: {
     title: 'பதிவிறக்கங்கள்',
-    subtitle: 'கணினி மென்பொருட்கள் & பயன்பாடுகள்',
+    subtitle: 'செயலிகள், எழுத்துருக்கள் & திறந்த மூலத் திட்டங்கள்',
+    projectsHeading: 'திறந்த மூலத் திட்டங்கள்',
+  },
+  elvanSans: {
+    title: 'எல்வன் சான்ஸ்',
+    categoryTag: 'எழுத்துரு & அச்சுக்கலை',
+    heroDesc:
+      'தமிழ், ஆங்கிலம் (லத்தீன்) மற்றும் மலையாளம் ஆகிய மூன்று வரிவடிவங்களையும் இயல்பான 100% உயர-இடைவெளி ஒருங்கிணைப்புடன் வழங்கும் திறந்த மூல எழுத்துரு (SIL OFL-1.1).',
+    downloadBtn: 'பதிவிறக்கு (ZIP)',
+    githubBtn: 'கிட்ஹப்',
+    browseFontsBtn: 'TTF கோப்புகள்',
   },
   nammil: {
     title: 'நம்மில்',

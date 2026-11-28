@@ -3,15 +3,54 @@ import '../../சிறப்புக்கூறுகள்/படைப்�
 import '../../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdUnit from '../../components/astro/AdUnit.astro';
+import Icon from '../../components/astro/Icon.astro';
 import { UI_TA, UI_EN } from '../../i18n';
+
+const genericProjects = [
+  {
+    nameTa: 'எல்வன் காட்சியகம்',
+    nameEn: 'Elvan Gallery',
+    meta: 'Android • Kotlin / Jetpack Compose media gallery',
+    href: 'https://github.com/ElvanParthasarathy/ElvanGallery',
+  },
+  {
+    nameTa: 'சார் இயக்கி (SAAR)',
+    nameEn: 'SAAR — Adaptive Runtime',
+    meta: 'Windows • Native Android APK runtime (Rust / C++)',
+    href: 'https://github.com/ElvanParthasarathy/ElvanSaar',
+  },
+  {
+    nameTa: 'எல்வன் டிவி முகப்பு',
+    nameEn: 'ElvanTV Home',
+    meta: 'Android TV • Fast, ad-free custom launcher',
+    href: 'https://github.com/ElvanParthasarathy/ElvanTV-Home',
+  },
+  {
+    nameTa: 'நேரம்',
+    nameEn: 'Neram',
+    meta: 'Web & Android • Academic timetable portal',
+    href: 'https://github.com/ElvanParthasarathy/Neram',
+  },
+  {
+    nameTa: 'எல்வன் நவில் ஒலிபெயர்ப்பி',
+    nameEn: 'Elvan Navil Transliterator',
+    meta: 'Web • Bidirectional Tamil / Indic script engine',
+    href: 'https://github.com/ElvanParthasarathy/ElvanNavilTransliterator',
+  },
+  {
+    nameTa: 'எல்வன் முகப்பு OS',
+    nameEn: 'Elvan Portfolio OS',
+    meta: 'Web • Windowed interactive desktop portfolio',
+    href: 'https://github.com/ElvanParthasarathy/ElvanPortfolioOs',
+  },
+];
 ---
 
 <BaseLayout
   title={`${UI_TA.downloads.title} | ${UI_EN.downloads.title} — ${UI_EN.brand.name}`}
-  description="Official desktop applications by Elvan Navil, including Nammil privacy-first WhatsApp companion for Windows."
+  description="Official desktop apps, multi-script Elvan Sans typeface downloads, and open-source software by Elvan Parthasarathy."
   canonicalPath="/downloads"
   mobileTitle={`${UI_TA.routes.downloads.title}|${UI_EN.routes.downloads.title}`}
-  backUrl="/"
 >
   <div class="writings-page page-view fadeIn">
     <header class="writings-header animate-entry">
@@ -24,69 +63,157 @@ import { UI_TA, UI_EN } from '../../i18n';
     </header>
 
     <div class="store-app-grid animate-entry">
-      <a
-        href="/downloads/nammil"
-        id="downloads-nammil-card"
-        class="store-app-card"
-        title="Nammil — Multi-Account WhatsApp Companion"
-      >
-        <div class="store-card-header">
-          <div class="store-card-identity">
-            <img src="/nammil_icon.png" alt="Nammil App Icon" class="store-card-icon" />
-            <div class="store-card-title-wrap">
-              <h2 class="store-card-title">
-                <span class="store-card-name-ta" lang="ta" data-ui-ta="home.nammilName">{UI_TA.home.nammilName}</span>
-                <span class="store-card-name-en" data-ui-en="home.nammilName">{UI_EN.home.nammilName}</span>
-              </h2>
-              <div class="store-card-meta">
-                <span>Social &amp; Productivity • <span data-ui-ta="nammil.categoryTag">{UI_TA.nammil.categoryTag}</span></span>
+      <article class="store-app-card">
+        <a
+          href="/downloads/nammil"
+          id="downloads-nammil-card"
+          class="store-app-link"
+          title="Nammil — Multi-Account WhatsApp Companion"
+        >
+          <div class="store-card-header">
+            <div class="store-card-identity">
+              <img src="/nammil_icon.png" alt="Nammil App Icon" class="store-card-icon" />
+              <div class="store-card-title-wrap">
+                <h2 class="store-card-title">
+                  <span class="store-card-name-ta" lang="ta" data-ui-ta="home.nammilName">{UI_TA.home.nammilName}</span>
+                  <span class="store-card-name-en" data-ui-en="home.nammilName">{UI_EN.home.nammilName}</span>
+                </h2>
+                <div class="store-card-meta">
+                  <span>Social &amp; Productivity • <span data-ui-ta="nammil.categoryTag">{UI_TA.nammil.categoryTag}</span></span>
+                </div>
               </div>
             </div>
+            <div class="store-card-pill">Free</div>
           </div>
-          <div class="store-card-pill">Free</div>
-        </div>
 
-        <div class="store-card-desc-wrap">
-          <p class="store-card-desc store-card-desc-ta" lang="ta" data-ui-ta="home.nammilShortDesc">
-            {UI_TA.home.nammilShortDesc}
-          </p>
-          <p class="store-card-desc store-card-desc-en" data-ui-en="home.nammilShortDesc">
-            {UI_EN.home.nammilShortDesc}
-          </p>
-        </div>
+          <div class="store-card-desc-wrap">
+            <p class="store-card-desc store-card-desc-ta" lang="ta" data-ui-ta="home.nammilShortDesc">
+              {UI_TA.home.nammilShortDesc}
+            </p>
+            <p class="store-card-desc store-card-desc-en" data-ui-en="home.nammilShortDesc">
+              {UI_EN.home.nammilShortDesc}
+            </p>
+          </div>
 
-        <div class="store-card-banner-frame">
-          <img
-            src="/nammil/slide_1.webp"
-            alt="Nammil Desktop Screenshot Preview"
-            class="store-card-banner-img"
-            loading="eager"
-          />
+          <div class="store-card-banner-frame">
+            <img
+              src="/nammil/slide_1.webp"
+              alt="Nammil Desktop Screenshot Preview"
+              class="store-card-banner-img"
+              loading="eager"
+            />
+          </div>
+        </a>
+
+        <div class="store-card-actions">
+          <a
+            href="https://github.com/ElvanParthasarathy/Nammil/releases/latest/download/Nammil-Setup.exe"
+            class="store-quick-pill is-primary"
+            download
+          >
+            <Icon name="DownloadSimple" weight="bold" size={14} />
+            <span data-ui-ta="nammil.downloadBtn">{UI_TA.nammil.downloadBtn}</span>
+          </a>
+          <a
+            href="https://github.com/ElvanParthasarathy/Nammil"
+            target="_blank"
+            rel="noreferrer"
+            class="store-quick-pill"
+          >
+            <Icon name="GithubLogo" weight="bold" size={14} />
+            <span data-ui-en="nammil.githubBtn">{UI_EN.nammil.githubBtn}</span>
+          </a>
         </div>
-      </a>
+      </article>
+
+      <article class="store-app-card">
+        <a
+          href="/downloads/elvan-sans"
+          id="downloads-elvansans-card"
+          class="store-app-link"
+          title="Elvan Sans — Unified Multi-Script Typeface"
+        >
+          <div class="store-card-header">
+            <div class="store-card-identity">
+              <img src="/elvan_sans_icon.png" alt="Elvan Sans Icon" class="store-card-icon" />
+              <div class="store-card-title-wrap">
+                <h2 class="store-card-title">
+                  <span class="store-card-name-ta" lang="ta" data-ui-ta="elvanSans.title">{UI_TA.elvanSans.title}</span>
+                  <span class="store-card-name-en" data-ui-en="elvanSans.title">{UI_EN.elvanSans.title}</span>
+                </h2>
+                <div class="store-card-meta">
+                  <span>OFL-1.1 • <span data-ui-ta="elvanSans.categoryTag">{UI_TA.elvanSans.categoryTag}</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="store-card-pill">Font</div>
+          </div>
+
+          <div class="store-card-desc-wrap">
+            <p class="store-card-desc store-card-desc-ta" lang="ta" data-ui-ta="elvanSans.heroDesc">
+              {UI_TA.elvanSans.heroDesc}
+            </p>
+            <p class="store-card-desc store-card-desc-en" data-ui-en="elvanSans.heroDesc">
+              {UI_EN.elvanSans.heroDesc}
+            </p>
+          </div>
+
+          <div class="store-card-banner-frame" style="background: #11131f;">
+            <img
+              src="/elvan-sans/slide_1.webp"
+              alt="Elvan Sans Hero Specimen"
+              class="store-card-banner-img"
+              loading="eager"
+            />
+          </div>
+        </a>
+
+        <div class="store-card-actions">
+          <a
+            href="https://github.com/ElvanParthasarathy/ElvanSans/archive/refs/heads/main.zip"
+            class="store-quick-pill is-primary"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Icon name="DownloadSimple" weight="bold" size={14} />
+            <span data-ui-ta="elvanSans.downloadBtn">{UI_TA.elvanSans.downloadBtn}</span>
+          </a>
+          <a
+            href="https://github.com/ElvanParthasarathy/ElvanSans"
+            target="_blank"
+            rel="noreferrer"
+            class="store-quick-pill"
+          >
+            <Icon name="GithubLogo" weight="bold" size={14} />
+            <span data-ui-en="elvanSans.githubBtn">{UI_EN.elvanSans.githubBtn}</span>
+          </a>
+        </div>
+      </article>
     </div>
+
+    <section class="store-projects-section animate-entry" aria-label="Open-Source Projects">
+      <h2 class="store-projects-heading" data-ui-pair="downloads.projectsHeading">
+        {UI_TA.downloads.projectsHeading} • {UI_EN.downloads.projectsHeading}
+      </h2>
+
+      <div class="store-projects-grid">
+        {genericProjects.map((proj) => (
+          <a href={proj.href} target="_blank" rel="noreferrer" class="store-project-row">
+            <div class="store-project-info">
+              <div class="store-project-heading">
+                <span class="store-project-title" lang="ta">{proj.nameTa}</span>
+                <span class="store-project-sep">·</span>
+                <span class="store-project-sub">{proj.nameEn}</span>
+              </div>
+              <div class="store-card-meta">{proj.meta}</div>
+            </div>
+            <Icon name="ArrowRight" weight="regular" size={16} class="store-project-arrow" />
+          </a>
+        ))}
+      </div>
+    </section>
 
     <AdUnit margin="48px 0 0" />
   </div>
 
-  <script is:inline>
-    (function () {
-      function bindDownloads() {
-        var card = document.getElementById('downloads-nammil-card');
-        if (!card || card.dataset.bound) return;
-        card.dataset.bound = '1';
-        card.addEventListener('mousedown', function (e) {
-          var rect = card.getBoundingClientRect();
-          var ripple = document.createElement('span');
-          ripple.className = 'store-card-ripple';
-          ripple.style.left = (e.clientX - rect.left) + 'px';
-          ripple.style.top = (e.clientY - rect.top) + 'px';
-          card.appendChild(ripple);
-          setTimeout(function () { ripple.remove(); }, 650);
-        });
-      }
-      bindDownloads();
-      document.addEventListener('astro:page-load', bindDownloads);
-    })();
-  </script>
 </BaseLayout>

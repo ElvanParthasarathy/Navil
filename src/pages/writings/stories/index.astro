@@ -5,6 +5,7 @@ import '../../../சிறப்புக்கூறுகள்/படைப�
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdUnit from '../../../components/astro/AdUnit.astro';
 import Icon from '../../../components/astro/Icon.astro';
+import WritingControlsSheet from '../../../components/astro/WritingControlsSheet.astro';
 import { getStoriesGrouped, getPrimaryTitle, getPrimaryExcerpt, getPostTags } from '../../../lib/content';
 import { getOptimizedImage } from '../../../நூலகம்/ஊடகம்';
 import { UI_TA, UI_EN } from '../../../i18n';
@@ -24,7 +25,6 @@ const allGenres = Array.from(genresSet).sort();
   backUrl="/writings"
 >
   <div class="writings-page page-view fadeIn" id="stories-list-root">
-    <!-- Controls (inline on mobile, moved to #desktop-topbar-actions on desktop) -->
     <div id="stories-controls-mount">
       <div class="controls-area" id="stories-controls-el" style="max-width: 800px;">
         <div class="minimal-search">
@@ -47,6 +47,8 @@ const allGenres = Array.from(genresSet).sort();
         )}
       </div>
     </div>
+
+    <WritingControlsSheet controlsId="stories-controls-el" />
 
     <div class="blog-grid-container animate-entry">
       {grouped.map((item) => {
@@ -157,25 +159,6 @@ const allGenres = Array.from(genresSet).sort();
         if (stAbort) stAbort.abort();
         stAbort = new AbortController();
         var sig = { signal: stAbort.signal };
-
-        var controlsEl = document.getElementById('stories-controls-el');
-        var controlsMount = document.getElementById('stories-controls-mount');
-
-        function syncControlsPlacement() {
-          var target = document.getElementById('desktop-topbar-actions');
-          if (!controlsEl || !controlsMount) return;
-          if (window.innerWidth > 768 && target) {
-            controlsEl.className = 'topbar-controls-area';
-            controlsEl.removeAttribute('style');
-            if (controlsEl.parentNode !== target) target.appendChild(controlsEl);
-          } else {
-            controlsEl.className = 'controls-area';
-            controlsEl.style.maxWidth = '800px';
-            if (controlsEl.parentNode !== controlsMount) controlsMount.appendChild(controlsEl);
-          }
-        }
-        syncControlsPlacement();
-        window.addEventListener('resize', syncControlsPlacement, sig);
 
         var input = document.getElementById('stories-search-input');
         var select = document.getElementById('stories-genre-select');

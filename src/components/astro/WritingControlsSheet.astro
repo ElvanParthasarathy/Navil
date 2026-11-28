@@ -1,0 +1,723 @@
+---
+import { UI_TA, UI_EN } from '../../i18n';
+
+interface Props {
+  controlsId: string;
+  paginationId?: string;
+}
+
+const { controlsId, paginationId } = Astro.props;
+const sheetId = `${controlsId}-sheet`;
+---
+
+<dialog class="writing-controls-sheet" id={sheetId} data-controls-id={controlsId} data-pagination-id={paginationId} aria-labelledby={`${sheetId}-title`}>
+  <div class="writing-sheet-surface">
+    <button type="button" class="writing-sheet-handle" data-sheet-handle aria-label="Close sheet" autofocus></button>
+    <header class="writing-sheet-heading">
+      <h2 id={`${sheetId}-title`} data-sheet-title></h2>
+    </header>
+    <div class="writing-sheet-topics" data-sheet-topics hidden></div>
+    <div data-sheet-pages hidden></div>
+  </div>
+</dialog>
+
+<div class="writing-search-dock" id={`${controlsId}-search`} role="search" hidden>
+  <label class="writing-search-pill">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m16 16 4 4" />
+    </svg>
+    <input type="search" enterkeyhint="search" data-ui-placeholder="common.searchPlaceholder" placeholder={UI_TA.common.searchPlaceholder} aria-label={UI_EN.common.searchPlaceholder} />
+  </label>
+  <button type="button" aria-label="Close search">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="m6 6 12 12M18 6 6 18" />
+    </svg>
+  </button>
+</div>
+
+<script>
+  function bindWritingSheet(sheet: HTMLDialogElement) {
+    if (sheet.dataset.bound) return;
+    const controls = document.getElementById(sheet.dataset.controlsId ?? '');
+    const search = controls?.querySelector<HTMLInputElement>('input[type="search"]');
+    const searchPill = search?.parentElement;
+    const title = sheet.querySelector<HTMLElement>('[data-sheet-title]');
+    const handle = sheet.querySelector<HTMLButtonElement>('[data-sheet-handle]');
+    const searchDock = document.getElementById(`${sheet.dataset.controlsId}-search`);
+    const shell = sheet.closest('#app-shell');
+    const controlsMount = controls?.parentElement;
+    const dockInput = searchDock?.querySelector<HTMLInputElement>('input');
+    const closeSearchButton = searchDock?.querySelector('button');
+    const topicsPanel = sheet.querySelector<HTMLElement>('[data-sheet-topics]');
+    const pagesPanel = sheet.querySelector<HTMLElement>('[data-sheet-pages]');
+    if (!controls || !controlsMount || !shell || !search || !searchPill || !title || !handle || !searchDock || !dockInput || !closeSearchButton || !topicsPanel || !pagesPanel) return;
+    sheet.dataset.bound = 'true';
+    controls.dataset.writingSheetEnabled = 'true';
+    shell.append(searchDock);
+
+    const mobile = window.matchMedia('(max-width: 768px)');
+    const topics = controls.querySelector<HTMLSelectElement>('select');
+    const pagination = document.getElementById(sheet.dataset.paginationId ?? '');
+    const pagesTrigger = controls.querySelector<HTMLButtonElement>('.pagination-toggle-btn');
+    const actionsPill = document.createElement('div');
+    actionsPill.className = 'writing-actions-pill';
+    let opener: HTMLButtonElement | null = null;
+    let pagesMarker: Comment | null = null;
+    let sheetDrag: { pointerId: number; startY: number } | null = null;
+    let ignoreHandleClick = false;
+    let closingAnimation: Animation | null = null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function dismissSheet() {
+      if (!sheet.open || closingAnimation) return;
+      if (reduceMotion.matches) {
+        sheet.close();
+        return;
+      }
+      const from = getComputedStyle(sheet).transform;
+      sheet.dataset.closing = 'true';
+      const animation = sheet.animate([
+        { transform: from },
+        { transform: 'translateY(100%)' },
+      ], { duration: 220, easing: 'cubic-bezier(0.35, 0, 0.75, 0.15)', fill: 'forwards' });
+      closingAnimation = animation;
+      animation.finished.then(() => {
+        if (closingAnimation === animation && sheet.open) sheet.close();
+      }, () => {});
+    }
+
+    function makeTrigger(parent: HTMLElement, label: string) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'writing-sheet-trigger';
+      button.setAttribute('aria-label', label);
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.setAttribute('aria-controls', sheet.id);
+      parent.append(button);
+      return button;
+    }
+
+    function restorePages() {
+      if (!pagesMarker || !pagination) return;
+      delete pagination.dataset.inWritingSheet;
+      if (pagesMarker.isConnected) pagesMarker.replaceWith(pagination);
+      pagesMarker = null;
+    }
+
+    const searchTrigger = makeTrigger(searchPill, search.getAttribute('aria-label') || search.placeholder);
+    searchTrigger.removeAttribute('aria-haspopup');
+    searchTrigger.setAttribute('aria-controls', searchDock.id);
+    searchTrigger.setAttribute('aria-expanded', 'false');
+    function refreshSearchLabel() {
+      searchTrigger.textContent = search.value || search.placeholder;
+      searchTrigger.classList.toggle('has-query', Boolean(search.value));
+    }
+    refreshSearchLabel();
+    search.addEventListener('input', refreshSearchLabel);
+    new MutationObserver(refreshSearchLabel).observe(search, { attributeFilter: ['placeholder'] });
+
+    function openPanel(trigger: HTMLButtonElement, panel: HTMLElement, heading: string) {
+      if (!mobile.matches || sheet.open) return false;
+      closeSearch(false);
+      opener = trigger;
+      title.textContent = heading;
+      title.parentElement!.hidden = panel === topicsPanel;
+      topicsPanel!.hidden = topicsPanel !== panel;
+      pagesPanel!.hidden = pagesPanel !== panel;
+      sheet.showModal();
+      return true;
+    }
+
+    const viewport = window.visualViewport;
+    function syncSearchPosition() {
+      if (searchDock!.hidden) return;
+      const offset = viewport && Math.abs(viewport.scale - 1) < 0.01
+        ? Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+        : 0;
+      searchDock!.style.setProperty('--writing-keyboard-offset', offset + 'px');
+    }
+
+    function closeSearch(restoreFocus: boolean) {
+      if (searchDock!.hidden) return;
+      dockInput!.blur();
+      searchDock!.hidden = true;
+      controls!.inert = false;
+      searchTrigger.setAttribute('aria-expanded', 'false');
+      if (restoreFocus && mobile.matches) searchTrigger.focus({ preventScroll: true });
+    }
+
+    searchTrigger.addEventListener('click', () => {
+      if (!mobile.matches || sheet.open) return;
+      dockInput.value = search.value;
+      searchDock.hidden = false;
+      controls.inert = true;
+      searchTrigger.setAttribute('aria-expanded', 'true');
+      syncSearchPosition();
+      dockInput.focus({ preventScroll: true });
+    });
+    dockInput.addEventListener('input', () => {
+      search.value = dockInput.value;
+      search.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    searchDock.addEventListener('keydown', event => {
+      if (event.isComposing) return;
+      if (event.key === 'Enter' && event.target === dockInput) dockInput.blur();
+      if (event.key === 'Escape') closeSearch(true);
+    });
+    closeSearchButton.addEventListener('click', () => closeSearch(true));
+    viewport?.addEventListener('resize', syncSearchPosition);
+    viewport?.addEventListener('scroll', syncSearchPosition);
+
+    const topicWrapper = topics?.parentElement;
+    if (topics && topicWrapper) {
+      const topicsTrigger = makeTrigger(topicWrapper, topics.getAttribute('aria-label') || 'Topics');
+      const topicLabel = topicsTrigger.getAttribute('aria-label') || 'Topics';
+      topicsTrigger.title = topicLabel;
+      const refreshTopicState = () => topicsTrigger.setAttribute('aria-label', topics.value
+        ? `${topicLabel}: ${topics.selectedOptions[0]?.text || topics.value}`
+        : topicLabel);
+      topics.addEventListener('change', refreshTopicState);
+      topicsTrigger.addEventListener('click', () => {
+        topicsPanel.replaceChildren(...Array.from(topics.options, option => {
+          const choice = document.createElement('button');
+          choice.type = 'button';
+          choice.textContent = option.value ? option.text : '\u0B85\u0BA9\u0BC8\u0BA4\u0BCD\u0BA4\u0BC1\u0BAE\u0BCD';
+          choice.setAttribute('aria-pressed', String(option.selected));
+          choice.addEventListener('click', () => {
+            topics.value = option.value;
+            topics.dispatchEvent(new Event('change', { bubbles: true }));
+            dismissSheet();
+          });
+          return choice;
+        }));
+        openPanel(topicsTrigger, topicsPanel, topics.options[0]?.text || 'Topics');
+      });
+    }
+
+    if (pagesTrigger && pagination) {
+      pagesTrigger.setAttribute('aria-haspopup', 'dialog');
+      pagesTrigger.setAttribute('aria-controls', sheet.id);
+      controls.addEventListener('click', event => {
+        if (!mobile.matches || !(event.target instanceof Element) || !pagesTrigger.contains(event.target)) return;
+        event.stopPropagation();
+        if (!openPanel(pagesTrigger, pagesPanel, pagesTrigger.title || 'Pages')) return;
+        pagesMarker = document.createComment('');
+        pagination.before(pagesMarker);
+        pagination.dataset.inWritingSheet = 'true';
+        pagesPanel.append(pagination);
+      }, true);
+      pagination.addEventListener('click', event => {
+        if (sheet.open && !pagesPanel.hidden && event.target instanceof Element && event.target.closest('.page-number-btn')) {
+          dismissSheet();
+        }
+      });
+    }
+
+    const syncControlsPlacement = () => {
+      if (!mobile.matches) {
+        closeSearch(false);
+        if (sheet.open) sheet.close();
+        actionsPill.replaceWith(...actionsPill.children);
+      } else if (!actionsPill.isConnected && (topicWrapper || pagesTrigger)) {
+        searchPill.after(actionsPill);
+        if (topicWrapper) actionsPill.append(topicWrapper);
+        if (pagesTrigger) actionsPill.append(pagesTrigger);
+      }
+      const desktop = document.getElementById('desktop-topbar-actions');
+      const target = mobile.matches ? shell : desktop || controlsMount;
+      controls.classList.toggle('writing-list-dock', mobile.matches);
+      controls.classList.toggle('controls-area', !mobile.matches && !desktop);
+      controls.classList.toggle('topbar-controls-area', !mobile.matches && Boolean(desktop));
+      controls.style.removeProperty('max-width');
+      target.append(controls);
+    };
+    syncControlsPlacement();
+    mobile.addEventListener('change', syncControlsPlacement);
+    handle.addEventListener('click', event => {
+      if (event.detail === 0 || !ignoreHandleClick) dismissSheet();
+    });
+    handle.addEventListener('pointerdown', event => {
+      if (closingAnimation || !event.isPrimary || event.button !== 0) return;
+      ignoreHandleClick = false;
+      sheetDrag = { pointerId: event.pointerId, startY: event.clientY };
+      handle.setPointerCapture(event.pointerId);
+      sheet.dataset.dragging = 'true';
+    });
+    handle.addEventListener('pointermove', event => {
+      if (sheetDrag?.pointerId !== event.pointerId) return;
+      sheet.style.setProperty('--writing-sheet-drag', Math.max(0, event.clientY - sheetDrag.startY) + 'px');
+    });
+    function endSheetDrag(event: PointerEvent, cancelled: boolean) {
+      if (sheetDrag?.pointerId !== event.pointerId) return;
+      const distance = event.clientY - sheetDrag.startY;
+      ignoreHandleClick = cancelled || Math.abs(distance) > 8;
+      const dismiss = !cancelled && distance > 70;
+      sheetDrag = null;
+      delete sheet.dataset.dragging;
+      if (dismiss) dismissSheet();
+      else sheet.style.removeProperty('--writing-sheet-drag');
+    }
+    handle.addEventListener('pointerup', event => endSheetDrag(event, false));
+    handle.addEventListener('pointercancel', event => endSheetDrag(event, true));
+    handle.addEventListener('lostpointercapture', event => endSheetDrag(event, true));
+    sheet.addEventListener('click', event => { if (event.target === sheet) dismissSheet(); });
+    sheet.addEventListener('cancel', event => {
+      event.preventDefault();
+      dismissSheet();
+    });
+    sheet.addEventListener('close', () => {
+      closingAnimation?.cancel();
+      closingAnimation = null;
+      sheetDrag = null;
+      delete sheet.dataset.closing;
+      delete sheet.dataset.dragging;
+      sheet.style.removeProperty('--writing-sheet-drag');
+      restorePages();
+      if (mobile.matches && opener?.isConnected) opener.focus({ preventScroll: true });
+      opener = null;
+    });
+    document.addEventListener('astro:before-swap', () => {
+      closeSearch(false);
+      if (sheet.open) sheet.close();
+      restorePages();
+      mobile.removeEventListener('change', syncControlsPlacement);
+      viewport?.removeEventListener('resize', syncSearchPosition);
+      viewport?.removeEventListener('scroll', syncSearchPosition);
+    }, { once: true });
+  }
+
+  function bindWritingSheets() {
+    document.querySelectorAll<HTMLDialogElement>('.writing-controls-sheet').forEach(bindWritingSheet);
+  }
+
+  bindWritingSheets();
+  document.addEventListener('astro:page-load', bindWritingSheets);
+</script>
+
+<style is:global>
+  .writing-sheet-trigger,
+  .writing-search-dock {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    [data-writing-sheet-enabled] .minimal-search > input,
+    [data-writing-sheet-enabled] .filter-icon-wrapper > select {
+      display: none;
+    }
+
+    [data-writing-sheet-enabled] .writing-sheet-trigger {
+      display: block;
+      min-height: 48px;
+      min-width: 0;
+      flex: 1;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text-main);
+      font: inherit;
+      text-align: start;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    [data-writing-sheet-enabled] .filter-icon-wrapper .writing-sheet-trigger {
+      position: absolute;
+      inset: 0;
+      min-height: 0;
+      border-radius: inherit;
+    }
+
+    html:has(.writing-controls-sheet[open]),
+    html:has(.writing-controls-sheet[open]) body {
+      overflow: hidden !important;
+    }
+
+    .writing-controls-sheet {
+      position: fixed;
+      inset: auto 0 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      max-height: min(58dvh, 420px);
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 28px 28px 0 0;
+      background: var(--bg-panel, var(--bg-app));
+      color: var(--text-main);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      overflow-x: hidden;
+      transform: translateY(var(--writing-sheet-drag, 0px));
+      transition: transform 170ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    @supports (backdrop-filter: blur(1px)) {
+      .writing-controls-sheet {
+        background: color-mix(in srgb, var(--bg-app) 86%, var(--text-main) 7%);
+        backdrop-filter: blur(24px) saturate(170%);
+      }
+
+      [data-theme='light'] .writing-controls-sheet {
+        background: var(--mobile-glass-fill);
+        box-shadow: var(--mobile-glass-shadow);
+      }
+    }
+
+    .writing-controls-sheet[open] {
+      animation: writing-sheet-enter 300ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    .writing-controls-sheet[data-dragging] {
+      animation: none;
+      transition: none;
+    }
+
+    .writing-controls-sheet::backdrop {
+      background: rgba(0, 0, 0, 0.34);
+      transition: background-color 220ms ease-out;
+    }
+
+    .writing-controls-sheet[data-closing]::backdrop {
+      background-color: transparent;
+    }
+
+    .writing-sheet-surface {
+      padding: 0 max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    }
+
+    .writing-sheet-handle {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 26px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .writing-sheet-handle::before {
+      content: '';
+      width: 34px;
+      height: 4px;
+      border-radius: 99px;
+      background: color-mix(in srgb, var(--text-main) 24%, transparent);
+    }
+
+    .writing-sheet-heading {
+      padding: 3px 0 8px;
+    }
+
+    .writing-sheet-heading h2 {
+      margin: 0;
+      font-size: 1.04rem;
+      font-weight: 650;
+    }
+
+    .writing-controls-sheet :is(button, a),
+    #app-shell > .writing-list-dock :is(button, a) {
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
+    }
+
+    .writing-sheet-topics:not([hidden]) {
+      display: grid;
+      gap: 4px;
+    }
+
+    .writing-sheet-topics button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 500;
+      text-align: start;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      transition: scale 140ms ease-out, background-color 140ms ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .writing-sheet-topics button:hover {
+        background: color-mix(in srgb, var(--text-main) 6%, transparent);
+      }
+    }
+
+    .writing-sheet-topics button:active {
+      scale: 0.988;
+      background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    }
+
+    .writing-sheet-topics button[aria-pressed='true'] {
+      font-weight: 650;
+      background: transparent;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .writing-sheet-topics button[aria-pressed='true']:hover {
+        background: color-mix(in srgb, var(--text-main) 6%, transparent);
+      }
+    }
+
+    .writing-sheet-topics button[aria-pressed='true']:active {
+      background: color-mix(in srgb, var(--text-main) 8%, transparent);
+    }
+
+    .writing-sheet-topics button[aria-pressed='true']::after {
+      content: '✓';
+      flex: none;
+    }
+
+    #app-shell > .writing-list-dock,
+    #app-shell > .writing-search-dock:not([hidden]) {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: fixed;
+      z-index: 1102;
+      pointer-events: none;
+      inset-inline: max(12px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-right, 0px));
+      inset-block-end: calc(max(10px, env(safe-area-inset-bottom, 0px)) + var(--writing-keyboard-offset, 0px));
+      width: auto;
+      max-width: 338px;
+      margin-inline: auto;
+    }
+
+    #app-shell > :is(.writing-list-dock, .writing-search-dock) > * {
+      pointer-events: auto;
+    }
+
+    #app-shell > .writing-list-dock {
+      justify-content: center;
+      transition: opacity 170ms ease-out, translate 200ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #app-shell > .writing-search-dock:not([hidden]) {
+      justify-content: center;
+    }
+
+    #app-shell:has(> .writing-search-dock:not([hidden])) > .writing-list-dock {
+      opacity: 0;
+      translate: 0 8px;
+      pointer-events: none;
+    }
+
+    #app-shell:has(> .writing-list-dock) > #app-main-content {
+      padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    #app-shell:has(> .writing-list-dock) > .mobile-edge-fade--bottom {
+      height: calc(112px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .writings-page:has(.writing-controls-sheet[data-bound]) > .pagination-collapsible:not([data-in-writing-sheet]) {
+      display: none !important;
+    }
+
+    #app-shell > .writing-list-dock .minimal-search {
+      order: 1;
+      position: relative;
+      justify-content: center;
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+      padding: 0;
+    }
+
+    #app-shell > .writing-list-dock .minimal-search > .writing-sheet-trigger {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      font-size: 0;
+    }
+
+    #app-shell > .writing-list-dock .minimal-search:has(.has-query) .search-icon {
+      color: var(--text-main);
+      opacity: 1;
+    }
+
+    .writing-actions-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-inline: 4px;
+    }
+
+    .writing-actions-pill:not(:has(.filter-icon-wrapper, .pagination-toggle-btn:not([style*="display: none"]))) {
+      display: none !important;
+    }
+
+    #app-shell > .writing-list-dock :is(.filter-icon-wrapper, .pagination-toggle-btn) {
+      display: flex;
+      justify-content: center;
+      flex: 0 0 52px;
+      width: 52px;
+      height: 48px;
+      margin-block: 2px;
+      padding: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-main);
+    }
+
+    #app-shell > .writing-list-dock .writing-actions-pill :is(.filter-icon-wrapper, .pagination-toggle-btn):active {
+      background: color-mix(in srgb, var(--text-main) 13%, transparent);
+    }
+
+    #app-shell > .writing-list-dock .search-icon {
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
+
+    #app-shell > .writing-list-dock :is(.search-icon, .filter-icon, .pagination-toggle-btn > svg) {
+      opacity: 0.85;
+    }
+
+    #app-shell > .writing-list-dock :is(.minimal-search, .filter-icon-wrapper, .pagination-toggle-btn):active {
+      scale: 0.96;
+    }
+
+    #app-shell > .writing-list-dock :is(.minimal-search, .filter-icon-wrapper, .pagination-toggle-btn) {
+      transition: scale 150ms ease-out;
+    }
+
+    #app-shell > .writing-list-dock :is(.minimal-search, .writing-actions-pill),
+    .writing-search-pill,
+    .writing-search-dock > button {
+      display: flex;
+      align-items: center;
+      min-height: 52px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--bg-panel);
+      color: var(--text-main);
+      box-shadow: var(--mobile-glass-shadow);
+    }
+
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      #app-shell > .writing-list-dock :is(.minimal-search, .writing-actions-pill),
+      .writing-search-pill,
+      .writing-search-dock > button {
+        background: var(--mobile-glass-fill);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+      }
+    }
+
+    .writing-search-pill {
+      box-sizing: border-box;
+      flex: 1 1 100%;
+      min-width: 0;
+      max-width: calc(100% - 60px);
+      gap: 10px;
+      padding-inline: 16px;
+    }
+
+    .writing-search-pill > svg {
+      flex: none;
+      color: var(--text-muted);
+    }
+
+    .writing-search-pill input {
+      flex: 1;
+      min-width: 0;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      outline: none;
+      box-shadow: none;
+      appearance: none;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 16px;
+    }
+
+    .writing-search-dock > button {
+      justify-content: center;
+      flex: 0 0 52px;
+      padding: 0;
+      transition: scale 150ms ease-out;
+    }
+
+    .writing-search-dock:not([hidden]) .writing-search-pill {
+      animation: writing-search-expand 330ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .writing-search-dock > button:active {
+      scale: 0.96;
+    }
+
+    @keyframes writing-search-expand {
+      from { max-width: min(68%, 180px); }
+      to { max-width: calc(100% - 60px); }
+    }
+
+    .writing-controls-sheet .pagination-collapsible[data-in-writing-sheet] {
+      grid-template-rows: 1fr;
+      margin: 0;
+      padding: 0;
+    }
+
+    .writing-controls-sheet .pagination-collapsible-inner {
+      opacity: 1;
+      transform: none;
+    }
+
+    .writing-controls-sheet .pagination-wrapper {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .writing-controls-sheet :is(.page-number-btn:not(.active), .page-btn) {
+      background: transparent;
+    }
+
+    .writing-controls-sheet .pagination-nav-pill > button,
+    .writing-controls-sheet .page-number-btn {
+      font-weight: 550;
+    }
+
+    @keyframes writing-sheet-enter {
+      from { transform: translateY(100%); }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .writing-controls-sheet[open],
+    #app-shell > .writing-search-dock:not([hidden]),
+    .writing-search-dock:not([hidden]) .writing-search-pill {
+      animation: none !important;
+    }
+
+    .writing-search-dock > button,
+    #app-shell > .writing-list-dock,
+    #app-shell > .writing-list-dock :is(.minimal-search, .filter-icon-wrapper, .pagination-toggle-btn) {
+      scale: none;
+      transition: none !important;
+    }
+  }
+</style>

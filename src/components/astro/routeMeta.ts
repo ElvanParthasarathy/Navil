@@ -32,9 +32,10 @@ export function getRouteInfo(pathname: string): RouteMeta {
   const p = pathname.toLowerCase().replace(/\/$/, '') || '/';
 
   if (p === '/') return makeRoute('home', '/favicon.png', false);
+  if (p.startsWith('/downloads/elvan-sans')) return makeRoute('elvanSans', '/elvan_sans_icon.png', true, '/downloads');
   if (p.startsWith('/downloads/nammil')) return makeRoute('nammil', '/nammil_icon.png', true, '/downloads');
-  if (p === '/downloads') return makeRoute('downloads', '/favicon.png', true, '/');
-  if (p === '/navilgal') return makeRoute('navilgal', '/favicon.png', true, '/');
+  if (p === '/downloads') return makeRoute('downloads', '/favicon.png', false);
+  if (p === '/navilgal') return makeRoute('navilgal', '/favicon.png', false);
   if (p === '/writings') return makeRoute('writings', '/favicon.png', true, '/navilgal');
   if (p.startsWith('/writings/poems')) return makeRoute('poems', '/favicon.png', true, p === '/writings/poems' ? '/writings' : '/writings/poems');
   if (p.startsWith('/writings/quotes')) return makeRoute('quotes', '/favicon.png', true, p === '/writings/quotes' ? '/writings' : '/writings/quotes');
@@ -55,8 +56,8 @@ export function getRouteInfo(pathname: string): RouteMeta {
   if (p.startsWith('/tools/vocoder') || p.startsWith('/teaching/vocoder')) return makeRoute('vocoder', '/favicon.png', true, '/teaching', 'BETA');
   if (p.startsWith('/tools/piano')) return makeRoute('piano', '/favicon.png', true, '/tools', 'BETA');
   if (p === '/teaching') return makeRoute('teaching', '/favicon.png', true, '/tools');
-  if (p === '/tools') return makeRoute('tools', '/favicon.png', true, '/', 'BETA');
-  if (p === '/about') return makeRoute('about', '/favicon.png', true, '/');
+  if (p === '/tools') return makeRoute('tools', '/favicon.png', false, undefined, 'BETA');
+  if (p === '/about') return makeRoute('about', '/favicon.png', false);
   if (p === '/contact') return makeRoute('contact', '/favicon.png', true, '/');
   if (p === '/privacy') return makeRoute('privacy', '/favicon.png', true, '/');
   if (p === '/terms') return makeRoute('terms', '/favicon.png', true, '/');

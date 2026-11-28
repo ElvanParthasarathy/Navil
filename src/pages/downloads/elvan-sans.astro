@@ -1,0 +1,422 @@
+---
+import '../../சிறப்புக்கூறுகள்/பதிவிறக்கங்கள்/பதிவிறக்கங்கள்.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdUnit from '../../components/astro/AdUnit.astro';
+import Icon from '../../components/astro/Icon.astro';
+import { BASE_URL } from '../../lib/content';
+import { UI_TA, UI_EN } from '../../i18n';
+
+const slides = [
+  { src: '/elvan-sans/slide_1.webp', titleTa: 'எல்வன் சான்ஸ் • அறிமுகப் பார்வை', titleEn: 'Elvan Sans • Typeface Overview' },
+  { src: '/elvan-sans/slide_2.webp', titleTa: 'மும்மொழி அளவு ஒத்திசைவு', titleEn: 'Tamil, Latin & Malayalam Harmony' },
+  { src: '/elvan-sans/slide_3.webp', titleTa: 'எடைகளும் சாய்வெழுத்துகளும்', titleEn: 'Static Weights & 10° Italics' },
+  { src: '/elvan-sans/slide_4.webp', titleTa: 'வெளிர் பயன்முறை வாசிப்புத் தோற்றம்', titleEn: 'Editorial & Light Theme Specimen' },
+];
+
+const fontJsonLd = {
+  '@type': 'SoftwareApplication',
+  name: 'Elvan Sans (எல்வன் சான்ஸ்)',
+  operatingSystem: 'Windows, macOS, Linux, Android, Web',
+  applicationCategory: 'DesignApplication',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@id': `${BASE_URL}/#organization` },
+  description:
+    'Open-source SIL OFL 1.1 multi-script typeface pairing geometric Latin, legible Tamil, and balanced Malayalam at unified native metrics.',
+};
+---
+
+<BaseLayout
+  title={`${UI_TA.elvanSans.title} • ${UI_EN.elvanSans.title} — Typeface | ${UI_EN.brand.name}`}
+  description="Download Elvan Sans (SIL OFL-1.1) from GitHub — unified Tamil, English, and Malayalam multi-script static font family with specimen previews."
+  canonicalPath="/downloads/elvan-sans"
+  ogImage={`${BASE_URL}/elvan-sans/slide_1.webp`}
+  favicon="/elvan_sans_icon.png"
+  mobileTitle={`${UI_TA.elvanSans.title}|${UI_EN.elvanSans.title}`}
+  backUrl="/downloads"
+  jsonLd={fontJsonLd}
+>
+  <div class="ms-store-page page-view fadeIn" style="--store-accent-rgb: 99, 102, 241;">
+    <div class="ms-ambient-glow" aria-hidden="true"></div>
+
+    <div class="ms-store-container">
+      <!-- 1. HERO -->
+      <header class="ms-hero-card animate-entry">
+        <div class="ms-hero-top-row">
+          <div class="ms-app-icon-wrap" style="background: #3730a3;">
+            <img src="/elvan_sans_icon.png" alt="Elvan Sans Icon" class="ms-app-icon-img" />
+          </div>
+
+          <div class="ms-hero-title-group">
+            <h1 class="ms-app-title">
+              <span class="ms-title-main" lang="ta" data-ui-ta="elvanSans.title">{UI_TA.elvanSans.title}</span>
+              <span class="ms-title-sub" data-ui-en="elvanSans.title">{UI_EN.elvanSans.title}</span>
+            </h1>
+            <div class="ms-developer-link">
+              <a href="/about" class="ms-dev-item" data-ui-en="brand.name">{UI_EN.brand.name}</a>
+            </div>
+            <div class="ms-category-row">
+              <span class="ms-category-tag" data-ui-pair="elvanSans.categoryTag">{UI_TA.elvanSans.categoryTag} • {UI_EN.elvanSans.categoryTag}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-hero-desc-wrap">
+          <p class="ms-hero-desc" lang="ta" data-ui-ta="elvanSans.heroDesc">
+            {UI_TA.elvanSans.heroDesc}
+          </p>
+          <p class="ms-hero-desc ms-hero-desc-en" data-ui-en="elvanSans.heroDesc">
+            {UI_EN.elvanSans.heroDesc}
+          </p>
+        </div>
+
+        <div class="ms-action-row">
+          <a
+            href="https://github.com/ElvanParthasarathy/ElvanSans/archive/refs/heads/main.zip"
+            class="ms-btn-primary"
+            target="_blank"
+            rel="noreferrer"
+            title="Download Elvan Sans Repository ZIP from GitHub"
+          >
+            <Icon name="DownloadSimple" weight="bold" size={18} />
+            <div class="ms-btn-text">
+              <span class="ms-btn-label" data-ui-ta="elvanSans.downloadBtn">{UI_TA.elvanSans.downloadBtn}</span>
+              <span class="ms-btn-sublabel" data-ui-en="elvanSans.downloadBtn">{UI_EN.elvanSans.downloadBtn}</span>
+            </div>
+          </a>
+          <a
+            href="https://github.com/ElvanParthasarathy/ElvanSans"
+            target="_blank"
+            rel="noreferrer"
+            class="ms-btn-secondary ms-btn-github"
+            title="View Elvan Sans Source on GitHub"
+          >
+            <Icon name="GithubLogo" weight="bold" size={20} />
+            <div class="ms-btn-text">
+              <span class="ms-btn-label" data-ui-ta="elvanSans.githubBtn">{UI_TA.elvanSans.githubBtn}</span>
+              <span class="ms-btn-sublabel" data-ui-en="elvanSans.githubBtn">{UI_EN.elvanSans.githubBtn}</span>
+            </div>
+          </a>
+          <a
+            href="https://github.com/ElvanParthasarathy/ElvanSans/tree/main/fonts/ttf"
+            target="_blank"
+            rel="noreferrer"
+            class="ms-btn-secondary ms-btn-github"
+            title="Browse Direct TTF Files on GitHub"
+          >
+            <Icon name="FolderSimple" weight="bold" size={18} />
+            <div class="ms-btn-text">
+              <span class="ms-btn-label" data-ui-ta="elvanSans.browseFontsBtn">{UI_TA.elvanSans.browseFontsBtn}</span>
+              <span class="ms-btn-sublabel" data-ui-en="elvanSans.browseFontsBtn">{UI_EN.elvanSans.browseFontsBtn}</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <!-- 2. SPECIMEN IMAGES & DETAILS -->
+      <div class="ms-store-body animate-entry">
+        <section class="ms-section ms-screenshots-section" aria-label="Font Specimen Looks">
+          <div class="ms-section-header-link" id="elvan-sans-open-lb">
+            <h2 class="ms-section-title" data-ui-pair="nammil.screenshotsHeading">{UI_TA.nammil.screenshotsHeading} • Specimen Looks</h2>
+            <Icon name="CaretRight" weight="bold" size={18} class="ms-section-chevron" />
+          </div>
+
+          <div class="ms-screenshots-scroller-wrap">
+            <button type="button" id="elvan-sans-scroll-left" class="ms-scroll-nav-btn prev" style="display: none;" aria-label="Previous specimens">
+              <Icon name="CaretLeft" weight="bold" size={22} />
+            </button>
+            <div class="ms-screenshots-scroller" id="elvan-sans-scroller">
+              {slides.map((slide, idx) => (
+                <div class="ms-shot-frame" data-es-slide-idx={idx} title="Click to inspect full resolution specimen">
+                  <img
+                    src={slide.src}
+                    alt={slide.titleEn}
+                    class="ms-shot-img"
+                    loading={idx < 2 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              ))}
+            </div>
+            <button type="button" id="elvan-sans-scroll-right" class="ms-scroll-nav-btn next" aria-label="Next specimens">
+              <Icon name="CaretRight" weight="bold" size={22} />
+            </button>
+          </div>
+        </section>
+
+        <!-- LIVE WEIGHT PREVIEW -->
+        <section class="ms-section ms-desc-section">
+          <h2 class="ms-section-title">எடை மாதிரிகள் • Live Typeface Specimen</h2>
+          <div class="ms-desc-body" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);">
+              <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">400 Regular</span>
+              <span lang="ta" style="font-size: 1.18rem; font-weight: 400; color: var(--text-main);">அகர முதல எழுத்தெல்லாம் • Elvan Sans 2026 • മലയാളം</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);">
+              <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">500 Medium</span>
+              <span lang="ta" style="font-size: 1.18rem; font-weight: 500; color: var(--text-main);">நவில் மிழிகள் க்ஷ ஸ்ரீ ஐ ஜ • Clean Bilingual Balance</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);">
+              <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">600 SemiBold</span>
+              <span lang="ta" style="font-size: 1.18rem; font-weight: 600; color: var(--text-main);">எண்ம எழுத்து வடிவமைப்பு • Interface &amp; Reader Headings</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);">
+              <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">700 Bold</span>
+              <span lang="ta" style="font-size: 1.18rem; font-weight: 700; color: var(--text-main);">இயல்பும் உளவும் · മലയാളം · Crisp Heavy Display</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;">
+              <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Italics (10°)</span>
+              <span lang="ta" style="font-size: 1.18rem; font-weight: 600; font-style: italic; color: var(--text-main);">கற்க கசடறக் கற்பவை • Harmonized Slanted Italics</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DESCRIPTION -->
+        <section class="ms-section ms-desc-section">
+          <h2 class="ms-section-title" data-ui-pair="nammil.descriptionHeading">{UI_TA.nammil.descriptionHeading} • {UI_EN.nammil.descriptionHeading}</h2>
+          <div class="ms-desc-body">
+            <div class="ms-desc-block ms-desc-ta" lang="ta">
+              <p>
+                <strong>எல்வன் சான்ஸ் (Elvan Sans)</strong> தமிழ், ஆங்கிலம் மற்றும் மலையாளம் ஆகிய எழுத்துருக்களை ஒரே வரிக் கோட்டில் உயர-அகல வேறுபாடின்றி இயல்பாகப் பொருந்தச் செய்ய உருவாக்கப்பட்ட திறந்த மூல எழுத்துருக் குடும்பமாகும்.
+              </p>
+              <p>
+                வடிவியல் தெளிவு கொண்ட Google Sans லத்தீன் எழுத்துகளையும், தெளிவான முக்தா மலர் தமிழ் வரிவடிவங்களையும் இணைத்து, நவில் சான்ஸ் ஒத்திசைவுடன் <code>ஐ, ஜ, ஸ்ரீ</code> மற்றும் 2048 UPEM வரி-அளவுகள் சீரமைக்கப்பட்டுள்ளன.
+              </p>
+            </div>
+            <div class="ms-desc-divider"></div>
+            <div class="ms-desc-block ms-desc-en" lang="en">
+              <p>
+                <strong>Elvan Sans</strong> was crafted by Elvan Parthasarathy to solve script mismatch, line-box clipping, and glyph weight imbalance in multilingual Tamil-English-Malayalam interfaces and readers.
+              </p>
+              <p>
+                Built across 16 static weights (<code>Regular</code>, <code>Medium</code>, <code>SemiBold</code>, <code>Bold</code> plus 10° slanted <code>Italic</code> and <code>17pt</code> optical sets) under the SIL Open Font License v1.1 for desktop, mobile, Android, and Web fonts.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="ms-section ms-features-section">
+          <h2 class="ms-section-title" data-ui-pair="nammil.featuresHeading">{UI_TA.nammil.featuresHeading} • Highlights</h2>
+          <div class="ms-features-grid">
+            <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="Translate" weight="regular" size={22} />
+              </div>
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">மும்மொழி ஒத்திசைவு</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">Unified Multi-Script Metrics</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">தமிழ், ஆங்கிலம் &amp; மலையாளம் ஆகியவை ஒரே அடிவரையில் சீராக அமையும்.</p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">Equal ascent, descent, and stroke weight balance across Tamil, Latin, and Malayalam.</p>
+              </div>
+            </div>
+
+            <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="Package" weight="regular" size={22} />
+              </div>
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">16 எழுத்துரு வகைகள்</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">16 Static Weights &amp; Italics</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">Regular முதல் Bold வரை நேர் மற்றும் 10° சாய்வெழுத்துப் பதிப்புகள்.</p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">Includes Regular, Medium, SemiBold, Bold, their Italic masters, and 17pt optical size files.</p>
+              </div>
+            </div>
+
+            <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="ShieldCheck" weight="regular" size={22} />
+              </div>
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">வெட்டுப்படா வரிவடிவம்</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">Zero Line-Box Clipping</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">ஆண்ட்ராய்டு மற்றும் இணையத்தில் உயிர்மெய்க் குறிகள் சிதையாமல் தெளிவாகத் தோன்றும்.</p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">Calibrated 2048 UPEM bounds keep ascenders and vowel signs unclipped on mobile and desktop UIs.</p>
+              </div>
+            </div>
+
+            <div class="ms-feature-item">
+              <div class="ms-feature-icon-box">
+                <Icon name="FileText" weight="regular" size={22} />
+              </div>
+              <div class="ms-feature-text">
+                <h3 class="ms-feature-heading">
+                  <span class="ms-feature-title-ta">திறந்த மூல உரிமம்</span>
+                  <span class="ms-feature-title-sep">•</span>
+                  <span class="ms-feature-title-en">SIL OFL 1.1 Licensed</span>
+                </h3>
+                <p class="ms-feature-copy-ta" lang="ta">தனிப்பட்ட மற்றும் வணிகப் பயன்பாடுகளில் இலவசமாகப் பயன்படுத்தலாம்.</p>
+                <div class="ms-feature-divider"></div>
+                <p class="ms-feature-copy-en">Open-source typeface repository with build scripts and TTF downloads hosted directly on GitHub.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <AdUnit margin="32px 0" />
+
+        <!-- ADDITIONAL INFO -->
+        <section class="ms-additional-info-section">
+          <h2 class="ms-info-main-title" data-ui-pair="nammil.additionalInfoHeading">{UI_TA.nammil.additionalInfoHeading} • Technical Info</h2>
+          <div class="ms-info-grid">
+            <div class="ms-info-cell">
+              <Icon name="Package" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Published by</div>
+                <div class="ms-cell-val">Elvan Parthasarathy</div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="FileText" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">License</div>
+                <div class="ms-cell-val"><a href="https://github.com/ElvanParthasarathy/ElvanSans/blob/main/OFL.txt" target="_blank" rel="noreferrer">SIL Open Font License 1.1</a></div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="Code" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">GitHub Repository</div>
+                <div class="ms-cell-val"><a href="https://github.com/ElvanParthasarathy/ElvanSans" target="_blank" rel="noreferrer">ElvanParthasarathy/ElvanSans</a></div>
+              </div>
+            </div>
+            <div class="ms-info-cell">
+              <Icon name="DownloadSimple" weight="regular" size={20} class="ms-cell-icon" />
+              <div class="ms-cell-content">
+                <div class="ms-cell-label">Direct Download</div>
+                <div class="ms-cell-val"><a href="https://github.com/ElvanParthasarathy/ElvanSans/archive/refs/heads/main.zip" target="_blank" rel="noreferrer">ElvanSans-main.zip</a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX OVERLAY -->
+  <div id="elvan-sans-lightbox" class="nammil-lightbox" style="display: none;">
+    <div class="nammil-lb-header">
+      <div class="nammil-lb-counter" id="elvan-sans-lb-counter">1 / 4</div>
+      <button type="button" class="nammil-lb-close" id="elvan-sans-lb-close" aria-label="Close">
+        <Icon name="X" weight="bold" size={20} />
+      </button>
+    </div>
+    <div class="nammil-lb-main-container">
+      <button type="button" class="nammil-lb-nav prev" id="elvan-sans-lb-prev" aria-label="Previous specimen">
+        <Icon name="CaretLeft" weight="bold" size={24} />
+      </button>
+      <button type="button" class="nammil-lb-nav next" id="elvan-sans-lb-next" aria-label="Next specimen">
+        <Icon name="CaretRight" weight="bold" size={24} />
+      </button>
+      <div class="nammil-lb-img-wrapper">
+        <div class="nammil-lb-slide">
+          <img id="elvan-sans-lb-img" src="" alt="" class="nammil-lb-img" />
+        </div>
+      </div>
+    </div>
+    <div class="nammil-lb-filmstrip">
+      {slides.map((s, idx) => (
+        <div class="nammil-lb-fs-item" data-es-lb-thumb={idx} title={s.titleTa}>
+          <img src={s.src} alt={s.titleEn} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ slides }}>
+    (function () {
+      var esAbort = null;
+      function initElvanSans() {
+        var scroller = document.getElementById('elvan-sans-scroller');
+        if (!scroller || scroller.dataset.bound) return;
+        scroller.dataset.bound = '1';
+
+        if (esAbort) esAbort.abort();
+        esAbort = new AbortController();
+        var sig = { signal: esAbort.signal };
+
+        var leftBtn = document.getElementById('elvan-sans-scroll-left');
+        var rightBtn = document.getElementById('elvan-sans-scroll-right');
+        function updateBtns() {
+          if (!scroller) return;
+          if (leftBtn) leftBtn.style.display = scroller.scrollLeft > 12 ? 'flex' : 'none';
+          if (rightBtn) rightBtn.style.display = scroller.scrollLeft < scroller.scrollWidth - scroller.clientWidth - 12 ? 'flex' : 'none';
+        }
+        scroller.addEventListener('scroll', updateBtns, sig);
+        window.addEventListener('resize', updateBtns, sig);
+        updateBtns();
+
+        if (leftBtn) leftBtn.addEventListener('click', function () { scroller.scrollBy({ left: -420, behavior: 'smooth' }); }, sig);
+        if (rightBtn) rightBtn.addEventListener('click', function () { scroller.scrollBy({ left: 420, behavior: 'smooth' }); }, sig);
+
+        var lb = document.getElementById('elvan-sans-lightbox');
+        var lbImg = document.getElementById('elvan-sans-lb-img');
+        var lbCounter = document.getElementById('elvan-sans-lb-counter');
+        var currentIdx = 0;
+
+        function showSlide(idx) {
+          currentIdx = Math.max(0, Math.min(slides.length - 1, idx));
+          if (lbImg) {
+            lbImg.src = slides[currentIdx].src;
+            lbImg.alt = slides[currentIdx].titleEn;
+          }
+          if (lbCounter) lbCounter.textContent = (currentIdx + 1) + ' / ' + slides.length;
+          document.querySelectorAll('[data-es-lb-thumb]').forEach(function (el) {
+            el.classList.toggle('active', Number(el.getAttribute('data-es-lb-thumb')) === currentIdx);
+          });
+        }
+        function openLb(idx) {
+          if (!lb) return;
+          if (lb.parentElement !== document.body) document.body.appendChild(lb);
+          showSlide(idx);
+          lb.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        }
+        function closeLb() {
+          if (!lb) return;
+          lb.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+        document.querySelectorAll('[data-es-slide-idx]').forEach(function (el) {
+          el.addEventListener('click', function () { openLb(Number(el.getAttribute('data-es-slide-idx'))); }, sig);
+        });
+        var openHeader = document.getElementById('elvan-sans-open-lb');
+        if (openHeader) openHeader.addEventListener('click', function () { openLb(0); }, sig);
+        var cBtn = document.getElementById('elvan-sans-lb-close');
+        var pBtn = document.getElementById('elvan-sans-lb-prev');
+        var nBtn = document.getElementById('elvan-sans-lb-next');
+        if (cBtn) cBtn.addEventListener('click', closeLb, sig);
+        if (pBtn) pBtn.addEventListener('click', function () { showSlide(currentIdx - 1); }, sig);
+        if (nBtn) nBtn.addEventListener('click', function () { showSlide(currentIdx + 1); }, sig);
+        document.querySelectorAll('[data-es-lb-thumb]').forEach(function (el) {
+          el.addEventListener('click', function () { showSlide(Number(el.getAttribute('data-es-lb-thumb'))); }, sig);
+        });
+        if (lb) lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); }, sig);
+        document.addEventListener('keydown', function (e) {
+          if (!lb || lb.style.display === 'none') return;
+          if (e.key === 'Escape') closeLb();
+          if (e.key === 'ArrowRight') showSlide(currentIdx + 1);
+          if (e.key === 'ArrowLeft') showSlide(currentIdx - 1);
+        }, sig);
+      }
+      initElvanSans();
+      document.addEventListener('astro:page-load', initElvanSans);
+      document.addEventListener('astro:before-swap', function () {
+        if (esAbort) { esAbort.abort(); esAbort = null; }
+        var strayLb = document.body.querySelector(':scope > #elvan-sans-lightbox');
+        if (strayLb) strayLb.remove();
+        document.body.style.overflow = '';
+      });
+    })();
+  </script>
+</BaseLayout>

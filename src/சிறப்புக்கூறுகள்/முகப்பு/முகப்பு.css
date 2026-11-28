@@ -656,13 +656,13 @@
         margin-top: 8px;
         margin-bottom: 24px;
         padding-top: 0;
-        padding-left: 20px;
+        padding-left: 0;
     }
 }
 
 @media (max-width: 768px) {
     .home-brand-header {
-        text-align: center !important;
+        text-align: left !important;
         padding: 12px 0 4px !important;
         margin-bottom: 16px !important;
     }
@@ -675,16 +675,16 @@
     .home-brand-subtitle {
         font-size: 0.88rem !important;
         line-height: 1.5 !important;
-        text-align: center !important;
-        margin: 0 auto 6px !important;
+        text-align: left !important;
+        margin: 0 0 6px !important;
     }
 
     .home-brand-subtitle-en {
         font-size: 0.8rem !important;
         line-height: 1.45 !important;
         color: #888888 !important;
-        text-align: center !important;
-        margin: 0 auto !important;
+        text-align: left !important;
+        margin: 0 !important;
     }
 
     .company-home-page .dictionary-container {
@@ -1178,12 +1178,12 @@
 .home-section-header {
     margin: 40px 0 20px;
     padding-bottom: 12px;
-    padding-left: 20px;
+    padding-left: 0;
 }
 
 @media (max-width: 768px) {
     .home-section-header {
-        padding-left: 12px;
+        padding-left: 0;
     }
 }
 
